@@ -9,9 +9,8 @@ import UIKit
 
 import Listable
 
-import Blueprint
-import BlueprintLayout
-import BlueprintCommonControls
+import BlueprintUI
+import BlueprintUICommonControls
 
 
 final class TableViewDemosCartViewController : UIViewController
@@ -124,13 +123,15 @@ struct AmountRow : ProxyElement, TableViewCellViewElement, Equatable
     var detail : String
     
     var elementRepresentation: Element {
-        return Row() { row in
-            row += (.zeroPriority, Label(text: self.title))
-            row += Box()
-            row += (.zeroPriority, Label(text: self.detail))
-        }
-            .scaleContentToFit()
-            .inset(vertical: 0.0, horizontal: 20.0)
+        return Inset(
+            wrapping: Row() { row in
+                row += (.zeroPriority, Label(text: self.title))
+                row += Box()
+                row += (.zeroPriority, Label(text: self.detail))
+            },
+            left: 20.0,
+            right: 20.0
+        )
     }
     
     // TableViewCellViewElement
@@ -160,26 +161,26 @@ struct ItemizationRow : ProxyElement, TableViewCellViewElement, Equatable
     
     var elementRepresentation: Element {
         
-        return Column() { column in
-            
-            column += Row() { row in
-                row += (.zeroPriority, Label(text: itemization.variation.name))
+        return Inset(
+            wrapping: Column() { column in
                 
-                if itemization.quantity > 1 {
-                    row += (.zeroPriority, Label(text: "x \(itemization.quantity)").inset(top: 0, bottom: 0, left: 10.0, right: 0))
+                column += Row() { row in
+                    row += (.zeroPriority, Label(text: itemization.variation.name))
+                    
+                    if itemization.quantity > 1 {
+                        row += (.zeroPriority, Inset(wrapping: Label(text: "x \(itemization.quantity)"), left: 10.0))
+                    }
+                    
+                    row += Box()
+                    
+                    row += (.zeroPriority, Label(text: itemization.total))
+                    }.scaleContentToFit()
+                
+                for modifier in itemization.modifiers {
+                    column += Label(text: modifier.name)
                 }
-                
-                row += Box()
-                
-                row += (.zeroPriority, Label(text: itemization.total))
-            }.scaleContentToFit()
-            
-            for modifier in itemization.modifiers {
-                column += Label(text: modifier.name)
-            }
-        }
-            .scaleContentToFit()
-            .inset(vertical: 20.0, horizontal: 20.0)
+                }.scaleContentToFit(),
+            uniformInset: 20.0)
     }
     
     // TableViewCellViewElement

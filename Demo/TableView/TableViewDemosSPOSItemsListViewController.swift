@@ -9,9 +9,8 @@ import UIKit
 
 import Listable
 
-import Blueprint
-import BlueprintLayout
-import BlueprintCommonControls
+import BlueprintUI
+import BlueprintUICommonControls
 
 
 final class TableViewDemosSPOSItemsListViewController : UIViewController
@@ -153,19 +152,25 @@ struct Product : TableViewCellViewElement, ProxyElement, Equatable
         return Row() { stack in
             stack += (.zeroPriority, self.tile)
             
-            let titleLabel = Label(text: self.title)
-                .font(Font.heading2.font)
-                .color(.darkGray)
-                .inset(top: 0.0, bottom: 0.0, left: 20.0, right: 0.0)
+            let titleLabel = Inset(
+                wrapping: Label(text: self.title) {
+                    $0.font = Font.heading2.font
+                    $0.color = .darkGray
+                },
+                left: 20.0
+            )
             
             stack += (.zeroPriority, titleLabel)
             
             stack += Box()
             
-            let detailLabel = Label(text: self.detail)
-                .font(Font.body.font)
-                .color(.lightGray)
-                .inset(top: 0.0, bottom: 0.0, left: 0.0, right: 20.0)
+            let detailLabel = Inset(
+                wrapping: Label(text: self.detail) {
+                    $0.font = Font.body.font
+                    $0.color = .lightGray
+                },
+                right: 20.0
+            )
             
             stack += (.zeroPriority, detailLabel)
             }.scaleContentToFit()
@@ -199,12 +204,13 @@ struct Tile : ProxyElement, Equatable
             // TODO
             box = Box(backgroundColor: UIColor.darkGray, cornerStyle: .square)
         } else {
-            let label = Label(text: self.abbreviation.text)
-                .alignment(.center)
-                .color(.white)
-                .font(Font.heading.font)
+            let label = Label(text: self.abbreviation.text) {
+                $0.alignment = .center
+                $0.color = .white
+                $0.font = Font.heading.font
+            }
             
-            box = Box(backgroundColor: self.abbreviation.color, cornerStyle: .square, content: label)
+            box = Box(backgroundColor: self.abbreviation.color, cornerStyle: .square, wrapping: label)
         }
         
         return Square(in: .vertical, box: box)

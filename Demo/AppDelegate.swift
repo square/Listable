@@ -8,7 +8,6 @@
 
 import UIKit
 
-import Blueprint
 import Listable
 import Dispatch
 

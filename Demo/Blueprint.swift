@@ -7,9 +7,8 @@
 
 import Foundation
 
-import Blueprint
-import BlueprintLayout
-import BlueprintCommonControls
+import BlueprintUI
+import BlueprintUICommonControls
 
 
 func Init<Value:Element>(_ value : Value, _ block : (inout Value) -> ()) -> Value
@@ -21,7 +20,7 @@ func Init<Value:Element>(_ value : Value, _ block : (inout Value) -> ()) -> Valu
     return value
 }
 
-public final class ElementView<DisplayedElement:Blueprint.Element> : UIView
+public final class ElementView<DisplayedElement:BlueprintUI.Element> : UIView
 {
     public var element : DisplayedElement? {
         didSet {
@@ -65,7 +64,7 @@ public final class ElementView<DisplayedElement:Blueprint.Element> : UIView
             return .zero
         }
         
-        return element.measure(in: .init(size))
+        return element.content.measure(in: .init(size))
     }
 }
 
