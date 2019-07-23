@@ -263,16 +263,58 @@ public extension TableView
         public var leadingActions : SwipeActions?
         public var trailingActions : SwipeActions?
         
-        public typealias OnTap = (Row<Element>) -> ()
+        public typealias OnTap = () -> ()
         public var onTap : OnTap?
         
-        public typealias OnDisplay = (Row<Element>) -> ()
+        public typealias OnDisplay = () -> ()
         public var onDisplay : OnDisplay?
         
         private let reuseIdentifier : ReuseIdentifier<Element>
         
-        public typealias CreateBinding = (Element) -> (Binding<Element>)
+        public typealias CreateBinding = (Element) -> Binding<Element>
         internal let bind : CreateBinding?
+        
+        static func any(
+            _ element : Element,
+            sizing : AxisSizing = .default,
+            configuration : CellConfiguration = .default,
+            leadingActions : SwipeActions? = nil,
+            trailingActions : SwipeActions? = nil,
+            bind : CreateBinding? = nil,
+            onDisplay : OnDisplay? = nil,
+            onTap : OnTap? = nil
+            ) -> Row<AnyTableViewCellElement>
+        {
+            let anyBind : ((AnyTableViewCellElement) -> Binding<AnyTableViewCellElement>)?
+            
+            if let bind = bind {
+                anyBind = { anyElement in
+                    let binding = bind(anyElement.base as! Element)
+                    
+                    return Binding(
+                        initial: anyElement,
+                        bind: { binding.context },
+                        update: {context, value in
+                            return value
+                    
+
+                    })
+                }
+            } else {
+                anyBind = nil
+            }
+            
+            return Row(
+                AnyTableViewCellElement(element),
+                sizing: sizing,
+                configuration: configuration,
+                leadingActions: leadingActions,
+                trailingActions: trailingActions,
+                bind: anyBind,
+                onDisplay: onDisplay,
+                onTap: onTap
+            )
+        }
  
         public init(
             _ element : Element,
@@ -328,7 +370,7 @@ public extension TableView
         
         public func performOnTap()
         {
-            self.onTap?(self)
+            self.onTap?()
         }
         
         public func updatedComparedTo(old : TableViewRow) -> Bool

@@ -93,6 +93,25 @@ public final class Binding<Element>
 
 public extension Binding
 {
+    final class WrappingBindingContext<Wrapped> : BindingContext
+    {
+        private let wrapping : Binding<Wrapped>
+        
+        init(wrapping : Binding<Wrapped>)
+        {
+            self.wrapping = wrapping
+            
+            // TODO...
+        }
+        
+        // MARK: BindingContext
+        
+        public func unbind(from binding: Binding)
+        {
+            self.wrapping.discard()
+        }
+    }
+    
     final class NotificationContext : BindingContext
     {
         private weak var binding : Binding?

@@ -111,7 +111,7 @@ internal extension TableView
                     }
                 }
                 
-                self.row.onDisplay?(self.row)
+                self.row.onDisplay?()
             }
             
             public func didEndDisplay()
