@@ -75,13 +75,13 @@ internal extension TableView
         {
             var row : TableView.Row<Element>
             
-            var binding : Binding<Element>.Container?
+            var binding : Binding<Element>?
             
             init(row : TableView.Row<Element>)
             {
                 self.row = row
                 
-                self.binding = Binding.Container(self.row.bind)
+                self.binding = row.bind?(self.row.element)
             }
             
             deinit {
@@ -105,7 +105,7 @@ internal extension TableView
                     let binding = self.binding,
                     let cell = cell as? Element.TableViewCell
                 {
-                    binding.willDisplay(self.row.element) { element in
+                    binding.setDidChange { element in
                         self.row.element = element
                         self.row.element.applyTo(cell: cell, reason: .willDisplay)
                     }
@@ -116,7 +116,7 @@ internal extension TableView
             
             public func didEndDisplay()
             {
-                self.binding?.didEndDisplay()
+                self.binding?.setDidChange(nil)
             }
         }
     }

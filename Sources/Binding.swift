@@ -14,21 +14,28 @@ public final class Binding<Element>
 
     private var state : State
     
-    internal typealias Apply = (Element) -> ()
-    internal typealias Update = (AnyBindingContext, Element) -> Element
+    internal typealias DidChange = (Element) -> ()
+    internal typealias UpdateValue = (AnyBindingContext, inout Element) -> ()
     
     internal enum State
     {
         case initializing
-        case idle(AnyBindingContext, Update)
-        case updating(AnyBindingContext, Update, Apply)
+        case updating(Updating)
         case discarded
+        
+        struct Updating
+        {
+            let context : AnyBindingContext
+            let updateValue : UpdateValue
+            
+            var didChange : DidChange? = nil
+        }
     }
     
     public init<Context:BindingContext>(
         initial element : Element,
         bind bindingContext : @escaping (Binding) -> Context,
-        update : @escaping (Context, Element) -> Element
+        update : @escaping (Context, inout Element) -> ()
         )
     {
         self.element = element
@@ -37,9 +44,14 @@ public final class Binding<Element>
         
         let context = bindingContext(self)
         
-        self.state = .idle(context, { context, element in
-            return update(context as! Context, element)
-        })
+        self.state = .updating(.init(
+            context: context,
+            updateValue: { context, element in
+                update(context as! Context, &element)
+        },
+            didChange: nil
+            )
+        )
     }
     
     deinit {
@@ -49,69 +61,62 @@ public final class Binding<Element>
     public func signal()
     {
         switch self.state {
-        case .initializing, .idle, .discarded: break
+        case .initializing, .discarded: break
             
-        case .updating(let context, let update, let apply):
-            self.element = update(context, self.element)
-            apply(self.element)
+        case .updating(let state):
+            state.updateValue(state.context, &self.element)
+            state.didChange?(self.element)
         }
     }
     
-    internal func willDisplay(_ element : Element, apply : @escaping Apply)
+    internal func setDidChange(_ didChange : DidChange?)
     {
-        self.element = element
-        
         switch self.state {
-        case .initializing, .updating, .discarded: break
+        case .initializing, .discarded: break
             
-        case .idle(let context, let update):
-            self.state = .updating(context, update, apply)
-        }
-    }
-    
-    internal func didEndDisplay()
-    {
-        switch self.state {
-        case .initializing, .idle, .discarded: break
-        
-        case .updating(let context, let update, _):
-            self.state = .idle(context, update)
+        case .updating(let state):
+            var newState = state
+            newState.didChange = didChange
+            
+            self.state = .updating(newState)
         }
     }
     
     internal func discard()
     {
         switch self.state {
-        case .initializing: break
-        case .idle(let context, _), .updating(let context, _, _): context.unbindAny(from: self)
-        case .discarded: break
+        case .initializing, .discarded: break
+            
+        case .updating(let state):
+            state.context.unbindAny(from: self)
         }
         
         self.state = .discarded
     }
 }
 
-public extension Binding
+internal final class BindingWrappingContext<Element, Wrapping> : BindingContext
 {
-    final class WrappingBindingContext<Wrapped> : BindingContext
+    private let wrapping : Binding<Wrapping>
+    private weak var binding : Binding<Element>?
+    
+    init(wrapping : Binding<Wrapping>, onChange : @escaping () -> ())
     {
-        private let wrapping : Binding<Wrapped>
+        self.wrapping = wrapping
         
-        init(wrapping : Binding<Wrapped>)
-        {
-            self.wrapping = wrapping
-            
-            // TODO...
-        }
-        
-        // MARK: BindingContext
-        
-        public func unbind(from binding: Binding)
-        {
-            self.wrapping.discard()
+        self.wrapping.setDidChange { context in
+            onChange()
         }
     }
     
+    func unbind(from binding : Binding<Element>)
+    {
+        self.wrapping.discard()
+    }
+}
+
+public extension Binding
+{
     final class NotificationContext : BindingContext
     {
         private weak var binding : Binding?
@@ -173,75 +178,3 @@ public extension BindingContext
         self.unbind(from: binding)
     }
 }
-
-
-extension Binding
-{
-    final class Container
-    {
-        private var state : State
-        
-        typealias CreateBinding = (Element) -> (Binding)
-        
-        enum State {
-            case new(CreateBinding)
-            case idle(Binding)
-            case updating(Binding)
-            case discarded
-        }
-        
-        init?(_ create : CreateBinding?)
-        {
-            guard let create = create else {
-                return nil
-            }
-            
-            self.state = .new(create)
-        }
-        
-        deinit {
-            self.discard()
-        }
-        
-        func willDisplay(_ element : Element, apply : @escaping Apply)
-        {
-            switch self.state {
-            case .new(let create):
-                let binding = create(element)
-                self.state = .updating(binding)
-                binding.willDisplay(element, apply: apply)
-                
-            case .idle(let binding):
-                self.state = .updating(binding)
-                binding.willDisplay(element, apply: apply)
-                
-            case .updating(let binding):
-                binding.willDisplay(element, apply: apply)
-                
-            case .discarded: break
-            }
-        }
-        
-        func didEndDisplay()
-        {
-            switch self.state {
-            case .new, .idle, .discarded: break
-                
-            case .updating(let binding):
-                self.state = .idle(binding)
-                binding.didEndDisplay()
-            }
-        }
-        
-        func discard()
-        {
-            switch self.state {
-            case .new, .discarded: break
-            case .idle(let binding), .updating(let binding): binding.discard()
-            }
-            
-            self.state = .discarded
-        }
-    }
-}
-

@@ -289,22 +289,18 @@ public extension TableView
             
             if let bind = bind {
                 anyBind = { anyElement in
-                    let binding = bind(anyElement.base as! Element)
-                    
-                    return Binding(
-                        initial: anyElement,
-                        bind: { binding.context },
-                        update: {context, value in
-                            return value
-                    
-
+                    Binding(initial: anyElement, bind: { binding in
+                        BindingWrappingContext<AnyTableViewCellElement, Element>(wrapping: bind(anyElement.base as! Element), onChange: {
+                            
+                        })
+                    }, update: {context, value in
                     })
                 }
             } else {
                 anyBind = nil
             }
             
-            return Row(
+            return Row<AnyTableViewCellElement>(
                 AnyTableViewCellElement(element),
                 sizing: sizing,
                 configuration: configuration,

@@ -18,8 +18,12 @@ public struct AnyTableViewCellElement : TableViewCellElement
     
     public init<Element:TableViewCellElement>(_ element : Element)
     {
-        self.base = element
-        self.box = Box(element: element)
+        if let element = element as? AnyTableViewCellElement {
+            self = element
+        } else {
+            self.base = element
+            self.box = Box(element: element)
+        }
     }
     
     private let box : AnyTableViewCellElementBox
