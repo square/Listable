@@ -35,7 +35,7 @@ public final class DemosRootViewController : UIViewController
                         text:"English Dictionary Search",
                         detail: "Shows the Websters English dictionary, sectioned by letter."
                     ),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosDictionaryViewController())
                 })
                 
@@ -43,7 +43,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "Random Sorter",
                         detail: "Randomly resorts the content, with animation."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosRandomResortViewController())
                 })
                 
@@ -51,7 +51,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "Lorem Ipsum",
                         detail: "Headers, footers, and cells showing varying amounts of ipsum to demonstrate sizing."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosIpsumViewController())
                 })
                 
@@ -59,7 +59,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "Bindings Demo",
                         detail: "Shows how bindings work on table view cell."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosBindingsViewController())
                 })
                 
@@ -67,7 +67,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "SPOS Items List",
                         detail: "Example of what the items library looks like in SPOS."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosSPOSItemsListViewController())
                 })
                 
@@ -75,7 +75,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "Transaction History",
                         detail: "Example of what the transaction list looks like in SPOS, including load on scroll and pull to refresh."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosSPOSTransactionsListViewController())
                 })
                 
@@ -83,7 +83,7 @@ public final class DemosRootViewController : UIViewController
                     SubtitleRow(
                         text: "Cart",
                         detail: "Example of the cart view in Point of Sale."),
-                    onTap: {
+                    onTap: { _ in
                         self.push(TableViewDemosCartViewController())
                 })
             }
@@ -94,7 +94,7 @@ public final class DemosRootViewController : UIViewController
                         text: "Flow Layout",
                         detail: "Demo of flow layout wrapper."
                     ),
-                    onTap : {
+                    onTap : { _ in
                         self.push(CollectionViewDemoFlowLayoutViewController())
                 })
             }

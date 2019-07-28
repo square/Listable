@@ -82,6 +82,7 @@ internal extension TableView
                 self.row = row
                 
                 self.binding = row.bind?(self.row.element)
+                self.binding?.start()
             }
             
             deinit {
@@ -105,18 +106,18 @@ internal extension TableView
                     let binding = self.binding,
                     let cell = cell as? Element.TableViewCell
                 {
-                    binding.setDidChange { element in
+                    binding.onChange { element in
                         self.row.element = element
                         self.row.element.applyTo(cell: cell, reason: .willDisplay)
                     }
                 }
                 
-                self.row.onDisplay?()
+                self.row.onDisplay?(self.row.element)
             }
             
             public func didEndDisplay()
             {
-                self.binding?.setDidChange(nil)
+                self.binding?.onChange(nil)
             }
         }
     }

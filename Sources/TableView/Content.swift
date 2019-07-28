@@ -263,10 +263,10 @@ public extension TableView
         public var leadingActions : SwipeActions?
         public var trailingActions : SwipeActions?
         
-        public typealias OnTap = () -> ()
+        public typealias OnTap = (Element) -> ()
         public var onTap : OnTap?
         
-        public typealias OnDisplay = () -> ()
+        public typealias OnDisplay = (Element) -> ()
         public var onDisplay : OnDisplay?
         
         private let reuseIdentifier : ReuseIdentifier<Element>
@@ -289,11 +289,13 @@ public extension TableView
             
             if let bind = bind {
                 anyBind = { anyElement in
-                    Binding(initial: anyElement, bind: { binding in
-                        BindingWrappingContext<AnyTableViewCellElement, Element>(wrapping: bind(anyElement.base as! Element), onChange: {
-                            
-                        })
-                    }, update: {context, value in
+                    return Binding(
+                        initial: anyElement,
+                        bind: { binding in
+                            return Binding<AnyTableViewCellElement>.WrapperContext<Element>(wrapping: bind(element), for: binding)
+                    },
+                        update: { context, element in
+                            element = AnyTableViewCellElement(context.latest)
                     })
                 }
             } else {
@@ -307,8 +309,8 @@ public extension TableView
                 leadingActions: leadingActions,
                 trailingActions: trailingActions,
                 bind: anyBind,
-                onDisplay: onDisplay,
-                onTap: onTap
+                onDisplay: { onDisplay?($0.base as! Element) },
+                onTap: { onTap?($0.base as! Element) }
             )
         }
  
@@ -366,7 +368,7 @@ public extension TableView
         
         public func performOnTap()
         {
-            self.onTap?()
+            self.onTap?(self.element)
         }
         
         public func updatedComparedTo(old : TableViewRow) -> Bool

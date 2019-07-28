@@ -41,7 +41,7 @@ final class TableViewDemosBindingsViewController : UIViewController
                             name: .incrementedDemo
                         )
                     }, update: { context, element in
-                        String(self.number)
+                        element = String(self.number)
                     })
                 })
             }

@@ -14,21 +14,28 @@ public final class Binding<Element>
 
     private var state : State
     
-    internal typealias DidChange = (Element) -> ()
+    internal typealias OnChange = (Element) -> ()
     internal typealias UpdateValue = (AnyBindingContext, inout Element) -> ()
     
     internal enum State
     {
         case initializing
+        case new(New)
         case updating(Updating)
         case discarded
+        
+        struct New
+        {
+            let context : AnyBindingContext
+            let updateValue : UpdateValue
+        }
         
         struct Updating
         {
             let context : AnyBindingContext
             let updateValue : UpdateValue
             
-            var didChange : DidChange? = nil
+            var onChange : OnChange? = nil
         }
     }
     
@@ -39,19 +46,15 @@ public final class Binding<Element>
         )
     {
         self.element = element
-        
         self.state = .initializing
         
         let context = bindingContext(self)
         
-        self.state = .updating(.init(
+        self.state = .new(.init(
             context: context,
             updateValue: { context, element in
                 update(context as! Context, &element)
-        },
-            didChange: nil
-            )
-        )
+        }))
     }
     
     deinit {
@@ -61,31 +64,41 @@ public final class Binding<Element>
     public func signal()
     {
         switch self.state {
-        case .initializing, .discarded: break
+        case .initializing, .new, .discarded: break
             
         case .updating(let state):
             state.updateValue(state.context, &self.element)
-            state.didChange?(self.element)
+            state.onChange?(self.element)
         }
     }
     
-    internal func setDidChange(_ didChange : DidChange?)
+    internal func onChange(_ onChange : OnChange?)
     {
         switch self.state {
-        case .initializing, .discarded: break
+        case .initializing, .new, .discarded: break
             
         case .updating(let state):
             var newState = state
-            newState.didChange = didChange
+            newState.onChange = onChange
             
             self.state = .updating(newState)
+        }
+    }
+    
+    internal func start()
+    {
+        switch self.state {
+        case .initializing, .updating, .discarded: break
+            
+        case .new(let new):
+            new.context.bindAny(to: self)
         }
     }
     
     internal func discard()
     {
         switch self.state {
-        case .initializing, .discarded: break
+        case .initializing, .new, .discarded: break
             
         case .updating(let state):
             state.context.unbindAny(from: self)
@@ -95,28 +108,40 @@ public final class Binding<Element>
     }
 }
 
-internal final class BindingWrappingContext<Element, Wrapping> : BindingContext
-{
-    private let wrapping : Binding<Wrapping>
-    private weak var binding : Binding<Element>?
-    
-    init(wrapping : Binding<Wrapping>, onChange : @escaping () -> ())
-    {
-        self.wrapping = wrapping
-        
-        self.wrapping.setDidChange { context in
-            onChange()
-        }
-    }
-    
-    func unbind(from binding : Binding<Element>)
-    {
-        self.wrapping.discard()
-    }
-}
-
 public extension Binding
 {
+    final class WrapperContext<Wrapped> : BindingContext
+    {
+        private let wrapping : Binding<Wrapped>
+        private weak var binding : Binding<Element>?
+        
+        internal var latest : Wrapped
+        
+        init(wrapping : Binding<Wrapped>, for binding : Binding<Element>)
+        {
+            self.wrapping = wrapping
+            self.binding = binding
+            
+            self.latest = self.wrapping.element
+            
+            self.wrapping.onChange { [weak self] wrapped in
+                self?.latest = wrapped
+                self?.binding?.signal()
+            }
+        }
+        
+        public func bind(to binding: Binding<Element>)
+        {
+            self.wrapping.start()
+        }
+        
+        public func unbind(from binding : Binding<Element>)
+        {
+            self.wrapping.discard()
+        }
+    }
+
+    
     final class NotificationContext : BindingContext
     {
         private weak var binding : Binding?
@@ -137,13 +162,6 @@ public extension Binding
             self.center = center
             self.name = name
             self.object = object
-            
-            self.center.addObserver(self, selector: #selector(recievedNotification(_:)), name: self.name, object: self.object)
-        }
-        
-        public func unbind(from binding : Binding)
-        {
-            self.center.removeObserver(self)
         }
         
         @objc private func recievedNotification(_ notification : Notification)
@@ -152,11 +170,24 @@ public extension Binding
             
             self.binding?.signal()
         }
+    
+        // MARK: BindingContext
+        
+        public func bind(to binding: Binding<Element>)
+        {
+            self.center.addObserver(self, selector: #selector(recievedNotification(_:)), name: self.name, object: self.object)
+        }
+        
+        public func unbind(from binding : Binding)
+        {
+            self.center.removeObserver(self)
+        }
     }
 }
 
 public protocol AnyBindingContext : AnyObject
 {
+    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
     func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
 }
 
@@ -164,12 +195,20 @@ public protocol BindingContext : AnyBindingContext
 {
     associatedtype Element
     
+    func bind(to binding : Binding<Element>)
     func unbind(from binding : Binding<Element>)
 }
 
 public extension BindingContext
 {
     // MARK: AnyBindingContext
+    
+    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
+    {
+        let binding = binding as! Binding<Element>
+        
+        self.bind(to: binding)
+    }
     
     func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
     {

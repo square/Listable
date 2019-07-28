@@ -79,7 +79,7 @@ final class TableViewDemosCartViewController : UIViewController
                             })
                         ),
                         
-                        onTap: {
+                        onTap: { _ in
                             print("Tapped!")
                     })
                 }

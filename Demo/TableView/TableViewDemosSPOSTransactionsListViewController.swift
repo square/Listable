@@ -74,7 +74,7 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
                     }
                     
                     if content.hasMore {
-                        rows += TableView.Row("Load More", onDisplay: {
+                        rows += TableView.Row("Load More", onDisplay: { _ in
                             
                         })
                     }
