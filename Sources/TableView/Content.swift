@@ -27,6 +27,8 @@ public protocol TableViewHeaderFooter_Internal
 public protocol TableViewRow : TableViewRow_Internal
 {
     var identifier : AnyIdentifier { get }
+    
+    func elementEqual(to other : TableViewRow) -> Bool
 }
 
 public protocol TableViewRow_Internal
@@ -351,6 +353,22 @@ public extension TableView
         
         // MARK: TableViewRow
         
+        public func elementEqual(to other : TableViewRow) -> Bool
+        {
+            guard let other = other as? TableView.Row<Element> else {
+                return false
+            }
+            
+            return self.elementEqual(to: other)
+        }
+        
+        internal func elementEqual(to other : TableView.Row<Element>) -> Bool
+        {
+            return false
+        }
+        
+        // MARK: TableViewRow_Internal
+        
         public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
         {
             return self.element.measureCell(with: self.sizing, width: width, defaultHeight: defaultHeight, in: measurementCache)
@@ -439,6 +457,14 @@ public extension TableView
                 return false
             }
         }
+    }
+}
+
+fileprivate extension TableView.Row where Element:Equatable
+{
+    func elementEqual(to other : TableView.Row<Element>) -> Bool
+    {
+        return self.element == other.element
     }
 }
 
@@ -692,3 +718,49 @@ public extension TableView
         }
     }
 }
+
+
+public extension TableView.Content
+{
+    func elementsEqual(to other : TableView.Content) -> Bool
+    {
+        if self.sections.count != other.sections.count {
+            return false
+        }
+        
+        let sections = zip(self.sections, other.sections)
+        
+        return sections.allSatisfy { both in
+            both.0.elementsEqual(to: both.1)
+        }
+    }
+}
+
+public extension TableView.Section
+{
+    func elementsEqual(to other : TableView.Section) -> Bool
+    {
+        if self.rows.count != other.rows.count {
+            return false
+        }
+        
+        return self.rows.elementsEqual(to: other.rows)
+    }
+}
+
+public extension Array where Element == TableViewRow
+{
+    func elementsEqual(to other : [TableViewRow]) -> Bool
+    {
+        if self.count != other.count {
+            return false
+        }
+        
+        let rows = zip(self, other)
+        
+        return rows.allSatisfy { both in
+            both.0.elementEqual(to: both.1)
+        }
+    }
+}
+
