@@ -18,7 +18,8 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
         return .init(self.text ?? "EmptyIdentifier")
     }
     
-    public func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<DefaultHeaderFooter>) -> UITableViewHeaderFooterView {
+    public static func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<DefaultHeaderFooter>) -> UITableViewHeaderFooterView
+    {
         return UITableViewHeaderFooterView(reuseIdentifier: reuseIdentifier.stringValue)
     }
     
@@ -54,7 +55,7 @@ public final class ViewInstance<View:UIView> : TableViewCellElement, Equatable
         return .init(ObjectIdentifier(self.view))
     }
     
-    public func createReusableCell(with reuseIdentifier: ReuseIdentifier<ViewInstance<View>>) -> ViewRowTableViewCell
+    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<ViewInstance<View>>) -> ViewRowTableViewCell
     {
         fatalError()
     }
@@ -136,7 +137,7 @@ public struct SubtitleRow : TableViewCellElement, Equatable
         return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
     }
     
-    public func createReusableCell(with reuseIdentifier: ReuseIdentifier<SubtitleRow>) -> UITableViewCell
+    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<SubtitleRow>) -> UITableViewCell
     {
         return UITableViewCell(style: .subtitle, reuseIdentifier: reuseIdentifier.stringValue)
     }
@@ -170,7 +171,7 @@ public struct DefaultRow : TableViewCellElement, Equatable
         return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
     }
     
-    public func createReusableCell(with reuseIdentifier: ReuseIdentifier<DefaultRow>) -> UITableViewCell
+    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<DefaultRow>) -> UITableViewCell
     {
         return UITableViewCell(style: .default, reuseIdentifier: reuseIdentifier.stringValue)
     }
@@ -192,7 +193,7 @@ extension String : TableViewCellElement, TableViewHeaderFooterElement
         return .init(self)
     }
     
-    public func createReusableCell(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewCell
+    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewCell
     {
         return UITableViewCell(style: .default, reuseIdentifier: reuseIdentifier.stringValue)
     }
@@ -206,7 +207,8 @@ extension String : TableViewCellElement, TableViewHeaderFooterElement
     
     public typealias HeaderFooterView = UITableViewHeaderFooterView
     
-    public func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewHeaderFooterView {
+    public static func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewHeaderFooterView
+    {
         return UITableViewHeaderFooterView(reuseIdentifier: reuseIdentifier.stringValue)
     }
     

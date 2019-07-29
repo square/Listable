@@ -136,7 +136,7 @@ struct Product : TableViewCellViewElement, ProxyElement, Equatable
     
     typealias View = ElementView<Product>
     
-    func createReusableView() -> View
+    static func createReusableView() -> View
     {
         return ElementView(frame: .zero)
     }
