@@ -10,7 +10,7 @@ import Foundation
 import Listable
 
 
-extension NSNotification.Name
+extension Notification.Name
 {
     static let incrementedDemo = Notification.Name("IncrementedDemo")
 }
@@ -32,15 +32,10 @@ final class TableViewDemosBindingsViewController : UIViewController
         self.tableView.setContent { table in
             table += TableView.Section(header: "Demo Section") { rows in
                 rows += TableView.Row(String(self.number), bind: {
-                    
-                    // TODO: How do we account for the time between creation and display? How do we update the element data?
-                    
-                    Binding(initial: $0, bind: { binding in
-                        Binding.NotificationContext(
-                            with: binding,
-                            name: .incrementedDemo
-                        )
-                    }, update: { context, element in
+                    Binding(initial: $0, bind: { _ in
+                        NotificationContext<String,Notification>(name: .incrementedDemo)
+                    }, update: { _, _, element in
+                        self.number += 1
                         element = String(self.number)
                     })
                 })
@@ -50,8 +45,6 @@ final class TableViewDemosBindingsViewController : UIViewController
     
     @objc func increment()
     {
-        self.number += 1
-        
         NotificationCenter.default.post(name: .incrementedDemo, object: nil)
     }
 }

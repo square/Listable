@@ -28,7 +28,7 @@ public enum ApplyReason : Hashable
     }
 }
 
-
+// TODO: TableViewRowElement?
 public protocol TableViewCellElement
 {
     // MARK: Identifying Content & Changes
