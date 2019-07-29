@@ -537,7 +537,7 @@ public struct ArrayDiff<Element>
             + self.updated.count
     }
     
-    private class Pair
+    private final class Pair
     {
         let new : DiffContainer<Element>
         let old : DiffContainer<Element>
@@ -579,7 +579,7 @@ public struct ArrayDiff<Element>
             return new.containers.map { newContainer in
                 
                 let identifier = newContainer.identifier
-                let oldContainer = old.containersByIdentifier[identifier]!
+                let oldContainer = old.container(for: identifier)
                 
                 return Pair(
                     new: newContainer,
@@ -810,6 +810,7 @@ fileprivate class DiffContainer<Value>
     static func containers(with elements : [Value], identifierProvider : (Value) -> AnyHashable) -> [DiffContainer]
     {
         let identifierFactory = UniqueIdentifier<Value>.Factory()
+        identifierFactory.reserveCapacity(elements.count)
         
         return elements.mapWithIndex { index, value in
             return DiffContainer(
@@ -823,31 +824,42 @@ fileprivate class DiffContainer<Value>
 }
 
 
-private class UniqueIdentifier<Type> : Hashable
+private final class UniqueIdentifier<Type> : Hashable
 {
     private let base : AnyHashable
     private let modifier : Int
+    
+    private let hash : Int
     
     init(base : AnyHashable, modifier : Int)
     {
         self.base = base
         self.modifier = modifier
+        
+        var hasher = Hasher()
+        hasher.combine(self.base)
+        hasher.combine(self.modifier)
+        self.hash = hasher.finalize()
     }
     
     static func == (lhs: UniqueIdentifier, rhs: UniqueIdentifier) -> Bool
     {
-        return lhs.base == rhs.base && lhs.modifier == rhs.modifier
+        return lhs.hash == rhs.hash && lhs.base == rhs.base && lhs.modifier == rhs.modifier
     }
     
     func hash(into hasher: inout Hasher)
     {
-        hasher.combine(self.base)
-        hasher.combine(self.modifier)
+        hasher.combine(self.hash)
     }
     
     final class Factory
     {
         private var counts : [AnyHashable:Int] = [:]
+        
+        func reserveCapacity(_ minimumCapacity : Int)
+        {
+            self.counts.reserveCapacity(minimumCapacity)
+        }
         
         func identifier(for base : AnyHashable) -> UniqueIdentifier
         {
@@ -860,13 +872,15 @@ private class UniqueIdentifier<Type> : Hashable
     }
 }
 
-private class DiffableCollection<Value>
+private final class DiffableCollection<Value>
 {
     private(set) var containers : [DiffContainer<Value>]
-    private(set) var containersByIdentifier : [UniqueIdentifier<Value>:DiffContainer<Value>]
+    private var containersByIdentifier : [UniqueIdentifier<Value>:DiffContainer<Value>]
     
     init(elements : [Value], _ identifierProvider : (Value) -> AnyHashable)
     {
+        self.identifierContainerIndexes.reserveCapacity(elements.count)
+        
         self.containers = DiffContainer.containers(with: elements, identifierProvider: identifierProvider)
         
         self.containersByIdentifier = self.containers.toUniqueDictionary { _, container in
@@ -888,6 +902,11 @@ private class DiffableCollection<Value>
         return self.containersByIdentifier[identifier] != nil
     }
     
+    func container(for identifier : UniqueIdentifier<Value>) -> DiffContainer<Value>
+    {
+        return self.containersByIdentifier[identifier]!
+    }
+    
     func difference(from other : DiffableCollection) -> [DiffContainer<Value>]
     {
         return self.containers.compactMap { element in
@@ -899,28 +918,13 @@ private class DiffableCollection<Value>
         }
     }
     
-    // MARK: Passthrough Mutating Methods
-    
-    func remove(elements : [DiffContainer<Value>])
-    {
-        self.remove(byIdentifier: elements.map { $0.identifier })
-    }
-    
     func subtractDifference(from other : DiffableCollection) -> [DiffContainer<Value>]
     {
         let difference = self.difference(from: other)
         
-        self.remove(elements: difference)
+        self.remove(containers: difference)
         
         return difference
-    }
-    
-    @discardableResult
-    func remove(byIdentifier identifier : UniqueIdentifier<Value>) -> DiffContainer<Value>?
-    {
-        let removed = self.remove(byIdentifier: [identifier])
-        
-        return removed.first
     }
     
     // MARK: Core Mutating Methods
@@ -939,11 +943,10 @@ private class DiffableCollection<Value>
         self.resetIndexLookups()
     }
     
-    @discardableResult
-    func remove(byIdentifier identifiers : [UniqueIdentifier<Value>]) -> [DiffContainer<Value>]
+    func remove(containers : [DiffContainer<Value>])
     {
-        let containers : [DiffContainer<Value>] = identifiers.map {
-            return self.containersByIdentifier.removeValue(forKey: $0)!
+        containers.forEach {
+            self.containersByIdentifier.removeValue(forKey: $0.identifier)
         }
         
         let indexes = containers.map({
@@ -955,8 +958,6 @@ private class DiffableCollection<Value>
         }
         
         self.resetIndexLookups()
-        
-        return containers
     }
     
     // MARK: Private Methods
@@ -965,7 +966,7 @@ private class DiffableCollection<Value>
     
     private func resetIndexLookups()
     {
-        self.identifierContainerIndexes = [:]
+        self.identifierContainerIndexes.removeAll()
     }
     
     private func generateIndexLookupsIfNeeded()
@@ -974,8 +975,8 @@ private class DiffableCollection<Value>
             return
         }
         
-        self.identifierContainerIndexes = self.containers.toUniqueDictionary { index, container in
-            return (container.identifier, index)
+        for (index, container) in self.containers.enumerated() {
+            self.identifierContainerIndexes[container.identifier] = index
         }
     }
 }
@@ -1004,6 +1005,7 @@ private extension Array
     func mapWithIndex<Mapped>(_ block : (Int, Element) throws -> Mapped) rethrows -> [Mapped]
     {
         var mapped = [Mapped]()
+        mapped.reserveCapacity(self.count)
         
         for index in 0..<self.count {
             mapped.append(try block(index, self[index]))
@@ -1012,12 +1014,13 @@ private extension Array
         return mapped
     }
     
-    func toUniqueDictionary<Key:Hashable, Value>(_ block : (Int, Element) throws -> (Key, Value)) rethrows -> Dictionary<Key,Value>
+    func toUniqueDictionary<Key:Hashable, Value>(_ block : (Int, Element) -> (Key, Value)) -> Dictionary<Key,Value>
     {
         var dictionary = Dictionary<Key,Value>()
+        dictionary.reserveCapacity(self.count)
         
         for (index, element) in self.enumerated() {
-            let (key,value) = try block(index, element)
+            let (key,value) = block(index, element)
             
             guard dictionary[key] == nil else {
                 fatalError("Existing entry for key '\(key)' not allowed for unique dictionaries.")
