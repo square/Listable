@@ -81,6 +81,10 @@ internal extension TableView
             {
                 self.row = row
                 
+                // TODO: Right now, because we do not create presentation state for rows that are
+                // not part of the visible slice, we don't start watching the bound data.
+                // this means that the row data can get out of date.
+                
                 self.binding = row.bind?(self.row.element)
                 self.binding?.start()
             }
