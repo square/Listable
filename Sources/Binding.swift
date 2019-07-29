@@ -146,11 +146,6 @@ public protocol BindingContext : AnyBindingContext
     func unbind(from binding : Binding<Element>)
 }
 
-public enum EmptyUpdate
-{
-    case empty
-}
-
 public extension BindingContext
 {
     // MARK: AnyBindingContext
