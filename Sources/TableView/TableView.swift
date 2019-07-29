@@ -50,9 +50,14 @@ public final class TableView : UIView
     
     public func set(content new : Content, animated : Bool = false)
     {
-        _content = new
+        let old = self.content
+        self._content = new
         
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
+        let diff = TableView.diffWith(old: old, new: new)
+        
+        self.updateVisibleSlice(for: .contentChanged(animated: animated)) {
+            self.presentationState.update(with: diff)
+        }
     }
     
     // MARK: Private Properties
@@ -172,7 +177,7 @@ public final class TableView : UIView
     
     private var visibleSlice : Content.Slice = Content.Slice()
     
-    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason, onBeginUpdates : () -> () = {})
     {
         let firstIndexPath = self.visibleIndexPaths.first
         
@@ -181,20 +186,20 @@ public final class TableView : UIView
             let needsNewSlice = self.tableView.isScrolledNearBottom() && self.visibleSlice.truncatedBottom == false
             
             if needsNewSlice {
-                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
             }
         case .contentChanged:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
             
         case .didEndDecelerating:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
             
         case .scrolledToTop:
-            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason)
+            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason, onBeginUpdates: onBeginUpdates)
         }
     }
     
-    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason, onBeginUpdates : () -> ())
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
@@ -204,11 +209,11 @@ public final class TableView : UIView
         if reason.diffsChanges {
             self.tableView.update(with: diff, animated: reason.animated) {
                 self.visibleSlice = new
-                self.presentationState.update(with: diff)
+                onBeginUpdates()
             }
         } else {
             self.visibleSlice = new
-            self.presentationState.update(with: diff)
+            onBeginUpdates()
             
             self.tableView.reloadData()
         }

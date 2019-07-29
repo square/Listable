@@ -40,17 +40,15 @@ public final class Binding<Element>
     }
     
     public init<Context:BindingContext>(
-        initial provider : () -> Element,
+        initial element : Element,
         bind bindingContext : (Element) -> Context,
         update updateElement : @escaping (Context, Context.Update, inout Element) -> ()
         )
     {
-        let element = provider()
-        
         self.element = element
         self.state = .initializing
         
-        let context = bindingContext(element)
+        let context = bindingContext(self.element)
         
         context.didUpdate = { [weak self] (update : Context.Update) -> () in
             self?.contextUpdated(with: update)
