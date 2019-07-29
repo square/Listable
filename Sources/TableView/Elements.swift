@@ -76,7 +76,7 @@ public extension TableViewCellElement
     
     func cellForDisplay(in tableView: UITableView) -> TableViewCell
     {
-        let reuseIdentifier = ReuseIdentifier<Self>()
+        let reuseIdentifier = ReuseIdentifier.identifier(for: self)
         
         let cell : TableViewCell = {
             if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier.stringValue) {
@@ -96,7 +96,7 @@ public extension TableViewCellElement
         in measurementCache : ReusableViewCache
         ) -> CGFloat
     {
-        let reuseIdentifier = ReuseIdentifier<Self>()
+        let reuseIdentifier = ReuseIdentifier.identifier(for: self)
         
         return measurementCache.use(with: reuseIdentifier, create: { Self.createReusableCell(with: reuseIdentifier) }) { cell in
             self.applyTo(cell: cell, reason: .willDisplay)

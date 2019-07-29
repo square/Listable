@@ -182,10 +182,10 @@ public extension TableView
         
         public init(_ element : Element, sizing : AxisSizing = .default)
         {
-            self.reuseIdentifier = ReuseIdentifier<Element>()
-            
             self.element = element
             self.sizing = sizing
+            
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
         }
         
         // MARK: TableViewHeaderFooter
@@ -289,7 +289,7 @@ public extension TableView
         {
             self.element = element
             
-            self.reuseIdentifier = ReuseIdentifier<Element>()
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
             
             self.identifier = AnyIdentifier(element.identifier)
             
