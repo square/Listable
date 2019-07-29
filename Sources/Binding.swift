@@ -94,6 +94,14 @@ public final class Binding<Element>
             
         case .new(let new):
             new.context.bindAny(to: self)
+            
+            self.state = .updating(
+                .init(
+                    context: new.context,
+                    updateValue: new.updateValue,
+                    onChange: nil
+                )
+            )
         }
     }
     
