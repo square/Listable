@@ -16,7 +16,7 @@ public final class Binding<Element>
 
     private var state : State
     
-    private typealias UpdateValue = (AnyBindingContext, Any, inout Element) -> ()
+    private typealias UpdateElement = (AnyBindingContext, Any, inout Element) -> ()
     
     private enum State
     {
@@ -28,13 +28,13 @@ public final class Binding<Element>
         struct New
         {
             let context : AnyBindingContext
-            let updateValue : UpdateValue
+            let updateElement : UpdateElement
         }
         
         struct Updating
         {
             let context : AnyBindingContext
-            let updateValue : UpdateValue
+            let updateElement : UpdateElement
             
             var onChange : OnChange? = nil
         }
@@ -43,7 +43,7 @@ public final class Binding<Element>
     public init<Context:BindingContext>(
         initial element : Element,
         bind bindingContext : (Element) -> Context,
-        update updateValue : @escaping (Context, Context.Update, inout Element) -> ()
+        update updateElement : @escaping (Context, Context.Update, inout Element) -> ()
         )
     {
         self.element = element
@@ -57,8 +57,8 @@ public final class Binding<Element>
         
         self.state = .new(.init(
             context: context,
-            updateValue: { context, contextUpdate, element in
-                updateValue(context as! Context, contextUpdate as! Context.Update, &element)
+            updateElement: { context, contextUpdate, element in
+                updateElement(context as! Context, contextUpdate as! Context.Update, &element)
         }))
     }
     
@@ -90,7 +90,7 @@ public final class Binding<Element>
             self.state = .updating(
                 .init(
                     context: new.context,
-                    updateValue: new.updateValue,
+                    updateElement: new.updateElement,
                     onChange: nil
                 )
             )
@@ -116,7 +116,7 @@ public final class Binding<Element>
             
         case .updating(let state):
             OperationQueue.main.addOperation {
-                state.updateValue(state.context, update, &self.element)
+                state.updateElement(state.context, update, &self.element)
                 state.onChange?(self.element)
             }
         }
