@@ -77,6 +77,8 @@ internal extension TableView
             
             var binding : Binding<Element>?
             
+            private var visibleCell : Element.TableViewCell?
+            
             init(row : TableView.Row<Element>)
             {
                 self.row = row
@@ -85,8 +87,23 @@ internal extension TableView
                 // not part of the visible slice, we don't start watching the bound data.
                 // this means that the row data can get out of date.
                 
-                self.binding = row.bind?(self.row.element)
-                self.binding?.start()
+                if let binding = row.bind?(self.row.element)
+                {
+                    self.binding =  binding
+                    
+                    binding.start()
+
+                    binding.onChange { [weak self] element in
+                        
+                        guard let self = self else { return }
+                        
+                        self.row.element = element
+                        
+                        if let cell = self.visibleCell {
+                            self.row.element.applyTo(cell: cell, reason: .willDisplay)
+                        }
+                    }
+                }
             }
             
             deinit {
@@ -106,22 +123,14 @@ internal extension TableView
             
             public func willDisplay(with cell : UITableViewCell)
             {
-                if
-                    let binding = self.binding,
-                    let cell = cell as? Element.TableViewCell
-                {
-                    binding.onChange { element in
-                        self.row.element = element
-                        self.row.element.applyTo(cell: cell, reason: .willDisplay)
-                    }
-                }
+                self.visibleCell = (cell as! Element.TableViewCell)
                 
                 self.row.onDisplay?(self.row.element)
             }
             
             public func didEndDisplay()
             {
-                self.binding?.onChange(nil)
+                self.visibleCell = nil
             }
         }
     }

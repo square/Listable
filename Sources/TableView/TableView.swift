@@ -29,17 +29,6 @@ public final class TableView : UIView
         set { self.set(content: newValue, animated: false) }
     }
     
-    private var _content : Content = Content(sections: [])
-    
-    private let presentationState : PresentationState = PresentationState()
-    
-    public func set(content new : Content, animated : Bool = false)
-    {
-        _content = new
-        
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
-    }
-    
     public func setContent(animated : Bool = false, _ block : (inout ContentBuilder) -> ())
     {
         var builder = ContentBuilder()
@@ -54,6 +43,16 @@ public final class TableView : UIView
             ),
             animated: animated
         )
+    }
+    
+    private var _content : Content = Content(sections: [])
+    private let presentationState : PresentationState = PresentationState()
+    
+    public func set(content new : Content, animated : Bool = false)
+    {
+        _content = new
+        
+        self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
     // MARK: Private Properties
@@ -150,7 +149,7 @@ public final class TableView : UIView
         }
     }
     
-    var visibleIndexPaths : [IndexPath] {
+    private var visibleIndexPaths : [IndexPath] {
         if let indexPaths = self.tableView.indexPathsForVisibleRows {
             return indexPaths
         } else {
@@ -174,7 +173,7 @@ public final class TableView : UIView
     private var visibleSlice : Content.Slice = Content.Slice()
     private var updatingVisibleSlice : Bool = false
     
-    fileprivate func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {
         guard updatingVisibleSlice == false else {
             print("We do still need the updatingVisibleSlice guard!")
@@ -204,7 +203,7 @@ public final class TableView : UIView
         }
     }
     
-    fileprivate func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
@@ -213,23 +212,7 @@ public final class TableView : UIView
         let old = self.visibleSlice
         let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: sliceBatchSize)
         
-        let diff = SectionedDiff(
-            old: old.content.sections,
-            new: new.content.sections,
-            configuration: SectionedDiff.Configuration(
-                section: .init(
-                    identifier: { $0.identifier },
-                    rows: { $0.rows },
-                    updated: { $0.updatedComparedTo(old: $1) },
-                    movedHint: { $0.movedComparedTo(old: $1) }
-                ),
-                row: .init(
-                    identifier: { $0.identifier },
-                    updated: { $0.updatedComparedTo(old: $1) },
-                    movedHint: { $0.movedComparedTo(old: $1) }
-                )
-            )
-        )
+        let diff = TableView.diffWith(old: old.content, new: new.content)
         
         if reason.diffsChanges {
             /*
@@ -247,6 +230,27 @@ public final class TableView : UIView
             
             self.tableView.reloadData()
         }
+    }
+    
+    private static func diffWith(old : Content, new : Content) -> SectionedDiff<Section, TableViewRow>
+    {
+        return SectionedDiff(
+            old: old.sections,
+            new: new.sections,
+            configuration: SectionedDiff.Configuration(
+                section: .init(
+                    identifier: { $0.identifier },
+                    rows: { $0.rows },
+                    updated: { $0.updatedComparedTo(old: $1) },
+                    movedHint: { $0.movedComparedTo(old: $1) }
+                ),
+                row: .init(
+                    identifier: { $0.identifier },
+                    updated: { $0.updatedComparedTo(old: $1) },
+                    movedHint: { $0.movedComparedTo(old: $1) }
+                )
+            )
+        )
     }
 }
 
