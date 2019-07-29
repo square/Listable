@@ -190,6 +190,10 @@ public final class NotificationContext<Element, Update> : BindingContext
         self.createUpdate = createUpdate
     }
     
+    deinit {
+        self.center.removeObserver(self)
+    }
+    
     @objc private func recievedNotification(_ notification : Notification)
     {
         self.didUpdate?(self.createUpdate(notification))
@@ -205,5 +209,22 @@ public final class NotificationContext<Element, Update> : BindingContext
     public func unbind(from binding : Binding<Element>)
     {
         self.center.removeObserver(self)
+    }
+}
+
+public extension NotificationContext where Update == Notification
+{
+    convenience init(
+        center : NotificationCenter = .default,
+        name : Notification.Name,
+        object : AnyObject? = nil
+        )
+    {
+        self.init(
+            center: center,
+            name: name,
+            object: object,
+            createUpdate: { $0 }
+        )
     }
 }
