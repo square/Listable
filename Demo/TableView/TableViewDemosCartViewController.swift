@@ -142,7 +142,7 @@ struct AmountRow : ProxyElement, TableViewCellViewElement, Equatable
         return .init(self.title)
     }
     
-    func createReusableView() -> View
+    static func createReusableView() -> View
     {
         return ElementView()
     }
@@ -191,7 +191,7 @@ struct ItemizationRow : ProxyElement, TableViewCellViewElement, Equatable
         return .init(self.itemization.remoteID)
     }
     
-    func createReusableView() -> View
+    static func createReusableView() -> View
     {
         return ElementView()
     }

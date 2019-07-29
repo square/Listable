@@ -276,7 +276,7 @@ public extension CollectionView
             
             self.identifier = AnyIdentifier(element.identifier)
             
-            self.reuseIdentifier = ReuseIdentifier<Element>()
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: element)
         }
         
         // MARK: CollectionViewSupplementaryItem
@@ -323,7 +323,7 @@ public extension CollectionView
             self.sizing = sizing
             
             self.identifier = AnyIdentifier(element.identifier)
-            self.reuseIdentifier = ReuseIdentifier<Element>()
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
         }
         
         // MARK: CollectionViewItem

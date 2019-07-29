@@ -182,17 +182,17 @@ public extension TableView
         
         public init(_ element : Element, sizing : AxisSizing = .default)
         {
-            self.reuseIdentifier = ReuseIdentifier<Element>()
-            
             self.element = element
             self.sizing = sizing
+            
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
         }
         
         // MARK: TableViewHeaderFooter
         
         public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
         {
-            return measurementCache.use(with: self.reuseIdentifier, create: { self.element.createReusableHeaderFooterView(with: self.reuseIdentifier) }) { view in
+            return measurementCache.use(with: self.reuseIdentifier, create: { Element.createReusableHeaderFooterView(with: self.reuseIdentifier) }) { view in
                 self.element.applyTo(headerFooterView: view, reason: .willDisplay)
                 
                 return self.sizing.height(with: view, fittingWidth: width, default: defaultHeight)
@@ -214,7 +214,7 @@ public extension TableView
                 if let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: self.reuseIdentifier.stringValue) {
                     return view as! Element.HeaderFooterView
                 } else {
-                    return self.element.createReusableHeaderFooterView(with: self.reuseIdentifier)
+                    return Element.createReusableHeaderFooterView(with: self.reuseIdentifier)
                 }
             }()
             
@@ -289,7 +289,7 @@ public extension TableView
         {
             self.element = element
             
-            self.reuseIdentifier = ReuseIdentifier<Element>()
+            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
             
             self.identifier = AnyIdentifier(element.identifier)
             

@@ -50,12 +50,7 @@ public protocol TableViewCellElement
     
     //var reuseIdentifier : ReuseIdentifier<Self> { get }
     
-    /*
-     !! IMPORTANT !!
-     Even though this is an instance method, you must ALWAYS return an identical cell from this method.
-     Why? We have not yet implemented a way to salt the return value with initializer or config input like cell style, etc.
-     */
-    func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableViewCell
+    static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableViewCell
     
     // MARK: Dequeuing & Rendering
     
@@ -81,13 +76,13 @@ public extension TableViewCellElement
     
     func cellForDisplay(in tableView: UITableView) -> TableViewCell
     {
-        let reuseIdentifier = ReuseIdentifier<Self>()
+        let reuseIdentifier = ReuseIdentifier.identifier(for: self)
         
         let cell : TableViewCell = {
             if let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier.stringValue) {
                 return cell as! TableViewCell
             } else {
-                return self.createReusableCell(with: reuseIdentifier)
+                return Self.createReusableCell(with: reuseIdentifier)
             }
         }()
                 
@@ -101,9 +96,9 @@ public extension TableViewCellElement
         in measurementCache : ReusableViewCache
         ) -> CGFloat
     {
-        let reuseIdentifier = ReuseIdentifier<Self>()
+        let reuseIdentifier = ReuseIdentifier.identifier(for: self)
         
-        return measurementCache.use(with: reuseIdentifier, create: { self.createReusableCell(with: reuseIdentifier) }) { cell in
+        return measurementCache.use(with: reuseIdentifier, create: { Self.createReusableCell(with: reuseIdentifier) }) { cell in
             self.applyTo(cell: cell, reason: .willDisplay)
             return sizing.height(with: cell, fittingWidth: width, default: defaultHeight)
         }
@@ -129,17 +124,17 @@ public protocol TableViewCellViewElement : TableViewCellElement where TableViewC
     
     associatedtype View:UIView
     
-    func createReusableView() -> View
+    static func createReusableView() -> View
     
     func applyTo(view : View, reason : ApplyReason)
 }
 
 public extension TableViewCellViewElement
 {
-    func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementCell<Self>
+    static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementCell<Self>
     {
         return TableView.ElementCell(
-            view: self.createReusableView(),
+            view: Self.createReusableView(),
             style: UITableViewCell.CellStyle.default,
             reuseIdentifier: reuseIdentifier.stringValue
         )
@@ -168,7 +163,7 @@ public protocol TableViewHeaderFooterElement
     
     associatedtype HeaderFooterView:UITableViewHeaderFooterView
     
-    func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> HeaderFooterView
+    static func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> HeaderFooterView
 }
 
 public extension TableViewHeaderFooterElement where Self:Equatable
@@ -188,17 +183,17 @@ public protocol TableViewHeaderFooterViewElement : TableViewHeaderFooterElement 
 {
     associatedtype View:UIView
     
-    func makeView() -> View
+    static func createReusableView() -> View
     
     func applyTo(view : View, reason : ApplyReason)
 }
 
 public extension TableViewHeaderFooterViewElement
 {
-    func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementHeaderFooterView<Self>
+    static func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementHeaderFooterView<Self>
     {
         return TableView.ElementHeaderFooterView(
-            view:self.makeView(),
+            view:Self.createReusableView(),
             reuseIdentifier: reuseIdentifier.stringValue
         )
     }

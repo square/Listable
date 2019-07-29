@@ -5,56 +5,44 @@
 //  Created by Kyle Van Essen on 6/21/19.
 //
 
-import Foundation
 
+private var identifiers : [ObjectIdentifier:Any] = [:]
 
-public class ReuseIdentifier<Element> : Hashable
-{    
-    init(modifiers : [AnyHashable] = [])
+public final class ReuseIdentifier<Element> : Hashable
+{
+    // MARK: Fetching Identifiers
+    
+    public static func identifier(for element : Element) -> ReuseIdentifier<Element>
+    {
+        let typeIdentifier = ObjectIdentifier(Element.self)
+        
+        if let identifier = identifiers[typeIdentifier] {
+            return identifier as! ReuseIdentifier<Element>
+        } else {
+            let identifier = ReuseIdentifier<Element>()
+            identifiers[typeIdentifier] = identifier
+            return identifier
+        }
+    }
+    
+    public let stringValue : String
+    
+    // MARK: Private Methods
+    
+    private init()
     {
         self.identifier = ObjectIdentifier(Element.self)
         
-        self.modifiers = modifiers
+        self.stringValue = "\(String(reflecting: Element.self))(\(self.identifier))"
     }
     
     private let identifier : ObjectIdentifier
-    private let modifiers : [AnyHashable]
-    
-    public lazy var stringValue : String = {
-        
-        // TODO Is this safe and unique? In theory the two items below are duplicative,
-        // but are they guaranteed to always work the way they do?
-        // TODO Is this fast enough?
-        var string =  "\(String(reflecting: Element.self))(\(self.identifier))"
-        
-        if self.modifiers.count > 0 {
-            
-            string += "("
-            
-            modifiers.forEach {
-                string += "\($0), "
-            }
-            
-            string += ")"
-        }
-        
-        return string
-
-    }()
     
     // Equatable
     
     public static func == (lhs: ReuseIdentifier, rhs: ReuseIdentifier) -> Bool
     {
-        if lhs.identifier != rhs.identifier {
-            return false
-        }
-        
-        if lhs.modifiers != rhs.modifiers {
-            return false
-        }
-        
-        return true
+        return lhs.identifier == rhs.identifier
     }
     
     // Hashable
@@ -62,6 +50,5 @@ public class ReuseIdentifier<Element> : Hashable
     public func hash(into hasher: inout Hasher)
     {
         hasher.combine(self.identifier)
-        hasher.combine(self.modifiers)
     }
 }
