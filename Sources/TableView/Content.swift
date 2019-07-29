@@ -275,46 +275,6 @@ public extension TableView
         
         public typealias CreateBinding = (Element) -> Binding<Element>
         internal let bind : CreateBinding?
-        
-        static func any(
-            _ element : Element,
-            sizing : AxisSizing = .default,
-            configuration : CellConfiguration = .default,
-            leadingActions : SwipeActions? = nil,
-            trailingActions : SwipeActions? = nil,
-            bind : CreateBinding? = nil,
-            onDisplay : OnDisplay? = nil,
-            onTap : OnTap? = nil
-            ) -> Row<AnyTableViewCellElement>
-        {
-            let anyBind : ((AnyTableViewCellElement) -> Binding<AnyTableViewCellElement>)?
-            
-            if let bind = bind {
-                anyBind = { anyElement in
-                    return Binding(
-                        initial: anyElement,
-                        bind: { binding in
-                            return Binding<AnyTableViewCellElement>.WrapperContext<Element>(wrapping: bind(element), for: binding)
-                    },
-                        update: { context, element in
-                            element = AnyTableViewCellElement(context.latest)
-                    })
-                }
-            } else {
-                anyBind = nil
-            }
-            
-            return Row<AnyTableViewCellElement>(
-                AnyTableViewCellElement(element),
-                sizing: sizing,
-                configuration: configuration,
-                leadingActions: leadingActions,
-                trailingActions: trailingActions,
-                bind: anyBind,
-                onDisplay: { onDisplay?($0.base as! Element) },
-                onTap: { onTap?($0.base as! Element) }
-            )
-        }
  
         public init(
             _ element : Element,

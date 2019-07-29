@@ -67,8 +67,10 @@ public final class Binding<Element>
         case .initializing, .new, .discarded: break
             
         case .updating(let state):
-            state.updateValue(state.context, &self.element)
-            state.onChange?(self.element)
+            OperationQueue.main.addOperation {
+                state.updateValue(state.context, &self.element)
+                state.onChange?(self.element)
+            }
         }
     }
     
@@ -110,38 +112,6 @@ public final class Binding<Element>
 
 public extension Binding
 {
-    final class WrapperContext<Wrapped> : BindingContext
-    {
-        private let wrapping : Binding<Wrapped>
-        private weak var binding : Binding<Element>?
-        
-        internal var latest : Wrapped
-        
-        init(wrapping : Binding<Wrapped>, for binding : Binding<Element>)
-        {
-            self.wrapping = wrapping
-            self.binding = binding
-            
-            self.latest = self.wrapping.element
-            
-            self.wrapping.onChange { [weak self] wrapped in
-                self?.latest = wrapped
-                self?.binding?.signal()
-            }
-        }
-        
-        public func bind(to binding: Binding<Element>)
-        {
-            self.wrapping.start()
-        }
-        
-        public func unbind(from binding : Binding<Element>)
-        {
-            self.wrapping.discard()
-        }
-    }
-
-    
     final class NotificationContext : BindingContext
     {
         private weak var binding : Binding?
@@ -166,8 +136,6 @@ public extension Binding
         
         @objc private func recievedNotification(_ notification : Notification)
         {
-            // TODO: Could come in on any thread...
-            
             self.binding?.signal()
         }
     
