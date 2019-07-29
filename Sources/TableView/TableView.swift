@@ -171,18 +171,9 @@ public final class TableView : UIView
     //
     
     private var visibleSlice : Content.Slice = Content.Slice()
-    private var updatingVisibleSlice : Bool = false
     
     private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {
-        guard updatingVisibleSlice == false else {
-            print("We do still need the updatingVisibleSlice guard!")
-            return
-        }
-        
-        defer { self.updatingVisibleSlice = false }
-        self.updatingVisibleSlice = true
-        
         let firstIndexPath = self.visibleIndexPaths.first
         
         switch reason {
@@ -207,20 +198,11 @@ public final class TableView : UIView
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
-        let sliceBatchSize = 250
-        
-        let old = self.visibleSlice
-        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: sliceBatchSize)
-        
-        let diff = TableView.diffWith(old: old.content, new: new.content)
+        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
+        let diff = TableView.diffWith(old: self.visibleSlice.content, new: new.content)
         
         if reason.diffsChanges {
-            /*
-             We only diff in the case of content change to avoid visual artifacts in the table view;
-             even with no animation type provided to batch update methods, the table view still moves
-             rows around in an animated manner.
-             */
-            self.tableView.apply(diff: diff, animated: reason.animated) {
+            self.tableView.update(with: diff, animated: reason.animated) {
                 self.visibleSlice = new
                 self.presentationState.update(with: diff)
             }
@@ -259,9 +241,7 @@ public protocol TableViewPresentationStateRow : TableViewPresentationStateRow_In
 }
 
 public protocol TableViewPresentationStateRow_Internal
-{
-    var anyRow : TableViewRow { get }
-    
+{    
     func update(with old : TableViewRow, new : TableViewRow)
     
     func willDisplay(with cell : UITableViewCell)
@@ -525,7 +505,7 @@ fileprivate extension UITableView
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
     }
     
-    func apply(diff : SectionedDiff<TableView.Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
+    func update(with diff : SectionedDiff<TableView.Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
     {
         self.beginUpdates()
         onBeginUpdates()

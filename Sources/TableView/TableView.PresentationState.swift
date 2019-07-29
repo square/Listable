@@ -94,7 +94,6 @@ internal extension TableView
                     binding.start()
 
                     binding.onChange { [weak self] element in
-                        
                         guard let self = self else { return }
                         
                         self.row.element = element
@@ -111,10 +110,6 @@ internal extension TableView
             }
             
             // MARK: TableViewPresentationStateRow
-            
-            public var anyRow: TableViewRow {
-                return self.row
-            }
             
             public func update(with old : TableViewRow, new : TableViewRow)
             {

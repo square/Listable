@@ -85,8 +85,6 @@ public final class Binding<Element>
         case .initializing, .updating, .discarded: break
             
         case .new(let new):
-            new.context.bindAny(to: self)
-            
             self.state = .updating(
                 .init(
                     context: new.context,
@@ -94,6 +92,8 @@ public final class Binding<Element>
                     onChange: nil
                 )
             )
+            
+            new.context.anyBind(to: self)
         }
     }
     
@@ -103,10 +103,9 @@ public final class Binding<Element>
         case .initializing, .new, .discarded: break
             
         case .updating(let state):
-            state.context.unbindAny(from: self)
+            self.state = .discarded
+            state.context.anyUnbind(from: self)
         }
-        
-        self.state = .discarded
     }
     
     private func contextUpdated(with update: Any)
@@ -126,8 +125,10 @@ public final class Binding<Element>
 
 public protocol AnyBindingContext : AnyObject
 {
-    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
-    func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
+    func anyBind<AnyElement>(to binding : Binding<AnyElement>)
+    func anyFetchLatestUpdate<AnyUpdate>() -> AnyUpdate
+    
+    func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
 }
 
 
@@ -143,6 +144,8 @@ public protocol BindingContext : AnyBindingContext
     var didUpdate : DidUpdate? { get set }
     
     func bind(to binding : Binding<Element>)
+    func fetchLatestUpdate() -> Update
+    
     func unbind(from binding : Binding<Element>)
 }
 
@@ -150,14 +153,20 @@ public extension BindingContext
 {
     // MARK: AnyBindingContext
     
-    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
+    func anyBind<AnyElement>(to binding : Binding<AnyElement>)
     {
         let binding = binding as! Binding<Element>
         
         self.bind(to: binding)
     }
     
-    func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
+    func anyFetchLatestUpdate<AnyUpdate>() -> AnyUpdate
+    {
+        // TODO
+        fatalError()
+    }
+    
+    func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
     {
         let binding = binding as! Binding<Element>
         
@@ -204,6 +213,12 @@ public final class NotificationContext<Element, Update> : BindingContext
     public func bind(to binding: Binding<Element>)
     {
         self.center.addObserver(self, selector: #selector(recievedNotification(_:)), name: self.name, object: self.object)
+    }
+    
+    // TODO Implement me...
+    public func fetchLatestUpdate() -> Update
+    {
+        fatalError()
     }
     
     public func unbind(from binding : Binding<Element>)
