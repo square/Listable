@@ -94,6 +94,8 @@ public final class Binding<Element>
             )
             
             new.context.anyBind(to: self)
+            
+            new.context.fetchAndPushLatestUpdate()
         }
     }
     
@@ -126,7 +128,7 @@ public final class Binding<Element>
 public protocol AnyBindingContext : AnyObject
 {
     func anyBind<AnyElement>(to binding : Binding<AnyElement>)
-    func anyFetchLatestUpdate<AnyUpdate>() -> AnyUpdate
+    func fetchAndPushLatestUpdate()
     
     func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
 }
@@ -160,10 +162,11 @@ public extension BindingContext
         self.bind(to: binding)
     }
     
-    func anyFetchLatestUpdate<AnyUpdate>() -> AnyUpdate
+    func fetchAndPushLatestUpdate()
     {
-        // TODO
-        fatalError()
+        let latest = self.fetchLatestUpdate()
+        
+        self.didUpdate?(latest)
     }
     
     func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
