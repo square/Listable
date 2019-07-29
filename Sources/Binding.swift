@@ -51,7 +51,7 @@ public final class Binding<Element>
         
         let context = bindingContext(element)
         
-        context.contextUpdated = { [weak self] (update : Context.Update) -> () in
+        context.didUpdate = { [weak self] (update : Context.Update) -> () in
             self?.contextUpdated(with: update)
         }
         
@@ -136,16 +136,19 @@ public protocol BindingContext : AnyBindingContext
     associatedtype Element
     associatedtype Update
     
-    typealias ContextUpdated = (Update) -> ()
-    var contextUpdated : ContextUpdated? { get set }
+    typealias DidUpdate = (Update) -> ()
+    
+    // Call this closure when your context needs to signal an update.
+    // Set by the system when creating the context. You should not set this value yourself.
+    var didUpdate : DidUpdate? { get set }
     
     func bind(to binding : Binding<Element>)
     func unbind(from binding : Binding<Element>)
 }
 
-public enum NoUpdate
+public enum EmptyUpdate
 {
-    case none
+    case empty
 }
 
 public extension BindingContext
@@ -167,15 +170,10 @@ public extension BindingContext
     }
 }
 
-public class TestBindingContext<Element, Update>
-{
-    
-}
-
 
 public final class NotificationContext<Element, Update> : BindingContext
 {
-    public var contextUpdated : ContextUpdated?
+    public var didUpdate : DidUpdate?
     
     public let center : NotificationCenter
     public let name : Notification.Name
@@ -190,8 +188,6 @@ public final class NotificationContext<Element, Update> : BindingContext
         createUpdate : @escaping (Notification) -> Update
         )
     {
-        self.contextUpdated = { _ in }
-        
         self.center = center
         self.name = name
         self.object = object
@@ -201,7 +197,7 @@ public final class NotificationContext<Element, Update> : BindingContext
     
     @objc private func recievedNotification(_ notification : Notification)
     {
-        self.contextUpdated?(self.createUpdate(notification))
+        self.didUpdate?(self.createUpdate(notification))
     }
     
     // MARK: BindingContext

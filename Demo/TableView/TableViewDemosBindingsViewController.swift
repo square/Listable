@@ -33,12 +33,13 @@ final class TableViewDemosBindingsViewController : UIViewController
             table += TableView.Section(header: "Demo Section") { rows in
                 rows += TableView.Row(String(self.number), bind: {
                     Binding(initial: $0, bind: { _ in
-                        NotificationContext<String,NoUpdate>(
+                        NotificationContext<String,EmptyUpdate>(
                             name: .incrementedDemo,
                             createUpdate : { _ in
-                                return .none
+                                return .empty
                         })
                     }, update: { _, _, element in
+                        self.number += 1
                         element = String(self.number)
                     })
                 })
@@ -48,8 +49,6 @@ final class TableViewDemosBindingsViewController : UIViewController
     
     @objc func increment()
     {
-        self.number += 1
-        
         NotificationCenter.default.post(name: .incrementedDemo, object: nil)
     }
 }
