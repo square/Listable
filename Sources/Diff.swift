@@ -966,7 +966,7 @@ private final class DiffableCollection<Value>
     
     private func resetIndexLookups()
     {
-        self.identifierContainerIndexes.removeAll()
+        self.identifierContainerIndexes.removeAll(keepingCapacity: true)
     }
     
     private func generateIndexLookupsIfNeeded()
