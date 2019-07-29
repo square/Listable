@@ -51,7 +51,8 @@ public final class TableView : UIView
     public func set(content new : Content, animated : Bool = false)
     {
         let old = self.content
-        self._content = new
+    
+        _content = new
         
         let diff = TableView.diffWith(old: old, new: new)
         
