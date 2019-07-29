@@ -11,12 +11,11 @@ import Foundation
 public final class Binding<Element>
 {
     private(set) public var element : Element
-    
-    internal typealias OnChange = (Element) -> ()
 
     private var state : State
     
     private typealias UpdateElement = (AnyBindingContext, Any, inout Element) -> ()
+    internal typealias OnChange = (Element) -> ()
     
     private enum State
     {
@@ -41,11 +40,13 @@ public final class Binding<Element>
     }
     
     public init<Context:BindingContext>(
-        initial element : Element,
+        initial provider : () -> Element,
         bind bindingContext : (Element) -> Context,
         update updateElement : @escaping (Context, Context.Update, inout Element) -> ()
         )
     {
+        let element = provider()
+        
         self.element = element
         self.state = .initializing
         
@@ -94,8 +95,6 @@ public final class Binding<Element>
             )
             
             new.context.anyBind(to: self)
-            
-            new.context.fetchAndPushLatestUpdate()
         }
     }
     
@@ -128,7 +127,6 @@ public final class Binding<Element>
 public protocol AnyBindingContext : AnyObject
 {
     func anyBind<AnyElement>(to binding : Binding<AnyElement>)
-    func fetchAndPushLatestUpdate()
     
     func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
 }
@@ -146,8 +144,6 @@ public protocol BindingContext : AnyBindingContext
     var didUpdate : DidUpdate? { get set }
     
     func bind(to binding : Binding<Element>)
-    func fetchLatestUpdate() -> Update
-    
     func unbind(from binding : Binding<Element>)
 }
 
@@ -160,13 +156,6 @@ public extension BindingContext
         let binding = binding as! Binding<Element>
         
         self.bind(to: binding)
-    }
-    
-    func fetchAndPushLatestUpdate()
-    {
-        let latest = self.fetchLatestUpdate()
-        
-        self.didUpdate?(latest)
     }
     
     func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
@@ -216,12 +205,6 @@ public final class NotificationContext<Element, Update> : BindingContext
     public func bind(to binding: Binding<Element>)
     {
         self.center.addObserver(self, selector: #selector(recievedNotification(_:)), name: self.name, object: self.object)
-    }
-    
-    // TODO Implement me...
-    public func fetchLatestUpdate() -> Update
-    {
-        fatalError()
     }
     
     public func unbind(from binding : Binding<Element>)
