@@ -31,8 +31,8 @@ final class TableViewDemosBindingsViewController : UIViewController
         
         self.tableView.setContent { table in
             table += TableView.Section(header: "Demo Section") { rows in
-                rows += TableView.Row(String(self.number), bind: {
-                    Binding(initial: $0, bind: { _ in
+                rows += TableView.Row(String(self.number), bind: { element in
+                    Binding(initial: { element }, bind: { _ in
                         NotificationContext<String,Notification>(name: .incrementedDemo)
                     }, update: { _, _, element in
                         self.number += 1

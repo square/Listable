@@ -581,6 +581,8 @@ public extension TableView
         
         struct Slice
         {
+            static let defaultSize : Int = 1000
+            
             let truncatedBottom : Bool
             let content : Content
             
@@ -605,8 +607,12 @@ public extension TableView
                 
                 case contentChanged(animated : Bool)
                 
-                // TODO: Remove
                 var diffsChanges : Bool {
+                    /*
+                     We only diff in the case of content change to avoid visual artifacts in the table view;
+                     even with no animation type provided to batch update methods, the table view still moves
+                     rows around in an animated manner.
+                     */
                     switch self {
                     case .scrolledDown: return false
                     case .didEndDecelerating: return false

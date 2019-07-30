@@ -29,17 +29,6 @@ public final class TableView : UIView
         set { self.set(content: newValue, animated: false) }
     }
     
-    private var _content : Content = Content(sections: [])
-    
-    private let presentationState : PresentationState = PresentationState()
-    
-    public func set(content new : Content, animated : Bool = false)
-    {
-        _content = new
-        
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
-    }
-    
     public func setContent(animated : Bool = false, _ block : (inout ContentBuilder) -> ())
     {
         var builder = ContentBuilder()
@@ -54,6 +43,15 @@ public final class TableView : UIView
             ),
             animated: animated
         )
+    }
+    
+    private var _content : Content = Content(sections: [])
+    
+    public func set(content new : Content, animated : Bool = false)
+    {
+        _content = new
+        
+        self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
     // MARK: Private Properties
@@ -150,7 +148,7 @@ public final class TableView : UIView
         }
     }
     
-    var visibleIndexPaths : [IndexPath] {
+    private var visibleIndexPaths : [IndexPath] {
         if let indexPaths = self.tableView.indexPathsForVisibleRows {
             return indexPaths
         } else {
@@ -171,19 +169,11 @@ public final class TableView : UIView
     // MARK: Updating Visible Slice
     //
     
+    private let visiblePresentationState : PresentationState = PresentationState()
     private var visibleSlice : Content.Slice = Content.Slice()
-    private var updatingVisibleSlice : Bool = false
     
-    fileprivate func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {
-        guard updatingVisibleSlice == false else {
-            print("We do still need the updatingVisibleSlice guard!")
-            return
-        }
-        
-        defer { self.updatingVisibleSlice = false }
-        self.updatingVisibleSlice = true
-        
         let firstIndexPath = self.visibleIndexPaths.first
         
         switch reason {
@@ -204,18 +194,31 @@ public final class TableView : UIView
         }
     }
     
-    fileprivate func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
-        let sliceBatchSize = 250
+        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
+        let diff = TableView.diffWith(old: self.visibleSlice.content, new: new.content)
         
-        let old = self.visibleSlice
-        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: sliceBatchSize)
+        let updateData = {
+            self.visibleSlice = new
+            self.visiblePresentationState.update(with: diff)
+        }
         
-        let diff = SectionedDiff(
-            old: old.content.sections,
-            new: new.content.sections,
+        if reason.diffsChanges {
+            self.tableView.update(with: diff, animated: reason.animated, onBeginUpdates: updateData)
+        } else {
+            updateData()
+            self.tableView.reloadData()
+        }
+    }
+    
+    private static func diffWith(old : Content, new : Content) -> SectionedDiff<Section, TableViewRow>
+    {
+        return SectionedDiff(
+            old: old.sections,
+            new: new.sections,
             configuration: SectionedDiff.Configuration(
                 section: .init(
                     identifier: { $0.identifier },
@@ -230,23 +233,6 @@ public final class TableView : UIView
                 )
             )
         )
-        
-        if reason.diffsChanges {
-            /*
-             We only diff in the case of content change to avoid visual artifacts in the table view;
-             even with no animation type provided to batch update methods, the table view still moves
-             rows around in an animated manner.
-             */
-            self.tableView.apply(diff: diff, animated: reason.animated) {
-                self.visibleSlice = new
-                self.presentationState.update(with: diff)
-            }
-        } else {
-            self.visibleSlice = new
-            self.presentationState.update(with: diff)
-            
-            self.tableView.reloadData()
-        }
     }
 }
 
@@ -255,9 +241,7 @@ public protocol TableViewPresentationStateRow : TableViewPresentationStateRow_In
 }
 
 public protocol TableViewPresentationStateRow_Internal
-{
-    var anyRow : TableViewRow { get }
-    
+{    
     func update(with old : TableViewRow, new : TableViewRow)
     
     func willDisplay(with cell : UITableViewCell)
@@ -402,7 +386,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.presentationState.row(at: indexPath)
+            let row = self.tableView.visiblePresentationState.row(at: indexPath)
             
             self.displayedRows[ObjectIdentifier(cell)] = row
             
@@ -521,7 +505,7 @@ fileprivate extension UITableView
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
     }
     
-    func apply(diff : SectionedDiff<TableView.Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
+    func update(with diff : SectionedDiff<TableView.Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
     {
         self.beginUpdates()
         onBeginUpdates()

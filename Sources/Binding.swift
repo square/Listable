@@ -11,12 +11,11 @@ import Foundation
 public final class Binding<Element>
 {
     private(set) public var element : Element
-    
-    internal typealias OnChange = (Element) -> ()
 
     private var state : State
     
     private typealias UpdateElement = (AnyBindingContext, Any, inout Element) -> ()
+    internal typealias OnChange = (Element) -> ()
     
     private enum State
     {
@@ -41,15 +40,16 @@ public final class Binding<Element>
     }
     
     public init<Context:BindingContext>(
-        initial element : Element,
+        initial provider : () -> Element,
         bind bindingContext : (Element) -> Context,
         update updateElement : @escaping (Context, Context.Update, inout Element) -> ()
         )
     {
-        self.element = element
         self.state = .initializing
         
-        let context = bindingContext(element)
+        self.element = provider()
+        
+        let context = bindingContext(self.element)
         
         context.didUpdate = { [weak self] (update : Context.Update) -> () in
             self?.contextUpdated(with: update)
@@ -85,8 +85,6 @@ public final class Binding<Element>
         case .initializing, .updating, .discarded: break
             
         case .new(let new):
-            new.context.bindAny(to: self)
-            
             self.state = .updating(
                 .init(
                     context: new.context,
@@ -94,6 +92,8 @@ public final class Binding<Element>
                     onChange: nil
                 )
             )
+            
+            new.context.anyBind(to: self)
         }
     }
     
@@ -103,10 +103,9 @@ public final class Binding<Element>
         case .initializing, .new, .discarded: break
             
         case .updating(let state):
-            state.context.unbindAny(from: self)
+            self.state = .discarded
+            state.context.anyUnbind(from: self)
         }
-        
-        self.state = .discarded
     }
     
     private func contextUpdated(with update: Any)
@@ -126,8 +125,9 @@ public final class Binding<Element>
 
 public protocol AnyBindingContext : AnyObject
 {
-    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
-    func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
+    func anyBind<AnyElement>(to binding : Binding<AnyElement>)
+    
+    func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
 }
 
 
@@ -150,14 +150,14 @@ public extension BindingContext
 {
     // MARK: AnyBindingContext
     
-    func bindAny<AnyElement>(to binding : Binding<AnyElement>)
+    func anyBind<AnyElement>(to binding : Binding<AnyElement>)
     {
         let binding = binding as! Binding<Element>
         
         self.bind(to: binding)
     }
     
-    func unbindAny<AnyElement>(from binding : Binding<AnyElement>)
+    func anyUnbind<AnyElement>(from binding : Binding<AnyElement>)
     {
         let binding = binding as! Binding<Element>
         
