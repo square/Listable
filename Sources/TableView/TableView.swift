@@ -25,7 +25,7 @@ public final class TableView : UIView
     }
     
     public var content : Content {
-        get { return _content }
+        get { return self.storage.content }
         set { self.set(content: newValue, animated: false) }
     }
     
@@ -45,11 +45,9 @@ public final class TableView : UIView
         )
     }
     
-    private var _content : Content = Content(sections: [])
-    
     public func set(content new : Content, animated : Bool = false)
     {
-        _content = new
+        self.storage.content = new
         
         self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
@@ -124,7 +122,7 @@ public final class TableView : UIView
         return self.visibleIndexPaths.map {
             VisibleRow(
                 indexPath: $0,
-                row: self.visibleSlice.content.row(at: $0)
+                row: self.storage.visibleSlice.content.row(at: $0)
             )
         }
     }
@@ -143,7 +141,7 @@ public final class TableView : UIView
         return sectionIndexes.map {
             VisibleSection(
                 index: $0,
-                section: self.visibleSlice.content.sections[$0]
+                section: self.storage.visibleSlice.content.sections[$0]
             )
         }
     }
@@ -166,11 +164,17 @@ public final class TableView : UIView
     }
     
     //
-    // MARK: Updating Visible Slice
+    // MARK: Updating Content
     //
     
-    private let visiblePresentationState : PresentationState = PresentationState()
-    private var visibleSlice : Content.Slice = Content.Slice()
+    private var storage : Storage = Storage()
+    
+    private struct Storage {
+        let visiblePresentationState : PresentationState = PresentationState()
+        
+        var content : Content = Content(sections: [])
+        var visibleSlice : Content.Slice = Content.Slice()
+    }
     
     private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {
@@ -178,7 +182,7 @@ public final class TableView : UIView
         
         switch reason {
         case .scrolledDown:
-            let needsNewSlice = self.tableView.isScrolledNearBottom() && self.visibleSlice.truncatedBottom == false
+            let needsNewSlice = self.tableView.isScrolledNearBottom() && self.storage.visibleSlice.truncatedBottom == false
             
             if needsNewSlice {
                 self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
@@ -199,11 +203,11 @@ public final class TableView : UIView
         let globalIndexPath = globalIndexPath ?? .zero
         
         let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
-        let diff = TableView.diffWith(old: self.visibleSlice.content, new: new.content)
+        let diff = TableView.diffWith(old: self.storage.visibleSlice.content, new: new.content)
         
         let updateData = {
-            self.visibleSlice = new
-            self.visiblePresentationState.update(with: diff)
+            self.storage.visibleSlice = new
+            self.storage.visiblePresentationState.update(with: diff)
         }
         
         if reason.diffsChanges {
@@ -257,19 +261,19 @@ fileprivate extension TableView
         
         func numberOfSections(in tableView: UITableView) -> Int
         {
-            return self.tableView.visibleSlice.content.sections.count
+            return self.tableView.storage.visibleSlice.content.sections.count
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
         {
-            let section = self.tableView.visibleSlice.content.sections[section]
+            let section = self.tableView.storage.visibleSlice.content.sections[section]
             
             return section.rows.count
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             
             return row.dequeueCell(in: tableView)
         }
@@ -308,7 +312,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
         {
-            let section = self.tableView.visibleSlice.content.sections[section]
+            let section = self.tableView.storage.visibleSlice.content.sections[section]
             
             guard let header = section.header else {
                 return nil
@@ -319,7 +323,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
         {
-            let section = self.tableView.visibleSlice.content.sections[section]
+            let section = self.tableView.storage.visibleSlice.content.sections[section]
             
             guard let footer = section.footer else {
                 return nil
@@ -330,7 +334,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             
             return row.heightWith(
                 width: tableView.bounds.size.width,
@@ -341,7 +345,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
         {
-            let section = self.tableView.visibleSlice.content.sections[section]
+            let section = self.tableView.storage.visibleSlice.content.sections[section]
             
             guard let header = section.header else {
                 return 0.0
@@ -356,7 +360,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat
         {
-            let section = self.tableView.visibleSlice.content.sections[section]
+            let section = self.tableView.storage.visibleSlice.content.sections[section]
             
             guard let footer = section.footer else {
                 return 0.0
@@ -373,7 +377,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             
             row.performOnTap()
             
@@ -386,7 +390,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.visiblePresentationState.row(at: indexPath)
+            let row = self.tableView.storage.visiblePresentationState.row(at: indexPath)
             
             self.displayedRows[ObjectIdentifier(cell)] = row
             
@@ -419,7 +423,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             let type = row.swipeToDeleteType
             
             switch type {
@@ -431,7 +435,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             let type = row.swipeToDeleteType
             
             switch type {
@@ -444,7 +448,7 @@ fileprivate extension TableView
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             
             return row.leadingSwipeActionsConfiguration
         }
@@ -452,7 +456,7 @@ fileprivate extension TableView
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
             
             return row.trailingSwipeActionsConfiguration
         }
