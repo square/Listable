@@ -581,7 +581,7 @@ public extension TableView
         
         struct Slice
         {
-            static let defaultSize : Int = 250
+            static let defaultSize : Int = 1000
             
             let truncatedBottom : Bool
             let content : Content

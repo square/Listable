@@ -40,13 +40,14 @@ public final class Binding<Element>
     }
     
     public init<Context:BindingContext>(
-        initial element : Element,
+        initial provider : () -> Element,
         bind bindingContext : (Element) -> Context,
         update updateElement : @escaping (Context, Context.Update, inout Element) -> ()
         )
     {
-        self.element = element
         self.state = .initializing
+        
+        self.element = provider()
         
         let context = bindingContext(self.element)
         

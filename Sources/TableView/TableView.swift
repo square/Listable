@@ -46,19 +46,12 @@ public final class TableView : UIView
     }
     
     private var _content : Content = Content(sections: [])
-    private let presentationState : PresentationState = PresentationState()
     
     public func set(content new : Content, animated : Bool = false)
     {
-        let old = self.content
-    
         _content = new
         
-        let diff = TableView.diffWith(old: old, new: new)
-        
-        self.updateVisibleSlice(for: .contentChanged(animated: animated)) {
-            self.presentationState.update(with: diff)
-        }
+        self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
     // MARK: Private Properties
@@ -176,9 +169,10 @@ public final class TableView : UIView
     // MARK: Updating Visible Slice
     //
     
+    private let visiblePresentationState : PresentationState = PresentationState()
     private var visibleSlice : Content.Slice = Content.Slice()
     
-    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason, onBeginUpdates : () -> () = {})
+    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {
         let firstIndexPath = self.visibleIndexPaths.first
         
@@ -187,35 +181,35 @@ public final class TableView : UIView
             let needsNewSlice = self.tableView.isScrolledNearBottom() && self.visibleSlice.truncatedBottom == false
             
             if needsNewSlice {
-                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
+                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
             }
         case .contentChanged:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
+            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
             
         case .didEndDecelerating:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason, onBeginUpdates: onBeginUpdates)
+            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
             
         case .scrolledToTop:
-            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason, onBeginUpdates: onBeginUpdates)
+            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason)
         }
     }
     
-    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason, onBeginUpdates : () -> ())
+    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
         let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
         let diff = TableView.diffWith(old: self.visibleSlice.content, new: new.content)
         
-        if reason.diffsChanges {
-            self.tableView.update(with: diff, animated: reason.animated) {
-                self.visibleSlice = new
-                onBeginUpdates()
-            }
-        } else {
+        let updateData = {
             self.visibleSlice = new
-            onBeginUpdates()
-            
+            self.visiblePresentationState.update(with: diff)
+        }
+        
+        if reason.diffsChanges {
+            self.tableView.update(with: diff, animated: reason.animated, onBeginUpdates: updateData)
+        } else {
+            updateData()
             self.tableView.reloadData()
         }
     }
@@ -392,7 +386,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.presentationState.row(at: indexPath)
+            let row = self.tableView.visiblePresentationState.row(at: indexPath)
             
             self.displayedRows[ObjectIdentifier(cell)] = row
             

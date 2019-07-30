@@ -102,6 +102,11 @@ internal extension TableView
                             self.row.element.applyTo(cell: cell, reason: .willDisplay)
                         }
                     }
+                    
+                    // Pull the current element off the binding in case it changed
+                    // during initialization, from the provider.
+                    
+                    self.row.element = binding.element
                 }
             }
             
