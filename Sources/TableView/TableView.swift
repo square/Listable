@@ -300,15 +300,6 @@ fileprivate extension TableView
             return row.dequeueCell(in: tableView)
         }
         
-        // MARK: Row Actions
-        
-        func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
-        {
-            // TODO
-            
-            fatalError()
-        }
-        
         // MARK: Moving
         
         func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
@@ -372,7 +363,7 @@ fileprivate extension TableView
             guard let header = section.header else {
                 return 0.0
             }
-                        
+            
             return header.heightWith(
                 width: tableView.bounds.size.width,
                 default: tableView.sectionHeaderHeight,
@@ -442,30 +433,6 @@ fileprivate extension TableView
         }
         
         // MARK: Row Actions
-        
-        func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
-        {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
-            let type = row.swipeToDeleteType
-            
-            switch type {
-            case .none: return .none
-            case .standard: return .delete
-            case .custom(_): return .delete
-            }
-        }
-        
-        func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?
-        {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
-            let type = row.swipeToDeleteType
-            
-            switch type {
-            case .none: return nil
-            case .standard: return nil
-            case .custom(let custom): return custom
-            }
-        }
         
         func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
         {

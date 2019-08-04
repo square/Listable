@@ -52,8 +52,6 @@ public protocol TableViewRow_Internal
     
     func trailingTableViewRowActions(onPerform : @escaping TableView.SwipeAction.OnPerform) -> [UITableViewRowAction]?
     
-    var swipeToDeleteType : TableView.SwipeToDelete { get }
-    
     func newPresentationRow() -> TableViewPresentationStateRow
 }
 
@@ -380,19 +378,6 @@ public extension TableView
             return self.trailingActions?.toUITableViewRowActions(onPerform: onPerform)
         }
         
-        public var swipeToDeleteType : TableView.SwipeToDelete
-        {
-            guard let action = self.trailingActions?.firstDestructiveAction else {
-                return .none
-            }
-            
-            if let title = action.title {
-                return .custom(title)
-            } else {
-                return .standard
-            }
-        }
-        
         public func newPresentationRow() -> TableViewPresentationStateRow
         {
             return TableView.PresentationState.Row(self)
@@ -429,13 +414,6 @@ fileprivate extension TableView.Row where Element:Equatable
 
 public extension TableView
 {
-    enum SwipeToDelete : Equatable
-    {
-        case none
-        case standard
-        case custom(String)
-    }
-    
     struct SwipeActions
     {
         public var actions : [SwipeAction]
