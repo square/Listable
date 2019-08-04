@@ -52,44 +52,11 @@ public protocol TableViewRow_Internal
     
     var swipeToDeleteType : TableView.SwipeToDelete { get }
     
-    func newPresentationContainer() -> TableViewPresentationStateRow
+    func newPresentationRow() -> TableViewPresentationStateRow
 }
 
 public extension TableView
-{
-    struct RefreshControl
-    {
-        public var title : NSAttributedString?
-        public var tintColor : UIColor?
-        
-        public typealias EndRefreshing = () -> ()
-        public typealias OnRefresh = (EndRefreshing) -> ()
-        public var onRefresh : OnRefresh
-        
-        public typealias IsRefreshing = () -> Binding<Bool>
-        public var isRefreshing : IsRefreshing?
-        
-        public init(
-            title : NSAttributedString? = nil,
-            tintColor : UIColor? = nil,
-            onRefresh : @escaping OnRefresh,
-            isRefreshing: IsRefreshing? = nil
-        )
-        {
-            self.title = title
-            self.tintColor = tintColor
-            
-            self.onRefresh = onRefresh
-            self.isRefreshing = isRefreshing
-        }
-        
-        func apply(to refreshControl : UIRefreshControl)
-        {
-            refreshControl.tintColor = self.tintColor
-            refreshControl.attributedTitle = self.title
-        }
-    }
-    
+{    
     struct Section
     {
         public let identifier : AnyHashable
@@ -427,9 +394,9 @@ public extension TableView
             }
         }
         
-        public func newPresentationContainer() -> TableViewPresentationStateRow
+        public func newPresentationRow() -> TableViewPresentationStateRow
         {
-            return TableView.PresentationState.Row(row: self)
+            return TableView.PresentationState.Row(self)
         }
     }
     
@@ -562,26 +529,26 @@ public extension TableView
 {
     struct Content
     {
+        public let refreshControl : RefreshControl?
+        
         public let header : TableViewHeaderFooter?
         public let footer : TableViewHeaderFooter?
-        
-        public let refreshControl : RefreshControl?
         
         public let sections : [TableView.Section]
         
         let rowCount : Int
         
         public init(
+            refreshControl : RefreshControl? = nil,
             header : TableViewHeaderFooter? = nil,
             footer : TableViewHeaderFooter? = nil,
-            refreshControl : RefreshControl? = nil,
             sections : [TableView.Section] = []
             )
         {
+            self.refreshControl = refreshControl
+            
             self.header = header
             self.footer = footer
-            
-            self.refreshControl = refreshControl
             
             self.sections = sections
             

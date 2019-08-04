@@ -19,7 +19,7 @@ internal extension TableView
     {
         unowned var tableView : UITableView!
         
-        var refreshControl : RefreshControl?
+        var refreshControl : RefreshControl.PresentationState?
         
         var sections : [PresentationState.Section]
         
@@ -63,7 +63,7 @@ internal extension TableView
                 left: self.refreshControl,
                 right: content.refreshControl,
                 created: { model in
-                    let new = RefreshControl(model)
+                    let new = RefreshControl.PresentationState(model)
                     self.tableView.refreshControl = new.view
                     self.refreshControl = new
             },
@@ -74,46 +74,6 @@ internal extension TableView
                 overlapping: { control, model in
                     model.apply(to: control.view)
             })
-        }
-        
-        final class RefreshControl
-        {
-            var model : TableView.RefreshControl
-            
-            var binding : Binding<Bool>?
-            
-            var view : UIRefreshControl
-            
-            init(_ model : TableView.RefreshControl)
-            {
-                self.model = model
-                self.view = UIRefreshControl()
-                
-                if let isRefreshing = model.isRefreshing {
-                    let binding = isRefreshing()
-                    binding.start()
-                    
-                    binding.onChange { [weak self] refreshing in
-                        guard let self = self else { return }
-                        if refreshing {
-                            self.view.beginRefreshing()
-                        } else {
-                            self.view.endRefreshing()
-                        }
-                    }
-                    
-                    self.binding = binding
-                }
-                
-                self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
-            }
-            
-            @objc func refreshControlChanged()
-            {
-                self.model.onRefresh {
-                    self.view.endRefreshing()
-                }
-            }
         }
         
         final class Section
@@ -129,7 +89,7 @@ internal extension TableView
                 self.section = section
                 
                 self.rows = self.section.rows.map {
-                    $0.newPresentationContainer()
+                    $0.newPresentationRow()
                 }
             }
             
@@ -144,7 +104,7 @@ internal extension TableView
                 self.rows = changes.transform(
                     old: self.rows,
                     removed: { _, _ in },
-                    added: { $0.newPresentationContainer() },
+                    added: { $0.newPresentationRow() },
                     moved: { old, new, row in row.update(with: old, new: new) },
                     updated: { old, new, row in row.update(with: old, new: new) },
                     noChange: { old, new, row in row.update(with: old, new: new) }
@@ -154,21 +114,17 @@ internal extension TableView
         
         final class Row<Element:TableViewRowElement> : TableViewPresentationStateRow
         {
-            var row : TableView.Row<Element>
+            var model : TableView.Row<Element>
             
             var binding : Binding<Element>?
             
             private var visibleCell : Element.TableViewCell?
             
-            init(row : TableView.Row<Element>)
+            init(_ model : TableView.Row<Element>)
             {
-                self.row = row
+                self.model = model
                 
-                // TODO: Right now, because we do not create presentation state for rows that are
-                // not part of the visible slice, we don't start watching the bound data.
-                // this means that the row data can get out of date.
-                
-                if let binding = row.bind?(self.row.element)
+                if let binding = self.model.bind?(self.model.element)
                 {
                     self.binding =  binding
                     
@@ -177,17 +133,17 @@ internal extension TableView
                     binding.onChange { [weak self] element in
                         guard let self = self else { return }
                         
-                        self.row.element = element
+                        self.model.element = element
                         
                         if let cell = self.visibleCell {
-                            self.row.element.applyTo(cell: cell, reason: .willDisplay)
+                            self.model.element.applyTo(cell: cell, reason: .willDisplay)
                         }
                     }
                     
                     // Pull the current element off the binding in case it changed
                     // during initialization, from the provider.
                     
-                    self.row.element = binding.element
+                    self.model.element = binding.element
                 }
             }
             
@@ -199,14 +155,14 @@ internal extension TableView
             
             public func update(with old : TableViewRow, new : TableViewRow)
             {
-                self.row = new as! TableView.Row<Element>
+                self.model = new as! TableView.Row<Element>
             }
             
             public func willDisplay(with cell : UITableViewCell)
             {
                 self.visibleCell = (cell as! Element.TableViewCell)
                 
-                self.row.onDisplay?(self.row.element)
+                self.model.onDisplay?(self.model.element)
             }
             
             public func didEndDisplay()
