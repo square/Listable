@@ -504,7 +504,11 @@ public extension TableView
                 style: self.style.toUITableViewRowActionStyle(),
                 title: self.title,
                 handler: { _, _ in
-                    onPerform(self.style)
+                    let completed = self.onTap(self)
+                    
+                    if completed {
+                        onPerform(self.style)
+                    }
             })
         }
         
