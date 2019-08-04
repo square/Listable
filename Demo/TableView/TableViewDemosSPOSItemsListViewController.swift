@@ -34,7 +34,7 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
             
             func include(_ word : String) -> Bool
             {
-                return self.filter.count == 0 || word.contains(self.filter.lowercased())
+                return self.filter.isEmpty || word.contains(self.filter.lowercased())
             }
         }
         

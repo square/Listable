@@ -29,35 +29,20 @@ public extension TableView
         public var sections : [TableView.Section] = []
         
         public var isEmpty : Bool {
-            for section in self.sections {
-                if section.rows.count > 0 {
-                    return false
-                }
-            }
-            
-            return true
+            return self.sections.firstIndex { $0.rows.isEmpty == false } == nil
         }
         
         public mutating func removeEmpty()
         {
             self.sections.removeAll {
-                $0.rows.count == 0
+                $0.rows.isEmpty
             }
         }
-        
-        //
-        // Single Sections
-        //
-        
-        // Adds the given section to the builder.
+
         public static func += (lhs : inout ContentBuilder, rhs : TableView.Section)
         {
             lhs.sections.append(rhs)
         }
-        
-        //
-        // Arrays of Sections
-        //
         
         public static func += (lhs : inout ContentBuilder, rhs : [TableView.Section])
         {
@@ -70,12 +55,8 @@ public extension TableView
         public var rows : [TableViewRow] = []
         
         public var isEmpty : Bool {
-            return self.rows.count == 0
+            return self.rows.isEmpty
         }
-        
-        //
-        // Single Rows
-        //
         
         // Adds the given row to the builder.
         public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : TableView.Row<Element>)
@@ -90,10 +71,6 @@ public extension TableView
             
             lhs.rows.append(row)
         }
-        
-        //
-        // Arrays of Rows
-        //
         
         // Allows mixed arrays of different types of rows.
         public static func += (lhs : inout SectionBuilder, rhs : [TableViewRow])

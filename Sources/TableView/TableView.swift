@@ -25,6 +25,10 @@ public final class TableView : UIView
         }
     }
     
+    //
+    // MARK: Setting Content
+    //
+    
     public var content : Content {
         get { return self.storage.content }
         set { self.set(content: newValue, animated: false) }
@@ -37,11 +41,7 @@ public final class TableView : UIView
         block(&builder)
         
         self.set(
-            content: Content(
-                header: builder.header,
-                footer: builder.footer,
-                sections: builder.sections
-            ),
+            content: builder.content,
             animated: animated
         )
     }
@@ -53,7 +53,9 @@ public final class TableView : UIView
         self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
+    //
     // MARK: Private Properties
+    //
     
     private let storage : Storage
     
@@ -67,10 +69,22 @@ public final class TableView : UIView
     private let footerMeasurementCache : ReusableViewCache
     
     final private class Storage {
-        let visiblePresentationState : PresentationState = PresentationState()
+        let presentationState : PresentationState = PresentationState()
         
         var content : Content = Content()
         var visibleSlice : Content.Slice = Content.Slice()
+        
+        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
+        {
+            if let indexPath = self.presentationState.remove(row: rowToRemove) {
+                self.content.remove(at: indexPath)
+                self.visibleSlice.content.remove(at: indexPath)
+                
+                return indexPath
+            } else {
+                return nil
+            }
+        }
     }
     
     // MARK: Initialization
@@ -112,7 +126,7 @@ public final class TableView : UIView
         
         super.init(frame: frame)
         
-        self.storage.visiblePresentationState.tableView = self.tableView
+        self.storage.presentationState.tableView = self.tableView
         
         self.dataSource.tableView = self
         self.delegate.tableView = self
@@ -126,7 +140,7 @@ public final class TableView : UIView
     
     // MARK: Public Methods
     
-   public  struct VisibleRow
+   public struct VisibleRow
     {
         public let indexPath : IndexPath
         public let row : TableViewRow
@@ -212,7 +226,7 @@ public final class TableView : UIView
         
         let updateData = {
             self.storage.visibleSlice = new
-            self.storage.visiblePresentationState.update(with: diff, for: self.content)
+            self.storage.presentationState.update(with: diff, for: self.content)
         }
         
         if reason.diffsChanges {
@@ -249,8 +263,11 @@ public protocol TableViewPresentationStateRow : TableViewPresentationStateRow_In
 {
 }
 
-public protocol TableViewPresentationStateRow_Internal
-{    
+public protocol TableViewPresentationStateRow_Internal : AnyObject
+{
+    var anyIdentifier : AnyIdentifier { get }
+    var anyModel : TableViewRow { get }
+    
     func update(with old : TableViewRow, new : TableViewRow)
     
     func willDisplay(with cell : UITableViewCell)
@@ -283,22 +300,13 @@ fileprivate extension TableView
             return row.dequeueCell(in: tableView)
         }
         
-        // MARK: Row Actions
-        
-        func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
-        {
-            // TODO
-            
-            fatalError()
-        }
-        
         // MARK: Moving
         
         func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
         {
             // TODO
             
-            fatalError()
+            return false
         }
         
         func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
@@ -395,7 +403,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.storage.visiblePresentationState.row(at: indexPath)
+            let row = self.tableView.storage.presentationState.row(at: indexPath)
             
             self.displayedRows[ObjectIdentifier(cell)] = row
             
@@ -426,44 +434,44 @@ fileprivate extension TableView
         
         // MARK: Row Actions
         
-        func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
+        func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
-            let type = row.swipeToDeleteType
+            // Note: Only used before iOS 11.
+            // We must also manually animate out the removal.
             
-            switch type {
-            case .none: return .none
-            case .standard: return .delete
-            case .custom(_): return .delete
-            }
-        }
-        
-        func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?
-        {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
-            let type = row.swipeToDeleteType
+            let row = self.tableView.storage.presentationState.row(at: indexPath)
             
-            switch type {
-            case .none: return nil
-            case .standard: return nil
-            case .custom(let custom): return custom
+            return row.anyModel.trailingTableViewRowActions { [weak self] style in
+                if style.deletesRow {
+                    if let indexPath = self?.tableView.storage.remove(row: row) {
+                        self?.tableView.tableView.deleteRows(at: [indexPath], with: .left)
+                    }
+                }
             }
         }
         
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
-            
-            return row.leadingSwipeActionsConfiguration
+            let row = self.tableView.storage.presentationState.row(at: indexPath)
+
+            return row.anyModel.leadingSwipeActionsConfiguration { [weak self] style in
+                if style.deletesRow {
+                    _ = self?.tableView.storage.remove(row: row)
+                }
+            }
         }
         
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
+            let row = self.tableView.storage.presentationState.row(at: indexPath)
             
-            return row.trailingSwipeActionsConfiguration
+            return row.anyModel.trailingSwipeActionsConfiguration { [weak self] style in
+                if style.deletesRow {
+                    _ = self?.tableView.storage.remove(row: row)
+                }
+            }
         }
         
         // MARK: UIScrollViewDelegate
