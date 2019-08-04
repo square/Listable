@@ -55,7 +55,7 @@ public final class TableView : UIView
     
     // MARK: Private Properties
     
-    private let storage : Storage = Storage()
+    private let storage : Storage
     
     private let dataSource : DataSource
     private let delegate : Delegate
@@ -93,6 +93,8 @@ public final class TableView : UIView
             precondition(tableView.delegate == nil, "Must provide an unconfigured table view.")
         }
         
+        self.storage = Storage()
+        
         self.cellMeasurementCache = ReusableViewCache()
         self.headerMeasurementCache = ReusableViewCache()
         self.footerMeasurementCache = ReusableViewCache()
@@ -109,6 +111,8 @@ public final class TableView : UIView
         self.tableView.delegate = self.delegate
         
         super.init(frame: frame)
+        
+        self.storage.visiblePresentationState.tableView = self.tableView
         
         self.dataSource.tableView = self
         self.delegate.tableView = self
@@ -208,7 +212,7 @@ public final class TableView : UIView
         
         let updateData = {
             self.storage.visibleSlice = new
-            self.storage.visiblePresentationState.update(with: diff)
+            self.storage.visiblePresentationState.update(with: diff, for: self.content)
         }
         
         if reason.diffsChanges {

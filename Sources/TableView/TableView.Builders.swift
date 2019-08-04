@@ -13,8 +13,15 @@ public extension TableView
     struct ContentBuilder
     {
         public var content : TableView.Content {
-            return TableView.Content(header: self.header, footer: self.footer, sections: self.sections)
+            return TableView.Content(
+                refreshControl: self.refreshControl,
+                header: self.header,
+                footer: self.footer,
+                sections: self.sections
+            )
         }
+        
+        public var refreshControl : RefreshControl?
         
         public var header : TableViewHeaderFooter?
         public var footer : TableViewHeaderFooter?

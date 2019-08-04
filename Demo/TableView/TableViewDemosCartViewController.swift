@@ -26,7 +26,7 @@ final class TableViewDemosCartViewController : UIViewController
     
     class ContentSource : TableViewContentSource
     {
-        let searchRow = ViewInstance(view: SearchBar())
+        let searchRow = UIViewRowElement(view: SearchBar())
         
         let itemizations : [Itemization] = fakeItemizations()
         

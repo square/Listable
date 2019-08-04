@@ -39,6 +39,7 @@ public protocol TableViewRowElement
     
     // MARK: Applying To Displayed Cell
     
+    // TODO: Rename to apply(to:reason:).
     func applyTo(cell : TableViewCell, reason : ApplyReason)
     
     var updateStrategy : UpdateStrategy { get }

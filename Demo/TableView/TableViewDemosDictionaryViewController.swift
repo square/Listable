@@ -28,13 +28,13 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     {
         var dictionary : EnglishDictionary
         
-        var searchRow : ViewInstance<SearchBar>
+        var searchRow : UIViewRowElement<SearchBar>
         
         init(dictionary : EnglishDictionary)
         {
             self.dictionary = dictionary
             
-            self.searchRow = ViewInstance(view: SearchBar())
+            self.searchRow = UIViewRowElement(view: SearchBar())
         }
         
         struct State : Equatable
@@ -49,6 +49,14 @@ final public class TableViewDemosDictionaryViewController : UIViewController
 
         func tableViewContent(with state: TableView.State<State>, table: inout TableView.ContentBuilder)
         {
+            if #available(iOS 10.0, *) {
+                table.refreshControl = RefreshControl() { finished in
+                    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
+                        finished()
+                    }
+                }
+            }
+            
             table += TableView.Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
                     state.update { state in

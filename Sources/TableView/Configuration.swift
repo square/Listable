@@ -16,19 +16,26 @@ public extension TableView
             return Configuration()
         }
         
-        var rowHeight : CGFloat = 44.0
+        var rowHeight : CGFloat? = nil
         
-        var sectionHeaderHeight : CGFloat = 30.0
-        var sectionFooterHeight : CGFloat = 30.0
+        var sectionHeaderHeight : CGFloat? = nil
+        var sectionFooterHeight : CGFloat? = nil
         
         public init() {}
         
         func apply(to tableView : UITableView)
         {
-            tableView.rowHeight = self.rowHeight
+            if let height = self.rowHeight {
+                tableView.rowHeight = height
+            }
             
-            tableView.sectionHeaderHeight = self.sectionHeaderHeight
-            tableView.sectionFooterHeight = self.sectionFooterHeight
+            if let height = self.sectionHeaderHeight {
+                tableView.sectionHeaderHeight = height
+            }
+            
+            if let height = self.sectionFooterHeight {
+                tableView.sectionFooterHeight = height
+            }
         }
     }
     
@@ -37,6 +44,8 @@ public extension TableView
         public static var `default` : CellConfiguration {
             return CellConfiguration()
         }
+        
+        public init() {}
         
         public var accessoryType : UITableViewCell.AccessoryType = .none
         public var selectionStyle : UITableViewCell.SelectionStyle = .default

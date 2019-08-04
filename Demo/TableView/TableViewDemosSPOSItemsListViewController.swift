@@ -26,7 +26,7 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
     
     class ContentSource : TableViewContentSource
     {
-        let searchRow = ViewInstance(view: SearchBar())
+        let searchRow = UIViewRowElement(view: SearchBar())
         
         struct State : Equatable
         {

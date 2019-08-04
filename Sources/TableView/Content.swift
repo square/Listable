@@ -52,11 +52,11 @@ public protocol TableViewRow_Internal
     
     var swipeToDeleteType : TableView.SwipeToDelete { get }
     
-    func newPresentationContainer() -> TableViewPresentationStateRow
+    func newPresentationRow() -> TableViewPresentationStateRow
 }
 
 public extension TableView
-{
+{    
     struct Section
     {
         public let identifier : AnyHashable
@@ -394,9 +394,9 @@ public extension TableView
             }
         }
         
-        public func newPresentationContainer() -> TableViewPresentationStateRow
+        public func newPresentationRow() -> TableViewPresentationStateRow
         {
-            return TableView.PresentationState.Row(row: self)
+            return TableView.PresentationState.Row(self)
         }
     }
     
@@ -529,6 +529,8 @@ public extension TableView
 {
     struct Content
     {
+        public let refreshControl : RefreshControl?
+        
         public let header : TableViewHeaderFooter?
         public let footer : TableViewHeaderFooter?
         
@@ -536,8 +538,15 @@ public extension TableView
         
         let rowCount : Int
         
-        public init(header : TableViewHeaderFooter? = nil, footer : TableViewHeaderFooter? = nil, sections : [TableView.Section] = [])
+        public init(
+            refreshControl : RefreshControl? = nil,
+            header : TableViewHeaderFooter? = nil,
+            footer : TableViewHeaderFooter? = nil,
+            sections : [TableView.Section] = []
+            )
         {
+            self.refreshControl = refreshControl
+            
             self.header = header
             self.footer = footer
             

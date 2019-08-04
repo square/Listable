@@ -17,7 +17,19 @@ internal extension TableView
      */
     final class PresentationState
     {
-        var sections : [PresentationState.Section] = []
+        unowned var tableView : UITableView!
+        
+        var refreshControl : RefreshControl.PresentationState?
+        
+        var sections : [PresentationState.Section]
+        
+        init()
+        {
+            self.refreshControl = nil
+            self.sections = []
+        }
+        
+        // TODO: Add header and footer.
         
         func row(at indexPath : IndexPath) -> TableViewPresentationStateRow
         {
@@ -27,8 +39,12 @@ internal extension TableView
             return row
         }
         
-        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>)
+        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>, for content : Content)
         {
+            // TODO: Handle header footer changing.
+            
+            self.updateRefreshControl(with: content)
+            
             self.sections = diff.changes.transform(
                 old: self.sections,
                 removed: { _, _ in },
@@ -39,18 +55,41 @@ internal extension TableView
             )
         }
         
+        func updateRefreshControl(with content : Content)
+        {
+            guard #available(iOS 10.0, *) else { return }
+            
+            syncOptionals(
+                left: self.refreshControl,
+                right: content.refreshControl,
+                created: { model in
+                    let new = RefreshControl.PresentationState(model)
+                    self.tableView.refreshControl = new.view
+                    self.refreshControl = new
+            },
+                removed: { _ in
+                    self.refreshControl = nil
+                    self.tableView.refreshControl = nil
+            },
+                overlapping: { control, model in
+                    model.apply(to: control.view)
+            })
+        }
+        
         final class Section
         {
             let section : TableView.Section
             
             var rows : [TableViewPresentationStateRow]
             
+            // TODO: Add header and footer.
+            
             init(section : TableView.Section)
             {
                 self.section = section
                 
                 self.rows = self.section.rows.map {
-                    $0.newPresentationContainer()
+                    $0.newPresentationRow()
                 }
             }
             
@@ -60,10 +99,12 @@ internal extension TableView
                 changes : SectionedDiff<TableView.Section, TableViewRow>.RowChanges
                 )
             {
+                // TODO: Handle header footer changing.
+                
                 self.rows = changes.transform(
                     old: self.rows,
                     removed: { _, _ in },
-                    added: { $0.newPresentationContainer() },
+                    added: { $0.newPresentationRow() },
                     moved: { old, new, row in row.update(with: old, new: new) },
                     updated: { old, new, row in row.update(with: old, new: new) },
                     noChange: { old, new, row in row.update(with: old, new: new) }
@@ -73,21 +114,17 @@ internal extension TableView
         
         final class Row<Element:TableViewRowElement> : TableViewPresentationStateRow
         {
-            var row : TableView.Row<Element>
+            var model : TableView.Row<Element>
             
             var binding : Binding<Element>?
             
             private var visibleCell : Element.TableViewCell?
             
-            init(row : TableView.Row<Element>)
+            init(_ model : TableView.Row<Element>)
             {
-                self.row = row
+                self.model = model
                 
-                // TODO: Right now, because we do not create presentation state for rows that are
-                // not part of the visible slice, we don't start watching the bound data.
-                // this means that the row data can get out of date.
-                
-                if let binding = row.bind?(self.row.element)
+                if let binding = self.model.bind?(self.model.element)
                 {
                     self.binding =  binding
                     
@@ -96,17 +133,17 @@ internal extension TableView
                     binding.onChange { [weak self] element in
                         guard let self = self else { return }
                         
-                        self.row.element = element
+                        self.model.element = element
                         
                         if let cell = self.visibleCell {
-                            self.row.element.applyTo(cell: cell, reason: .willDisplay)
+                            self.model.element.applyTo(cell: cell, reason: .willDisplay)
                         }
                     }
                     
                     // Pull the current element off the binding in case it changed
                     // during initialization, from the provider.
                     
-                    self.row.element = binding.element
+                    self.model.element = binding.element
                 }
             }
             
@@ -118,14 +155,14 @@ internal extension TableView
             
             public func update(with old : TableViewRow, new : TableViewRow)
             {
-                self.row = new as! TableView.Row<Element>
+                self.model = new as! TableView.Row<Element>
             }
             
             public func willDisplay(with cell : UITableViewCell)
             {
                 self.visibleCell = (cell as! Element.TableViewCell)
                 
-                self.row.onDisplay?(self.row.element)
+                self.model.onDisplay?(self.model.element)
             }
             
             public func didEndDisplay()
@@ -133,5 +170,16 @@ internal extension TableView
                 self.visibleCell = nil
             }
         }
+    }
+}
+
+func syncOptionals<Left,Right>(left : Left?, right : Right?, created : (Right) -> (), removed : (Left) -> (), overlapping: (Left, Right) -> ())
+{
+    if left == nil, let right = right {
+        created(right)
+    } else if let left = left, right == nil {
+        removed(left)
+    } else if let left = left, let right = right {
+        overlapping(left, right)
     }
 }
