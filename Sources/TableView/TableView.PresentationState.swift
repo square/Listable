@@ -17,7 +17,19 @@ internal extension TableView
      */
     final class PresentationState
     {
-        var sections : [PresentationState.Section] = []
+        unowned var tableView : UITableView!
+        
+        var refreshControl : RefreshControl?
+        
+        var sections : [PresentationState.Section]
+        
+        init()
+        {
+            self.refreshControl = nil
+            self.sections = []
+        }
+        
+        // TODO: Add header and footer.
         
         func row(at indexPath : IndexPath) -> TableViewPresentationStateRow
         {
@@ -27,8 +39,12 @@ internal extension TableView
             return row
         }
         
-        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>)
+        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>, for content : Content)
         {
+            // TODO: Handle header footer changing.
+            
+            self.updateRefreshControl(with: content)
+            
             self.sections = diff.changes.transform(
                 old: self.sections,
                 removed: { _, _ in },
@@ -39,11 +55,74 @@ internal extension TableView
             )
         }
         
+        func updateRefreshControl(with content : Content)
+        {
+            guard #available(iOS 10.0, *) else { return }
+            
+            syncOptionals(
+                left: self.refreshControl,
+                right: content.refreshControl,
+                created: { model in
+                    let new = RefreshControl(model)
+                    self.tableView.refreshControl = new.view
+                    self.refreshControl = new
+            },
+                removed: { _ in
+                    self.refreshControl = nil
+                    self.tableView.refreshControl = nil
+            },
+                overlapping: { control, model in
+                    model.apply(to: control.view)
+            })
+        }
+        
+        final class RefreshControl
+        {
+            var model : TableView.RefreshControl
+            
+            var binding : Binding<Bool>?
+            
+            var view : UIRefreshControl
+            
+            init(_ model : TableView.RefreshControl)
+            {
+                self.model = model
+                self.view = UIRefreshControl()
+                
+                if let isRefreshing = model.isRefreshing {
+                    let binding = isRefreshing()
+                    binding.start()
+                    
+                    binding.onChange { [weak self] refreshing in
+                        guard let self = self else { return }
+                        if refreshing {
+                            self.view.beginRefreshing()
+                        } else {
+                            self.view.endRefreshing()
+                        }
+                    }
+                    
+                    self.binding = binding
+                }
+                
+                self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
+            }
+            
+            @objc func refreshControlChanged()
+            {
+                self.model.onRefresh {
+                    self.view.endRefreshing()
+                }
+            }
+        }
+        
         final class Section
         {
             let section : TableView.Section
             
             var rows : [TableViewPresentationStateRow]
+            
+            // TODO: Add header and footer.
             
             init(section : TableView.Section)
             {
@@ -60,6 +139,8 @@ internal extension TableView
                 changes : SectionedDiff<TableView.Section, TableViewRow>.RowChanges
                 )
             {
+                // TODO: Handle header footer changing.
+                
                 self.rows = changes.transform(
                     old: self.rows,
                     removed: { _, _ in },
@@ -133,5 +214,16 @@ internal extension TableView
                 self.visibleCell = nil
             }
         }
+    }
+}
+
+func syncOptionals<Left,Right>(left : Left?, right : Right?, created : (Right) -> (), removed : (Left) -> (), overlapping: (Left, Right) -> ())
+{
+    if left == nil, let right = right {
+        created(right)
+    } else if let left = left, right == nil {
+        removed(left)
+    } else if let left = left, let right = right {
+        overlapping(left, right)
     }
 }

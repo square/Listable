@@ -28,13 +28,13 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     {
         var dictionary : EnglishDictionary
         
-        var searchRow : ViewInstance<SearchBar>
+        var searchRow : UIViewRowElement<SearchBar>
         
         init(dictionary : EnglishDictionary)
         {
             self.dictionary = dictionary
             
-            self.searchRow = ViewInstance(view: SearchBar())
+            self.searchRow = UIViewRowElement(view: SearchBar())
         }
         
         struct State : Equatable

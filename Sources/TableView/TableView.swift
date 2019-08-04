@@ -208,7 +208,7 @@ public final class TableView : UIView
         
         let updateData = {
             self.storage.visibleSlice = new
-            self.storage.visiblePresentationState.update(with: diff)
+            self.storage.visiblePresentationState.update(with: diff, for: self.content)
         }
         
         if reason.diffsChanges {

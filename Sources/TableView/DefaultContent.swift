@@ -30,39 +30,39 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
 }
 
 
-public final class ViewInstance<View:UIView> : TableViewRowElement, Equatable
+public final class UIViewRowElement<View:UIView> : TableViewRowElement, Equatable
 {
-    public typealias TableViewCell = ViewRowTableViewCell
+    public typealias TableViewCell = Cell
     
     public let view : View
-    
-    private let cell : ViewRowTableViewCell
     
     public init(view : View)
     {
         self.view = view
-        self.cell = ViewRowTableViewCell(view: self.view)
+        self.cell = Cell(view: self.view)
     }
+    
+    private let cell : Cell
     
     // MARK: TableViewRowElement
     
-    public func applyTo(cell: ViewInstance<View>.ViewRowTableViewCell, reason: ApplyReason)
+    public func applyTo(cell: Cell, reason: ApplyReason)
     {
         // No Op
     }
     
-    public var identifier: Identifier<ViewInstance<View>> {
+    public var identifier: Identifier<UIViewRowElement<View>> {
         return .init(ObjectIdentifier(self.view))
     }
     
-    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<ViewInstance<View>>) -> ViewRowTableViewCell
+    public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<UIViewRowElement<View>>) -> Cell
     {
         fatalError()
     }
     
     // TODO: Is this right? Do we need to always return the same cell? Or is the view sufficient?
     // If the view is sufficient and the cells are reused, then cellForDisplay can be made private like it is for header/footers.
-    public func cellForDisplay(in tableView: UITableView) -> ViewRowTableViewCell
+    public func cellForDisplay(in tableView: UITableView) -> Cell
     {
         return self.cell
     }
@@ -79,16 +79,16 @@ public final class ViewInstance<View:UIView> : TableViewRowElement, Equatable
     
     // MARK: Equatable
     
-    public static func == (lhs : ViewInstance, rhs : ViewInstance) -> Bool
+    public static func == (lhs : UIViewRowElement, rhs : UIViewRowElement) -> Bool
     {
         return lhs.view == rhs.view
     }
     
-    public final class ViewRowTableViewCell : UITableViewCell
+    public final class Cell : UITableViewCell
     {
-        var view : View
+        public let view : View
         
-        public init(view : View)
+        fileprivate init(view : View)
         {
             self.view = view
             
@@ -190,7 +190,7 @@ extension String : TableViewRowElement, TableViewHeaderFooterElement
     public typealias Cell = UITableViewCell
     
     public var identifier: Identifier<String> {
-        return .init(self)
+        return .init(self.count > 0 ? self : "EmptyIdentifier")
     }
     
     public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewCell
