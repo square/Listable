@@ -29,7 +29,7 @@ public extension TableView
         public var sections : [TableView.Section] = []
         
         public var isEmpty : Bool {
-            return self.sections.firstIndex { $0.rows.isEmpty == false } != nil
+            return self.sections.firstIndex { $0.rows.isEmpty == false } == nil
         }
         
         public mutating func removeEmpty()
