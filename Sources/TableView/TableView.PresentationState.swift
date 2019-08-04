@@ -31,6 +31,19 @@ internal extension TableView
         
         // TODO: Add header and footer.
         
+        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
+        {
+            for (sectionIndex, section) in self.sections.enumerated() {
+                for (rowIndex, row) in section.rows.enumerated() {
+                    if row === rowToRemove {
+                        return IndexPath(row: rowIndex, section: sectionIndex)
+                    }
+                }
+            }
+            
+            return nil
+        }
+        
         func row(at indexPath : IndexPath) -> TableViewPresentationStateRow
         {
             let section = self.sections[indexPath.section]
@@ -116,13 +129,15 @@ internal extension TableView
         {
             var model : TableView.Row<Element>
             
-            var binding : Binding<Element>?
+            let binding : Binding<Element>?
             
             private var visibleCell : Element.TableViewCell?
             
             init(_ model : TableView.Row<Element>)
             {
                 self.model = model
+                
+                self.anyIdentifier = self.model.identifier
                 
                 if let binding = self.model.bind?(self.model.element)
                 {
@@ -144,6 +159,8 @@ internal extension TableView
                     // during initialization, from the provider.
                     
                     self.model.element = binding.element
+                } else {
+                    self.binding = nil
                 }
             }
             
@@ -152,6 +169,12 @@ internal extension TableView
             }
             
             // MARK: TableViewPresentationStateRow
+            
+            let anyIdentifier : AnyIdentifier
+            
+            var anyModel : TableViewRow {
+                return self.model
+            }
             
             public func update(with old : TableViewRow, new : TableViewRow)
             {

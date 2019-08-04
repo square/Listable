@@ -22,13 +22,22 @@ final class TableViewDemosCartViewController : UIViewController
         self.title = "Cart"
         
         self.view = self.presenter.tableView
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addItem))
+    }
+    
+    @objc func addItem()
+    {
+        self.presenter.contentSource.itemizations.insert(fakeItemization(), at: 0)
+        
+        self.presenter.update()
     }
     
     class ContentSource : TableViewContentSource
     {
         let searchRow = UIViewRowElement(view: SearchBar())
         
-        let itemizations : [Itemization] = fakeItemizations()
+        var itemizations : [Itemization] = fakeItemizations()
         
         struct FilterState : Equatable
         {
@@ -71,10 +80,9 @@ final class TableViewDemosCartViewController : UIViewController
                         
                         trailingActions: TableView.SwipeActions(
                             TableView.SwipeAction(
-                                title: "Void",
+                                title: "Delete",
                                 style: .destructive,
                                 onTap: { _ in
-                                    print("Tapped!!")
                                     return true
                             })
                         ),
@@ -202,10 +210,9 @@ struct ItemizationRow : ProxyElement, TableViewRowViewElement, Equatable
     }
 }
 
-
-func fakeItemizations() -> [Itemization]
+func fakeItemization() -> Itemization
 {
-    let itemization = Itemization(
+    return Itemization(
         variation: .init(
             name: "Small",
             catalogID: UUID()
@@ -219,16 +226,9 @@ func fakeItemizations() -> [Itemization]
         quantity: 4,
         remoteID: UUID()
     )
-    
-    return [
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-        itemization,
-    ]
+}
+
+func fakeItemizations() -> [Itemization]
+{
+    return Array(repeating: fakeItemization(), count: 3)
 }

@@ -45,10 +45,10 @@ public protocol TableViewRow_Internal
     func movedComparedTo(old : TableViewRow) -> Bool
     
     @available(iOS 11.0, *)
-    var leadingSwipeActionsConfiguration : UISwipeActionsConfiguration? { get }
-    
+    func leadingSwipeActionsConfiguration(onPerform : @escaping TableView.SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+
     @available(iOS 11.0, *)
-    var trailingSwipeActionsConfiguration : UISwipeActionsConfiguration? { get }
+    func trailingSwipeActionsConfiguration(onPerform : @escaping TableView.SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
     
     var swipeToDeleteType : TableView.SwipeToDelete { get }
     
@@ -242,16 +242,6 @@ public extension TableView
         }
     }
     
-    fileprivate class Reference<Value>
-    {
-        var value : Value
-        
-        init(_ value : Value)
-        {
-            self.value = value
-        }
-    }
-    
     struct Row<Element:TableViewRowElement> : TableViewRow
     {
         public var identifier : AnyIdentifier
@@ -372,13 +362,15 @@ public extension TableView
         }
         
         @available(iOS 11.0, *)
-        public var leadingSwipeActionsConfiguration : UISwipeActionsConfiguration? {
-            return self.leadingActions?.toUISwipeActionsConfiguration()
+        public func leadingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+        {
+            return self.leadingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
         }
         
         @available(iOS 11.0, *)
-        public var trailingSwipeActionsConfiguration : UISwipeActionsConfiguration? {
-            return self.trailingActions?.toUISwipeActionsConfiguration()
+        public func trailingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+        {
+            return self.trailingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
         }
         
         public var swipeToDeleteType : TableView.SwipeToDelete
@@ -462,9 +454,11 @@ public extension TableView
         }
         
         @available(iOS 11.0, *)
-        internal func toUISwipeActionsConfiguration() -> UISwipeActionsConfiguration
+        internal func toUISwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration
         {
-            let config = UISwipeActionsConfiguration(actions: self.actions.map { $0.toUIContextualAction() })
+            let config = UISwipeActionsConfiguration(actions: self.actions.map {
+                $0.toUIContextualAction(onPerform: onPerform)
+            })
             
             config.performsFirstActionWithFullSwipe = self.performsFirstOnFullSwipe
             
@@ -474,6 +468,8 @@ public extension TableView
     
     struct SwipeAction
     {
+        public typealias OnPerform = (Style) -> ()
+        
         public var title: String?
         
         public var style: Style = .normal
@@ -494,14 +490,19 @@ public extension TableView
         }
         
         @available(iOS 11.0, *)
-        internal func toUIContextualAction() -> UIContextualAction
+        internal func toUIContextualAction(onPerform : @escaping OnPerform) -> UIContextualAction
         {
             let action = UIContextualAction(
                 style: self.style.toUIContextualActionStyle(),
                 title: self.title,
                 handler: { action, view, didComplete in
                     let completed = self.onTap(self)
+                    
                     didComplete(completed)
+                    
+                    if completed {
+                        onPerform(self.style)
+                    }
             })
             
             return action
@@ -511,6 +512,13 @@ public extension TableView
         {
             case normal
             case destructive
+            
+            public var deletesRow : Bool {
+                switch self {
+                case .normal: return false
+                case .destructive: return true
+                }
+            }
             
             @available(iOS 11.0, *)
             func toUIContextualActionStyle() -> UIContextualAction.Style
@@ -534,7 +542,7 @@ public extension TableView
         public let header : TableViewHeaderFooter?
         public let footer : TableViewHeaderFooter?
         
-        public let sections : [TableView.Section]
+        public var sections : [TableView.Section]
         
         let rowCount : Int
         
@@ -581,6 +589,10 @@ public extension TableView
             return nil
         }
         
+        mutating func remove(at indexPath : IndexPath)
+        {
+            self.sections[indexPath.section].rows.remove(at: indexPath.row)
+        }
         
         //
         // MARK: Slicing
@@ -591,7 +603,7 @@ public extension TableView
             static let defaultSize : Int = 250
             
             let truncatedBottom : Bool
-            let content : Content
+            var content : Content
             
             init(truncatedBottom : Bool, content : Content)
             {
