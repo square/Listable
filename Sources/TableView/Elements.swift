@@ -28,8 +28,7 @@ public enum ApplyReason : Hashable
     }
 }
 
-// TODO: TableViewRowElement?
-public protocol TableViewCellElement
+public protocol TableViewRowElement
 {
     // MARK: Identifying Content & Changes
     
@@ -64,7 +63,7 @@ public protocol TableViewCellElement
         ) -> CGFloat
 }
 
-public extension TableViewCellElement
+public extension TableViewRowElement
 {
     // MARK: Applying To Displayed Cell
     
@@ -105,7 +104,7 @@ public extension TableViewCellElement
     }
 }
 
-public extension TableViewCellElement where Self:Equatable
+public extension TableViewRowElement where Self:Equatable
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
@@ -118,7 +117,7 @@ public extension TableViewCellElement where Self:Equatable
     }
 }
 
-public protocol TableViewCellViewElement : TableViewCellElement where TableViewCell == TableView.ElementCell<Self>
+public protocol TableViewRowViewElement : TableViewRowElement where TableViewCell == TableView.ElementCell<Self>
 {
     // MARK: Converting To View For Display
     
@@ -129,7 +128,7 @@ public protocol TableViewCellViewElement : TableViewCellElement where TableViewC
     func applyTo(view : View, reason : ApplyReason)
 }
 
-public extension TableViewCellViewElement
+public extension TableViewRowViewElement
 {
     static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementCell<Self>
     {
@@ -264,7 +263,7 @@ public extension TableView
     }
     
     
-    final class ElementCell<Element:TableViewCellViewElement> : UITableViewCell
+    final class ElementCell<Element:TableViewRowViewElement> : UITableViewCell
     {
         var view : Element.View
         

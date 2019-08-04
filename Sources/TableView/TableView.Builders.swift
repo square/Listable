@@ -71,13 +71,13 @@ public extension TableView
         //
         
         // Adds the given row to the builder.
-        public static func += <Element:TableViewCellElement>(lhs : inout SectionBuilder, rhs : TableView.Row<Element>)
+        public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : TableView.Row<Element>)
         {
             lhs.rows.append(rhs)
         }
         
         // Converts `Element` which conforms to `TableViewElement` into Rows.
-        public static func += <Element:TableViewCellElement>(lhs : inout SectionBuilder, rhs : Element)
+        public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : Element)
         {
             let row = TableView.Row(rhs)
             
@@ -95,13 +95,13 @@ public extension TableView
         }
         
         // Arrays of the same type of rows – allows `[.init(...)]` syntax within the array.
-        public static func += <Element:TableViewCellElement>(lhs : inout SectionBuilder, rhs : [TableView.Row<Element>])
+        public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : [TableView.Row<Element>])
         {
             lhs.rows += rhs
         }
         
         // Converts `Element` which conforms to `TableViewRowValue` into Rows.
-        public static func += <Element:TableViewCellElement>(lhs : inout SectionBuilder, rhs : [Element])
+        public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : [Element])
         {
             let rows = rhs.map {
                 TableView.Row($0)

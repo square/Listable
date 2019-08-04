@@ -16,13 +16,19 @@ public extension TableView
             return Configuration()
         }
         
-        var rowHeight : CGFloat = 60.0
+        var rowHeight : CGFloat = 44.0
+        
+        var sectionHeaderHeight : CGFloat = 30.0
+        var sectionFooterHeight : CGFloat = 30.0
         
         public init() {}
         
         func apply(to tableView : UITableView)
         {
             tableView.rowHeight = self.rowHeight
+            
+            tableView.sectionHeaderHeight = self.sectionHeaderHeight
+            tableView.sectionFooterHeight = self.sectionFooterHeight
         }
     }
     

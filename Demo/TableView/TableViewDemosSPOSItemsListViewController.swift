@@ -119,7 +119,7 @@ func randomColor() -> UIColor
     )
 }
 
-struct Product : TableViewCellViewElement, ProxyElement, Equatable
+struct Product : TableViewRowViewElement, ProxyElement, Equatable
 {
     var tile : Tile
     
@@ -128,7 +128,7 @@ struct Product : TableViewCellViewElement, ProxyElement, Equatable
     
     var catalogID : UUID
     
-    // MARK: TableViewCellViewElement
+    // MARK: TableViewRowViewElement
     
     var identifier: Identifier<Product> {
         return .init(catalogID)

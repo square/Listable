@@ -117,7 +117,7 @@ struct Itemization : Equatable
     }
 }
 
-struct AmountRow : ProxyElement, TableViewCellViewElement, Equatable
+struct AmountRow : ProxyElement, TableViewRowViewElement, Equatable
 {
     var title : String
     var detail : String
@@ -134,7 +134,7 @@ struct AmountRow : ProxyElement, TableViewCellViewElement, Equatable
         )
     }
     
-    // TableViewCellViewElement
+    // TableViewRowViewElement
     
     typealias View = ElementView<AmountRow>
     
@@ -153,7 +153,7 @@ struct AmountRow : ProxyElement, TableViewCellViewElement, Equatable
     }
 }
 
-struct ItemizationRow : ProxyElement, TableViewCellViewElement, Equatable
+struct ItemizationRow : ProxyElement, TableViewRowViewElement, Equatable
 {
     var itemization : Itemization
     
@@ -183,7 +183,7 @@ struct ItemizationRow : ProxyElement, TableViewCellViewElement, Equatable
             uniformInset: 20.0)
     }
     
-    // TableViewCellViewElement
+    // TableViewRowViewElement
     
     typealias View = ElementView<ItemizationRow>
     

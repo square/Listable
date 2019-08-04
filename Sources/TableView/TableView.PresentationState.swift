@@ -71,7 +71,7 @@ internal extension TableView
             }
         }
         
-        final class Row<Element:TableViewCellElement> : TableViewPresentationStateRow
+        final class Row<Element:TableViewRowElement> : TableViewPresentationStateRow
         {
             var row : TableView.Row<Element>
             

@@ -21,6 +21,7 @@ public final class TableView : UIView
             }
             
             self.configuration.apply(to: self.tableView)
+            self.tableView.reloadData()
         }
     }
     
@@ -54,6 +55,8 @@ public final class TableView : UIView
     
     // MARK: Private Properties
     
+    private let storage : Storage = Storage()
+    
     private let dataSource : DataSource
     private let delegate : Delegate
     
@@ -62,6 +65,13 @@ public final class TableView : UIView
     private let cellMeasurementCache : ReusableViewCache
     private let headerMeasurementCache : ReusableViewCache
     private let footerMeasurementCache : ReusableViewCache
+    
+    final private class Storage {
+        let visiblePresentationState : PresentationState = PresentationState()
+        
+        var content : Content = Content()
+        var visibleSlice : Content.Slice = Content.Slice()
+    }
     
     // MARK: Initialization
     
@@ -166,15 +176,6 @@ public final class TableView : UIView
     //
     // MARK: Updating Content
     //
-    
-    private var storage : Storage = Storage()
-    
-    private struct Storage {
-        let visiblePresentationState : PresentationState = PresentationState()
-        
-        var content : Content = Content(sections: [])
-        var visibleSlice : Content.Slice = Content.Slice()
-    }
     
     private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
     {

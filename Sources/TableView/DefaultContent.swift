@@ -10,12 +10,12 @@ import Foundation
 
 public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
 {
-    var text : String?
+    var text : String
         
     public typealias HeaderFooterView = UITableViewHeaderFooterView
     
     public var identifier: Identifier<DefaultHeaderFooter> {
-        return .init(self.text ?? "EmptyIdentifier")
+        return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
     }
     
     public static func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<DefaultHeaderFooter>) -> UITableViewHeaderFooterView
@@ -30,7 +30,7 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
 }
 
 
-public final class ViewInstance<View:UIView> : TableViewCellElement, Equatable
+public final class ViewInstance<View:UIView> : TableViewRowElement, Equatable
 {
     public typealias TableViewCell = ViewRowTableViewCell
     
@@ -44,7 +44,7 @@ public final class ViewInstance<View:UIView> : TableViewCellElement, Equatable
         self.cell = ViewRowTableViewCell(view: self.view)
     }
     
-    // MARK: TableViewCellElement
+    // MARK: TableViewRowElement
     
     public func applyTo(cell: ViewInstance<View>.ViewRowTableViewCell, reason: ApplyReason)
     {
@@ -112,7 +112,7 @@ public final class ViewInstance<View:UIView> : TableViewCellElement, Equatable
     }
 }
 
-public struct SubtitleRow : TableViewCellElement, Equatable
+public struct SubtitleRow : TableViewRowElement, Equatable
 {
     var text : String
     var textLineCount : Int
@@ -129,7 +129,7 @@ public struct SubtitleRow : TableViewCellElement, Equatable
         self.detailLineCount = detailLineCount
     }
     
-    // MARK: TableViewCellElement
+    // MARK: TableViewRowElement
     
     public typealias TableViewCell = UITableViewCell
     
@@ -152,7 +152,7 @@ public struct SubtitleRow : TableViewCellElement, Equatable
     }
 }
 
-public struct DefaultRow : TableViewCellElement, Equatable
+public struct DefaultRow : TableViewRowElement, Equatable
 {
     var text : String
     var lineCount : Int
@@ -163,7 +163,7 @@ public struct DefaultRow : TableViewCellElement, Equatable
         self.lineCount = lineCount
     }
     
-    // MARK: TableViewCellElement
+    // MARK: TableViewRowElement
     
     public typealias TableViewCell = UITableViewCell
     
@@ -183,9 +183,9 @@ public struct DefaultRow : TableViewCellElement, Equatable
     }
 }
 
-extension String : TableViewCellElement, TableViewHeaderFooterElement
+extension String : TableViewRowElement, TableViewHeaderFooterElement
 {
-    // MARK: TableViewCellElement
+    // MARK: TableViewRowElement
     
     public typealias Cell = UITableViewCell
     

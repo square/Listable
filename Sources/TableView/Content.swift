@@ -252,7 +252,7 @@ public extension TableView
         }
     }
     
-    struct Row<Element:TableViewCellElement> : TableViewRow
+    struct Row<Element:TableViewRowElement> : TableViewRow
     {
         public var identifier : AnyIdentifier
         
@@ -481,7 +481,6 @@ public extension TableView
         public var backgroundColor: UIColor?
         public var image: UIImage?
         
-        // TODO: Need to figure out how to pass through the element here...
         public typealias OnTap = (SwipeAction) -> Bool
         public var onTap : OnTap
         
@@ -501,8 +500,8 @@ public extension TableView
                 style: self.style.toUIContextualActionStyle(),
                 title: self.title,
                 handler: { action, view, didComplete in
-                    let success = self.onTap(self)
-                    didComplete(success)
+                    let completed = self.onTap(self)
+                    didComplete(completed)
             })
             
             return action
@@ -537,7 +536,7 @@ public extension TableView
         
         let rowCount : Int
         
-        public init(header : TableViewHeaderFooter? = nil, footer : TableViewHeaderFooter? = nil, sections : [TableView.Section])
+        public init(header : TableViewHeaderFooter? = nil, footer : TableViewHeaderFooter? = nil, sections : [TableView.Section] = [])
         {
             self.header = header
             self.footer = footer
