@@ -146,6 +146,7 @@ public protocol BindingContext : AnyBindingContext
     func unbind(from binding : Binding<Element>)
 }
 
+// TODO: Rename to BindingDataSource? BindingSource?
 public extension BindingContext
 {
     // MARK: AnyBindingContext
@@ -165,6 +166,42 @@ public extension BindingContext
     }
 }
 
+public final class KVOContext<Element, Observed:NSObject, Value> : BindingContext
+{
+    public typealias Update = NSKeyValueObservedChange<Value>
+    
+    public var didUpdate : DidUpdate?
+    
+    // TODO: Strong or weak? Can't decide... maybe allow for both?
+    public private(set) weak var observed : Observed?
+    public let keyPath : KeyPath<Observed, Value>
+    
+    private var observation : NSKeyValueObservation?
+    
+    public init(with observed : Observed, keyPath : KeyPath<Observed, Value>)
+    {
+        self.observed = observed
+        self.keyPath = keyPath
+    }
+    
+    deinit {
+        self.observation?.invalidate()
+    }
+    
+    public func bind(to binding: Binding<Element>)
+    {
+        self.observation = self.observed?.observe(keyPath) { [weak self] observed, change in
+            guard let self = self else { return }
+            
+            self.didUpdate?(change)
+        }
+    }
+    
+    public func unbind(from binding: Binding<Element>)
+    {
+        self.observation?.invalidate()
+    }
+}
 
 public final class NotificationContext<Element, Update> : BindingContext
 {
