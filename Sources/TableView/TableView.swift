@@ -74,11 +74,15 @@ public final class TableView : UIView
         var content : Content = Content()
         var visibleSlice : Content.Slice = Content.Slice()
         
-        func remove(row rowToRemove : TableViewPresentationStateRow)
+        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
         {
             if let indexPath = self.presentationState.remove(row: rowToRemove) {
                 self.content.remove(at: indexPath)
                 self.visibleSlice.content.remove(at: indexPath)
+                
+                return indexPath
+            } else {
+                return nil
             }
         }
     }
@@ -368,7 +372,7 @@ fileprivate extension TableView
             guard let header = section.header else {
                 return 0.0
             }
-            
+                        
             return header.heightWith(
                 width: tableView.bounds.size.width,
                 default: tableView.sectionHeaderHeight,
@@ -463,10 +467,20 @@ fileprivate extension TableView
             }
         }
         
-        @available(iOS 9.3, *)
         func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
         {
-            return []
+            // Note: Only used before iOS 11.
+            // We must also manually animate out the removal.
+            
+            let row = self.tableView.storage.presentationState.row(at: indexPath)
+            
+            return row.anyModel.trailingTableViewRowActions { [weak self] style in
+                if style.deletesRow {
+                    if let indexPath = self?.tableView.storage.remove(row: row) {
+                        self?.tableView.tableView.deleteRows(at: [indexPath], with: .left)
+                    }
+                }
+            }
         }
         
         @available(iOS 11.0, *)
@@ -476,7 +490,7 @@ fileprivate extension TableView
 
             return row.anyModel.leadingSwipeActionsConfiguration { [weak self] style in
                 if style.deletesRow {
-                    self?.tableView.storage.remove(row: row)
+                    _ = self?.tableView.storage.remove(row: row)
                 }
             }
         }
@@ -488,7 +502,7 @@ fileprivate extension TableView
             
             return row.anyModel.trailingSwipeActionsConfiguration { [weak self] style in
                 if style.deletesRow {
-                    self?.tableView.storage.remove(row: row)
+                    _ = self?.tableView.storage.remove(row: row)
                 }
             }
         }

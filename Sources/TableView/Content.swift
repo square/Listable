@@ -50,6 +50,8 @@ public protocol TableViewRow_Internal
     @available(iOS 11.0, *)
     func trailingSwipeActionsConfiguration(onPerform : @escaping TableView.SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
     
+    func trailingTableViewRowActions(onPerform : @escaping TableView.SwipeAction.OnPerform) -> [UITableViewRowAction]?
+    
     var swipeToDeleteType : TableView.SwipeToDelete { get }
     
     func newPresentationRow() -> TableViewPresentationStateRow
@@ -373,6 +375,11 @@ public extension TableView
             return self.trailingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
         }
         
+        public func trailingTableViewRowActions(onPerform : @escaping TableView.SwipeAction.OnPerform) -> [UITableViewRowAction]?
+        {
+            return self.trailingActions?.toUITableViewRowActions(onPerform: onPerform)
+        }
+        
         public var swipeToDeleteType : TableView.SwipeToDelete
         {
             guard let action = self.trailingActions?.firstDestructiveAction else {
@@ -464,6 +471,13 @@ public extension TableView
             
             return config
         }
+        
+        internal func toUITableViewRowActions(onPerform : @escaping SwipeAction.OnPerform) -> [UITableViewRowAction]?
+        {
+            return self.actions.map {
+                $0.toUITableViewRowAction(onPerform: onPerform)
+            }
+        }
     }
     
     struct SwipeAction
@@ -492,7 +506,7 @@ public extension TableView
         @available(iOS 11.0, *)
         internal func toUIContextualAction(onPerform : @escaping OnPerform) -> UIContextualAction
         {
-            let action = UIContextualAction(
+            return UIContextualAction(
                 style: self.style.toUIContextualActionStyle(),
                 title: self.title,
                 handler: { action, view, didComplete in
@@ -504,8 +518,16 @@ public extension TableView
                         onPerform(self.style)
                     }
             })
-            
-            return action
+        }
+        
+        internal func toUITableViewRowAction(onPerform : @escaping OnPerform) -> UITableViewRowAction
+        {
+            return UITableViewRowAction(
+                style: self.style.toUITableViewRowActionStyle(),
+                title: self.title,
+                handler: { _, _ in
+                    onPerform(self.style)
+            })
         }
         
         public enum Style
@@ -522,6 +544,14 @@ public extension TableView
             
             @available(iOS 11.0, *)
             func toUIContextualActionStyle() -> UIContextualAction.Style
+            {
+                switch self {
+                case .normal: return .normal
+                case .destructive: return .destructive
+                }
+            }
+            
+            func toUITableViewRowActionStyle() -> UITableViewRowAction.Style
             {
                 switch self {
                 case .normal: return .normal
@@ -655,7 +685,7 @@ public extension TableView
         
         internal func sliceUpTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
         {
-            guard self.sections.count > 0 else {
+            guard self.sections.isEmpty == false else {
                 return Slice(
                     truncatedBottom: true,
                     content: Content(sections: [])

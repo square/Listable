@@ -45,13 +45,13 @@ final class TableViewDemosCartViewController : UIViewController
             
             func include(_ word : String) -> Bool
             {
-                return self.filter.count == 0 || word.lowercased().contains(self.filter.lowercased())
+                return self.filter.isEmpty || word.lowercased().contains(self.filter.lowercased())
             }
         }
         
         func tableViewContent(with state: TableView.State<FilterState>, table: inout TableView.ContentBuilder)
         {
-            guard self.itemizations.count > 0 else {
+            guard self.itemizations.isEmpty == false else {
                 return
             }
             

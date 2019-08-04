@@ -17,7 +17,7 @@ public extension CollectionView
         
         public var isEmpty : Bool {
             for section in self.sections {
-                if section.items.count > 0 {
+                if section.items.isEmpty == false {
                     return false
                 }
             }
@@ -39,7 +39,7 @@ public extension CollectionView
         public mutating func removeEmpty()
         {
             self.sections.removeAll {
-                $0.items.count == 0
+                $0.items.isEmpty
             }
         }
         
@@ -70,7 +70,7 @@ public extension CollectionView
         public var items : [CollectionViewItem]
     
         public var isEmpty : Bool {
-            return self.items.count == 0
+            return self.items.isEmpty
         }
         
         public init(layout : Layout)

@@ -971,7 +971,7 @@ private final class DiffableCollection<Value>
     
     private func generateIndexLookupsIfNeeded()
     {
-        guard self.identifierContainerIndexes.count == 0 else {
+        guard self.identifierContainerIndexes.isEmpty else {
             return
         }
         

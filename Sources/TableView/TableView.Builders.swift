@@ -29,13 +29,13 @@ public extension TableView
         public var sections : [TableView.Section] = []
         
         public var isEmpty : Bool {
-            return self.sections.firstIndex { $0.rows.count > 0 } != nil
+            return self.sections.firstIndex { $0.rows.isEmpty == false } != nil
         }
         
         public mutating func removeEmpty()
         {
             self.sections.removeAll {
-                $0.rows.count == 0
+                $0.rows.isEmpty
             }
         }
 
@@ -55,7 +55,7 @@ public extension TableView
         public var rows : [TableViewRow] = []
         
         public var isEmpty : Bool {
-            return self.rows.count == 0
+            return self.rows.isEmpty
         }
         
         // Adds the given row to the builder.

@@ -15,7 +15,7 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
     public typealias HeaderFooterView = UITableViewHeaderFooterView
     
     public var identifier: Identifier<DefaultHeaderFooter> {
-        return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
+        return .init(self.text.isEmpty == false ? self.text : "EmptyIdentifier")
     }
     
     public static func createReusableHeaderFooterView(with reuseIdentifier: ReuseIdentifier<DefaultHeaderFooter>) -> UITableViewHeaderFooterView
@@ -134,7 +134,7 @@ public struct SubtitleRow : TableViewRowElement, Equatable
     public typealias TableViewCell = UITableViewCell
     
     public var identifier: Identifier<SubtitleRow> {
-        return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
+        return .init(self.text.isEmpty == false ? self.text : "EmptyIdentifier")
     }
     
     public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<SubtitleRow>) -> UITableViewCell
@@ -168,7 +168,7 @@ public struct DefaultRow : TableViewRowElement, Equatable
     public typealias TableViewCell = UITableViewCell
     
     public var identifier: Identifier<DefaultRow> {
-        return .init(self.text.count > 0 ? self.text : "EmptyIdentifier")
+        return .init(self.text.isEmpty == false ? self.text : "EmptyIdentifier")
     }
     
     public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<DefaultRow>) -> UITableViewCell
@@ -190,7 +190,7 @@ extension String : TableViewRowElement, TableViewHeaderFooterElement
     public typealias Cell = UITableViewCell
     
     public var identifier: Identifier<String> {
-        return .init(self.count > 0 ? self : "EmptyIdentifier")
+        return .init(self.isEmpty == false ? self : "EmptyIdentifier")
     }
     
     public static func createReusableCell(with reuseIdentifier: ReuseIdentifier<String>) -> UITableViewCell
