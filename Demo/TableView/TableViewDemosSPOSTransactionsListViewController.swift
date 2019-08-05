@@ -12,31 +12,16 @@ import Listable
 
 final class TableViewDemosSPOSTransactionsListViewController : UIViewController
 {
-    let presenter = TableView.Presenter(
-        initial: ContentSource.State(),
-        contentSource: ContentSource(),
-        tableView: TableView()
-    )
-    
     let endpoint = ListEndpoint()
     
     override func loadView()
     {
         self.title = "Transactions"
         
-        self.view = self.presenter.tableView
+        self.view = TableView(initial: Source.State(), source: Source())
     }
     
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear(animated)
-        
-        if self.presenter.state.value.content == .new {
-            
-        }
-    }
-    
-    class ContentSource : TableViewContentSource
+    class Source : TableViewSource
     {
         let searchRow = UIViewRowElement(view: SearchBar())
         
@@ -56,7 +41,7 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
             }
         }
         
-        func tableViewContent(with state: TableView.State<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             switch state.value.content {
             case .new: break

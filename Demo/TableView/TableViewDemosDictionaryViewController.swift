@@ -11,24 +11,17 @@ import Listable
 
 final public class TableViewDemosDictionaryViewController : UIViewController
 {
-    let presenter = TableView.Presenter(
-        initial: ContentSource.State(),
-        contentSource: ContentSource(dictionary: EnglishDictionary.dictionary),
-        tableView: TableView(frame: .zero)
-    )
-    
     override public func loadView()
     {
         self.title = "Dictionary"
         
-        self.view = self.presenter.tableView
+        self.view = TableView(initial: Source.State(), source: Source(dictionary: EnglishDictionary.dictionary))
     }
     
-    final class ContentSource : TableViewContentSource
+    final class Source : TableViewSource
     {
-        var dictionary : EnglishDictionary
-        
-        var searchRow : UIViewRowElement<SearchBar>
+        let dictionary : EnglishDictionary
+        let searchRow : UIViewRowElement<SearchBar>
         
         init(dictionary : EnglishDictionary)
         {
@@ -47,7 +40,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             }
         }
 
-        func tableViewContent(with state: TableView.State<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             if #available(iOS 10.0, *) {
                 table.refreshControl = RefreshControl() { finished in
@@ -59,9 +52,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             
             table += TableView.Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
-                    state.update { state in
-                        state.filter = filter
-                    }
+                    state.value.filter = filter
                 }
                 
                 rows += self.searchRow

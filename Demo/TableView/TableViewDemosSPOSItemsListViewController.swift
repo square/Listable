@@ -15,16 +15,14 @@ import BlueprintUICommonControls
 
 final class TableViewDemosSPOSItemsListViewController : UIViewController
 {
-    let presenter = TableView.Presenter(initial: ContentSource.State(), contentSource: ContentSource(), tableView: TableView())
-    
     override func loadView()
     {
         self.title = "Items"
         
-        self.view = self.presenter.tableView
+        self.view = TableView(initial: Source.State(), source: Source())
     }
     
-    class ContentSource : TableViewContentSource
+    class Source : TableViewSource
     {
         let searchRow = UIViewRowElement(view: SearchBar())
         
@@ -38,13 +36,11 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
             }
         }
         
-        func tableViewContent(with state: TableView.State<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             table += TableView.Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
-                    state.update { state in
-                        state.filter = filter
-                    }
+                    state.value.filter = filter
                 }
                 
                 rows += self.searchRow
