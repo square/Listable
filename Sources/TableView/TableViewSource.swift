@@ -129,8 +129,24 @@ public final class State<Value:Equatable>
 }
 
 
-public extension TableView
+internal extension TableView
 {
+    final class ClosureSource<Input:Equatable> : TableViewSource
+    {
+        typealias Builder = (State<Input>, inout TableView.ContentBuilder) -> ()
+        let builder : Builder
+        
+        init(with builder : @escaping Builder)
+        {
+            self.builder = builder
+        }
+        
+        public func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        {
+            self.builder(state, &table)
+        }
+    }
+    
     final class StaticSource : TableViewSource
     {
         public struct Input : Equatable {}
@@ -139,7 +155,7 @@ public extension TableView
         
         public let builder : TableView.ContentBuilder
         
-        public init(_ build : @escaping Build)
+        public init(with build : @escaping Build)
         {
             var builder = TableView.ContentBuilder()
             build(&builder)

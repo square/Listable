@@ -107,11 +107,39 @@ public final class TableView : UIView
         self.init(frame: frame, style: .plain)
     }
     
-    public convenience init<Source:TableViewSource>(frame: CGRect = .zero, style : UITableView.Style = .plain, initial : Source.Input, source : Source)
+    public convenience init<Source:TableViewSource>(
+        frame: CGRect = .zero,
+        style : UITableView.Style = .plain,
+        initial : Source.Input,
+        source : Source
+        )
     {
         self.init(frame: frame, style: style)
         
         self.setSource(initial: initial, source: source)
+    }
+    
+    public convenience init<Input:Equatable>(
+        frame: CGRect = .zero,
+        style : UITableView.Style = .plain,
+        initial : Input,
+        _ builder : @escaping (State<Input>, inout TableView.ContentBuilder) -> ()
+        )
+    {
+        self.init(frame: frame, style: style)
+        
+        self.setSource(initial: initial, source: TableView.ClosureSource(with: builder))
+    }
+    
+    public convenience init(
+        frame: CGRect = .zero,
+        style : UITableView.Style = .plain,
+        _ builder : @escaping (inout TableView.ContentBuilder) -> ()
+        )
+    {
+        self.init(frame: frame, style: style)
+        
+        self.setSource(initial: TableView.StaticSource.Input(), source: TableView.StaticSource(with: builder))
     }
     
     public init(frame: CGRect = .zero, style : UITableView.Style = .plain)
