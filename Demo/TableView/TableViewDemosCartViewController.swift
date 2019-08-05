@@ -19,7 +19,7 @@ final class TableViewDemosCartViewController : UIViewController
     {
         self.title = "Cart"
         
-        self.view = TableView(initial: Source.State(), source: Source())
+        self.view = TableView(state: Source.State(), source: Source())
     }
     
     class Source : TableViewSource

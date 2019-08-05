@@ -101,25 +101,25 @@ public final class TableView : UIView
     public convenience init<Source:TableViewSource>(
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
-        initial : Source.State,
+        state : Source.State,
         source : Source
         )
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: initial, source: source)
+        self.setSource(initial: state, source: source)
     }
     
-    public convenience init<Input:Equatable>(
+    public convenience init<State:Equatable>(
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
-        initial : Input,
-        _ builder : @escaping (SourceState<Input>, inout TableView.ContentBuilder) -> ()
+        state : State,
+        _ builder : @escaping (SourceState<State>, inout TableView.ContentBuilder) -> ()
         )
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: initial, source: TableView.DynamicSource(with: builder))
+        self.setSource(initial: state, source: TableView.DynamicSource(with: builder))
     }
     
     public convenience init(

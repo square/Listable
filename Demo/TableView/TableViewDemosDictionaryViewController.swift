@@ -15,7 +15,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.view = TableView(initial: Source.State(), source: Source(dictionary: EnglishDictionary.dictionary))
+        self.view = TableView(state: Source.State(), source: Source(dictionary: EnglishDictionary.dictionary))
     }
     
     final class Source : TableViewSource

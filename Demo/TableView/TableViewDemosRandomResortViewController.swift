@@ -17,7 +17,7 @@ final class TableViewDemosRandomResortViewController : UIViewController
     {
         self.title = "Random Resorter"
         
-        self.tableView = TableView(initial: Source.State(), source: Source())
+        self.tableView = TableView(state: Source.State(), source: Source())
         self.view = tableView
         
         self.navigationItem.rightBarButtonItems = [
