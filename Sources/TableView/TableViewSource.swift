@@ -52,7 +52,8 @@ internal extension TableView
         func discard()
         {
             self.didChange = nil
-            self.state.didChange = nil
+            
+            self.state.discard()
         }
         
         internal func content() -> TableView.Content
