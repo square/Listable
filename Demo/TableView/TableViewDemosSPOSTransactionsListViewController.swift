@@ -41,7 +41,7 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
             }
         }
         
-        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             switch state.value.content {
             case .new: break

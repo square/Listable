@@ -40,7 +40,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             }
         }
 
-        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             if #available(iOS 10.0, *) {
                 table.refreshControl = RefreshControl() { finished in

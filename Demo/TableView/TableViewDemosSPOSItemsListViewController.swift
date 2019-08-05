@@ -36,7 +36,7 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
             }
         }
         
-        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             table += TableView.Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in

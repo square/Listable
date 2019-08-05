@@ -34,42 +34,32 @@ public final class TableView : UIView
         set { self.set(content: newValue, animated: false) }
     }
     
-    public func setContent(animated : Bool = false, _ block : (inout ContentBuilder) -> ())
+    public func setContent(animated : Bool = false, _ block : ContentBuilder.Build)
     {
-        var builder = ContentBuilder()
-        
-        block(&builder)
-        
-        self.set(
-            content: builder.content,
-            animated: animated
-        )
+        self.set(content: ContentBuilder.build(with: block), animated: animated)
     }
     
     public func set(content new : Content, animated : Bool = false)
     {
-        self.storage.content = new
-        
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
+        self.setSource(
+            initial: StaticSource.Input(),
+            source: StaticSource(with: new),
+            animated: animated
+        )
     }
-    
-    // MARK: Content Sources
-    
-    private var sourcePresenter : TableViewSourcePresenter? = nil
     
     @discardableResult
     public func setSource<Source:TableViewSource>(initial : Source.Input, source : Source, animated : Bool = false) -> ValueAccess<Source.Input>
     {
-        self.sourcePresenter?.discard()
+        self.sourcePresenter.discard()
         
         let sourcePresenter = TableView.SourcePresenter(initial: initial, source: source) { [weak self] in
-            // TODO: This should eventually debounce.
-            self?.update(animated: animated)
+            self?.reloadContent(animated: animated)
         }
         
         self.sourcePresenter = sourcePresenter
         
-        self.update(animated: animated)
+        self.reloadContent(animated: animated)
         
         return ValueAccess(get: {
             sourcePresenter.value
@@ -78,11 +68,11 @@ public final class TableView : UIView
         })
     }
     
-    public func update(animated : Bool = false)
+    public func reloadContent(animated : Bool = false)
     {
-        if let sourcePresenter = self.sourcePresenter {
-            self.set(content: sourcePresenter.content(), animated: animated)
-        }
+        self.storage.content = self.sourcePresenter.content()
+        
+        self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
     //
@@ -90,6 +80,7 @@ public final class TableView : UIView
     //
     
     private let storage : Storage
+    private var sourcePresenter : TableViewSourcePresenter
     
     private let dataSource : DataSource
     private let delegate : Delegate
@@ -128,7 +119,7 @@ public final class TableView : UIView
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: initial, source: TableView.ClosureSource(with: builder))
+        self.setSource(initial: initial, source: TableView.DynamicSource(with: builder))
     }
     
     public convenience init(
@@ -145,6 +136,7 @@ public final class TableView : UIView
     public init(frame: CGRect = .zero, style : UITableView.Style = .plain)
     {
         self.storage = Storage()
+        self.sourcePresenter = SourcePresenter(initial: StaticSource.Input(), source: StaticSource())
         
         self.cellMeasurementCache = ReusableViewCache()
         self.headerMeasurementCache = ReusableViewCache()
@@ -486,6 +478,11 @@ fileprivate extension TableView
             // TODO
             
             return proposedDestinationIndexPath
+        }
+        
+        func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
+        {
+            return .none
         }
         
         // MARK: Row Actions

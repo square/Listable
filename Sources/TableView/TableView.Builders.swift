@@ -12,6 +12,15 @@ public extension TableView
 {    
     struct ContentBuilder
     {
+        public typealias Build = (inout ContentBuilder) -> ()
+        
+        public static func build(with block : Build) -> Content
+        {
+            var builder = ContentBuilder()
+            block(&builder)
+            return builder.content
+        }
+        
         public var content : TableView.Content {
             return TableView.Content(
                 refreshControl: self.refreshControl,

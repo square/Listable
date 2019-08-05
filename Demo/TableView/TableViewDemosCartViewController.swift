@@ -38,7 +38,7 @@ final class TableViewDemosCartViewController : UIViewController
             }
         }
         
-        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             guard self.itemizations.isEmpty == false else {
                 return

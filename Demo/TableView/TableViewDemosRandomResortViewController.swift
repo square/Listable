@@ -28,12 +28,12 @@ final class TableViewDemosRandomResortViewController : UIViewController
     
     @objc func resortRows()
     {
-        self.tableView?.update()
+        self.tableView?.reloadContent()
     }
     
     @objc func resortSections()
     {
-        self.tableView?.update()
+        self.tableView?.reloadContent()
     }
     
     struct SeedableRNG : RandomNumberGenerator, Equatable
@@ -56,7 +56,7 @@ final class TableViewDemosRandomResortViewController : UIViewController
         
         struct Input : Equatable {}
         
-        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             (1...5).forEach { sectionIndex in
                 table += TableView.Section(identifier: sectionIndex, header: TableView.HeaderFooter(String(sectionIndex))) { rows in

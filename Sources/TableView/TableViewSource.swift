@@ -12,7 +12,19 @@ public protocol TableViewSource
 {
     associatedtype Input:Equatable
     
-    func content(with state : State<Input>, in table : inout TableView.ContentBuilder)
+    func content(with state : State<Input>, table : inout TableView.ContentBuilder)
+    
+    func content(with state : State<Input>) -> TableView.Content
+}
+
+public extension TableViewSource
+{
+    func content(with state : State<Input>) -> TableView.Content
+    {
+        return TableView.ContentBuilder.build { table in
+            self.content(with: state, table: &table)
+        }
+    }
 }
 
 internal protocol TableViewSourcePresenter
@@ -38,7 +50,7 @@ internal extension TableView
         
         private var state : State<Source.Input>
         
-        init(initial : Source.Input, source : Source, didChange : @escaping DidChange)
+        init(initial : Source.Input, source : Source, didChange : @escaping DidChange = {})
         {
             self.source = source
 
@@ -67,11 +79,7 @@ internal extension TableView
             
             // Create and return new content.
             
-            var builder = TableView.ContentBuilder()
-            
-            self.source.content(with: self.state, in: &builder)
-            
-            return builder.content
+            return self.source.content(with: self.state)
         }
     }
 }
@@ -131,7 +139,7 @@ public final class State<Value:Equatable>
 
 internal extension TableView
 {
-    final class ClosureSource<Input:Equatable> : TableViewSource
+    final class DynamicSource<Input:Equatable> : TableViewSource
     {
         typealias Builder = (State<Input>, inout TableView.ContentBuilder) -> ()
         let builder : Builder
@@ -141,7 +149,7 @@ internal extension TableView
             self.builder = builder
         }
         
-        public func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
+        public func content(with state: State<Input>, table: inout TableView.ContentBuilder)
         {
             self.builder(state, &table)
         }
@@ -151,21 +159,26 @@ internal extension TableView
     {
         public struct Input : Equatable {}
         
-        public typealias Build = (inout TableView.ContentBuilder) -> ()
+        public let content : TableView.Content
         
-        public let builder : TableView.ContentBuilder
-        
-        public init(with build : @escaping Build)
+        public init(with content : TableView.Content = .init())
         {
-            var builder = TableView.ContentBuilder()
-            build(&builder)
-            
-            self.builder = builder
+            self.content = content
         }
         
-        public func content(with state : State<Input>, in table : inout TableView.ContentBuilder)
+        public convenience init(with build : TableView.ContentBuilder.Build)
         {
-            table = self.builder
+            self.init(with: TableView.ContentBuilder.build(with: build))
+        }
+        
+        func content(with state: State<TableView.StaticSource.Input>, table: inout TableView.ContentBuilder)
+        {
+            fatalError()
+        }
+        
+        func content(with state: State<TableView.StaticSource.Input>) -> TableView.Content
+        {
+            return self.content
         }
     }
 }
