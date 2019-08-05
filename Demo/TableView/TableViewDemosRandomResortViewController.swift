@@ -17,7 +17,7 @@ final class TableViewDemosRandomResortViewController : UIViewController
     {
         self.title = "Random Resorter"
         
-        self.tableView = TableView(initial: Source.Input(), source: Source())
+        self.tableView = TableView(initial: Source.State(), source: Source())
         self.view = tableView
         
         self.navigationItem.rightBarButtonItems = [
@@ -54,9 +54,9 @@ final class TableViewDemosRandomResortViewController : UIViewController
     {
         var rng = SeedableRNG(seed: 0)
         
-        struct Input : Equatable {}
+        struct State : Equatable {}
         
-        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             (1...5).forEach { sectionIndex in
                 table += TableView.Section(identifier: sectionIndex, header: TableView.HeaderFooter(String(sectionIndex))) { rows in

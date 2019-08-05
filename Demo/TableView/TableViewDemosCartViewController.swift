@@ -19,7 +19,7 @@ final class TableViewDemosCartViewController : UIViewController
     {
         self.title = "Cart"
         
-        self.view = TableView(initial: Source.Input(), source: Source())
+        self.view = TableView(initial: Source.State(), source: Source())
     }
     
     class Source : TableViewSource
@@ -28,7 +28,7 @@ final class TableViewDemosCartViewController : UIViewController
         
         var itemizations : [Itemization] = fakeItemizations()
         
-        struct Input : Equatable
+        struct State : Equatable
         {
             var filter : String = ""
             
@@ -38,7 +38,7 @@ final class TableViewDemosCartViewController : UIViewController
             }
         }
         
-        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             guard self.itemizations.isEmpty == false else {
                 return

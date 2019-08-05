@@ -15,7 +15,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.view = TableView(initial: Source.Input(), source: Source(dictionary: EnglishDictionary.dictionary))
+        self.view = TableView(initial: Source.State(), source: Source(dictionary: EnglishDictionary.dictionary))
     }
     
     final class Source : TableViewSource
@@ -30,7 +30,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             self.searchRow = UIViewRowElement(view: SearchBar())
         }
         
-        struct Input : Equatable
+        struct State : Equatable
         {
             var filter : String = ""
             
@@ -40,7 +40,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             }
         }
 
-        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             if #available(iOS 10.0, *) {
                 table.refreshControl = RefreshControl() { finished in

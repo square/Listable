@@ -42,14 +42,14 @@ public final class TableView : UIView
     public func set(content new : Content, animated : Bool = false)
     {
         self.setSource(
-            initial: StaticSource.Input(),
+            initial: StaticSource.State(),
             source: StaticSource(with: new),
             animated: animated
         )
     }
     
     @discardableResult
-    public func setSource<Source:TableViewSource>(initial : Source.Input, source : Source, animated : Bool = false) -> ValueAccess<Source.Input>
+    public func setSource<Source:TableViewSource>(initial : Source.State, source : Source, animated : Bool = false) -> StateAccessor<Source.State>
     {
         self.sourcePresenter.discard()
         
@@ -61,16 +61,16 @@ public final class TableView : UIView
         
         self.reloadContent(animated: animated)
         
-        return ValueAccess(get: {
-            sourcePresenter.value
+        return StateAccessor(get: {
+            sourcePresenter.state
         }, set: {
-            sourcePresenter.value = $0
+            sourcePresenter.state = $0
         })
     }
     
     public func reloadContent(animated : Bool = false)
     {
-        self.storage.content = self.sourcePresenter.content()
+        self.storage.content = self.sourcePresenter.reloadContent()
         
         self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
@@ -101,7 +101,7 @@ public final class TableView : UIView
     public convenience init<Source:TableViewSource>(
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
-        initial : Source.Input,
+        initial : Source.State,
         source : Source
         )
     {
@@ -114,7 +114,7 @@ public final class TableView : UIView
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
         initial : Input,
-        _ builder : @escaping (State<Input>, inout TableView.ContentBuilder) -> ()
+        _ builder : @escaping (SourceState<Input>, inout TableView.ContentBuilder) -> ()
         )
     {
         self.init(frame: frame, style: style)
@@ -130,13 +130,13 @@ public final class TableView : UIView
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: TableView.StaticSource.Input(), source: TableView.StaticSource(with: builder))
+        self.setSource(initial: TableView.StaticSource.State(), source: TableView.StaticSource(with: builder))
     }
     
     public init(frame: CGRect = .zero, style : UITableView.Style = .plain)
     {
         self.storage = Storage()
-        self.sourcePresenter = SourcePresenter(initial: StaticSource.Input(), source: StaticSource())
+        self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
         
         self.cellMeasurementCache = ReusableViewCache()
         self.headerMeasurementCache = ReusableViewCache()

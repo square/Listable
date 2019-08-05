@@ -18,14 +18,14 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
     {
         self.title = "Transactions"
         
-        self.view = TableView(initial: Source.Input(), source: Source())
+        self.view = TableView(initial: Source.State(), source: Source())
     }
     
     class Source : TableViewSource
     {
         let searchRow = UIViewRowElement(view: SearchBar())
         
-        struct Input : Equatable
+        struct State : Equatable
         {
             var filter : String = ""
             
@@ -41,7 +41,7 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
             }
         }
         
-        func content(with state: State<Input>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
         {
             switch state.value.content {
             case .new: break

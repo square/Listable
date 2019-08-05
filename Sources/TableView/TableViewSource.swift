@@ -10,16 +10,16 @@ import Foundation
 
 public protocol TableViewSource
 {
-    associatedtype Input:Equatable
+    associatedtype State:Equatable
     
-    func content(with state : State<Input>, table : inout TableView.ContentBuilder)
+    func content(with state : SourceState<State>, table : inout TableView.ContentBuilder)
     
-    func content(with state : State<Input>) -> TableView.Content
+    func content(with state : SourceState<State>) -> TableView.Content
 }
 
 public extension TableViewSource
 {
-    func content(with state : State<Input>) -> TableView.Content
+    func content(with state : SourceState<State>) -> TableView.Content
     {
         return TableView.ContentBuilder.build { table in
             self.content(with: state, table: &table)
@@ -31,7 +31,7 @@ internal protocol TableViewSourcePresenter
 {
     func discard()
     
-    func content() -> TableView.Content
+    func reloadContent() -> TableView.Content
 }
 
 internal extension TableView
@@ -40,21 +40,21 @@ internal extension TableView
     {
         let source : Source
         
-        var value : Source.Input {
-            get { return self.state.value }
-            set { self.state.value = newValue }
+        var state : Source.State {
+            get { return self.sourceState.value }
+            set { self.sourceState.value = newValue }
         }
         
         typealias DidChange = () -> ()
         var didChange : DidChange?
         
-        private var state : State<Source.Input>
+        private var sourceState : SourceState<Source.State>
         
-        init(initial : Source.Input, source : Source, didChange : @escaping DidChange = {})
+        init(initial : Source.State, source : Source, didChange : @escaping DidChange = {})
         {
             self.source = source
 
-            self.state = State(initial: initial)
+            self.sourceState = SourceState(initial: initial)
             
             self.didChange = didChange
         }
@@ -65,43 +65,43 @@ internal extension TableView
         {
             self.didChange = nil
             
-            self.state.discard()
+            self.sourceState.discard()
         }
         
-        internal func content() -> TableView.Content
+        internal func reloadContent() -> TableView.Content
         {
             // Throw out old state object so changes do not leak between render passes.
             
-            self.state.discard()
+            self.sourceState.discard()
             
-            self.state = State(initial: self.state.value)
-            self.state.didChange = self.didChange
+            self.sourceState = SourceState(initial: self.sourceState.value)
+            self.sourceState.didChange = self.didChange
             
             // Create and return new content.
             
-            return self.source.content(with: self.state)
+            return self.source.content(with: self.sourceState)
         }
     }
 }
 
-public final class ValueAccess<Value:Equatable>
+public final class StateAccessor<State:Equatable>
 {
-    public var value : Value {
+    public var value : State {
         get { return self.get() }
         set { self.set(newValue) }
     }
     
-    private let get : () -> Value
-    private let set : (Value) -> ()
+    private let get : () -> State
+    private let set : (State) -> ()
     
-    internal init(get : @escaping () -> Value, set : @escaping (Value) -> ())
+    internal init(get : @escaping () -> State, set : @escaping (State) -> ())
     {
         self.get = get
         self.set = set
     }
 }
 
-public final class State<Value:Equatable>
+public final class SourceState<Value:Equatable>
 {
     public var value : Value {
         didSet {
@@ -141,7 +141,7 @@ internal extension TableView
 {
     final class DynamicSource<Input:Equatable> : TableViewSource
     {
-        typealias Builder = (State<Input>, inout TableView.ContentBuilder) -> ()
+        typealias Builder = (SourceState<Input>, inout TableView.ContentBuilder) -> ()
         let builder : Builder
         
         init(with builder : @escaping Builder)
@@ -149,7 +149,7 @@ internal extension TableView
             self.builder = builder
         }
         
-        public func content(with state: State<Input>, table: inout TableView.ContentBuilder)
+        public func content(with state: SourceState<Input>, table: inout TableView.ContentBuilder)
         {
             self.builder(state, &table)
         }
@@ -157,7 +157,7 @@ internal extension TableView
     
     final class StaticSource : TableViewSource
     {
-        public struct Input : Equatable {}
+        public struct State : Equatable {}
         
         public let content : TableView.Content
         
@@ -171,12 +171,12 @@ internal extension TableView
             self.init(with: TableView.ContentBuilder.build(with: build))
         }
         
-        func content(with state: State<TableView.StaticSource.Input>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<TableView.StaticSource.State>, table: inout TableView.ContentBuilder)
         {
             fatalError()
         }
         
-        func content(with state: State<TableView.StaticSource.Input>) -> TableView.Content
+        func content(with state: SourceState<TableView.StaticSource.State>) -> TableView.Content
         {
             return self.content
         }
