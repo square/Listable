@@ -53,6 +53,38 @@ public final class TableView : UIView
         self.updateVisibleSlice(for: .contentChanged(animated: animated))
     }
     
+    // MARK: Content Sources
+    
+    private var sourcePresenter : TableViewSourcePresenter? = nil
+    
+    @discardableResult
+    public func setSource<Source:TableViewSource>(initial : Source.Input, source : Source, animated : Bool = false) -> ValueAccess<Source.Input>
+    {
+        self.sourcePresenter?.discard()
+        
+        let sourcePresenter = TableView.SourcePresenter(initial: initial, source: source) { [weak self] in
+            // TODO: This should eventually debounce.
+            self?.update(animated: animated)
+        }
+        
+        self.sourcePresenter = sourcePresenter
+        
+        self.update(animated: animated)
+        
+        return ValueAccess(get: {
+            sourcePresenter.value
+        }, set: {
+            sourcePresenter.value = $0
+        })
+    }
+    
+    public func update(animated : Bool = false)
+    {
+        if let sourcePresenter = self.sourcePresenter {
+            self.set(content: sourcePresenter.content(), animated: animated)
+        }
+    }
+    
     //
     // MARK: Private Properties
     //
@@ -68,45 +100,22 @@ public final class TableView : UIView
     private let headerMeasurementCache : ReusableViewCache
     private let footerMeasurementCache : ReusableViewCache
     
-    final private class Storage {
-        let presentationState : PresentationState = PresentationState()
-        
-        var content : Content = Content()
-        var visibleSlice : Content.Slice = Content.Slice()
-        
-        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
-        {
-            if let indexPath = self.presentationState.remove(row: rowToRemove) {
-                self.content.remove(at: indexPath)
-                self.visibleSlice.content.remove(at: indexPath)
-                
-                return indexPath
-            } else {
-                return nil
-            }
-        }
-    }
-    
     // MARK: Initialization
-    
-    public convenience init()
-    {
-        self.init(frame: .zero)
-    }
     
     override public convenience init(frame: CGRect)
     {
-        self.init(frame: frame, tableView: nil)
+        self.init(frame: frame, style: .plain)
     }
     
-    public init(frame: CGRect = .zero, style : UITableView.Style = .plain, tableView : UITableView? = nil)
+    public convenience init<Source:TableViewSource>(frame: CGRect = .zero, style : UITableView.Style = .plain, initial : Source.Input, source : Source)
     {
-        if let tableView = tableView {
-            precondition(tableView.superview == nil, "Must provide an unconfigured table view.")
-            precondition(tableView.dataSource == nil, "Must provide an unconfigured table view.")
-            precondition(tableView.delegate == nil, "Must provide an unconfigured table view.")
-        }
+        self.init(frame: frame, style: style)
         
+        self.setSource(initial: initial, source: source)
+    }
+    
+    public init(frame: CGRect = .zero, style : UITableView.Style = .plain)
+    {
         self.storage = Storage()
         
         self.cellMeasurementCache = ReusableViewCache()
@@ -118,7 +127,7 @@ public final class TableView : UIView
         self.dataSource = DataSource()
         self.delegate = Delegate()
         
-        self.tableView = tableView ?? UITableView(frame: frame, style: style)
+        self.tableView = UITableView(frame: frame, style: style)
         self.configuration.apply(to: self.tableView)
         
         self.tableView.dataSource = self.dataSource
@@ -277,7 +286,26 @@ public protocol TableViewPresentationStateRow_Internal : AnyObject
 
 fileprivate extension TableView
 {
-    class DataSource : NSObject, UITableViewDataSource
+    final class Storage {
+        let presentationState : PresentationState = PresentationState()
+        
+        var content : Content = Content()
+        var visibleSlice : Content.Slice = Content.Slice()
+        
+        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
+        {
+            if let indexPath = self.presentationState.remove(row: rowToRemove) {
+                self.content.remove(at: indexPath)
+                self.visibleSlice.content.remove(at: indexPath)
+                
+                return indexPath
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    final class DataSource : NSObject, UITableViewDataSource
     {
         unowned var tableView : TableView!
         
@@ -317,7 +345,7 @@ fileprivate extension TableView
         }
     }
     
-    class Delegate : NSObject, UITableViewDelegate
+    final class Delegate : NSObject, UITableViewDelegate
     {
         unowned var tableView : TableView!
         

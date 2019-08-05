@@ -15,31 +15,20 @@ import BlueprintUICommonControls
 
 final class TableViewDemosCartViewController : UIViewController
 {
-    let presenter = TableView.Presenter(initial: ContentSource.State(), contentSource: ContentSource(), tableView: TableView())
-    
     override func loadView()
     {
         self.title = "Cart"
         
-        self.view = self.presenter.tableView
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addItem))
+        self.view = TableView(initial: Source.Input(), source: Source())
     }
     
-    @objc func addItem()
-    {
-        self.presenter.contentSource.itemizations.insert(fakeItemization(), at: 0)
-        
-        self.presenter.update()
-    }
-    
-    class ContentSource : TableViewContentSource
+    class Source : TableViewSource
     {
         let searchRow = UIViewRowElement(view: SearchBar())
         
         var itemizations : [Itemization] = fakeItemizations()
         
-        struct FilterState : Equatable
+        struct Input : Equatable
         {
             var filter : String = ""
             
@@ -49,7 +38,7 @@ final class TableViewDemosCartViewController : UIViewController
             }
         }
         
-        func tableViewContent(with state: TableView.State<FilterState>, table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
         {
             guard self.itemizations.isEmpty == false else {
                 return
@@ -57,9 +46,7 @@ final class TableViewDemosCartViewController : UIViewController
             
             table += TableView.Section(identifier: "search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
-                    state.update { state in
-                        state.filter = filter
-                    }
+                    state.value.filter = filter
                 }
                 
                 rows += self.searchRow

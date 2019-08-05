@@ -11,13 +11,14 @@ import Listable
 
 final class TableViewDemosRandomResortViewController : UIViewController
 {
-    let presenter = TableView.Presenter(initial: ContentSource.State(), contentSource: ContentSource(), tableView: TableView())
+    var tableView : TableView? = nil
     
     override func loadView()
     {
         self.title = "Random Resorter"
         
-        self.view = self.presenter.tableView
+        self.tableView = TableView(initial: Source.Input(), source: Source())
+        self.view = tableView
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Rows", style: .plain, target: self, action: #selector(resortRows)),
@@ -27,12 +28,12 @@ final class TableViewDemosRandomResortViewController : UIViewController
     
     @objc func resortRows()
     {
-        self.presenter.update()
+        self.tableView?.update()
     }
     
     @objc func resortSections()
     {
-        self.presenter.update()
+        self.tableView?.update()
     }
     
     struct SeedableRNG : RandomNumberGenerator, Equatable
@@ -49,13 +50,13 @@ final class TableViewDemosRandomResortViewController : UIViewController
         }
     }
     
-    class ContentSource : TableViewContentSource
+    class Source : TableViewSource
     {
         var rng = SeedableRNG(seed: 0)
         
-        struct State : Equatable {}
+        struct Input : Equatable {}
         
-        func tableViewContent(with state: TableView.State<State>, table: inout TableView.ContentBuilder)
+        func content(with state: State<Input>, in table: inout TableView.ContentBuilder)
         {
             (1...5).forEach { sectionIndex in
                 table += TableView.Section(identifier: sectionIndex, header: TableView.HeaderFooter(String(sectionIndex))) { rows in
