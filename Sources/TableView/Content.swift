@@ -669,25 +669,23 @@ public extension TableView
         {
             var sliced = self
             
-            var remainingRowsCount : Int = additionalRows
+            var remaining : Int = indexPath.row + additionalRows
             
             sliced.sections = self.sections.compactMapWithIndex { sectionIndex, section in
                 if sectionIndex < indexPath.section {
                     return section
                 } else {
-                    if remainingRowsCount > 0 {
-                        var section = section
-                        section.rows = section.rowsUpTo(limit: remainingRowsCount)
-                        remainingRowsCount -= section.rows.count
-                        
-                        return section
-                    } else {
+                    guard remaining > 0 else {
                         return nil
                     }
+                    
+                    var section = section
+                    section.rows = section.rowsUpTo(limit: remaining)
+                    remaining -= section.rows.count
+                    
+                    return section
                 }
             }
-            
-            print("Row Count: \(sliced.rowCount)")
             
             return Slice(
                 containsAllRows: self.rowCount == sliced.rowCount,
