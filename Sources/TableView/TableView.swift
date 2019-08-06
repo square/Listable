@@ -250,12 +250,11 @@ public final class TableView : UIView
     {
         let indexPath = indexPath ?? .zero
         
-        let new = self.content.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-        
-        let diff = TableView.diffWith(old: self.storage.presentationState.sectionModels, new: new.content.sections)
+        let slice = self.content.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+        let diff = TableView.diffWith(old: self.storage.presentationState.sectionModels, new: slice.content.sections)
         
         let updateData = {
-            self.storage.presentationState.update(with: diff, slice: new)
+            self.storage.presentationState.update(with: diff, slice: slice)
         }
         
         if reason.diffsChanges {
