@@ -23,10 +23,14 @@ internal extension TableView
         
         var sections : [PresentationState.Section]
         
+        private(set) var containsAllRows : Bool
+        
         init()
         {
             self.refreshControl = nil
             self.sections = []
+            
+            self.containsAllRows = true
         }
         
         // TODO: Add table header and footer.
@@ -53,11 +57,13 @@ internal extension TableView
             return row
         }
         
-        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>, for content : Content)
+        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>, slice : Content.Slice)
         {
+            self.containsAllRows = slice.containsAllRows
+            
             // TODO: Handle header footer changing.
             
-            self.updateRefreshControl(with: content)
+            self.updateRefreshControl(with: slice.content.refreshControl)
             
             self.sections = diff.changes.transform(
                 old: self.sections,
@@ -81,13 +87,13 @@ internal extension TableView
             }
         }
         
-        private func updateRefreshControl(with content : Content)
+        private func updateRefreshControl(with refreshControl : RefreshControl?)
         {
             guard #available(iOS 10.0, *) else { return }
             
             syncOptionals(
                 left: self.refreshControl,
-                right: content.refreshControl,
+                right: refreshControl,
                 created: { model in
                     let new = RefreshControl.PresentationState(model)
                     self.tableView.refreshControl = new.view

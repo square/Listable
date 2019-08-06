@@ -72,7 +72,7 @@ public final class TableView : UIView
     {
         self.storage.content = self.sourcePresenter.reloadContent()
         
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
+        self.updatePresentationState(for: .contentChanged(animated: animated))
     }
     
     //
@@ -224,40 +224,38 @@ public final class TableView : UIView
     // MARK: Updating Content
     //
     
-    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
+    private func updatePresentationState(for reason : Content.Slice.UpdateReason)
     {
-        let firstIndexPath = self.visibleIndexPaths.first
+        let indexPath = self.visibleIndexPaths.first
         
         switch reason {
         case .scrolledDown:
-            let needsNewSlice = self.tableView.isScrolledNearBottom() && self.storage.visibleSlice.containsAllRows == false
+            let needsUpdate = self.tableView.isScrolledNearBottom() && self.storage.presentationState.containsAllRows == false
             
-            if needsNewSlice {
-                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            if needsUpdate {
+                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             }
         case .contentChanged:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             
         case .didEndDecelerating:
-            // TODO: Can we not call this every time? Eg, if the slice contains all rows, we don't need it.
-            // But, when scrolled to the very bottom, it will contain all rows. Need to figure something out...
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             
         case .scrolledToTop:
-            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: .zero, for: reason)
         }
     }
     
-    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updatePresentationStateWith(firstVisibleIndexPath indexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
     {
-        let globalIndexPath = globalIndexPath ?? .zero
+        let indexPath = indexPath ?? .zero
         
-        let new = self.content.sliceTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
+        let new = self.content.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+        
         let diff = TableView.diffWith(old: self.storage.presentationState.sectionModels, new: new.content.sections)
         
         let updateData = {
-            self.storage.visibleSlice = new
-            self.storage.presentationState.update(with: diff, for: self.content)
+            self.storage.presentationState.update(with: diff, slice: new)
         }
         
         if reason.diffsChanges {
@@ -312,14 +310,11 @@ fileprivate extension TableView
         let presentationState : PresentationState = PresentationState()
         
         var content : Content = Content()
-        var visibleSlice : Content.Slice = Content.Slice()
         
         func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
         {
             if let indexPath = self.presentationState.remove(row: rowToRemove) {
                 self.content.remove(at: indexPath)
-                self.visibleSlice.content.remove(at: indexPath)
-                
                 return indexPath
             } else {
                 return nil
@@ -544,12 +539,12 @@ fileprivate extension TableView
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
-            self.tableView.updateVisibleSlice(for: .didEndDecelerating)
+            self.tableView.updatePresentationState(for: .didEndDecelerating)
         }
         
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
         {
-            self.tableView.updateVisibleSlice(for: .scrolledToTop)
+            self.tableView.updatePresentationState(for: .scrolledToTop)
         }
         
         var lastPosition : CGFloat = 0.0
@@ -563,7 +558,7 @@ fileprivate extension TableView
             self.lastPosition = scrollView.contentOffset.y
             
             if scrollingDown {
-                self.tableView.updateVisibleSlice(for: .scrolledDown)
+                self.tableView.updatePresentationState(for: .scrolledDown)
             }
         }
     }
