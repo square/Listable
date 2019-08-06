@@ -56,6 +56,22 @@ public protocol TableViewRow_Internal
 }
 
 public extension TableView
+{
+    struct CellRegistry
+    {
+        func register<Element:TableViewRowElement>(_ type : Element.Type, block : () -> ())
+        {
+            
+        }
+    }
+    
+    struct ElementToCell<Element:TableViewRowElement, Cell:UITableViewCell>
+    {
+        var createReusableCell : (ReuseIdentifier<Element>) -> Cell
+    }
+}
+
+public extension TableView
 {    
     struct Section
     {
