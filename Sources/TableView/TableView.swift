@@ -72,7 +72,7 @@ public final class TableView : UIView
     {
         self.storage.content = self.sourcePresenter.reloadContent()
         
-        self.updateVisibleSlice(for: .contentChanged(animated: animated))
+        self.updatePresentationState(for: .contentChanged(animated: animated))
     }
     
     //
@@ -179,7 +179,7 @@ public final class TableView : UIView
         return self.visibleIndexPaths.map {
             VisibleRow(
                 indexPath: $0,
-                row: self.storage.visibleSlice.content.row(at: $0)
+                row: self.storage.presentationState.row(at: $0).anyModel
             )
         }
     }
@@ -198,7 +198,7 @@ public final class TableView : UIView
         return sectionIndexes.map {
             VisibleSection(
                 index: $0,
-                section: self.storage.visibleSlice.content.sections[$0]
+                section: self.storage.presentationState.sections[$0].model
             )
         }
     }
@@ -224,38 +224,37 @@ public final class TableView : UIView
     // MARK: Updating Content
     //
     
-    private func updateVisibleSlice(for reason : Content.Slice.UpdateReason)
+    private func updatePresentationState(for reason : Content.Slice.UpdateReason)
     {
-        let firstIndexPath = self.visibleIndexPaths.first
+        let indexPath = self.visibleIndexPaths.first
         
         switch reason {
         case .scrolledDown:
-            let needsNewSlice = self.tableView.isScrolledNearBottom() && self.storage.visibleSlice.truncatedBottom == false
+            let needsUpdate = self.tableView.isScrolledNearBottom() && self.storage.presentationState.containsAllRows == false
             
-            if needsNewSlice {
-                self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            if needsUpdate {
+                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             }
         case .contentChanged:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             
         case .didEndDecelerating:
-            self.updateVisibleSliceWith(globalIndexPath: firstIndexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             
         case .scrolledToTop:
-            self.updateVisibleSliceWith(globalIndexPath: .zero, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: .zero, for: reason)
         }
     }
     
-    private func updateVisibleSliceWith(globalIndexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updatePresentationStateWith(firstVisibleIndexPath indexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
     {
-        let globalIndexPath = globalIndexPath ?? .zero
+        let indexPath = indexPath ?? .zero
         
-        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
-        let diff = TableView.diffWith(old: self.storage.visibleSlice.content, new: new.content)
+        let slice = self.content.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+        let diff = TableView.diffWith(old: self.storage.presentationState.sectionModels, new: slice.content.sections)
         
         let updateData = {
-            self.storage.visibleSlice = new
-            self.storage.presentationState.update(with: diff, for: self.content)
+            self.storage.presentationState.update(with: diff, slice: slice)
         }
         
         if reason.diffsChanges {
@@ -266,11 +265,11 @@ public final class TableView : UIView
         }
     }
     
-    private static func diffWith(old : Content, new : Content) -> SectionedDiff<Section, TableViewRow>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, TableViewRow>
     {
         return SectionedDiff(
-            old: old.sections,
-            new: new.sections,
+            old: old,
+            new: new,
             configuration: SectionedDiff.Configuration(
                 section: .init(
                     identifier: { $0.identifier },
@@ -310,14 +309,11 @@ fileprivate extension TableView
         let presentationState : PresentationState = PresentationState()
         
         var content : Content = Content()
-        var visibleSlice : Content.Slice = Content.Slice()
         
         func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
         {
             if let indexPath = self.presentationState.remove(row: rowToRemove) {
                 self.content.remove(at: indexPath)
-                self.visibleSlice.content.remove(at: indexPath)
-                
                 return indexPath
             } else {
                 return nil
@@ -329,23 +325,27 @@ fileprivate extension TableView
     {
         unowned var tableView : TableView!
         
+        var presentationState : TableView.PresentationState {
+            return self.tableView.storage.presentationState
+        }
+        
         func numberOfSections(in tableView: UITableView) -> Int
         {
-            return self.tableView.storage.visibleSlice.content.sections.count
+            return self.presentationState.sections.count
         }
         
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
         {
-            let section = self.tableView.storage.visibleSlice.content.sections[section]
+            let section = self.presentationState.sections[section]
             
             return section.rows.count
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
-            return row.dequeueCell(in: tableView)
+            return row.anyModel.dequeueCell(in: tableView)
         }
         
         // MARK: Moving
@@ -369,13 +369,17 @@ fileprivate extension TableView
     {
         unowned var tableView : TableView!
         
+        var presentationState : TableView.PresentationState {
+            return self.tableView.storage.presentationState
+        }
+        
         // MARK: Views & Sizing
         
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
         {
-            let section = self.tableView.storage.visibleSlice.content.sections[section]
-            
-            guard let header = section.header else {
+            let section = self.presentationState.sections[section]
+
+            guard let header = section.model.header else {
                 return nil
             }
             
@@ -384,9 +388,9 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
         {
-            let section = self.tableView.storage.visibleSlice.content.sections[section]
-            
-            guard let footer = section.footer else {
+            let section = self.presentationState.sections[section]
+
+            guard let footer = section.model.footer else {
                 return nil
             }
             
@@ -395,9 +399,9 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
-            return row.heightWith(
+            return row.anyModel.heightWith(
                 width: tableView.bounds.size.width,
                 default: tableView.rowHeight,
                 measurementCache: self.tableView.cellMeasurementCache
@@ -406,9 +410,9 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
         {
-            let section = self.tableView.storage.visibleSlice.content.sections[section]
-            
-            guard let header = section.header else {
+            let section = self.presentationState.sections[section]
+
+            guard let header = section.model.header else {
                 return 0.0
             }
             
@@ -421,9 +425,9 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat
         {
-            let section = self.tableView.storage.visibleSlice.content.sections[section]
-            
-            guard let footer = section.footer else {
+            let section = self.presentationState.sections[section]
+
+            guard let footer = section.model.footer else {
                 return 0.0
             }
             
@@ -438,9 +442,9 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.storage.visibleSlice.content.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
-            row.performOnTap()
+            row.anyModel.performOnTap()
             
             self.tableView.tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -451,7 +455,7 @@ fileprivate extension TableView
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
-            let row = self.tableView.storage.presentationState.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
             self.displayedRows[ObjectIdentifier(cell)] = row
             
@@ -487,43 +491,46 @@ fileprivate extension TableView
         
         // MARK: Row Actions
         
+        func performedActionFor(row : TableViewPresentationStateRow, style : TableView.SwipeAction.Style)
+        {
+            if style.deletesRow {
+                if let indexPath = self.tableView.storage.remove(row: row) {
+                    UIView.performWithoutAnimation {
+                        self.tableView.tableView.deleteRows(at: [indexPath], with: .none)
+                    }
+                }
+            }
+        }
+        
         func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
         {
             // Note: Only used before iOS 11.
             // We must also manually animate out the removal.
             
-            let row = self.tableView.storage.presentationState.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
             return row.anyModel.trailingTableViewRowActions { [weak self] style in
-                if style.deletesRow {
-                    if let indexPath = self?.tableView.storage.remove(row: row) {
-                        self?.tableView.tableView.deleteRows(at: [indexPath], with: .left)
-                    }
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.storage.presentationState.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
 
             return row.anyModel.leadingSwipeActionsConfiguration { [weak self] style in
-                if style.deletesRow {
-                    _ = self?.tableView.storage.remove(row: row)
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
         @available(iOS 11.0, *)
         func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
-            let row = self.tableView.storage.presentationState.row(at: indexPath)
+            let row = self.presentationState.row(at: indexPath)
             
             return row.anyModel.trailingSwipeActionsConfiguration { [weak self] style in
-                if style.deletesRow {
-                    _ = self?.tableView.storage.remove(row: row)
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
@@ -531,12 +538,12 @@ fileprivate extension TableView
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
-            self.tableView.updateVisibleSlice(for: .didEndDecelerating)
+            self.tableView.updatePresentationState(for: .didEndDecelerating)
         }
         
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
         {
-            self.tableView.updateVisibleSlice(for: .scrolledToTop)
+            self.tableView.updatePresentationState(for: .scrolledToTop)
         }
         
         var lastPosition : CGFloat = 0.0
@@ -550,7 +557,7 @@ fileprivate extension TableView
             self.lastPosition = scrollView.contentOffset.y
             
             if scrollingDown {
-                self.tableView.updateVisibleSlice(for: .scrolledDown)
+                self.tableView.updatePresentationState(for: .scrolledDown)
             }
         }
     }

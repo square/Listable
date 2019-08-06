@@ -162,7 +162,7 @@ public extension TableView
         
         // MARK: Slicing
         
-        func rowSlice(limit : Int) -> [TableViewRow]
+        func rowsUpTo(limit : Int) -> [TableViewRow]
         {
             let end = min(self.rows.count, limit)
             
@@ -490,11 +490,11 @@ public extension TableView
                 handler: { action, view, didComplete in
                     let completed = self.onTap(self)
                     
-                    didComplete(completed)
-                    
                     if completed {
                         onPerform(self.style)
                     }
+                    
+                    didComplete(completed)
             })
         }
         
@@ -556,7 +556,9 @@ public extension TableView
         
         public var sections : [TableView.Section]
         
-        let rowCount : Int
+        public var rowCount : Int {
+            return self.sections.reduce(0, { $0 + $1.rows.count })
+        }
         
         public init(
             refreshControl : RefreshControl? = nil,
@@ -571,8 +573,6 @@ public extension TableView
             self.footer = footer
             
             self.sections = sections
-            
-            self.rowCount = self.sections.reduce(0, { $0 + $1.rows.count })
         }
         
         public func row(at indexPath : IndexPath) -> TableViewRow
@@ -614,18 +614,18 @@ public extension TableView
         {
             static let defaultSize : Int = 250
             
-            let truncatedBottom : Bool
+            let containsAllRows : Bool
             var content : Content
             
-            init(truncatedBottom : Bool, content : Content)
+            init(containsAllRows : Bool, content : Content)
             {
-                self.truncatedBottom = truncatedBottom
+                self.containsAllRows = containsAllRows
                 self.content = content
             }
             
             init()
             {
-                self.truncatedBottom = true
+                self.containsAllRows = true
                 self.content = Content(sections: [])
             }
             
@@ -665,52 +665,31 @@ public extension TableView
             }
         }
         
-        internal func sliceUpTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
+        internal func sliceTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
         {
-            guard self.sections.isEmpty == false else {
-                return Slice(
-                    truncatedBottom: true,
-                    content: Content(sections: [])
-                )
-            }
+            var sliced = self
             
-            // TOOD: Bail early if we're smaller than the requested size.
+            var remaining : Int = indexPath.row + additionalRows
             
-            let previousSections = Array(self.sections[0..<indexPath.section])
-            let section = self.sections[indexPath.section]
-            let laterSections = Array(self.sections[indexPath.section+1..<self.sections.count])
-            
-            let limit = indexPath.row + additionalRows
-            let displayRows = section.rowSlice(limit: limit)
-            
-            var remainingNextRowCount = limit - displayRows.count
-            
-            let displaySection = Section(identifier:section.identifier, header: section.header, footer: section.footer, rows: displayRows)
-            
-            let nextDisplaySections : [TableView.Section] = laterSections.compactMap { section in
-                if remainingNextRowCount <= 0 {
-                    return nil
+            sliced.sections = self.sections.compactMapWithIndex { sectionIndex, section in
+                if sectionIndex < indexPath.section {
+                    return section
+                } else {
+                    guard remaining > 0 else {
+                        return nil
+                    }
+                    
+                    var section = section
+                    section.rows = section.rowsUpTo(limit: remaining)
+                    remaining -= section.rows.count
+                    
+                    return section
                 }
-                
-                let rows = section.rowSlice(limit: remainingNextRowCount)
-                remainingNextRowCount -= rows.count
-                
-                return Section(identifier:section.identifier, header: section.header, footer: section.footer, rows: rows)
             }
-            
-            var displaySections = [TableView.Section]()
-            
-            displaySections += previousSections
-            displaySections.append(displaySection)
-            displaySections += nextDisplaySections
             
             return Slice(
-                truncatedBottom: remainingNextRowCount > 0,
-                content: Content(
-                    header: self.header,
-                    footer: self.footer,
-                    sections: displaySections
-                )
+                containsAllRows: self.rowCount == sliced.rowCount,
+                content: sliced
             )
         }
     }
@@ -761,3 +740,19 @@ public extension Array where Element == TableViewRow
     }
 }
 
+private extension Array
+{
+    func compactMapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped?) -> [Mapped]
+    {
+        var mapped = [Mapped]()
+        mapped.reserveCapacity(self.count)
+        
+        for (index, element) in self.enumerated() {
+            if let value = block(index, element) {
+                mapped.append(value)
+            }
+        }
+        
+        return mapped
+    }
+}

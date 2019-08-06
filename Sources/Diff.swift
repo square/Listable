@@ -1002,13 +1002,13 @@ private extension Array
 
 private extension Array
 {
-    func mapWithIndex<Mapped>(_ block : (Int, Element) throws -> Mapped) rethrows -> [Mapped]
+    func mapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped) -> [Mapped]
     {
         var mapped = [Mapped]()
         mapped.reserveCapacity(self.count)
         
-        for index in 0..<self.count {
-            mapped.append(try block(index, self[index]))
+        for (index, element) in self.enumerated() {
+            mapped.append(block(index, element))
         }
         
         return mapped
