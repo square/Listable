@@ -61,7 +61,7 @@ internal extension TableView
             self.sections = diff.changes.transform(
                 old: self.sections,
                 removed: { _, _ in },
-                added: { section in Section(section: section) },
+                added: { section in Section(model: section) },
                 moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
                 updated: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
                 noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes) }
@@ -91,17 +91,17 @@ internal extension TableView
         
         final class Section
         {
-            let section : TableView.Section
+            let model : TableView.Section
             
             var rows : [TableViewPresentationStateRow]
             
             // TODO: Add header and footer.
             
-            init(section : TableView.Section)
+            init(model : TableView.Section)
             {
-                self.section = section
+                self.model = model
                 
-                self.rows = self.section.rows.map {
+                self.rows = self.model.rows.map {
                     $0.newPresentationRow()
                 }
             }
