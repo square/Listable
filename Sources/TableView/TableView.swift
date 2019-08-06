@@ -501,7 +501,9 @@ fileprivate extension TableView
         {
             if style.deletesRow {
                 if let indexPath = self.tableView.storage.remove(row: row) {
-                    self.tableView.tableView.deleteRows(at: [indexPath], with: .none)
+                    UIView.performWithoutAnimation {
+                        self.tableView.tableView.deleteRows(at: [indexPath], with: .none)
+                    }
                 }
             }
         }
