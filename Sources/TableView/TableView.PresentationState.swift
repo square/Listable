@@ -29,13 +29,14 @@ internal extension TableView
             self.sections = []
         }
         
-        // TODO: Add header and footer.
+        // TODO: Add table header and footer.
         
         func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
         {
             for (sectionIndex, section) in self.sections.enumerated() {
                 for (rowIndex, row) in section.rows.enumerated() {
                     if row === rowToRemove {
+                        self.sections[sectionIndex].removeRow(at: rowIndex)
                         return IndexPath(row: rowIndex, section: sectionIndex)
                     }
                 }
@@ -68,7 +69,19 @@ internal extension TableView
             )
         }
         
-        func updateRefreshControl(with content : Content)
+        var sectionModels : [TableView.Section] {
+            return self.sections.map { section in
+                var sectionModel = section.model
+                
+                sectionModel.rows = section.rows.map {
+                    $0.anyModel
+                }
+                
+                return sectionModel
+            }
+        }
+        
+        private func updateRefreshControl(with content : Content)
         {
             guard #available(iOS 10.0, *) else { return }
             
@@ -91,7 +104,7 @@ internal extension TableView
         
         final class Section
         {
-            let model : TableView.Section
+            var model : TableView.Section
             
             var rows : [TableViewPresentationStateRow]
             
@@ -106,13 +119,19 @@ internal extension TableView
                 }
             }
             
-            func update(
+            fileprivate func removeRow(at index : Int)
+            {
+                self.model.rows.remove(at: index)
+                self.rows.remove(at: index)
+            }
+            
+            fileprivate func update(
                 with oldSection : TableView.Section,
                 new newSection : TableView.Section,
                 changes : SectionedDiff<TableView.Section, TableViewRow>.RowChanges
                 )
             {
-                // TODO: Handle header footer changing.
+                self.model = newSection
                 
                 self.rows = changes.transform(
                     old: self.rows,

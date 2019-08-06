@@ -490,11 +490,11 @@ public extension TableView
                 handler: { action, view, didComplete in
                     let completed = self.onTap(self)
                     
-                    didComplete(completed)
-                    
                     if completed {
                         onPerform(self.style)
                     }
+                    
+                    didComplete(completed)
             })
         }
         
@@ -665,7 +665,7 @@ public extension TableView
             }
         }
         
-        internal func sliceUpTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
+        internal func sliceTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
         {
             var sliced = self
             

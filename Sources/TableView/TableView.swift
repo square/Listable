@@ -252,8 +252,8 @@ public final class TableView : UIView
     {
         let globalIndexPath = globalIndexPath ?? .zero
         
-        let new = self.content.sliceUpTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
-        let diff = TableView.diffWith(old: self.storage.visibleSlice.content, new: new.content)
+        let new = self.content.sliceTo(indexPath: globalIndexPath, plus: Content.Slice.defaultSize)
+        let diff = TableView.diffWith(old: self.storage.presentationState.sectionModels, new: new.content.sections)
         
         let updateData = {
             self.storage.visibleSlice = new
@@ -268,11 +268,11 @@ public final class TableView : UIView
         }
     }
     
-    private static func diffWith(old : Content, new : Content) -> SectionedDiff<Section, TableViewRow>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, TableViewRow>
     {
         return SectionedDiff(
-            old: old.sections,
-            new: new.sections,
+            old: old,
+            new: new,
             configuration: SectionedDiff.Configuration(
                 section: .init(
                     identifier: { $0.identifier },
@@ -497,6 +497,15 @@ fileprivate extension TableView
         
         // MARK: Row Actions
         
+        func performedActionFor(row : TableViewPresentationStateRow, style : TableView.SwipeAction.Style)
+        {
+            if style.deletesRow {
+                if let indexPath = self.tableView.storage.remove(row: row) {
+                    self.tableView.tableView.deleteRows(at: [indexPath], with: .none)
+                }
+            }
+        }
+        
         func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
         {
             // Note: Only used before iOS 11.
@@ -505,11 +514,7 @@ fileprivate extension TableView
             let row = self.presentationState.row(at: indexPath)
             
             return row.anyModel.trailingTableViewRowActions { [weak self] style in
-                if style.deletesRow {
-                    if let indexPath = self?.tableView.storage.remove(row: row) {
-                        self?.tableView.tableView.deleteRows(at: [indexPath], with: .left)
-                    }
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
@@ -519,9 +524,7 @@ fileprivate extension TableView
             let row = self.presentationState.row(at: indexPath)
 
             return row.anyModel.leadingSwipeActionsConfiguration { [weak self] style in
-                if style.deletesRow {
-                    _ = self?.tableView.storage.remove(row: row)
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
@@ -531,9 +534,7 @@ fileprivate extension TableView
             let row = self.presentationState.row(at: indexPath)
             
             return row.anyModel.trailingSwipeActionsConfiguration { [weak self] style in
-                if style.deletesRow {
-                    _ = self?.tableView.storage.remove(row: row)
-                }
+                self?.performedActionFor(row: row, style: style)
             }
         }
         
