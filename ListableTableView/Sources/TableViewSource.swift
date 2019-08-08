@@ -5,7 +5,7 @@
 //  Created by Kyle Van Essen on 8/4/19.
 //
 
-import Foundation
+import ListableCore
 
 
 public protocol TableViewSource

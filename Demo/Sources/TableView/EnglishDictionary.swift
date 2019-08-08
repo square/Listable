@@ -5,9 +5,8 @@
 //  Created by Kyle Van Essen on 6/25/19.
 //
 
-import Foundation
-
-import Listable
+import UIKit
+import ListableTableView
 
 
 class BundleFinder : NSObject {}
@@ -21,7 +20,7 @@ public class EnglishDictionary
     
     init()
     {
-        let stream = InputStream(url: Bundle.ListableDemoResourcesBundle.url(forResource: "dictionary", withExtension: "json")!)!
+        let stream = InputStream(url: Bundle.main.url(forResource: "dictionary", withExtension: "json")!)!
         defer { stream.close() }
         stream.open()
         
@@ -70,46 +69,4 @@ public class EnglishDictionary
         let word : String
         let description : String
     }
-    
-    public static func runPerformanceTest()
-    {
-        let dictionary = EnglishDictionary()
-        
-        for count in 0..<dictionary.wordsByLetter.count {
-            
-            let includedLetters = Array(dictionary.wordsByLetter[0...count])
-            
-            let wordCount : Int = includedLetters.reduce(0, { $0 + $1.words.count })
-            
-            let start = DispatchTime.now()
-            
-            _ = SectionedDiff(
-                old: includedLetters,
-                new: includedLetters,
-                configuration: SectionedDiff.Configuration(
-                    moveDetection: .checkAll,
-                    
-                    section: .init(
-                        identifier: { AnyHashable($0.letter) },
-                        rows: { $0.words },
-                        updated: { $0.letter != $1.letter },
-                        movedHint: { $0.letter != $1.letter }
-                    ),
-                    
-                    row: .init(
-                        identifier: { AnyHashable($0.word) },
-                        updated: { $0.word != $1.word },
-                        movedHint: { $0.word != $1.word }
-                    )
-                )
-            )
-            
-            let end = DispatchTime.now()
-            
-            let seconds = Double(end.uptimeNanoseconds - start.uptimeNanoseconds) / 1_000_000_000.0
-            
-            print("Run Time for \(count) sections (\(wordCount) words): \(seconds).")
-        }
-    }
-    
 }

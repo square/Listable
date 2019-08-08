@@ -5,9 +5,9 @@
 //  Created by Kyle Van Essen on 6/27/19.
 //
 
-import Foundation
-
-import Listable
+import UIKit
+import ListableCore
+import ListableTableView
 
 
 extension Notification.Name

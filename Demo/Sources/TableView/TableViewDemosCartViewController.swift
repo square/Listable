@@ -6,8 +6,8 @@
 //
 
 import UIKit
-
-import Listable
+import ListableCore
+import ListableTableView
 
 import BlueprintUI
 import BlueprintUICommonControls

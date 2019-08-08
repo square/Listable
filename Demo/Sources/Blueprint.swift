@@ -5,8 +5,6 @@
 //  Created by Kyle Van Essen on 6/26/19.
 //
 
-import Foundation
-
 import BlueprintUI
 import BlueprintUICommonControls
 

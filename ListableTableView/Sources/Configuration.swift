@@ -5,7 +5,8 @@
 //  Created by Kyle Van Essen on 6/21/19.
 //
 
-import Foundation
+import UIKit
+import ListableCore
 
 
 public extension TableView

@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 7/22/19.
 //
 
+import ListableCore
+
 
 internal extension TableView
 {

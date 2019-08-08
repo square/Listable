@@ -34,21 +34,20 @@ public struct RefreshControl
         self.onRefresh = onRefresh
     }
     
-    func apply(to refreshControl : UIRefreshControl)
+    public func apply(to refreshControl : UIRefreshControl)
     {
         refreshControl.tintColor = self.tintColor
         refreshControl.attributedTitle = self.title
     }
     
-    internal final class PresentationState
+    public final class PresentationState
     {
-        var model : RefreshControl
+        public var model : RefreshControl
+        public var view : UIRefreshControl
         
-        var binding : Binding<Bool>?
+        private var binding : Binding<Bool>?
         
-        var view : UIRefreshControl
-        
-        init(_ model : RefreshControl)
+        public init(_ model : RefreshControl)
         {
             self.model = model
             self.view = UIRefreshControl()

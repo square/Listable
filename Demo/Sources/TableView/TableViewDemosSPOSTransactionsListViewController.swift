@@ -6,8 +6,7 @@
 //
 
 import UIKit
-
-import Listable
+import ListableTableView
 
 
 final class TableViewDemosSPOSTransactionsListViewController : UIViewController

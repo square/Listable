@@ -192,49 +192,49 @@ public struct SectionedDiff<Section, Row>
         
         public struct Added
         {
-            let newIndex : Int
+            public let newIndex : Int
             
-            let newValue : Section
+            public let newValue : Section
         }
         
         public struct Removed
         {
-            let oldIndex : Int
+            public let oldIndex : Int
             
-            let oldValue : Section
+            public let oldValue : Section
         }
         
         public struct Moved
         {
-            let oldIndex : Int
-            let newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            let oldValue : Section
-            let newValue : Section
+            public let oldValue : Section
+            public let newValue : Section
             
-            let rowChanges : RowChanges
+            public let rowChanges : RowChanges
         }
         
         public struct Updated
         {
-            let oldIndex : Int
-            let newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            let oldValue : Section
-            let newValue : Section
+            public let oldValue : Section
+            public let newValue : Section
             
-            let rowChanges : RowChanges
+            public let rowChanges : RowChanges
         }
         
         public struct NoChange
         {
-            let oldIndex : Int
-            let newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            let oldValue : Section
-            let newValue : Section
+            public let oldValue : Section
+            public let newValue : Section
             
-            let rowChanges : RowChanges
+            public let rowChanges : RowChanges
         }
     }
     
@@ -320,43 +320,43 @@ public struct SectionedDiff<Section, Row>
         
         public struct Added
         {
-            let newIndex : Int
+            public let newIndex : Int
             
-            let newValue : Row
+            public let newValue : Row
         }
         
         public struct Removed
         {
-            let oldIndex : Int
+            public let oldIndex : Int
             
-            let oldValue : Row
+            public let oldValue : Row
         }
         
         public struct Moved
         {
-            var oldIndex : Int
-            var newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            var oldValue : Row
-            var newValue : Row
+            public var oldValue : Row
+            public var newValue : Row
         }
         
         public struct Updated
         {
-            var oldIndex : Int
-            var newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            var oldValue : Row
-            var newValue : Row
+            public let oldValue : Row
+            public let newValue : Row
         }
         
         public struct NoChange
         {
-            var oldIndex : Int
-            var newIndex : Int
+            public let oldIndex : Int
+            public let newIndex : Int
             
-            var oldValue : Row
-            var newValue : Row
+            public let oldValue : Row
+            public let newValue : Row
         }
     }
 }
@@ -382,43 +382,43 @@ public struct ArrayDiff<Element>
     
     public struct Added
     {
-        let newIndex : Int
+        public let newIndex : Int
         
-        let new : Element
+        public let new : Element
     }
     
     public struct Removed
     {
-        let oldIndex : Int
+        public let oldIndex : Int
         
-        let old : Element
+        public let old : Element
     }
     
     public struct Moved
     {
-        let oldIndex : Int
-        let newIndex : Int
+        public let oldIndex : Int
+        public let newIndex : Int
         
-        let old : Element
-        let new : Element
+        public let old : Element
+        public let new : Element
     }
     
     public struct Updated
     {
-        let oldIndex : Int
-        let newIndex : Int
+        public let oldIndex : Int
+        public let newIndex : Int
         
-        let old : Element
-        let new : Element
+        public let old : Element
+        public let new : Element
     }
     
     public struct NoChange
     {
-        let oldIndex : Int
-        let newIndex : Int
+        public let oldIndex : Int
+        public let newIndex : Int
         
-        let old : Element
-        let new : Element
+        public let old : Element
+        public let new : Element
     }
     
     public struct Configuration

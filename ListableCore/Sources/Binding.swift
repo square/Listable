@@ -15,7 +15,6 @@ public final class Binding<Element>
     private var state : State
     
     private typealias UpdateElement = (AnyBindingContext, Any, inout Element) -> ()
-    internal typealias OnChange = (Element) -> ()
     
     private enum State
     {
@@ -66,7 +65,9 @@ public final class Binding<Element>
         self.discard()
     }
     
-    internal func onChange(_ onChange : OnChange?)
+    public typealias OnChange = (Element) -> ()
+    
+    public func onChange(_ onChange : OnChange?)
     {
         switch self.state {
         case .initializing, .new, .discarded: break
@@ -79,7 +80,7 @@ public final class Binding<Element>
         }
     }
     
-    internal func start()
+    public func start()
     {
         switch self.state {
         case .initializing, .updating, .discarded: break
@@ -97,7 +98,7 @@ public final class Binding<Element>
         }
     }
     
-    internal func discard()
+    public func discard()
     {
         switch self.state {
         case .initializing, .new, .discarded: break

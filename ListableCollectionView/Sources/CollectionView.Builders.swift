@@ -5,7 +5,9 @@
 //  Created by Kyle Van Essen on 7/8/19.
 //
 
-import Foundation
+import UIKit
+import ListableCore
+
 
 public extension CollectionView
 {

@@ -5,8 +5,8 @@
 //  Created by Kyle Van Essen on 7/9/19.
 //
 
-import Foundation
-import Listable
+import UIKit
+import ListableCollectionView
 
 
 final class CollectionViewDemoFlowLayoutViewController : UIViewController

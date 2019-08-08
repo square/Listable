@@ -5,14 +5,9 @@
 //  Created by Kyle Van Essen on 6/21/19.
 //
 
-import Foundation
+import UIKit
+import ListableCore
 
-
-public enum UpdateStrategy : Hashable
-{
-    case reload
-    case apply
-}
 
 
 public enum ApplyReason : Hashable

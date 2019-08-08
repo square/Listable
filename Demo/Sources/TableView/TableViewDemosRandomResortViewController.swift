@@ -6,8 +6,8 @@
 //
 
 import UIKit
+import ListableTableView
 
-import Listable
 
 final class TableViewDemosRandomResortViewController : UIViewController
 {

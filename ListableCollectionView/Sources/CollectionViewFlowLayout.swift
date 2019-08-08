@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ListableCore
 
 
 public final class CollectionViewFlowLayout : UICollectionViewFlowLayout, CollectionViewLayout

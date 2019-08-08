@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import ListableCore
+import ListableTableView
 
-import Listable
 
 final public class TableViewDemosDictionaryViewController : UIViewController
 {

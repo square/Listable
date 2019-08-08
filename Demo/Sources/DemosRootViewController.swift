@@ -7,7 +7,7 @@
 
 import UIKit
 
-import Listable
+import ListableTableView
 
 
 public final class DemosRootViewController : UIViewController

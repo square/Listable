@@ -10,9 +10,14 @@ import Foundation
 
 public final class ReusableViewCache
 {
-    private var views : [String:[Any]] = [:]
+    private var views : [String:[Any]]
     
-    internal func push<Content,View>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
+    public init()
+    {
+        self.views = [:]
+    }
+    
+    public func push<Content,View>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
@@ -21,7 +26,7 @@ public final class ReusableViewCache
         self.views[reuseIdentifier.stringValue] = views
     }
     
-    internal func pop<Content,View>(with reuseIdentifier: ReuseIdentifier<Content>, _ create : () -> View) -> View
+    public func pop<Content,View>(with reuseIdentifier: ReuseIdentifier<Content>, _ create : () -> View) -> View
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
@@ -33,7 +38,7 @@ public final class ReusableViewCache
         }
     }
     
-    internal func use<Content,View, Result>(with reuseIdentifier: ReuseIdentifier<Content>, create : () -> View, _ use : (View) -> Result) -> Result
+    public func use<Content,View, Result>(with reuseIdentifier: ReuseIdentifier<Content>, create : () -> View, _ use : (View) -> Result) -> Result
     {
         let views = self.views[reuseIdentifier.stringValue, default: []]
         
