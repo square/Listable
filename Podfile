@@ -6,9 +6,9 @@ project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
 
 target 'Demo' do
-	pod 'ListableCore', :path => 'ListableCore.podspec'
-	pod 'ListableTableView', :path => 'ListableTableView.podspec'
-	pod 'ListableCollectionView', :path => 'ListableCollectionView.podspec'
+	pod 'ListableCore', :path => 'ListableCore.podspec', :testspecs => ['Tests']
+	pod 'ListableTableView', :path => 'ListableTableView.podspec', :testspecs => ['Tests']
+	pod 'ListableCollectionView', :path => 'ListableCollectionView.podspec', :testspecs => ['Tests']
 
 	pod 'BlueprintUI'
 	pod 'BlueprintUICommonControls'
