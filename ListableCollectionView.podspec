@@ -12,6 +12,8 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
+  s.dependency 'ListableCore'
+
   s.source_files = 'ListableCollectionView/Sources/**/*.{swift}'
   s.private_header_files = 'ListableCollectionView/Sources/**/Internal/**/*.h'
   s.resource_bundle = { 'ListableCollectionViewResources' => ['ListableCollectionView/Resources/*'] }

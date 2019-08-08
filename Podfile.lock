@@ -1,7 +1,9 @@
 PODS:
-  - ListableCollectionView (1.0.0.LOCAL)
+  - ListableCollectionView (1.0.0.LOCAL):
+    - ListableCore
   - ListableCore (1.0.0.LOCAL)
-  - ListableTableView (1.0.0.LOCAL)
+  - ListableTableView (1.0.0.LOCAL):
+    - ListableCore
 
 DEPENDENCIES:
   - ListableCollectionView (from `ListableCollectionView.podspec`)
@@ -17,10 +19,10 @@ EXTERNAL SOURCES:
     :path: ListableTableView.podspec
 
 SPEC CHECKSUMS:
-  ListableCollectionView: 3052667dfb544289d565ad02484c3a117f7a23bd
+  ListableCollectionView: 38f7edcb9affbc1214ebb59e6f81881f6fb636d7
   ListableCore: 6375e203fb51271731537c8b296f5d9cbd9b864f
-  ListableTableView: 8d8448e5049abc9fc2614426a3603df8b49c20ed
+  ListableTableView: 0e1cabe807217f5858650ae01bbdd546e1a49a3b
 
-PODFILE CHECKSUM: 7c1b8067d425febc10ac130fc378fb350be4c888
+PODFILE CHECKSUM: 375d6885878cbf5edc24048c724f73882ccdbd53
 
 COCOAPODS: 1.7.5

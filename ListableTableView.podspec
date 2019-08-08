@@ -12,6 +12,8 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
+  s.dependency 'ListableCore'
+
   s.source_files = 'ListableTableView/Sources/**/*.{swift}'
   s.private_header_files = 'ListableTableView/Sources/**/Internal/**/*.h'
   s.resource_bundle = { 'ListableTableViewResources' => ['ListableTableView/Resources/*'] }
