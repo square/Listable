@@ -20,6 +20,4 @@ install:
 
 matrix:
   include:
-    - xcode_scheme: ListableCore-Unit-Tests
-    - xcode_scheme: ListableCollectionView-Unit-Tests
-    - xcode_scheme: ListableTableView-Unit-Tests
+    - xcode_scheme: Listable-CI-Test-Suite
