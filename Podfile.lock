@@ -1,0 +1,48 @@
+PODS:
+  - BlueprintUI (0.2.2)
+  - BlueprintUICommonControls (0.2.2):
+    - BlueprintUI
+  - ListableCollectionView (1.0.0.LOCAL):
+    - ListableCore
+  - ListableCollectionView/Tests (1.0.0.LOCAL):
+    - ListableCore
+  - ListableCore (1.0.0.LOCAL)
+  - ListableCore/Tests (1.0.0.LOCAL)
+  - ListableTableView (1.0.0.LOCAL):
+    - ListableCore
+  - ListableTableView/Tests (1.0.0.LOCAL):
+    - ListableCore
+
+DEPENDENCIES:
+  - BlueprintUI
+  - BlueprintUICommonControls
+  - ListableCollectionView (from `ListableCollectionView.podspec`)
+  - ListableCollectionView/Tests (from `ListableCollectionView.podspec`)
+  - ListableCore (from `ListableCore.podspec`)
+  - ListableCore/Tests (from `ListableCore.podspec`)
+  - ListableTableView (from `ListableTableView.podspec`)
+  - ListableTableView/Tests (from `ListableTableView.podspec`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - BlueprintUI
+    - BlueprintUICommonControls
+
+EXTERNAL SOURCES:
+  ListableCollectionView:
+    :path: ListableCollectionView.podspec
+  ListableCore:
+    :path: ListableCore.podspec
+  ListableTableView:
+    :path: ListableTableView.podspec
+
+SPEC CHECKSUMS:
+  BlueprintUI: c9f3fa4a2388a70fc0d0a9b7b92b03a3f10f73c2
+  BlueprintUICommonControls: 71ac875081c8e8c5fa5948bb3fb0bbb5bbbe662a
+  ListableCollectionView: 38f7edcb9affbc1214ebb59e6f81881f6fb636d7
+  ListableCore: 6375e203fb51271731537c8b296f5d9cbd9b864f
+  ListableTableView: 0e1cabe807217f5858650ae01bbdd546e1a49a3b
+
+PODFILE CHECKSUM: 9919996bd13a7be50d32ac9d7b6b8f094e71dcb5
+
+COCOAPODS: 1.7.5
