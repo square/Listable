@@ -178,7 +178,7 @@ internal extension TableView
                         self.model.element = element
                         
                         if let cell = self.visibleCell {
-                            self.model.element.applyTo(cell: cell, reason: .willDisplay)
+                            self.model.element.apply(to: cell, reason: .willDisplay)
                         }
                     }
                     

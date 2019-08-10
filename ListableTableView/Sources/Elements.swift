@@ -34,16 +34,13 @@ public protocol TableViewRowElement
     
     // MARK: Applying To Displayed Cell
     
-    // TODO: Rename to apply(to:reason:).
-    func applyTo(cell : TableViewCell, reason : ApplyReason)
+    func apply(to cell : TableViewCell, reason : ApplyReason)
     
     var updateStrategy : UpdateStrategy { get }
     
     // MARK: Converting To Cell For Display
     
     associatedtype TableViewCell:UITableViewCell
-    
-    //var reuseIdentifier : ReuseIdentifier<Self> { get }
     
     static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableViewCell
     
@@ -94,7 +91,7 @@ public extension TableViewRowElement
         let reuseIdentifier = ReuseIdentifier.identifier(for: self)
         
         return measurementCache.use(with: reuseIdentifier, create: { Self.createReusableCell(with: reuseIdentifier) }) { cell in
-            self.applyTo(cell: cell, reason: .willDisplay)
+            self.apply(to: cell, reason: .willDisplay)
             return sizing.height(with: cell, fittingWidth: width, default: defaultHeight)
         }
     }
@@ -121,7 +118,7 @@ public protocol TableViewRowViewElement : TableViewRowElement where TableViewCel
     
     static func createReusableView() -> View
     
-    func applyTo(view : View, reason : ApplyReason)
+    func apply(to view : View, reason : ApplyReason)
 }
 
 public extension TableViewRowViewElement
@@ -135,9 +132,9 @@ public extension TableViewRowViewElement
         )
     }
     
-    func applyTo(cell : TableView.ElementCell<Self>, reason : ApplyReason)
+    func apply(to cell : TableView.ElementCell<Self>, reason : ApplyReason)
     {
-        self.applyTo(view: cell.view, reason: reason)
+        self.apply(to: cell.view, reason: reason)
     }
 }
 
@@ -152,7 +149,7 @@ public protocol TableViewHeaderFooterElement
     
     // MARK: Applying To Displayed View
     
-    func applyTo(headerFooterView : HeaderFooterView, reason : ApplyReason)
+    func apply(to headerFooterView : HeaderFooterView, reason : ApplyReason)
     
     // MARK: Converting To View For Display
     
@@ -180,7 +177,7 @@ public protocol TableViewHeaderFooterViewElement : TableViewHeaderFooterElement 
     
     static func createReusableView() -> View
     
-    func applyTo(view : View, reason : ApplyReason)
+    func apply(to view : View, reason : ApplyReason)
 }
 
 public extension TableViewHeaderFooterViewElement
@@ -195,7 +192,7 @@ public extension TableViewHeaderFooterViewElement
     
     func applyTo(headerFooter : TableView.ElementHeaderFooterView<Self>, reason : ApplyReason)
     {
-        self.applyTo(view: headerFooter.view, reason: reason)
+        self.apply(to: headerFooter.view, reason: reason)
     }
 }
 

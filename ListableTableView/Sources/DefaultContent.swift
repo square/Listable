@@ -24,7 +24,7 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
         return UITableViewHeaderFooterView(reuseIdentifier: reuseIdentifier.stringValue)
     }
     
-    public func applyTo(headerFooterView: UITableViewHeaderFooterView, reason: ApplyReason)
+    public func apply(to headerFooterView: UITableViewHeaderFooterView, reason: ApplyReason)
     {
         headerFooterView.textLabel?.text = self.text
     }
@@ -47,7 +47,7 @@ public final class UIViewRowElement<View:UIView> : TableViewRowElement, Equatabl
     
     // MARK: TableViewRowElement
     
-    public func applyTo(cell: Cell, reason: ApplyReason)
+    public func apply(to cell: Cell, reason: ApplyReason)
     {
         // No Op
     }
@@ -143,7 +143,7 @@ public struct SubtitleRow : TableViewRowElement, Equatable
         return UITableViewCell(style: .subtitle, reuseIdentifier: reuseIdentifier.stringValue)
     }
     
-    public func applyTo(cell: UITableViewCell, reason: ApplyReason)
+    public func apply(to cell: UITableViewCell, reason: ApplyReason)
     {
         cell.textLabel?.numberOfLines = self.textLineCount
         cell.textLabel?.text = self.text
@@ -177,7 +177,7 @@ public struct DefaultRow : TableViewRowElement, Equatable
         return UITableViewCell(style: .default, reuseIdentifier: reuseIdentifier.stringValue)
     }
     
-    public func applyTo(cell: UITableViewCell, reason : ApplyReason)
+    public func apply(to cell: UITableViewCell, reason : ApplyReason)
     {
         cell.textLabel?.numberOfLines = self.lineCount
         cell.textLabel?.text = self.text
@@ -199,7 +199,7 @@ extension String : TableViewRowElement, TableViewHeaderFooterElement
         return UITableViewCell(style: .default, reuseIdentifier: reuseIdentifier.stringValue)
     }
     
-    public func applyTo(cell: UITableViewCell, reason: ApplyReason)
+    public func apply(to cell: UITableViewCell, reason: ApplyReason)
     {
         cell.textLabel?.text = self
     }
@@ -213,7 +213,7 @@ extension String : TableViewRowElement, TableViewHeaderFooterElement
         return UITableViewHeaderFooterView(reuseIdentifier: reuseIdentifier.stringValue)
     }
     
-    public func applyTo(headerFooterView: UITableViewHeaderFooterView, reason: ApplyReason)
+    public func apply(to headerFooterView: UITableViewHeaderFooterView, reason: ApplyReason)
     {
         headerFooterView.textLabel?.text = self
     }
