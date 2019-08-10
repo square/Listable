@@ -194,7 +194,7 @@ public extension TableView
         public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
         {
             return measurementCache.use(with: self.reuseIdentifier, create: { Element.createReusableHeaderFooterView(with: self.reuseIdentifier) }) { view in
-                self.element.applyTo(headerFooterView: view, reason: .willDisplay)
+                self.element.apply(to: view, reason: .willDisplay)
                 
                 return self.sizing.height(with: view, fittingWidth: width, default: defaultHeight)
             }
@@ -206,7 +206,7 @@ public extension TableView
                 return
             }
             
-            self.element.applyTo(headerFooterView: view, reason: reason)
+            self.element.apply(to: view, reason: reason)
         }
         
         public func dequeueView(in tableView: UITableView) -> UITableViewHeaderFooterView
@@ -219,7 +219,7 @@ public extension TableView
                 }
             }()
             
-            self.element.applyTo(headerFooterView: view, reason: .willDisplay)
+            self.element.apply(to: view, reason: .willDisplay)
             
             return view
         }
@@ -329,7 +329,7 @@ public extension TableView
         {
             let cell = self.element.cellForDisplay(in: tableView)
             
-            self.element.applyTo(cell: cell, reason: .willDisplay)
+            self.element.apply(to: cell, reason: .willDisplay)
             self.configuration.apply(to: cell)
             
             return cell

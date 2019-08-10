@@ -137,7 +137,7 @@ struct Product : TableViewRowViewElement, ProxyElement, Equatable
         return ElementView(frame: .zero)
     }
     
-    func applyTo(view : View, reason : ApplyReason)
+    func apply(to view : View, reason : ApplyReason)
     {
         view.element = self
     }

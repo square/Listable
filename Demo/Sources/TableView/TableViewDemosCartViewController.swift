@@ -142,7 +142,7 @@ struct AmountRow : ProxyElement, TableViewRowViewElement, Equatable
         return ElementView()
     }
     
-    func applyTo(view : View, reason : ApplyReason)
+    func apply(to view : View, reason : ApplyReason)
     {
         view.element = self
     }
@@ -191,7 +191,7 @@ struct ItemizationRow : ProxyElement, TableViewRowViewElement, Equatable
         return ElementView()
     }
     
-    func applyTo(view : View, reason : ApplyReason)
+    func apply(to view : View, reason : ApplyReason)
     {
         view.element = self
     }
