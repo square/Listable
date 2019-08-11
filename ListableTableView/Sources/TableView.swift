@@ -15,7 +15,7 @@ public final class TableView : UIView
     // MARK: Public Properties
     //
     
-    public var configuration : Configuration {
+    public var configuration : TableConfiguration {
         didSet {
             guard oldValue != self.configuration else {
                 return
@@ -143,7 +143,7 @@ public final class TableView : UIView
         self.headerMeasurementCache = ReusableViewCache()
         self.footerMeasurementCache = ReusableViewCache()
                 
-        self.configuration = Configuration()
+        self.configuration = TableConfiguration()
         
         self.dataSource = DataSource()
         self.delegate = Delegate()
@@ -287,6 +287,37 @@ public final class TableView : UIView
         )
     }
 }
+
+
+public struct TableConfiguration : Equatable
+{
+    public static var `default` : TableConfiguration {
+        return TableConfiguration()
+    }
+    
+    public var rowHeight : CGFloat? = nil
+    
+    public var sectionHeaderHeight : CGFloat? = nil
+    public var sectionFooterHeight : CGFloat? = nil
+    
+    public init() {}
+    
+    public func apply(to tableView : UITableView)
+    {
+        if let height = self.rowHeight {
+            tableView.rowHeight = height
+        }
+        
+        if let height = self.sectionHeaderHeight {
+            tableView.sectionHeaderHeight = height
+        }
+        
+        if let height = self.sectionFooterHeight {
+            tableView.sectionFooterHeight = height
+        }
+    }
+}
+
 
 
 fileprivate extension TableView
