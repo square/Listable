@@ -23,7 +23,7 @@ public enum ApplyReason : Hashable
     }
 }
 
-public protocol TableViewRowElement
+public protocol RowElement
 {
     // MARK: Identifying Content & Changes
     
@@ -56,7 +56,7 @@ public protocol TableViewRowElement
         ) -> CGFloat
 }
 
-public extension TableViewRowElement
+public extension RowElement
 {
     // MARK: Applying To Displayed Cell
     
@@ -97,7 +97,7 @@ public extension TableViewRowElement
     }
 }
 
-public extension TableViewRowElement where Self:Equatable
+public extension RowElement where Self:Equatable
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
@@ -110,7 +110,7 @@ public extension TableViewRowElement where Self:Equatable
     }
 }
 
-public protocol TableViewRowViewElement : TableViewRowElement where TableViewCell == TableView.ElementCell<Self>
+public protocol RowViewElement : RowElement where TableViewCell == ElementCell<Self>
 {
     // MARK: Converting To View For Display
     
@@ -121,24 +121,24 @@ public protocol TableViewRowViewElement : TableViewRowElement where TableViewCel
     func apply(to view : View, reason : ApplyReason)
 }
 
-public extension TableViewRowViewElement
+public extension RowViewElement
 {
-    static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementCell<Self>
+    static func createReusableCell(with reuseIdentifier : ReuseIdentifier<Self>) -> ElementCell<Self>
     {
-        return TableView.ElementCell(
+        return ElementCell(
             view: Self.createReusableView(),
             style: UITableViewCell.CellStyle.default,
             reuseIdentifier: reuseIdentifier.stringValue
         )
     }
     
-    func apply(to cell : TableView.ElementCell<Self>, reason : ApplyReason)
+    func apply(to cell : ElementCell<Self>, reason : ApplyReason)
     {
         self.apply(to: cell.view, reason: reason)
     }
 }
 
-public protocol TableViewHeaderFooterElement
+public protocol HeaderFooterElement
 {
     // MARK: Identifying Content & Changes
     
@@ -158,7 +158,7 @@ public protocol TableViewHeaderFooterElement
     static func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> HeaderFooterView
 }
 
-public extension TableViewHeaderFooterElement where Self:Equatable
+public extension HeaderFooterElement where Self:Equatable
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
@@ -171,7 +171,7 @@ public extension TableViewHeaderFooterElement where Self:Equatable
     }
 }
 
-public protocol TableViewHeaderFooterViewElement : TableViewHeaderFooterElement where HeaderFooterView == TableView.ElementHeaderFooterView<Self>
+public protocol HeaderFooterViewElement : HeaderFooterElement where HeaderFooterView == ElementHeaderFooterView<Self>
 {
     associatedtype View:UIView
     
@@ -180,135 +180,132 @@ public protocol TableViewHeaderFooterViewElement : TableViewHeaderFooterElement 
     func apply(to view : View, reason : ApplyReason)
 }
 
-public extension TableViewHeaderFooterViewElement
+public extension HeaderFooterViewElement
 {
-    static func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> TableView.ElementHeaderFooterView<Self>
+    static func createReusableHeaderFooterView(with reuseIdentifier : ReuseIdentifier<Self>) -> ElementHeaderFooterView<Self>
     {
-        return TableView.ElementHeaderFooterView(
+        return ElementHeaderFooterView(
             view:Self.createReusableView(),
             reuseIdentifier: reuseIdentifier.stringValue
         )
     }
     
-    func applyTo(headerFooter : TableView.ElementHeaderFooterView<Self>, reason : ApplyReason)
+    func applyTo(headerFooter : ElementHeaderFooterView<Self>, reason : ApplyReason)
     {
         self.apply(to: headerFooter.view, reason: reason)
     }
 }
 
 
-public extension TableView
-{    
-    final class ElementHeaderFooterView<Element:TableViewHeaderFooterViewElement> : UITableViewHeaderFooterView
+public final class ElementHeaderFooterView<Element:HeaderFooterViewElement> : UITableViewHeaderFooterView
+{
+    var view : Element.View
+    
+    public init(view : Element.View, reuseIdentifier: String)
     {
-        var view : Element.View
+        self.view = view
         
-        public init(view : Element.View, reuseIdentifier: String)
-        {
-            self.view = view
-            
-            super.init(reuseIdentifier: reuseIdentifier)
-            
-            self.view.frame = self.contentView.bounds
-            self.contentView.addSubview(self.view)
-        }
+        super.init(reuseIdentifier: reuseIdentifier)
         
-        @available(*, unavailable)
-        override public init(reuseIdentifier: String?) {
-            fatalError()
-        }
-        
-        @available(*, unavailable)
-        required init?(coder aDecoder: NSCoder) {
-            fatalError()
-        }
-        
-        // MARK: UIView
-        
-        public override func layoutSubviews()
-        {
-            super.layoutSubviews()
-            
-            self.view.frame = self.contentView.bounds
-        }
-        
-        public override func sizeThatFits(_ size: CGSize) -> CGSize
-        {
-            let viewSize = CGSize(width: self.view.bounds.size.width, height: size.height)
-            
-            return view.sizeThatFits(viewSize)
-        }
-        
-        public override func systemLayoutSizeFitting(
-            _ targetSize: CGSize,
-            withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
-            verticalFittingPriority: UILayoutPriority
-            ) -> CGSize
-        {
-            let viewSize = CGSize(width: self.view.bounds.size.width, height: targetSize.height)
-            
-            return view.systemLayoutSizeFitting(
-                viewSize,
-                withHorizontalFittingPriority: horizontalFittingPriority,
-                verticalFittingPriority: verticalFittingPriority
-            )
-        }
+        self.view.frame = self.contentView.bounds
+        self.contentView.addSubview(self.view)
     }
     
+    @available(*, unavailable)
+    override public init(reuseIdentifier: String?) {
+        fatalError()
+    }
     
-    final class ElementCell<Element:TableViewRowViewElement> : UITableViewCell
+    @available(*, unavailable)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+    
+    // MARK: UIView
+    
+    public override func layoutSubviews()
     {
-        var view : Element.View
+        super.layoutSubviews()
         
-        public init(view : Element.View, style: UITableViewCell.CellStyle, reuseIdentifier: String)
-        {
-            self.view = view
-            
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-            
-            self.view.frame = self.contentView.bounds
-            self.contentView.addSubview(self.view)
-        }
+        self.view.frame = self.contentView.bounds
+    }
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        let viewSize = CGSize(width: self.view.bounds.size.width, height: size.height)
         
-        @available(*, unavailable)
-        override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            fatalError()
-        }
+        return view.sizeThatFits(viewSize)
+    }
+    
+    public override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+        ) -> CGSize
+    {
+        let viewSize = CGSize(width: self.view.bounds.size.width, height: targetSize.height)
         
-        @available(*, unavailable)
-        required init?(coder aDecoder: NSCoder) {
-            fatalError()
-        }
+        return view.systemLayoutSizeFitting(
+            viewSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
+    }
+}
+
+
+public final class ElementCell<Element:RowViewElement> : UITableViewCell
+{
+    var view : Element.View
+    
+    public init(view : Element.View, style: UITableViewCell.CellStyle, reuseIdentifier: String)
+    {
+        self.view = view
         
-        // MARK: UIView
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        public override func layoutSubviews()
-        {
-            super.layoutSubviews()
-            
-            self.view.frame = self.contentView.bounds
-        }
+        self.view.frame = self.contentView.bounds
+        self.contentView.addSubview(self.view)
+    }
+    
+    @available(*, unavailable)
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        fatalError()
+    }
+    
+    @available(*, unavailable)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+    
+    // MARK: UIView
+    
+    public override func layoutSubviews()
+    {
+        super.layoutSubviews()
         
-        public override func sizeThatFits(_ size: CGSize) -> CGSize
-        {
-            let viewSize = CGSize(width: self.view.bounds.size.width, height: size.height)
-            
-            return view.sizeThatFits(viewSize)
-        }
+        self.view.frame = self.contentView.bounds
+    }
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        let viewSize = CGSize(width: self.view.bounds.size.width, height: size.height)
         
-        public override func systemLayoutSizeFitting(
-            _ targetSize: CGSize,
-            withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
-            verticalFittingPriority: UILayoutPriority
-            ) -> CGSize
-        {
-            let viewSize = CGSize(width: self.view.bounds.size.width, height: targetSize.height)
-            
-            return view.systemLayoutSizeFitting(
-                viewSize,
-                withHorizontalFittingPriority: horizontalFittingPriority,
-                verticalFittingPriority: verticalFittingPriority
-            )
-        }
+        return view.sizeThatFits(viewSize)
+    }
+    
+    public override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+        ) -> CGSize
+    {
+        let viewSize = CGSize(width: self.view.bounds.size.width, height: targetSize.height)
+        
+        return view.systemLayoutSizeFitting(
+            viewSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
     }
 }

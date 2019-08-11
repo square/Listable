@@ -115,7 +115,7 @@ func randomColor() -> UIColor
     )
 }
 
-struct Product : TableViewRowViewElement, ProxyElement, Equatable
+struct Product : RowViewElement, ProxyElement, Equatable
 {
     var tile : Tile
     

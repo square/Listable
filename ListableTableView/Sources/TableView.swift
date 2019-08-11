@@ -173,7 +173,7 @@ public final class TableView : UIView
    public struct VisibleRow
     {
         public let indexPath : IndexPath
-        public let row : TableViewRow
+        public let row : AnyRow
     }
     
     var visibleRows : [VisibleRow] {
@@ -266,7 +266,7 @@ public final class TableView : UIView
         }
     }
     
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, TableViewRow>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyRow>
     {
         return SectionedDiff(
             old: old,
@@ -568,7 +568,7 @@ fileprivate extension UITableView
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
     }
     
-    func update(with diff : SectionedDiff<Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
+    func update(with diff : SectionedDiff<Section,AnyRow>, animated: Bool, onBeginUpdates : () -> ())
     {
         self.beginUpdates()
         onBeginUpdates()
