@@ -8,220 +8,234 @@
 import ListableCore
 
 
-internal extension TableView
+public protocol PresentationStateRowState : PresentationStateRowState_Internal
 {
-    /*
-     A class used to manage the "live" / mutable state of the visible rows in the table view,
-     which is persistent across diffs of content (instances are only created or destroyed when a row enters or leaves the table).
-     
-     This is where bindings or other update-driving objects live,
-     which then push the changes to the row and section content back into view models.
-     */
-    final class PresentationState
+}
+
+public protocol PresentationStateRowState_Internal : AnyObject
+{
+    var anyIdentifier : AnyIdentifier { get }
+    var anyModel : TableViewRow { get }
+    
+    func update(with old : TableViewRow, new : TableViewRow)
+    
+    func willDisplay(with cell : UITableViewCell)
+    func didEndDisplay()
+}
+
+
+/*
+ A class used to manage the "live" / mutable state of the visible rows in the table view,
+ which is persistent across diffs of content (instances are only created or destroyed when a row enters or leaves the table).
+ 
+ This is where bindings or other update-driving objects live,
+ which then push the changes to the row and section content back into view models.
+ */
+final class PresentationState
+{
+    unowned var tableView : UITableView!
+    
+    var refreshControl : RefreshControl.PresentationState?
+    
+    var sections : [PresentationState.SectionState]
+    
+    private(set) var containsAllRows : Bool
+    
+    init()
     {
-        unowned var tableView : UITableView!
+        self.refreshControl = nil
+        self.sections = []
         
-        var refreshControl : RefreshControl.PresentationState?
-        
-        var sections : [PresentationState.Section]
-        
-        private(set) var containsAllRows : Bool
-        
-        init()
-        {
-            self.refreshControl = nil
-            self.sections = []
-            
-            self.containsAllRows = true
-        }
-        
-        // TODO: Add table header and footer.
-        
-        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
-        {
-            for (sectionIndex, section) in self.sections.enumerated() {
-                for (rowIndex, row) in section.rows.enumerated() {
-                    if row === rowToRemove {
-                        self.sections[sectionIndex].removeRow(at: rowIndex)
-                        return IndexPath(row: rowIndex, section: sectionIndex)
-                    }
+        self.containsAllRows = true
+    }
+    
+    // TODO: Add table header and footer.
+    
+    func remove(row rowToRemove : PresentationStateRowState) -> IndexPath?
+    {
+        for (sectionIndex, section) in self.sections.enumerated() {
+            for (rowIndex, row) in section.rows.enumerated() {
+                if row === rowToRemove {
+                    self.sections[sectionIndex].removeRow(at: rowIndex)
+                    return IndexPath(row: rowIndex, section: sectionIndex)
                 }
             }
-            
-            return nil
         }
         
-        func row(at indexPath : IndexPath) -> TableViewPresentationStateRow
-        {
-            let section = self.sections[indexPath.section]
-            let row = section.rows[indexPath.row]
+        return nil
+    }
+    
+    func row(at indexPath : IndexPath) -> PresentationStateRowState
+    {
+        let section = self.sections[indexPath.section]
+        let row = section.rows[indexPath.row]
+        
+        return row
+    }
+    
+    func update(with diff : SectionedDiff<Section, TableViewRow>, slice : Content.Slice)
+    {
+        self.containsAllRows = slice.containsAllRows
+        
+        // TODO: Handle header footer changing.
+        
+        self.updateRefreshControl(with: slice.content.refreshControl)
+        
+        self.sections = diff.changes.transform(
+            old: self.sections,
+            removed: { _, _ in },
+            added: { section in SectionState(model: section) },
+            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
+            updated: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
+            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes) }
+        )
+    }
+    
+    var sectionModels : [Section] {
+        return self.sections.map { section in
+            var sectionModel = section.model
             
-            return row
+            sectionModel.rows = section.rows.map {
+                $0.anyModel
+            }
+            
+            return sectionModel
+        }
+    }
+    
+    private func updateRefreshControl(with refreshControl : RefreshControl?)
+    {
+        guard #available(iOS 10.0, *) else { return }
+        
+        syncOptionals(
+            left: self.refreshControl,
+            right: refreshControl,
+            created: { model in
+                let new = RefreshControl.PresentationState(model)
+                self.tableView.refreshControl = new.view
+                self.refreshControl = new
+        },
+            removed: { _ in
+                self.refreshControl = nil
+                self.tableView.refreshControl = nil
+        },
+            overlapping: { control, model in
+                model.apply(to: control.view)
+        })
+    }
+    
+    final class SectionState
+    {
+        var model : Section
+        
+        var rows : [PresentationStateRowState]
+        
+        // TODO: Add header and footer.
+        
+        init(model : Section)
+        {
+            self.model = model
+            
+            self.rows = self.model.rows.map {
+                $0.newPresentationContainer()
+            }
         }
         
-        func update(with diff : SectionedDiff<TableView.Section, TableViewRow>, slice : Content.Slice)
+        fileprivate func removeRow(at index : Int)
         {
-            self.containsAllRows = slice.containsAllRows
+            self.model.rows.remove(at: index)
+            self.rows.remove(at: index)
+        }
+        
+        fileprivate func update(
+            with oldSection : Section,
+            new newSection : Section,
+            changes : SectionedDiff<Section, TableViewRow>.RowChanges
+            )
+        {
+            self.model = newSection
             
-            // TODO: Handle header footer changing.
-            
-            self.updateRefreshControl(with: slice.content.refreshControl)
-            
-            self.sections = diff.changes.transform(
-                old: self.sections,
+            self.rows = changes.transform(
+                old: self.rows,
                 removed: { _, _ in },
-                added: { section in Section(model: section) },
-                moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
-                updated: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
-                noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes) }
+                added: { $0.newPresentationContainer() },
+                moved: { old, new, row in row.update(with: old, new: new) },
+                updated: { old, new, row in row.update(with: old, new: new) },
+                noChange: { old, new, row in row.update(with: old, new: new) }
             )
         }
+    }
+    
+    final class RowState<Element:TableViewRowElement> : PresentationStateRowState
+    {
+        var model : Row<Element>
         
-        var sectionModels : [TableView.Section] {
-            return self.sections.map { section in
-                var sectionModel = section.model
-                
-                sectionModel.rows = section.rows.map {
-                    $0.anyModel
-                }
-                
-                return sectionModel
-            }
-        }
+        let binding : Binding<Element>?
         
-        private func updateRefreshControl(with refreshControl : RefreshControl?)
+        private var visibleCell : Element.TableViewCell?
+        
+        init(_ model : Row<Element>)
         {
-            guard #available(iOS 10.0, *) else { return }
+            self.model = model
             
-            syncOptionals(
-                left: self.refreshControl,
-                right: refreshControl,
-                created: { model in
-                    let new = RefreshControl.PresentationState(model)
-                    self.tableView.refreshControl = new.view
-                    self.refreshControl = new
-            },
-                removed: { _ in
-                    self.refreshControl = nil
-                    self.tableView.refreshControl = nil
-            },
-                overlapping: { control, model in
-                    model.apply(to: control.view)
-            })
-        }
-        
-        final class Section
-        {
-            var model : TableView.Section
+            self.anyIdentifier = self.model.identifier
             
-            var rows : [TableViewPresentationStateRow]
-            
-            // TODO: Add header and footer.
-            
-            init(model : TableView.Section)
+            if let binding = self.model.bind?(self.model.element)
             {
-                self.model = model
+                self.binding =  binding
                 
-                self.rows = self.model.rows.map {
-                    $0.newPresentationRow()
-                }
-            }
-            
-            fileprivate func removeRow(at index : Int)
-            {
-                self.model.rows.remove(at: index)
-                self.rows.remove(at: index)
-            }
-            
-            fileprivate func update(
-                with oldSection : TableView.Section,
-                new newSection : TableView.Section,
-                changes : SectionedDiff<TableView.Section, TableViewRow>.RowChanges
-                )
-            {
-                self.model = newSection
+                binding.start()
                 
-                self.rows = changes.transform(
-                    old: self.rows,
-                    removed: { _, _ in },
-                    added: { $0.newPresentationRow() },
-                    moved: { old, new, row in row.update(with: old, new: new) },
-                    updated: { old, new, row in row.update(with: old, new: new) },
-                    noChange: { old, new, row in row.update(with: old, new: new) }
-                )
-            }
-        }
-        
-        final class Row<Element:TableViewRowElement> : TableViewPresentationStateRow
-        {
-            var model : TableView.Row<Element>
-            
-            let binding : Binding<Element>?
-            
-            private var visibleCell : Element.TableViewCell?
-            
-            init(_ model : TableView.Row<Element>)
-            {
-                self.model = model
-                
-                self.anyIdentifier = self.model.identifier
-                
-                if let binding = self.model.bind?(self.model.element)
-                {
-                    self.binding =  binding
+                binding.onChange { [weak self] element in
+                    guard let self = self else { return }
                     
-                    binding.start()
-
-                    binding.onChange { [weak self] element in
-                        guard let self = self else { return }
-                        
-                        self.model.element = element
-                        
-                        if let cell = self.visibleCell {
-                            self.model.element.apply(to: cell, reason: .willDisplay)
-                        }
+                    self.model.element = element
+                    
+                    if let cell = self.visibleCell {
+                        self.model.element.apply(to: cell, reason: .willDisplay)
                     }
-                    
-                    // Pull the current element off the binding in case it changed
-                    // during initialization, from the provider.
-                    
-                    self.model.element = binding.element
-                } else {
-                    self.binding = nil
                 }
-            }
-            
-            deinit {
-                self.binding?.discard()
-            }
-            
-            // MARK: TableViewPresentationStateRow
-            
-            let anyIdentifier : AnyIdentifier
-            
-            var anyModel : TableViewRow {
-                return self.model
-            }
-            
-            public func update(with old : TableViewRow, new : TableViewRow)
-            {
-                self.model = new as! TableView.Row<Element>
-            }
-            
-            public func willDisplay(with cell : UITableViewCell)
-            {
-                self.visibleCell = (cell as! Element.TableViewCell)
                 
-                self.model.onDisplay?(self.model.element)
+                // Pull the current element off the binding in case it changed
+                // during initialization, from the provider.
+                
+                self.model.element = binding.element
+            } else {
+                self.binding = nil
             }
+        }
+        
+        deinit {
+            self.binding?.discard()
+        }
+        
+        // MARK: TableViewPresentationStateRow
+        
+        let anyIdentifier : AnyIdentifier
+        
+        var anyModel : TableViewRow {
+            return self.model
+        }
+        
+        public func update(with old : TableViewRow, new : TableViewRow)
+        {
+            self.model = new as! Row<Element>
+        }
+        
+        public func willDisplay(with cell : UITableViewCell)
+        {
+            self.visibleCell = (cell as! Element.TableViewCell)
             
-            public func didEndDisplay()
-            {
-                self.visibleCell = nil
-            }
+            self.model.onDisplay?(self.model.element)
+        }
+        
+        public func didEndDisplay()
+        {
+            self.visibleCell = nil
         }
     }
 }
+
 
 func syncOptionals<Left,Right>(left : Left?, right : Right?, created : (Right) -> (), removed : (Left) -> (), overlapping: (Left, Right) -> ())
 {

@@ -38,13 +38,13 @@ final class TableViewDemosCartViewController : UIViewController
             }
         }
         
-        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout ContentBuilder)
         {
             guard self.itemizations.isEmpty == false else {
                 return
             }
             
-            table += TableView.Section(identifier: "search") { rows in
+            table += Section(identifier: "search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
                     state.value.filter = filter
                 }
@@ -52,7 +52,7 @@ final class TableViewDemosCartViewController : UIViewController
                 rows += self.searchRow
             }
             
-            table += TableView.Section(identifier: "itemizations") { rows in
+            table += Section(identifier: "itemizations") { rows in
                 
                 rows += self.itemizations.compactMap { itemization in
                     
@@ -60,13 +60,13 @@ final class TableViewDemosCartViewController : UIViewController
                         return nil
                     }
                     
-                    return TableView.Row(
+                    return Row(
                         ItemizationRow(itemization: itemization),
                         
                         sizing: .thatFits(.noConstraint),
                         
-                        trailingActions: TableView.SwipeActions(
-                            TableView.SwipeAction(
+                        trailingActions: SwipeActions(
+                            SwipeAction(
                                 title: "Delete",
                                 style: .destructive,
                                 onTap: { _ in
@@ -80,11 +80,11 @@ final class TableViewDemosCartViewController : UIViewController
                 }
             }
             
-            table += TableView.Section(identifier: "amounts") { rows in
-                rows += TableView.Row(AmountRow(title: "Tax", detail: "$1.50"))
-                rows += TableView.Row(AmountRow(title: "Discount", detail: "$2.00"))
-                rows += TableView.Row(AmountRow(title: "Loyalty", detail: "No Points"))
-                rows += TableView.Row(AmountRow(title: "Total", detail: "$10.00"))
+            table += Section(identifier: "amounts") { rows in
+                rows += Row(AmountRow(title: "Tax", detail: "$1.50"))
+                rows += Row(AmountRow(title: "Discount", detail: "$2.00"))
+                rows += Row(AmountRow(title: "Loyalty", detail: "No Points"))
+                rows += Row(AmountRow(title: "Total", detail: "$10.00"))
             }
         }
     }

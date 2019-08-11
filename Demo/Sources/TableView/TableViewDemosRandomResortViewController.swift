@@ -56,13 +56,13 @@ final class TableViewDemosRandomResortViewController : UIViewController
         
         struct State : Equatable {}
         
-        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout ContentBuilder)
         {
             (1...5).forEach { sectionIndex in
-                table += TableView.Section(identifier: sectionIndex, header: TableView.HeaderFooter(String(sectionIndex))) { rows in
+                table += Section(identifier: sectionIndex, header: HeaderFooter(String(sectionIndex))) { rows in
                     
                     (1...10).forEach { rowIndex in
-                        rows += TableView.Row(String(rowIndex))
+                        rows += Row(String(rowIndex))
                     }
                     
                     rows.rows.shuffle(using: &self.rng)
