@@ -40,38 +40,38 @@ final class TableViewDemosSPOSTransactionsListViewController : UIViewController
             }
         }
         
-        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout ContentBuilder)
         {
             switch state.value.content {
             case .new: break
                 
             case .loading(_):
-                table += TableView.Section(identifier: "loading") { rows in
-                    rows += TableView.Row("Loading...")
+                table += Section(identifier: "loading") { rows in
+                    rows += Row("Loading...")
                 }
                 
             case .content(let content):
-                table += TableView.Section(header: "Payments") { rows in
+                table += Section(header: "Payments") { rows in
                     
                     rows += content.transactions.map { transaction in
-                        TableView.Row(transaction.remoteID.uuidString)
+                        Row(transaction.remoteID.uuidString)
                     }
                     
                     if content.hasMore {
-                        rows += TableView.Row("Load More", onDisplay: { _ in
+                        rows += Row("Load More", onDisplay: { _ in
                             
                         })
                     }
                 }
                 
             case .error:
-                table += TableView.Section(identifier: "error") { rows in
-                    rows += TableView.Row("Error!")
+                table += Section(identifier: "error") { rows in
+                    rows += Row("Error!")
                 }
                 
             case .empty:
-                table += TableView.Section(identifier: "empty") { rows in
-                    rows += TableView.Row("No Payments")
+                table += Section(identifier: "empty") { rows in
+                    rows += Row("No Payments")
                 }
             }
         }

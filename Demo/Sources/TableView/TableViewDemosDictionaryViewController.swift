@@ -41,7 +41,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             }
         }
 
-        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout ContentBuilder)
         {
             if #available(iOS 10.0, *) {
                 table.refreshControl = RefreshControl() { finished in
@@ -51,7 +51,7 @@ final public class TableViewDemosDictionaryViewController : UIViewController
                 }
             }
             
-            table += TableView.Section(identifier: "Search") { rows in
+            table += Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
                     state.value.filter = filter
                 }
@@ -63,12 +63,12 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             
             table += self.dictionary.wordsByLetter.map { letter in
                 
-                return TableView.Section(header: letter.letter) { rows in
+                return Section(header: letter.letter) { rows in
                     
                     rows += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
-                            return TableView.Row(SubtitleRow(text: word.word, detail: word.description))
+                            return Row(SubtitleRow(text: word.word, detail: word.description))
                         } else {
                             return nil
                         }
@@ -79,8 +79,8 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             table.removeEmpty()
             
             if hasContent == false {
-                table += TableView.Section(identifier: "emptty") { rows in
-                    rows += TableView.Row(
+                table += Section(identifier: "emptty") { rows in
+                    rows += Row(
                         SubtitleRow(
                             text: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."

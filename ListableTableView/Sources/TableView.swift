@@ -54,7 +54,7 @@ public final class TableView : UIView
     {
         self.sourcePresenter.discard()
         
-        let sourcePresenter = TableView.SourcePresenter(initial: initial, source: source) { [weak self] in
+        let sourcePresenter = SourcePresenter(initial: initial, source: source) { [weak self] in
             self?.reloadContent(animated: animated)
         }
         
@@ -115,23 +115,23 @@ public final class TableView : UIView
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
         state : State,
-        _ builder : @escaping (SourceState<State>, inout TableView.ContentBuilder) -> ()
+        _ builder : @escaping (SourceState<State>, inout ContentBuilder) -> ()
         )
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: state, source: TableView.DynamicSource(with: builder))
+        self.setSource(initial: state, source: DynamicSource(with: builder))
     }
     
     public convenience init(
         frame: CGRect = .zero,
         style : UITableView.Style = .plain,
-        _ builder : @escaping (inout TableView.ContentBuilder) -> ()
+        _ builder : @escaping (inout ContentBuilder) -> ()
         )
     {
         self.init(frame: frame, style: style)
         
-        self.setSource(initial: TableView.StaticSource.State(), source: TableView.StaticSource(with: builder))
+        self.setSource(initial: StaticSource.State(), source: StaticSource(with: builder))
     }
     
     public init(frame: CGRect = .zero, style : UITableView.Style = .plain)
@@ -188,7 +188,7 @@ public final class TableView : UIView
     public struct VisibleSection
     {
         public let index : Int
-        public let section : TableView.Section
+        public let section : Section
     }
     
     public var visibleSections : [VisibleSection] {
@@ -288,21 +288,6 @@ public final class TableView : UIView
     }
 }
 
-public protocol TableViewPresentationStateRow : TableViewPresentationStateRow_Internal
-{
-}
-
-public protocol TableViewPresentationStateRow_Internal : AnyObject
-{
-    var anyIdentifier : AnyIdentifier { get }
-    var anyModel : TableViewRow { get }
-    
-    func update(with old : TableViewRow, new : TableViewRow)
-    
-    func willDisplay(with cell : UITableViewCell)
-    func didEndDisplay()
-}
-
 
 fileprivate extension TableView
 {
@@ -311,7 +296,7 @@ fileprivate extension TableView
         
         var content : Content = Content()
         
-        func remove(row rowToRemove : TableViewPresentationStateRow) -> IndexPath?
+        func remove(row rowToRemove : PresentationStateRowState) -> IndexPath?
         {
             if let indexPath = self.presentationState.remove(row: rowToRemove) {
                 self.content.remove(at: indexPath)
@@ -326,7 +311,7 @@ fileprivate extension TableView
     {
         unowned var tableView : TableView!
         
-        var presentationState : TableView.PresentationState {
+        var presentationState : PresentationState {
             return self.tableView.storage.presentationState
         }
         
@@ -370,7 +355,7 @@ fileprivate extension TableView
     {
         unowned var tableView : TableView!
         
-        var presentationState : TableView.PresentationState {
+        var presentationState : PresentationState {
             return self.tableView.storage.presentationState
         }
         
@@ -452,7 +437,7 @@ fileprivate extension TableView
         
         // MARK: Display
         
-        var displayedRows : [ObjectIdentifier:TableViewPresentationStateRow] = [:]
+        var displayedRows : [ObjectIdentifier:PresentationStateRowState] = [:]
         
         func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
         {
@@ -492,7 +477,7 @@ fileprivate extension TableView
         
         // MARK: Row Actions
         
-        func performedActionFor(row : TableViewPresentationStateRow, style : TableView.SwipeAction.Style)
+        func performedActionFor(row : PresentationStateRowState, style : SwipeAction.Style)
         {
             if style.deletesRow {
                 if let indexPath = self.tableView.storage.remove(row: row) {
@@ -583,7 +568,7 @@ fileprivate extension UITableView
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
     }
     
-    func update(with diff : SectionedDiff<TableView.Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
+    func update(with diff : SectionedDiff<Section,TableViewRow>, animated: Bool, onBeginUpdates : () -> ())
     {
         self.beginUpdates()
         onBeginUpdates()

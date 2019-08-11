@@ -12,16 +12,16 @@ public protocol TableViewSource
 {
     associatedtype State:Equatable
     
-    func content(with state : SourceState<State>, table : inout TableView.ContentBuilder)
+    func content(with state : SourceState<State>, table : inout ContentBuilder)
     
-    func content(with state : SourceState<State>) -> TableView.Content
+    func content(with state : SourceState<State>) -> Content
 }
 
 public extension TableViewSource
 {
-    func content(with state : SourceState<State>) -> TableView.Content
+    func content(with state : SourceState<State>) -> Content
     {
-        return TableView.ContentBuilder.build { table in
+        return ContentBuilder.build { table in
             self.content(with: state, table: &table)
         }
     }
@@ -31,56 +31,53 @@ internal protocol TableViewSourcePresenter
 {
     func discard()
     
-    func reloadContent() -> TableView.Content
+    func reloadContent() -> Content
 }
 
-internal extension TableView
+internal final class SourcePresenter<Source:TableViewSource> : TableViewSourcePresenter
 {
-    final class SourcePresenter<Source:TableViewSource> : TableViewSourcePresenter
+    let source : Source
+    
+    var state : Source.State {
+        get { return self.sourceState.value }
+        set { self.sourceState.value = newValue }
+    }
+    
+    typealias DidChange = () -> ()
+    var didChange : DidChange?
+    
+    private var sourceState : SourceState<Source.State>
+    
+    init(initial : Source.State, source : Source, didChange : @escaping DidChange = {})
     {
-        let source : Source
+        self.source = source
         
-        var state : Source.State {
-            get { return self.sourceState.value }
-            set { self.sourceState.value = newValue }
-        }
+        self.sourceState = SourceState(initial: initial)
         
-        typealias DidChange = () -> ()
-        var didChange : DidChange?
+        self.didChange = didChange
+    }
+    
+    // MARK: TableViewSourceController
+    
+    func discard()
+    {
+        self.didChange = nil
         
-        private var sourceState : SourceState<Source.State>
+        self.sourceState.discard()
+    }
+    
+    internal func reloadContent() -> Content
+    {
+        // Throw out old state object so changes do not leak between render passes.
         
-        init(initial : Source.State, source : Source, didChange : @escaping DidChange = {})
-        {
-            self.source = source
-
-            self.sourceState = SourceState(initial: initial)
-            
-            self.didChange = didChange
-        }
+        self.sourceState.discard()
         
-        // MARK: TableViewSourceController
+        self.sourceState = SourceState(initial: self.sourceState.value)
+        self.sourceState.didChange = self.didChange
         
-        func discard()
-        {
-            self.didChange = nil
-            
-            self.sourceState.discard()
-        }
+        // Create and return new content.
         
-        internal func reloadContent() -> TableView.Content
-        {
-            // Throw out old state object so changes do not leak between render passes.
-            
-            self.sourceState.discard()
-            
-            self.sourceState = SourceState(initial: self.sourceState.value)
-            self.sourceState.didChange = self.didChange
-            
-            // Create and return new content.
-            
-            return self.source.content(with: self.sourceState)
-        }
+        return self.source.content(with: self.sourceState)
     }
 }
 
@@ -137,48 +134,45 @@ public final class SourceState<Value:Equatable>
 }
 
 
-internal extension TableView
+internal final class DynamicSource<Input:Equatable> : TableViewSource
 {
-    final class DynamicSource<Input:Equatable> : TableViewSource
+    typealias Builder = (SourceState<Input>, inout ContentBuilder) -> ()
+    let builder : Builder
+    
+    init(with builder : @escaping Builder)
     {
-        typealias Builder = (SourceState<Input>, inout TableView.ContentBuilder) -> ()
-        let builder : Builder
-        
-        init(with builder : @escaping Builder)
-        {
-            self.builder = builder
-        }
-        
-        public func content(with state: SourceState<Input>, table: inout TableView.ContentBuilder)
-        {
-            self.builder(state, &table)
-        }
+        self.builder = builder
     }
     
-    final class StaticSource : TableViewSource
+    public func content(with state: SourceState<Input>, table: inout ContentBuilder)
     {
-        public struct State : Equatable {}
-        
-        public let content : TableView.Content
-        
-        public init(with content : TableView.Content = .init())
-        {
-            self.content = content
-        }
-        
-        public convenience init(with build : TableView.ContentBuilder.Build)
-        {
-            self.init(with: TableView.ContentBuilder.build(with: build))
-        }
-        
-        func content(with state: SourceState<TableView.StaticSource.State>, table: inout TableView.ContentBuilder)
-        {
-            fatalError()
-        }
-        
-        func content(with state: SourceState<TableView.StaticSource.State>) -> TableView.Content
-        {
-            return self.content
-        }
+        self.builder(state, &table)
+    }
+}
+
+internal final class StaticSource : TableViewSource
+{
+    public struct State : Equatable {}
+    
+    public let content : Content
+    
+    public init(with content : Content = Content())
+    {
+        self.content = content
+    }
+    
+    public convenience init(with build : ContentBuilder.Build)
+    {
+        self.init(with: ContentBuilder.build(with: build))
+    }
+    
+    func content(with state: SourceState<StaticSource.State>, table: inout ContentBuilder)
+    {
+        fatalError()
+    }
+    
+    func content(with state: SourceState<StaticSource.State>) -> Content
+    {
+        return self.content
     }
 }

@@ -36,9 +36,9 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
             }
         }
         
-        func content(with state: SourceState<State>, table: inout TableView.ContentBuilder)
+        func content(with state: SourceState<State>, table: inout ContentBuilder)
         {
-            table += TableView.Section(identifier: "Search") { rows in
+            table += Section(identifier: "Search") { rows in
                 self.searchRow.view.onStateChanged = { filter in
                     state.value.filter = filter
                 }
@@ -46,7 +46,7 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
                 rows += self.searchRow
             }
             
-            table += TableView.Section(identifier: "actions") { rows in
+            table += Section(identifier: "actions") { rows in
                 rows += Product(
                     tile: Tile(
                         abbreviation: .init(color: .darkGray, text: "$"),
@@ -81,7 +81,7 @@ final class TableViewDemosSPOSItemsListViewController : UIViewController
             let letters = EnglishDictionary.dictionary.wordsByLetter
             
             letters.forEach { letter in
-                table += TableView.Section(header: letter.letter.capitalized) { rows in
+                table += Section(header: letter.letter.capitalized) { rows in
                     
                     letter.words[0...50].forEach { word in
                         

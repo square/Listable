@@ -46,345 +46,345 @@ public protocol TableViewRow_Internal
     func movedComparedTo(old : TableViewRow) -> Bool
     
     @available(iOS 11.0, *)
-    func leadingSwipeActionsConfiguration(onPerform : @escaping TableView.SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+    func leadingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
 
     @available(iOS 11.0, *)
-    func trailingSwipeActionsConfiguration(onPerform : @escaping TableView.SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+    func trailingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
     
-    func trailingTableViewRowActions(onPerform : @escaping TableView.SwipeAction.OnPerform) -> [UITableViewRowAction]?
+    func trailingTableViewRowActions(onPerform : @escaping SwipeAction.OnPerform) -> [UITableViewRowAction]?
     
-    func newPresentationRow() -> TableViewPresentationStateRow
+    func newPresentationContainer() -> PresentationStateRowState
 }
 
-public extension TableView
-{    
-    struct Section
+public struct Section
+{
+    public let identifier : AnyHashable
+    
+    public var header : TableViewHeaderFooter?
+    public var footer : TableViewHeaderFooter?
+    
+    public var rows : [TableViewRow]
+    
+    public init(
+        header headerString: String,
+        footer footerString: String? = nil,
+        content contentBuilder : (inout SectionBuilder) -> ()
+        )
     {
-        public let identifier : AnyHashable
+        var builder = SectionBuilder()
         
-        public var header : TableViewHeaderFooter?
-        public var footer : TableViewHeaderFooter?
+        contentBuilder(&builder)
         
-        public var rows : [TableViewRow]
+        var footer : TableViewHeaderFooter?
         
-        public init(
-            header headerString: String,
-            footer footerString: String? = nil,
-            content contentBuilder : (inout SectionBuilder) -> ()
-            )
-        {
-            var builder = SectionBuilder()
-            
-            contentBuilder(&builder)
-            
-            var footer : TableViewHeaderFooter?
-            
-            if let footerString = footerString {
-                footer = TableView.HeaderFooter(footerString)
-            }
-            
-            self.init(
-                identifier: footerString,
-                header: TableView.HeaderFooter(headerString),
-                footer: footer,
-                rows: builder.rows
-            )
+        if let footerString = footerString {
+            footer = HeaderFooter(footerString)
         }
         
-        public init<Identifier:Hashable>(
-            identifier : Identifier,
-            header : TableViewHeaderFooter? = nil,
-            footer : TableViewHeaderFooter? = nil,
-            content contentBuilder : (inout SectionBuilder) -> ()
-            )
-        {
-            var builder = SectionBuilder()
-            
-            contentBuilder(&builder)
-            
-            self.init(
-                identifier: identifier,
-                header: header,
-                footer: footer,
-                rows: builder.rows
-            )
-        }
-        
-        public init<Header:TableViewHeaderFooterElement>(
-            header : TableView.HeaderFooter<Header>,
-            footer : TableViewHeaderFooter? = nil,
-            content contentBuilder : (inout SectionBuilder) -> ()
-            )
-        {
-            var builder = SectionBuilder()
-            
-            contentBuilder(&builder)
-            
-            self.init(
-                identifier: header.element.identifier,
-                header: header,
-                footer: footer,
-                rows: builder.rows
-            )
-        }
-        
-        public init<Identifier:Hashable>(
-            identifier : Identifier,
-            header : TableViewHeaderFooter? = nil,
-            footer : TableViewHeaderFooter? = nil,
-            rows : [TableViewRow] = []
-            )
-        {
-            self.identifier = AnyHashable(identifier)
-            
-            self.header = header
-            self.footer = footer
-            
-            self.rows = rows
-        }
-        
-        // MARK: TableViewSection
-        
-        public func updatedComparedTo(old : TableView.Section) -> Bool
-        {
-            let headerChanged = TableView.headerFooterChanged(self.header, old.header, { $0.updatedComparedTo(old: $1) })
-            let footerChanged = TableView.headerFooterChanged(self.footer, old.footer, { $0.updatedComparedTo(old: $1) })
-            
-            return headerChanged || footerChanged
-        }
-        
-        public func movedComparedTo(old : TableView.Section) -> Bool
-        {
-            let headerChanged = TableView.headerFooterChanged(self.header, old.header, { $0.movedComparedTo(old: $1) })
-            let footerChanged = TableView.headerFooterChanged(self.footer, old.footer, { $0.movedComparedTo(old: $1) })
-            
-            return headerChanged || footerChanged
-        }
-        
-        // MARK: Slicing
-        
-        func rowsUpTo(limit : Int) -> [TableViewRow]
-        {
-            let end = min(self.rows.count, limit)
-            
-            return Array(self.rows[0..<end])
-        }
+        self.init(
+            identifier: footerString,
+            header: HeaderFooter(headerString),
+            footer: footer,
+            rows: builder.rows
+        )
     }
     
-    
-    struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHeaderFooter
+    public init<Identifier:Hashable>(
+        identifier : Identifier,
+        header : TableViewHeaderFooter? = nil,
+        footer : TableViewHeaderFooter? = nil,
+        content contentBuilder : (inout SectionBuilder) -> ()
+        )
     {
-        public var element : Element
-        public var sizing : AxisSizing
+        var builder = SectionBuilder()
         
-        private let reuseIdentifier : ReuseIdentifier<Element>
+        contentBuilder(&builder)
         
-        // MARK: Initialization
+        self.init(
+            identifier: identifier,
+            header: header,
+            footer: footer,
+            rows: builder.rows
+        )
+    }
+    
+    public init<Header:TableViewHeaderFooterElement>(
+        header : HeaderFooter<Header>,
+        footer : TableViewHeaderFooter? = nil,
+        content contentBuilder : (inout SectionBuilder) -> ()
+        )
+    {
+        var builder = SectionBuilder()
         
-        public init(_ element : Element, sizing : AxisSizing = .default)
-        {
-            self.element = element
-            self.sizing = sizing
-            
-            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
-        }
+        contentBuilder(&builder)
         
-        // MARK: TableViewHeaderFooter
+        self.init(
+            identifier: header.element.identifier,
+            header: header,
+            footer: footer,
+            rows: builder.rows
+        )
+    }
+    
+    public init<Identifier:Hashable>(
+        identifier : Identifier,
+        header : TableViewHeaderFooter? = nil,
+        footer : TableViewHeaderFooter? = nil,
+        rows : [TableViewRow] = []
+        )
+    {
+        self.identifier = AnyHashable(identifier)
         
-        public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
-        {
-            return measurementCache.use(with: self.reuseIdentifier, create: { Element.createReusableHeaderFooterView(with: self.reuseIdentifier) }) { view in
-                self.element.apply(to: view, reason: .willDisplay)
-                
-                return self.sizing.height(with: view, fittingWidth: width, default: defaultHeight)
-            }
-        }
+        self.header = header
+        self.footer = footer
         
-        public func applyTo(headerFooterView : UITableViewHeaderFooterView, reason : ApplyReason)
-        {
-            guard let view = headerFooterView as? Element.HeaderFooterView else {
-                return
-            }
-            
-            self.element.apply(to: view, reason: reason)
-        }
+        self.rows = rows
+    }
+    
+    // MARK: TableViewSection
+    
+    public func updatedComparedTo(old : Section) -> Bool
+    {
+        let headerChanged = TableView.headerFooterChanged(self.header, old.header, { $0.updatedComparedTo(old: $1) })
+        let footerChanged = TableView.headerFooterChanged(self.footer, old.footer, { $0.updatedComparedTo(old: $1) })
         
-        public func dequeueView(in tableView: UITableView) -> UITableViewHeaderFooterView
-        {
-            let view : Element.HeaderFooterView = {
-                if let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: self.reuseIdentifier.stringValue) {
-                    return view as! Element.HeaderFooterView
-                } else {
-                    return Element.createReusableHeaderFooterView(with: self.reuseIdentifier)
-                }
-            }()
-            
+        return headerChanged || footerChanged
+    }
+    
+    public func movedComparedTo(old : Section) -> Bool
+    {
+        let headerChanged = TableView.headerFooterChanged(self.header, old.header, { $0.movedComparedTo(old: $1) })
+        let footerChanged = TableView.headerFooterChanged(self.footer, old.footer, { $0.movedComparedTo(old: $1) })
+        
+        return headerChanged || footerChanged
+    }
+    
+    // MARK: Slicing
+    
+    func rowsUpTo(limit : Int) -> [TableViewRow]
+    {
+        let end = min(self.rows.count, limit)
+        
+        return Array(self.rows[0..<end])
+    }
+}
+
+
+public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHeaderFooter
+{
+    public var element : Element
+    public var sizing : AxisSizing
+    
+    private let reuseIdentifier : ReuseIdentifier<Element>
+    
+    // MARK: Initialization
+    
+    public init(_ element : Element, sizing : AxisSizing = .default)
+    {
+        self.element = element
+        self.sizing = sizing
+        
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+    }
+    
+    // MARK: TableViewHeaderFooter
+    
+    public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    {
+        return measurementCache.use(with: self.reuseIdentifier, create: { Element.createReusableHeaderFooterView(with: self.reuseIdentifier) }) { view in
             self.element.apply(to: view, reason: .willDisplay)
             
-            return view
-        }
-        
-        public func updatedComparedTo(old : TableViewHeaderFooter) -> Bool
-        {
-            guard let old = old as? HeaderFooter<Element> else {
-                return true
-            }
-            
-            return self.element.wasUpdated(comparedTo: old.element)
-        }
-        
-        public func movedComparedTo(old : TableViewHeaderFooter) -> Bool
-        {
-            guard let old = old as? HeaderFooter<Element> else {
-                return true
-            }
-            
-            return self.element.wasMoved(comparedTo: old.element)
+            return self.sizing.height(with: view, fittingWidth: width, default: defaultHeight)
         }
     }
     
-    struct Row<Element:TableViewRowElement> : TableViewRow
+    public func applyTo(headerFooterView : UITableViewHeaderFooterView, reason : ApplyReason)
     {
-        public var identifier : AnyIdentifier
-        
-        public var element : Element
-        
-        public var sizing : AxisSizing
-        
-        public var configuration : CellConfiguration
-        
-        public var leadingActions : SwipeActions?
-        public var trailingActions : SwipeActions?
-        
-        public typealias OnTap = (Element) -> ()
-        public var onTap : OnTap?
-        
-        public typealias OnDisplay = (Element) -> ()
-        public var onDisplay : OnDisplay?
-        
-        private let reuseIdentifier : ReuseIdentifier<Element>
-        
-        public typealias CreateBinding = (Element) -> Binding<Element>
-        internal let bind : CreateBinding?
- 
-        public init(
-            _ element : Element,
-            sizing : AxisSizing = .default,
-            configuration : CellConfiguration = .default,
-            leadingActions : SwipeActions? = nil,
-            trailingActions : SwipeActions? = nil,
-            bind : CreateBinding? = nil,
-            onDisplay : OnDisplay? = nil,
-            onTap : OnTap? = nil
-            )
-        {
-            self.element = element
-            
-            self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
-            
-            self.identifier = AnyIdentifier(element.identifier)
-            
-            self.sizing = sizing
-            
-            self.configuration = configuration
-            
-            self.leadingActions = leadingActions
-            self.trailingActions = trailingActions
-            
-            self.bind = bind
-            
-            self.onDisplay = onDisplay
-            
-            if onTap == nil {
-                self.configuration.selectionStyle = .none
-            }
-            
-            self.onTap = onTap
+        guard let view = headerFooterView as? Element.HeaderFooterView else {
+            return
         }
         
-        // MARK: TableViewRow
-        
-        public func elementEqual(to other : TableViewRow) -> Bool
-        {
-            guard let other = other as? TableView.Row<Element> else {
-                return false
+        self.element.apply(to: view, reason: reason)
+    }
+    
+    public func dequeueView(in tableView: UITableView) -> UITableViewHeaderFooterView
+    {
+        let view : Element.HeaderFooterView = {
+            if let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: self.reuseIdentifier.stringValue) {
+                return view as! Element.HeaderFooterView
+            } else {
+                return Element.createReusableHeaderFooterView(with: self.reuseIdentifier)
             }
-            
-            return self.elementEqual(to: other)
+        }()
+        
+        self.element.apply(to: view, reason: .willDisplay)
+        
+        return view
+    }
+    
+    public func updatedComparedTo(old : TableViewHeaderFooter) -> Bool
+    {
+        guard let old = old as? HeaderFooter<Element> else {
+            return true
         }
         
-        internal func elementEqual(to other : TableView.Row<Element>) -> Bool
-        {
+        return self.element.wasUpdated(comparedTo: old.element)
+    }
+    
+    public func movedComparedTo(old : TableViewHeaderFooter) -> Bool
+    {
+        guard let old = old as? HeaderFooter<Element> else {
+            return true
+        }
+        
+        return self.element.wasMoved(comparedTo: old.element)
+    }
+}
+
+public struct Row<Element:TableViewRowElement> : TableViewRow
+{
+    public var identifier : AnyIdentifier
+    
+    public var element : Element
+    
+    public var sizing : AxisSizing
+    
+    public var configuration : TableView.CellConfiguration
+    
+    public var leadingActions : SwipeActions?
+    public var trailingActions : SwipeActions?
+    
+    public typealias OnTap = (Element) -> ()
+    public var onTap : OnTap?
+    
+    public typealias OnDisplay = (Element) -> ()
+    public var onDisplay : OnDisplay?
+    
+    private let reuseIdentifier : ReuseIdentifier<Element>
+    
+    public typealias CreateBinding = (Element) -> Binding<Element>
+    internal let bind : CreateBinding?
+    
+    public init(
+        _ element : Element,
+        sizing : AxisSizing = .default,
+        configuration : TableView.CellConfiguration = .default,
+        leadingActions : SwipeActions? = nil,
+        trailingActions : SwipeActions? = nil,
+        bind : CreateBinding? = nil,
+        onDisplay : OnDisplay? = nil,
+        onTap : OnTap? = nil
+        )
+    {
+        self.element = element
+        
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        
+        self.identifier = AnyIdentifier(element.identifier)
+        
+        self.sizing = sizing
+        
+        self.configuration = configuration
+        
+        self.leadingActions = leadingActions
+        self.trailingActions = trailingActions
+        
+        self.bind = bind
+        
+        self.onDisplay = onDisplay
+        
+        if onTap == nil {
+            self.configuration.selectionStyle = .none
+        }
+        
+        self.onTap = onTap
+    }
+    
+    // MARK: TableViewRow
+    
+    public func elementEqual(to other : TableViewRow) -> Bool
+    {
+        guard let other = other as? Row<Element> else {
             return false
         }
         
-        // MARK: TableViewRow_Internal
-        
-        public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
-        {
-            return self.element.measureCell(with: self.sizing, width: width, defaultHeight: defaultHeight, in: measurementCache)
-        }
-        
-        public func dequeueCell(in tableView: UITableView) -> UITableViewCell
-        {
-            let cell = self.element.cellForDisplay(in: tableView)
-            
-            self.element.apply(to: cell, reason: .willDisplay)
-            self.configuration.apply(to: cell)
-            
-            return cell
-        }
-        
-        public func performOnTap()
-        {
-            self.onTap?(self.element)
-        }
-        
-        public func updatedComparedTo(old : TableViewRow) -> Bool
-        {
-            guard let old = old as? TableView.Row<Element> else {
-                return true
-            }
-            
-            return self.element.wasUpdated(comparedTo: old.element)
-        }
-        
-        public var updateStrategy : UpdateStrategy {
-            return self.element.updateStrategy
-        }
-        
-        public func movedComparedTo(old : TableViewRow) -> Bool
-        {
-            guard let old = old as? TableView.Row<Element> else {
-                return true
-            }
-            
-            return self.element.wasMoved(comparedTo: old.element)
-        }
-        
-        @available(iOS 11.0, *)
-        public func leadingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
-        {
-            return self.leadingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
-        }
-        
-        @available(iOS 11.0, *)
-        public func trailingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
-        {
-            return self.trailingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
-        }
-        
-        public func trailingTableViewRowActions(onPerform : @escaping TableView.SwipeAction.OnPerform) -> [UITableViewRowAction]?
-        {
-            return self.trailingActions?.toUITableViewRowActions(onPerform: onPerform)
-        }
-        
-        public func newPresentationRow() -> TableViewPresentationStateRow
-        {
-            return TableView.PresentationState.Row(self)
-        }
+        return self.elementEqual(to: other)
     }
     
+    internal func elementEqual(to other : Row<Element>) -> Bool
+    {
+        return false
+    }
+    
+    // MARK: TableViewRow_Internal
+    
+    public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    {
+        return self.element.measureCell(with: self.sizing, width: width, defaultHeight: defaultHeight, in: measurementCache)
+    }
+    
+    public func dequeueCell(in tableView: UITableView) -> UITableViewCell
+    {
+        let cell = self.element.cellForDisplay(in: tableView)
+        
+        self.element.apply(to: cell, reason: .willDisplay)
+        self.configuration.apply(to: cell)
+        
+        return cell
+    }
+    
+    public func performOnTap()
+    {
+        self.onTap?(self.element)
+    }
+    
+    public func updatedComparedTo(old : TableViewRow) -> Bool
+    {
+        guard let old = old as? Row<Element> else {
+            return true
+        }
+        
+        return self.element.wasUpdated(comparedTo: old.element)
+    }
+    
+    public var updateStrategy : UpdateStrategy {
+        return self.element.updateStrategy
+    }
+    
+    public func movedComparedTo(old : TableViewRow) -> Bool
+    {
+        guard let old = old as? Row<Element> else {
+            return true
+        }
+        
+        return self.element.wasMoved(comparedTo: old.element)
+    }
+    
+    @available(iOS 11.0, *)
+    public func leadingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+    {
+        return self.leadingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
+    }
+    
+    @available(iOS 11.0, *)
+    public func trailingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
+    {
+        return self.trailingActions?.toUISwipeActionsConfiguration(onPerform: onPerform)
+    }
+    
+    public func trailingTableViewRowActions(onPerform : @escaping SwipeAction.OnPerform) -> [UITableViewRowAction]?
+    {
+        return self.trailingActions?.toUITableViewRowActions(onPerform: onPerform)
+    }
+    
+    public func newPresentationContainer() -> PresentationStateRowState
+    {
+        return PresentationState.RowState(self)
+    }
+}
+
+public extension TableView
+{
     fileprivate static func headerFooterChanged(
         _ lhs : TableViewHeaderFooter?,
         _ rhs : TableViewHeaderFooter?,
@@ -405,301 +405,296 @@ public extension TableView
     }
 }
 
-fileprivate extension TableView.Row where Element:Equatable
+fileprivate extension Row where Element:Equatable
 {
-    func elementEqual(to other : TableView.Row<Element>) -> Bool
+    func elementEqual(to other : Row<Element>) -> Bool
     {
         return self.element == other.element
     }
 }
 
-public extension TableView
+
+public struct SwipeActions
 {
-    struct SwipeActions
+    public var actions : [SwipeAction]
+    
+    public var performsFirstOnFullSwipe : Bool
+    
+    public var firstDestructiveAction : SwipeAction? {
+        return self.actions.first {
+            $0.style == .destructive
+        }
+    }
+    
+    public init(_ action : SwipeAction, performsFirstOnFullSwipe : Bool = false)
     {
-        public var actions : [SwipeAction]
+        self.init([action], performsFirstOnFullSwipe: performsFirstOnFullSwipe)
+    }
+    
+    public init(_ actions : [SwipeAction], performsFirstOnFullSwipe : Bool = false)
+    {
+        self.actions = actions
         
-        public var performsFirstOnFullSwipe : Bool
+        self.performsFirstOnFullSwipe = performsFirstOnFullSwipe
+    }
+    
+    @available(iOS 11.0, *)
+    internal func toUISwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration
+    {
+        let config = UISwipeActionsConfiguration(actions: self.actions.map {
+            $0.toUIContextualAction(onPerform: onPerform)
+        })
         
-        public var firstDestructiveAction : SwipeAction? {
-            return self.actions.first {
-                $0.style == .destructive
+        config.performsFirstActionWithFullSwipe = self.performsFirstOnFullSwipe
+        
+        return config
+    }
+    
+    internal func toUITableViewRowActions(onPerform : @escaping SwipeAction.OnPerform) -> [UITableViewRowAction]?
+    {
+        return self.actions.map {
+            $0.toUITableViewRowAction(onPerform: onPerform)
+        }
+    }
+}
+
+public struct SwipeAction
+{
+    public typealias OnPerform = (Style) -> ()
+    
+    public var title: String?
+    
+    public var style: Style = .normal
+    
+    public var backgroundColor: UIColor?
+    public var image: UIImage?
+    
+    public typealias OnTap = (SwipeAction) -> Bool
+    public var onTap : OnTap
+    
+    public init(title: String?, style: Style = .normal, backgroundColor: UIColor? = nil, image: UIImage? = nil, onTap : @escaping OnTap)
+    {
+        self.title = title
+        self.style = style
+        self.backgroundColor = backgroundColor
+        self.image = image
+        self.onTap = onTap
+    }
+    
+    @available(iOS 11.0, *)
+    internal func toUIContextualAction(onPerform : @escaping OnPerform) -> UIContextualAction
+    {
+        return UIContextualAction(
+            style: self.style.toUIContextualActionStyle(),
+            title: self.title,
+            handler: { action, view, didComplete in
+                let completed = self.onTap(self)
+                
+                if completed {
+                    onPerform(self.style)
+                }
+                
+                didComplete(completed)
+        })
+    }
+    
+    internal func toUITableViewRowAction(onPerform : @escaping OnPerform) -> UITableViewRowAction
+    {
+        return UITableViewRowAction(
+            style: self.style.toUITableViewRowActionStyle(),
+            title: self.title,
+            handler: { _, _ in
+                let completed = self.onTap(self)
+                
+                if completed {
+                    onPerform(self.style)
+                }
+        })
+    }
+    
+    public enum Style
+    {
+        case normal
+        case destructive
+        
+        public var deletesRow : Bool {
+            switch self {
+            case .normal: return false
+            case .destructive: return true
             }
         }
         
-        public init(_ action : SwipeAction, performsFirstOnFullSwipe : Bool = false)
-        {
-            self.init([action], performsFirstOnFullSwipe: performsFirstOnFullSwipe)
-        }
-        
-        public init(_ actions : [SwipeAction], performsFirstOnFullSwipe : Bool = false)
-        {
-            self.actions = actions
-            
-            self.performsFirstOnFullSwipe = performsFirstOnFullSwipe
-        }
-        
         @available(iOS 11.0, *)
-        internal func toUISwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration
+        func toUIContextualActionStyle() -> UIContextualAction.Style
         {
-            let config = UISwipeActionsConfiguration(actions: self.actions.map {
-                $0.toUIContextualAction(onPerform: onPerform)
-            })
-            
-            config.performsFirstActionWithFullSwipe = self.performsFirstOnFullSwipe
-            
-            return config
+            switch self {
+            case .normal: return .normal
+            case .destructive: return .destructive
+            }
         }
         
-        internal func toUITableViewRowActions(onPerform : @escaping SwipeAction.OnPerform) -> [UITableViewRowAction]?
+        func toUITableViewRowActionStyle() -> UITableViewRowAction.Style
         {
-            return self.actions.map {
-                $0.toUITableViewRowAction(onPerform: onPerform)
+            switch self {
+            case .normal: return .normal
+            case .destructive: return .destructive
+            }
+        }
+    }
+}
+
+
+public struct Content
+{
+    public let refreshControl : RefreshControl?
+    
+    public let header : TableViewHeaderFooter?
+    public let footer : TableViewHeaderFooter?
+    
+    public var sections : [Section]
+    
+    public var rowCount : Int {
+        return self.sections.reduce(0, { $0 + $1.rows.count })
+    }
+    
+    public init(
+        refreshControl : RefreshControl? = nil,
+        header : TableViewHeaderFooter? = nil,
+        footer : TableViewHeaderFooter? = nil,
+        sections : [Section] = []
+        )
+    {
+        self.refreshControl = refreshControl
+        
+        self.header = header
+        self.footer = footer
+        
+        self.sections = sections
+    }
+    
+    public func row(at indexPath : IndexPath) -> TableViewRow
+    {
+        let section = self.sections[indexPath.section]
+        let row = section.rows[indexPath.row]
+        
+        return row
+    }
+    
+    public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
+    {
+        return self.row(for: identifier)?.indexPath
+    }
+    
+    func row(for identifier : AnyIdentifier) -> (indexPath:IndexPath, row:TableViewRow)?
+    {
+        for (sectionIndex, section) in self.sections.enumerated() {
+            for (rowIndex, row) in section.rows.enumerated() {
+                if row.identifier == identifier {
+                    return (IndexPath(row: rowIndex, section: sectionIndex), row)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    mutating func remove(at indexPath : IndexPath)
+    {
+        self.sections[indexPath.section].rows.remove(at: indexPath.row)
+    }
+    
+    //
+    // MARK: Slicing
+    //
+    
+    struct Slice
+    {
+        static let defaultSize : Int = 250
+        
+        let containsAllRows : Bool
+        var content : Content
+        
+        init(containsAllRows : Bool, content : Content)
+        {
+            self.containsAllRows = containsAllRows
+            self.content = content
+        }
+        
+        init()
+        {
+            self.containsAllRows = true
+            self.content = Content(sections: [])
+        }
+        
+        enum UpdateReason : Equatable
+        {
+            case scrolledDown
+            case didEndDecelerating
+            
+            case scrolledToTop
+            
+            case contentChanged(animated : Bool)
+            
+            var diffsChanges : Bool {
+                /*
+                 We only diff in the case of content change to avoid visual artifacts in the table view;
+                 even with no animation type provided to batch update methods, the table view still moves
+                 rows around in an animated manner.
+                 */
+                switch self {
+                case .scrolledDown: return false
+                case .didEndDecelerating: return false
+                case .scrolledToTop: return false
+                    
+                case .contentChanged(_): return true
+                }
+            }
+            
+            var animated : Bool {
+                switch self {
+                case .scrolledDown: return false
+                case .didEndDecelerating: return false
+                case .scrolledToTop: return false
+                    
+                case .contentChanged(let animated): return animated
+                }
             }
         }
     }
     
-    struct SwipeAction
+    internal func sliceTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
     {
-        public typealias OnPerform = (Style) -> ()
+        var sliced = self
         
-        public var title: String?
+        var remaining : Int = indexPath.row + additionalRows
         
-        public var style: Style = .normal
-        
-        public var backgroundColor: UIColor?
-        public var image: UIImage?
-        
-        public typealias OnTap = (SwipeAction) -> Bool
-        public var onTap : OnTap
-        
-        public init(title: String?, style: Style = .normal, backgroundColor: UIColor? = nil, image: UIImage? = nil, onTap : @escaping OnTap)
-        {
-            self.title = title
-            self.style = style
-            self.backgroundColor = backgroundColor
-            self.image = image
-            self.onTap = onTap
-        }
-        
-        @available(iOS 11.0, *)
-        internal func toUIContextualAction(onPerform : @escaping OnPerform) -> UIContextualAction
-        {
-            return UIContextualAction(
-                style: self.style.toUIContextualActionStyle(),
-                title: self.title,
-                handler: { action, view, didComplete in
-                    let completed = self.onTap(self)
-                    
-                    if completed {
-                        onPerform(self.style)
-                    }
-                    
-                    didComplete(completed)
-            })
-        }
-        
-        internal func toUITableViewRowAction(onPerform : @escaping OnPerform) -> UITableViewRowAction
-        {
-            return UITableViewRowAction(
-                style: self.style.toUITableViewRowActionStyle(),
-                title: self.title,
-                handler: { _, _ in
-                    let completed = self.onTap(self)
-                    
-                    if completed {
-                        onPerform(self.style)
-                    }
-            })
-        }
-        
-        public enum Style
-        {
-            case normal
-            case destructive
-            
-            public var deletesRow : Bool {
-                switch self {
-                case .normal: return false
-                case .destructive: return true
+        sliced.sections = self.sections.compactMapWithIndex { sectionIndex, section in
+            if sectionIndex < indexPath.section {
+                return section
+            } else {
+                guard remaining > 0 else {
+                    return nil
                 }
-            }
-            
-            @available(iOS 11.0, *)
-            func toUIContextualActionStyle() -> UIContextualAction.Style
-            {
-                switch self {
-                case .normal: return .normal
-                case .destructive: return .destructive
-                }
-            }
-            
-            func toUITableViewRowActionStyle() -> UITableViewRowAction.Style
-            {
-                switch self {
-                case .normal: return .normal
-                case .destructive: return .destructive
-                }
+                
+                var section = section
+                section.rows = section.rowsUpTo(limit: remaining)
+                remaining -= section.rows.count
+                
+                return section
             }
         }
+        
+        return Slice(
+            containsAllRows: self.rowCount == sliced.rowCount,
+            content: sliced
+        )
     }
 }
 
 
-public extension TableView
+public extension Content
 {
-    struct Content
-    {
-        public let refreshControl : RefreshControl?
-        
-        public let header : TableViewHeaderFooter?
-        public let footer : TableViewHeaderFooter?
-        
-        public var sections : [TableView.Section]
-        
-        public var rowCount : Int {
-            return self.sections.reduce(0, { $0 + $1.rows.count })
-        }
-        
-        public init(
-            refreshControl : RefreshControl? = nil,
-            header : TableViewHeaderFooter? = nil,
-            footer : TableViewHeaderFooter? = nil,
-            sections : [TableView.Section] = []
-            )
-        {
-            self.refreshControl = refreshControl
-            
-            self.header = header
-            self.footer = footer
-            
-            self.sections = sections
-        }
-        
-        public func row(at indexPath : IndexPath) -> TableViewRow
-        {
-            let section = self.sections[indexPath.section]
-            let row = section.rows[indexPath.row]
-            
-            return row
-        }
-        
-        public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
-        {
-            return self.row(for: identifier)?.indexPath
-        }
-        
-        func row(for identifier : AnyIdentifier) -> (indexPath:IndexPath, row:TableViewRow)?
-        {
-            for (sectionIndex, section) in self.sections.enumerated() {
-                for (rowIndex, row) in section.rows.enumerated() {
-                    if row.identifier == identifier {
-                        return (IndexPath(row: rowIndex, section: sectionIndex), row)
-                    }
-                }
-            }
-            
-            return nil
-        }
-        
-        mutating func remove(at indexPath : IndexPath)
-        {
-            self.sections[indexPath.section].rows.remove(at: indexPath.row)
-        }
-        
-        //
-        // MARK: Slicing
-        //
-        
-        struct Slice
-        {
-            static let defaultSize : Int = 250
-            
-            let containsAllRows : Bool
-            var content : Content
-            
-            init(containsAllRows : Bool, content : Content)
-            {
-                self.containsAllRows = containsAllRows
-                self.content = content
-            }
-            
-            init()
-            {
-                self.containsAllRows = true
-                self.content = Content(sections: [])
-            }
-            
-            enum UpdateReason : Equatable
-            {
-                case scrolledDown
-                case didEndDecelerating
-                
-                case scrolledToTop
-                
-                case contentChanged(animated : Bool)
-                
-                var diffsChanges : Bool {
-                    /*
-                     We only diff in the case of content change to avoid visual artifacts in the table view;
-                     even with no animation type provided to batch update methods, the table view still moves
-                     rows around in an animated manner.
-                     */
-                    switch self {
-                    case .scrolledDown: return false
-                    case .didEndDecelerating: return false
-                    case .scrolledToTop: return false
-                        
-                    case .contentChanged(_): return true
-                    }
-                }
-                
-                var animated : Bool {
-                    switch self {
-                    case .scrolledDown: return false
-                    case .didEndDecelerating: return false
-                    case .scrolledToTop: return false
-                        
-                    case .contentChanged(let animated): return animated
-                    }
-                }
-            }
-        }
-        
-        internal func sliceTo(indexPath : IndexPath, plus additionalRows : Int) -> Slice
-        {
-            var sliced = self
-            
-            var remaining : Int = indexPath.row + additionalRows
-            
-            sliced.sections = self.sections.compactMapWithIndex { sectionIndex, section in
-                if sectionIndex < indexPath.section {
-                    return section
-                } else {
-                    guard remaining > 0 else {
-                        return nil
-                    }
-                    
-                    var section = section
-                    section.rows = section.rowsUpTo(limit: remaining)
-                    remaining -= section.rows.count
-                    
-                    return section
-                }
-            }
-            
-            return Slice(
-                containsAllRows: self.rowCount == sliced.rowCount,
-                content: sliced
-            )
-        }
-    }
-}
-
-
-public extension TableView.Content
-{
-    func elementsEqual(to other : TableView.Content) -> Bool
+    func elementsEqual(to other : Content) -> Bool
     {
         if self.sections.count != other.sections.count {
             return false
@@ -713,9 +708,10 @@ public extension TableView.Content
     }
 }
 
-public extension TableView.Section
+
+public extension Section
 {
-    func elementsEqual(to other : TableView.Section) -> Bool
+    func elementsEqual(to other : Section) -> Bool
     {
         if self.rows.count != other.rows.count {
             return false

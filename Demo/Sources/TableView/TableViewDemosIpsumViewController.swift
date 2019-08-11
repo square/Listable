@@ -21,18 +21,18 @@ final public class TableViewDemosIpsumViewController : UIViewController
         
         self.tableView.setContent(animated:false) { content in
             
-            content += TableView.Section(
-                header: TableView.HeaderFooter(ipsum, sizing: .thatFits(.noConstraint)),
-                footer: TableView.HeaderFooter("This is a footer!", sizing: .thatFits(.noConstraint))
+            content += Section(
+                header: HeaderFooter(ipsum, sizing: .thatFits(.noConstraint)),
+                footer: HeaderFooter("This is a footer!", sizing: .thatFits(.noConstraint))
             ) {
                 $0 += "Row 1"
                 $0 += "Row 2"
-                $0 += TableView.Row("Short row", sizing: .thatFits(.noConstraint))
-                $0 += TableView.Row(ipsum, sizing: .thatFits(.noConstraint))
+                $0 += Row("Short row", sizing: .thatFits(.noConstraint))
+                $0 += Row(ipsum, sizing: .thatFits(.noConstraint))
                 $0 += ipsum
             }
             
-            content += TableView.Section(header: TableView.HeaderFooter("Section 0.5")) { rows in
+            content += Section(header: HeaderFooter("Section 0.5")) { rows in
                 rows += [
                     "1",
                     "2",
@@ -40,7 +40,7 @@ final public class TableViewDemosIpsumViewController : UIViewController
                 ]
             }
             
-            content += TableView.Section(header: TableView.HeaderFooter("Section 1")) { rows in
+            content += Section(header: HeaderFooter("Section 1")) { rows in
                 
                 rows += "Row 1"
                 rows += "Row 2"
@@ -49,10 +49,10 @@ final public class TableViewDemosIpsumViewController : UIViewController
                 rows += .init("Row 4")
             }
             
-            content += TableView.Section(header: TableView.HeaderFooter("Section 2")) { rows in
-                rows += TableView.Row("Row 1")
-                rows += TableView.Row("Row 2")
-                rows += TableView.Row("Row 3")
+            content += Section(header: HeaderFooter("Section 2")) { rows in
+                rows += Row("Row 1")
+                rows += Row("Row 2")
+                rows += Row("Row 3")
             }
         }
     }
