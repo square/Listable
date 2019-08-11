@@ -9,7 +9,7 @@ import UIKit
 import ListableCore
 
 
-public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
+public struct DefaultHeaderFooter : HeaderFooterElement, Equatable
 {
     var text : String
         
@@ -31,7 +31,7 @@ public struct DefaultHeaderFooter : TableViewHeaderFooterElement, Equatable
 }
 
 
-public final class UIViewRowElement<View:UIView> : TableViewRowElement, Equatable
+public final class UIViewRowElement<View:UIView> : RowElement, Equatable
 {
     public typealias TableViewCell = Cell
     
@@ -113,7 +113,7 @@ public final class UIViewRowElement<View:UIView> : TableViewRowElement, Equatabl
     }
 }
 
-public struct SubtitleRow : TableViewRowElement, Equatable
+public struct SubtitleRow : RowElement, Equatable
 {
     var text : String
     var textLineCount : Int
@@ -153,7 +153,7 @@ public struct SubtitleRow : TableViewRowElement, Equatable
     }
 }
 
-public struct DefaultRow : TableViewRowElement, Equatable
+public struct DefaultRow : RowElement, Equatable
 {
     var text : String
     var lineCount : Int
@@ -184,7 +184,7 @@ public struct DefaultRow : TableViewRowElement, Equatable
     }
 }
 
-extension String : TableViewRowElement, TableViewHeaderFooterElement
+extension String : RowElement, HeaderFooterElement
 {
     // MARK: TableViewRowElement
     

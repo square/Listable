@@ -15,9 +15,9 @@ public protocol PresentationStateRowState : PresentationStateRowState_Internal
 public protocol PresentationStateRowState_Internal : AnyObject
 {
     var anyIdentifier : AnyIdentifier { get }
-    var anyModel : TableViewRow { get }
+    var anyModel : AnyRow { get }
     
-    func update(with old : TableViewRow, new : TableViewRow)
+    func update(with old : AnyRow, new : AnyRow)
     
     func willDisplay(with cell : UITableViewCell)
     func didEndDisplay()
@@ -73,7 +73,7 @@ final class PresentationState
         return row
     }
     
-    func update(with diff : SectionedDiff<Section, TableViewRow>, slice : Content.Slice)
+    func update(with diff : SectionedDiff<Section, AnyRow>, slice : Content.Slice)
     {
         self.containsAllRows = slice.containsAllRows
         
@@ -150,7 +150,7 @@ final class PresentationState
         fileprivate func update(
             with oldSection : Section,
             new newSection : Section,
-            changes : SectionedDiff<Section, TableViewRow>.RowChanges
+            changes : SectionedDiff<Section, AnyRow>.RowChanges
             )
         {
             self.model = newSection
@@ -166,7 +166,7 @@ final class PresentationState
         }
     }
     
-    final class RowState<Element:TableViewRowElement> : PresentationStateRowState
+    final class RowState<Element:RowElement> : PresentationStateRowState
     {
         var model : Row<Element>
         
@@ -213,11 +213,11 @@ final class PresentationState
         
         let anyIdentifier : AnyIdentifier
         
-        var anyModel : TableViewRow {
+        var anyModel : AnyRow {
             return self.model
         }
         
-        public func update(with old : TableViewRow, new : TableViewRow)
+        public func update(with old : AnyRow, new : AnyRow)
         {
             self.model = new as! Row<Element>
         }

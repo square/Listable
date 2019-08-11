@@ -9,11 +9,11 @@ import UIKit
 import ListableCore
 
 
-public protocol TableViewHeaderFooter : TableViewHeaderFooter_Internal
+public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
 {
 }
 
-public protocol TableViewHeaderFooter_Internal
+public protocol AnyHeaderFooter_Internal
 {
     func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
     
@@ -21,18 +21,18 @@ public protocol TableViewHeaderFooter_Internal
     
     func applyTo(headerFooterView : UITableViewHeaderFooterView, reason: ApplyReason)
     
-    func updatedComparedTo(old : TableViewHeaderFooter) -> Bool
-    func movedComparedTo(old : TableViewHeaderFooter) -> Bool
+    func updatedComparedTo(old : AnyHeaderFooter) -> Bool
+    func movedComparedTo(old : AnyHeaderFooter) -> Bool
 }
 
-public protocol TableViewRow : TableViewRow_Internal
+public protocol AnyRow : AnyRow_Internal
 {
     var identifier : AnyIdentifier { get }
     
-    func elementEqual(to other : TableViewRow) -> Bool
+    func elementEqual(to other : AnyRow) -> Bool
 }
 
-public protocol TableViewRow_Internal
+public protocol AnyRow_Internal
 {
     func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
     
@@ -40,10 +40,10 @@ public protocol TableViewRow_Internal
     
     func performOnTap()
     
-    func updatedComparedTo(old : TableViewRow) -> Bool
+    func updatedComparedTo(old : AnyRow) -> Bool
     var updateStrategy : UpdateStrategy { get }
     
-    func movedComparedTo(old : TableViewRow) -> Bool
+    func movedComparedTo(old : AnyRow) -> Bool
     
     @available(iOS 11.0, *)
     func leadingSwipeActionsConfiguration(onPerform : @escaping SwipeAction.OnPerform) -> UISwipeActionsConfiguration?
@@ -60,10 +60,10 @@ public struct Section
 {
     public let identifier : AnyHashable
     
-    public var header : TableViewHeaderFooter?
-    public var footer : TableViewHeaderFooter?
+    public var header : AnyHeaderFooter?
+    public var footer : AnyHeaderFooter?
     
-    public var rows : [TableViewRow]
+    public var rows : [AnyRow]
     
     public init(
         header headerString: String,
@@ -75,7 +75,7 @@ public struct Section
         
         contentBuilder(&builder)
         
-        var footer : TableViewHeaderFooter?
+        var footer : AnyHeaderFooter?
         
         if let footerString = footerString {
             footer = HeaderFooter(footerString)
@@ -91,8 +91,8 @@ public struct Section
     
     public init<Identifier:Hashable>(
         identifier : Identifier,
-        header : TableViewHeaderFooter? = nil,
-        footer : TableViewHeaderFooter? = nil,
+        header : AnyHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
         content contentBuilder : (inout SectionBuilder) -> ()
         )
     {
@@ -108,9 +108,9 @@ public struct Section
         )
     }
     
-    public init<Header:TableViewHeaderFooterElement>(
+    public init<Header:HeaderFooterElement>(
         header : HeaderFooter<Header>,
-        footer : TableViewHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
         content contentBuilder : (inout SectionBuilder) -> ()
         )
     {
@@ -128,9 +128,9 @@ public struct Section
     
     public init<Identifier:Hashable>(
         identifier : Identifier,
-        header : TableViewHeaderFooter? = nil,
-        footer : TableViewHeaderFooter? = nil,
-        rows : [TableViewRow] = []
+        header : AnyHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
+        rows : [AnyRow] = []
         )
     {
         self.identifier = AnyHashable(identifier)
@@ -161,7 +161,7 @@ public struct Section
     
     // MARK: Slicing
     
-    func rowsUpTo(limit : Int) -> [TableViewRow]
+    func rowsUpTo(limit : Int) -> [AnyRow]
     {
         let end = min(self.rows.count, limit)
         
@@ -170,7 +170,7 @@ public struct Section
 }
 
 
-public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHeaderFooter
+public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
 {
     public var element : Element
     public var sizing : AxisSizing
@@ -187,7 +187,7 @@ public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHead
         self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
     }
     
-    // MARK: TableViewHeaderFooter
+    // MARK: AnyHeaderFooter_Internal
     
     public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
     {
@@ -222,7 +222,7 @@ public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHead
         return view
     }
     
-    public func updatedComparedTo(old : TableViewHeaderFooter) -> Bool
+    public func updatedComparedTo(old : AnyHeaderFooter) -> Bool
     {
         guard let old = old as? HeaderFooter<Element> else {
             return true
@@ -231,7 +231,7 @@ public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHead
         return self.element.wasUpdated(comparedTo: old.element)
     }
     
-    public func movedComparedTo(old : TableViewHeaderFooter) -> Bool
+    public func movedComparedTo(old : AnyHeaderFooter) -> Bool
     {
         guard let old = old as? HeaderFooter<Element> else {
             return true
@@ -241,7 +241,7 @@ public struct HeaderFooter<Element:TableViewHeaderFooterElement> : TableViewHead
     }
 }
 
-public struct Row<Element:TableViewRowElement> : TableViewRow
+public struct Row<Element:RowElement> : AnyRow
 {
     public var identifier : AnyIdentifier
     
@@ -300,9 +300,9 @@ public struct Row<Element:TableViewRowElement> : TableViewRow
         self.onTap = onTap
     }
     
-    // MARK: TableViewRow
+    // MARK: AnyRow
     
-    public func elementEqual(to other : TableViewRow) -> Bool
+    public func elementEqual(to other : AnyRow) -> Bool
     {
         guard let other = other as? Row<Element> else {
             return false
@@ -316,7 +316,7 @@ public struct Row<Element:TableViewRowElement> : TableViewRow
         return false
     }
     
-    // MARK: TableViewRow_Internal
+    // MARK: AnyRow_Internal
     
     public func heightWith(width : CGFloat, default defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
     {
@@ -338,7 +338,7 @@ public struct Row<Element:TableViewRowElement> : TableViewRow
         self.onTap?(self.element)
     }
     
-    public func updatedComparedTo(old : TableViewRow) -> Bool
+    public func updatedComparedTo(old : AnyRow) -> Bool
     {
         guard let old = old as? Row<Element> else {
             return true
@@ -351,7 +351,7 @@ public struct Row<Element:TableViewRowElement> : TableViewRow
         return self.element.updateStrategy
     }
     
-    public func movedComparedTo(old : TableViewRow) -> Bool
+    public func movedComparedTo(old : AnyRow) -> Bool
     {
         guard let old = old as? Row<Element> else {
             return true
@@ -386,9 +386,9 @@ public struct Row<Element:TableViewRowElement> : TableViewRow
 public extension TableView
 {
     fileprivate static func headerFooterChanged(
-        _ lhs : TableViewHeaderFooter?,
-        _ rhs : TableViewHeaderFooter?,
-        _ compare : (TableViewHeaderFooter, TableViewHeaderFooter) -> Bool
+        _ lhs : AnyHeaderFooter?,
+        _ rhs : AnyHeaderFooter?,
+        _ compare : (AnyHeaderFooter, AnyHeaderFooter) -> Bool
         ) -> Bool
     {
         if let lhs = lhs, let rhs = rhs {
@@ -548,8 +548,8 @@ public struct Content
 {
     public let refreshControl : RefreshControl?
     
-    public let header : TableViewHeaderFooter?
-    public let footer : TableViewHeaderFooter?
+    public let header : AnyHeaderFooter?
+    public let footer : AnyHeaderFooter?
     
     public var sections : [Section]
     
@@ -559,8 +559,8 @@ public struct Content
     
     public init(
         refreshControl : RefreshControl? = nil,
-        header : TableViewHeaderFooter? = nil,
-        footer : TableViewHeaderFooter? = nil,
+        header : AnyHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
         sections : [Section] = []
         )
     {
@@ -572,7 +572,7 @@ public struct Content
         self.sections = sections
     }
     
-    public func row(at indexPath : IndexPath) -> TableViewRow
+    public func row(at indexPath : IndexPath) -> AnyRow
     {
         let section = self.sections[indexPath.section]
         let row = section.rows[indexPath.row]
@@ -585,7 +585,7 @@ public struct Content
         return self.row(for: identifier)?.indexPath
     }
     
-    func row(for identifier : AnyIdentifier) -> (indexPath:IndexPath, row:TableViewRow)?
+    func row(for identifier : AnyIdentifier) -> (indexPath:IndexPath, row:AnyRow)?
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (rowIndex, row) in section.rows.enumerated() {
@@ -721,9 +721,9 @@ public extension Section
     }
 }
 
-public extension Array where Element == TableViewRow
+public extension Array where Element == AnyRow
 {
-    func elementsEqual(to other : [TableViewRow]) -> Bool
+    func elementsEqual(to other : [AnyRow]) -> Bool
     {
         if self.count != other.count {
             return false

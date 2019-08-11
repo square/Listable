@@ -112,7 +112,7 @@ struct Itemization : Equatable
     }
 }
 
-struct AmountRow : ProxyElement, TableViewRowViewElement, Equatable
+struct AmountRow : ProxyElement, RowViewElement, Equatable
 {
     var title : String
     var detail : String
@@ -148,7 +148,7 @@ struct AmountRow : ProxyElement, TableViewRowViewElement, Equatable
     }
 }
 
-struct ItemizationRow : ProxyElement, TableViewRowViewElement, Equatable
+struct ItemizationRow : ProxyElement, RowViewElement, Equatable
 {
     var itemization : Itemization
     

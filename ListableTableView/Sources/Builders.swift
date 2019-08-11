@@ -30,8 +30,8 @@ public struct ContentBuilder
     
     public var refreshControl : RefreshControl?
     
-    public var header : TableViewHeaderFooter?
-    public var footer : TableViewHeaderFooter?
+    public var header : AnyHeaderFooter?
+    public var footer : AnyHeaderFooter?
     
     public var sections : [Section] = []
     
@@ -59,20 +59,20 @@ public struct ContentBuilder
 
 public struct SectionBuilder
 {
-    public var rows : [TableViewRow] = []
+    public var rows : [AnyRow] = []
     
     public var isEmpty : Bool {
         return self.rows.isEmpty
     }
     
     // Adds the given row to the builder.
-    public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : Row<Element>)
+    public static func += <Element:RowElement>(lhs : inout SectionBuilder, rhs : Row<Element>)
     {
         lhs.rows.append(rhs)
     }
     
     // Converts `Element` which conforms to `TableViewElement` into Rows.
-    public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : Element)
+    public static func += <Element:RowElement>(lhs : inout SectionBuilder, rhs : Element)
     {
         let row = Row(rhs)
         
@@ -80,19 +80,19 @@ public struct SectionBuilder
     }
     
     // Allows mixed arrays of different types of rows.
-    public static func += (lhs : inout SectionBuilder, rhs : [TableViewRow])
+    public static func += (lhs : inout SectionBuilder, rhs : [AnyRow])
     {
         lhs.rows += rhs
     }
     
     // Arrays of the same type of rows – allows `[.init(...)]` syntax within the array.
-    public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : [Row<Element>])
+    public static func += <Element:RowElement>(lhs : inout SectionBuilder, rhs : [Row<Element>])
     {
         lhs.rows += rhs
     }
     
     // Converts `Element` which conforms to `TableViewRowValue` into Rows.
-    public static func += <Element:TableViewRowElement>(lhs : inout SectionBuilder, rhs : [Element])
+    public static func += <Element:RowElement>(lhs : inout SectionBuilder, rhs : [Element])
     {
         let rows = rhs.map {
             Row($0)
