@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A8AEF7C2314477600CCB7F3 /* TableViewDemosBlueprintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7B2314477600CCB7F3 /* TableViewDemosBlueprintViewController.swift */; };
+		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
+		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
+		0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF802315F68400CCB7F3 /* planet-money.jpg */; };
+		0A8AEF882315F68400CCB7F3 /* outside-lands.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF812315F68400CCB7F3 /* outside-lands.jpg */; };
+		0A8AEF892315F68400CCB7F3 /* the-impact.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF822315F68400CCB7F3 /* the-impact.png */; };
+		0A8AEF8A2315F68400CCB7F3 /* wait-wait.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF832315F68400CCB7F3 /* wait-wait.png */; };
+		0A8AEF8B2315F68400CCB7F3 /* nancy.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF842315F68400CCB7F3 /* nancy.png */; };
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
 		0AEB96D622FBCC1D00341DFF /* TableViewDemosRandomResortViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96C522FBCC1D00341DFF /* TableViewDemosRandomResortViewController.swift */; };
@@ -28,6 +36,14 @@
 
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		0A8AEF7B2314477600CCB7F3 /* TableViewDemosBlueprintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDemosBlueprintViewController.swift; sourceTree = "<group>"; };
+		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
+		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
+		0A8AEF802315F68400CCB7F3 /* planet-money.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "planet-money.jpg"; sourceTree = "<group>"; };
+		0A8AEF812315F68400CCB7F3 /* outside-lands.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "outside-lands.jpg"; sourceTree = "<group>"; };
+		0A8AEF822315F68400CCB7F3 /* the-impact.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "the-impact.png"; sourceTree = "<group>"; };
+		0A8AEF832315F68400CCB7F3 /* wait-wait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-wait.png"; sourceTree = "<group>"; };
+		0A8AEF842315F68400CCB7F3 /* nancy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nancy.png; sourceTree = "<group>"; };
 		0AEB96AE22FBCBA500341DFF /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEB96B822FBCBA600341DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEB96BB22FBCBA600341DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -62,6 +78,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A8AEF7A2314476300CCB7F3 /* Blueprint */ = {
+			isa = PBXGroup;
+			children = (
+				0A8AEF7B2314477600CCB7F3 /* TableViewDemosBlueprintViewController.swift */,
+			);
+			path = Blueprint;
+			sourceTree = "<group>";
+		};
+		0A8AEF7D2315F68400CCB7F3 /* Podcasts */ = {
+			isa = PBXGroup;
+			children = (
+				0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */,
+				0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */,
+				0A8AEF802315F68400CCB7F3 /* planet-money.jpg */,
+				0A8AEF812315F68400CCB7F3 /* outside-lands.jpg */,
+				0A8AEF822315F68400CCB7F3 /* the-impact.png */,
+				0A8AEF832315F68400CCB7F3 /* wait-wait.png */,
+				0A8AEF842315F68400CCB7F3 /* nancy.png */,
+			);
+			path = Podcasts;
+			sourceTree = "<group>";
+		};
 		0AEB96A522FBCBA500341DFF = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +135,7 @@
 			children = (
 				0AEB96C422FBCC1D00341DFF /* TableView */,
 				0AEB96CD22FBCC1D00341DFF /* CollectionView */,
+				0A8AEF7A2314476300CCB7F3 /* Blueprint */,
 				0AEB96CF22FBCC1D00341DFF /* DemosRootViewController.swift */,
 				0AEB96D222FBCC1D00341DFF /* Blueprint.swift */,
 				0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */,
@@ -131,6 +170,7 @@
 		0AEB96E522FBCC5300341DFF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0A8AEF7D2315F68400CCB7F3 /* Podcasts */,
 				0AEB96E622FBCC5300341DFF /* dictionary.json */,
 			);
 			path = Resources;
@@ -214,9 +254,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */,
+				0A8AEF882315F68400CCB7F3 /* outside-lands.jpg in Resources */,
 				0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */,
+				0A8AEF8B2315F68400CCB7F3 /* nancy.png in Resources */,
+				0A8AEF8A2315F68400CCB7F3 /* wait-wait.png in Resources */,
 				0AEB96E722FBCC5400341DFF /* dictionary.json in Resources */,
 				0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */,
+				0A8AEF892315F68400CCB7F3 /* the-impact.png in Resources */,
+				0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */,
+				0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +329,7 @@
 				0AEB96D722FBCC1D00341DFF /* TableViewDemosIpsumViewController.swift in Sources */,
 				0AEB96D622FBCC1D00341DFF /* TableViewDemosRandomResortViewController.swift in Sources */,
 				0AEB96DD22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift in Sources */,
+				0A8AEF7C2314477600CCB7F3 /* TableViewDemosBlueprintViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

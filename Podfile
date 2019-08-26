@@ -10,6 +10,8 @@ target 'Demo' do
 	pod 'ListableTableView', :path => 'ListableTableView.podspec', :testspecs => ['Tests']
 	pod 'ListableCollectionView', :path => 'ListableCollectionView.podspec', :testspecs => ['Tests']
 
+	pod 'ListableBlueprintTableView', :path => 'ListableBlueprintTableView.podspec', :testspecs => ['Tests']
+
 	pod 'BlueprintUI'
 	pod 'BlueprintUICommonControls'
 end

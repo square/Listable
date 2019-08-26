@@ -98,6 +98,17 @@ public final class DemosRootViewController : UIViewController
                         self.push(CollectionViewDemoFlowLayoutViewController())
                 })
             }
+            
+            table += Section(header: "Blueprint") { rows in
+                rows += Row(
+                    SubtitleRow(
+                        text: "Basic Table View",
+                        detail: "Creating a Blueprint view backed by Listable."
+                    ),
+                    onTap : { _ in
+                        self.push(TableViewDemosBlueprintViewController())
+                })
+            }
         }
     }
 }
