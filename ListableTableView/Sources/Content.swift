@@ -73,7 +73,7 @@ public struct Content
     
     struct Slice
     {
-        static let defaultSize : Int = 250
+        static let defaultSize : Int = 10_000
         
         let containsAllRows : Bool
         var content : Content
