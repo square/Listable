@@ -15,8 +15,6 @@ Pod::Spec.new do |s|
   s.dependency 'ListableCore'
 
   s.source_files = 'ListableTableView/Sources/**/*.{swift}'
-  s.private_header_files = 'ListableTableView/Sources/**/Internal/**/*.h'
-  s.resource_bundle = { 'ListableTableViewResources' => ['ListableTableView/Resources/*'] }
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'ListableTableView/Tests/**/*.{swift}'

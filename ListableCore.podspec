@@ -13,8 +13,6 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.source_files = 'ListableCore/Sources/**/*.{swift}'
-  s.private_header_files = 'ListableCore/Sources/**/Internal/**/*.h'
-  s.resource_bundle = { 'ListableCoreResources' => ['ListableCore/Resources/*'] }
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'ListableCore/Tests/**/*.{swift}'
