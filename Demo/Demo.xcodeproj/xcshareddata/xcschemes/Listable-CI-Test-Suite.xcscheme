@@ -41,6 +41,15 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "0AEB96AD22FBCBA500341DFF"
+            BuildableName = "Demo.app"
+            BlueprintName = "Demo"
+            ReferencedContainer = "container:Demo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -66,9 +75,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "39FCAA36A3F11D747B7635A64DDD0402"
-               BuildableName = "ListableCollectionView-Unit-Tests.xctest"
-               BlueprintName = "ListableCollectionView-Unit-Tests"
+               BlueprintIdentifier = "04099BB01E02215D58299914B20C8D1B"
+               BuildableName = "Listable-Unit-Tests.xctest"
+               BlueprintName = "Listable-Unit-Tests"
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -76,24 +85,13 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "42E597D5C7B3B1791477E38BDC8C3FDD"
-               BuildableName = "ListableBlueprintTableView-Unit-Tests.xctest"
-               BlueprintName = "ListableBlueprintTableView-Unit-Tests"
+               BlueprintIdentifier = "FEDB08DE1F9CE90D4A66BB17EA1E00F3"
+               BuildableName = "BlueprintLists-Unit-Tests.xctest"
+               BlueprintName = "BlueprintLists-Unit-Tests"
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0AEB96AD22FBCBA500341DFF"
-            BuildableName = "Demo.app"
-            BlueprintName = "Demo"
-            ReferencedContainer = "container:Demo.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -115,8 +113,6 @@
             ReferencedContainer = "container:Demo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

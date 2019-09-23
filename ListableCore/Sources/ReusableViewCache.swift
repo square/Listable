@@ -10,12 +10,9 @@ import Foundation
 
 public final class ReusableViewCache
 {
-    private var views : [String:[Any]]
+    private var views : [String:[Any]] = [:]
     
-    public init()
-    {
-        self.views = [:]
-    }
+    public init() {}
     
     public func push<Content,View>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
     {

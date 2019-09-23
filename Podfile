@@ -4,11 +4,11 @@ project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
 
 target 'Demo' do
-	pod 'ListableTableView', :path => 'ListableTableView.podspec', :testspecs => ['Tests']
-	pod 'ListableCollectionView', :path => 'ListableCollectionView.podspec', :testspecs => ['Tests']
+	pod 'Listable', :path => 'Listable.podspec', :testspecs => ['Tests']
 	pod 'ListableCore', :path => 'ListableCore.podspec', :testspecs => ['Tests']
+	pod 'BlueprintLists', :path => 'BlueprintLists.podspec', :testspecs => ['Tests']
 
-	pod 'ListableBlueprintTableView', :path => 'ListableBlueprintTableView.podspec', :testspecs => ['Tests']
+	pod 'ListableTableView', :path => 'ListableTableView.podspec', :testspecs => ['Tests']
 
 	pod 'BlueprintUI'
 	pod 'BlueprintUICommonControls'

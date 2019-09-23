@@ -1,0 +1,175 @@
+//
+//  Section.swift
+//  Listable
+//
+//  Created by Kyle Van Essen on 8/10/19.
+//
+
+import ListableCore
+
+
+
+public struct Section
+{
+    //
+    // MARK: Public Properties
+    //
+    
+    public var info : AnySectionInfo
+    
+    public var layout : Layout
+    
+    public var header : AnyHeaderFooter?
+    public var footer : AnyHeaderFooter?
+    
+    public var items : [AnyItem]
+    
+    //
+    // MARK: Initialization
+    //
+    
+    public init<Identifier:Hashable>(
+        identifier : Identifier,
+        layout : Layout = Layout(),
+        header : AnyHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
+        content contentBuilder : (inout SectionBuilder) -> ()
+        )
+    {
+        var builder = SectionBuilder()
+        
+        contentBuilder(&builder)
+        
+        self.init(
+            info: HashableSectionInfo(identifier),
+            layout: layout,
+            header: header,
+            footer: footer,
+            items: builder.items
+        )
+    }
+    
+    public init<Info:SectionInfo>(
+        info: Info,
+        layout : Layout = Layout(),
+        header : AnyHeaderFooter? = nil,
+        footer : AnyHeaderFooter? = nil,
+        items : [AnyItem] = []
+        )
+    {
+        self.info = info
+        
+        self.layout = layout
+        
+        self.header = header
+        self.footer = footer
+        
+        self.items = items
+    }
+    
+    //
+    // MARK: Slicing
+    //
+    
+    internal func itemsUpTo(limit : Int) -> [AnyItem]
+    {
+        let end = min(self.items.count, limit)
+        
+        return Array(self.items[0..<end])
+    }
+}
+
+
+public extension Section
+{
+    struct Layout
+    {
+        public var columns : Int
+        public var spacing : CGFloat
+        
+        public init(columns : Int = 1, spacing : CGFloat = 0.0)
+        {
+            precondition(columns >= 1, "Columns must be greater than or equal to 1.")
+            precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
+            
+            self.columns = columns
+            self.spacing = spacing
+        }
+    }
+}
+
+
+public protocol SectionInfo : AnySectionInfo
+{
+    //
+    // MARK: Identifying Content & Changes
+    //
+    
+    var identifier : Identifier<Self> { get }
+    
+    func wasMoved(comparedTo other : Self) -> Bool
+}
+
+
+public protocol AnySectionInfo
+{
+    //
+    // MARK: Identifying Content & Changes
+    //
+    
+    var anyIdentifier : AnyIdentifier { get }
+    
+    func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool
+}
+
+
+public extension SectionInfo
+{
+    var anyIdentifier : AnyIdentifier {
+        return AnyIdentifier(self.identifier)
+    }
+    
+    func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool
+    {
+        guard let other = other as? Self else {
+            return true
+        }
+        
+        return self.wasMoved(comparedTo: other)
+    }
+}
+
+
+public extension Section
+{
+    func elementsEqual(to other : Section) -> Bool
+    {
+        if self.items.count != other.items.count {
+            return false
+        }
+        
+        return self.items.elementsEqual(to: other.items)
+    }
+}
+
+
+private struct HashableSectionInfo<Value:Hashable> : SectionInfo
+{
+    var value : Value
+    
+    init(_ value : Value)
+    {
+        self.value = value
+    }
+    
+    // MARK: SectionInfo
+    
+    var identifier : Identifier<Self> {
+        return .init(self.value)
+    }
+    
+    func wasMoved(comparedTo other : Self) -> Bool
+    {
+        return self.value != other.value
+    }
+}

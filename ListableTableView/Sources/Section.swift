@@ -5,10 +5,12 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
+import ListableCore
+
 
 public struct Section
 {
-    public let identifier : AnyHashable
+    public let identifier : AnyIdentifier
     
     public var header : AnyHeaderFooter?
     public var footer : AnyHeaderFooter?
@@ -83,7 +85,7 @@ public struct Section
         rows : [AnyRow] = []
         )
     {
-        self.identifier = AnyHashable(identifier)
+        self.identifier = AnyIdentifier(ListableCore.Identifier<Identifier>(identifier))
         
         self.header = header
         self.footer = footer

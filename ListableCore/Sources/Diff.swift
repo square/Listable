@@ -8,17 +8,16 @@
 import Foundation
 
 
-public struct SectionedDiff<Section, Row>
+public struct SectionedDiff<Section, Item>
 {
     public let old : [Section]
     public let new : [Section]
     
     public let changes : SectionChanges
+    public let aggregatedChanges : AggregatedChanges
     
     public init(old : [Section], new: [Section], configuration : Configuration)
     {
-        // Set up base state.
-        
         self.old = old
         self.new = new
         
@@ -27,6 +26,8 @@ public struct SectionedDiff<Section, Row>
             new: new,
             configuration: configuration
         )
+        
+        self.aggregatedChanges = AggregatedChanges(sectionChanges: self.changes)
     }
     
     public static func calculate(on queue : DispatchQueue, old : [Section], new: [Section], configuration : Configuration, completion : @escaping (SectionedDiff) -> ())
@@ -42,50 +43,47 @@ public struct SectionedDiff<Section, Row>
         public var moveDetection : MoveDetection
         
         public var section : SectionProviders
-        public var row : RowProviders
+        public var item : ItemProviders
         
-        public init(moveDetection : MoveDetection = .checkAll, section : SectionProviders, row : RowProviders)
+        public init(moveDetection : MoveDetection = .checkAll, section : SectionProviders, item : ItemProviders)
         {
             self.moveDetection = moveDetection
             
             self.section = section
-            self.row = row
+            self.item = item
         }
         
         public struct SectionProviders
         {
-            public var identifier : (Section) -> AnyHashable
+            public var identifier : (Section) -> AnyIdentifier
             
-            public var rows : (Section) -> [Row]
+            public var items : (Section) -> [Item]
             
-            public var updated : (Section, Section) -> Bool
             public var movedHint : (Section, Section) -> Bool
             
             public init(
-                identifier : @escaping (Section) -> AnyHashable,
-                rows : @escaping (Section) -> [Row],
-                updated : @escaping (Section, Section) -> Bool,
+                identifier : @escaping (Section) -> AnyIdentifier,
+                items : @escaping (Section) -> [Item],
                 movedHint : @escaping (Section, Section) -> Bool
             )
             {
                 self.identifier = identifier
-                self.rows = rows
-                self.updated = updated
+                self.items = items
                 self.movedHint = movedHint
             }
         }
         
-        public struct RowProviders
+        public struct ItemProviders
         {
-            public var identifier : (Row) -> AnyHashable
+            public var identifier : (Item) -> AnyIdentifier
             
-            public var updated : (Row, Row) -> Bool
-            public var movedHint : (Row, Row) -> Bool
+            public var updated : (Item, Item) -> Bool
+            public var movedHint : (Item, Item) -> Bool
             
             public init(
-                identifier : @escaping (Row) -> AnyHashable,
-                updated : @escaping (Row, Row) -> Bool,
-                movedHint : @escaping (Row, Row) -> Bool
+                identifier : @escaping (Item) -> AnyIdentifier,
+                updated : @escaping (Item, Item) -> Bool,
+                movedHint : @escaping (Item, Item) -> Bool
             )
             {
                 self.identifier = identifier
@@ -97,16 +95,15 @@ public struct SectionedDiff<Section, Row>
     
     public struct SectionChanges
     {
-        public var added : [Added]
-        public var removed : [Removed]
+        public let added : [Added]
+        public let removed : [Removed]
         
-        public var moved : [Moved]
-        public var updated : [Updated]
-        public var noChange : [NoChange]
+        public let moved : [Moved]
+        public let noChange : [NoChange]
         
-        public var sectionsChangeCount : Int
-        public var rowsChangeCount : Int
-        
+        public let sectionsChangeCount : Int
+        public let itemsChangeCount : Int
+                
         private let diff : ArrayDiff<Section>
         
         public init(old : [Section], new : [Section], configuration : Configuration)
@@ -117,7 +114,7 @@ public struct SectionedDiff<Section, Row>
                 configuration: .init(moveDetection: configuration.moveDetection),
                 identifierProvider: { configuration.section.identifier($0) },
                 movedHint: { configuration.section.movedHint($0, $1) },
-                updated: { configuration.section.updated($0, $1) }
+                updated: { _, _ in false }
             )
             
             self.added = diff.added.map {
@@ -141,29 +138,16 @@ public struct SectionedDiff<Section, Row>
                     oldValue: $0.old,
                     newValue: $0.new,
                     
-                    rowChanges: SectionedDiff.RowChanges(
+                    itemChanges: SectionedDiff.ItemChanges(
                         old: $0.old,
+                        oldIndex: $0.oldIndex,
                         new: $0.new,
+                        newIndex: $0.newIndex,
                         configuration: configuration
                     )
                 )
             }
-            
-            self.updated = diff.updated.map {
-                Updated(
-                    oldIndex: $0.oldIndex,
-                    newIndex: $0.newIndex,
-                    oldValue: $0.old,
-                    newValue: $0.new,
-                    
-                    rowChanges: SectionedDiff.RowChanges(
-                        old: $0.old,
-                        new: $0.new,
-                        configuration: configuration
-                    )
-                )
-            }
-            
+                        
             self.noChange = diff.noChange.map {
                 return NoChange(
                     oldIndex: $0.oldIndex,
@@ -171,9 +155,11 @@ public struct SectionedDiff<Section, Row>
                     oldValue: $0.old,
                     newValue: $0.new,
                     
-                    rowChanges: SectionedDiff.RowChanges(
+                    itemChanges: SectionedDiff.ItemChanges(
                         old: $0.old,
+                        oldIndex: $0.oldIndex,
                         new: $0.new,
+                        newIndex: $0.newIndex,
                         configuration: configuration
                     )
                 )
@@ -182,12 +168,12 @@ public struct SectionedDiff<Section, Row>
             self.sectionsChangeCount = self.added.count
                 + self.removed.count
                 + self.moved.count
-                + self.updated.count
             
-            self.rowsChangeCount =
-                self.moved.reduce(0, { $0 + $1.rowChanges.changeCount }) +
-                self.updated.reduce(0, { $0 + $1.rowChanges.changeCount }) +
-                self.noChange.reduce(0, { $0 + $1.rowChanges.changeCount })
+            self.itemsChangeCount =
+                self.moved.reduce(0, { $0 + $1.itemChanges.changeCount }) +
+                self.noChange.reduce(0, { $0 + $1.itemChanges.changeCount })
+            
+            precondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
         
         public struct Added
@@ -212,18 +198,7 @@ public struct SectionedDiff<Section, Row>
             public let oldValue : Section
             public let newValue : Section
             
-            public let rowChanges : RowChanges
-        }
-        
-        public struct Updated
-        {
-            public let oldIndex : Int
-            public let newIndex : Int
-            
-            public let oldValue : Section
-            public let newValue : Section
-            
-            public let rowChanges : RowChanges
+            public let itemChanges : ItemChanges
         }
         
         public struct NoChange
@@ -234,61 +209,128 @@ public struct SectionedDiff<Section, Row>
             public let oldValue : Section
             public let newValue : Section
             
-            public let rowChanges : RowChanges
+            public let itemChanges : ItemChanges
         }
     }
     
-    public struct RowChanges
+    public struct AggregatedChanges
     {
-        public var added : [Added]
-        public var removed : [Removed]
+        public var deletedSections : [SectionChanges.Removed] = []
+        public var insertedSections : [SectionChanges.Added] = []
+        public var movedSections : [SectionChanges.Moved] = []
         
-        public var moved : [Moved]
-        public var updated : [Updated]
-        public var noChange : [NoChange]
+        public var deletedItems : [ItemChanges.Removed] = []
+        public var insertedItems : [ItemChanges.Added] = []
+        public var updatedItems : [ItemChanges.Updated] = []
+        public var movedItems : [ItemChanges.Moved] = []
         
-        public var changeCount : Int
-        
-        public let diff : ArrayDiff<Row>
+        init(sectionChanges changes : SectionChanges)
+        {
+            // Inserted & Removed Sections
 
-        public init(old : Section, new : Section, configuration: Configuration)
+            self.deletedSections = changes.removed
+            self.insertedSections = changes.added
+
+
+            // Moved Sections
+            
+            self.movedSections = changes.moved
+
+            // Deleted Items
+
+            changes.moved.forEach {
+                self.deletedItems += $0.itemChanges.removed
+            }
+
+            changes.noChange.forEach {
+                self.deletedItems += $0.itemChanges.removed
+            }
+
+            // Inserted Items
+            
+            changes.moved.forEach {
+                self.insertedItems += $0.itemChanges.added
+            }
+
+            changes.noChange.forEach {
+                self.insertedItems += $0.itemChanges.added
+            }
+            
+            // Updated Items
+            
+            changes.moved.forEach {
+                self.updatedItems += $0.itemChanges.updated
+            }
+
+            changes.noChange.forEach {
+                self.updatedItems += $0.itemChanges.updated
+            }
+
+            // Moved Items
+            
+            changes.moved.forEach {
+                self.movedItems += $0.itemChanges.moved
+            }
+
+            changes.noChange.forEach {
+                self.movedItems += $0.itemChanges.moved
+            }
+        }
+    }
+    
+    public struct ItemChanges
+    {
+        public let added : [Added]
+        public let removed : [Removed]
+        
+        public let moved : [Moved]
+        public let updated : [Updated]
+        public let noChange : [NoChange]
+        
+        public let changeCount : Int
+        
+        public let diff : ArrayDiff<Item>
+
+        public init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
         {
             self.init(
-                old: configuration.section.rows(old),
-                new: configuration.section.rows(new),
+                old: configuration.section.items(old),
+                oldIndex: oldIndex,
+                new: configuration.section.items(new),
+                newIndex: newIndex,
                 configuration: configuration
             )
         }
         
-        public init(old : [Row], new : [Row], configuration : Configuration)
+        public init(old : [Item], oldIndex : Int, new : [Item], newIndex : Int, configuration : Configuration)
         {
             self.diff = ArrayDiff(
                 old: old,
                 new: new,
                 configuration: .init(moveDetection: configuration.moveDetection),
-                identifierProvider: { configuration.row.identifier($0) },
-                movedHint: { configuration.row.movedHint($0, $1) },
-                updated: { configuration.row.updated($0, $1) }
+                identifierProvider: { configuration.item.identifier($0) },
+                movedHint: { configuration.item.movedHint($0, $1) },
+                updated: { configuration.item.updated($0, $1) }
             )
             
             self.added = diff.added.map {
                 Added(
-                    newIndex: $0.newIndex,
+                    newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     newValue: $0.new
                 )
             }
             
             self.removed = diff.removed.map {
                 Removed(
-                    oldIndex: $0.oldIndex,
+                    oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
                     oldValue: $0.old
                 )
             }
             
             self.moved = diff.moved.map {
                 Moved(
-                    oldIndex: $0.oldIndex,
-                    newIndex: $0.newIndex,
+                    oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
+                    newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     oldValue: $0.old,
                     newValue: $0.new
                 )
@@ -296,8 +338,8 @@ public struct SectionedDiff<Section, Row>
             
             self.updated = diff.updated.map {
                 Updated(
-                    oldIndex: $0.oldIndex,
-                    newIndex: $0.newIndex,
+                    oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
+                    newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     oldValue: $0.old,
                     newValue: $0.new
                 )
@@ -305,8 +347,8 @@ public struct SectionedDiff<Section, Row>
             
             self.noChange = diff.noChange.map {
                 NoChange(
-                    oldIndex: $0.oldIndex,
-                    newIndex: $0.newIndex,
+                    oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
+                    newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     oldValue: $0.old,
                     newValue: $0.new
                 )
@@ -320,43 +362,43 @@ public struct SectionedDiff<Section, Row>
         
         public struct Added
         {
-            public let newIndex : Int
+            public let newIndex : IndexPath
             
-            public let newValue : Row
+            public let newValue : Item
         }
         
         public struct Removed
         {
-            public let oldIndex : Int
+            public let oldIndex : IndexPath
             
-            public let oldValue : Row
+            public let oldValue : Item
         }
         
         public struct Moved
         {
-            public let oldIndex : Int
-            public let newIndex : Int
+            public let oldIndex : IndexPath
+            public let newIndex : IndexPath
             
-            public var oldValue : Row
-            public var newValue : Row
+            public var oldValue : Item
+            public var newValue : Item
         }
         
         public struct Updated
         {
-            public let oldIndex : Int
-            public let newIndex : Int
+            public let oldIndex : IndexPath
+            public let newIndex : IndexPath
             
-            public let oldValue : Row
-            public let newValue : Row
+            public let oldValue : Item
+            public let newValue : Item
         }
         
         public struct NoChange
         {
-            public let oldIndex : Int
-            public let newIndex : Int
+            public let oldIndex : IndexPath
+            public let newIndex : IndexPath
             
-            public let oldValue : Row
-            public let newValue : Row
+            public let oldValue : Item
+            public let newValue : Item
         }
     }
 }
@@ -601,9 +643,8 @@ public extension SectionedDiff.SectionChanges
         old : [Mapped],
         removed : (Section, Mapped) -> (),
         added : (Section) -> Mapped,
-        moved : (Section, Section, SectionedDiff.RowChanges, inout Mapped) -> (),
-        updated : (Section, Section, SectionedDiff.RowChanges, inout Mapped) -> (),
-        noChange : (Section, Section, SectionedDiff.RowChanges, inout Mapped) -> ()
+        moved : (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> (),
+        noChange : (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> ()
         ) -> [Mapped]
     {
         let removes : [Removal<Mapped>] = (self.removed.map({
@@ -618,7 +659,7 @@ public extension SectionedDiff.SectionChanges
             return .add(value, $0)
         }) + self.moved.map({
             var value = old[$0.oldIndex]
-            moved($0.oldValue, $0.newValue, $0.rowChanges, &value)
+            moved($0.oldValue, $0.newValue, $0.itemChanges, &value)
             return .move(value, $0)
         })).sorted(by: {$0.newIndex < $1.newIndex})
         
@@ -632,17 +673,11 @@ public extension SectionedDiff.SectionChanges
             new.insert($0.mapped, at: $0.newIndex)
         }
         
-        // Now that index changes are complete, perform update and no change messaging.
-        
-        self.updated.forEach {
-            var value = new[$0.newIndex]
-            updated($0.oldValue, $0.newValue, $0.rowChanges, &value)
-            new[$0.newIndex] = value
-        }
+        // Now that index changes are complete, perform no change messaging.
         
         self.noChange.forEach {
             var value = new[$0.newIndex]
-            updated($0.oldValue, $0.newValue, $0.rowChanges, &value)
+            noChange($0.oldValue, $0.newValue, $0.itemChanges, &value)
             new[$0.newIndex] = value
         }
         
@@ -691,31 +726,31 @@ public extension SectionedDiff.SectionChanges
 }
 
 
-public extension SectionedDiff.RowChanges
+public extension SectionedDiff.ItemChanges
 {
     func transform<Mapped>(
         old : [Mapped],
-        removed : (Row, Mapped) -> (),
-        added : (Row) -> Mapped,
-        moved : (Row, Row, inout Mapped) -> (),
-        updated : (Row, Row, inout Mapped) -> (),
-        noChange : (Row, Row, inout Mapped) -> ()
+        removed : (Item, Mapped) -> (),
+        added : (Item) -> Mapped,
+        moved : (Item, Item, inout Mapped) -> (),
+        updated : (Item, Item, inout Mapped) -> (),
+        noChange : (Item, Item, inout Mapped) -> ()
         ) -> [Mapped]
     {
         // Built mutative changes, sort to ensure changes are not destructive.
         
         let removes : [Removal<Mapped>] = (self.removed.map({
-            removed($0.oldValue, old[$0.oldIndex])
-            return .remove(old[$0.oldIndex], $0)
+            removed($0.oldValue, old[$0.oldIndex.item])
+            return .remove(old[$0.oldIndex.item], $0)
         }) + self.moved.map({
-            .move(old[$0.oldIndex], $0)
+            return .move(old[$0.oldIndex.item], $0)
         })).sorted(by: { $0.oldIndex > $1.oldIndex })
         
         let inserts : [Insertion<Mapped>] = (self.added.map({
             let value = added($0.newValue)
             return .add(value, $0)
         }) + self.moved.map({
-            var value = old[$0.oldIndex]
+            var value = old[$0.oldIndex.item]
             moved($0.oldValue, $0.newValue, &value)
             return .move(value, $0)
         })).sorted(by: { $0.newIndex < $1.newIndex })
@@ -733,15 +768,15 @@ public extension SectionedDiff.RowChanges
         // Now that index changes are complete, perform update and no change messaging.
         
         self.updated.forEach {
-            var value = new[$0.newIndex]
+            var value = new[$0.newIndex.item]
             updated($0.oldValue, $0.newValue, &value)
-            new[$0.newIndex] = value
+            new[$0.newIndex.item] = value
         }
         
         self.noChange.forEach {
-            var value = new[$0.newIndex]
+            var value = new[$0.newIndex.item]
             updated($0.oldValue, $0.newValue, &value)
-            new[$0.newIndex] = value
+            new[$0.newIndex.item] = value
         }
         
         return new
@@ -761,8 +796,8 @@ public extension SectionedDiff.RowChanges
         
         var newIndex : Int {
             switch self {
-            case .add(_, let added): return added.newIndex
-            case .move(_, let move): return move.newIndex
+            case .add(_, let added): return added.newIndex.item
+            case .move(_, let move): return move.newIndex.item
             }
         }
     }
@@ -781,8 +816,8 @@ public extension SectionedDiff.RowChanges
     
         var oldIndex : Int {
             switch self {
-            case .remove(_, let remove): return remove.oldIndex
-            case .move(_, let move): return move.oldIndex
+            case .remove(_, let remove): return remove.oldIndex.item
+            case .move(_, let move): return move.oldIndex.item
             }
         }
     }
@@ -1001,19 +1036,7 @@ private extension Array
 }
 
 private extension Array
-{
-    func mapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped) -> [Mapped]
-    {
-        var mapped = [Mapped]()
-        mapped.reserveCapacity(self.count)
-        
-        for (index, element) in self.enumerated() {
-            mapped.append(block(index, element))
-        }
-        
-        return mapped
-    }
-    
+{    
     func toUniqueDictionary<Key:Hashable, Value>(_ block : (Int, Element) -> (Key, Value)) -> Dictionary<Key,Value>
     {
         var dictionary = Dictionary<Key,Value>()
