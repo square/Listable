@@ -134,12 +134,13 @@ public final class SourceState<Value:Equatable>
 }
 
 
-internal final class DynamicSource<Input:Equatable> : TableViewSource
+public final class DynamicSource<Input:Equatable> : TableViewSource
 {
-    typealias Builder = (SourceState<Input>, inout ContentBuilder) -> ()
+    public typealias Builder = (SourceState<Input>, inout ContentBuilder) -> ()
+    
     let builder : Builder
     
-    init(with builder : @escaping Builder)
+    public init(with builder : @escaping Builder)
     {
         self.builder = builder
     }
@@ -150,9 +151,12 @@ internal final class DynamicSource<Input:Equatable> : TableViewSource
     }
 }
 
-internal final class StaticSource : TableViewSource
+public final class StaticSource : TableViewSource
 {
-    public struct State : Equatable {}
+    public struct State : Equatable
+    {
+        public init() {}
+    }
     
     public let content : Content
     
@@ -166,12 +170,12 @@ internal final class StaticSource : TableViewSource
         self.init(with: ContentBuilder.build(with: build))
     }
     
-    func content(with state: SourceState<StaticSource.State>, table: inout ContentBuilder)
+    public func content(with state: SourceState<StaticSource.State>, table: inout ContentBuilder)
     {
         fatalError()
     }
     
-    func content(with state: SourceState<StaticSource.State>) -> Content
+    public func content(with state: SourceState<StaticSource.State>) -> Content
     {
         return self.content
     }
