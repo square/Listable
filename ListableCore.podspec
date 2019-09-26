@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'ListableCore'
-  s.version      = '1.0.0.LOCAL'
+  s.version      = '0.1.1'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 9.3.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = { type: 'Proprietary', text: "© #{Date.today.year} Square, Inc." }
@@ -13,8 +13,6 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.source_files = 'ListableCore/Sources/**/*.{swift}'
-  s.private_header_files = 'ListableCore/Sources/**/Internal/**/*.h'
-  s.resource_bundle = { 'ListableCoreResources' => ['ListableCore/Resources/*'] }
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'ListableCore/Tests/**/*.{swift}'

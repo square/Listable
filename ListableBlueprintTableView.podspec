@@ -1,6 +1,6 @@
 
 Pod::Spec.new do |s|
-  s.name         = 'ListableTableView'
+  s.name         = 'ListableBlueprintTableView'
   s.version      = '0.1.1'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 9.3.'
   s.homepage     = 'https://github.com/kyleve/Listable'
@@ -12,13 +12,14 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
-  s.dependency 'ListableCore'
+  s.dependency 'ListableTableView'
+  s.dependency 'BlueprintUI'
 
-  s.source_files = 'ListableTableView/Sources/**/*.{swift}'
+  s.source_files = 'ListableBlueprintTableView/Sources/**/*.{swift}'
 
   s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'ListableTableView/Tests/**/*.{swift}'
-    test_spec.resources = 'ListableTableView/Tests/Resources/**/*'
+    test_spec.source_files = 'ListableBlueprintTableView/Tests/**/*.{swift}'
+    test_spec.resources = 'ListableBlueprintTableView/Tests/Resources/**/*'
 
     test_spec.framework = 'XCTest'
   end
