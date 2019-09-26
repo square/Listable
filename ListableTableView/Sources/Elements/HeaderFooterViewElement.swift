@@ -27,10 +27,9 @@ public extension HeaderFooterViewElement
             reuseIdentifier: reuseIdentifier.stringValue
         )
     }
-    
-    func applyTo(headerFooter : ElementHeaderFooterView<Self>, reason : ApplyReason)
-    {
-        self.apply(to: headerFooter.view, reason: reason)
+
+    func apply(to headerFooterView: ElementHeaderFooterView<Self>, reason: ApplyReason) {
+        self.apply(to: headerFooterView.view, reason: reason)
     }
 }
 
