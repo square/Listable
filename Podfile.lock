@@ -1,12 +1,10 @@
 PODS:
-  - BlueprintLists (1.0.0.LOCAL):
+  - BlueprintLists (0.1.1):
     - BlueprintUI
     - Listable
-    - ListableTableView
-  - BlueprintLists/Tests (1.0.0.LOCAL):
+  - BlueprintLists/Tests (0.1.1):
     - BlueprintUI
     - Listable
-    - ListableTableView
   - BlueprintUI (0.2.2)
   - BlueprintUICommonControls (0.2.2):
     - BlueprintUI
@@ -14,11 +12,11 @@ PODS:
     - ListableCore
   - Listable/Tests (1.0.0.LOCAL):
     - ListableCore
-  - ListableCore (1.0.0.LOCAL)
-  - ListableCore/Tests (1.0.0.LOCAL)
-  - ListableTableView (1.0.0.LOCAL):
+  - ListableCore (0.1.1)
+  - ListableCore/Tests (0.1.1)
+  - ListableTableView (0.1.1):
     - ListableCore
-  - ListableTableView/Tests (1.0.0.LOCAL):
+  - ListableTableView/Tests (0.1.1):
     - ListableCore
 
 DEPENDENCIES:
@@ -49,12 +47,12 @@ EXTERNAL SOURCES:
     :path: ListableTableView.podspec
 
 SPEC CHECKSUMS:
-  BlueprintLists: c8c3d48e2b2f8925aa82c231c085f1e1a7d9f7cb
+  BlueprintLists: f10700b43695f4e3cbeb0b031a56d761ba66f80a
   BlueprintUI: c9f3fa4a2388a70fc0d0a9b7b92b03a3f10f73c2
   BlueprintUICommonControls: 71ac875081c8e8c5fa5948bb3fb0bbb5bbbe662a
   Listable: b76d0fc20d3b323012c25daf1d4dc130a56b062f
-  ListableCore: f6860bd47ef93ab8659ddbe0e1b7180cf4056fca
-  ListableTableView: d5f55393085913198f6f7671a2b3285a4dd4ba45
+  ListableCore: 9dd67524ab3d74a2fbd6ba22e20663a490f17665
+  ListableTableView: 9cedc377d6c9143af025a01fb2f241cadb212566
 
 PODFILE CHECKSUM: 40d20abcae0d9c70b03e2d008733646868c66f2d
 
