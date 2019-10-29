@@ -325,7 +325,7 @@ struct ToggleItem : BlueprintItemElement, Equatable
         
         func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
         {
-            ViewDescription(ToggleView.self) { config in
+            return ViewDescription(ToggleView.self) { config in
                 config.builder = {
                     return ToggleView()
                 }
@@ -495,7 +495,7 @@ struct Itemization : Equatable
         
         self.discounts.append(Discount.Applied(
             discount: discount,
-            amount: Money(cents: 100)
+            amount: Money(cents: 100, currency: .USD)
         ))
     }
     
@@ -517,7 +517,7 @@ struct Itemization : Equatable
         
         self.taxes.append(Tax.Applied(
             tax: tax,
-            amount: Money(cents: 100)
+            amount: Money(cents: 100, currency: .USD)
         ))
     }
     

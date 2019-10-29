@@ -23,7 +23,7 @@ public final class DemosRootViewController : UIViewController
     }
     
     var itemAppearance : DemoElement.Appearance {
-        DemoElement.Appearance { label in
+        return DemoElement.Appearance { label in
             label.numberOfLines = 0
             label.font = .systemFont(ofSize: 16.0, weight: .regular)
         }

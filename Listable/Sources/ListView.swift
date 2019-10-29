@@ -417,7 +417,7 @@ fileprivate extension ListView
 
         func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView
         {
-            switch ListViewLayout.SupplementaryKind(rawValue: kind) {
+            switch ListViewLayout.SupplementaryKind(rawValue: kind)! {
             case .listHeader:
                 if let header = self.presentationState.header {
                     self.presentationState.registerSupplementaryView(of: kind, for: header)
@@ -445,8 +445,6 @@ fileprivate extension ListView
                     self.presentationState.registerSupplementaryView(of: kind, for: footer)
                     return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
-                
-            case .none: fatalError()
             }
             
             fatalError()
@@ -555,7 +553,7 @@ fileprivate extension ListView
         func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath)
         {
             let item : AnyPresentationHeaderFooterState = {
-                switch ListViewLayout.SupplementaryKind(rawValue: elementKind) {
+                switch ListViewLayout.SupplementaryKind(rawValue: elementKind)! {
                 case .listHeader:
                     return self.presentationState.header!
                     
@@ -569,9 +567,6 @@ fileprivate extension ListView
                 case .sectionFooter:
                     let section = self.presentationState.sections[indexPath.section]
                     return section.footer!
-                    
-                case .none:
-                    fatalError()
                 }
             }()
             

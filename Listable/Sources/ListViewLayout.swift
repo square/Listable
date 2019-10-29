@@ -498,6 +498,7 @@ fileprivate extension ListViewLayout
                 return SectionLayoutInfo(
                     header: hasHeader ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.sectionHeader) : nil,
                     footer: hasFooter ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.sectionFooter) : nil,
+                    frame: .zero,
                     items: Array(repeating: ItemLayoutInfo(), count: itemCount)
                 )
             }
@@ -563,14 +564,12 @@ fileprivate extension ListViewLayout
         {
             let section = self.sections[indexPath.section]
 
-            switch SupplementaryKind(rawValue: kind) {
+            switch SupplementaryKind(rawValue: kind)! {
             case .listHeader: return self.header?.layoutAttributes(with: indexPath)
             case .listFooter: return self.footer?.layoutAttributes(with: indexPath)
                 
             case .sectionHeader: return section.header?.layoutAttributes(with: indexPath)
             case .sectionFooter: return section.footer?.layoutAttributes(with: indexPath)
-                
-            case .none: fatalError()
             }
         }
         
@@ -808,6 +807,11 @@ fileprivate extension ListViewLayout
             }
             
             return frame
+        }
+        
+        init(kind : SupplementaryKind)
+        {
+            self.kind = kind
         }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
-		0A40AF75235D33090008736E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF74235D33080008736E /* SwiftUIView.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
 		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
@@ -34,7 +33,6 @@
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
-		0A40AF74235D33080008736E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
 		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 				0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */,
 				0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */,
 				0A40AF76235D41290008736E /* CollectionViewAppearance.swift */,
-				0A40AF74235D33080008736E /* SwiftUIView.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -291,7 +288,6 @@
 				0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */,
 				0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */,
 				0AEB96DD22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift in Sources */,
-				0A40AF75235D33090008736E /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

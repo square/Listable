@@ -164,11 +164,11 @@ private struct HashableSectionInfo<Value:Hashable> : SectionInfo
     
     // MARK: SectionInfo
     
-    var identifier : Identifier<Self> {
+    var identifier : Identifier<HashableSectionInfo> {
         return .init(self.value)
     }
     
-    func wasMoved(comparedTo other : Self) -> Bool
+    func wasMoved(comparedTo other : HashableSectionInfo) -> Bool
     {
         return self.value != other.value
     }
