@@ -274,11 +274,10 @@ public final class TableView : UIView
             configuration: SectionedDiff.Configuration(
                 section: .init(
                     identifier: { $0.identifier },
-                    rows: { $0.rows },
-                    updated: { $0.updatedComparedTo(old: $1) },
+                    items: { $0.rows },
                     movedHint: { $0.movedComparedTo(old: $1) }
                 ),
-                row: .init(
+                item: .init(
                     identifier: { $0.identifier },
                     updated: { $0.updatedComparedTo(old: $1) },
                     movedHint: { $0.movedComparedTo(old: $1) }
@@ -606,103 +605,29 @@ fileprivate extension UITableView
         
         let animation : UITableView.RowAnimation = animated ? .fade : .none
         
+        let changes = diff.aggregatedChanges
+        
         // Inserted & Removed Sections
         
-        let removedSectionIndexes = IndexSet(diff.changes.removed.map { $0.oldIndex })
-        let addedSectionIndexes = IndexSet(diff.changes.added.map { $0.newIndex })
-        
-        self.deleteSections(removedSectionIndexes, with: animation)
-        self.insertSections(addedSectionIndexes, with: animation)
-        
-        // Updated Sections
-        
-        for section in diff.changes.updated {
-            if let view = self.headerView(forSection: section.oldIndex) {
-                view.performTransition(animated: animated) {
-                    section.newValue.header?.applyTo(headerFooterView: view, reason: .wasUpdated)
-                }
-            }
-            
-            if let view = self.footerView(forSection: section.oldIndex) {
-                view.performTransition(animated: animated) {
-                    section.newValue.footer?.applyTo(headerFooterView: view, reason: .wasUpdated)
-                }
-            }
-        }
-        
+        self.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }), with: animation)
+        self.insertSections(IndexSet(changes.insertedSections.map { $0.newIndex }), with: animation)
+
         // Moved Sections
         
-        // TODO: Do I need to also handle removes and deletions inside the moved sections?
-        
-        diff.changes.moved.forEach {
+        changes.movedSections.forEach {
             self.moveSection($0.oldIndex, toSection: $0.newIndex)
         }
+
+        // Deleted Items
         
-        // Updated Rows
+        self.deleteRows(at: changes.deletedItems.map { $0.oldIndex }, with: animation)
         
-        // TODO: Need to maintain bindings across updated rows
+        self.insertRows(at: changes.insertedItems.map { $0.newIndex }, with: animation)
         
-        for section in diff.changes.updated {
-            
-            let indexPaths = section.rowChanges.updated.map { IndexPath(row: $0.oldIndex, section: section.oldIndex) }
-            self.reloadRows(at: indexPaths, with: animation)
-            
-            // Reloaded Rows
-            
-            // TODO
-            
-            // Reapplied Rows
-            
-            // TODO
-        }
+        self.reloadRows(at: changes.updatedItems.map { $0.oldIndex }, with: animation)
         
-        for section in diff.changes.noChange {
-            let indexPaths = section.rowChanges.updated.map { IndexPath(row: $0.oldIndex, section: section.oldIndex) }
-            self.reloadRows(at: indexPaths, with: animation)
-        }
-        
-        // Deleted Rows
-        
-        for section in diff.changes.updated {
-            let indexPaths = section.rowChanges.removed.map { IndexPath(row: $0.oldIndex, section: section.oldIndex) }
-            self.deleteRows(at: indexPaths, with: animation)
-        }
-        
-        for section in diff.changes.noChange {
-            let indexPaths = section.rowChanges.removed.map { IndexPath(row: $0.oldIndex, section: section.oldIndex) }
-            self.deleteRows(at: indexPaths, with: animation)
-        }
-        
-        // Inserted Rows
-        
-        for section in diff.changes.updated {
-            let indexPaths = section.rowChanges.added.map { IndexPath(row: $0.newIndex, section: section.newIndex) }
-            self.insertRows(at: indexPaths, with: animation)
-        }
-        
-        for section in diff.changes.noChange {
-            let indexPaths = section.rowChanges.added.map { IndexPath(row: $0.newIndex, section: section.newIndex) }
-            self.insertRows(at: indexPaths, with: animation)
-        }
-        
-        // Moved Rows
-        
-        for section in diff.changes.updated {
-            section.rowChanges.moved.forEach {
-                self.moveRow(
-                    at: IndexPath(row: $0.oldIndex, section: section.oldIndex),
-                    to: IndexPath(row: $0.newIndex, section: section.newIndex)
-                )
-            }
-        }
-        
-        for section in diff.changes.noChange {
-            section.rowChanges.moved.forEach {
-                self.moveRow(
-                    at: IndexPath(row: $0.oldIndex, section: section.oldIndex),
-                    to: IndexPath(row: $0.newIndex, section: section.newIndex)
-                )
-            }
+        changes.movedItems.forEach {
+            self.moveRow(at: $0.oldIndex, to: $0.newIndex)
         }
         
         self.endUpdates()

@@ -86,7 +86,6 @@ final class PresentationState
             removed: { _, _ in },
             added: { section in SectionState(model: section) },
             moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
-            updated: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
             noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes) }
         )
     }
@@ -150,7 +149,7 @@ final class PresentationState
         fileprivate func update(
             with oldSection : Section,
             new newSection : Section,
-            changes : SectionedDiff<Section, AnyRow>.RowChanges
+            changes : SectionedDiff<Section, AnyRow>.ItemChanges
             )
         {
             self.model = newSection

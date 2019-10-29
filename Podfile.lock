@@ -1,31 +1,31 @@
 PODS:
+  - BlueprintLists (0.1.1):
+    - BlueprintUI
+    - Listable
+  - BlueprintLists/Tests (0.1.1):
+    - BlueprintUI
+    - Listable
   - BlueprintUI (0.2.2)
   - BlueprintUICommonControls (0.2.2):
     - BlueprintUI
-  - ListableBlueprintTableView (1.0.0.LOCAL):
-    - BlueprintUI
-    - ListableTableView
-  - ListableBlueprintTableView/Tests (1.0.0.LOCAL):
-    - BlueprintUI
-    - ListableTableView
-  - ListableCollectionView (1.0.0.LOCAL):
+  - Listable (1.0.0.LOCAL):
     - ListableCore
-  - ListableCollectionView/Tests (1.0.0.LOCAL):
+  - Listable/Tests (1.0.0.LOCAL):
     - ListableCore
-  - ListableCore (1.0.0.LOCAL)
-  - ListableCore/Tests (1.0.0.LOCAL)
-  - ListableTableView (1.0.0.LOCAL):
+  - ListableCore (0.1.1)
+  - ListableCore/Tests (0.1.1)
+  - ListableTableView (0.1.1):
     - ListableCore
-  - ListableTableView/Tests (1.0.0.LOCAL):
+  - ListableTableView/Tests (0.1.1):
     - ListableCore
 
 DEPENDENCIES:
+  - BlueprintLists (from `BlueprintLists.podspec`)
+  - BlueprintLists/Tests (from `BlueprintLists.podspec`)
   - BlueprintUI
   - BlueprintUICommonControls
-  - ListableBlueprintTableView (from `ListableBlueprintTableView.podspec`)
-  - ListableBlueprintTableView/Tests (from `ListableBlueprintTableView.podspec`)
-  - ListableCollectionView (from `ListableCollectionView.podspec`)
-  - ListableCollectionView/Tests (from `ListableCollectionView.podspec`)
+  - Listable (from `Listable.podspec`)
+  - Listable/Tests (from `Listable.podspec`)
   - ListableCore (from `ListableCore.podspec`)
   - ListableCore/Tests (from `ListableCore.podspec`)
   - ListableTableView (from `ListableTableView.podspec`)
@@ -37,23 +37,23 @@ SPEC REPOS:
     - BlueprintUICommonControls
 
 EXTERNAL SOURCES:
-  ListableBlueprintTableView:
-    :path: ListableBlueprintTableView.podspec
-  ListableCollectionView:
-    :path: ListableCollectionView.podspec
+  BlueprintLists:
+    :path: BlueprintLists.podspec
+  Listable:
+    :path: Listable.podspec
   ListableCore:
     :path: ListableCore.podspec
   ListableTableView:
     :path: ListableTableView.podspec
 
 SPEC CHECKSUMS:
+  BlueprintLists: f10700b43695f4e3cbeb0b031a56d761ba66f80a
   BlueprintUI: c9f3fa4a2388a70fc0d0a9b7b92b03a3f10f73c2
   BlueprintUICommonControls: 71ac875081c8e8c5fa5948bb3fb0bbb5bbbe662a
-  ListableBlueprintTableView: ef607cf42210b489449acf5dc4736fe1275b740b
-  ListableCollectionView: 38f7edcb9affbc1214ebb59e6f81881f6fb636d7
-  ListableCore: f6860bd47ef93ab8659ddbe0e1b7180cf4056fca
-  ListableTableView: d5f55393085913198f6f7671a2b3285a4dd4ba45
+  Listable: b76d0fc20d3b323012c25daf1d4dc130a56b062f
+  ListableCore: 9dd67524ab3d74a2fbd6ba22e20663a490f17665
+  ListableTableView: 9cedc377d6c9143af025a01fb2f241cadb212566
 
-PODFILE CHECKSUM: 8cc435fb7acde198cd1c615d98aec1b2e5fd08fc
+PODFILE CHECKSUM: 40d20abcae0d9c70b03e2d008733646868c66f2d
 
 COCOAPODS: 1.7.5

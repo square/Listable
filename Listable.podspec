@@ -1,6 +1,6 @@
 
 Pod::Spec.new do |s|
-  s.name         = 'ListableCollectionView'
+  s.name         = 'Listable'
   s.version      = '1.0.0.LOCAL'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 9.3.'
   s.homepage     = 'https://github.com/kyleve/Listable'
@@ -14,13 +14,11 @@ Pod::Spec.new do |s|
 
   s.dependency 'ListableCore'
 
-  s.source_files = 'ListableCollectionView/Sources/**/*.{swift}'
-  s.private_header_files = 'ListableCollectionView/Sources/**/Internal/**/*.h'
-  s.resource_bundle = { 'ListableCollectionViewResources' => ['ListableCollectionView/Resources/*'] }
+  s.source_files = 'Listable/Sources/**/*.{swift}'
 
   s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'ListableCollectionView/Tests/**/*.{swift}'
-    test_spec.resources = 'ListableCollectionView/Tests/Resources/**/*'
+    test_spec.source_files = 'Listable/Tests/**/*.{swift}'
+    test_spec.resources = 'Listable/Tests/Resources/**/*'
 
     test_spec.framework = 'XCTest'
   end
