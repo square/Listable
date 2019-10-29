@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'BlueprintLists'
-  s.version      = '1.0.0.LOCAL'
+  s.version      = '0.1.1'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 9.3.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = { type: 'Proprietary', text: "© #{Date.today.year} Square, Inc." }
@@ -13,8 +13,6 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.dependency 'Listable'
-  s.dependency 'ListableTableView'
-
   s.dependency 'BlueprintUI'
 
   s.source_files = 'BlueprintLists/Sources/**/*.{swift}'
