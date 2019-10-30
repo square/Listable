@@ -671,6 +671,33 @@ fileprivate extension ListView
                 spacing: section.model.layout.spacing
             )
         }
+        
+        // MARK: UIScrollViewDelegate
+        
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
+        {
+            self.view.updatePresentationState(for: .didEndDecelerating)
+        }
+        
+        func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
+        {
+            self.view.updatePresentationState(for: .scrolledToTop)
+        }
+        
+        private var lastPosition : CGFloat = 0.0
+        
+        func scrollViewDidScroll(_ scrollView: UIScrollView)
+        {
+            guard scrollView.bounds.size.height > 0 else { return }
+            
+            let scrollingDown = self.lastPosition < scrollView.contentOffset.y
+            
+            self.lastPosition = scrollView.contentOffset.y
+            
+            if scrollingDown {
+                self.view.updatePresentationState(for: .scrolledDown)
+            }
+        }
     }
 }
 

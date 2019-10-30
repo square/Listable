@@ -1,5 +1,5 @@
 //
-//  TableViewDemosDictionaryViewController.swift
+//  CollectionViewDictionaryDemoViewController.swift
 //  CheckoutApplet
 //
 //  Created by Kyle Van Essen on 6/25/19.
@@ -13,13 +13,20 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 
-final public class TableViewDemosDictionaryViewController : UIViewController
+final public class CollectionViewDictionaryDemoViewController : UIViewController
 {
     override public func loadView()
     {
         self.title = "Dictionary"
         
         let listView = ListView()
+        
+        listView.appearance.contentLayout.set {
+            $0.width = .atMost(600.0)
+            $0.sectionHeaderBottomSpacing = 10.0
+            $0.rowSpacing = 7.0
+            $0.interSectionSpacingWithNoFooter = 10.0
+        }
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
         
@@ -29,13 +36,10 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     final class Source : ListViewSource
     {
         let dictionary : EnglishDictionary
-        //let searchRow : UIViewRowElement<SearchBar>
         
         init(dictionary : EnglishDictionary)
         {
             self.dictionary = dictionary
-            
-            //self.searchRow = UIViewRowElement(view: SearchBar())
         }
         
         struct State : Equatable
@@ -58,23 +62,28 @@ final public class TableViewDemosDictionaryViewController : UIViewController
                 }
             }
             
-//            table += Section(identifier: "Search") { rows in
-//                self.searchRow.view.onStateChanged = { filter in
-//                    state.value.filter = filter
-//                }
-//
-//                rows += self.searchRow
-//            }
+            table += Section(identifier: "search") { rows in
+                rows += Item(SearchRow(string: state.value.filter), appearance: SearchRowAppearance())
+            }
             
             var hasContent = false
             
             table += self.dictionary.wordsByLetter.map { letter in
                 
-                return Section(identifier: letter.letter) { rows in
+                return Section(
+                    identifier: letter.letter,
+                    header: HeaderFooter(
+                        SectionHeader(title: letter.letter),
+                        height: .thatFits(.noConstraint)
+                    )
+                ) { rows in
                     rows += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
-                            return Item(WordRow(title: word.word, detail: word.description))
+                            return Item(
+                                WordRow(title: word.word, detail: word.description),
+                                height: .thatFits(.noConstraint)
+                            )
                         } else {
                             return nil
                         }
@@ -134,6 +143,30 @@ struct SearchRow : ItemElement, Equatable
     }
 }
 
+struct SectionHeader : BlueprintHeaderFooterElement, Equatable
+{
+    var title : String
+    
+    // MARK: BlueprintItemElement
+    
+    var element: Element {
+        return Box(
+            backgroundColor: UIColor(white: 0.85, alpha: 1.0),
+            cornerStyle: .rounded(radius: 10.0),
+            wrapping: Inset(
+                wrapping: Label(text: self.title) {
+                    $0.font = .systemFont(ofSize: 22.0, weight: .bold)
+                },
+                top: 10.0, bottom: 10.0, left: 20.0, right: 20.0
+            )
+        )
+    }
+    
+    var identifier: Identifier<SectionHeader> {
+        return .init(self.title)
+    }
+}
+
 
 struct WordRow : BlueprintItemElement, Equatable
 {
@@ -143,10 +176,22 @@ struct WordRow : BlueprintItemElement, Equatable
     // MARK: BlueprintItemElement
     
     func element(with state: ItemState) -> Element {
-        return Column { column in
-            column.add(child: Label(text: self.title))
-            column.add(child: Label(text: self.detail))
-        }
+        return Box(
+            backgroundColor: .init(white: 0.96, alpha: 1.0),
+            cornerStyle: .rounded(radius: 10.0),
+            wrapping: Inset(wrapping: Column { column in
+                column.add(child: Label(text: self.title) {
+                    $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
+                })
+                
+                column.add(child: Spacer(size: .init(width: 0.0, height: 10.0)))
+                
+                column.add(child: Label(text: self.detail) {
+                    $0.font = .italicSystemFont(ofSize: 14.0)
+                    $0.color = .darkGray
+                })
+            }, top: 10.0, bottom: 10.0, left: 20.0, right: 20.0)
+        )
     }
     
     var identifier: Identifier<WordRow> {
