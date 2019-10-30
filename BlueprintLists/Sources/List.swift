@@ -20,7 +20,7 @@ public struct List : BlueprintUI.Element
     // MARK: Initialization
     //
     
-    public init(appearance : Appearance, _ builder : ContentBuilder.Build)
+    public init(appearance : Appearance = Appearance(), _ builder : ContentBuilder.Build)
     {
         self.appearance = appearance
         

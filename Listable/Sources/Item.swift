@@ -55,8 +55,11 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias OnDeselect = (Element) -> ()
     public var onDeselect : OnDeselect?
     
-    public typealias OnDisplay = (Element, Bool) -> ()
+    public typealias OnDisplay = (Element) -> ()
     public var onDisplay : OnDisplay?
+    
+    public typealias OnEndDisplay = (Element) -> ()
+    public var onEndDisplay : OnEndDisplay?
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
@@ -71,6 +74,7 @@ public struct Item<Element:ItemElement> : AnyItem
         swipeActions : SwipeActions? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
+        onEndDisplay : OnEndDisplay? = nil,
         onSelect : OnSelect? = nil,
         onDeselect : OnDeselect? = nil
         )
@@ -87,6 +91,7 @@ public struct Item<Element:ItemElement> : AnyItem
         self.bind = bind
         
         self.onDisplay = onDisplay
+        self.onEndDisplay = onEndDisplay
         
         self.onSelect = onSelect
         self.onDeselect = onDeselect
