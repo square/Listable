@@ -7,7 +7,10 @@
 
 import UIKit
 import ListableCore
-import ListableTableView
+import Listable
+import BlueprintLists
+import BlueprintUI
+import BlueprintUICommonControls
 
 
 final public class TableViewDemosDictionaryViewController : UIViewController
@@ -16,19 +19,23 @@ final public class TableViewDemosDictionaryViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.view = TableView(state: Source.State(), source: Source(dictionary: EnglishDictionary.dictionary))
+        let listView = ListView()
+        
+        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
+        
+        self.view = listView
     }
     
-    final class Source : TableViewSource
+    final class Source : ListViewSource
     {
         let dictionary : EnglishDictionary
-        let searchRow : UIViewRowElement<SearchBar>
+        //let searchRow : UIViewRowElement<SearchBar>
         
         init(dictionary : EnglishDictionary)
         {
             self.dictionary = dictionary
             
-            self.searchRow = UIViewRowElement(view: SearchBar())
+            //self.searchRow = UIViewRowElement(view: SearchBar())
         }
         
         struct State : Equatable
@@ -51,24 +58,23 @@ final public class TableViewDemosDictionaryViewController : UIViewController
                 }
             }
             
-            table += Section(identifier: "Search") { rows in
-                self.searchRow.view.onStateChanged = { filter in
-                    state.value.filter = filter
-                }
-                
-                rows += self.searchRow
-            }
+//            table += Section(identifier: "Search") { rows in
+//                self.searchRow.view.onStateChanged = { filter in
+//                    state.value.filter = filter
+//                }
+//
+//                rows += self.searchRow
+//            }
             
             var hasContent = false
             
             table += self.dictionary.wordsByLetter.map { letter in
                 
-                return Section(header: letter.letter) { rows in
-                    
+                return Section(identifier: letter.letter) { rows in
                     rows += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
-                            return Row(SubtitleRow(text: word.word, detail: word.description))
+                            return Item(WordRow(title: word.word, detail: word.description))
                         } else {
                             return nil
                         }
@@ -80,15 +86,71 @@ final public class TableViewDemosDictionaryViewController : UIViewController
             
             if hasContent == false {
                 table += Section(identifier: "emptty") { rows in
-                    rows += Row(
-                        SubtitleRow(
-                            text: "No Results For '\(state.value.filter)'",
+                    rows += Item(
+                        WordRow(
+                            title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
                         )
                     )
                 }
             }
         }
+    }
+}
+
+struct SearchRowAppearance : ItemElementAppearance
+{
+    // MARK: ItemElementAppearance
+    
+    typealias ContentView = SearchBar
+    typealias BackgroundView = UIView
+    typealias SelectedBackgroundView = UIView
+    
+    static func createReusableItemView() -> View
+    {
+        return ItemElementView(content: SearchBar(), background: UIView(), selectedBackground: UIView())
+    }
+    
+    func update(view: View, with position: ItemPosition) {}
+    
+    func apply(to view: View, with state: ItemState, previous: SearchRowAppearance?) {}
+}
+
+struct SearchRow : ItemElement, Equatable
+{
+    var string : String
+    
+    // MARK: ItemElement
+    
+    typealias Appearance = SearchRowAppearance
+    
+    var identifier: Identifier<SearchRow> {
+        return .init("search")
+    }
+    
+    func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
+    {
+        view.content.text = self.string
+    }
+}
+
+
+struct WordRow : BlueprintItemElement, Equatable
+{
+    var title : String
+    var detail : String
+    
+    // MARK: BlueprintItemElement
+    
+    func element(with state: ItemState) -> Element {
+        return Column { column in
+            column.add(child: Label(text: self.title))
+            column.add(child: Label(text: self.detail))
+        }
+    }
+    
+    var identifier: Identifier<WordRow> {
+        return .init(self.title)
     }
 }
 
