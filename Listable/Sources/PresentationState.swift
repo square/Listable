@@ -569,7 +569,7 @@ final internal class PresentationState
             
             self.visibleCell = cell
             
-            self.model.onDisplay?(self.model.element, true)
+            self.model.onDisplay?(self.model.element)
         }
         
         func updatePosition(with anyCell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
@@ -583,7 +583,7 @@ final internal class PresentationState
         {
             self.visibleCell = nil
             
-            self.model.onDisplay?(self.model.element, false)
+            self.model.onEndDisplay?(self.model.element)
         }
         
         public func performUserDidSelectItem(isSelected: Bool)
