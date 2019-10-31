@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
+		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
+		0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590003236A371600F463DA /* EnglishDictionary.swift */; };
 		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
 		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
 		0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF802315F68400CCB7F3 /* planet-money.jpg */; };
@@ -19,8 +21,6 @@
 		0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */; };
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
-		0AEB96DB22FBCC1D00341DFF /* EnglishDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96CA22FBCC1D00341DFF /* EnglishDictionary.swift */; };
-		0AEB96DD22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96CC22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift */; };
 		0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */; };
 		0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96CF22FBCC1D00341DFF /* DemosRootViewController.swift */; };
 		0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D222FBCC1D00341DFF /* Blueprint.swift */; };
@@ -34,6 +34,8 @@
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
+		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
+		0A590003236A371600F463DA /* EnglishDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishDictionary.swift; sourceTree = "<group>"; };
 		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
 		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
 		0A8AEF802315F68400CCB7F3 /* planet-money.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "planet-money.jpg"; sourceTree = "<group>"; };
@@ -46,8 +48,6 @@
 		0AEB96B822FBCBA600341DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEB96BB22FBCBA600341DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0AEB96BD22FBCBA600341DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0AEB96CA22FBCC1D00341DFF /* EnglishDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishDictionary.swift; sourceTree = "<group>"; };
-		0AEB96CC22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDemosDictionaryViewController.swift; sourceTree = "<group>"; };
 		0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewBasicDemoViewController.swift; sourceTree = "<group>"; };
 		0AEB96CF22FBCC1D00341DFF /* DemosRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemosRootViewController.swift; sourceTree = "<group>"; };
 		0AEB96D222FBCC1D00341DFF /* Blueprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blueprint.swift; sourceTree = "<group>"; };
@@ -117,7 +117,6 @@
 		0AEB96C322FBCC1D00341DFF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				0AEB96C422FBCC1D00341DFF /* TableView */,
 				0AEB96CD22FBCC1D00341DFF /* CollectionView */,
 				0AEB96CF22FBCC1D00341DFF /* DemosRootViewController.swift */,
 				0AEB96D222FBCC1D00341DFF /* Blueprint.swift */,
@@ -127,18 +126,11 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		0AEB96C422FBCC1D00341DFF /* TableView */ = {
-			isa = PBXGroup;
-			children = (
-				0AEB96CA22FBCC1D00341DFF /* EnglishDictionary.swift */,
-				0AEB96CC22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift */,
-			);
-			path = TableView;
-			sourceTree = "<group>";
-		};
 		0AEB96CD22FBCC1D00341DFF /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				0A590003236A371600F463DA /* EnglishDictionary.swift */,
+				0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */,
 				0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */,
 				0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */,
 				0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */,
@@ -279,15 +271,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */,
+				0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */,
+				0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,
 				0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */,
-				0AEB96DB22FBCC1D00341DFF /* EnglishDictionary.swift in Sources */,
 				0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */,
 				0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */,
 				0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */,
-				0AEB96DD22FBCC1D00341DFF /* TableViewDemosDictionaryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

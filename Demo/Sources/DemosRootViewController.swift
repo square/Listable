@@ -83,21 +83,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(ItemizationEditorViewController())
                 })
-            }
-            
-            list += Section(
-                identifier: "table-view",
-                header: HeaderFooter(
-                    HeaderElement(title: "Table Views (Deprecated)"),
-                    appearance: self.headerAppearance
-                )
-            ) { rows in
+                
                 rows += Item(
                     TitleElement(title: "English Dictionary Search"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
-                        self.push(TableViewDemosDictionaryViewController())
+                        self.push(CollectionViewDictionaryDemoViewController())
                 })
             }
         }
