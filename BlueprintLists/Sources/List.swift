@@ -39,7 +39,7 @@ public struct List : BlueprintUI.Element
     {
         return ListView.describe { config in
             config.builder = {
-                return ListView(frame: .zero, appearance: self.appearance)
+                return ListView(frame: bounds, appearance: self.appearance)
             }
             
             config.apply { listView in

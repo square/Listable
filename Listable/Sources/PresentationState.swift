@@ -10,6 +10,9 @@ import ListableCore
 
 internal protocol AnyPresentationItemState : AnyObject
 {
+    var isDisplayed : Bool { get }
+    func setAndPerform(isDisplayed: Bool)
+    
     var anyModel : AnyItem { get }
     
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
@@ -452,6 +455,7 @@ final internal class PresentationState
         {
             self.model = model
             
+            // TODO: Remove anyIdentifier?
             self.anyIdentifier = self.model.identifier
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
@@ -490,6 +494,22 @@ final internal class PresentationState
         }
         
         // MARK: AnyPresentationItemState
+        
+        private(set) var isDisplayed : Bool = false
+        
+        func setAndPerform(isDisplayed: Bool) {
+            guard self.isDisplayed != isDisplayed else {
+                return
+            }
+            
+            self.isDisplayed = isDisplayed
+            
+            if self.isDisplayed {
+                self.model.onDisplay?(self.model.element)
+            } else {
+                self.model.onEndDisplay?(self.model.element)
+            }
+        }
         
         let anyIdentifier : AnyIdentifier
         
@@ -568,8 +588,6 @@ final internal class PresentationState
             let cell = (anyCell as! ItemElementCell<Element>)
             
             self.visibleCell = cell
-            
-            self.model.onDisplay?(self.model.element)
         }
         
         func updatePosition(with anyCell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
@@ -582,8 +600,6 @@ final internal class PresentationState
         func didEndDisplay()
         {
             self.visibleCell = nil
-            
-            self.model.onEndDisplay?(self.model.element)
         }
         
         public func performUserDidSelectItem(isSelected: Bool)
