@@ -154,7 +154,7 @@ struct SectionHeader : BlueprintHeaderFooterElement, Equatable
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(
                 wrapping: Label(text: self.title) {
-                    $0.font = .systemFont(ofSize: 22.0, weight: .bold)
+                    $0.font = .systemFont(ofSize: 32.0, weight: .bold)
                 },
                 top: 10.0, bottom: 10.0, left: 20.0, right: 20.0
             )

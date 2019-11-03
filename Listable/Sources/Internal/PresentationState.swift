@@ -17,7 +17,7 @@ protocol AnyPresentationItemState : AnyObject
     
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
     
-    func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState)
+    func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState, reason : ApplyReason)
     func applyToVisibleCell()
         
     func setNew(item anyItem : AnyItem, reason : UpdateReason)
@@ -41,7 +41,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     
     func dequeueAndPrepareCollectionReusableView(in collectionView : UICollectionView, of kind : String, for indexPath : IndexPath) -> UICollectionReusableView
     
-    func applyTo(view anyView : UICollectionReusableView)
+    func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
     func applyToVisibleView()
     
     func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter, reason : UpdateReason)
@@ -356,19 +356,19 @@ final class PresentationState
         {
             let anyView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: self.model.reuseIdentifier.stringValue, for: indexPath)
                         
-            self.applyTo(view: anyView)
+            self.applyTo(view: anyView, reason: .willDisplay)
             
             return anyView
         }
         
-        func applyTo(view anyView : UICollectionReusableView)
+        func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
         {
             let view = anyView as! SupplementaryItemView<Element>
             
             self.model.appearance.apply(to: view.content, previous: view.appearance)
             view.appearance = self.model.appearance
             
-            self.model.element.apply(to: view.content, reason: .willDisplay)
+            self.model.element.apply(to: view.content, reason: reason)
         }
         
         func applyToVisibleView()
@@ -377,7 +377,7 @@ final class PresentationState
                 return
             }
             
-            self.applyTo(view: view)
+            self.applyTo(view: view, reason: .wasUpdated)
         }
         
         func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter, reason: UpdateReason)
@@ -529,7 +529,8 @@ final class PresentationState
             
             self.applyTo(
                 cell: cell,
-                itemState: itemState
+                itemState: itemState,
+                reason: .willDisplay
             )
             
             // Update appearance for position.
@@ -543,7 +544,7 @@ final class PresentationState
             return cell
         }
         
-        func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState)
+        func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState, reason : ApplyReason)
         {
             let cell = anyCell as! ItemElementCell<Element>
             
@@ -553,7 +554,7 @@ final class PresentationState
             self.model.element.apply(
                 to: cell.content,
                 with: itemState,
-                reason: .willDisplay
+                reason: reason
             )
         }
         
@@ -563,7 +564,11 @@ final class PresentationState
                 return
             }
             
-            self.applyTo(cell: cell, itemState: .init(cell: cell))
+            self.applyTo(
+                cell: cell,
+                itemState: .init(cell: cell),
+                reason: .wasUpdated
+            )
         }
         
         func setNew(item anyItem: AnyItem, reason: UpdateReason)
@@ -634,7 +639,7 @@ final class PresentationState
                 }, { cell in
                     let itemState = Listable.ItemState(isSelected: false, isHighlighted: false)
                     
-                    self.applyTo(cell: cell, itemState: itemState)
+                    self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
                     
                     return self.model.height.measure(with: cell, fittingWidth: width, default: defaultHeight)
                 })
