@@ -8,7 +8,7 @@
 import UIKit
 
 
-internal final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
+final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
 {
     let content : Element.Appearance.View
     

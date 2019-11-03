@@ -6,10 +6,9 @@
 //
 
 import UIKit
-import ListableCore
 
 
-internal protocol ListViewLayoutDelegate : AnyObject
+protocol ListViewLayoutDelegate : AnyObject
 {    
     func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
     
@@ -29,7 +28,7 @@ internal protocol ListViewLayoutDelegate : AnyObject
 }
 
 
-internal class ListViewLayout : UICollectionViewLayout
+class ListViewLayout : UICollectionViewLayout
 {
     //
     // MARK: Properties
@@ -352,7 +351,7 @@ internal class ListViewLayout : UICollectionViewLayout
 }
 
 
-internal extension ListViewLayout
+extension ListViewLayout
 {
     enum SupplementaryKind : String
     {
@@ -386,7 +385,7 @@ internal extension ListViewLayout
 }
 
 
-internal extension ListViewLayout
+extension ListViewLayout
 {
     struct ColumnLayout : Equatable
     {

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ListableCore
 import Listable
 import BlueprintLists
 import BlueprintUI

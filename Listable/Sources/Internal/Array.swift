@@ -1,6 +1,6 @@
 //
 //  Array.swift
-//  ListableCore
+//  Listable
 //
 //  Created by Kyle Van Essen on 10/27/19.
 //
@@ -8,7 +8,7 @@
 import Foundation
 
 
-public extension Array
+extension Array
 {
     func mapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped) -> [Mapped]
     {

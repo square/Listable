@@ -5,8 +5,6 @@
 //  Created by Kyle Van Essen on 6/21/19.
 //
 
-import ListableCore
-
 
 public struct ContentBuilder
 {
@@ -49,9 +47,14 @@ public struct ContentBuilder
         }
     }
     
+    public mutating func add(_ section : Section)
+    {
+        self.sections.append(section)
+    }
+    
     public static func += (lhs : inout ContentBuilder, rhs : Section)
     {
-        lhs.sections.append(rhs)
+        lhs.add(rhs)
     }
     
     public static func += (lhs : inout ContentBuilder, rhs : [Section])
@@ -68,10 +71,15 @@ public struct SectionBuilder
         return self.items.isEmpty
     }
     
+    public mutating func add(_ item : AnyItem)
+    {
+        self.items.append(item)
+    }
+    
     // Adds the given item to the builder.
     public static func += <Element:ItemElement>(lhs : inout SectionBuilder, rhs : Item<Element>)
     {
-        lhs.items.append(rhs)
+        lhs.add(rhs)
     }
     
     // Allows mixed arrays of different types of items.

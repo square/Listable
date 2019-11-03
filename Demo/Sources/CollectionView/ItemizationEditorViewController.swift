@@ -11,7 +11,6 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 import Listable
-import ListableCore
 
 
 final class ItemizationEditorViewController : UIViewController

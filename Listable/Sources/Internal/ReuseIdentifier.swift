@@ -9,17 +9,17 @@
 private var identifiers : [ObjectIdentifier:Any] = [:]
 
 
-public final class ReuseIdentifier<Element> : Hashable
+final class ReuseIdentifier<Element> : Hashable
 {
     // MARK: Fetching Identifiers
     
-    public static func identifier(for element : Element) -> ReuseIdentifier<Element>
+    static func identifier(for element : Element) -> ReuseIdentifier<Element>
     {
         // TODO is this right?
         return self.identifier(for: type(of: element))
     }
     
-    public static func identifier(for element : Element.Type) -> ReuseIdentifier<Element>
+    static func identifier(for element : Element.Type) -> ReuseIdentifier<Element>
     {
         let typeIdentifier = ObjectIdentifier(element)
         
@@ -33,7 +33,7 @@ public final class ReuseIdentifier<Element> : Hashable
     }
     
     
-    public let stringValue : String
+    let stringValue : String
     
     // MARK: Private Methods
     
@@ -48,14 +48,14 @@ public final class ReuseIdentifier<Element> : Hashable
     
     // Equatable
     
-    public static func == (lhs: ReuseIdentifier, rhs: ReuseIdentifier) -> Bool
+    static func == (lhs: ReuseIdentifier, rhs: ReuseIdentifier) -> Bool
     {
         return lhs.identifier == rhs.identifier
     }
     
     // Hashable
     
-    public func hash(into hasher: inout Hasher)
+    func hash(into hasher: inout Hasher)
     {
         hasher.combine(self.identifier)
     }
