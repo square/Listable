@@ -8,15 +8,15 @@
 import Foundation
 
 
-public struct SectionedDiff<Section, Item>
+struct SectionedDiff<Section, Item>
 {
-    public let old : [Section]
-    public let new : [Section]
+    let old : [Section]
+    let new : [Section]
     
-    public let changes : SectionChanges
-    public let aggregatedChanges : AggregatedChanges
+    let changes : SectionChanges
+    let aggregatedChanges : AggregatedChanges
     
-    public init(old : [Section], new: [Section], configuration : Configuration)
+    init(old : [Section], new: [Section], configuration : Configuration)
     {
         self.old = old
         self.new = new
@@ -30,7 +30,7 @@ public struct SectionedDiff<Section, Item>
         self.aggregatedChanges = AggregatedChanges(sectionChanges: self.changes)
     }
     
-    public static func calculate(on queue : DispatchQueue, old : [Section], new: [Section], configuration : Configuration, completion : @escaping (SectionedDiff) -> ())
+    static func calculate(on queue : DispatchQueue, old : [Section], new: [Section], configuration : Configuration, completion : @escaping (SectionedDiff) -> ())
     {
         queue.async {
             let diff = SectionedDiff(old: old, new: new, configuration: configuration)
@@ -38,14 +38,14 @@ public struct SectionedDiff<Section, Item>
         }
     }
     
-    public struct Configuration
+    struct Configuration
     {
-        public var moveDetection : MoveDetection
+        var moveDetection : MoveDetection
         
-        public var section : SectionProviders
-        public var item : ItemProviders
+        var section : SectionProviders
+        var item : ItemProviders
         
-        public init(moveDetection : MoveDetection = .checkAll, section : SectionProviders, item : ItemProviders)
+        init(moveDetection : MoveDetection = .checkAll, section : SectionProviders, item : ItemProviders)
         {
             self.moveDetection = moveDetection
             
@@ -53,15 +53,15 @@ public struct SectionedDiff<Section, Item>
             self.item = item
         }
         
-        public struct SectionProviders
+        struct SectionProviders
         {
-            public var identifier : (Section) -> AnyIdentifier
+            var identifier : (Section) -> AnyIdentifier
             
-            public var items : (Section) -> [Item]
+            var items : (Section) -> [Item]
             
-            public var movedHint : (Section, Section) -> Bool
+            var movedHint : (Section, Section) -> Bool
             
-            public init(
+            init(
                 identifier : @escaping (Section) -> AnyIdentifier,
                 items : @escaping (Section) -> [Item],
                 movedHint : @escaping (Section, Section) -> Bool
@@ -73,14 +73,14 @@ public struct SectionedDiff<Section, Item>
             }
         }
         
-        public struct ItemProviders
+        struct ItemProviders
         {
-            public var identifier : (Item) -> AnyIdentifier
+            var identifier : (Item) -> AnyIdentifier
             
-            public var updated : (Item, Item) -> Bool
-            public var movedHint : (Item, Item) -> Bool
+            var updated : (Item, Item) -> Bool
+            var movedHint : (Item, Item) -> Bool
             
-            public init(
+            init(
                 identifier : @escaping (Item) -> AnyIdentifier,
                 updated : @escaping (Item, Item) -> Bool,
                 movedHint : @escaping (Item, Item) -> Bool
@@ -93,20 +93,20 @@ public struct SectionedDiff<Section, Item>
         }
     }
     
-    public struct SectionChanges
+    struct SectionChanges
     {
-        public let added : [Added]
-        public let removed : [Removed]
+        let added : [Added]
+        let removed : [Removed]
         
-        public let moved : [Moved]
-        public let noChange : [NoChange]
+        let moved : [Moved]
+        let noChange : [NoChange]
         
-        public let sectionsChangeCount : Int
-        public let itemsChangeCount : Int
+        let sectionsChangeCount : Int
+        let itemsChangeCount : Int
                 
         private let diff : ArrayDiff<Section>
         
-        public init(old : [Section], new : [Section], configuration : Configuration)
+        init(old : [Section], new : [Section], configuration : Configuration)
         {
             self.diff = ArrayDiff(
                 old: old,
@@ -176,53 +176,53 @@ public struct SectionedDiff<Section, Item>
             precondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
         
-        public struct Added
+        struct Added
         {
-            public let newIndex : Int
+            let newIndex : Int
             
-            public let newValue : Section
+            let newValue : Section
         }
         
-        public struct Removed
+        struct Removed
         {
-            public let oldIndex : Int
+            let oldIndex : Int
             
-            public let oldValue : Section
+            let oldValue : Section
         }
         
-        public struct Moved
+        struct Moved
         {
-            public let oldIndex : Int
-            public let newIndex : Int
+            let oldIndex : Int
+            let newIndex : Int
             
-            public let oldValue : Section
-            public let newValue : Section
+            let oldValue : Section
+            let newValue : Section
             
-            public let itemChanges : ItemChanges
+            let itemChanges : ItemChanges
         }
         
-        public struct NoChange
+        struct NoChange
         {
-            public let oldIndex : Int
-            public let newIndex : Int
+            let oldIndex : Int
+            let newIndex : Int
             
-            public let oldValue : Section
-            public let newValue : Section
+            let oldValue : Section
+            let newValue : Section
             
-            public let itemChanges : ItemChanges
+            let itemChanges : ItemChanges
         }
     }
     
-    public struct AggregatedChanges
+    struct AggregatedChanges
     {
-        public var deletedSections : [SectionChanges.Removed] = []
-        public var insertedSections : [SectionChanges.Added] = []
-        public var movedSections : [SectionChanges.Moved] = []
+        var deletedSections : [SectionChanges.Removed] = []
+        var insertedSections : [SectionChanges.Added] = []
+        var movedSections : [SectionChanges.Moved] = []
         
-        public var deletedItems : [ItemChanges.Removed] = []
-        public var insertedItems : [ItemChanges.Added] = []
-        public var updatedItems : [ItemChanges.Updated] = []
-        public var movedItems : [ItemChanges.Moved] = []
+        var deletedItems : [ItemChanges.Removed] = []
+        var insertedItems : [ItemChanges.Added] = []
+        var updatedItems : [ItemChanges.Updated] = []
+        var movedItems : [ItemChanges.Moved] = []
         
         init(sectionChanges changes : SectionChanges)
         {
@@ -278,20 +278,20 @@ public struct SectionedDiff<Section, Item>
         }
     }
     
-    public struct ItemChanges
+    struct ItemChanges
     {
-        public let added : [Added]
-        public let removed : [Removed]
+        let added : [Added]
+        let removed : [Removed]
         
-        public let moved : [Moved]
-        public let updated : [Updated]
-        public let noChange : [NoChange]
+        let moved : [Moved]
+        let updated : [Updated]
+        let noChange : [NoChange]
         
-        public let changeCount : Int
+        let changeCount : Int
         
-        public let diff : ArrayDiff<Item>
+        let diff : ArrayDiff<Item>
 
-        public init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
+        init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
         {
             self.init(
                 old: configuration.section.items(old),
@@ -302,7 +302,7 @@ public struct SectionedDiff<Section, Item>
             )
         }
         
-        public init(old : [Item], oldIndex : Int, new : [Item], newIndex : Int, configuration : Configuration)
+        init(old : [Item], oldIndex : Int, new : [Item], newIndex : Int, configuration : Configuration)
         {
             self.diff = ArrayDiff(
                 old: old,
@@ -360,120 +360,120 @@ public struct SectionedDiff<Section, Item>
                 + self.updated.count
         }
         
-        public struct Added
+        struct Added
         {
-            public let newIndex : IndexPath
+            let newIndex : IndexPath
             
-            public let newValue : Item
+            let newValue : Item
         }
         
-        public struct Removed
+        struct Removed
         {
-            public let oldIndex : IndexPath
+            let oldIndex : IndexPath
             
-            public let oldValue : Item
+            let oldValue : Item
         }
         
-        public struct Moved
+        struct Moved
         {
-            public let oldIndex : IndexPath
-            public let newIndex : IndexPath
+            let oldIndex : IndexPath
+            let newIndex : IndexPath
             
-            public var oldValue : Item
-            public var newValue : Item
+            var oldValue : Item
+            var newValue : Item
         }
         
-        public struct Updated
+        struct Updated
         {
-            public let oldIndex : IndexPath
-            public let newIndex : IndexPath
+            let oldIndex : IndexPath
+            let newIndex : IndexPath
             
-            public let oldValue : Item
-            public let newValue : Item
+            let oldValue : Item
+            let newValue : Item
         }
         
-        public struct NoChange
+        struct NoChange
         {
-            public let oldIndex : IndexPath
-            public let newIndex : IndexPath
+            let oldIndex : IndexPath
+            let newIndex : IndexPath
             
-            public let oldValue : Item
-            public let newValue : Item
+            let oldValue : Item
+            let newValue : Item
         }
     }
 }
 
 
-public enum MoveDetection
+enum MoveDetection
 {
     case onlyHinted
     case checkAll
 }
 
 
-public struct ArrayDiff<Element>
+struct ArrayDiff<Element>
 {
-    public var added : [Added]
-    public var removed : [Removed]
+    var added : [Added]
+    var removed : [Removed]
     
-    public var moved : [Moved]
-    public var updated : [Updated]
-    public var noChange : [NoChange]
+    var moved : [Moved]
+    var updated : [Updated]
+    var noChange : [NoChange]
     
-    public var changeCount : Int
+    var changeCount : Int
     
-    public struct Added
+    struct Added
     {
-        public let newIndex : Int
+        let newIndex : Int
         
-        public let new : Element
+        let new : Element
     }
     
-    public struct Removed
+    struct Removed
     {
-        public let oldIndex : Int
+        let oldIndex : Int
         
-        public let old : Element
+        let old : Element
     }
     
-    public struct Moved
+    struct Moved
     {
-        public let oldIndex : Int
-        public let newIndex : Int
+        let oldIndex : Int
+        let newIndex : Int
         
-        public let old : Element
-        public let new : Element
+        let old : Element
+        let new : Element
     }
     
-    public struct Updated
+    struct Updated
     {
-        public let oldIndex : Int
-        public let newIndex : Int
+        let oldIndex : Int
+        let newIndex : Int
         
-        public let old : Element
-        public let new : Element
+        let old : Element
+        let new : Element
     }
     
-    public struct NoChange
+    struct NoChange
     {
-        public let oldIndex : Int
-        public let newIndex : Int
+        let oldIndex : Int
+        let newIndex : Int
         
-        public let old : Element
-        public let new : Element
+        let old : Element
+        let new : Element
     }
     
-    public struct Configuration
+    struct Configuration
     {
         var moveDetection : MoveDetection
         
-        public init(moveDetection : MoveDetection = .checkAll)
+        init(moveDetection : MoveDetection = .checkAll)
         {
             self.moveDetection = moveDetection
         }
     }
     
-    public init(
+    init(
         old : [Element],
         new : [Element],
         configuration : Configuration = Configuration(),
@@ -637,7 +637,7 @@ public struct ArrayDiff<Element>
 }
 
 
-public extension SectionedDiff.SectionChanges
+extension SectionedDiff.SectionChanges
 {
     func transform<Mapped>(
         old : [Mapped],
@@ -726,7 +726,7 @@ public extension SectionedDiff.SectionChanges
 }
 
 
-public extension SectionedDiff.ItemChanges
+extension SectionedDiff.ItemChanges
 {
     func transform<Mapped>(
         old : [Mapped],

@@ -5,7 +5,6 @@ workspace 'Demo/Demo.xcworkspace'
 
 target 'Demo' do
 	pod 'Listable', :path => 'Listable.podspec', :testspecs => ['Tests']
-	pod 'ListableCore', :path => 'ListableCore.podspec', :testspecs => ['Tests']
 
 	pod 'BlueprintLists', :path => 'BlueprintLists.podspec', :testspecs => ['Tests']
 

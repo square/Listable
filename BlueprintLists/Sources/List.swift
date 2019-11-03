@@ -8,7 +8,6 @@
 import BlueprintUI
 
 import Listable
-import ListableCore
 
 
 public struct List : BlueprintUI.Element

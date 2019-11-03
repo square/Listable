@@ -5,8 +5,6 @@
 //  Created by Kyle Van Essen on 10/17/19.
 //
 
-import ListableCore
-
 
 public struct Appearance : Equatable
 {

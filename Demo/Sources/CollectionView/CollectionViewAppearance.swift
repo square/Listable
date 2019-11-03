@@ -6,7 +6,6 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import ListableCore
 import Listable
 
 

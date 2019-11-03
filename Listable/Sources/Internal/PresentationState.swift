@@ -5,10 +5,8 @@
 //  Created by Kyle Van Essen on 7/22/19.
 //
 
-import ListableCore
 
-
-internal protocol AnyPresentationItemState : AnyObject
+protocol AnyPresentationItemState : AnyObject
 {
     var isDisplayed : Bool { get }
     func setAndPerform(isDisplayed: Bool)
@@ -35,7 +33,7 @@ internal protocol AnyPresentationItemState : AnyObject
 }
 
 
-internal protocol AnyPresentationHeaderFooterState : AnyObject
+protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
     
@@ -56,7 +54,7 @@ internal protocol AnyPresentationHeaderFooterState : AnyObject
 }
 
 
-internal enum UpdateReason
+enum UpdateReason
 {
     case move
     case update
@@ -71,7 +69,7 @@ internal enum UpdateReason
  This is where bindings or other update-driving objects live,
  which then push the changes to the item and section content back into view models.
  */
-final internal class PresentationState
+final class PresentationState
 {
     //
     // MARK: Public Properties

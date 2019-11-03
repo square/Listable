@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ListableCore
 
 
 public final class ListView : UIView

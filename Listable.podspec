@@ -12,8 +12,6 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
-  s.dependency 'ListableCore'
-
   s.source_files = 'Listable/Sources/**/*.{swift}'
 
   s.test_spec 'Tests' do |test_spec|
