@@ -223,22 +223,14 @@ public final class ListView : UIView
         
         removed.forEach {
             let item = state.item(at: $0)
-            
             view.deselectItem(at: $0, animated: animated)
-                        
-            if let cell = view.cellForItem(at: $0) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
         
         added.forEach {
             let item = state.item(at: $0)
-
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
-            
-            if let cell = view.cellForItem(at: $0) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
     }
     
@@ -553,18 +545,14 @@ fileprivate extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            if let cell = collectionView.cellForItem(at: indexPath) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
         
         func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath)
         {
             let item = self.presentationState.item(at: indexPath)
 
-            if let cell = collectionView.cellForItem(at: indexPath) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
 
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
@@ -584,10 +572,7 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
-            
-            if let cell = collectionView.cellForItem(at: indexPath) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
 
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
@@ -595,10 +580,7 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: false)
-
-            if let cell = collectionView.cellForItem(at: indexPath) {
-                item.applyTo(cell: cell, itemState: .init(cell: cell))
-            }
+            item.applyToVisibleCell()
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]
