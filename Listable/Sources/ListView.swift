@@ -141,6 +141,26 @@ public final class ListView : UIView
     
     // MARK: UIView
     
+    public override var frame: CGRect {
+        didSet {
+            /**
+             Once the view actually has a size, we can provide content.
+            
+             There's no value in having content with no view size, as we cannot
+             size cells otherwise.
+             */
+            
+            let fromEmpty = oldValue.isEmpty && self.bounds.isEmpty == false
+            let toEmpty = oldValue.isEmpty == false && self.bounds.isEmpty
+            
+            if fromEmpty {
+                self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
+            } else if toEmpty {
+                self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
+            }
+        }
+    }
+    
     public override var backgroundColor: UIColor? {
         didSet {
             self.collectionView.backgroundColor = self.backgroundColor
@@ -224,6 +244,49 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: Updating Displayed Items
+    //
+    
+    private struct VisibleItem : Hashable
+    {
+        let value : AnyPresentationItemState
+        
+        func hash(into hasher: inout Hasher)
+        {
+            hasher.combine(ObjectIdentifier(self.value))
+        }
+        
+        static func == (lhs : VisibleItem, rhs : VisibleItem) -> Bool
+        {
+            return lhs.value === rhs.value
+        }
+    }
+    
+    private var visibleItems : Set<VisibleItem> = Set()
+    
+    private func updateVisibleItems()
+    {
+        let newVisibleIndexes = self.collectionView.indexPathsForVisibleItems
+        
+        let newVisibleItems = Set(newVisibleIndexes.map {
+            VisibleItem(value: self.storage.presentationState.item(at: $0))
+        })
+        
+        let removed = self.visibleItems.subtracting(newVisibleItems)
+        let added = newVisibleItems.subtracting(self.visibleItems)
+        
+        removed.forEach {
+            $0.value.setAndPerform(isDisplayed: false)
+        }
+        
+        added.forEach {
+            $0.value.setAndPerform(isDisplayed: true)
+        }
+        
+        self.visibleItems = newVisibleItems
+    }
+    
+    //
     // MARK: Updating Presentation State
     //
     
@@ -250,6 +313,9 @@ public final class ListView : UIView
             
         case .scrolledToTop:
             self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason)
+            
+        case .transitionedToBounds(_):
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
         }
     }
     
@@ -257,22 +323,29 @@ public final class ListView : UIView
     {
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
         
-        let slice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-        let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: slice.content.sections)
+        let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+        
+        let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
         
         let updateData = {
-            self.storage.presentationState.update(with: diff, slice: slice)
+            self.storage.presentationState.update(with: diff, slice: visibleSlice)
+        }
+        
+        let completion = { (finished : Bool) in
+            self.updateVisibleItems()
         }
         
         if reason.diffsChanges {
             self.performBatchUpdates(
                 with: diff,
                 animated: reason.animated,
-                onBeginUpdates: updateData
+                onBeginUpdates: updateData,
+                completion:completion
             )
         } else {
             updateData()
             self.collectionView.reloadData()
+            completion(true)
         }
         
         self.updateCollectionViewSelections(animated: reason.animated)
@@ -281,7 +354,8 @@ public final class ListView : UIView
     private func performBatchUpdates(
         with diff : SectionedDiff<Section,AnyItem>,
         animated: Bool,
-        onBeginUpdates : @escaping () -> ()
+        onBeginUpdates : @escaping () -> (),
+        completion : @escaping (Bool) -> ()
     )
     {
         let view = self.collectionView
@@ -337,10 +411,10 @@ public final class ListView : UIView
         self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
-            view.performBatchUpdates(batchUpdates)
+            view.performBatchUpdates(batchUpdates, completion: completion)
         } else {
             UIView.performWithoutAnimation {
-                view.performBatchUpdates(batchUpdates)
+                view.performBatchUpdates(batchUpdates, completion: completion)
             }
         }
     }
@@ -697,6 +771,8 @@ fileprivate extension ListView
             if scrollingDown {
                 self.view.updatePresentationState(for: .scrolledDown)
             }
+            
+            self.view.updateVisibleItems()
         }
     }
 }

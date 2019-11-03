@@ -152,6 +152,8 @@ internal extension Content
             
             case contentChanged(animated : Bool)
             
+            case transitionedToBounds(isEmpty : Bool)
+            
             var diffsChanges : Bool {
                 /*
                  We only diff in the case of content change to avoid visual artifacts in the table view;
@@ -164,6 +166,8 @@ internal extension Content
                 case .scrolledToTop: return false
                     
                 case .contentChanged(_): return true
+                    
+                case .transitionedToBounds(_): return false
                 }
             }
             
@@ -174,6 +178,8 @@ internal extension Content
                 case .scrolledToTop: return false
                     
                 case .contentChanged(let animated): return animated
+                    
+                case .transitionedToBounds(_): return false
                 }
             }
         }
