@@ -300,7 +300,7 @@ class ListViewLayout : UICollectionViewLayout
     //
 
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
-    {
+    {        
         let changes = self.changesDuringCurrentUpdate
 
         let wasInserted = changes.insertedItems.contains {
@@ -309,19 +309,19 @@ class ListViewLayout : UICollectionViewLayout
 
         if wasInserted {
             let attributes = self.layoutResult.element(at: itemIndexPath)
-
+            
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
 
             return attributes
         } else {
-            return self.layoutResult.element(at: itemIndexPath)
+            return super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
         }
     }
 
     public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutResult.supplementaryElement(of: elementKind, at: elementIndexPath)
+        return super.initialLayoutAttributesForAppearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
     }
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
@@ -340,13 +340,13 @@ class ListViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            return self.previousLayoutResult.element(at: itemIndexPath)
+            return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
         }
     }
 
     public override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.previousLayoutResult.supplementaryElement(of: elementKind, at: elementIndexPath)
+        return super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
     }
 }
 

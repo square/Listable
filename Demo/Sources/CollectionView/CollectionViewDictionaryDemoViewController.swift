@@ -62,7 +62,14 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             }
             
             table += Section(identifier: "search") { rows in
-                rows += Item(SearchRow(string: state.value.filter), appearance: SearchRowAppearance())
+                rows += Item(
+                    SearchRow(
+                        string: state.value.filter,
+                        onChange: { string in
+                            state.value.filter = string
+                    }
+                ), appearance: SearchRowAppearance()
+                )
             }
             
             var hasContent = false
@@ -81,7 +88,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                             hasContent = true
                             return Item(
                                 WordRow(title: word.word, detail: word.description),
-                                height: .thatFits(.noConstraint)
+                                height: .thatFits(.atMost(250.0))
                             )
                         } else {
                             return nil
@@ -93,12 +100,13 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             table.removeEmpty()
             
             if hasContent == false {
-                table += Section(identifier: "emptty") { rows in
+                table += Section(identifier: "empty") { rows in
                     rows += Item(
                         WordRow(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
-                        )
+                        ),
+                        height: .thatFits(.atMost(250.0))
                     )
                 }
             }
@@ -124,9 +132,11 @@ struct SearchRowAppearance : ItemElementAppearance
     func apply(to view: View, with state: ItemState, previous: SearchRowAppearance?) {}
 }
 
-struct SearchRow : ItemElement, Equatable
+struct SearchRow : ItemElement
 {
     var string : String
+    
+    var onChange : (String) -> ()
     
     // MARK: ItemElement
     
@@ -138,7 +148,12 @@ struct SearchRow : ItemElement, Equatable
     
     func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
     {
+        view.content.onStateChanged = self.onChange
         view.content.text = self.string
+    }
+    
+    func wasUpdated(comparedTo other: SearchRow) -> Bool {
+        return self.string != other.string
     }
 }
 

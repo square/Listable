@@ -32,7 +32,7 @@ public protocol ItemElement
      
      The list view uses the value of this method to be more intelligent about what has moved within the list.
      
-     There is a default implementation of this method for Equatable elements – which simply checks if the old and new values are equal.
+     There is a default implementation of this method which simply returns wasUpdated(comparedTo:).
      */
     func wasMoved(comparedTo other : Self) -> Bool
     
@@ -69,13 +69,17 @@ public protocol ItemElement
 }
 
 
-public extension ItemElement where Self:Equatable
+public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
-        return self != other
+        return self.wasUpdated(comparedTo: other)
     }
-    
+}
+
+
+public extension ItemElement where Self:Equatable
+{
     func wasUpdated(comparedTo other : Self) -> Bool
     {
         return self != other

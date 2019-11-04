@@ -117,7 +117,7 @@ public final class ListView : UIView
         self.sourcePresenter.discard()
         
         let sourcePresenter = SourcePresenter(initial: initial, source: source, didChange: { [weak self] in
-            self?.setContentFromSource(animated: animated)
+            self?.setContentFromSource(animated: true)
         })
         
         self.sourcePresenter = sourcePresenter
@@ -391,6 +391,8 @@ public final class ListView : UIView
             }
             
             // Perform Updates Of Visible Items
+            
+            // TODO: Always refresh the cells that are on-screen.
             
             changes.updatedItems.forEach {
                 let item = self.storage.presentationState.item(at: $0.oldIndex)
