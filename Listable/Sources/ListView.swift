@@ -89,6 +89,57 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: Scrolling To Sections & Items
+    //
+    
+    public enum ItemScrollPosition : Equatable
+    {
+        case top
+        case centered
+        case bottom
+        
+        var scrollPosition : UICollectionView.ScrollPosition {
+            switch self {
+            case .top: return .top
+            case .centered: return .centeredVertically
+            case .bottom: return .bottom
+            }
+        }
+    }
+    
+    @discardableResult
+    public func scrollTo<Element:ItemElement>(item : Item<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        return self.scrollTo(item: item.identifier, position: position, animated: animated)
+    }
+    
+    @discardableResult
+    public func scrollTo<Element:ItemElement>(item : Identifier<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        return self.scrollTo(item: AnyIdentifier(item), position: position, animated: animated)
+    }
+    
+    @discardableResult
+    public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        guard let indexPath = self.storage.allContent.indexPath(for: item) else {
+            return false
+        }
+        
+        guard let lastRenderedIndexPath = self.storage.presentationState.lastIndexPath else {
+            return false
+        }
+        
+        if lastRenderedIndexPath < indexPath {
+            self.updatePresentationState(for: .programaticScrollDownTo(indexPath))
+        }
+        
+        self.collectionView.scrollToItem(at: indexPath, at: position.scrollPosition, animated: animated)
+        
+        return true
+    }
+    
+    //
     // MARK: Setting & Getting Content
     //
     
@@ -307,6 +358,9 @@ public final class ListView : UIView
             
         case .transitionedToBounds(_):
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+            
+        case .programaticScrollDownTo(let newIndexPath):
+            self.updatePresentationStateWith(firstVisibleIndexPath: newIndexPath, for: reason)
         }
     }
     
