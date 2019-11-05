@@ -147,6 +147,23 @@ final class PresentationState
         return sections
     }
     
+    public var lastIndexPath : IndexPath? {
+        guard self.sections.isEmpty == false else {
+            return nil
+        }
+        
+        let lastSectionIndex = (self.sections.count - 1)
+        let lastSection = self.sections[lastSectionIndex]
+        
+        guard lastSection.items.isEmpty == false else {
+            return nil
+        }
+        
+        let lastItemIndex = (lastSection.items.count - 1)
+        
+        return IndexPath(item: lastItemIndex, section: lastSectionIndex)
+    }
+    
     //
     // MARK: Mutating Data
     //

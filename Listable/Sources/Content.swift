@@ -70,6 +70,19 @@ public struct Content
         self.sections[indexPath.section].items.remove(at: indexPath.item)
     }
     
+    public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
+    {
+        for (sectionIndex, section) in self.sections.enumerated() {
+            for (itemIndex, item) in section.items.enumerated() {
+                if item.identifier == identifier {
+                    return IndexPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     //
     // MARK: Slicing Content
     //
@@ -153,6 +166,8 @@ internal extension Content
             
             case transitionedToBounds(isEmpty : Bool)
             
+            case programaticScrollDownTo(IndexPath)
+        
             var animated : Bool {
                 switch self {
                 case .scrolledDown: return false
@@ -162,6 +177,8 @@ internal extension Content
                 case .contentChanged(let animated): return animated
                     
                 case .transitionedToBounds(_): return false
+                    
+                case .programaticScrollDownTo(_): return false
                 }
             }
         }
