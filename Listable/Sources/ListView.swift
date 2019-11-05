@@ -85,7 +85,7 @@ public final class ListView : UIView
         self.layout.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
         
-        self.storage.presentationState.resetCachedHeights()
+        self.storage.presentationState.resetAllCachedHeights()
     }
     
     //
@@ -238,43 +238,68 @@ public final class ListView : UIView
     // MARK: Updating Displayed Items
     //
     
-    private struct VisibleItem : Hashable
+    private struct VisibleSection : Hashable
     {
-        let value : AnyPresentationItemState
+        let section : PresentationState.SectionState
         
         func hash(into hasher: inout Hasher)
         {
-            hasher.combine(ObjectIdentifier(self.value))
+            hasher.combine(ObjectIdentifier(self.section))
+        }
+        
+        static func == (lhs : VisibleSection, rhs : VisibleSection) -> Bool
+        {
+            return lhs.section === rhs.section
+        }
+    }
+    
+    
+    private struct VisibleItem : Hashable
+    {
+        let item : AnyPresentationItemState
+        
+        func hash(into hasher: inout Hasher)
+        {
+            hasher.combine(ObjectIdentifier(self.item))
         }
         
         static func == (lhs : VisibleItem, rhs : VisibleItem) -> Bool
         {
-            return lhs.value === rhs.value
+            return lhs.item === rhs.item
         }
     }
     
+    private var visibleSections : Set<VisibleSection> = Set()
     private var visibleItems : Set<VisibleItem> = Set()
     
-    private func updateVisibleItems()
+    private func updateVisibleItemsAndSections()
     {
-        let newVisibleIndexes = self.collectionView.indexPathsForVisibleItems
+        // Visible Items & Sections
         
-        let newVisibleItems = Set(newVisibleIndexes.map {
-            VisibleItem(value: self.storage.presentationState.item(at: $0))
+        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems
+        
+        let newVisibleItems = Set(visibleIndexPaths.map {
+            VisibleItem(item: self.storage.presentationState.item(at: $0))
         })
+        
+        let visibleSectionIndexes : Set<Int> = visibleIndexPaths.reduce(into: Set(), { $0.insert($1.section) })
+        let visibleSections = self.storage.presentationState.sections(at: Array(visibleSectionIndexes))
+        
+        // Message Changes
         
         let removed = self.visibleItems.subtracting(newVisibleItems)
         let added = newVisibleItems.subtracting(self.visibleItems)
         
         removed.forEach {
-            $0.value.setAndPerform(isDisplayed: false)
+            $0.item.setAndPerform(isDisplayed: false)
         }
         
         added.forEach {
-            $0.value.setAndPerform(isDisplayed: true)
+            $0.item.setAndPerform(isDisplayed: true)
         }
         
         self.visibleItems = newVisibleItems
+        self.visibleSections = Set(visibleSections.map { VisibleSection(section: $0)} )
     }
     
     //
@@ -287,9 +312,11 @@ public final class ListView : UIView
         
         let indexPath = indexPaths.first
         
+        let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
+        
         switch reason {
         case .scrolledDown:
-            let needsUpdate = self.collectionView.isScrolledNearBottom() && self.storage.presentationState.containsAllItems == false
+            let needsUpdate = self.collectionView.isScrolledNearBottom() && presentationStateTruncated
             
             if needsUpdate {
                 self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
@@ -300,10 +327,14 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
             
         case .didEndDecelerating:
-            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+            if presentationStateTruncated {
+                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+            }
             
         case .scrolledToTop:
-            self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason)
+            if presentationStateTruncated {
+                self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason)
+            }
             
         case .transitionedToBounds(_):
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
@@ -318,34 +349,28 @@ public final class ListView : UIView
         
         let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
         
-        let updateData = {
+        let updateBackingData = {
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
         
         let completion = { (finished : Bool) in
-            self.updateVisibleItems()
+            self.updateVisibleItemsAndSections()
         }
         
-        if reason.diffsChanges {
-            self.performBatchUpdates(
-                with: diff,
-                animated: reason.animated,
-                onBeginUpdates: updateData,
-                completion:completion
-            )
-        } else {
-            updateData()
-            self.collectionView.reloadData()
-            completion(true)
-        }
-        
+        self.performBatchUpdates(
+            with: diff,
+            animated: reason.animated,
+            updateBackingData: updateBackingData,
+            completion:completion
+        )
+
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         
     private func performBatchUpdates(
         with diff : SectionedDiff<Section,AnyItem>,
         animated: Bool,
-        onBeginUpdates : @escaping () -> (),
+        updateBackingData : @escaping () -> (),
         completion : @escaping (Bool) -> ()
     )
     {
@@ -354,7 +379,7 @@ public final class ListView : UIView
         let changes = diff.aggregatedChanges
                 
         let batchUpdates = {
-            onBeginUpdates()
+            updateBackingData()
                                     
             // Sections
 
@@ -374,30 +399,17 @@ public final class ListView : UIView
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            // Perform Updates Of Section Headers & Footers
+            // Perform Updates Of Visible Section Headers & Footers
             
-            diff.changes.moved.forEach { move in
-                let section = self.storage.presentationState.sections[move.newIndex]
-                
-                section.header?.applyToVisibleView()
-                section.footer?.applyToVisibleView()
-            }
-            
-            diff.changes.noChange.forEach { change in
-                let section = self.storage.presentationState.sections[change.newIndex]
-                
-                section.header?.applyToVisibleView()
-                section.footer?.applyToVisibleView()
+            self.visibleSections.forEach {
+                $0.section.header?.applyToVisibleView()
+                $0.section.footer?.applyToVisibleView()
             }
             
             // Perform Updates Of Visible Items
             
-            // TODO: Always refresh the cells that are on-screen.
-            
-            changes.updatedItems.forEach {
-                let item = self.storage.presentationState.item(at: $0.oldIndex)
-                
-                item.applyToVisibleCell()
+            self.visibleItems.forEach {
+                $0.item.applyToVisibleCell()
             }
         }
         
@@ -755,7 +767,7 @@ fileprivate extension ListView
                 self.view.updatePresentationState(for: .scrolledDown)
             }
             
-            self.view.updateVisibleItems()
+            self.view.updateVisibleItemsAndSections()
         }
     }
 }

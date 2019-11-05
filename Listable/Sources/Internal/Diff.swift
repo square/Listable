@@ -775,7 +775,7 @@ extension SectionedDiff.ItemChanges
         
         self.noChange.forEach {
             var value = new[$0.newIndex.item]
-            updated($0.oldValue, $0.newValue, &value)
+            noChange($0.oldValue, $0.newValue, &value)
             new[$0.newIndex.item] = value
         }
         
