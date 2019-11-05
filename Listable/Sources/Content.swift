@@ -31,6 +31,10 @@ public struct Content
         return self.sections.reduce(0, { $0 + $1.items.count })
     }
     
+    public var isEmpty : Bool {
+        return self.sections.isEmpty || self.sections.allSatisfy { $0.isEmpty }
+    }
+    
     //
     // MARK: Initialization
     //

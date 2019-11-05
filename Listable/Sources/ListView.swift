@@ -92,42 +92,6 @@ public final class ListView : UIView
     // MARK: Scrolling To Sections & Items
     //
     
-    public struct ItemScrollPosition : Equatable
-    {
-        var position : Position
-        var ifAlreadyVisible : IfAlreadyVisible
-        
-        var offset : CGFloat
-        
-        public init(position : Position, ifAlreadyVisible : IfAlreadyVisible, offset : CGFloat = 0.0)
-        {
-            self.position = position
-            self.ifAlreadyVisible = ifAlreadyVisible
-            self.offset = offset
-        }
-        
-        public enum Position : Equatable
-        {
-            case top
-            case centered
-            case bottom
-            
-            var toCollectionViewScrollPosition : UICollectionView.ScrollPosition {
-                switch self {
-                case .top: return .top
-                case .centered: return .centeredVertically
-                case .bottom: return .bottom
-                }
-            }
-        }
-        
-        public enum IfAlreadyVisible : Equatable
-        {
-            case doNothing
-            case scrollToPosition
-        }
-    }
-    
     @discardableResult
     public func scrollTo(item : AnyItem, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
@@ -143,6 +107,8 @@ public final class ListView : UIView
     @discardableResult
     public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
+        // Make sure the item identifier is valid.
+        
         guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
             return false
         }
@@ -151,10 +117,20 @@ public final class ListView : UIView
             return false
         }
         
+        // If the item is already visible and that's good enough, return.
+        
+        let isAlreadyVisible = self.collectionView.indexPathsForVisibleItems.contains(toIndexPath)
+        
+        if  isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+            return true
+        }
+        
+        // Otherwise, perform scrolling.
+        
         let scroll = {
             self.collectionView.scrollToItem(
                 at: toIndexPath,
-                at: position.position.toCollectionViewScrollPosition,
+                at: position.position.UICollectionViewScrollPosition,
                 animated: animated
             )
         }
