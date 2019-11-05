@@ -89,7 +89,7 @@ public extension BlueprintItemElement
     //
     
     func apply(to view: Appearance.View, with state : ItemState, reason: ApplyReason)
-    {
+    {        
         view.content.element = self.element(with: state)
         
         let background = self.backgroundElement(with: state)

@@ -136,6 +136,17 @@ final class PresentationState
         return item
     }
     
+    func sections(at indexes : [Int]) -> [SectionState]
+    {
+        var sections : [SectionState] = []
+        
+        indexes.forEach {
+            sections.append(self.sections[$0])
+        }
+        
+        return sections
+    }
+    
     //
     // MARK: Mutating Data
     //
@@ -158,7 +169,7 @@ final class PresentationState
     // MARK: Height Caching
     //
     
-    func resetCachedHeights()
+    func resetAllCachedHeights()
     {
         self.sections.forEach { section in
             section.items.forEach { item in

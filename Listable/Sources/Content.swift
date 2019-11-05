@@ -153,23 +153,6 @@ internal extension Content
             
             case transitionedToBounds(isEmpty : Bool)
             
-            var diffsChanges : Bool {
-                /*
-                 We only diff in the case of content change to avoid visual artifacts in the table view;
-                 even with no animation type provided to batch update methods, the table view still moves
-                 items around in an animated manner.
-                 */
-                switch self {
-                case .scrolledDown: return false
-                case .didEndDecelerating: return false
-                case .scrolledToTop: return false
-                    
-                case .contentChanged(_): return true
-                    
-                case .transitionedToBounds(_): return false
-                }
-            }
-            
             var animated : Bool {
                 switch self {
                 case .scrolledDown: return false
