@@ -70,12 +70,12 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(
                 identifier: SectionIdentifier.variations,
                 layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(title: variationsTitle), height: .thatFits(.noConstraint)),
-                footer: HeaderFooter(Footer(text: footerText), height: .thatFits(.noConstraint)),
+                header: HeaderFooter(Header(content: variationsTitle), height: .thatFits(.noConstraint)),
+                footer: HeaderFooter(Footer(content: footerText), height: .thatFits(.noConstraint)),
                 content: { section in
                     section += self.itemization.variations.all.map { variation in
                         Item(
-                            ChoiceItem(title: variation.name, detail: "$0.00"),
+                            ChoiceItem(content: .init(title: variation.name, detail: "$0.00")),
                             selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
                             onSelect: { _ in
                                 self.itemization.variations.select(modifier: variation)
@@ -90,12 +90,12 @@ final class ItemizationEditorViewController : UIViewController
                 Section(
                     identifier: SectionIdentifier.modifier(set.name),
                     layout: Section.Layout(columns: 2, spacing: 20.0),
-                    header: HeaderFooter(Header(title: set.name), height: .thatFits(.noConstraint)),
-                    footer: HeaderFooter(Footer(text: "Choose modifiers"), height: .thatFits(.noConstraint)),
+                    header: HeaderFooter(Header(content: set.name), height: .thatFits(.noConstraint)),
+                    footer: HeaderFooter(Footer(content: "Choose modifiers"), height: .thatFits(.noConstraint)),
                     content: { section in
                         section += set.all.map { modifier in
                             Item(
-                                ChoiceItem(title: modifier.name, detail: "$0.00"),
+                                ChoiceItem(content: .init(title: modifier.name, detail: "$0.00")),
                                 selection: .isSelectable(isSelected: false),
                                 onSelect: { _ in
                                     
@@ -110,12 +110,12 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(
                 identifier: SectionIdentifier.discounts,
                 layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(title: "Discounts"), height: .thatFits(.noConstraint)),
+                header: HeaderFooter(Header(content: "Discounts"), height: .thatFits(.noConstraint)),
                 footer: nil,
                 content: { section in
                     section += self.availableOptions.allDiscounts.map { discount in
                         Item(
-                            ToggleItem(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount)) { isOn in
+                            ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
                                 if isOn {
                                     self.itemization.add(discount)
                                 } else {
@@ -131,12 +131,12 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(
                 identifier: SectionIdentifier.taxes,
                 layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(title: "Taxes"), height: .thatFits(.noConstraint)),
+                header: HeaderFooter(Header(content: "Taxes"), height: .thatFits(.noConstraint)),
                 footer: nil,
                 content: { section in
                     section += self.availableOptions.allTaxes.map { tax in
                         Item(
-                            ToggleItem(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax)) { isOn in
+                            ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
                                 if isOn {
                                     self.itemization.add(tax)
                                 } else {
@@ -177,33 +177,38 @@ final class ItemizationEditorViewController : UIViewController
     }
 }
 
-struct Header : BlueprintHeaderFooterElement, Equatable
+struct Header : BlueprintHeaderFooterElement
 {
-    var title : String
+    var content : String
     
     var element : Element {
-        return Inset(wrapping: Label(text: self.title) { label in
+        return Inset(wrapping: Label(text: self.content) { label in
             label.font = .systemFont(ofSize: 30.0, weight: .bold)
         }, insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0))
     }
 }
 
-struct Footer : BlueprintHeaderFooterElement, Equatable
+struct Footer : BlueprintHeaderFooterElement
 {
-    var text : String
+    var content : String
     
     var element : Element {
-        return Label(text: self.text) { label in
+        return Label(text: self.content) { label in
             label.font = .systemFont(ofSize: 14.0, weight: .regular)
             label.alignment = .center
         }
     }
 }
 
-struct ChoiceItem : BlueprintItemElement, Equatable
+struct ChoiceItem : BlueprintItemElement
 {
-    var title : String
-    var detail : String
+    var content : Content
+    
+    struct Content : Equatable
+    {
+        var title : String
+        var detail : String
+    }
     
     // MARK: BlueprintItemElement
     
@@ -215,10 +220,10 @@ struct ChoiceItem : BlueprintItemElement, Equatable
                 wrapping: Row() { row in
                     row.verticalAlignment = .center
                     
-                    row.add(child: Label(text: self.title) { label in
+                    row.add(child: Label(text: self.content.title) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
                     })
-                    row.add(child: Label(text: self.detail) { label in
+                    row.add(child: Label(text: self.content.detail) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .regular)
                     })
                 },
@@ -239,45 +244,26 @@ struct ChoiceItem : BlueprintItemElement, Equatable
     }
     
     var identifier: Identifier<ChoiceItem> {
-        return .init(self.title)
+        return .init(self.content.title)
     }
 }
 
-struct SkipEquatable<Value> : Equatable
+struct ToggleItem : BlueprintItemElement
 {
-    var value : Value
+    var content : Content
     
-    init(_ value : Value)
+    struct Content : Equatable
     {
-        self.value = value
-    }
-    
-    static func == (lhs: SkipEquatable<Value>, rhs: SkipEquatable<Value>) -> Bool
-    {
-        return true
-    }
-}
-
-struct ToggleItem : BlueprintItemElement, Equatable
-{
-    var title : String
-    var detail : String
-    
-    var isOn : Bool
-    
-    var onToggle : SkipEquatable<(Bool) -> ()>
-    
-    init(title : String, detail : String, isOn : Bool, onToggle : @escaping (Bool) -> ())
-    {
-        self.title = title
-        self.detail = detail
-        self.isOn = isOn
+        var title : String
+        var detail : String
         
-        self.onToggle = .init(onToggle)
+        var isOn : Bool
     }
+    
+    var onToggle : (Bool) -> ()
     
     var identifier: Identifier<ToggleItem> {
-        return .init(self.title)
+        return .init(self.content.title)
     }
     
     func element(with state: ItemState) -> Element
@@ -289,19 +275,19 @@ struct ToggleItem : BlueprintItemElement, Equatable
                     row.horizontalUnderflow = .growProportionally
                     row.verticalAlignment = .center
                     
-                    row.add(growPriority: 0.0, child: Label(text: self.title) { label in
+                    row.add(growPriority: 0.0, child: Label(text: self.content.title) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
                     })
                     
                     row.add(growPriority: 1.0, child: Spacer(size: .init(width: 10.0, height: 0.0)))
                     
-                    row.add(growPriority: 0.0, child: Label(text: self.detail) { label in
+                    row.add(growPriority: 0.0, child: Label(text: self.content.detail) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .regular)
                     })
                     
                     row.add(growPriority: 0.0, child: Spacer(size: .init(width: 10.0, height: 0.0)))
                     
-                    row.add(growPriority: 0.0, child: Toggle(isOn: self.isOn, onToggle: self.onToggle.value))
+                    row.add(growPriority: 0.0, child: Toggle(isOn: self.content.isOn, onToggle: self.onToggle))
                 },
                 uniformInset: 10.0
             )

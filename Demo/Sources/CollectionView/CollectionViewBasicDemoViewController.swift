@@ -14,13 +14,13 @@ final class CollectionViewBasicDemoViewController : UIViewController
 {
     var rows : [[DemoElement]] = [
         [
-            DemoElement(title: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
-            DemoElement(title: "Row 2"),
+            DemoElement(content: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
+            DemoElement(content: "Row 2"),
         ],
         [
-            DemoElement(title: "Row 1"),
-            DemoElement(title: "Row 2"),
-            DemoElement(title: "Row 3"),
+            DemoElement(content: "Row 1"),
+            DemoElement(content: "Row 2"),
+            DemoElement(content: "Row 3"),
         ],
         ]
     
@@ -73,11 +73,11 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     layout: Section.Layout(columns: 2, spacing: 10.0),
                     
                     header: HeaderFooter(
-                        HeaderElement(title: "Section Header"),
+                        HeaderElement(content: "Section Header"),
                         appearance: self.headerAppearance
                     ),
                     footer: HeaderFooter(
-                        FooterElement(title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
+                        FooterElement(content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
                         appearance: self.footerAppearance,
                         height: .thatFits(.noConstraint)
                     )
@@ -96,8 +96,8 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     @objc func addItem()
     {
-        self.rows[0].insert(DemoElement(title: Date().description), at: 0)
-        self.rows[1].insert(DemoElement(title: Date().description), at: 0)
+        self.rows[0].insert(DemoElement(content: Date().description), at: 0)
+        self.rows[1].insert(DemoElement(content: Date().description), at: 0)
         
         self.updateTable(animated: true)
     }
@@ -117,9 +117,9 @@ final class CollectionViewBasicDemoViewController : UIViewController
 }
 
 
-struct HeaderElement : HeaderFooterElement, Equatable
+struct HeaderElement : HeaderFooterElement
 {
-    var title : String
+    var content : String
     
     // HeaderFooterElement
     
@@ -127,13 +127,13 @@ struct HeaderElement : HeaderFooterElement, Equatable
     
     func apply(to views: HeaderFooterElementView<UILabel, UIView>, reason: ApplyReason)
     {
-        views.content.text = self.title
+        views.content.text = self.content
     }
 }
 
-struct FooterElement : HeaderFooterElement, Equatable
+struct FooterElement : HeaderFooterElement
 {
-    var title : String
+    var content : String
     
     // HeaderFooterElement
     
@@ -141,24 +141,24 @@ struct FooterElement : HeaderFooterElement, Equatable
     
     func apply(to views: HeaderFooterElementView<UILabel, UIView>, reason: ApplyReason)
     {
-        views.content.text = self.title
+        views.content.text = self.content
     }
 }
 
-struct DemoElement : ItemElement, Equatable
+struct DemoElement : ItemElement
 {
-    var title : String
+    var content : String
 
     // ItemElement
     
     typealias Appearance = ItemAppearance<UILabel>
     
     var identifier: Identifier<DemoElement> {
-        return .init(self.title)
+        return .init(self.content)
     }
     
     func apply(to view: Appearance.View, with state : ItemState, reason: ApplyReason)
     {
-        view.content.text = self.title
+        view.content.text = self.content
     }
 }

@@ -276,8 +276,6 @@ final class PresentationState
         
         var items : [AnyPresentationItemState]
         
-        // TODO: Add header and footer.
-        
         init(model : Section)
         {
             self.model = model
@@ -463,9 +461,6 @@ final class PresentationState
         init(_ model : Item<Element>)
         {
             self.model = model
-            
-            // TODO: Remove anyIdentifier?
-            self.anyIdentifier = self.model.identifier
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
@@ -519,9 +514,7 @@ final class PresentationState
                 self.model.onEndDisplay?(self.model.element)
             }
         }
-        
-        let anyIdentifier : AnyIdentifier
-        
+                
         var anyModel : AnyItem {
             return self.model
         }

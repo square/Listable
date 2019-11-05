@@ -89,6 +89,7 @@ public struct ListContentLayout : Equatable
     public var rowSpacing : CGFloat
     public var rowToSectionFooterSpacing : CGFloat
     
+    // TODO: Consider giving a better name; "usesStickySectionHeaders".
     public var sectionHeadersPinToVisibleBounds : Bool
     
     public init(
