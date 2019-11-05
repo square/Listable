@@ -147,21 +147,17 @@ final class PresentationState
         return sections
     }
     
-    public var lastIndexPath : IndexPath? {
-        guard self.sections.isEmpty == false else {
+    public var lastIndexPath : IndexPath?
+    {
+        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.flatMapWithIndex {
+            return $1.items.isEmpty ? nil : ($0, $1)
+        }
+        
+        guard let lastSection = nonEmptySections.last else {
             return nil
         }
         
-        let lastSectionIndex = (self.sections.count - 1)
-        let lastSection = self.sections[lastSectionIndex]
-        
-        guard lastSection.items.isEmpty == false else {
-            return nil
-        }
-        
-        let lastItemIndex = (lastSection.items.count - 1)
-        
-        return IndexPath(item: lastItemIndex, section: lastSectionIndex)
+        return IndexPath(item: (lastSection.section.items.count - 1), section: lastSection.index)
     }
     
     //
