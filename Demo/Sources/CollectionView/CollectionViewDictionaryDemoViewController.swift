@@ -14,13 +14,13 @@ import BlueprintUICommonControls
 
 final public class CollectionViewDictionaryDemoViewController : UIViewController
 {
+    let listView = ListView()
+    
     override public func loadView()
     {
         self.title = "Dictionary"
         
-        let listView = ListView()
-        
-        listView.appearance.contentLayout.set {
+        self.listView.appearance.contentLayout.set {
             $0.width = .atMost(600.0)
             $0.sectionHeaderBottomSpacing = 10.0
             $0.rowSpacing = 7.0
@@ -29,7 +29,30 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
         
-        self.view = listView
+        self.view = self.listView
+        
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Scroll Down", style: .plain, target: self, action: #selector(tappedScrollDown)),
+            UIBarButtonItem(title: "Scroll Up", style: .plain, target: self, action: #selector(tappedScrollUp)),
+        ]
+    }
+    
+    @objc func tappedScrollDown()
+    {
+        self.listView.scrollTo(
+            item: Identifier<WordRow>("clam"),
+            position: .init(position: .centered, ifAlreadyVisible: .doNothing),
+            animated: true
+        )
+    }
+    
+    @objc func tappedScrollUp()
+    {
+        self.listView.scrollTo(
+            item: Identifier<WordRow>("aard-vark"),
+            position: .init(position: .centered, ifAlreadyVisible: .doNothing),
+            animated: true
+        )
     }
     
     final class Source : ListViewSource

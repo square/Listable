@@ -21,6 +21,10 @@ public struct Section
     
     public var items : [AnyItem]
     
+    public var isEmpty : Bool {
+        return self.items.isEmpty
+    }
+    
     //
     // MARK: Initialization
     //

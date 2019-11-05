@@ -300,12 +300,8 @@ class ListViewLayout : UICollectionViewLayout
     //
 
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
-    {        
-        let changes = self.changesDuringCurrentUpdate
-
-        let wasInserted = changes.insertedItems.contains {
-            $0.newIndexPath == itemIndexPath
-        }
+    {
+        let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
             let attributes = self.layoutResult.element(at: itemIndexPath)
@@ -326,11 +322,7 @@ class ListViewLayout : UICollectionViewLayout
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let changes = self.changesDuringCurrentUpdate
-        
-        let wasDeleted = changes.deletedItems.contains {
-            $0.oldIndexPath == itemIndexPath
-        }
+        let wasDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
 
         if wasDeleted {
             let attributes = self.previousLayoutResult.element(at: itemIndexPath)
@@ -846,46 +838,46 @@ fileprivate extension ListViewLayout
 
 struct UpdateItems : Equatable
 {
-    var insertedSections : [InsertSection]
-    var deletedSections : [DeleteSection]
+    let insertedSections : Set<InsertSection>
+    let deletedSections : Set<DeleteSection>
     
-    var insertedItems : [InsertItem]
-    var deletedItems : [DeleteItem]
-    var movedItems : [MoveItem]
+    let insertedItems : Set<InsertItem>
+    let deletedItems : Set<DeleteItem>
+    let movedItems : Set<MoveItem>
     
-    var reloadedItems : [OverlappingItem]
-    var noneItems : [OverlappingItem]
+    let reloadedItems : Set<OverlappingItem>
+    let noneItems : Set<OverlappingItem>
     
     init(with updateItems : [UICollectionViewUpdateItem])
     {
-        var insertedSections : [InsertSection] = []
-        var deletedSections : [DeleteSection] = []
-        
-        var insertedItems : [InsertItem] = []
-        var deletedItems : [DeleteItem] = []
-        var movedItems : [MoveItem] = []
+       var insertedSections = Set<InsertSection>()
+       var deletedSections = Set<DeleteSection>()
 
-        var reloadedItems : [OverlappingItem] = []
-        var noneItems : [OverlappingItem] = []
-        
-        for item in updateItems {
+       var insertedItems = Set<InsertItem>()
+       var deletedItems = Set<DeleteItem>()
+       var movedItems = Set<MoveItem>()
+
+       var reloadedItems = Set<OverlappingItem>()
+       var noneItems = Set<OverlappingItem>()
+
+       for item in updateItems {
             switch item.updateAction {
             case .insert:
                 let indexPath = item.indexPathAfterUpdate!
                 
                 if indexPath.item == NSNotFound {
-                    insertedSections.append(.init(newIndex: indexPath.section))
+                    insertedSections.insert(.init(newIndex: indexPath.section))
                 } else {
-                    insertedItems.append(.init(newIndexPath: indexPath))
+                    insertedItems.insert(.init(newIndexPath: indexPath))
                 }
                 
             case .delete:
                 let indexPath = item.indexPathBeforeUpdate!
                 
                 if indexPath.item == NSNotFound {
-                    deletedSections.append(.init(oldIndex: indexPath.section))
+                    deletedSections.insert(.init(oldIndex: indexPath.section))
                 } else {
-                    deletedItems.append(.init(oldIndexPath: indexPath))
+                    deletedItems.insert(.init(oldIndexPath: indexPath))
                 }
                 
             case .move:
@@ -895,35 +887,26 @@ struct UpdateItems : Equatable
                 let deleteItem = DeleteItem(oldIndexPath: oldIndexPath)
                 let insertItem = InsertItem(newIndexPath: newIndexPath)
                 
-                deletedItems.append(deleteItem)
-                insertedItems.append(insertItem)
+                deletedItems.insert(deleteItem)
+                insertedItems.insert(insertItem)
                 
-                movedItems.append(.init(deleteItem: deleteItem, insertItem: insertItem))
+                movedItems.insert(.init(deleteItem: deleteItem, insertItem: insertItem))
                 
             case .reload:
                 let oldIndexPath = item.indexPathBeforeUpdate!
                 let newIndexPath = item.indexPathAfterUpdate!
                 
-                reloadedItems.append(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
+                reloadedItems.insert(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
                 
             case .none:
                 let oldIndexPath = item.indexPathBeforeUpdate!
                 let newIndexPath = item.indexPathAfterUpdate!
                 
-                noneItems.append(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
+                noneItems.insert(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
                 
             @unknown default: fatalError()
             }
         }
-        
-        insertedSections.sort { $0.newIndex < $1.newIndex }
-        deletedSections.sort { $0.oldIndex > $1.oldIndex }
-        
-        insertedItems.sort { $0.newIndexPath < $1.newIndexPath }
-        deletedItems.sort { $0.oldIndexPath > $1.oldIndexPath }
-        movedItems.sort { $0.insertItem.newIndexPath < $1.insertItem.newIndexPath }
-        reloadedItems.sort { $0.newIndexPath < $1.newIndexPath }
-        noneItems.sort { $0.newIndexPath < $1.newIndexPath }
         
         self.insertedSections = insertedSections
         self.deletedSections = deletedSections
@@ -935,33 +918,33 @@ struct UpdateItems : Equatable
         self.noneItems = noneItems
     }
     
-    struct InsertSection : Equatable
+    struct InsertSection : Hashable
     {
         var newIndex : Int
     }
     
-    struct DeleteSection : Equatable
+    struct DeleteSection : Hashable
     {
         var oldIndex : Int
     }
     
-    struct InsertItem : Equatable
+    struct InsertItem : Hashable
     {
         var newIndexPath : IndexPath
     }
     
-    struct DeleteItem : Equatable
+    struct DeleteItem : Hashable
     {
         var oldIndexPath : IndexPath
     }
     
-    struct MoveItem : Equatable
+    struct MoveItem : Hashable
     {
         var deleteItem : DeleteItem
         var insertItem : InsertItem
     }
     
-    struct OverlappingItem : Equatable
+    struct OverlappingItem : Hashable
     {
         var oldIndexPath : IndexPath
         var newIndexPath : IndexPath

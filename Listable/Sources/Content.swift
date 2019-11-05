@@ -31,6 +31,10 @@ public struct Content
         return self.sections.reduce(0, { $0 + $1.items.count })
     }
     
+    public var isEmpty : Bool {
+        return self.sections.isEmpty || self.sections.allSatisfy { $0.isEmpty }
+    }
+    
     //
     // MARK: Initialization
     //
@@ -68,6 +72,19 @@ public struct Content
     mutating func remove(at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.remove(at: indexPath.item)
+    }
+    
+    public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
+    {
+        for (sectionIndex, section) in self.sections.enumerated() {
+            for (itemIndex, item) in section.items.enumerated() {
+                if item.identifier == identifier {
+                    return IndexPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        return nil
     }
     
     //
@@ -153,6 +170,8 @@ internal extension Content
             
             case transitionedToBounds(isEmpty : Bool)
             
+            case programaticScrollDownTo(IndexPath)
+        
             var animated : Bool {
                 switch self {
                 case .scrolledDown: return false
@@ -162,6 +181,8 @@ internal extension Content
                 case .contentChanged(let animated): return animated
                     
                 case .transitionedToBounds(_): return false
+                    
+                case .programaticScrollDownTo(_): return false
                 }
             }
         }
