@@ -29,24 +29,42 @@ public struct Section
     // MARK: Initialization
     //
     
+    public typealias Build = (inout Section) -> ()
+    
+    public init<Identifier:Hashable>(
+        identifier : Identifier,
+        build : Build
+        )
+    {
+        self.init(identifier: identifier)
+        
+        build(&self)
+    }
+    
+    public init<Info:SectionInfo>(
+        info: Info,
+        build : Build
+        )
+    {
+        self.init(info: info)
+        
+        build(&self)
+    }
+    
     public init<Identifier:Hashable>(
         identifier : Identifier,
         layout : Layout = Layout(),
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
-        content contentBuilder : (inout SectionBuilder) -> ()
+        items : [AnyItem] = []
         )
     {
-        var builder = SectionBuilder()
-        
-        contentBuilder(&builder)
-        
         self.init(
             info: HashableSectionInfo(identifier),
             layout: layout,
             header: header,
             footer: footer,
-            items: builder.items
+            items: items
         )
     }
     
@@ -66,6 +84,30 @@ public struct Section
         self.footer = footer
         
         self.items = items
+    }
+    
+    //
+    // MARK: Adding & Removing Items
+    //
+    
+    public mutating func add(_ item : AnyItem)
+    {
+        self.items.append(item)
+    }
+    
+    public static func += <Element:ItemElement>(lhs : inout Section, rhs : Item<Element>)
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += (lhs : inout Section, rhs : [AnyItem])
+    {
+        lhs.items += rhs
+    }
+    
+    public static func += <Element:ItemElement>(lhs : inout Section, rhs : [Item<Element>])
+    {
+        lhs.items += rhs
     }
     
     //

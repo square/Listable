@@ -19,11 +19,11 @@ public struct List : BlueprintUI.Element
     // MARK: Initialization
     //
     
-    public init(appearance : Appearance = Appearance(), _ builder : ContentBuilder.Build)
+    public init(appearance : Appearance = Appearance(), _ builder : Content.Build)
     {
         self.appearance = appearance
         
-        self.listContent = ContentBuilder.build(with: builder)
+        self.listContent = Content(with: builder)
     }
     
     //

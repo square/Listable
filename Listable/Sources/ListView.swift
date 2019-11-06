@@ -155,9 +155,9 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(animated : Bool = false, _ block : ContentBuilder.Build)
+    public func setContent(animated : Bool = false, _ builder : Content.Build)
     {
-        self.setContent(animated: animated, ContentBuilder.build(with: block))
+        self.setContent(animated: animated, Content(with: builder))
     }
     
     public func setContent(animated : Bool = false, _ content : Content)

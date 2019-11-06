@@ -39,6 +39,15 @@ public struct Content
     // MARK: Initialization
     //
     
+    public typealias Build = (inout Content) -> ()
+    
+    public init(with build : Build)
+    {
+        self.init()
+        
+        build(&self)
+    }
+    
     public init(
         selectionMode : SelectionMode = .single,
         refreshControl : RefreshControl? = nil,
@@ -58,7 +67,7 @@ public struct Content
     }
     
     //
-    // MARK: Finding & Mutating Content
+    // MARK: Finding Content
     //
     
     public func item(at indexPath : IndexPath) -> AnyItem
@@ -67,11 +76,6 @@ public struct Content
         let item = section.items[indexPath.item]
         
         return item
-    }
-    
-    mutating func remove(at indexPath : IndexPath)
-    {
-        self.sections[indexPath.section].items.remove(at: indexPath.item)
     }
     
     public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
@@ -85,6 +89,37 @@ public struct Content
         }
         
         return nil
+    }
+    
+    //
+    // MARK: Mutating Content
+    //
+    
+    public mutating func removeEmpty()
+    {
+        self.sections.removeAll {
+            $0.items.isEmpty
+        }
+    }
+    
+    public mutating func add(_ section : Section)
+    {
+        self.sections.append(section)
+    }
+    
+    public static func += (lhs : inout Content, rhs : Section)
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += (lhs : inout Content, rhs : [Section])
+    {
+        lhs.sections += rhs
+    }
+    
+    internal mutating func remove(at indexPath : IndexPath)
+    {
+        self.sections[indexPath.section].items.remove(at: indexPath.item)
     }
     
     //
