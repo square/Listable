@@ -631,6 +631,8 @@ final class PresentationState
             } else {
                 self.model.onDeselect?(self.model.element)
             }
+            
+            self.applyToVisibleCell()
         }
         
         private var cachedHeights : [CGFloat:CGFloat] = [:]

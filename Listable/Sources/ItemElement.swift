@@ -6,9 +6,6 @@
 //
 
 
-/**
- TODO
- */
 public protocol ItemElement
 {
     //
@@ -153,7 +150,7 @@ public extension ItemElement
  when the appearance of an element changes, versus on each display.
  */
 public protocol ItemElementAppearance
-{
+{    
     //
     // MARK: Creating & Providing Views
     //
