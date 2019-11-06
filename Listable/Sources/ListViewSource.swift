@@ -13,7 +13,7 @@ public protocol ListViewSource
 {
     associatedtype State:Equatable
     
-    func content(with state : SourceState<State>, table : inout ContentBuilder)
+    func content(with state : SourceState<State>, content : inout Content)
     
     func content(with state : SourceState<State>) -> Content
 }
@@ -23,8 +23,8 @@ public extension ListViewSource
 {
     func content(with state : SourceState<State>) -> Content
     {
-        return ContentBuilder.build { table in
-            self.content(with: state, table: &table)
+        return Content() { content in
+            self.content(with: state, content: &content)
         }
     }
 }
@@ -147,7 +147,7 @@ public final class SourceState<Value:Equatable>
 
 public final class DynamicSource<Input:Equatable> : ListViewSource
 {
-    public typealias Builder = (SourceState<Input>, inout ContentBuilder) -> ()
+    public typealias Builder = (SourceState<Input>, inout Content) -> ()
     
     let builder : Builder
     
@@ -156,9 +156,9 @@ public final class DynamicSource<Input:Equatable> : ListViewSource
         self.builder = builder
     }
     
-    public func content(with state: SourceState<Input>, table: inout ContentBuilder)
+    public func content(with state: SourceState<Input>, content: inout Content)
     {
-        self.builder(state, &table)
+        self.builder(state, &content)
     }
 }
 
@@ -182,12 +182,12 @@ public final class StaticSource : ListViewSource
         self.content = content
     }
     
-    public convenience init(with build : ContentBuilder.Build)
+    public convenience init(with builder : Content.Build)
     {
-        self.init(with: ContentBuilder.build(with: build))
+        self.init(with: Content(with: builder))
     }
     
-    public func content(with state: SourceState<StaticSource.State>, table: inout ContentBuilder)
+    public func content(with state: SourceState<StaticSource.State>, content: inout Content)
     {
         fatalError()
     }

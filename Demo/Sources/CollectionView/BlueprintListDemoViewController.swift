@@ -29,7 +29,7 @@ final class BlueprintListDemoViewController : UIViewController
         return List(appearance: Appearance()) { list in
 
             let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-
+            
             list += Section(identifier: "podcasts") { section in
 
                 section += podcasts.map { podcast in

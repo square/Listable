@@ -74,17 +74,17 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             }
         }
 
-        func content(with state: SourceState<State>, table: inout ContentBuilder)
+        func content(with state: SourceState<State>, content: inout Content)
         {
             if #available(iOS 10.0, *) {
-                table.refreshControl = RefreshControl() { finished in
+                content.refreshControl = RefreshControl() { finished in
                     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
                         finished()
                     }
                 }
             }
             
-            table += Section(identifier: "search") { rows in
+            content += Section(identifier: "search") { rows in
                 rows += Item(
                     SearchRow(
                         string: state.value.filter,
@@ -97,16 +97,16 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             
             var hasContent = false
             
-            table += self.dictionary.wordsByLetter.map { letter in
+            content += self.dictionary.wordsByLetter.map { letter in
                 
-                return Section(
-                    identifier: letter.letter,
-                    header: HeaderFooter(
+                return Section(identifier: letter.letter) { section in
+                    
+                    section.header = HeaderFooter(
                         SectionHeader(title: letter.letter),
                         height: .thatFits(.noConstraint)
                     )
-                ) { rows in
-                    rows += letter.words.compactMap { word in
+                    
+                    section += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
@@ -120,11 +120,11 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 }
             }
             
-            table.removeEmpty()
+            content.removeEmpty()
             
             if hasContent == false {
-                table += Section(identifier: "empty") { rows in
-                    rows += Item(
+                content += Section(identifier: "empty") { section in
+                    section += Item(
                         WordRow(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
