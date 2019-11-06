@@ -67,21 +67,21 @@ final class CollectionViewBasicDemoViewController : UIViewController
         listView.setContent(animated: animated) { list in
             
             list += self.rows.map { sectionRows in
-                Section(
-                    identifier: "Demo Section",
+                Section(identifier: "Demo Section") { section in
                     
-                    layout: Section.Layout(columns: 2, spacing: 10.0),
-                    
-                    header: HeaderFooter(
+                    section.layout = Section.Layout(columns: 2, spacing: 10.0)
+                     
+                    section.header = HeaderFooter(
                         HeaderElement(content: "Section Header"),
                         appearance: self.headerAppearance
-                    ),
-                    footer: HeaderFooter(
+                    )
+                    
+                    section.footer = HeaderFooter(
                         FooterElement(content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
                         appearance: self.footerAppearance,
                         height: .thatFits(.noConstraint)
                     )
-                ) { section in
+                    
                     section += sectionRows.map { row in
                         Item(
                             row,

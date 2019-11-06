@@ -89,6 +89,64 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: Scrolling To Sections & Items
+    //
+    
+    @discardableResult
+    public func scrollTo(item : AnyItem, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        return self.scrollTo(item: item.identifier, position: position, animated: animated)
+    }
+    
+    @discardableResult
+    public func scrollTo<Element:ItemElement>(item : Identifier<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        return self.scrollTo(item: AnyIdentifier(item), position: position, animated: animated)
+    }
+    
+    @discardableResult
+    public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    {
+        // Make sure the item identifier is valid.
+        
+        guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
+            return false
+        }
+        
+        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
+            return false
+        }
+        
+        // If the item is already visible and that's good enough, return.
+        
+        let isAlreadyVisible = self.collectionView.indexPathsForVisibleItems.contains(toIndexPath)
+        
+        if  isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+            return true
+        }
+        
+        // Otherwise, perform scrolling.
+        
+        let scroll = {
+            self.collectionView.scrollToItem(
+                at: toIndexPath,
+                at: position.position.UICollectionViewScrollPosition,
+                animated: animated
+            )
+        }
+        
+        if lastLoadedIndexPath < toIndexPath {
+            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
+                scroll()
+            }
+        } else {
+            scroll()
+        }
+    
+        return true
+    }
+    
+    //
     // MARK: Setting & Getting Content
     //
     
@@ -97,9 +155,9 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(animated : Bool = false, _ block : ContentBuilder.Build)
+    public func setContent(animated : Bool = false, _ builder : Content.Build)
     {
-        self.setContent(animated: animated, ContentBuilder.build(with: block))
+        self.setContent(animated: animated, Content(with: builder))
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
@@ -306,7 +364,7 @@ public final class ListView : UIView
     // MARK: Updating Presentation State
     //
     
-    private func updatePresentationState(for reason : Content.Slice.UpdateReason)
+    private func updatePresentationState(for reason : Content.Slice.UpdateReason, completion : @escaping (Bool) -> () = { _ in })
     {
         let indexPaths = self.collectionView.indexPathsForVisibleItems
         
@@ -319,29 +377,42 @@ public final class ListView : UIView
             let needsUpdate = self.collectionView.isScrolledNearBottom() && presentationStateTruncated
             
             if needsUpdate {
-                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+            } else {
+                completion(true)
             }
             
         case .contentChanged:
             self.updateCollectionViewConfiguration()
-            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
             
         case .didEndDecelerating:
             if presentationStateTruncated {
-                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+            } else {
+                completion(true)
             }
             
         case .scrolledToTop:
             if presentationStateTruncated {
-                self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason)
+                self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason, completion: completion)
+            } else {
+                completion(true)
             }
             
         case .transitionedToBounds(_):
-            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason)
+            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+            
+        case .programaticScrollDownTo(let scrollToIndexPath):
+            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
     
-    private func updatePresentationStateWith(firstVisibleIndexPath indexPath: IndexPath?, for reason : Content.Slice.UpdateReason)
+    private func updatePresentationStateWith(
+        firstVisibleIndexPath indexPath: IndexPath?,
+        for reason : Content.Slice.UpdateReason,
+        completion callerCompletion : @escaping (Bool) -> ()
+        )
     {
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
         
@@ -353,17 +424,12 @@ public final class ListView : UIView
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
         
-        let completion = { (finished : Bool) in
+        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
+            callerCompletion(finished)
         }
-        
-        self.performBatchUpdates(
-            with: diff,
-            animated: reason.animated,
-            updateBackingData: updateBackingData,
-            completion:completion
-        )
 
+        // TODO: Does this work with the async batch updates now?
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         

@@ -67,87 +67,86 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }()
             
-            list += Section(
-                identifier: SectionIdentifier.variations,
-                layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(content: variationsTitle), height: .thatFits(.noConstraint)),
-                footer: HeaderFooter(Footer(content: footerText), height: .thatFits(.noConstraint)),
-                content: { section in
-                    section += self.itemization.variations.all.map { variation in
-                        Item(
-                            ChoiceItem(content: .init(title: variation.name, detail: "$0.00")),
-                            selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
-                            onSelect: { _ in
-                                self.itemization.variations.select(modifier: variation)
-                            },
-                            onDeselect: { _ in
-                                self.itemization.variations.deselect(modifier: variation)
-                        })
-                    }
-            })
+            list += Section(identifier: SectionIdentifier.variations) { section in
+                
+                section.layout = Section.Layout(columns: 2, spacing: 20.0)
+                section.header = HeaderFooter(Header(content: variationsTitle), height: .thatFits(.noConstraint))
+                section.footer = HeaderFooter(Footer(content: footerText), height: .thatFits(.noConstraint))
+                
+                section += self.itemization.variations.all.map { variation in
+                    Item(
+                        ChoiceItem(content: .init(title: variation.name, detail: "$0.00")),
+                        selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
+                        onSelect: { _ in
+                            self.itemization.variations.select(modifier: variation)
+                        },
+                        onDeselect: { _ in
+                            self.itemization.variations.deselect(modifier: variation)
+                    })
+                }
+            }
 
             list += itemization.modifiers.map { set in
-                Section(
-                    identifier: SectionIdentifier.modifier(set.name),
-                    layout: Section.Layout(columns: 2, spacing: 20.0),
-                    header: HeaderFooter(Header(content: set.name), height: .thatFits(.noConstraint)),
-                    footer: HeaderFooter(Footer(content: "Choose modifiers"), height: .thatFits(.noConstraint)),
-                    content: { section in
-                        section += set.all.map { modifier in
-                            Item(
-                                ChoiceItem(content: .init(title: modifier.name, detail: "$0.00")),
-                                selection: .isSelectable(isSelected: false),
-                                onSelect: { _ in
-                                    
-                            },
-                                onDeselect: { _ in
-                                    
-                            })
-                        }
-                })
+                Section(identifier: SectionIdentifier.modifier(set.name)) { section in
+                    
+                    section.layout = Section.Layout(columns: 2, spacing: 20.0)
+                    
+                    section.header = HeaderFooter(Header(content: set.name), height: .thatFits(.noConstraint))
+                    section.footer = HeaderFooter(Footer(content: "Choose modifiers"), height: .thatFits(.noConstraint))
+                    
+                    section += set.all.map { modifier in
+                        Item(
+                            ChoiceItem(content: .init(title: modifier.name, detail: "$0.00")),
+                            selection: .isSelectable(isSelected: false),
+                            onSelect: { _ in
+                                
+                        },
+                            onDeselect: { _ in
+                                
+                        })
+                    }
+                }
             }
             
-            list += Section(
-                identifier: SectionIdentifier.discounts,
-                layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(content: "Discounts"), height: .thatFits(.noConstraint)),
-                footer: nil,
-                content: { section in
-                    section += self.availableOptions.allDiscounts.map { discount in
-                        Item(
-                            ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
-                                if isOn {
-                                    self.itemization.add(discount)
-                                } else {
-                                    self.itemization.remove(discount)
-                                }
-                            },
-                            height: self.itemization.has(discount) ? .fixed(130.0) : .default,
-                            selection: .isSelectable(isSelected: false)
-                        )
-                    }
-            })
+            list += Section(identifier: SectionIdentifier.discounts) { section in
+                
+                section.layout = Section.Layout(columns: 2, spacing: 20.0)
+                section.header = HeaderFooter(Header(content: "Discounts"), height: .thatFits(.noConstraint))
+                
+                section += self.availableOptions.allDiscounts.map { discount in
+                    Item(
+                        ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
+                            if isOn {
+                                self.itemization.add(discount)
+                            } else {
+                                self.itemization.remove(discount)
+                            }
+                        },
+                        height: self.itemization.has(discount) ? .fixed(130.0) : .default,
+                        selection: .isSelectable(isSelected: false)
+                    )
+                }
+            }
             
-            list += Section(
-                identifier: SectionIdentifier.taxes,
-                layout: Section.Layout(columns: 2, spacing: 20.0),
-                header: HeaderFooter(Header(content: "Taxes"), height: .thatFits(.noConstraint)),
-                footer: nil,
-                content: { section in
-                    section += self.availableOptions.allTaxes.map { tax in
-                        Item(
-                            ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
-                                if isOn {
-                                    self.itemization.add(tax)
-                                } else {
-                                    self.itemization.remove(tax)
-                                }
-                            },
-                            height: self.itemization.has(tax) ? .fixed(130.0) : .default,
-                            selection: .isSelectable(isSelected: false)
-                        )
-                    }
-            })
+            list += Section(identifier: SectionIdentifier.taxes) { section in
+                
+                section.layout = Section.Layout(columns: 2, spacing: 20.0)
+                section.header = HeaderFooter(Header(content: "Taxes"), height: .thatFits(.noConstraint))
+                
+                section += self.availableOptions.allTaxes.map { tax in
+                    Item(
+                        ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
+                            if isOn {
+                                self.itemization.add(tax)
+                            } else {
+                                self.itemization.remove(tax)
+                            }
+                        },
+                        height: self.itemization.has(tax) ? .fixed(130.0) : .default,
+                        selection: .isSelectable(isSelected: false)
+                    )
+                }
+            }
         }
     }
     

@@ -31,9 +31,22 @@ public struct Content
         return self.sections.reduce(0, { $0 + $1.items.count })
     }
     
+    public var isEmpty : Bool {
+        return self.sections.isEmpty || self.sections.allSatisfy { $0.isEmpty }
+    }
+    
     //
     // MARK: Initialization
     //
+    
+    public typealias Build = (inout Content) -> ()
+    
+    public init(with build : Build)
+    {
+        self.init()
+        
+        build(&self)
+    }
     
     public init(
         selectionMode : SelectionMode = .single,
@@ -54,7 +67,7 @@ public struct Content
     }
     
     //
-    // MARK: Finding & Mutating Content
+    // MARK: Finding Content
     //
     
     public func item(at indexPath : IndexPath) -> AnyItem
@@ -65,7 +78,46 @@ public struct Content
         return item
     }
     
-    mutating func remove(at indexPath : IndexPath)
+    public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
+    {
+        for (sectionIndex, section) in self.sections.enumerated() {
+            for (itemIndex, item) in section.items.enumerated() {
+                if item.identifier == identifier {
+                    return IndexPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    //
+    // MARK: Mutating Content
+    //
+    
+    public mutating func removeEmpty()
+    {
+        self.sections.removeAll {
+            $0.items.isEmpty
+        }
+    }
+    
+    public mutating func add(_ section : Section)
+    {
+        self.sections.append(section)
+    }
+    
+    public static func += (lhs : inout Content, rhs : Section)
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += (lhs : inout Content, rhs : [Section])
+    {
+        lhs.sections += rhs
+    }
+    
+    internal mutating func remove(at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.remove(at: indexPath.item)
     }
@@ -153,6 +205,8 @@ internal extension Content
             
             case transitionedToBounds(isEmpty : Bool)
             
+            case programaticScrollDownTo(IndexPath)
+        
             var animated : Bool {
                 switch self {
                 case .scrolledDown: return false
@@ -162,6 +216,8 @@ internal extension Content
                 case .contentChanged(let animated): return animated
                     
                 case .transitionedToBounds(_): return false
+                    
+                case .programaticScrollDownTo(_): return false
                 }
             }
         }

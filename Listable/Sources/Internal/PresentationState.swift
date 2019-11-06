@@ -147,6 +147,19 @@ final class PresentationState
         return sections
     }
     
+    public var lastIndexPath : IndexPath?
+    {
+        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.flatMapWithIndex {
+            return $1.items.isEmpty ? nil : ($0, $1)
+        }
+        
+        guard let lastSection = nonEmptySections.last else {
+            return nil
+        }
+        
+        return IndexPath(item: (lastSection.section.items.count - 1), section: lastSection.index)
+    }
+    
     //
     // MARK: Mutating Data
     //

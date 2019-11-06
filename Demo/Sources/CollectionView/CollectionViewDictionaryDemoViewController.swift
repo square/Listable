@@ -14,13 +14,13 @@ import BlueprintUICommonControls
 
 final public class CollectionViewDictionaryDemoViewController : UIViewController
 {
+    let listView = ListView()
+    
     override public func loadView()
     {
         self.title = "Dictionary"
         
-        let listView = ListView()
-        
-        listView.appearance.contentLayout.set {
+        self.listView.appearance.contentLayout.set {
             $0.width = .atMost(600.0)
             $0.sectionHeaderBottomSpacing = 10.0
             $0.rowSpacing = 7.0
@@ -31,7 +31,30 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
         
-        self.view = listView
+        self.view = self.listView
+        
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Scroll Down", style: .plain, target: self, action: #selector(tappedScrollDown)),
+            UIBarButtonItem(title: "Scroll Up", style: .plain, target: self, action: #selector(tappedScrollUp)),
+        ]
+    }
+    
+    @objc func tappedScrollDown()
+    {
+        self.listView.scrollTo(
+            item: Identifier<WordRow>("clam"),
+            position: .init(position: .centered, ifAlreadyVisible: .doNothing),
+            animated: true
+        )
+    }
+    
+    @objc func tappedScrollUp()
+    {
+        self.listView.scrollTo(
+            item: Identifier<WordRow>("aard-vark"),
+            position: .init(position: .centered, ifAlreadyVisible: .doNothing),
+            animated: true
+        )
     }
     
     final class Source : ListViewSource
@@ -53,17 +76,17 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             }
         }
 
-        func content(with state: SourceState<State>, table: inout ContentBuilder)
+        func content(with state: SourceState<State>, content: inout Content)
         {
             if #available(iOS 10.0, *) {
-                table.refreshControl = RefreshControl() { finished in
+                content.refreshControl = RefreshControl() { finished in
                     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
                         finished()
                     }
                 }
             }
             
-            table += Section(identifier: "search") { rows in
+            content += Section(identifier: "search") { rows in
                 rows += Item(
                     SearchRow(
                         content: state.value.filter,
@@ -76,16 +99,15 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             
             var hasContent = false
             
-            table += self.dictionary.wordsByLetter.map { letter in
-                
-                return Section(
-                    identifier: letter.letter,
-                    header: HeaderFooter(
+            content += self.dictionary.wordsByLetter.map { letter in
+                return Section(identifier: letter.letter) { section in
+                    
+                    section.header = HeaderFooter(
                         SectionHeader(content: letter.letter),
                         height: .thatFits(.noConstraint)
                     )
-                ) { rows in
-                    rows += letter.words.compactMap { word in
+                    
+                    section += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
@@ -99,15 +121,16 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 }
             }
             
-            table.removeEmpty()
+            content.removeEmpty()
             
             if hasContent == false {
-                table += Section(identifier: "empty") { rows in
-                    rows += Item(
+                content += Section(identifier: "empty") { section in
+                    section += Item(
                         WordRow(content: .init(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
-                        )),
+                            )
+                        ),
                         height: .thatFits(.atMost(250.0))
                     )
                 }

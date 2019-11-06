@@ -52,14 +52,14 @@ public final class DemosRootViewController : UIViewController
         self.listView.appearance = defaultAppearance
         
         self.listView.setContent { list in
-            list += Section(
-            identifier: "collection-view",
-            header: HeaderFooter(
-                HeaderElement(content: "Collection Views"),
-                appearance: self.headerAppearance
+            list += Section(identifier: "collection-view") { section in
+                
+                section.header = HeaderFooter(
+                    HeaderElement(content: "Collection Views"),
+                    appearance: self.headerAppearance
                 )
-            ) { rows in
-                rows += Item(
+                
+                section += Item(
                     TitleElement(content: "Basic Demo"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
@@ -67,7 +67,7 @@ public final class DemosRootViewController : UIViewController
                         self.push(CollectionViewBasicDemoViewController())
                 })
                 
-                rows += Item(
+                section += Item(
                     TitleElement(content: "Blueprint Integration"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
@@ -75,7 +75,7 @@ public final class DemosRootViewController : UIViewController
                         self.push(BlueprintListDemoViewController())
                 })
                 
-                rows += Item(
+                section += Item(
                     TitleElement(content: "Itemization Editor"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
@@ -83,7 +83,7 @@ public final class DemosRootViewController : UIViewController
                         self.push(ItemizationEditorViewController())
                 })
                 
-                rows += Item(
+                section += Item(
                     TitleElement(content: "English Dictionary Search"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
