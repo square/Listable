@@ -5,7 +5,7 @@ notifications:
 
 language: swift
 os: osx
-osx_image: xcode10.2
+osx_image: xcode10.3
 xcode_workspace: Demo/Demo.xcworkspace
 xcode_destination: platform=iOS Simulator,OS=12.2,name=iPhone X
 
@@ -13,9 +13,9 @@ before_install:
   - gem update --system
   - gem install bundler
   - bundle install
-  - bundle exec pod repo update
 
 install:
+  - bundle exec pod repo update
   - bundle exec pod install
 
 matrix:

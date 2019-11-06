@@ -90,6 +90,14 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(CollectionViewDictionaryDemoViewController())
                 })
+                
+                section += Item(
+                    TitleElement(title: "Keyboard Testing"),
+                    appearance: self.itemAppearance,
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(KeyboardTestingViewController())
+                })
             }
         }
     }

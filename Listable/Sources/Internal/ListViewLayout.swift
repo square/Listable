@@ -952,18 +952,6 @@ struct UpdateItems : Equatable
 }
 
 
-fileprivate extension UIView
-{
-    var lst_safeAreaInsets : UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
-    }
-}
-
-
 fileprivate extension CGSize
 {
     var isEmpty : Bool {
