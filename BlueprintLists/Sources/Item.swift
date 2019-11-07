@@ -40,6 +40,16 @@ public extension Listable.Item where Element : BlueprintItemElement
 {
     init(
         _ element : Element,
+        build : Item.Build
+        )
+    {
+        self.init(element)
+        
+        build(&self)
+    }
+    
+    init(
+        _ element : Element,
         height : Height = .default,
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
