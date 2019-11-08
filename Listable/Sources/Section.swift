@@ -95,17 +95,12 @@ public struct Section
         self.items.append(item)
     }
     
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : Item<Element>)
+    public static func += (lhs : inout Section, rhs : AnyItem)
     {
         lhs.add(rhs)
     }
     
     public static func += (lhs : inout Section, rhs : [AnyItem])
-    {
-        lhs.items += rhs
-    }
-    
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : [Item<Element>])
     {
         lhs.items += rhs
     }

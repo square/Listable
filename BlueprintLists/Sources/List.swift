@@ -12,18 +12,15 @@ import Listable
 
 public struct List : BlueprintUI.Element
 {
-    public var appearance : Appearance
-    public var listContent : Content
+    public var listDescription : ListDescription
     
     //
     // MARK: Initialization
     //
-    
-    public init(appearance : Appearance = Appearance(), _ builder : Content.Build)
-    {
-        self.appearance = appearance
         
-        self.listContent = Content(with: builder)
+    public init(build : ListDescription.Build)
+    {
+        self.listDescription = ListDescription(build: build)
     }
     
     //
@@ -38,12 +35,12 @@ public struct List : BlueprintUI.Element
     {
         return ListView.describe { config in
             config.builder = {
-                return ListView(frame: bounds, appearance: self.appearance)
+                return ListView(frame: bounds, appearance: self.listDescription.appearance)
             }
             
             config.apply { listView in
-                listView.appearance = self.appearance
-                listView.setContent(animated: true, self.listContent)
+                listView.appearance = self.listDescription.appearance
+                listView.setContent(animated: true, self.listDescription.content)
             }
         }
     }
@@ -63,5 +60,37 @@ public struct List : BlueprintUI.Element
         {
             return []
         }
+    }
+}
+
+
+public struct ListDescription
+{
+    public var appearance : Listable.Appearance
+    public var content : Listable.Content
+
+    public typealias Build = (inout ListDescription) -> ()
+    
+    public init(build : Build)
+    {
+        self.appearance = Listable.Appearance()
+        self.content = Listable.Content()
+        
+        build(&self)
+    }
+    
+    public mutating func add(_ section : Section)
+    {
+        self.content.sections.append(section)
+    }
+    
+    public static func += (lhs : inout ListDescription, rhs : Section)
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += (lhs : inout ListDescription, rhs : [Section])
+    {
+        lhs.content.sections += rhs
     }
 }
