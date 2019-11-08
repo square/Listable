@@ -92,7 +92,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(title: "Keyboard Testing"),
+                    TitleElement(content: "Keyboard Testing"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
