@@ -70,18 +70,12 @@ public protocol HeaderFooterElement
     // MARK: Tracking Changes
     //
     
-    func wasMoved(comparedTo other : Self) -> Bool
     func wasUpdated(comparedTo other : Self) -> Bool
 }
 
 
 public extension HeaderFooterElement
-{
-    func wasMoved(comparedTo other : Self) -> Bool
-    {
-        return self.content != other.content
-    }
-    
+{    
     func wasUpdated(comparedTo other : Self) -> Bool
     {
         return self.content != other.content
