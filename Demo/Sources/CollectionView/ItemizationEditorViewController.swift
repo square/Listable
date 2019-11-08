@@ -72,12 +72,12 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.variations) { section in
                 
                 section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(content: variationsTitle), height: .thatFits(.noConstraint))
-                section.footer = HeaderFooter(Footer(content: footerText), height: .thatFits(.noConstraint))
+                section.header = HeaderFooter(Header(title: variationsTitle), height: .thatFits(.noConstraint))
+                section.footer = HeaderFooter(Footer(text: footerText), height: .thatFits(.noConstraint))
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
-                        ChoiceItem(content: .init(title: variation.name, detail: "$0.00")),
+                        ChoiceItem(title: variation.name, detail: "$0.00"),
                         selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
                         onSelect: { _ in
                             self.itemization.variations.select(modifier: variation)
@@ -93,12 +93,12 @@ final class ItemizationEditorViewController : UIViewController
                     
                     section.layout = Section.Layout(columns: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(Header(content: set.name), height: .thatFits(.noConstraint))
-                    section.footer = HeaderFooter(Footer(content: "Choose modifiers"), height: .thatFits(.noConstraint))
+                    section.header = HeaderFooter(Header(title: set.name), height: .thatFits(.noConstraint))
+                    section.footer = HeaderFooter(Footer(text: "Choose modifiers"), height: .thatFits(.noConstraint))
                     
                     section += set.all.map { modifier in
                         Item(
-                            ChoiceItem(content: .init(title: modifier.name, detail: "$0.00")),
+                            ChoiceItem(title: modifier.name, detail: "$0.00"),
                             selection: .isSelectable(isSelected: false),
                             onSelect: { _ in
                                 
@@ -113,7 +113,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.discounts) { section in
                 
                 section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(content: "Discounts"), height: .thatFits(.noConstraint))
+                section.header = HeaderFooter(Header(title: "Discounts"), height: .thatFits(.noConstraint))
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     Item(
@@ -133,7 +133,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.taxes) { section in
                 
                 section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(content: "Taxes"), height: .thatFits(.noConstraint))
+                section.header = HeaderFooter(Header(title: "Taxes"), height: .thatFits(.noConstraint))
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     Item(
@@ -178,38 +178,33 @@ final class ItemizationEditorViewController : UIViewController
     }
 }
 
-struct Header : BlueprintHeaderFooterElement
+struct Header : BlueprintHeaderFooterElement, Equatable
 {
-    var content : String
+    var title : String
     
     var element : Element {
-        return Inset(wrapping: Label(text: self.content) { label in
+        return Inset(wrapping: Label(text: self.title) { label in
             label.font = .systemFont(ofSize: 30.0, weight: .bold)
         }, insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0))
     }
 }
 
-struct Footer : BlueprintHeaderFooterElement
+struct Footer : BlueprintHeaderFooterElement, Equatable
 {
-    var content : String
+    var text : String
     
     var element : Element {
-        return Label(text: self.content) { label in
+        return Label(text: self.text) { label in
             label.font = .systemFont(ofSize: 14.0, weight: .regular)
             label.alignment = .center
         }
     }
 }
 
-struct ChoiceItem : BlueprintItemElement
+struct ChoiceItem : BlueprintItemElement, Equatable
 {
-    var content : Content
-    
-    struct Content : Equatable
-    {
-        var title : String
-        var detail : String
-    }
+    var title : String
+    var detail : String
     
     // MARK: BlueprintItemElement
     
@@ -221,10 +216,10 @@ struct ChoiceItem : BlueprintItemElement
                 wrapping: Row() { row in
                     row.verticalAlignment = .center
                     
-                    row.add(child: Label(text: self.content.title) { label in
+                    row.add(child: Label(text: self.title) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
                     })
-                    row.add(child: Label(text: self.content.detail) { label in
+                    row.add(child: Label(text: self.detail) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .regular)
                     })
                 },
@@ -245,7 +240,7 @@ struct ChoiceItem : BlueprintItemElement
     }
     
     var identifier: Identifier<ChoiceItem> {
-        return .init(self.content.title)
+        return .init(self.title)
     }
 }
 
@@ -262,6 +257,10 @@ struct ToggleItem : BlueprintItemElement
     }
     
     var onToggle : (Bool) -> ()
+    
+    func wasUpdated(comparedTo other: ToggleItem) -> Bool {
+        return self.content != other.content
+    }
     
     var identifier: Identifier<ToggleItem> {
         return .init(self.content.title)

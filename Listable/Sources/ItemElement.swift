@@ -9,61 +9,6 @@
 public protocol ItemElement
 {
     //
-    // MARK: Content Of ItemElement
-    //
-    
-    /**
-     The content used to visually represent your element.
-     
-     See the documentation on `associatedtype Content : Equatable` for more.
-     */
-    var content : Content { get }
-    
-    /**
-     The content which visually affects the appearance of your element.
-     This includes things like titles, detail strings, images, control states (on, off, enabled, disabled), etc.
-     
-     Content is `Equatable` because the collection view uses it to determine when to update content, recalculate row sizes, etc.
-     
-     If you have a simple ItemElement type, `Content` could be a `String`.
-     If you have a complex `ItemElement` type, `Content` will likely be a struct (eg, view model) conforming to Equatable:
-     
-     ```
-     struct Podcast : Equatable
-     {
-        var identifier : UUID
-     
-        var episodeName : String
-        var showName : String
-     
-        var length : TimeInterval
-     
-        var playStatus : PlayStatus
-     
-        enum PlayStatus : Equatable
-        {
-            case .notStarted
-            case .inProgress(percent : CGFloat)
-            case .done
-        }
-     }
-     ```
-     
-     This struct should NOT include closures or other events triggered later, such as `onTap`.
-     Store these fields directly on your ItemElement. This allows Equatability to be implemented automatically by the compiler:
-     
-     ```
-     struct PodcastRow : ItemElement
-     {
-        var content : Podcast
-     
-        var onTap : (Podcast) -> ()
-     }
-     ```
-     */
-    associatedtype Content : Equatable
-    
-    //
     // MARK: Identification
     //
     
@@ -128,17 +73,20 @@ public protocol ItemElement
     func wasUpdated(comparedTo other : Self) -> Bool
 }
 
-
 public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
-        return self.content != other.content
+        return self.wasUpdated(comparedTo: other)
     }
-    
+}
+
+
+public extension ItemElement where Self:Equatable
+{
     func wasUpdated(comparedTo other : Self) -> Bool
     {
-        return self.content != other.content
+        return self != other
     }
 }
 

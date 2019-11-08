@@ -33,7 +33,7 @@ final class BlueprintListDemoViewController : UIViewController
 
                 section += podcasts.map { podcast in
                     Item(
-                        PodcastRow(content: podcast),
+                        PodcastRow(podcast: podcast),
                         height: .thatFits(.noConstraint)
                     )
                 }
@@ -42,12 +42,12 @@ final class BlueprintListDemoViewController : UIViewController
     }
 }
 
-struct PodcastRow : BlueprintItemElement
+struct PodcastRow : BlueprintItemElement, Equatable
 {
-    var content : Podcast
+    var podcast : Podcast
     
     var identifier: Identifier<PodcastRow> {
-        return .init(self.content.name)
+        return .init(self.podcast.name)
     }
 
     func element(with state: ItemState) -> Element
@@ -59,7 +59,7 @@ struct PodcastRow : BlueprintItemElement
             row.add(
                 growPriority: 0.0,
                 child: ConstrainedSize(
-                    wrapping: Box(cornerStyle: .rounded(radius: 8.0), wrapping: Image(image: self.content.image)),
+                    wrapping: Box(cornerStyle: .rounded(radius: 8.0), wrapping: Image(image: self.podcast.image)),
                     width: .absolute(100.0),
                     height: .absolute(100.0)
                 )
@@ -73,21 +73,21 @@ struct PodcastRow : BlueprintItemElement
             row.add(child: Column { column in
                 column.verticalUnderflow = .growUniformly
 
-                column.add(growPriority: 0.0, child: Label(text: self.content.episode) { label in
+                column.add(growPriority: 0.0, child: Label(text: self.podcast.episode) { label in
                     label.font = UIFont.systemFont(ofSize: 18.0, weight: .semibold)
                     label.color = .darkGray
                 })
 
                 column.add(growPriority: 0.0, child: Spacer(size: .init(width: 0.0, height: 5.0)))
 
-                column.add(growPriority: 0.0, child: Label(text: self.content.name) { label in
+                column.add(growPriority: 0.0, child: Label(text: self.podcast.name) { label in
                     label.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
                     label.color = .gray
                 })
 
                 column.add(growPriority: 1.0, child: Spacer(size: .init(width: 0.0, height: 1.0)))
 
-                column.add(growPriority: 0.0, child: Label(text: self.content.length) { label in
+                column.add(growPriority: 0.0, child: Label(text: self.podcast.length) { label in
                     label.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
                     label.color = .lightGray
                 })
