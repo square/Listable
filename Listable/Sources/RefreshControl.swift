@@ -10,75 +10,73 @@ import Foundation
 
 public struct RefreshControl
 {
-    public var title : NSAttributedString?
+    public var isRefreshing : Bool
+    
+    public enum Title : Equatable
+    {
+        case string(String)
+        case attributed(NSAttributedString)
+    }
+    
+    public var title : Title?
     public var tintColor : UIColor?
     
-    public typealias EndRefreshing = () -> ()
-    public typealias OnRefresh = (@escaping EndRefreshing) -> ()
+    public typealias OnRefresh = () -> ()
     public var onRefresh : OnRefresh
     
-    public typealias IsRefreshing = () -> Binding<Bool>
-    public var isRefreshing : IsRefreshing?
-    
     public init(
-        title : NSAttributedString? = nil,
+        isRefreshing: Bool,
+        title : Title? = nil,
         tintColor : UIColor? = nil,
-        isRefreshing: IsRefreshing? = nil,
         onRefresh : @escaping OnRefresh
         )
     {
+        self.isRefreshing = isRefreshing
+
         self.title = title
         self.tintColor = tintColor
         
-        self.isRefreshing = isRefreshing
         self.onRefresh = onRefresh
     }
     
-    public func apply(to refreshControl : UIRefreshControl)
-    {
-        refreshControl.tintColor = self.tintColor
-        refreshControl.attributedTitle = self.title
-    }
-    
-    public final class PresentationState
+    internal final class PresentationState
     {
         public var model : RefreshControl
         public var view : UIRefreshControl
-        
-        private var binding : Binding<Bool>?
         
         public init(_ model : RefreshControl)
         {
             self.model = model
             self.view = UIRefreshControl()
             
-            if let isRefreshing = model.isRefreshing {
-                let binding = isRefreshing()
-                binding.start()
-                
-                binding.onChange { [weak self] refreshing in
-                    guard let self = self else { return }
-                    
-                    if refreshing {
-                        self.view.beginRefreshing()
-                    } else {
-                        self.view.endRefreshing()
-                    }
+            self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
+        }
+        
+        func update(with control : RefreshControl)
+        {
+            self.model = control
+            
+            if let title = self.model.title {
+                switch title {
+                case .string(let string): self.view.attributedTitle = NSAttributedString(string: string)
+                case .attributed(let string): self.view.attributedTitle = string
                 }
-                
-                self.binding = binding
+            } else {
+                self.view.attributedTitle = nil
             }
             
-            self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
+            self.view.tintColor = self.model.tintColor
+            
+            if self.model.isRefreshing {
+                self.view.beginRefreshing()
+            } else {
+                self.view.endRefreshing()
+            }
         }
         
         @objc func refreshControlChanged()
         {
-            self.model.onRefresh { [weak self] in
-                guard let self = self else { return }
-
-                self.view.endRefreshing()
-            }
+            self.model.onRefresh()
         }
     }
 

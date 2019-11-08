@@ -29,7 +29,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.sectionHeadersPinToVisibleBounds = true
         }
         
-        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
+        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State())
         
         self.view = self.listView
         
@@ -70,6 +70,8 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         {
             var filter : String = ""
             
+            var isRefreshing : Bool = false
+            
             func include(_ word : String) -> Bool
             {
                 return self.filter.isEmpty || word.contains(self.filter.lowercased())
@@ -79,9 +81,12 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         func content(with state: SourceState<State>, content: inout Content)
         {
             if #available(iOS 10.0, *) {
-                content.refreshControl = RefreshControl() { finished in
+                content.refreshControl = RefreshControl(isRefreshing: state.value.isRefreshing) {
+                    
+                    state.value.isRefreshing = true
+                    
                     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-                        finished()
+                        state.value.isRefreshing = false
                     }
                 }
             }
