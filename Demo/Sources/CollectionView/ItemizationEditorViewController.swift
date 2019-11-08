@@ -47,9 +47,11 @@ final class ItemizationEditorViewController : UIViewController
     
     var list : List
     {
-        return List(appearance: self.listAppearance) { list in
+        return List { list in
             
-            list.selectionMode = .multiple
+            list.content.selectionMode = .multiple
+            
+            list.appearance = self.listAppearance
             
             let variationsTitle : String = {
                 if let selected = self.itemization.variations.selected.first {
