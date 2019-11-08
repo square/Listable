@@ -29,7 +29,9 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
+    //
     // MARK: Initialization
+    //
     
     public init(
         _ element : Element,
@@ -66,5 +68,21 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public func newPresentationHeaderFooterState() -> Any
     {
         return PresentationState.HeaderFooterState(self)
+    }
+}
+
+
+public extension HeaderFooter where Element.Appearance == Element
+{
+    init(
+        _ element : Element,
+        height : Height = .default
+    )
+    {
+        self.init(
+            element,
+            appearance: element,
+            height: height
+        )
     }
 }

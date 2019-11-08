@@ -25,6 +25,8 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.sectionHeaderBottomSpacing = 10.0
             $0.rowSpacing = 7.0
             $0.interSectionSpacingWithNoFooter = 10.0
+            
+            $0.sectionHeadersPinToVisibleBounds = true
         }
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
@@ -87,7 +89,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             content += Section(identifier: "search") { rows in
                 rows += Item(
                     SearchRow(
-                        string: state.value.filter,
+                        content: state.value.filter,
                         onChange: { string in
                             state.value.filter = string
                     }
@@ -98,11 +100,10 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             var hasContent = false
             
             content += self.dictionary.wordsByLetter.map { letter in
-                
                 return Section(identifier: letter.letter) { section in
                     
                     section.header = HeaderFooter(
-                        SectionHeader(title: letter.letter),
+                        SectionHeader(content: letter.letter),
                         height: .thatFits(.noConstraint)
                     )
                     
@@ -110,7 +111,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
-                                WordRow(title: word.word, detail: word.description),
+                                WordRow(content: .init(title: word.word, detail: word.description)),
                                 height: .thatFits(.atMost(250.0))
                             )
                         } else {
@@ -125,9 +126,10 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             if hasContent == false {
                 content += Section(identifier: "empty") { section in
                     section += Item(
-                        WordRow(
+                        WordRow(content: .init(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
+                            )
                         ),
                         height: .thatFits(.atMost(250.0))
                     )
@@ -157,7 +159,7 @@ struct SearchRowAppearance : ItemElementAppearance
 
 struct SearchRow : ItemElement
 {
-    var string : String
+    var content : String
     
     var onChange : (String) -> ()
     
@@ -172,17 +174,13 @@ struct SearchRow : ItemElement
     func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
     {
         view.content.onStateChanged = self.onChange
-        view.content.text = self.string
-    }
-    
-    func wasUpdated(comparedTo other: SearchRow) -> Bool {
-        return self.string != other.string
+        view.content.text = self.content
     }
 }
 
-struct SectionHeader : BlueprintHeaderFooterElement, Equatable
+struct SectionHeader : BlueprintHeaderFooterElement
 {
-    var title : String
+    var content : String
     
     // MARK: BlueprintItemElement
     
@@ -191,7 +189,7 @@ struct SectionHeader : BlueprintHeaderFooterElement, Equatable
             backgroundColor: UIColor(white: 0.85, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(
-                wrapping: Label(text: self.title) {
+                wrapping: Label(text: self.content) {
                     $0.font = .systemFont(ofSize: 32.0, weight: .bold)
                 },
                 top: 10.0, bottom: 10.0, left: 20.0, right: 20.0
@@ -200,15 +198,20 @@ struct SectionHeader : BlueprintHeaderFooterElement, Equatable
     }
     
     var identifier: Identifier<SectionHeader> {
-        return .init(self.title)
+        return .init(self.content)
     }
 }
 
 
-struct WordRow : BlueprintItemElement, Equatable
+struct WordRow : BlueprintItemElement
 {
-    var title : String
-    var detail : String
+    var content : Content
+    
+    struct Content : Equatable
+    {
+        var title : String
+        var detail : String
+    }
     
     // MARK: BlueprintItemElement
     
@@ -217,13 +220,13 @@ struct WordRow : BlueprintItemElement, Equatable
             backgroundColor: .init(white: 0.96, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(wrapping: Column { column in
-                column.add(child: Label(text: self.title) {
+                column.add(child: Label(text: self.content.title) {
                     $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
                 })
                 
                 column.add(child: Spacer(size: .init(width: 0.0, height: 10.0)))
                 
-                column.add(child: Label(text: self.detail) {
+                column.add(child: Label(text: self.content.detail) {
                     $0.font = .italicSystemFont(ofSize: 14.0)
                     $0.color = .darkGray
                 })
@@ -232,7 +235,7 @@ struct WordRow : BlueprintItemElement, Equatable
     }
     
     var identifier: Identifier<WordRow> {
-        return .init(self.title)
+        return .init(self.content.title)
     }
 }
 

@@ -134,6 +134,7 @@ public struct Item<Element:ItemElement> : AnyItem
     
     // MARK: AnyItem_Internal
     
+    // TODO: I don't need these, I don't think... due to the Identifier containing type, the underlying type will always be the same.
     public func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     {
         guard let other = other as? Item<Element> else {
@@ -155,6 +156,36 @@ public struct Item<Element:ItemElement> : AnyItem
     public func newPresentationItemState() -> Any
     {
         return PresentationState.ItemState(self)
+    }
+}
+
+
+public extension Item where Element.Appearance == Element
+{
+    init(
+        _ element : Element,
+        height : Height = .default,
+        selection : ItemSelection = .notSelectable,
+        swipeActions : SwipeActions? = nil,
+        bind : CreateBinding? = nil,
+        onDisplay : OnDisplay? = nil,
+        onEndDisplay : OnEndDisplay? = nil,
+        onSelect : OnSelect? = nil,
+        onDeselect : OnDeselect? = nil
+        )
+    {
+        self.init(
+        element,
+        appearance: element,
+        height: height,
+        selection: selection,
+        swipeActions: swipeActions,
+        bind: bind,
+        onDisplay: onDisplay,
+        onEndDisplay: onEndDisplay,
+        onSelect: onSelect,
+        onDeselect: onDeselect
+        )
     }
 }
 

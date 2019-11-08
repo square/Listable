@@ -705,7 +705,6 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
-            item.applyToVisibleCell()
         }
 
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
@@ -713,7 +712,6 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: false)
-            item.applyToVisibleCell()
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]
