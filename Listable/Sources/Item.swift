@@ -64,6 +64,23 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias CreateBinding = (Element) -> Binding<Element>
     internal let bind : CreateBinding?
     
+    //
+    // MARK: Initialization
+    //
+    
+    public typealias Build = (inout Item) -> ()
+    
+    public init(
+        _ element : Element,
+        appearance : Element.Appearance,
+        build : Build
+        )
+    {
+        self.init(element, appearance: appearance)
+        
+        build(&self)
+    }
+    
     public init(
         _ element : Element,
         appearance : Element.Appearance,
