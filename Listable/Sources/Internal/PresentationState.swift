@@ -232,7 +232,7 @@ final class PresentationState
                 self.view.refreshControl = nil
         },
             overlapping: { control, model in
-                model.apply(to: control.view)
+                control.update(with: model)
         })
     }
     
