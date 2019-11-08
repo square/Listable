@@ -215,8 +215,7 @@ final class PresentationState
     
     private func updateRefreshControl(with refreshControl : RefreshControl?)
     {
-        guard #available(iOS 10.0, *) else { return }
-        
+
         // TODO: Remove use of syncOptionals
         
         syncOptionals(
@@ -224,12 +223,22 @@ final class PresentationState
             right: refreshControl,
             created: { model in
                 let new = RefreshControl.PresentationState(model)
-                self.view.refreshControl = new.view
+                if #available(iOS 10.0, *) {
+                    self.view.refreshControl = new.view
+                } else {
+                    self.view.addSubview(new.view)
+                }
                 self.refreshControl = new
         },
             removed: { _ in
+                if #available(iOS 10.0, *) {
+                    self.view.refreshControl = nil
+                } else {
+                    self.refreshControl?.view.removeFromSuperview()
+                }
+                
                 self.refreshControl = nil
-                self.view.refreshControl = nil
+
         },
             overlapping: { control, model in
                 control.update(with: model)

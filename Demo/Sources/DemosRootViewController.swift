@@ -55,12 +55,12 @@ public final class DemosRootViewController : UIViewController
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    HeaderElement(content: "Collection Views"),
+                    HeaderElement(title: "Collection Views"),
                     appearance: self.headerAppearance
                 )
                 
                 section += Item(
-                    TitleElement(content: "Basic Demo"),
+                    TitleElement(title: "Basic Demo"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -68,7 +68,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(content: "Blueprint Integration"),
+                    TitleElement(title: "Blueprint Integration"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -76,7 +76,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(content: "Itemization Editor"),
+                    TitleElement(title: "Itemization Editor"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -84,7 +84,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(content: "English Dictionary Search"),
+                    TitleElement(title: "English Dictionary Search"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -92,7 +92,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(content: "Keyboard Testing"),
+                    TitleElement(title: "Keyboard Testing"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -103,20 +103,20 @@ public final class DemosRootViewController : UIViewController
     }
 }
 
-struct TitleElement : ItemElement
+struct TitleElement : ItemElement, Equatable
 {
-    var content : String
+    var title : String
 
     // ItemElement
     
     typealias Appearance = ItemAppearance<UILabel>
     
     var identifier: Identifier<TitleElement> {
-        return .init(self.content)
+        return .init(self.title)
     }
     
     func apply(to view: Appearance.View, with state : ItemState, reason: ApplyReason)
     {
-        view.content.text = self.content
+        view.content.text = self.title
     }
 }

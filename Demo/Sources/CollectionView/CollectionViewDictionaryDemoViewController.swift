@@ -94,7 +94,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             content += Section(identifier: "search") { rows in
                 rows += Item(
                     SearchRow(
-                        content: state.value.filter,
+                        text: state.value.filter,
                         onChange: { string in
                             state.value.filter = string
                     }
@@ -108,7 +108,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 return Section(identifier: letter.letter) { section in
                     
                     section.header = HeaderFooter(
-                        SectionHeader(content: letter.letter),
+                        SectionHeader(title: letter.letter),
                         height: .thatFits(.noConstraint)
                     )
                     
@@ -116,7 +116,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
-                                WordRow(content: .init(title: word.word, detail: word.description)),
+                                WordRow(title: word.word, detail: word.description),
                                 height: .thatFits(.atMost(250.0))
                             )
                         } else {
@@ -131,11 +131,10 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             if hasContent == false {
                 content += Section(identifier: "empty") { section in
                     section += Item(
-                        WordRow(content: .init(
+                        WordRow(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
-                            )
-                        ),
+                            ),
                         height: .thatFits(.atMost(250.0))
                     )
                 }
@@ -164,7 +163,7 @@ struct SearchRowAppearance : ItemElementAppearance
 
 struct SearchRow : ItemElement
 {
-    var content : String
+    var text : String
     
     var onChange : (String) -> ()
     
@@ -179,13 +178,17 @@ struct SearchRow : ItemElement
     func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
     {
         view.content.onStateChanged = self.onChange
-        view.content.text = self.content
+        view.content.text = self.text
+    }
+    
+    func wasUpdated(comparedTo other: SearchRow) -> Bool {
+        return self.text != other.text
     }
 }
 
-struct SectionHeader : BlueprintHeaderFooterElement
+struct SectionHeader : BlueprintHeaderFooterElement, Equatable
 {
-    var content : String
+    var title : String
     
     // MARK: BlueprintItemElement
     
@@ -194,7 +197,7 @@ struct SectionHeader : BlueprintHeaderFooterElement
             backgroundColor: UIColor(white: 0.85, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(
-                wrapping: Label(text: self.content) {
+                wrapping: Label(text: self.title) {
                     $0.font = .systemFont(ofSize: 32.0, weight: .bold)
                 },
                 top: 10.0, bottom: 10.0, left: 20.0, right: 20.0
@@ -203,20 +206,15 @@ struct SectionHeader : BlueprintHeaderFooterElement
     }
     
     var identifier: Identifier<SectionHeader> {
-        return .init(self.content)
+        return .init(self.title)
     }
 }
 
 
-struct WordRow : BlueprintItemElement
+struct WordRow : BlueprintItemElement, Equatable
 {
-    var content : Content
-    
-    struct Content : Equatable
-    {
-        var title : String
-        var detail : String
-    }
+    var title : String
+    var detail : String
     
     // MARK: BlueprintItemElement
     
@@ -225,13 +223,13 @@ struct WordRow : BlueprintItemElement
             backgroundColor: .init(white: 0.96, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(wrapping: Column { column in
-                column.add(child: Label(text: self.content.title) {
+                column.add(child: Label(text: self.title) {
                     $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
                 })
                 
                 column.add(child: Spacer(size: .init(width: 0.0, height: 10.0)))
                 
-                column.add(child: Label(text: self.content.detail) {
+                column.add(child: Label(text: self.detail) {
                     $0.font = .italicSystemFont(ofSize: 14.0)
                     $0.color = .darkGray
                 })
@@ -240,7 +238,7 @@ struct WordRow : BlueprintItemElement
     }
     
     var identifier: Identifier<WordRow> {
-        return .init(self.content.title)
+        return .init(self.title)
     }
 }
 
