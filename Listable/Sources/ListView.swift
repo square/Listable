@@ -31,6 +31,9 @@ public final class ListView : UIView
         
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         
+        self.keyboardObserver = KeyboardObserver()
+        self.keyboardInset = 0.0
+        
         if #available(iOS 10.0, *) {
             self.collectionView.isPrefetchingEnabled = false
         }
@@ -43,6 +46,8 @@ public final class ListView : UIView
         self.storage.presentationState.view = self.collectionView
         self.dataSource.view = self
         self.delegate.view = self
+        
+        self.keyboardObserver.delegate = self
         
         self.collectionView.frame = self.bounds
         self.addSubview(self.collectionView)
@@ -65,6 +70,9 @@ public final class ListView : UIView
     
     private let collectionView : UICollectionView
     private let layout : ListViewLayout
+    
+    private var keyboardInset : CGFloat
+    private let keyboardObserver : KeyboardObserver
     
     //
     // MARK: Appearance
@@ -221,6 +229,24 @@ public final class ListView : UIView
     public override var backgroundColor: UIColor? {
         didSet {
             self.collectionView.backgroundColor = self.backgroundColor
+        }
+    }
+    
+    public override func didMoveToWindow()
+    {
+        super.didMoveToWindow()
+        
+        if self.window != nil {
+            self.setContentInsetWithKeyboardFrame()
+        }
+    }
+    
+    public override func didMoveToSuperview()
+    {
+        super.didMoveToSuperview()
+        
+        if self.superview != nil {
+            self.setContentInsetWithKeyboardFrame()
         }
     }
     
@@ -508,6 +534,33 @@ public final class ListView : UIView
                 )
             )
         )
+    }
+}
+
+
+extension ListView : KeyboardObserverDelegate
+{
+    private func setContentInsetWithKeyboardFrame()
+    {
+        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+            return
+        }
+        
+        switch frame {
+        case .notVisible: self.keyboardInset = 0.0
+        case .visible(let frame): self.keyboardInset = (self.bounds.size.height - frame.origin.y)
+        }
+        
+        self.collectionView.contentInset.bottom = self.keyboardInset
+    }
+    
+    //
+    // MARK: KeyboardObserverDelegate
+    //
+    
+    func keyboardFrameWillChange(observer : KeyboardObserver)
+    {
+        self.setContentInsetWithKeyboardFrame()
     }
 }
 

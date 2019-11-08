@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
+		0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
 		0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590003236A371600F463DA /* EnglishDictionary.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
+		0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
 		0A590003236A371600F463DA /* EnglishDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishDictionary.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */,
 				0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */,
 				0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */,
+				0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */,
 				0A40AF76235D41290008736E /* CollectionViewAppearance.swift */,
 			);
 			path = CollectionView;
@@ -272,6 +275,7 @@
 			files = (
 				0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */,
 				0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */,
+				0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */,
 				0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
