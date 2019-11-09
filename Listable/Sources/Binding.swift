@@ -173,7 +173,6 @@ public final class KVOContext<Element, Observed:NSObject, Value> : BindingContex
     
     public var didUpdate : DidUpdate?
     
-    // TODO: Strong or weak? Can't decide... maybe allow for both?
     public private(set) weak var observed : Observed?
     public let keyPath : KeyPath<Observed, Value>
     
