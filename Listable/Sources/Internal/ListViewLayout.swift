@@ -585,7 +585,7 @@ fileprivate extension ListViewLayout
                 return .skipped
             }
             
-            guard contentLayout.sectionHeadersPinToVisibleBounds else {
+            guard contentLayout.usesStickySectionHeaders else {
                 return .completed
             }
                         

@@ -563,9 +563,7 @@ struct ArrayDiff<Element>
         }
         
         // We are done – sort arrays.
-        
-        // TODO ARE THESE ORDERS RIGHT?
-        
+                
         self.added.sort { $0.newIndex < $1.newIndex }
         self.removed.sort { $0.oldIndex > $1.oldIndex }
         

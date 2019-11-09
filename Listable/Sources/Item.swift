@@ -26,7 +26,6 @@ public protocol AnyItem : AnyItem_Internal
 
 public protocol AnyItem_Internal
 {
-    // TODO: Move these impls onto an extension instead of Item<Element>.
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     
@@ -111,7 +110,7 @@ public struct Item<Element:ItemElement> : AnyItem
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
         
         self.identifier = AnyIdentifier(self.element.identifier)
     }
@@ -134,7 +133,6 @@ public struct Item<Element:ItemElement> : AnyItem
     
     // MARK: AnyItem_Internal
     
-    // TODO: I don't need these, I don't think... due to the Identifier containing type, the underlying type will always be the same.
     public func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     {
         guard let other = other as? Item<Element> else {

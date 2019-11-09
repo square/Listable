@@ -455,7 +455,6 @@ public final class ListView : UIView
             callerCompletion(finished)
         }
 
-        // TODO: Does this work with the async batch updates now?
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         
