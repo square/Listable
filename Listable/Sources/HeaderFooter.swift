@@ -44,7 +44,7 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
         
         self.height = height
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
     }
     
     // MARK: AnyHeaderFooter_Internal

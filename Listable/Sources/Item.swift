@@ -111,7 +111,7 @@ public struct Item<Element:ItemElement> : AnyItem
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
         
         self.identifier = AnyIdentifier(self.element.identifier)
     }
