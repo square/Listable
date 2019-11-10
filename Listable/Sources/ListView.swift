@@ -163,9 +163,13 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(animated : Bool = false, _ builder : Content.Build)
+    public func setContent(animated : Bool = false, _ builder : ListDescription.Build)
     {
-        self.setContent(animated: animated, Content(with: builder))
+        let description = ListDescription(appearance: self.appearance, build: builder)
+        
+        self.appearance = description.appearance
+        
+        self.setContent(animated: animated, description.content)
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
