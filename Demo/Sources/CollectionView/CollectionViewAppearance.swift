@@ -20,7 +20,7 @@ let defaultAppearance = Appearance {
         sectionHeaderBottomSpacing: 10.0,
         rowSpacing: 5.0,
         rowToSectionFooterSpacing: 10.0,
-        sectionHeadersPinToVisibleBounds: true
+        usesStickySectionHeaders: true
     )
 }
 

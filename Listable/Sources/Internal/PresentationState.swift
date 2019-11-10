@@ -44,7 +44,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
     func applyToVisibleView()
     
-    func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter, reason : UpdateReason)
+    func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
     
     func willDisplay(view : UICollectionReusableView, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
@@ -213,36 +213,28 @@ final class PresentationState
         )
     }
     
-    private func updateRefreshControl(with refreshControl : RefreshControl?)
+    private func updateRefreshControl(with new : RefreshControl?)
     {
-
-        // TODO: Remove use of syncOptionals
-        
-        syncOptionals(
-            left: self.refreshControl,
-            right: refreshControl,
-            created: { model in
-                let new = RefreshControl.PresentationState(model)
-                if #available(iOS 10.0, *) {
-                    self.view.refreshControl = new.view
-                } else {
-                    self.view.addSubview(new.view)
-                }
-                self.refreshControl = new
-        },
-            removed: { _ in
-                if #available(iOS 10.0, *) {
-                    self.view.refreshControl = nil
-                } else {
-                    self.refreshControl?.view.removeFromSuperview()
-                }
-                
-                self.refreshControl = nil
-
-        },
-            overlapping: { control, model in
-                control.update(with: model)
-        })
+        if let existing = self.refreshControl, let new = new {
+            existing.update(with: new)
+        } else if self.refreshControl == nil, let new = new {
+            let newControl = RefreshControl.PresentationState(new)
+            
+            if #available(iOS 10.0, *) {
+                self.view.refreshControl = newControl.view
+            } else {
+                self.view.addSubview(newControl.view)
+            }
+            self.refreshControl = newControl
+        } else if let existing = refreshControl, new == nil {
+            if #available(iOS 10.0, *) {
+                self.view.refreshControl = nil
+            } else {
+                existing.view.removeFromSuperview()
+            }
+            
+            self.refreshControl = nil
+        }
     }
     
     //
@@ -344,7 +336,7 @@ final class PresentationState
                     let isSameType = type(of: current.anyModel) == type(of: new)
                     
                     if isSameType {
-                        current.setNew(headerFooter: new, reason: .update)
+                        current.setNew(headerFooter: new)
                         return current
                     } else {
                         return (new.newPresentationHeaderFooterState() as! AnyPresentationHeaderFooterState)
@@ -411,11 +403,13 @@ final class PresentationState
             self.applyTo(view: view, reason: .wasUpdated)
         }
         
-        func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter, reason: UpdateReason)
+        func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
         {
             let oldModel = self.model
             
             self.model = anyHeaderFooter as! HeaderFooter<Element>
+            
+            let reason : UpdateReason = self.model.anyWasUpdated(comparedTo: oldModel) ? .update : .noChange
             
             if oldModel.height != self.model.height {
                 self.resetCachedHeights()
@@ -701,16 +695,5 @@ fileprivate extension UICollectionView
                 return .middle
             }
         }
-    }
-}
-
-private func syncOptionals<Left,Right>(left : Left?, right : Right?, created : (Right) -> (), removed : (Left) -> (), overlapping: (Left, Right) -> ())
-{
-    if left == nil, let right = right {
-        created(right)
-    } else if let left = left, right == nil {
-        removed(left)
-    } else if let left = left, let right = right {
-        overlapping(left, right)
     }
 }

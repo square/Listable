@@ -26,7 +26,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.rowSpacing = 7.0
             $0.interSectionSpacingWithNoFooter = 10.0
             
-            $0.sectionHeadersPinToVisibleBounds = true
+            $0.usesStickySectionHeaders = true
         }
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State())

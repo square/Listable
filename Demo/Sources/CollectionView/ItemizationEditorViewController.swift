@@ -170,7 +170,7 @@ final class ItemizationEditorViewController : UIViewController
                 sectionHeaderBottomSpacing: 0.0,
                 rowSpacing: 20.0,
                 rowToSectionFooterSpacing: 20.0,
-                sectionHeadersPinToVisibleBounds: false
+                usesStickySectionHeaders: false
             )
             ,
             underflow: .alwaysBounceVertical(true)
@@ -612,6 +612,6 @@ struct Money : Hashable
     }
     
     var localized : String {
-        return "$10.00" // TODO
+        return "$10.00"
     }
 }
