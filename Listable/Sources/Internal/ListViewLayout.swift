@@ -350,8 +350,8 @@ extension ListViewLayout
         case listHeader = "Listable.ListViewLayout.ListHeader"
         case listFooter = "Listable.ListViewLayout.ListFooter"
         
-        case sectionHeader = "Listable.TableLayout.SectionHeader"
-        case sectionFooter = "Listable.TableLayout.SectionFooter"
+        case sectionHeader = "Listable.ListViewLayout.SectionHeader"
+        case sectionFooter = "Listable.ListViewLayout.SectionFooter"
         
         var zIndex : Int {
             switch self {

@@ -180,3 +180,31 @@ public final class StaticSource : ListViewSource
         return self.content
     }
 }
+
+
+///
+/// MARK: Timer For Reloading
+///
+
+internal final class ReloadTimer
+{
+    private var timer : Timer?
+    
+    typealias OnFire = () -> ()
+    private var onFire : OnFire?
+    
+    init(onFire : @escaping OnFire)
+    {
+        self.onFire = onFire
+        
+        self.timer = Timer.scheduledTimer(timeInterval: 0.0, target: self, selector: #selector(timerFired), userInfo: nil, repeats: false)
+    }
+    
+    @objc func timerFired()
+    {
+        self.onFire?()
+        self.onFire = nil
+        
+        self.timer = nil
+    }
+}

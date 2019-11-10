@@ -177,13 +177,21 @@ public final class ListView : UIView
         )
     }
     
+    private var sourceChangedTimer : ReloadTimer? = nil
+    
     @discardableResult
     public func set<Source:ListViewSource>(source : Source, initial : Source.State, animated : Bool = false) -> StateAccessor<Source.State>
     {
         self.sourcePresenter.discard()
         
         let sourcePresenter = SourcePresenter(initial: initial, source: source, didChange: { [weak self] in
-            self?.setContentFromSource(animated: true)
+            guard let self = self else { return }
+            guard self.sourceChangedTimer == nil else { return }
+            
+            self.sourceChangedTimer = ReloadTimer {
+                self.sourceChangedTimer = nil
+                self.setContentFromSource(animated: true)
+            }
         })
         
         self.sourcePresenter = sourcePresenter
@@ -205,6 +213,11 @@ public final class ListView : UIView
     }
     
     // MARK: UIView
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        return self.layout.collectionViewContentSize
+    }
     
     public override var frame: CGRect {
         didSet {
