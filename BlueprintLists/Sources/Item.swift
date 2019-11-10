@@ -40,17 +40,18 @@ public extension Listable.Item where Element : BlueprintItemElement
 {
     init(
         _ element : Element,
-        build : Item.Build
+        build : Build
         )
     {
-        self.init(element)
+        self.init(with: element)
         
         build(&self)
     }
     
     init(
-        _ element : Element,
-        height : Height = .default,
+        with element : Element,
+        sizing : Sizing = .default,
+        layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
         bind : CreateBinding? = nil,
@@ -60,9 +61,10 @@ public extension Listable.Item where Element : BlueprintItemElement
         )
     {
         self.init(
-            element,
+            with: element,
             appearance: BlueprintItemElementAppearance(),
-            height: height,
+            sizing: sizing,
+            layout: layout,
             selection: selection,
             swipeActions: swipeActions,
             bind: bind,
@@ -127,9 +129,9 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
     public typealias BackgroundView = BlueprintView
     public typealias SelectedBackgroundView = BlueprintView
     
-    public static func createReusableItemView() -> View
+    public static func createReusableItemView(frame: CGRect) -> View
     {
-        return ItemElementView(content: BlueprintView(), background: BlueprintView(), selectedBackground: BlueprintView())
+        return ItemElementView(content: BlueprintView(frame: frame), background: BlueprintView(), selectedBackground: BlueprintView())
     }
     
     public func update(view: View, with position: ItemPosition) {}

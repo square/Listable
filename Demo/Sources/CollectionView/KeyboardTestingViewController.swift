@@ -18,24 +18,24 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.appearance.contentLayout.rowSpacing = 10.0
+        self.listView.appearance.layout.itemSpacing = 10.0
         
         self.listView.setContent { list in
             list += Section(identifier: "section") { section in
-                section += Item(TextField(content: "Item 1"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 2"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 3"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 4"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 5"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 6"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 7"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 8"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 9"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 10"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 11"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 12"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 13"), appearance: TextFieldAppearance(), height: .fixed(100.0))
-                section += Item(TextField(content: "Item 14"), appearance: TextFieldAppearance(), height: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 1"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 2"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 3"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 4"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 5"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 6"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 7"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 8"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 9"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 10"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 11"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 12"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 13"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextField(content: "Item 14"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
             }
         }
         
@@ -79,9 +79,9 @@ struct TextFieldAppearance : ItemElementAppearance
     typealias BackgroundView = UIView
     typealias SelectedBackgroundView = UIView
     
-    static func createReusableItemView() -> ItemElementView<UITextField, UIView, UIView>
+    static func createReusableItemView(frame: CGRect) -> ItemElementView<UITextField, UIView, UIView>
     {
-        return ItemElementView(content: UITextField(), background: UIView(), selectedBackground: UIView())
+        return ItemElementView(content: UITextField(frame: frame), background: UIView(), selectedBackground: UIView())
     }
     
     func update(view: ItemElementView<UITextField, UIView, UIView>, with position: ItemPosition)

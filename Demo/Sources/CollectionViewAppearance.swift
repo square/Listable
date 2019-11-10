@@ -12,16 +12,24 @@ import Listable
 let defaultAppearance = Appearance {
     $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
                 
-    $0.contentLayout = ListContentLayout(
-        padding: UIEdgeInsets(top: 30.0, left: 15.0, bottom: 30.0, right: 15.0),
-        width: .atMost(500.0),
+    $0.layout = ListLayout(
+        padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+        width: .atMost(600.0),
         interSectionSpacingWithNoFooter: 20.0,
         interSectionSpacingWithFooter: 20.0,
         sectionHeaderBottomSpacing: 10.0,
-        rowSpacing: 5.0,
-        rowToSectionFooterSpacing: 10.0,
-        usesStickySectionHeaders: true
+        itemSpacing: 5.0,
+        itemToSectionFooterSpacing: 10.0,
+        stickySectionHeaders: true
     )
+}
+
+extension UIColor
+{
+    static func white(_ blend : CGFloat) -> UIColor
+    {
+        return UIColor(white: blend, alpha: 1.0)
+    }
 }
 
 struct ItemAppearance<ContentView:UIView> : ItemElementAppearance
@@ -36,9 +44,9 @@ struct ItemAppearance<ContentView:UIView> : ItemElementAppearance
         self.apply = apply
     }
     
-    static func createReusableItemView() -> ItemElementView<ContentView, UIView, UIView>
+    static func createReusableItemView(frame: CGRect) -> ItemElementView<ContentView, UIView, UIView>
     {
-        return .init(content: ContentView(), background: UIView(), selectedBackground: UIView())
+        return .init(content: ContentView(frame: frame), background: UIView(), selectedBackground: UIView())
     }
     
     func update(view: ItemElementView<ContentView, UIView, UIView>, with position: ItemPosition)
@@ -75,9 +83,9 @@ struct HeaderAppearance<ContentView:UIView> : HeaderFooterElementAppearance
         self.apply = apply
     }
     
-    static func createReusableHeaderFooterView() -> HeaderFooterElementView<ContentView, UIView>
+    static func createReusableHeaderFooterView(frame: CGRect) -> HeaderFooterElementView<ContentView, UIView>
     {
-        return .init(content: ContentView(), background: UIView())
+        return .init(content: ContentView(frame: frame), background: UIView())
     }
     
     func apply(to view: HeaderFooterElementView<ContentView, UIView>, previous: HeaderAppearance<ContentView>?)
@@ -114,9 +122,9 @@ struct FooterAppearance<ContentView:UIView> : HeaderFooterElementAppearance
         self.apply = apply
     }
     
-    static func createReusableHeaderFooterView() -> HeaderFooterElementView<ContentView, UIView>
+    static func createReusableHeaderFooterView(frame: CGRect) -> HeaderFooterElementView<ContentView, UIView>
     {
-        return .init(content: ContentView(), background: UIView())
+        return .init(content: ContentView(frame: frame), background: UIView())
     }
     
     func apply(to view: HeaderFooterElementView<ContentView, UIView>, previous: FooterAppearance<ContentView>?)

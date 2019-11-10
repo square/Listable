@@ -39,8 +39,7 @@ public struct List : BlueprintUI.Element
             }
             
             config.apply { listView in
-                listView.appearance = self.listDescription.appearance
-                listView.setContent(animated: true, self.listDescription.content)
+                listView.setProperties(with: self.listDescription, animated: true)
             }
         }
     }

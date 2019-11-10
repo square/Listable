@@ -33,8 +33,8 @@ final class BlueprintListDemoViewController : UIViewController
 
                 section += podcasts.map { podcast in
                     Item(
-                        PodcastRow(podcast: podcast),
-                        height: .thatFits(.noConstraint)
+                        with: PodcastRow(podcast: podcast),
+                        sizing: .thatFits(.noConstraint)
                     )
                 }
             }
@@ -52,16 +52,16 @@ struct PodcastRow : BlueprintItemElement, Equatable
 
     func element(with state: ItemState) -> Element
     {
-        return Inset(wrapping: Row { row in
+        return Inset(uniformInset: 10.0, wrapping: Row { row in
             row.horizontalUnderflow = .growUniformly
             row.verticalAlignment = .fill
 
             row.add(
                 growPriority: 0.0,
                 child: ConstrainedSize(
-                    wrapping: Box(cornerStyle: .rounded(radius: 8.0), wrapping: Image(image: self.podcast.image)),
                     width: .absolute(100.0),
-                    height: .absolute(100.0)
+                    height: .absolute(100.0),
+                    wrapping: Box(cornerStyle: .rounded(radius: 8.0), wrapping: Image(image: self.podcast.image))
                 )
             )
 
@@ -92,7 +92,7 @@ struct PodcastRow : BlueprintItemElement, Equatable
                     label.color = .lightGray
                 })
             })
-        }, uniformInset: 10.0)
+        })
     }
     
     func backgroundElement(with state: ItemState) -> Element?

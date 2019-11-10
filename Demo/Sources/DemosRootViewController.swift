@@ -55,12 +55,12 @@ public final class DemosRootViewController : UIViewController
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    HeaderElement(title: "Collection Views"),
+                    with: HeaderElement(title: "Collection Views"),
                     appearance: self.headerAppearance
                 )
                 
                 section += Item(
-                    TitleElement(title: "Basic Demo"),
+                    with: TitleElement(title: "Basic Demo"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -68,7 +68,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(title: "Blueprint Integration"),
+                    with: TitleElement(title: "Blueprint Integration"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -76,7 +76,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(title: "Itemization Editor"),
+                    with: TitleElement(title: "Itemization Editor"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -84,7 +84,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(title: "English Dictionary Search"),
+                    with: TitleElement(title: "English Dictionary Search"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
@@ -92,11 +92,27 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    TitleElement(title: "Keyboard Testing"),
+                    with: TitleElement(title: "Keyboard Testing"),
                     appearance: self.itemAppearance,
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
+                })
+                
+                section += Item(
+                    with: TitleElement(title: "Horizontal Layout"),
+                    appearance: self.itemAppearance,
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(HorizontalLayoutViewController())
+                })
+                
+                section += Item(
+                    with: TitleElement(title: "Width Customization"),
+                    appearance: self.itemAppearance,
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(WidthCustomizationViewController())
                 })
             }
         }

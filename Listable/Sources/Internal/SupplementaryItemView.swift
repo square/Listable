@@ -16,7 +16,7 @@ final class SupplementaryItemView<Element:HeaderFooterElement> : UICollectionReu
     
     override init(frame: CGRect)
     {
-        self.content = Element.Appearance.createReusableHeaderFooterView()
+        self.content = Element.Appearance.createReusableHeaderFooterView(frame: frame)
         
         super.init(frame: frame)
         

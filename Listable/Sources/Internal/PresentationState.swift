@@ -29,7 +29,7 @@ protocol AnyPresentationItemState : AnyObject
     func performUserDidSelectItem(isSelected: Bool)
     
     func resetCachedHeights()
-    func height(with width : CGFloat, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
 }
 
 
@@ -50,7 +50,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     func didEndDisplay()
     
     func resetCachedHeights()
-    func height(with width : CGFloat, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
 }
 
 
@@ -115,8 +115,8 @@ final class PresentationState
     }
     
     var selectedIndexPaths : [IndexPath] {
-        let indexes : [[IndexPath]] = self.sections.flatMapWithIndex { sectionIndex, section in
-            return section.items.flatMapWithIndex { itemIndex, item in
+        let indexes : [[IndexPath]] = self.sections.flatMapWithIndex { sectionIndex, _, section in
+            return section.items.flatMapWithIndex { itemIndex, _, item in
                 if item.anyModel.selection.isSelected {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 } else {
@@ -149,8 +149,8 @@ final class PresentationState
     
     public var lastIndexPath : IndexPath?
     {
-        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.flatMapWithIndex {
-            return $1.items.isEmpty ? nil : ($0, $1)
+        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.flatMapWithIndex { index, _, state in
+            return state.items.isEmpty ? nil : (index, state)
         }
         
         guard let lastSection = nonEmptySections.last else {
@@ -411,7 +411,7 @@ final class PresentationState
             
             let reason : UpdateReason = self.model.anyWasUpdated(comparedTo: oldModel) ? .update : .noChange
             
-            if oldModel.height != self.model.height {
+            if oldModel.sizing != self.model.sizing {
                 self.resetCachedHeights()
             }
             
@@ -430,20 +430,22 @@ final class PresentationState
             self.visibleView = nil
         }
         
-        private var cachedHeights : [CGFloat:CGFloat] = [:]
+        private var cachedHeights : [HeightKey:CGFloat] = [:]
         
         func resetCachedHeights()
         {
             self.cachedHeights.removeAll()
         }
         
-        func height(with width : CGFloat, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+        func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
         {
             guard width > 0.0 else {
                 return 0.0
             }
             
-            if let height = self.cachedHeights[width] {
+            let heightKey = HeightKey(width: width, layoutDirection: layoutDirection)
+            
+            if let height = self.cachedHeights[heightKey] {
                 return height
             } else {
                 let height : CGFloat = measurementCache.use(
@@ -456,10 +458,10 @@ final class PresentationState
                     
                     self.model.element.apply(to: view.content, reason: .willDisplay)
                     
-                    return self.model.height.measure(with: view, fittingWidth: width, default: defaultHeight)
+                    return self.model.sizing.measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
                 })
                 
-                self.cachedHeights[width] = height
+                self.cachedHeights[heightKey] = height
                 
                 return height
             }
@@ -597,7 +599,7 @@ final class PresentationState
             
             self.model = anyItem as! Item<Element>
             
-            if oldModel.height != self.model.height {
+            if oldModel.sizing != self.model.sizing {
                 self.resetCachedHeights()
             }
             
@@ -638,20 +640,22 @@ final class PresentationState
             self.applyToVisibleCell()
         }
         
-        private var cachedHeights : [CGFloat:CGFloat] = [:]
+        private var cachedHeights : [HeightKey:CGFloat] = [:]
         
         func resetCachedHeights()
         {
             self.cachedHeights.removeAll()
         }
         
-        func height(with width : CGFloat, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+        func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
         {
             guard width > 0.0 else {
                 return 0.0
             }
             
-            if let height = self.cachedHeights[width] {
+            let heightKey = HeightKey(width: width, layoutDirection: layoutDirection)
+            
+            if let height = self.cachedHeights[heightKey] {
                 return height
             } else {
                 let height : CGFloat = measurementCache.use(
@@ -663,15 +667,21 @@ final class PresentationState
                     
                     self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
                     
-                    return self.model.height.measure(with: cell, fittingWidth: width, default: defaultHeight)
+                    return self.model.sizing.measure(with: cell, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
                 })
                 
-                self.cachedHeights[width] = height
+                self.cachedHeights[heightKey] = height
                 
                 return height
             }
         }
     }
+}
+
+fileprivate struct HeightKey : Hashable
+{
+    var width : CGFloat
+    var layoutDirection : LayoutDirection
 }
 
 fileprivate extension UICollectionView

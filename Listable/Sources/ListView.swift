@@ -18,6 +18,8 @@ public final class ListView : UIView
     {
         self.appearance = appearance
         
+        self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
+        
         self.storage = Storage()
         self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
         
@@ -32,7 +34,6 @@ public final class ListView : UIView
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         
         self.keyboardObserver = KeyboardObserver()
-        self.keyboardInset = 0.0
         
         if #available(iOS 10.0, *) {
             self.collectionView.isPrefetchingEnabled = false
@@ -53,6 +54,7 @@ public final class ListView : UIView
         self.addSubview(self.collectionView)
         
         self.applyAppearance()
+        self.applyScrollInsets()
     }
     
     @available(*, unavailable)
@@ -71,7 +73,6 @@ public final class ListView : UIView
     private let collectionView : UICollectionView
     private let layout : ListViewLayout
     
-    private var keyboardInset : CGFloat
     private let keyboardObserver : KeyboardObserver
     
     //
@@ -94,6 +95,24 @@ public final class ListView : UIView
         self.backgroundColor = self.appearance.backgroundColor
         
         self.storage.presentationState.resetAllCachedHeights()
+    }
+    
+    public var scrollInsets : ScrollInsets {
+        didSet {
+            guard oldValue != self.scrollInsets else {
+                return
+            }
+            
+            self.applyScrollInsets()
+        }
+    }
+    
+    func applyScrollInsets()
+    {
+        self.collectionView.contentInset = self.scrollInsets.insets(
+            with: self.collectionView.contentInset,
+            layoutDirection: self.appearance.direction
+        )
     }
     
     //
@@ -167,9 +186,7 @@ public final class ListView : UIView
     {
         let description = ListDescription(appearance: self.appearance, build: builder)
         
-        self.appearance = description.appearance
-        
-        self.setContent(animated: animated, description.content)
+        self.setProperties(with: description, animated: animated)
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
@@ -209,6 +226,13 @@ public final class ListView : UIView
         })
     }
     
+    public func setProperties(with description : ListDescription, animated: Bool = false)
+    {
+        self.appearance = description.appearance
+        self.setContent(animated: animated, description.content)
+        self.scrollInsets = description.scrollInsets
+    }
+    
     private func setContentFromSource(animated : Bool = false)
     {
         self.storage.allContent = self.sourcePresenter.reloadContent()
@@ -217,11 +241,6 @@ public final class ListView : UIView
     }
     
     // MARK: UIView
-    
-    public override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        return self.layout.collectionViewContentSize
-    }
     
     public override var frame: CGRect {
         didSet {
@@ -562,12 +581,14 @@ extension ListView : KeyboardObserverDelegate
             return
         }
         
+        var inset : CGFloat
+        
         switch frame {
-        case .notVisible: self.keyboardInset = 0.0
-        case .visible(let frame): self.keyboardInset = (self.bounds.size.height - frame.origin.y)
+        case .notVisible: inset = 0.0
+        case .visible(let frame): inset = (self.bounds.size.height - frame.origin.y)
         }
         
-        self.collectionView.contentInset.bottom = self.keyboardInset
+        self.collectionView.contentInset.bottom = inset
     }
     
     //
@@ -795,15 +816,23 @@ fileprivate extension ListView
         
         private let cellMeasurementCache = ReusableViewCache()
         
-        func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+        func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
         {
             let item = self.presentationState.item(at: indexPath)
             
             return item.height(
-                with: width,
-                defaultHeight: self.view.layout.appearance.sizing.rowHeight,
+                width: width,
+                layoutDirection : layoutDirection,
+                defaultHeight: self.view.layout.appearance.sizing.itemHeight,
                 measurementCache: self.cellMeasurementCache
             )
+        }
+        
+        func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
+        {
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.layout
         }
         
         func hasListHeader(in collectionView : UICollectionView) -> Bool
@@ -811,11 +840,23 @@ fileprivate extension ListView
             return self.presentationState.header != nil
         }
         
-        func heightForListHeader(in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+        func heightForListHeader(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
         {
             let header = self.presentationState.header!
             
-            return header.height(with: width, defaultHeight: self.view.layout.appearance.sizing.listHeaderHeight, measurementCache: self.headerMeasurementCache)
+            return header.height(
+                width: width,
+                layoutDirection : layoutDirection,
+                defaultHeight: self.view.layout.appearance.sizing.listHeaderHeight,
+                measurementCache: self.headerMeasurementCache
+            )
+        }
+        
+        func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
+        {
+            let header = self.presentationState.header!
+            
+            return header.anyModel.layout
         }
         
         func hasListFooter(in collectionView : UICollectionView) -> Bool
@@ -823,11 +864,30 @@ fileprivate extension ListView
             return self.presentationState.footer != nil
         }
         
-        func heightForListFooter(in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+        func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
         {
             let footer = self.presentationState.footer!
             
-            return footer.height(with: width, defaultHeight: self.view.layout.appearance.sizing.listFooterHeight, measurementCache: self.headerMeasurementCache)
+            return footer.height(
+                width: width,
+                layoutDirection: layoutDirection,
+                defaultHeight: self.view.layout.appearance.sizing.listFooterHeight,
+                measurementCache: self.headerMeasurementCache
+            )
+        }
+        
+        func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
+        {
+            let footer = self.presentationState.footer!
+            
+            return footer.anyModel.layout
+        }
+        
+        func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
+        {
+            let section = self.presentationState.sections[sectionIndex]
+
+            return section.model.layout
         }
         
         func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
@@ -839,12 +899,25 @@ fileprivate extension ListView
         
         private let headerMeasurementCache = ReusableViewCache()
         
-        func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+        func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
         {
             let section = self.presentationState.sections[sectionIndex]
             let header = section.header!
             
-            return header.height(with: width, defaultHeight: self.view.layout.appearance.sizing.sectionHeaderHeight, measurementCache: self.headerMeasurementCache)
+            return header.height(
+                width: width,
+                layoutDirection: layoutDirection,
+                defaultHeight: self.view.layout.appearance.sizing.sectionHeaderHeight,
+                measurementCache: self.headerMeasurementCache
+            )
+        }
+        
+        func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
+        {
+            let section = self.presentationState.sections[sectionIndex]
+            let header = section.header!
+            
+            return header.anyModel.layout
         }
         
         func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
@@ -856,22 +929,32 @@ fileprivate extension ListView
         
         private let footerMeasurementCache = ReusableViewCache()
         
-        func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+        func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
         {
             let section = self.presentationState.sections[sectionIndex]
             let footer = section.footer!
                         
-            return footer.height(with: width, defaultHeight: self.view.layout.appearance.sizing.sectionFooterHeight, measurementCache: self.headerMeasurementCache)
+            return footer.height(
+                width: width,
+                layoutDirection: layoutDirection,
+                defaultHeight: self.view.layout.appearance.sizing.sectionFooterHeight,
+                measurementCache: self.headerMeasurementCache
+            )
         }
         
-        func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> ListViewLayout.ColumnLayout
+        func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
+        {
+            let section = self.presentationState.sections[sectionIndex]
+            let footer = section.footer!
+            
+            return footer.anyModel.layout
+        }
+        
+        func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns
         {
             let section = self.presentationState.sections[sectionIndex]
             
-            return ListViewLayout.ColumnLayout(
-                columns: section.model.layout.columns,
-                spacing: section.model.layout.spacing
-            )
+            return section.model.columns
         }
         
         // MARK: UIScrollViewDelegate

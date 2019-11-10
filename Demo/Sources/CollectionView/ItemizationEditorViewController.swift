@@ -71,13 +71,13 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(identifier: SectionIdentifier.variations) { section in
                 
-                section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: variationsTitle), height: .thatFits(.noConstraint))
-                section.footer = HeaderFooter(Footer(text: footerText), height: .thatFits(.noConstraint))
+                section.columns = .init(count: 2, spacing: 20.0)
+                section.header = HeaderFooter(with: Header(title: variationsTitle), sizing: .thatFits(.noConstraint))
+                section.footer = HeaderFooter(with: Footer(text: footerText), sizing: .thatFits(.noConstraint))
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
-                        ChoiceItem(title: variation.name, detail: "$0.00"),
+                        with: ChoiceItem(title: variation.name, detail: "$0.00"),
                         selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
                         onSelect: { _ in
                             self.itemization.variations.select(modifier: variation)
@@ -91,14 +91,14 @@ final class ItemizationEditorViewController : UIViewController
             list += itemization.modifiers.map { set in
                 Section(identifier: SectionIdentifier.modifier(set.name)) { section in
                     
-                    section.layout = Section.Layout(columns: 2, spacing: 20.0)
+                    section.columns = .init(count: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(Header(title: set.name), height: .thatFits(.noConstraint))
-                    section.footer = HeaderFooter(Footer(text: "Choose modifiers"), height: .thatFits(.noConstraint))
+                    section.header = HeaderFooter(with: Header(title: set.name), sizing: .thatFits(.noConstraint))
+                    section.footer = HeaderFooter(with: Footer(text: "Choose modifiers"), sizing: .thatFits(.noConstraint))
                     
                     section += set.all.map { modifier in
                         Item(
-                            ChoiceItem(title: modifier.name, detail: "$0.00"),
+                            with: ChoiceItem(title: modifier.name, detail: "$0.00"),
                             selection: .isSelectable(isSelected: false),
                             onSelect: { _ in
                                 
@@ -112,19 +112,19 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(identifier: SectionIdentifier.discounts) { section in
                 
-                section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Discounts"), height: .thatFits(.noConstraint))
+                section.columns = .init(count: 2, spacing: 20.0)
+                section.header = HeaderFooter(with: Header(title: "Discounts"), sizing: .thatFits(.noConstraint))
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     Item(
-                        ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
+                        with: ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
                             if isOn {
                                 self.itemization.add(discount)
                             } else {
                                 self.itemization.remove(discount)
                             }
                         },
-                        height: self.itemization.has(discount) ? .fixed(130.0) : .default,
+                        sizing: self.itemization.has(discount) ? .fixed(130.0) : .default,
                         selection: .isSelectable(isSelected: false)
                     )
                 }
@@ -132,19 +132,19 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(identifier: SectionIdentifier.taxes) { section in
                 
-                section.layout = Section.Layout(columns: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Taxes"), height: .thatFits(.noConstraint))
+                section.columns = .init(count: 2, spacing: 20.0)
+                section.header = HeaderFooter(with: Header(title: "Taxes"), sizing: .thatFits(.noConstraint))
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     Item(
-                        ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
+                        with: ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
                             if isOn {
                                 self.itemization.add(tax)
                             } else {
                                 self.itemization.remove(tax)
                             }
                         },
-                        height: self.itemization.has(tax) ? .fixed(130.0) : .default,
+                        sizing: self.itemization.has(tax) ? .fixed(130.0) : .default,
                         selection: .isSelectable(isSelected: false)
                     )
                 }
@@ -156,21 +156,21 @@ final class ItemizationEditorViewController : UIViewController
         return Appearance(
             backgroundColor: .white,
             sizing: ListSizing(
-                rowHeight: 70.0,
+                itemHeight: 70.0,
                 sectionHeaderHeight: 50.0,
                 sectionFooterHeight: 50.0,
                 listHeaderHeight: 100.0,
                 listFooterHeight: 100.0
             ),
-            contentLayout: ListContentLayout(
-                padding: UIEdgeInsets(top: 50.0, left: 50.0, bottom: 50.0, right: 50.0),
+            layout: ListLayout(
+                padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
                 width: .atMost(600.0),
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 0.0,
-                rowSpacing: 20.0,
-                rowToSectionFooterSpacing: 20.0,
-                usesStickySectionHeaders: false
+                itemSpacing: 20.0,
+                itemToSectionFooterSpacing: 20.0,
+                stickySectionHeaders: false
             )
             ,
             underflow: .alwaysBounceVertical(true)
@@ -183,9 +183,9 @@ struct Header : BlueprintHeaderFooterElement, Equatable
     var title : String
     
     var element : Element {
-        return Inset(wrapping: Label(text: self.title) { label in
+        return Inset(insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0), wrapping: Label(text: self.title) { label in
             label.font = .systemFont(ofSize: 30.0, weight: .bold)
-        }, insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0))
+        })
     }
 }
 
@@ -213,6 +213,7 @@ struct ChoiceItem : BlueprintItemElement, Equatable
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),
             wrapping: Inset(
+                uniformInset: 10.0,
                 wrapping: Row() { row in
                     row.verticalAlignment = .center
                     
@@ -222,9 +223,7 @@ struct ChoiceItem : BlueprintItemElement, Equatable
                     row.add(child: Label(text: self.detail) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .regular)
                     })
-                },
-                uniformInset: 10.0
-            )
+            })
         )
         
         if state.isSelected {
@@ -271,6 +270,7 @@ struct ToggleItem : BlueprintItemElement
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),
             wrapping: Inset(
+                uniformInset: 10.0,
                 wrapping: Row() { row in
                     row.horizontalUnderflow = .growProportionally
                     row.verticalAlignment = .center
@@ -288,9 +288,7 @@ struct ToggleItem : BlueprintItemElement
                     row.add(growPriority: 0.0, child: Spacer(size: .init(width: 10.0, height: 0.0)))
                     
                     row.add(growPriority: 0.0, child: Toggle(isOn: self.content.isOn, onToggle: self.onToggle))
-                },
-                uniformInset: 10.0
-            )
+            })
         )
         
         box.backgroundColor = .clear
