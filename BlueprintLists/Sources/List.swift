@@ -63,34 +63,3 @@ public struct List : BlueprintUI.Element
     }
 }
 
-
-public struct ListDescription
-{
-    public var appearance : Listable.Appearance
-    public var content : Listable.Content
-
-    public typealias Build = (inout ListDescription) -> ()
-    
-    public init(build : Build)
-    {
-        self.appearance = Listable.Appearance()
-        self.content = Listable.Content()
-        
-        build(&self)
-    }
-    
-    public mutating func add(_ section : Section)
-    {
-        self.content.sections.append(section)
-    }
-    
-    public static func += (lhs : inout ListDescription, rhs : Section)
-    {
-        lhs.add(rhs)
-    }
-    
-    public static func += (lhs : inout ListDescription, rhs : [Section])
-    {
-        lhs.content.sections += rhs
-    }
-}
