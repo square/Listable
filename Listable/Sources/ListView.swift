@@ -450,7 +450,7 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
-    
+        
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
         for reason : Content.Slice.UpdateReason,
@@ -467,11 +467,13 @@ public final class ListView : UIView
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
         
+        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
         }
-
+        
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         
