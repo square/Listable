@@ -13,6 +13,8 @@ public struct Content
     // MARK: Content Data
     //
     
+    public var identifier : AnyHashable?
+    
     public var selectionMode : SelectionMode
     
     public enum SelectionMode : Equatable
@@ -49,6 +51,7 @@ public struct Content
     }
     
     public init(
+        identifier : AnyHashable? = nil,
         selectionMode : SelectionMode = .single,
         refreshControl : RefreshControl? = nil,
         header : AnyHeaderFooter? = nil,
@@ -56,6 +59,8 @@ public struct Content
         sections : [Section] = []
         )
     {
+        self.identifier = identifier
+        
         self.selectionMode = selectionMode
         
         self.refreshControl = refreshControl
@@ -201,7 +206,7 @@ internal extension Content
             
             case scrolledToTop
             
-            case contentChanged(animated : Bool)
+            case contentChanged(animated : Bool, identifierChanged : Bool)
             
             case transitionedToBounds(isEmpty : Bool)
             
@@ -213,7 +218,7 @@ internal extension Content
                 case .didEndDecelerating: return false
                 case .scrolledToTop: return false
                     
-                case .contentChanged(let animated): return animated
+                case .contentChanged(let animated, let identifierChanged): return animated && identifierChanged == false
                     
                 case .transitionedToBounds(_): return false
                     

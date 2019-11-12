@@ -86,6 +86,8 @@ final class PresentationState
         
     private(set) var containsAllItems : Bool
     
+    private(set) var contentIdentifier : AnyHashable?
+    
     //
     // MARK: Initialization
     //
@@ -96,6 +98,8 @@ final class PresentationState
         self.sections = []
         
         self.containsAllItems = true
+        
+        self.contentIdentifier = nil
     }
     
     //
@@ -198,6 +202,8 @@ final class PresentationState
     func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice)
     {
         self.containsAllItems = slice.containsAllItems
+        
+        self.contentIdentifier = slice.content.identifier
         
         self.header = SectionState.headerFooterState(with: self.header, new: slice.content.header)
         self.footer = SectionState.headerFooterState(with: self.footer, new: slice.content.footer)

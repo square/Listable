@@ -211,9 +211,13 @@ public final class ListView : UIView
     
     private func setContentFromSource(animated : Bool = false)
     {
+        let oldIdentifier = self.storage.allContent.identifier
         self.storage.allContent = self.sourcePresenter.reloadContent()
+        let newIdentifier = self.storage.allContent.identifier
         
-        self.updatePresentationState(for: .contentChanged(animated: animated))        
+        let identifierChanged = oldIdentifier != newIdentifier
+        
+        self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
     
     // MARK: UIView
@@ -462,7 +466,7 @@ public final class ListView : UIView
         let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
         
         let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
-        
+                
         let updateBackingData = {
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
