@@ -201,9 +201,7 @@ final class PresentationState
         
         self.header = SectionState.headerFooterState(with: self.header, new: slice.content.header)
         self.footer = SectionState.headerFooterState(with: self.footer, new: slice.content.footer)
-        
-        self.updateRefreshControl(with: slice.content.refreshControl)
-        
+                
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
@@ -213,13 +211,13 @@ final class PresentationState
         )
     }
     
-    private func updateRefreshControl(with new : RefreshControl?)
+    internal func updateRefreshControl(with new : RefreshControl?)
     {
         if let existing = self.refreshControl, let new = new {
             existing.update(with: new)
         } else if self.refreshControl == nil, let new = new {
             let newControl = RefreshControl.PresentationState(new)
-            
+
             if #available(iOS 10.0, *) {
                 self.view.refreshControl = newControl.view
             } else {
@@ -232,7 +230,7 @@ final class PresentationState
             } else {
                 existing.view.removeFromSuperview()
             }
-            
+
             self.refreshControl = nil
         }
     }

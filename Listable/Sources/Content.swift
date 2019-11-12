@@ -180,7 +180,7 @@ internal extension Content
         static let defaultSize : Int = 250
         
         let containsAllItems : Bool
-        var content : Content
+        let content : Content
         
         init(containsAllItems : Bool, content : Content)
         {
