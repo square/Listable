@@ -12,18 +12,15 @@ import Listable
 
 public struct List : BlueprintUI.Element
 {
-    public var appearance : Appearance
-    public var listContent : Content
+    public var listDescription : ListDescription
     
     //
     // MARK: Initialization
     //
-    
-    public init(appearance : Appearance = Appearance(), _ builder : Content.Build)
-    {
-        self.appearance = appearance
         
-        self.listContent = Content(with: builder)
+    public init(build : ListDescription.Build)
+    {
+        self.listDescription = ListDescription(build: build)
     }
     
     //
@@ -38,12 +35,12 @@ public struct List : BlueprintUI.Element
     {
         return ListView.describe { config in
             config.builder = {
-                return ListView(frame: bounds, appearance: self.appearance)
+                return ListView(frame: bounds, appearance: self.listDescription.appearance)
             }
             
             config.apply { listView in
-                listView.appearance = self.appearance
-                listView.setContent(animated: true, self.listContent)
+                listView.appearance = self.listDescription.appearance
+                listView.setContent(animated: true, self.listDescription.content)
             }
         }
     }
@@ -65,3 +62,4 @@ public struct List : BlueprintUI.Element
         }
     }
 }
+

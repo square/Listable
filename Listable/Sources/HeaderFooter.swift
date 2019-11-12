@@ -14,7 +14,7 @@ public protocol AnyHeaderFooter_Internal
 {
     func apply(to headerFooterView : UICollectionReusableView, reason: ApplyReason)
     
-    func wasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
+    func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
     
     func newPresentationHeaderFooterState() -> Any
 }
@@ -29,7 +29,9 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
+    //
     // MARK: Initialization
+    //
     
     public init(
         _ element : Element,
@@ -42,7 +44,7 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
         
         self.height = height
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
     }
     
     // MARK: AnyHeaderFooter_Internal
@@ -54,7 +56,7 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
         self.element.apply(to: view.content, reason: reason)
     }
         
-    public func wasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
+    public func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
     {
         guard let other = other as? HeaderFooter<Element> else {
             return true
@@ -66,5 +68,21 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public func newPresentationHeaderFooterState() -> Any
     {
         return PresentationState.HeaderFooterState(self)
+    }
+}
+
+
+public extension HeaderFooter where Element.Appearance == Element
+{
+    init(
+        _ element : Element,
+        height : Height = .default
+    )
+    {
+        self.init(
+            element,
+            appearance: element,
+            height: height
+        )
     }
 }

@@ -89,7 +89,7 @@ public struct ListContentLayout : Equatable
     public var rowSpacing : CGFloat
     public var rowToSectionFooterSpacing : CGFloat
     
-    public var sectionHeadersPinToVisibleBounds : Bool
+    public var usesStickySectionHeaders : Bool
     
     public init(
         padding : UIEdgeInsets = .zero,
@@ -99,7 +99,7 @@ public struct ListContentLayout : Equatable
         sectionHeaderBottomSpacing : CGFloat = 0.0,
         rowSpacing : CGFloat = 0.0,
         rowToSectionFooterSpacing : CGFloat = 0.0,
-        sectionHeadersPinToVisibleBounds : Bool = false
+        usesStickySectionHeaders : Bool = false
     )
     {
         self.padding = padding
@@ -112,7 +112,7 @@ public struct ListContentLayout : Equatable
         self.rowSpacing = rowSpacing
         self.rowToSectionFooterSpacing = rowToSectionFooterSpacing
         
-        self.sectionHeadersPinToVisibleBounds = sectionHeadersPinToVisibleBounds
+        self.usesStickySectionHeaders = usesStickySectionHeaders
     }
 
     public mutating func set(with block : (inout ListContentLayout) -> ())

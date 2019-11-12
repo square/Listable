@@ -6,13 +6,10 @@
 //
 
 
-/**
- TODO
- */
 public protocol ItemElement
 {
     //
-    // MARK: Identifying Content & Changes
+    // MARK: Identification
     //
     
     /**
@@ -27,25 +24,9 @@ public protocol ItemElement
      */
     var identifier : Identifier<Self> { get }
     
-    /**
-     Return true if the element's sort changed based on the old value passed into the function.
-     
-     The list view uses the value of this method to be more intelligent about what has moved within the list.
-     
-     There is a default implementation of this method which simply returns wasUpdated(comparedTo:).
-     */
-    func wasMoved(comparedTo other : Self) -> Bool
-    
-    /**
-     Return true if the element' changed based on the old value passed into the function.
-     
-     If this method returns true, the row representing the element is reloaded.
-     
-     There is a default implementation of this method for Equatable elements – which simply checks if the old and new values are equal.
-     */
-    func wasUpdated(comparedTo other : Self) -> Bool
-    
+    //
     // MARK: Converting To Views For Display
+    //
     
     /**
      How the element should be rendered within the list view.
@@ -57,7 +38,9 @@ public protocol ItemElement
      */
     associatedtype Appearance:ItemElementAppearance
     
+    //
     // MARK: Applying To Displayed View
+    //
         
     /**
      Called when rendering the element. This is where you should push data from your
@@ -66,8 +49,29 @@ public protocol ItemElement
      Do not retain a reference to the passed in views – they are reused by the list.
      */
     func apply(to view : Appearance.View, with state : ItemState, reason: ApplyReason)
+    
+    //
+    // MARK: Tracking Changes
+    //
+    
+    /**
+     Return true if the element's sort changed based on the old value passed into the function.
+     
+     The list view uses the value of this method to be more intelligent about what has moved within the list.
+     
+     There is a default implementation of this method which checks the equality of `content`.
+     */
+    func wasMoved(comparedTo other : Self) -> Bool
+    
+    /**
+     Return true if the element' changed based on the old value passed into the function.
+     
+     If this method returns true, the row representing the element is reloaded.
+     
+     There is a default implementation of this method which checks the equality of `content`.
+     */
+    func wasUpdated(comparedTo other : Self) -> Bool
 }
-
 
 public extension ItemElement
 {
@@ -94,7 +98,7 @@ public extension ItemElement where Self:Equatable
  when the appearance of an element changes, versus on each display.
  */
 public protocol ItemElementAppearance
-{
+{    
     //
     // MARK: Creating & Providing Views
     //

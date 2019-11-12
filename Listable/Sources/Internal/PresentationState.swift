@@ -44,7 +44,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
     func applyToVisibleView()
     
-    func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter, reason : UpdateReason)
+    func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
     
     func willDisplay(view : UICollectionReusableView, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
@@ -207,9 +207,7 @@ final class PresentationState
         
         self.header = SectionState.headerFooterState(with: self.header, new: slice.content.header)
         self.footer = SectionState.headerFooterState(with: self.footer, new: slice.content.footer)
-        
-        self.updateRefreshControl(with: slice.content.refreshControl)
-        
+                
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
@@ -219,27 +217,28 @@ final class PresentationState
         )
     }
     
-    private func updateRefreshControl(with refreshControl : RefreshControl?)
+    internal func updateRefreshControl(with new : RefreshControl?)
     {
-        guard #available(iOS 10.0, *) else { return }
-        
-        // TODO: Remove use of syncOptionals
-        
-        syncOptionals(
-            left: self.refreshControl,
-            right: refreshControl,
-            created: { model in
-                let new = RefreshControl.PresentationState(model)
-                self.view.refreshControl = new.view
-                self.refreshControl = new
-        },
-            removed: { _ in
-                self.refreshControl = nil
+        if let existing = self.refreshControl, let new = new {
+            existing.update(with: new)
+        } else if self.refreshControl == nil, let new = new {
+            let newControl = RefreshControl.PresentationState(new)
+
+            if #available(iOS 10.0, *) {
+                self.view.refreshControl = newControl.view
+            } else {
+                self.view.addSubview(newControl.view)
+            }
+            self.refreshControl = newControl
+        } else if let existing = refreshControl, new == nil {
+            if #available(iOS 10.0, *) {
                 self.view.refreshControl = nil
-        },
-            overlapping: { control, model in
-                model.apply(to: control.view)
-        })
+            } else {
+                existing.view.removeFromSuperview()
+            }
+
+            self.refreshControl = nil
+        }
     }
     
     //
@@ -295,8 +294,6 @@ final class PresentationState
         
         var items : [AnyPresentationItemState]
         
-        // TODO: Add header and footer.
-        
         init(model : Section)
         {
             self.model = model
@@ -343,7 +340,7 @@ final class PresentationState
                     let isSameType = type(of: current.anyModel) == type(of: new)
                     
                     if isSameType {
-                        current.setNew(headerFooter: new, reason: .update)
+                        current.setNew(headerFooter: new)
                         return current
                     } else {
                         return (new.newPresentationHeaderFooterState() as! AnyPresentationHeaderFooterState)
@@ -410,11 +407,13 @@ final class PresentationState
             self.applyTo(view: view, reason: .wasUpdated)
         }
         
-        func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter, reason: UpdateReason)
+        func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
         {
             let oldModel = self.model
             
             self.model = anyHeaderFooter as! HeaderFooter<Element>
+            
+            let reason : UpdateReason = self.model.anyWasUpdated(comparedTo: oldModel) ? .update : .noChange
             
             if oldModel.height != self.model.height {
                 self.resetCachedHeights()
@@ -482,9 +481,6 @@ final class PresentationState
         init(_ model : Item<Element>)
         {
             self.model = model
-            
-            // TODO: Remove anyIdentifier?
-            self.anyIdentifier = self.model.identifier
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
@@ -538,9 +534,7 @@ final class PresentationState
                 self.model.onEndDisplay?(self.model.element)
             }
         }
-        
-        let anyIdentifier : AnyIdentifier
-        
+                
         var anyModel : AnyItem {
             return self.model
         }
@@ -644,6 +638,8 @@ final class PresentationState
             } else {
                 self.model.onDeselect?(self.model.element)
             }
+            
+            self.applyToVisibleCell()
         }
         
         private var cachedHeights : [CGFloat:CGFloat] = [:]
@@ -703,16 +699,5 @@ fileprivate extension UICollectionView
                 return .middle
             }
         }
-    }
-}
-
-private func syncOptionals<Left,Right>(left : Left?, right : Right?, created : (Right) -> (), removed : (Left) -> (), overlapping: (Left, Right) -> ())
-{
-    if left == nil, let right = right {
-        created(right)
-    } else if let left = left, right == nil {
-        removed(left)
-    } else if let left = left, let right = right {
-        overlapping(left, right)
     }
 }

@@ -25,9 +25,11 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.sectionHeaderBottomSpacing = 10.0
             $0.rowSpacing = 7.0
             $0.interSectionSpacingWithNoFooter = 10.0
+            
+            $0.usesStickySectionHeaders = true
         }
         
-        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State(filter: ""))
+        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State())
         
         self.view = self.listView
         
@@ -68,6 +70,8 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         {
             var filter : String = ""
             
+            var isRefreshing : Bool = false
+            
             func include(_ word : String) -> Bool
             {
                 return self.filter.isEmpty || word.contains(self.filter.lowercased())
@@ -77,9 +81,12 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         func content(with state: SourceState<State>, content: inout Content)
         {
             if #available(iOS 10.0, *) {
-                content.refreshControl = RefreshControl() { finished in
+                content.refreshControl = RefreshControl(isRefreshing: state.value.isRefreshing) {
+                    
+                    state.value.isRefreshing = true
+                    
                     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-                        finished()
+                        state.value.isRefreshing = false
                     }
                 }
             }
@@ -87,7 +94,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             content += Section(identifier: "search") { rows in
                 rows += Item(
                     SearchRow(
-                        string: state.value.filter,
+                        text: state.value.filter,
                         onChange: { string in
                             state.value.filter = string
                     }
@@ -98,7 +105,6 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             var hasContent = false
             
             content += self.dictionary.wordsByLetter.map { letter in
-                
                 return Section(identifier: letter.letter) { section in
                     
                     section.header = HeaderFooter(
@@ -128,7 +134,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                         WordRow(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
-                        ),
+                            ),
                         height: .thatFits(.atMost(250.0))
                     )
                 }
@@ -157,7 +163,7 @@ struct SearchRowAppearance : ItemElementAppearance
 
 struct SearchRow : ItemElement
 {
-    var string : String
+    var text : String
     
     var onChange : (String) -> ()
     
@@ -172,11 +178,11 @@ struct SearchRow : ItemElement
     func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
     {
         view.content.onStateChanged = self.onChange
-        view.content.text = self.string
+        view.content.text = self.text
     }
     
     func wasUpdated(comparedTo other: SearchRow) -> Bool {
-        return self.string != other.string
+        return self.text != other.text
     }
 }
 

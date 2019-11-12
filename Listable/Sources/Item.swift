@@ -26,7 +26,6 @@ public protocol AnyItem : AnyItem_Internal
 
 public protocol AnyItem_Internal
 {
-    // TODO: Move these impls onto an extension instead of Item<Element>.
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     
@@ -111,7 +110,7 @@ public struct Item<Element:ItemElement> : AnyItem
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: self.element)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
         
         self.identifier = AnyIdentifier(self.element.identifier)
     }
@@ -155,6 +154,36 @@ public struct Item<Element:ItemElement> : AnyItem
     public func newPresentationItemState() -> Any
     {
         return PresentationState.ItemState(self)
+    }
+}
+
+
+public extension Item where Element.Appearance == Element
+{
+    init(
+        _ element : Element,
+        height : Height = .default,
+        selection : ItemSelection = .notSelectable,
+        swipeActions : SwipeActions? = nil,
+        bind : CreateBinding? = nil,
+        onDisplay : OnDisplay? = nil,
+        onEndDisplay : OnEndDisplay? = nil,
+        onSelect : OnSelect? = nil,
+        onDeselect : OnDeselect? = nil
+        )
+    {
+        self.init(
+        element,
+        appearance: element,
+        height: height,
+        selection: selection,
+        swipeActions: swipeActions,
+        bind: bind,
+        onDisplay: onDisplay,
+        onEndDisplay: onEndDisplay,
+        onSelect: onSelect,
+        onDeselect: onDeselect
+        )
     }
 }
 

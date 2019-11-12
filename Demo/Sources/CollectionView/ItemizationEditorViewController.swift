@@ -47,9 +47,11 @@ final class ItemizationEditorViewController : UIViewController
     
     var list : List
     {
-        return List(appearance: self.listAppearance) { list in
+        return List { list in
             
-            list.selectionMode = .multiple
+            list.content.selectionMode = .multiple
+            
+            list.appearance = self.listAppearance
             
             let variationsTitle : String = {
                 if let selected = self.itemization.variations.selected.first {
@@ -115,7 +117,7 @@ final class ItemizationEditorViewController : UIViewController
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     Item(
-                        ToggleItem(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount)) { isOn in
+                        ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
                             if isOn {
                                 self.itemization.add(discount)
                             } else {
@@ -135,7 +137,7 @@ final class ItemizationEditorViewController : UIViewController
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     Item(
-                        ToggleItem(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax)) { isOn in
+                        ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
                             if isOn {
                                 self.itemization.add(tax)
                             } else {
@@ -168,7 +170,7 @@ final class ItemizationEditorViewController : UIViewController
                 sectionHeaderBottomSpacing: 0.0,
                 rowSpacing: 20.0,
                 rowToSectionFooterSpacing: 20.0,
-                sectionHeadersPinToVisibleBounds: false
+                usesStickySectionHeaders: false
             )
             ,
             underflow: .alwaysBounceVertical(true)
@@ -242,41 +244,26 @@ struct ChoiceItem : BlueprintItemElement, Equatable
     }
 }
 
-struct SkipEquatable<Value> : Equatable
+struct ToggleItem : BlueprintItemElement
 {
-    var value : Value
+    var content : Content
     
-    init(_ value : Value)
+    struct Content : Equatable
     {
-        self.value = value
-    }
-    
-    static func == (lhs: SkipEquatable<Value>, rhs: SkipEquatable<Value>) -> Bool
-    {
-        return true
-    }
-}
-
-struct ToggleItem : BlueprintItemElement, Equatable
-{
-    var title : String
-    var detail : String
-    
-    var isOn : Bool
-    
-    var onToggle : SkipEquatable<(Bool) -> ()>
-    
-    init(title : String, detail : String, isOn : Bool, onToggle : @escaping (Bool) -> ())
-    {
-        self.title = title
-        self.detail = detail
-        self.isOn = isOn
+        var title : String
+        var detail : String
         
-        self.onToggle = .init(onToggle)
+        var isOn : Bool
+    }
+    
+    var onToggle : (Bool) -> ()
+    
+    func wasUpdated(comparedTo other: ToggleItem) -> Bool {
+        return self.content != other.content
     }
     
     var identifier: Identifier<ToggleItem> {
-        return .init(self.title)
+        return .init(self.content.title)
     }
     
     func element(with state: ItemState) -> Element
@@ -288,19 +275,19 @@ struct ToggleItem : BlueprintItemElement, Equatable
                     row.horizontalUnderflow = .growProportionally
                     row.verticalAlignment = .center
                     
-                    row.add(growPriority: 0.0, child: Label(text: self.title) { label in
+                    row.add(growPriority: 0.0, child: Label(text: self.content.title) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .semibold)
                     })
                     
                     row.add(growPriority: 1.0, child: Spacer(size: .init(width: 10.0, height: 0.0)))
                     
-                    row.add(growPriority: 0.0, child: Label(text: self.detail) { label in
+                    row.add(growPriority: 0.0, child: Label(text: self.content.detail) { label in
                         label.font = .systemFont(ofSize: 18.0, weight: .regular)
                     })
                     
                     row.add(growPriority: 0.0, child: Spacer(size: .init(width: 10.0, height: 0.0)))
                     
-                    row.add(growPriority: 0.0, child: Toggle(isOn: self.isOn, onToggle: self.onToggle.value))
+                    row.add(growPriority: 0.0, child: Toggle(isOn: self.content.isOn, onToggle: self.onToggle))
                 },
                 uniformInset: 10.0
             )
@@ -625,6 +612,6 @@ struct Money : Hashable
     }
     
     var localized : String {
-        return "$10.00" // TODO
+        return "$10.00"
     }
 }

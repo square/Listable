@@ -163,9 +163,13 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(animated : Bool = false, _ builder : Content.Build)
+    public func setContent(animated : Bool = false, _ builder : ListDescription.Build)
     {
-        self.setContent(animated: animated, Content(with: builder))
+        let description = ListDescription(appearance: self.appearance, build: builder)
+        
+        self.appearance = description.appearance
+        
+        self.setContent(animated: animated, description.content)
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
@@ -177,13 +181,21 @@ public final class ListView : UIView
         )
     }
     
+    private var sourceChangedTimer : ReloadTimer? = nil
+    
     @discardableResult
     public func set<Source:ListViewSource>(source : Source, initial : Source.State, animated : Bool = false) -> StateAccessor<Source.State>
     {
         self.sourcePresenter.discard()
         
         let sourcePresenter = SourcePresenter(initial: initial, source: source, didChange: { [weak self] in
-            self?.setContentFromSource(animated: true)
+            guard let self = self else { return }
+            guard self.sourceChangedTimer == nil else { return }
+            
+            self.sourceChangedTimer = ReloadTimer {
+                self.sourceChangedTimer = nil
+                self.setContentFromSource(animated: true)
+            }
         })
         
         self.sourcePresenter = sourcePresenter
@@ -209,6 +221,11 @@ public final class ListView : UIView
     }
     
     // MARK: UIView
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        return self.layout.collectionViewContentSize
+    }
     
     public override var frame: CGRect {
         didSet {
@@ -437,7 +454,7 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
-    
+        
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
         for reason : Content.Slice.UpdateReason,
@@ -454,12 +471,13 @@ public final class ListView : UIView
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
         
+        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
         }
-
-        // TODO: Does this work with the async batch updates now?
+        
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         
@@ -709,7 +727,6 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
-            item.applyToVisibleCell()
         }
 
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
@@ -717,7 +734,6 @@ fileprivate extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: false)
-            item.applyToVisibleCell()
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]

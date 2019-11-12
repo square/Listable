@@ -9,13 +9,6 @@
 public protocol HeaderFooterElement
 {
     //
-    // MARK: Identifying Content & Changes
-    //
-        
-    func wasMoved(comparedTo other : Self) -> Bool
-    func wasUpdated(comparedTo other : Self) -> Bool
-    
-    //
     // MARK: Converting To View For Display
     //
     
@@ -26,16 +19,17 @@ public protocol HeaderFooterElement
     //
     
     func apply(to view : Appearance.View, reason : ApplyReason)
+    
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
 }
 
 
 public extension HeaderFooterElement where Self:Equatable
-{
-    func wasMoved(comparedTo other : Self) -> Bool
-    {
-        return self != other
-    }
-    
+{    
     func wasUpdated(comparedTo other : Self) -> Bool
     {
         return self != other

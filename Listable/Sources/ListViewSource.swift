@@ -47,40 +47,24 @@ internal final class SourcePresenter<Source:ListViewSource> : AnySourcePresenter
         set { self.sourceState.value = newValue }
     }
     
-    typealias DidChange = () -> ()
-    var didChange : DidChange?
-    
     private var sourceState : SourceState<Source.State>
     
-    init(initial : Source.State, source : Source, didChange : @escaping DidChange = {})
+    init(initial : Source.State, source : Source, didChange : @escaping () -> () = {})
     {
         self.source = source
         
-        self.sourceState = SourceState(initial: initial)
-        
-        self.didChange = didChange
+        self.sourceState = SourceState(initial: initial, didChange: didChange)
     }
     
     // MARK: TableViewSourceController
     
     func discard()
     {
-        self.didChange = nil
-        
         self.sourceState.discard()
     }
     
     internal func reloadContent() -> Content
     {
-        // Throw out old state object so changes do not leak between render passes.
-        
-        self.sourceState.discard()
-        
-        self.sourceState = SourceState(initial: self.sourceState.value)
-        self.sourceState.didChange = self.didChange
-        
-        // Create and return new content.
-        
         return self.source.content(with: self.sourceState)
     }
 }
@@ -123,11 +107,11 @@ public final class SourceState<Value:Equatable>
         self.value = new
     }
     
-    public init(initial value : Value)
+    public init(initial value : Value, didChange : @escaping () -> ())
     {
         self.value = value
         
-        self.didChange = nil
+        self.didChange = didChange
     }
     
     public func discard()
@@ -135,8 +119,7 @@ public final class SourceState<Value:Equatable>
         self.didChange = nil
     }
     
-    public typealias DidChange = () -> ()
-    public var didChange : DidChange?
+    private var didChange : (() -> ())?
 }
 
 
@@ -195,5 +178,33 @@ public final class StaticSource : ListViewSource
     public func content(with state: SourceState<StaticSource.State>) -> Content
     {
         return self.content
+    }
+}
+
+
+///
+/// MARK: Timer For Reloading
+///
+
+internal final class ReloadTimer
+{
+    private var timer : Timer?
+    
+    typealias OnFire = () -> ()
+    private var onFire : OnFire?
+    
+    init(onFire : @escaping OnFire)
+    {
+        self.onFire = onFire
+        
+        self.timer = Timer.scheduledTimer(timeInterval: 0.0, target: self, selector: #selector(timerFired), userInfo: nil, repeats: false)
+    }
+    
+    @objc func timerFired()
+    {
+        self.onFire?()
+        self.onFire = nil
+        
+        self.timer = nil
     }
 }
