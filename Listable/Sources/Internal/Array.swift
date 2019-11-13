@@ -10,25 +10,38 @@ import Foundation
 
 extension Array
 {
-    func mapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped) -> [Mapped]
+    func forEachWithIndex(_ block : (Int, Bool, Element) -> ())
+    {
+        let count = self.count
+        
+        for (index, element) in self.enumerated() {
+            block(index, index == (count - 1), element)
+        }
+    }
+    
+    func mapWithIndex<Mapped>(_ block : (Int, Bool, Element) -> Mapped) -> [Mapped]
     {
         var mapped = [Mapped]()
         mapped.reserveCapacity(self.count)
         
+        let count = self.count
+        
         for (index, element) in self.enumerated() {
-            mapped.append(block(index, element))
+            mapped.append(block(index, index == (count - 1), element))
         }
         
         return mapped
     }
     
-    func flatMapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped?) -> [Mapped]
+    func flatMapWithIndex<Mapped>(_ block : (Int, Bool, Element) -> Mapped?) -> [Mapped]
     {
         var mapped = [Mapped]()
         mapped.reserveCapacity(self.count)
         
+        let count = self.count
+        
         for (index, element) in self.enumerated() {
-            if let value = block(index, element) {
+            if let value = block(index, index == (count - 1), element) {
                 mapped.append(value)
             }
         }

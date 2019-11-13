@@ -48,7 +48,7 @@ public protocol HeaderFooterElementAppearance
     
     typealias View = HeaderFooterElementView<ContentView, BackgroundView>
     
-    static func createReusableHeaderFooterView() -> View
+    static func createReusableHeaderFooterView(frame : CGRect) -> View
     
     //
     // MARK: Updating View State

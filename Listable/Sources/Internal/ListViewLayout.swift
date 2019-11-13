@@ -10,21 +10,28 @@ import UIKit
 
 protocol ListViewLayoutDelegate : AnyObject
 {    
-    func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+    func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
     
     func hasListHeader(in collectionView : UICollectionView) -> Bool
-    func heightForListHeader(in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+    func heightForListHeader(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func hasListFooter(in collectionView : UICollectionView) -> Bool
-    func heightForListFooter(in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+    func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
     
     func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+    func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat) -> CGFloat
+    func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
     
-    func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> ListViewLayout.ColumnLayout
+    func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns
 }
 
 
@@ -45,8 +52,17 @@ class ListViewLayout : UICollectionViewLayout
             self.invalidateEntireLayout()
             
             switch self.appearance.underflow {
-            case .alwaysBounceVertical(let bounce): self.collectionView?.alwaysBounceVertical = bounce
-            case .pinTo(_): fatalError("Other types of underflow are not yet implemented.")
+            case .alwaysBounceVertical(let bounce):
+                switch appearance.direction {
+                case .vertical:
+                    self.collectionView?.alwaysBounceVertical = bounce
+                    self.collectionView?.alwaysBounceHorizontal = false
+                case .horizontal:
+                    self.collectionView?.alwaysBounceVertical = false
+                    self.collectionView?.alwaysBounceHorizontal = bounce
+                }
+            case .pinTo(_):
+                fatalError("Other types of underflow are not yet implemented.")
             }
         }
     }
@@ -120,20 +136,16 @@ class ListViewLayout : UICollectionViewLayout
         
         super.invalidateLayout(with: context)
         
-        context.setWidthChanged(old: self.layoutResult.collectionViewWidth, new: view.frame.width)
-        
+        context.widthChanged = self.layoutResult.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+                
         self.neededLayoutType.merge(with: context)
     }
     
     override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext
     {
-        let view = self.collectionView!
-        
         let context = super.invalidationContext(forBoundsChange: newBounds) as! InvalidationContext
         
-        if newBounds.width == view.bounds.width {
-            context.setUpdateHeaders()
-        }
+        context.updateHeaders = self.appearance.layout.stickySectionHeaders
         
         return context
     }
@@ -145,23 +157,8 @@ class ListViewLayout : UICollectionViewLayout
     
     private final class InvalidationContext : UICollectionViewLayoutInvalidationContext
     {
-        private(set) var updateHeaders : Bool = false
-        
-        private(set) var widthChanged : Bool = false
-        
-        func setUpdateHeaders()
-        {
-            guard self.updateHeaders == false else { return }
-            
-            self.updateHeaders = true
-        }
-        
-        func setWidthChanged(old : CGFloat, new : CGFloat)
-        {
-            let changed = old != new
-            
-            self.widthChanged = self.widthChanged || changed
-        }
+        var updateHeaders : Bool = false
+        var widthChanged : Bool = false
     }
     
     //
@@ -195,11 +192,10 @@ class ListViewLayout : UICollectionViewLayout
             }
         }
         
-        mutating func update(with layoutResult : LayoutInfo.LayoutResult)
+        mutating func update(with success : Bool)
         {
-            switch layoutResult {
-            case .completed: self = .none
-            case .skipped: break
+            if success {
+                self = .none
             }
         }
     }
@@ -214,7 +210,7 @@ class ListViewLayout : UICollectionViewLayout
         
         self.neededLayoutType.update(with: {
             switch self.neededLayoutType {
-            case .none: return .completed
+            case .none: return true
             case .updateHeaders: return self.performHeaderLayout()
             case .fullLayout: return self.performFullLayout()
             }
@@ -243,30 +239,26 @@ class ListViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
     
-    private func performHeaderLayout() -> LayoutInfo.LayoutResult
+    private func performHeaderLayout() -> Bool
     {
         self.previousLayoutResult = self.layoutResult
         
-        return self.layoutResult.updateHeaders(
-            delegate: self.delegate,
-            contentLayout: self.appearance.contentLayout,
-            in: self.collectionView!
-        )
+        return self.layoutResult.updateHeaders(in: self.collectionView!)
     }
     
-    private func performFullLayout() -> LayoutInfo.LayoutResult
+    private func performFullLayout() -> Bool
     {
         self.previousLayoutResult = self.layoutResult
         
         self.layoutResult = LayoutInfo(
             delegate: self.delegate,
-            contentLayout: self.appearance.contentLayout,
+            layout: self.appearance.layout,
+            layoutDirection: self.appearance.direction,
             in: self.collectionView!
         )
         
         return self.layoutResult.layout(
             delegate: self.delegate,
-            contentLayout: self.appearance.contentLayout,
             in: self.collectionView!
         )
     }
@@ -277,7 +269,7 @@ class ListViewLayout : UICollectionViewLayout
     
     override var collectionViewContentSize : CGSize
     {
-        return self.layoutResult.size
+        return self.layoutResult.contentSize
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
@@ -315,11 +307,6 @@ class ListViewLayout : UICollectionViewLayout
         }
     }
 
-    public override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
-    {
-        return super.initialLayoutAttributesForAppearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
-    }
-
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
         let wasDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
@@ -334,11 +321,6 @@ class ListViewLayout : UICollectionViewLayout
         } else {
             return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
         }
-    }
-
-    public override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
-    {
-        return super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
     }
 }
 
@@ -377,77 +359,24 @@ extension ListViewLayout
 }
 
 
-extension ListViewLayout
+internal extension ListViewLayout
 {
-    struct ColumnLayout : Equatable
-    {
-        var columns : Int
-        var spacing : CGFloat
-        
-        init(columns : Int, spacing : CGFloat)
-        {
-            precondition(columns >= 1, "Columns must be greater than or equal to 1.")
-            precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
-            
-            self.columns = columns
-            self.spacing = spacing
-        }
-        
-        fileprivate struct Grouped<Value>
-        {
-            var value : Value
-            
-            var index : Int
-        }
-        
-        fileprivate func group<Value>(values input : [Value]) -> [[Grouped<Value>]]
-        {
-            var values : [Grouped<Value>] = input.mapWithIndex { index, value in
-                return Grouped(value: value, index: index)
-            }
-            
-            var grouped : [[Grouped<Value>]] = []
-            
-            while values.count > 0 {
-                grouped.append(values.safeDropFirst(self.columns))
-            }
-            
-            return grouped
-        }
-    }
-}
-
-
-fileprivate extension Array
-{
-    mutating func safeDropFirst(_ count : Int) -> [Element]
-    {
-        let safeCount = Swift.min(self.count, count)
-        let values = self[0..<safeCount]
-        
-        self.removeFirst(safeCount)
-        
-        return Array(values)
-    }
-}
-
-
-fileprivate extension ListViewLayout
-{
-    struct LayoutInfo
+    final class LayoutInfo
     {
         //
         // MARK: Public Properties
         //
         
-        var collectionViewWidth : CGFloat
+        let collectionViewSize : CGSize
+        var contentSize : CGSize
         
-        var header : SupplementaryItemLayoutInfo?
-        var footer : SupplementaryItemLayoutInfo?
+        let layout : ListLayout
+        let layoutDirection : LayoutDirection
         
-        var sections : [SectionLayoutInfo]
+        let header : SupplementaryItemLayoutInfo?
+        let footer : SupplementaryItemLayoutInfo?
         
-        var size : CGSize
+        let sections : [SectionLayoutInfo]
         
         //
         // MARK: Initialization
@@ -455,42 +384,85 @@ fileprivate extension ListViewLayout
         
         init()
         {
-            self.collectionViewWidth = 0.0
+            self.collectionViewSize = .zero
+            self.contentSize = .zero
+
+            self.layout = ListLayout()
+            self.layoutDirection = .vertical
+            
+            self.header = nil
+            self.footer = nil
             
             self.sections = []
-            
-            self.size = .zero
         }
         
         init(
             delegate : ListViewLayoutDelegate,
-            contentLayout : ListContentLayout,
+            layout : ListLayout,
+            layoutDirection : LayoutDirection,
             in collectionView : UICollectionView
         )
         {
             let sectionCount = collectionView.numberOfSections
             
-            self.collectionViewWidth = 0.0
-            self.size = .zero
+            self.collectionViewSize = collectionView.bounds.size
+            self.contentSize = .zero
+
+            self.layout = layout
+            self.layoutDirection = layoutDirection
             
-            let hasHeader = delegate.hasListHeader(in: collectionView)
-            let hasFooter = delegate.hasListFooter(in: collectionView)
+            self.header = {
+                guard delegate.hasListHeader(in: collectionView) else { return nil }
+                
+                return SupplementaryItemLayoutInfo(
+                    kind: SupplementaryKind.listHeader,
+                    direction: layoutDirection,
+                    layout: delegate.layoutForListHeader(in: collectionView)
+                )
+            }()
             
-            self.header = hasHeader ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.listHeader) : nil
-            self.footer = hasFooter ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.listFooter) : nil
+            self.footer = {
+                guard delegate.hasListFooter(in: collectionView) else { return nil }
+                
+                return SupplementaryItemLayoutInfo(
+                    kind: SupplementaryKind.listFooter,
+                    direction: layoutDirection,
+                    layout: delegate.layoutForListFooter(in: collectionView)
+                )
+            }()
                         
             self.sections = sectionCount.mapEach { sectionIndex in
-                
-                let hasHeader = delegate.hasHeader(in: sectionIndex, in: collectionView)
-                let hasFooter = delegate.hasFooter(in: sectionIndex, in: collectionView)
                 
                 let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
                 
                 return SectionLayoutInfo(
-                    header: hasHeader ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.sectionHeader) : nil,
-                    footer: hasFooter ? SupplementaryItemLayoutInfo(kind: SupplementaryKind.sectionFooter) : nil,
-                    frame: .zero,
-                    items: Array(repeating: ItemLayoutInfo(), count: itemCount)
+                    direction: layoutDirection,
+                    layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
+                    header: {
+                        guard delegate.hasHeader(in: sectionIndex, in: collectionView) else { return nil }
+                        
+                        return SupplementaryItemLayoutInfo(
+                            kind: SupplementaryKind.sectionHeader,
+                            direction: layoutDirection,
+                            layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView)
+                        )
+                    }(),
+                    footer: {
+                        guard delegate.hasFooter(in: sectionIndex, in: collectionView) else { return nil }
+                        
+                        return SupplementaryItemLayoutInfo(
+                            kind: SupplementaryKind.sectionFooter,
+                            direction: layoutDirection,
+                            layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView)
+                        )
+                    }(),
+                    columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
+                    items: itemCount.mapEach { itemIndex in
+                        ItemLayoutInfo(
+                            direction: layoutDirection,
+                            layout: delegate.layoutForItem(at: IndexPath(item: itemIndex, section: sectionIndex), in: collectionView)
+                        )
+                    }
                 )
             }
         }
@@ -568,203 +540,245 @@ fileprivate extension ListViewLayout
         // MARK: Peforming Layouts
         //
         
-        enum LayoutResult
+        func shouldInvalidateLayoutFor(newCollectionViewSize : CGSize) -> Bool
         {
-            case completed
-            case skipped
+            switch self.layoutDirection {
+            case .vertical: return self.collectionViewSize.width != newCollectionViewSize.width
+            case .horizontal: return self.collectionViewSize.height != newCollectionViewSize.height
+            }
         }
         
         @discardableResult
-        mutating func updateHeaders(
-            delegate : ListViewLayoutDelegate,
-            contentLayout : ListContentLayout,
-            in collectionView : UICollectionView
-        ) -> LayoutResult
+        func updateHeaders(in collectionView : UICollectionView) -> Bool
         {
             guard collectionView.frame.size.isEmpty == false else {
-                return .skipped
+                return false
             }
             
-            guard contentLayout.usesStickySectionHeaders else {
-                return .completed
+            guard self.layout.stickySectionHeaders else {
+                return true
             }
-                        
+                                    
             let visibleFrame = CGRect(
-                x: 0.0,
+                x: collectionView.contentOffset.x + collectionView.lst_safeAreaInsets.left,
                 y: collectionView.contentOffset.y + collectionView.lst_safeAreaInsets.top,
                 width: collectionView.bounds.size.width,
                 height: collectionView.bounds.size.height
             )
             
-            self.sections = self.sections.map { section in
-                guard var header = section.header else {
-                    return section
+            self.sections.forEachWithIndex { sectionIndex, isLast, section in
+                let sectionMaxY = self.layoutDirection.maxY(for: section.frame)
+                
+                if let header = section.header {
+                    if self.layoutDirection.y(for: header.defaultFrame.origin) < self.layoutDirection.y(for: visibleFrame.origin) {
+                        
+                        // Make sure the pinned origin stays within the section's frame.
+                        header.pinnedY = min(
+                            self.layoutDirection.y(for: visibleFrame.origin),
+                            sectionMaxY - self.layoutDirection.height(for: header.size)
+                        )
+                    } else {
+                        header.pinnedY = nil
+                    }
                 }
-                
-                if header.baseFrame.origin.y < visibleFrame.origin.y {
-                    // Make sure the pinned origin stays within the section's frame.
-                    header.pinnedOrigin = min(
-                        visibleFrame.origin.y,
-                        section.frame.maxY - header.baseFrame.height
-                    )
-                } else {
-                    header.pinnedOrigin = nil
-                }
-                
-                var section = section
-                section.header = header
-                
-                return section
             }
             
-            return .completed
+            return true
         }
-        
-        mutating func layout(
+
+        func layout(
             delegate : ListViewLayoutDelegate,
-            contentLayout : ListContentLayout,
             in collectionView : UICollectionView
-        ) -> LayoutResult
+        ) -> Bool
         {
             guard collectionView.frame.size.isEmpty == false else {
-                return .skipped
+                return false
             }
-                                    
+            
+            let viewWidth = self.layoutDirection.width(for: collectionView.bounds.size)
+            let viewSize = collectionView.bounds.size
+            
+            let rootWidth = ListLayout.width(with: viewSize, padding: self.layout.padding, constraint: self.layout.width, layoutDirection: self.layoutDirection)
+            
+            //
+            // Set Frame Origins
+            //
+            
             var lastSectionMaxY : CGFloat = 0.0
             var lastContentMaxY : CGFloat = 0.0
             
-            let totalWidth = collectionView.bounds.size.width
-            let paddedWidth = totalWidth - contentLayout.padding.left - contentLayout.padding.right
+            //
+            // Header
+            //
             
-            let contentWidth = contentLayout.width.clamp(paddedWidth)
-            let xOrigin = round((totalWidth - contentWidth) / 2.0)
-            
-            self.collectionViewWidth = totalWidth
-            
-            if var header = self.header {
-                let height = delegate.heightForListHeader(in: collectionView, width: contentWidth)
+            if let header = self.header {
+                let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: self.layoutDirection)
+                let height = delegate.heightForListHeader(in: collectionView, width: position.width, layoutDirection: self.layoutDirection)
                 
-                header.baseFrame = CGRect(x: 0.0, y: lastContentMaxY, width: totalWidth, height: height)
-
-                self.header = header
-
-                lastContentMaxY = header.baseFrame.maxY
-                lastContentMaxY += contentLayout.sectionHeaderBottomSpacing
+                header.x = position.origin
+                header.size = self.layoutDirection.size(width: position.width, height: height)
+                
+                header.y = lastContentMaxY
+                lastContentMaxY = layoutDirection.maxY(for: header.defaultFrame)
             }
             
-            lastSectionMaxY += contentLayout.padding.top
-            lastContentMaxY += contentLayout.padding.top
+            switch self.layoutDirection {
+            case .vertical:
+                lastSectionMaxY += self.layout.padding.top
+                lastContentMaxY += self.layout.padding.top
+                
+            case .horizontal:
+                lastSectionMaxY += self.layout.padding.left
+                lastContentMaxY += self.layout.padding.left
+            }
+
+            //
+            // Sections
+            //
             
-            self.sections = self.sections.mapWithIndex { sectionIndex, section in
+            self.sections.forEachWithIndex { sectionIndex, isLast, section in
                 
-                let isLastSection = (sectionIndex == self.sections.count - 1)
+                let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: self.layoutDirection)
                 
-                var section = section
+                section.x = sectionPosition.origin
                 
-                // Header
+                //
+                // Section Header
+                //
                 
-                if var header = section.header {
-                    let height = delegate.heightForHeader(in: sectionIndex, in: collectionView, width: contentWidth)
-                    header.baseFrame = CGRect(x: xOrigin, y: lastContentMaxY, width: contentWidth, height: height)
-
-                    section.header = header
-
-                    lastContentMaxY = header.baseFrame.maxY
-                    lastContentMaxY += contentLayout.sectionHeaderBottomSpacing
+                if let header = section.header {
+                    let width = header.layout.width.merge(with: section.layout.width)
+                    let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: self.layoutDirection)
+                    let height = delegate.heightForHeader(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: self.layoutDirection)
+                    
+                    header.x = position.origin
+                    header.size = self.layoutDirection.size(width: position.width, height: height)
+                    
+                    header.y = lastContentMaxY
+                    
+                    lastContentMaxY = self.layoutDirection.maxY(for: header.defaultFrame)
+                    lastContentMaxY += self.layout.sectionHeaderBottomSpacing
                 }
                 
+                //
                 // Section Items
+                //
                 
-                let columnLayout = delegate.columnLayout(for: sectionIndex, in: collectionView)
-                let itemWidth = round((contentWidth - (columnLayout.spacing * CGFloat(columnLayout.columns - 1))) / CGFloat(columnLayout.columns))
-                
-                var groupedItems = columnLayout.group(values: section.items)
-                
-                groupedItems = groupedItems.mapWithIndex { rowIndex, row in
-                    
-                    let isLastRow = rowIndex == groupedItems.count - 1
-                    
-                    var columnXOrigin = xOrigin
-                    var maxHeight : CGFloat = 0.0
-                    
-                    let row : [ColumnLayout.Grouped<ItemLayoutInfo>] = row.mapWithIndex { columnIndex, item in
+                if section.columns.count == 1 {
+                    section.items.forEachWithIndex { itemIndex, isLast, item in
+                        let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                         
-                        let indexPath = IndexPath(item: item.index, section: sectionIndex)
+                        let width = item.layout.width.merge(with: section.layout.width)
+                        let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: self.layoutDirection)
+                        let height = delegate.heightForItem(at: indexPath, in: collectionView, width: itemPosition.width, layoutDirection: self.layoutDirection)
                         
-                        var item = item
+                        item.x = itemPosition.origin
+                        item.y = lastContentMaxY
                         
-                        let height = delegate.heightForItem(at: indexPath, in: collectionView, width: itemWidth)
-                        item.value.frame = CGRect(x: columnXOrigin, y: lastContentMaxY, width: itemWidth, height: height)
+                        item.size = self.layoutDirection.size(width: itemPosition.width, height: height)
                         
-                        maxHeight = max(height, maxHeight)
+                        lastContentMaxY += height
                         
-                        columnXOrigin = item.value.frame.maxX + columnLayout.spacing
-                        
-                        return item
+                        if isLast {
+                            lastContentMaxY += self.layout.itemToSectionFooterSpacing
+                        } else {
+                            lastContentMaxY += self.layout.itemSpacing
+                        }
                     }
+                } else {
+                    let itemWidth = round((sectionPosition.width - (section.columns.spacing * CGFloat(section.columns.count - 1))) / CGFloat(section.columns.count))
                     
-                    lastContentMaxY += maxHeight
+                    let groupedItems = section.columns.group(values: section.items)
                     
-                    if isLastRow {
-                        lastContentMaxY += contentLayout.rowToSectionFooterSpacing
-                    } else {
-                        lastContentMaxY += contentLayout.rowSpacing
+                    groupedItems.forEachWithIndex { rowIndex, isLast, row in
+                        var maxHeight : CGFloat = 0.0
+                        var columnXOrigin = section.x
+                        
+                        row.forEachWithIndex { columnIndex, isLast, item in
+                            item.value.x = columnXOrigin
+                            item.value.y = lastContentMaxY
+                            
+                            let indexPath = IndexPath(item: item.index, section: sectionIndex)
+                            let height = delegate.heightForItem(at: indexPath, in: collectionView, width: itemWidth, layoutDirection: self.layoutDirection)
+                            
+                            item.value.size = self.layoutDirection.size(width: itemWidth, height: height)
+                            
+                            maxHeight = max(self.layoutDirection.height(for: item.value.size), maxHeight)
+                            columnXOrigin += (self.layoutDirection.width(for: item.value.size) + section.columns.spacing)
+                        }
+                        
+                        lastContentMaxY += maxHeight
+                        
+                        if isLast {
+                            lastContentMaxY += self.layout.itemToSectionFooterSpacing
+                        } else {
+                            lastContentMaxY += self.layout.itemSpacing
+                        }
                     }
-                    
-                    return row
                 }
                 
-                section.items = groupedItems.flatMap { $0.map { $0.value } }
+                //
+                // Section Footer
+                //
                 
-                // Footer
-                
-                if var footer = section.footer {
-                    let height = delegate.heightForFooter(in: sectionIndex, in: collectionView, width: contentWidth)
-                    footer.baseFrame = CGRect(x: xOrigin, y: lastContentMaxY, width: contentWidth, height: height)
-
-                    section.footer = footer
-
-                    lastContentMaxY = footer.baseFrame.maxY
+                if let footer = section.footer {
+                    let width = footer.layout.width.merge(with: section.layout.width)
+                    let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: self.layoutDirection)
+                    let height = delegate.heightForFooter(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: self.layoutDirection)
+                    
+                    footer.size = self.layoutDirection.size(width: position.width, height: height)
+                    footer.x = position.origin
+                    footer.y = lastContentMaxY
+                    
+                    lastContentMaxY = self.layoutDirection.maxY(for: footer.defaultFrame)
                 }
                 
-                section.frame = CGRect(x: xOrigin, y: lastSectionMaxY, width: contentWidth, height: lastContentMaxY - lastSectionMaxY)
+                //
+                // Size The Section
+                //
                 
-                lastSectionMaxY = section.frame.maxY
+                section.size = self.layoutDirection.size(width: viewWidth, height: lastContentMaxY - lastSectionMaxY)
+                section.y = lastSectionMaxY
+                
+                lastSectionMaxY = self.layoutDirection.maxY(for: section.frame)
                 
                 // Add additional padding from config.
                 
-                if isLastSection == false {
-                    let additionalSectionSpacing = section.footer != nil ? contentLayout.interSectionSpacingWithFooter : contentLayout.interSectionSpacingWithNoFooter
+                if isLast == false {
+                    let additionalSectionSpacing = section.footer != nil ? self.layout.interSectionSpacingWithFooter : self.layout.interSectionSpacingWithNoFooter
 
                     lastSectionMaxY += additionalSectionSpacing
                     lastContentMaxY += additionalSectionSpacing
                 }
-                
-                return section
             }
             
-            lastContentMaxY += contentLayout.padding.bottom
+            switch self.layoutDirection {
+            case .vertical: lastContentMaxY += self.layout.padding.bottom
+            case .horizontal: lastContentMaxY += self.layout.padding.right
+            }
             
-            if var footer = self.footer {
-                let height = delegate.heightForListFooter(in: collectionView, width: contentWidth)
+            //
+            // Footer
+            //
+            
+            if let footer = self.footer {
+                let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: self.layoutDirection)
+                let height = delegate.heightForListFooter(in: collectionView, width: position.width, layoutDirection: self.layoutDirection)
                 
-                footer.baseFrame = CGRect(x: 0.0, y: lastContentMaxY, width: totalWidth, height: height)
-
-                self.footer = footer
-
-                lastContentMaxY = footer.baseFrame.maxY
-                lastContentMaxY += contentLayout.sectionHeaderBottomSpacing
+                footer.size = self.layoutDirection.size(width: position.width, height: height)
+                
+                footer.x = position.origin
+                footer.y = lastContentMaxY
+                
+                lastContentMaxY = self.layoutDirection.maxY(for: footer.defaultFrame)
+                lastContentMaxY += self.layout.sectionHeaderBottomSpacing
             }
                         
-            self.size = CGSize(width: totalWidth, height: lastContentMaxY)
+            self.contentSize = self.layoutDirection.size(width: viewWidth, height: lastContentMaxY)
             
-            self.updateHeaders(
-                delegate: delegate,
-                contentLayout: contentLayout,
-                in: collectionView
-            )
+            self.updateHeaders(in: collectionView)
             
-            return .completed
+            return true
         }
     }
     
@@ -772,37 +786,81 @@ fileprivate extension ListViewLayout
     // MARK: Layout Information
     //
     
-    struct SectionLayoutInfo
+    final class SectionLayoutInfo
     {
-        var header : SupplementaryItemLayoutInfo?
-        var footer : SupplementaryItemLayoutInfo?
-
-        var frame : CGRect = .zero
+        let direction : LayoutDirection
+        let layout : Section.Layout
         
-        var items : [ItemLayoutInfo] = []
-    }
-    
-    struct SupplementaryItemLayoutInfo
-    {
-        let kind : SupplementaryKind
-                
-        var baseFrame : CGRect = .zero
+        let header : SupplementaryItemLayoutInfo?
+        let footer : SupplementaryItemLayoutInfo?
         
-        var pinnedOrigin : CGFloat? = nil
+        let columns : Section.Columns
         
-        var visibleFrame : CGRect {
-            var frame = self.baseFrame
-            
-            if let pinnedOrigin = self.pinnedOrigin {
-                frame.origin.y = pinnedOrigin
-            }
-            
-            return frame
+        let items : [ItemLayoutInfo]
+        
+        var size : CGSize = .zero
+        var x : CGFloat = .zero
+        var y : CGFloat = .zero
+        
+        var frame : CGRect {
+            return CGRect(
+                origin: self.direction.point(x: self.x, y: self.y),
+                size: self.size
+             )
         }
         
-        init(kind : SupplementaryKind)
+        init(
+            direction : LayoutDirection,
+            layout : Section.Layout,
+            header : SupplementaryItemLayoutInfo?,
+            footer : SupplementaryItemLayoutInfo?,
+            columns : Section.Columns,
+            items : [ItemLayoutInfo]
+        )
+        {
+            self.direction = direction
+            self.layout = layout
+            
+            self.header = header
+            self.footer = footer
+            
+            self.columns = columns
+            
+            self.items = items
+        }
+        
+    }
+    
+    final class SupplementaryItemLayoutInfo
+    {
+        let kind : SupplementaryKind
+        let direction : LayoutDirection
+        let layout : HeaderFooterLayout
+                
+        var size : CGSize = .zero
+        var x : CGFloat = .zero
+        var y : CGFloat = .zero
+        var pinnedY : CGFloat? = nil
+        
+        var defaultFrame : CGRect {
+            return CGRect(
+                origin: self.direction.point(x: self.x, y: self.y),
+                size: self.size
+             )
+        }
+        
+        var visibleFrame : CGRect {
+            return CGRect(
+                origin: self.direction.point(x: self.x, y: self.pinnedY ?? self.y),
+                size: self.size
+            )
+        }
+        
+        init(kind : SupplementaryKind, direction : LayoutDirection, layout : HeaderFooterLayout)
         {
             self.kind = kind
+            self.direction = direction
+            self.layout = layout
         }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
@@ -816,9 +874,27 @@ fileprivate extension ListViewLayout
         }
     }
     
-    struct ItemLayoutInfo
+    final class ItemLayoutInfo
     {
-        var frame : CGRect = .zero
+        let direction : LayoutDirection
+        let layout : ItemLayout
+        
+        var size : CGSize = .zero
+        var x : CGFloat = .zero
+        var y : CGFloat = .zero
+        
+        var frame : CGRect {
+            return CGRect(
+                origin: self.direction.point(x: self.x, y: self.y),
+                size: self.size
+            )
+        }
+        
+        init(direction : LayoutDirection, layout : ItemLayout)
+        {
+            self.direction = direction
+            self.layout = layout
+        }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
         {
@@ -832,11 +908,50 @@ fileprivate extension ListViewLayout
     }
 }
 
+
+fileprivate extension Section.Columns
+{
+    struct Grouped<Value>
+    {
+        var value : Value
+        var index : Int
+    }
+    
+    func group<Value>(values input : [Value]) -> [[Grouped<Value>]]
+    {
+        var values : [Grouped<Value>] = input.mapWithIndex { index, _, value in
+            return Grouped(value: value, index: index)
+        }
+        
+        var grouped : [[Grouped<Value>]] = []
+        
+        while values.count > 0 {
+            grouped.append(values.safeDropFirst(self.count))
+        }
+        
+        return grouped
+    }
+}
+
+
+fileprivate extension Array
+{
+    mutating func safeDropFirst(_ count : Int) -> [Element]
+    {
+        let safeCount = Swift.min(self.count, count)
+        let values = self[0..<safeCount]
+        
+        self.removeFirst(safeCount)
+        
+        return Array(values)
+    }
+}
+
 //
 // MARK: Update Information From Collection View Layout
 //
 
-struct UpdateItems : Equatable
+fileprivate struct UpdateItems : Equatable
 {
     let insertedSections : Set<InsertSection>
     let deletedSections : Set<DeleteSection>
@@ -948,14 +1063,6 @@ struct UpdateItems : Equatable
     {
         var oldIndexPath : IndexPath
         var newIndexPath : IndexPath
-    }
-}
-
-
-fileprivate extension CGSize
-{
-    var isEmpty : Bool {
-        return self.width == 0.0 || self.height == 0.0
     }
 }
 

@@ -16,7 +16,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
     
     override init(frame: CGRect)
     {
-        self.content = Element.Appearance.createReusableItemView()
+        self.content = Element.Appearance.createReusableItemView(frame: frame)
         
         super.init(frame: frame)
         

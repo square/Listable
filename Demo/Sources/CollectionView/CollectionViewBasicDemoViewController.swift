@@ -69,24 +69,24 @@ final class CollectionViewBasicDemoViewController : UIViewController
             list += self.rows.map { sectionRows in
                 Section(identifier: "Demo Section") { section in
                     
-                    section.layout = Section.Layout(columns: 2, spacing: 10.0)
+                    section.columns = .init(count: 2, spacing: 10.0)
                      
                     section.header = HeaderFooter(
-                        HeaderElement(title: "Section Header"),
+                        with: HeaderElement(title: "Section Header"),
                         appearance: self.headerAppearance
                     )
                     
                     section.footer = HeaderFooter(
-                        FooterElement(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
+                        with: FooterElement(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
                         appearance: self.footerAppearance,
-                        height: .thatFits(.noConstraint)
+                        sizing: .thatFits(.noConstraint)
                     )
                     
                     section += sectionRows.map { row in
                         Item(
-                            row,
+                            with: row,
                             appearance: self.itemAppearance,
-                            height: .thatFits(.atLeast(.default))
+                            sizing: .thatFits(.atLeast(.default))
                         )
                     }
                 }

@@ -15,6 +15,7 @@ public struct Section
     public var info : AnySectionInfo
     
     public var layout : Layout
+    public var columns : Columns
     
     public var header : AnyHeaderFooter?
     public var footer : AnyHeaderFooter?
@@ -54,6 +55,7 @@ public struct Section
     public init<Identifier:Hashable>(
         identifier : Identifier,
         layout : Layout = Layout(),
+        columns : Columns = .one,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
         items : [AnyItem] = []
@@ -62,6 +64,7 @@ public struct Section
         self.init(
             info: HashableSectionInfo(identifier),
             layout: layout,
+            columns: columns,
             header: header,
             footer: footer,
             items: items
@@ -71,6 +74,7 @@ public struct Section
     public init<Info:SectionInfo>(
         info: Info,
         layout : Layout = Layout(),
+        columns : Columns = .one,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
         items : [AnyItem] = []
@@ -79,6 +83,7 @@ public struct Section
         self.info = info
         
         self.layout = layout
+        self.columns = columns
         
         self.header = header
         self.footer = footer
@@ -120,17 +125,31 @@ public struct Section
 
 public extension Section
 {
-    struct Layout
+    struct Layout : Equatable
     {
-        public var columns : Int
+        public var width : CustomWidth
+        
+        public init(width : CustomWidth = .default)
+        {
+            self.width = width
+        }
+    }
+    
+    struct Columns
+    {
+        public var count : Int
         public var spacing : CGFloat
         
-        public init(columns : Int = 1, spacing : CGFloat = 0.0)
+        public static var one : Columns {
+            return Columns(count: 1, spacing: 0.0)
+        }
+        
+        public init(count : Int = 1, spacing : CGFloat = 0.0)
         {
-            precondition(columns >= 1, "Columns must be greater than or equal to 1.")
+            precondition(count >= 1, "Columns must be greater than or equal to 1.")
             precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
             
-            self.columns = columns
+            self.count = count
             self.spacing = spacing
         }
     }

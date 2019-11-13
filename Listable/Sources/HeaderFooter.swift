@@ -12,6 +12,8 @@ public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
 
 public protocol AnyHeaderFooter_Internal
 {
+    var layout : HeaderFooterLayout { get }
+    
     func apply(to headerFooterView : UICollectionReusableView, reason: ApplyReason)
     
     func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
@@ -25,7 +27,8 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public var element : Element
     public var appearance : Element.Appearance
     
-    public var height : Height
+    public var sizing : Sizing
+    public var layout : HeaderFooterLayout
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
@@ -33,16 +36,31 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     // MARK: Initialization
     //
     
+    public typealias Build = (inout HeaderFooter) -> ()
+    
     public init(
-        _ element : Element,
+        with element : Element,
         appearance : Element.Appearance,
-        height : Height = .default
+        build : Build
+        )
+    {
+        self.init(with: element, appearance: appearance)
+        
+        build(&self)
+    }
+    
+    public init(
+        with element : Element,
+        appearance : Element.Appearance,
+        sizing : Sizing = .default,
+        layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
         self.element = element
         self.appearance = appearance
         
-        self.height = height
+        self.sizing = sizing
+        self.layout = layout
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
     }
@@ -72,17 +90,30 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
 }
 
 
+public struct HeaderFooterLayout : Equatable
+{
+    public var width : CustomWidth
+    
+    public init(width : CustomWidth = .default)
+    {
+        self.width = width
+    }
+}
+
+
 public extension HeaderFooter where Element.Appearance == Element
 {
     init(
-        _ element : Element,
-        height : Height = .default
+        with element : Element,
+        sizing : Sizing = .default,
+        layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
         self.init(
-            element,
+            with: element,
             appearance: element,
-            height: height
+            sizing: sizing,
+            layout: layout
         )
     }
 }

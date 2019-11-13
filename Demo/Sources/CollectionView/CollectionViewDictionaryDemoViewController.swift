@@ -20,13 +20,14 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.listView.appearance.contentLayout.set {
+        self.listView.appearance.layout.set {
+            $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0)
             $0.width = .atMost(600.0)
             $0.sectionHeaderBottomSpacing = 10.0
-            $0.rowSpacing = 7.0
+            $0.itemSpacing = 7.0
             $0.interSectionSpacingWithNoFooter = 10.0
             
-            $0.usesStickySectionHeaders = true
+            $0.stickySectionHeaders = true
         }
         
         listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State())
@@ -93,12 +94,13 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             
             content += Section(identifier: "search") { rows in
                 rows += Item(
-                    SearchRow(
+                    with: SearchRow(
                         text: state.value.filter,
                         onChange: { string in
                             state.value.filter = string
                     }
-                ), appearance: SearchRowAppearance()
+                ), appearance: SearchRowAppearance(),
+                   layout: .init(width: .fill)
                 )
             }
             
@@ -108,16 +110,16 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 return Section(identifier: letter.letter) { section in
                     
                     section.header = HeaderFooter(
-                        SectionHeader(title: letter.letter),
-                        height: .thatFits(.noConstraint)
+                        with: SectionHeader(title: letter.letter),
+                        sizing: .thatFits(.noConstraint)
                     )
                     
                     section += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
-                                WordRow(title: word.word, detail: word.description),
-                                height: .thatFits(.atMost(250.0))
+                                with: WordRow(title: word.word, detail: word.description),
+                                sizing: .thatFits(.atMost(250.0))
                             )
                         } else {
                             return nil
@@ -131,11 +133,11 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             if hasContent == false {
                 content += Section(identifier: "empty") { section in
                     section += Item(
-                        WordRow(
+                        with: WordRow(
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
-                            ),
-                        height: .thatFits(.atMost(250.0))
+                        ),
+                        sizing: .thatFits(.atMost(250.0))
                     )
                 }
             }
@@ -151,9 +153,9 @@ struct SearchRowAppearance : ItemElementAppearance
     typealias BackgroundView = UIView
     typealias SelectedBackgroundView = UIView
     
-    static func createReusableItemView() -> View
+    static func createReusableItemView(frame: CGRect) -> View
     {
-        return ItemElementView(content: SearchBar(), background: UIView(), selectedBackground: UIView())
+        return ItemElementView(content: SearchBar(frame: frame), background: UIView(), selectedBackground: UIView())
     }
     
     func update(view: View, with position: ItemPosition) {}
@@ -197,11 +199,13 @@ struct SectionHeader : BlueprintHeaderFooterElement, Equatable
             backgroundColor: UIColor(white: 0.85, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
             wrapping: Inset(
+                top: 10.0,
+                bottom: 10.0,
+                left: 20.0,
+                right: 20.0,
                 wrapping: Label(text: self.title) {
                     $0.font = .systemFont(ofSize: 32.0, weight: .bold)
-                },
-                top: 10.0, bottom: 10.0, left: 20.0, right: 20.0
-            )
+            })
         )
     }
     
@@ -222,7 +226,7 @@ struct WordRow : BlueprintItemElement, Equatable
         return Box(
             backgroundColor: .init(white: 0.96, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
-            wrapping: Inset(wrapping: Column { column in
+            wrapping: Inset(top: 10.0, bottom: 10.0, left: 20.0, right: 20.0, wrapping: Column { column in
                 column.add(child: Label(text: self.title) {
                     $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
                 })
@@ -233,7 +237,7 @@ struct WordRow : BlueprintItemElement, Equatable
                     $0.font = .italicSystemFont(ofSize: 14.0)
                     $0.color = .darkGray
                 })
-            }, top: 10.0, bottom: 10.0, left: 20.0, right: 20.0)
+            })
         )
     }
     
@@ -245,9 +249,9 @@ struct WordRow : BlueprintItemElement, Equatable
 
 final class SearchBar : UISearchBar, UISearchBarDelegate
 {
-    init()
+    override init(frame: CGRect)
     {
-        super.init(frame: .zero)
+        super.init(frame: frame)
         
         self.delegate = self
     }

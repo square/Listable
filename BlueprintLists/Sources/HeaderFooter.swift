@@ -30,14 +30,26 @@ public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appeara
 public extension Listable.HeaderFooter where Element : BlueprintHeaderFooterElement
 {
     init(
-        _ element : Element,
-        height : Height = .default
+        with element : Element,
+        build : Build
+        )
+    {
+        self.init(with: element)
+        
+        build(&self)
+    }
+    
+    init(
+        with element : Element,
+        sizing : Sizing = .default,
+        layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
         self.init(
-            element,
+            with: element,
             appearance: BlueprintHeaderFooterElementAppearance(),
-            height: height
+            sizing: sizing,
+            layout : layout
         )
     }
 }
@@ -53,6 +65,8 @@ public extension BlueprintHeaderFooterElement
     func apply(to view: Appearance.View, reason: ApplyReason)
     {
         view.content.element = self.element
+        
+        view.content.backgroundColor = .clear
     }
 }
 
@@ -66,9 +80,9 @@ public struct BlueprintHeaderFooterElementAppearance : HeaderFooterElementAppear
     public typealias ContentView = BlueprintView
     public typealias BackgroundView = UIView
     
-    public static func createReusableHeaderFooterView() -> View
+    public static func createReusableHeaderFooterView(frame: CGRect) -> View
     {
-        return HeaderFooterElementView(content: BlueprintView(), background: UIView())
+        return HeaderFooterElementView(content: BlueprintView(frame: frame), background: UIView())
     }
     
     public func apply(to view: View, previous: BlueprintHeaderFooterElementAppearance?) {}

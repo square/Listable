@@ -845,7 +845,7 @@ fileprivate class DiffContainer<Value>
         let identifierFactory = UniqueIdentifier<Value>.Factory()
         identifierFactory.reserveCapacity(elements.count)
         
-        return elements.mapWithIndex { index, value in
+        return elements.mapWithIndex { index, _, value in
             return DiffContainer(
                 value: value,
                 index: index,

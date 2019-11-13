@@ -10,10 +10,12 @@ public struct Appearance : Equatable
 {
     public var backgroundColor : UIColor
     
-    public var sizing : ListSizing
-    public var contentLayout : ListContentLayout
-    public var underflow : UnderflowBehavior
+    public var direction : LayoutDirection
     
+    public var sizing : ListSizing
+    public var layout : ListLayout
+    public var underflow : UnderflowBehavior
+        
     public init(_ configure : (inout Appearance) -> ())
     {
         self.init()
@@ -23,14 +25,18 @@ public struct Appearance : Equatable
     
     public init(
         backgroundColor : UIColor = .white,
+        direction : LayoutDirection = .vertical,
         sizing : ListSizing = ListSizing(),
-        contentLayout : ListContentLayout = ListContentLayout(),
+        layout : ListLayout = ListLayout(),
         underflow : UnderflowBehavior = .alwaysBounceVertical(true)
     )
     {
         self.backgroundColor = backgroundColor
+        
+        self.direction = direction
+        
         self.sizing = sizing
-        self.contentLayout = contentLayout
+        self.layout = layout
         self.underflow = underflow
     }
     
@@ -45,7 +51,7 @@ public struct Appearance : Equatable
 
 public struct ListSizing : Equatable
 {
-    public var rowHeight : CGFloat
+    public var itemHeight : CGFloat
     
     public var sectionHeaderHeight : CGFloat
     public var sectionFooterHeight : CGFloat
@@ -54,14 +60,14 @@ public struct ListSizing : Equatable
     public var listFooterHeight : CGFloat
         
     public init(
-        rowHeight : CGFloat = 50.0,
+        itemHeight : CGFloat = 50.0,
         sectionHeaderHeight : CGFloat = 60.0,
         sectionFooterHeight : CGFloat = 40.0,
         listHeaderHeight : CGFloat = 60.0,
         listFooterHeight : CGFloat = 60.0
     )
     {
-        self.rowHeight = rowHeight
+        self.itemHeight = itemHeight
         self.sectionHeaderHeight = sectionHeaderHeight
         self.sectionFooterHeight = sectionFooterHeight
         self.listHeaderHeight = listHeaderHeight
@@ -77,19 +83,19 @@ public struct ListSizing : Equatable
 }
 
 
-public struct ListContentLayout : Equatable
+public struct ListLayout : Equatable
 {
     public var padding : UIEdgeInsets
     public var width : WidthConstraint
-    
+
     public var interSectionSpacingWithNoFooter : CGFloat
     public var interSectionSpacingWithFooter : CGFloat
     
     public var sectionHeaderBottomSpacing : CGFloat
-    public var rowSpacing : CGFloat
-    public var rowToSectionFooterSpacing : CGFloat
+    public var itemSpacing : CGFloat
+    public var itemToSectionFooterSpacing : CGFloat
     
-    public var usesStickySectionHeaders : Bool
+    public var stickySectionHeaders : Bool
     
     public init(
         padding : UIEdgeInsets = .zero,
@@ -97,9 +103,9 @@ public struct ListContentLayout : Equatable
         interSectionSpacingWithNoFooter : CGFloat = 0.0,
         interSectionSpacingWithFooter : CGFloat = 0.0,
         sectionHeaderBottomSpacing : CGFloat = 0.0,
-        rowSpacing : CGFloat = 0.0,
-        rowToSectionFooterSpacing : CGFloat = 0.0,
-        usesStickySectionHeaders : Bool = false
+        itemSpacing : CGFloat = 0.0,
+        itemToSectionFooterSpacing : CGFloat = 0.0,
+        stickySectionHeaders : Bool = false
     )
     {
         self.padding = padding
@@ -109,19 +115,39 @@ public struct ListContentLayout : Equatable
         self.interSectionSpacingWithFooter = interSectionSpacingWithFooter
         
         self.sectionHeaderBottomSpacing = sectionHeaderBottomSpacing
-        self.rowSpacing = rowSpacing
-        self.rowToSectionFooterSpacing = rowToSectionFooterSpacing
+        self.itemSpacing = itemSpacing
+        self.itemToSectionFooterSpacing = itemToSectionFooterSpacing
         
-        self.usesStickySectionHeaders = usesStickySectionHeaders
+        self.stickySectionHeaders = stickySectionHeaders
     }
 
-    public mutating func set(with block : (inout ListContentLayout) -> ())
+    public mutating func set(with block : (inout ListLayout) -> ())
     {
         var edited = self
         block(&edited)
         self = edited
     }
+    
+    internal static func width(
+        with viewSize : CGSize,
+        padding : UIEdgeInsets,
+        constraint : WidthConstraint,
+        layoutDirection : LayoutDirection
+    ) -> CGFloat
+    {
+        let paddedWidth : CGFloat = {
+            let viewWidth = layoutDirection.width(for: viewSize)
+            
+            switch layoutDirection {
+            case .vertical: return viewWidth - padding.left - padding.right
+            case .horizontal: return viewWidth - padding.top - padding.bottom
+            }
+        }()
+        
+        return constraint.clamp(paddedWidth)
+    }
 }
+
 
 public enum UnderflowBehavior : Equatable
 {
@@ -135,3 +161,4 @@ public enum UnderflowBehavior : Equatable
         case bottom
     }
 }
+

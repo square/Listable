@@ -26,6 +26,8 @@ public protocol AnyItem : AnyItem_Internal
 
 public protocol AnyItem_Internal
 {
+    var layout : ItemLayout { get }
+    
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     
@@ -40,7 +42,8 @@ public struct Item<Element:ItemElement> : AnyItem
     public var element : Element
     public var appearance : Element.Appearance
     
-    public var height : Height
+    public var sizing : Sizing
+    public var layout : ItemLayout
     
     public var selection : ItemSelection
     
@@ -70,20 +73,21 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias Build = (inout Item) -> ()
     
     public init(
-        _ element : Element,
+        with element : Element,
         appearance : Element.Appearance,
         build : Build
         )
     {
-        self.init(element, appearance: appearance)
+        self.init(with: element, appearance: appearance)
         
         build(&self)
     }
     
     public init(
-        _ element : Element,
+        with element : Element,
         appearance : Element.Appearance,
-        height : Height = .default,
+        sizing : Sizing = .default,
+        layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
         bind : CreateBinding? = nil,
@@ -96,7 +100,8 @@ public struct Item<Element:ItemElement> : AnyItem
         self.element = element
         self.appearance = appearance
         
-        self.height = height
+        self.sizing = sizing
+        self.layout = layout
         
         self.selection = selection
         
@@ -161,8 +166,9 @@ public struct Item<Element:ItemElement> : AnyItem
 public extension Item where Element.Appearance == Element
 {
     init(
-        _ element : Element,
-        height : Height = .default,
+        with element : Element,
+        sizing : Sizing = .default,
+        layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
         bind : CreateBinding? = nil,
@@ -173,17 +179,29 @@ public extension Item where Element.Appearance == Element
         )
     {
         self.init(
-        element,
-        appearance: element,
-        height: height,
-        selection: selection,
-        swipeActions: swipeActions,
-        bind: bind,
-        onDisplay: onDisplay,
-        onEndDisplay: onEndDisplay,
-        onSelect: onSelect,
-        onDeselect: onDeselect
+            with: element,
+            appearance: element,
+            sizing: sizing,
+            layout: layout,
+            selection: selection,
+            swipeActions: swipeActions,
+            bind: bind,
+            onDisplay: onDisplay,
+            onEndDisplay: onEndDisplay,
+            onSelect: onSelect,
+            onDeselect: onDeselect
         )
+    }
+}
+
+
+public struct ItemLayout : Equatable
+{
+    public var width : CustomWidth
+    
+    public init(width : CustomWidth = .default)
+    {
+        self.width = width
     }
 }
 

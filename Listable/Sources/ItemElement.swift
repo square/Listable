@@ -122,7 +122,7 @@ public protocol ItemElementAppearance
      Do not do configuration in this method that will be changed by your app's theme or appearance – instead
      do that work in apply(to:), so the appearance will be updated if the appearance of elements changes.
      */
-    static func createReusableItemView() -> View
+    static func createReusableItemView(frame : CGRect) -> View
     
     //
     // MARK: Updating View State

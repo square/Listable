@@ -123,9 +123,9 @@ public final class SourceState<Value:Equatable>
 }
 
 
-///
-/// MARK: Block-Driven Sources
-///
+//
+// MARK: Block-Driven Sources
+//
 
 
 public final class DynamicSource<Input:Equatable> : ListViewSource
@@ -146,9 +146,9 @@ public final class DynamicSource<Input:Equatable> : ListViewSource
 }
 
 
-///
-/// MARK: Immutable Sources
-///
+//
+// MARK: Immutable Sources
+//
 
 
 public final class StaticSource : ListViewSource
@@ -182,9 +182,9 @@ public final class StaticSource : ListViewSource
 }
 
 
-///
-/// MARK: Timer For Reloading
-///
+//
+// MARK: Timer For Reloading
+//
 
 internal final class ReloadTimer
 {
