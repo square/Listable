@@ -150,17 +150,15 @@ struct SearchRowAppearance : ItemElementAppearance
     // MARK: ItemElementAppearance
     
     typealias ContentView = SearchBar
-    typealias BackgroundView = UIView
-    typealias SelectedBackgroundView = UIView
     
-    static func createReusableItemView(frame: CGRect) -> View
+    static func createReusableItemView(frame: CGRect) -> ContentView
     {
-        return ItemElementView(content: SearchBar(frame: frame), background: UIView(), selectedBackground: UIView())
+        return SearchBar(frame: frame)
     }
     
-    func update(view: View, with position: ItemPosition) {}
+    func update(view: ContentView, with position: ItemPosition) {}
     
-    func apply(to view: View, with state: ItemState, previous: SearchRowAppearance?) {}
+    func apply(to view: ContentView, with state: ItemState, previous: SearchRowAppearance?) {}
     
     func wasUpdated(comparedTo other: SearchRowAppearance) -> Bool
     {
@@ -182,10 +180,10 @@ struct SearchRow : ItemElement
         return .init("search")
     }
     
-    func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
+    func apply(to view: Appearance.ContentView, with state: ItemState, reason: ApplyReason)
     {
-        view.content.onStateChanged = self.onChange
-        view.content.text = self.text
+        view.onStateChanged = self.onChange
+        view.text = self.text
     }
     
     func wasUpdated(comparedTo other: SearchRow) -> Bool {

@@ -18,7 +18,7 @@ public protocol HeaderFooterElement
     // MARK: Applying To Displayed View
     //
     
-    func apply(to view : Appearance.View, reason : ApplyReason)
+    func apply(to view : Appearance.ContentView, reason : ApplyReason)
     
     //
     // MARK: Tracking Changes
@@ -44,17 +44,14 @@ public protocol HeaderFooterElementAppearance
     //
     
     associatedtype ContentView:UIView
-    associatedtype BackgroundView:UIView
     
-    typealias View = HeaderFooterElementView<ContentView, BackgroundView>
-    
-    static func createReusableHeaderFooterView(frame : CGRect) -> View
+    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
     
     //
     // MARK: Updating View State
     //
     
-    func apply(to view : View, previous : Self?)
+    func apply(to view : ContentView, previous : Self?)
     
     func wasUpdated(comparedTo other : Self) -> Bool
 }
@@ -65,68 +62,5 @@ public extension HeaderFooterElementAppearance where Self:Equatable
     func wasUpdated(comparedTo other : Self) -> Bool
     {
         return self != other
-    }
-}
-
-
-public final class HeaderFooterElementView<Content:UIView, Background:UIView> : UIView
-{
-    //
-    // MARK: Public Properties
-    //
-    
-    public let content : Content
-    public let background : Background
-    
-    public var contentInset : UIEdgeInsets = .zero {
-        didSet {
-            guard oldValue != self.contentInset else {
-                return
-            }
-            
-            self.setNeedsLayout()
-        }
-    }
-    
-    //
-    // MARK: Initialization
-    //
-    
-    public init(content : Content, background : Background)
-    {
-        self.content = content
-        self.background = background
-        
-        super.init(frame: .zero)
-        
-        self.addSubview(self.background)
-        self.addSubview(self.content)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
-    
-    //
-    // MARK: UIView
-    //
-    
-    public override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        let fittingWidth = size.width - (self.contentInset.left + self.contentInset.right)
-        
-        let fittedSize = self.content.sizeThatFits(.init(width: fittingWidth, height: size.height))
-        
-        var totalSize = fittedSize
-        totalSize.height += self.contentInset.top
-        totalSize.height += self.contentInset.bottom
-        
-        return fittedSize
-    }
-    
-    public override func layoutSubviews()
-    {
-        self.background.frame = self.bounds
-        
-        self.content.frame = self.bounds.inset(by: self.contentInset)
     }
 }
