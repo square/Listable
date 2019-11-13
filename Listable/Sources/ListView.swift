@@ -235,9 +235,13 @@ public final class ListView : UIView
     
     private func setContentFromSource(animated : Bool = false)
     {
+        let oldIdentifier = self.storage.allContent.identifier
         self.storage.allContent = self.sourcePresenter.reloadContent()
+        let newIdentifier = self.storage.allContent.identifier
         
-        self.updatePresentationState(for: .contentChanged(animated: animated))        
+        let identifierChanged = oldIdentifier != newIdentifier
+        
+        self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
     
     // MARK: UIView
@@ -469,7 +473,7 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
-    
+        
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
         for reason : Content.Slice.UpdateReason,
@@ -481,16 +485,18 @@ public final class ListView : UIView
         let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
         
         let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
-        
+                
         let updateBackingData = {
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
+        
+        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
         
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
         }
-
+        
         self.updateCollectionViewSelections(animated: reason.animated)
     }
         
