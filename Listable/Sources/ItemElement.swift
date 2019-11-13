@@ -141,8 +141,18 @@ public protocol ItemElementAppearance
      Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
     func apply(to view : View, with state : ItemState, previous : Self?)
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
 }
 
+
+public extension ItemElementAppearance where Self:Equatable
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
 
 public final class ItemElementView<Content:UIView, Background:UIView, SelectedBackground:UIView> : UIView
 {

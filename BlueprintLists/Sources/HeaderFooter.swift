@@ -86,5 +86,10 @@ public struct BlueprintHeaderFooterElementAppearance : HeaderFooterElementAppear
     }
     
     public func apply(to view: View, previous: BlueprintHeaderFooterElementAppearance?) {}
+    
+    public func wasUpdated(comparedTo other: BlueprintHeaderFooterElementAppearance) -> Bool
+    {
+        return false
+    }
 }
 

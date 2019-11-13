@@ -96,4 +96,9 @@ struct TextFieldAppearance : ItemElementAppearance
         
         view.content.font = .systemFont(ofSize: 24.0, weight: .semibold)
     }
+    
+    func wasUpdated(comparedTo other: TextFieldAppearance) -> Bool
+    {
+        return false
+    }
 }

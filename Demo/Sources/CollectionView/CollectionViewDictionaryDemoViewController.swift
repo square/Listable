@@ -161,6 +161,11 @@ struct SearchRowAppearance : ItemElementAppearance
     func update(view: View, with position: ItemPosition) {}
     
     func apply(to view: View, with state: ItemState, previous: SearchRowAppearance?) {}
+    
+    func wasUpdated(comparedTo other: SearchRowAppearance) -> Bool
+    {
+        return false
+    }
 }
 
 struct SearchRow : ItemElement
