@@ -51,13 +51,37 @@ public struct Appearance : Equatable
 
 public struct ListSizing : Equatable
 {
-    public var itemHeight : CGFloat
+    private static let minHeightValue : CGFloat = 1.0
     
-    public var sectionHeaderHeight : CGFloat
-    public var sectionFooterHeight : CGFloat
+    public var itemHeight : CGFloat {
+        willSet {
+            precondition(newValue >= ListSizing.minHeightValue)
+        }
+    }
     
-    public var listHeaderHeight : CGFloat
-    public var listFooterHeight : CGFloat
+    public var sectionHeaderHeight : CGFloat {
+        willSet {
+            precondition(newValue >= ListSizing.minHeightValue)
+        }
+    }
+    
+    public var sectionFooterHeight : CGFloat {
+        willSet {
+            precondition(newValue >= ListSizing.minHeightValue)
+        }
+    }
+    
+    public var listHeaderHeight : CGFloat {
+        willSet {
+            precondition(newValue >= ListSizing.minHeightValue)
+        }
+    }
+    
+    public var listFooterHeight : CGFloat {
+        willSet {
+            precondition(newValue >= ListSizing.minHeightValue)
+        }
+    }
         
     public init(
         itemHeight : CGFloat = 50.0,
@@ -67,6 +91,12 @@ public struct ListSizing : Equatable
         listFooterHeight : CGFloat = 60.0
     )
     {
+        precondition(itemHeight >= ListSizing.minHeightValue)
+        precondition(sectionHeaderHeight >= ListSizing.minHeightValue)
+        precondition(sectionFooterHeight >= ListSizing.minHeightValue)
+        precondition(listHeaderHeight >= ListSizing.minHeightValue)
+        precondition(listFooterHeight >= ListSizing.minHeightValue)
+        
         self.itemHeight = itemHeight
         self.sectionHeaderHeight = sectionHeaderHeight
         self.sectionFooterHeight = sectionFooterHeight
