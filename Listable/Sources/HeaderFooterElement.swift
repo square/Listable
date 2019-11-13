@@ -55,6 +55,17 @@ public protocol HeaderFooterElementAppearance
     //
     
     func apply(to view : View, previous : Self?)
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
+}
+
+
+public extension HeaderFooterElementAppearance where Self:Equatable
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
 }
 
 

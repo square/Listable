@@ -69,6 +69,11 @@ struct ItemAppearance<ContentView:UIView> : ItemElementAppearance
         view.background.layer.borderColor = UIColor(white: 0.80, alpha: 1.0).cgColor
         view.background.layer.borderWidth = 0.5
     }
+    
+    func wasUpdated(comparedTo other: ItemAppearance) -> Bool
+    {
+        return false
+    }
 }
 
 
@@ -108,6 +113,11 @@ struct HeaderAppearance<ContentView:UIView> : HeaderFooterElementAppearance
         view.background.layer.shadowRadius = 2.0
         view.background.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
     }
+
+    func wasUpdated(comparedTo other: HeaderAppearance) -> Bool
+    {
+        return false
+    }
 }
 
 
@@ -130,6 +140,11 @@ struct FooterAppearance<ContentView:UIView> : HeaderFooterElementAppearance
     func apply(to view: HeaderFooterElementView<ContentView, UIView>, previous: FooterAppearance<ContentView>?)
     {
         self.apply(view.content)
+    }
+    
+    func wasUpdated(comparedTo other: FooterAppearance) -> Bool
+    {
+        return false
     }
 }
 

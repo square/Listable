@@ -137,4 +137,9 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
     public func update(view: View, with position: ItemPosition) {}
     
     public func apply(to view: View, with state : ItemState, previous: BlueprintItemElementAppearance?) {}
+    
+    public func wasUpdated(comparedTo other: BlueprintItemElementAppearance) -> Bool
+    {
+        return false
+    }
 }

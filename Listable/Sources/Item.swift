@@ -144,7 +144,7 @@ public struct Item<Element:ItemElement> : AnyItem
             return true
         }
         
-        return self.element.wasUpdated(comparedTo: other.element)
+        return self.element.wasUpdated(comparedTo: other.element) || self.appearance.wasUpdated(comparedTo: other.appearance)
     }
     
     public func anyWasMoved(comparedTo other : AnyItem) -> Bool

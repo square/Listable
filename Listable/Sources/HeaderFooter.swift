@@ -80,7 +80,7 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
             return true
         }
         
-        return self.element.wasUpdated(comparedTo: other.element)
+        return self.element.wasUpdated(comparedTo: other.element)  || self.appearance.wasUpdated(comparedTo: other.appearance)
     }
     
     public func newPresentationHeaderFooterState() -> Any
