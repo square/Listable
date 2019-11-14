@@ -36,9 +36,9 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         return .init(self.contentIdentifier)
     }
     
-    public func apply(to view: Appearance.View, with state: ItemState, reason: ApplyReason)
+    public func apply(to view: ContentView, with state: ItemState, reason: ApplyReason)
     {
-        view.content.setProperties(with: self.listDescription, animated: true)
+        view.setProperties(with: self.listDescription, animated: true)
     }
     
     public func wasUpdated(comparedTo other: ListItemElement) -> Bool
@@ -51,15 +51,13 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     //
     
     public typealias ContentView = ListView
-    public typealias BackgroundView = UIView
-    public typealias SelectedBackgroundView = UIView
     
-    public static func createReusableItemView(frame : CGRect) -> ItemElementView<ListView, UIView, UIView>
+    public static func createReusableItemView(frame : CGRect) -> ListView
     {
-        return ItemElementView(content: ListView(frame: frame), background: UIView(), selectedBackground: UIView())
+        return ListView(frame: frame)
     }
     
-    public func update(view: ItemElementView<ListView, UIView, UIView>, with position: ItemPosition) { }
+    public func update(view: ListView, with position: ItemPosition) { }
     
-    public func apply(to view: ItemElementView<ListView, UIView, UIView>, with state: ItemState, previous: ListItemElement.Appearance?) {}
+    public func apply(to view: ListView, with state: ItemState, previous: ListItemElement.Appearance?) {}
 }

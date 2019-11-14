@@ -21,95 +21,65 @@ public final class DemosRootViewController : UIViewController
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    var itemAppearance : DemoElement.Appearance {
-        return DemoElement.Appearance { label in
-            label.numberOfLines = 0
-            label.font = .systemFont(ofSize: 16.0, weight: .regular)
-        }
-    }
-    
-    var headerAppearance : HeaderElement.Appearance {
-        return HeaderElement.Appearance { label in
-            label.font = .systemFont(ofSize: 18.0, weight: .bold)
-        }
-    }
-    
-    var footerAppearance : FooterElement.Appearance {
-        return FooterElement.Appearance { label in
-            label.textColor = .darkGray
-            label.numberOfLines = 0
-            label.font = .systemFont(ofSize: 14.0, weight: .regular)
-            label.textAlignment = .center
-        }
-    }
-    
     override public func loadView()
     {        
         self.title = "Demos"
         
         self.view = self.listView
         
-        self.listView.appearance = defaultAppearance
+        self.listView.appearance = demoAppearance
         
         self.listView.setContent { list in
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: HeaderElement(title: "Collection Views"),
-                    appearance: self.headerAppearance
+                    with: DemoHeader(title: "Collection Views")
                 )
                 
                 section += Item(
-                    with: TitleElement(title: "Basic Demo"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Basic Demo"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(CollectionViewBasicDemoViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "Blueprint Integration"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Blueprint Integration"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(BlueprintListDemoViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "Itemization Editor"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Itemization Editor"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(ItemizationEditorViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "English Dictionary Search"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "English Dictionary Search"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(CollectionViewDictionaryDemoViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "Keyboard Testing"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Keyboard Testing"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "Horizontal Layout"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Horizontal Layout"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(HorizontalLayoutViewController())
                 })
                 
                 section += Item(
-                    with: TitleElement(title: "Width Customization"),
-                    appearance: self.itemAppearance,
+                    with: DemoItem(text: "Width Customization"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(WidthCustomizationViewController())
@@ -119,20 +89,3 @@ public final class DemosRootViewController : UIViewController
     }
 }
 
-struct TitleElement : ItemElement, Equatable
-{
-    var title : String
-
-    // ItemElement
-    
-    typealias Appearance = ItemAppearance<UILabel>
-    
-    var identifier: Identifier<TitleElement> {
-        return .init(self.title)
-    }
-    
-    func apply(to view: Appearance.View, with state : ItemState, reason: ApplyReason)
-    {
-        view.content.text = self.title
-    }
-}

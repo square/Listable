@@ -10,7 +10,7 @@ import UIKit
 
 final class SupplementaryItemView<Element:HeaderFooterElement> : UICollectionReusableView
 {
-    let content : Element.Appearance.View
+    let content : Element.Appearance.ContentView
     
     var appearance : Element.Appearance? = nil
     
@@ -31,15 +31,15 @@ final class SupplementaryItemView<Element:HeaderFooterElement> : UICollectionReu
     
     // MARK: UIView
     
+    override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        return self.content.sizeThatFits(size)
+    }
+    
     override func layoutSubviews()
     {
         super.layoutSubviews()
         
         self.content.frame = self.bounds
-    }
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        return self.content.sizeThatFits(size)
     }
 }

@@ -8,6 +8,9 @@
 
 import UIKit
 import Listable
+import BlueprintLists
+import BlueprintUI
+import BlueprintUICommonControls
 
 
 final class KeyboardTestingViewController : UIViewController
@@ -22,20 +25,20 @@ final class KeyboardTestingViewController : UIViewController
         
         self.listView.setContent { list in
             list += Section(identifier: "section") { section in
-                section += Item(with: TextField(content: "Item 1"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 2"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 3"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 4"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 5"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 6"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 7"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 8"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 9"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 10"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 11"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 12"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 13"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
-                section += Item(with: TextField(content: "Item 14"), appearance: TextFieldAppearance(), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 1"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 2"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 3"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 4"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 5"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 6"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 7"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 8"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 9"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 10"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 11"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 12"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 13"), sizing: .fixed(100.0))
+                section += Item(with: TextFieldElement(content: "Item 14"), sizing: .fixed(100.0))
             }
         }
         
@@ -48,57 +51,24 @@ final class KeyboardTestingViewController : UIViewController
     }
 }
 
-struct TextField : ItemElement
+struct TextFieldElement : BlueprintItemElement, Equatable
 {
     var content : String
     
-    // MARK: ItemElement
+    // MARK: BlueprintItemElement
     
-    typealias Appearance = TextFieldAppearance
-    
-    var identifier: Identifier<TextField> {
+    var identifier: Identifier<TextFieldElement> {
         return .init(self.content)
     }
     
-    func wasUpdated(comparedTo other: TextField) -> Bool
+    func element(with state: ItemState) -> Element
     {
-        return self.content != other.content
-    }
-    
-    func apply(to view: ItemElementView<UITextField, UIView, UIView>, with state: ItemState, reason: ApplyReason)
-    {
-        view.content.text = self.content
-    }
-}
-
-struct TextFieldAppearance : ItemElementAppearance
-{
-    // MARK: ItemElementAppearance
-    
-    typealias ContentView = UITextField
-    typealias BackgroundView = UIView
-    typealias SelectedBackgroundView = UIView
-    
-    static func createReusableItemView(frame: CGRect) -> ItemElementView<UITextField, UIView, UIView>
-    {
-        return ItemElementView(content: UITextField(frame: frame), background: UIView(), selectedBackground: UIView())
-    }
-    
-    func update(view: ItemElementView<UITextField, UIView, UIView>, with position: ItemPosition)
-    {
+        let textField = TextField(text: self.content)
         
-    }
-    
-    func apply(to view: ItemElementView<UITextField, UIView, UIView>, with state: ItemState, previous: TextFieldAppearance?)
-    {
-        view.contentInset = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
-        view.backgroundColor = .init(white: 0.97, alpha: 1.0)
-        
-        view.content.font = .systemFont(ofSize: 24.0, weight: .semibold)
-    }
-    
-    func wasUpdated(comparedTo other: TextFieldAppearance) -> Bool
-    {
-        return false
+        return Box(
+            backgroundColor: .init(white: 0.97, alpha: 1.0),
+            cornerStyle: .square,
+            wrapping: Inset(uniformInset: 20.0, wrapping: textField)
+        )
     }
 }

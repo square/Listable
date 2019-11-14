@@ -48,7 +48,7 @@ public protocol ItemElement
      
      Do not retain a reference to the passed in views – they are reused by the list.
      */
-    func apply(to view : Appearance.View, with state : ItemState, reason: ApplyReason)
+    func apply(to view : Appearance.ContentView, with state : ItemState, reason: ApplyReason)
     
     //
     // MARK: Tracking Changes
@@ -106,13 +106,6 @@ public protocol ItemElementAppearance
     /// The type of the content view of the element.
     /// The content view is drawn at the top of the view hierarchy, above everything else,
     associatedtype ContentView:UIView
-    /// The background view displayed behind the content view of the element.
-    associatedtype BackgroundView:UIView
-    /// The selected background view, which is displayed when the element is selected.
-    associatedtype SelectedBackgroundView:UIView
-    
-    /// A struct representing all the views of the element.
-    typealias View = ItemElementView<ContentView, BackgroundView, SelectedBackgroundView>
     
     /**
      Create and return a new set of views to be used to render the element.
@@ -122,7 +115,7 @@ public protocol ItemElementAppearance
      Do not do configuration in this method that will be changed by your app's theme or appearance – instead
      do that work in apply(to:), so the appearance will be updated if the appearance of elements changes.
      */
-    static func createReusableItemView(frame : CGRect) -> View
+    static func createReusableItemView(frame : CGRect) -> ContentView
     
     //
     // MARK: Updating View State
@@ -133,14 +126,14 @@ public protocol ItemElementAppearance
      
      If you are drawing dividers or borders on cells, use this method as a change to update those borders or dividers.
      */
-    func update(view : View, with position : ItemPosition)
+    func update(view : ContentView, with position : ItemPosition)
     
     /**
      Called to apply the appearance to a given set of views before they are displayed on screen.
      
      Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
-    func apply(to view : View, with state : ItemState, previous : Self?)
+    func apply(to view : ContentView, with state : ItemState, previous : Self?)
     
     func wasUpdated(comparedTo other : Self) -> Bool
 }
@@ -154,61 +147,4 @@ public extension ItemElementAppearance where Self:Equatable
     }
 }
 
-public final class ItemElementView<Content:UIView, Background:UIView, SelectedBackground:UIView> : UIView
-{
-    //
-    // MARK: Public Properties
-    //
-    
-    public let content : Content
-    public let background : Background
-    public let selectedBackground : SelectedBackground
-    
-    public var contentInset : UIEdgeInsets = .zero {
-        didSet {
-            guard oldValue != self.contentInset else { return }
-            
-            self.setNeedsLayout()
-        }
-    }
-        
-    //
-    // MARK: Initialization
-    //
-    
-    public init(content : Content, background : Background, selectedBackground : SelectedBackground)
-    {
-        self.content = content
-        self.background = background
-        self.selectedBackground = selectedBackground
-                
-        super.init(frame: .zero)
-        
-        self.addSubview(self.content)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
-        
-    //
-    // MARK: UIView
-    //
- 
-    public override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        let insetWidth = size.width - (self.contentInset.left + self.contentInset.right)
-        let fittedSize = self.content.sizeThatFits(.init(width: insetWidth, height: size.height))
-        
-        var totalHeight = fittedSize.height
-        totalHeight += self.contentInset.top
-        totalHeight += self.contentInset.bottom
-        
-        return CGSize(width: size.width, height: totalHeight)
-    }
-    
-    public override func layoutSubviews()
-    {
-        self.content.frame = self.bounds.inset(by: self.contentInset)
-    }
-}
 

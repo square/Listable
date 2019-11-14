@@ -62,11 +62,11 @@ public extension Listable.HeaderFooter where Element : BlueprintHeaderFooterElem
 
 public extension BlueprintHeaderFooterElement
 {
-    func apply(to view: Appearance.View, reason: ApplyReason)
+    func apply(to view: Appearance.ContentView, reason: ApplyReason)
     {
-        view.content.element = self.element
+        view.element = self.element
         
-        view.content.backgroundColor = .clear
+        view.backgroundColor = .clear
     }
 }
 
@@ -78,14 +78,13 @@ public struct BlueprintHeaderFooterElementAppearance : HeaderFooterElementAppear
     //
     
     public typealias ContentView = BlueprintView
-    public typealias BackgroundView = UIView
     
-    public static func createReusableHeaderFooterView(frame: CGRect) -> View
+    public static func createReusableHeaderFooterView(frame: CGRect) -> ContentView
     {
-        return HeaderFooterElementView(content: BlueprintView(frame: frame), background: UIView())
+        return BlueprintView(frame: frame)
     }
     
-    public func apply(to view: View, previous: BlueprintHeaderFooterElementAppearance?) {}
+    public func apply(to view: ContentView, previous: BlueprintHeaderFooterElementAppearance?) {}
     
     public func wasUpdated(comparedTo other: BlueprintHeaderFooterElementAppearance) -> Bool
     {

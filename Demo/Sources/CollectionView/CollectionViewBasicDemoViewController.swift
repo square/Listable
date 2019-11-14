@@ -12,15 +12,15 @@ import Listable
 
 final class CollectionViewBasicDemoViewController : UIViewController
 {
-    var rows : [[DemoElement]] = [
+    var rows : [[DemoItem]] = [
         [
-            DemoElement(text: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
-            DemoElement(text: "Row 2"),
+            DemoItem(text: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
+            DemoItem(text: "Row 2"),
         ],
         [
-            DemoElement(text: "Row 1"),
-            DemoElement(text: "Row 2"),
-            DemoElement(text: "Row 3"),
+            DemoItem(text: "Row 1"),
+            DemoItem(text: "Row 2"),
+            DemoItem(text: "Row 3"),
         ],
         ]
     
@@ -38,31 +38,9 @@ final class CollectionViewBasicDemoViewController : UIViewController
         self.updateTable(animated: false)
     }
     
-    var itemAppearance : DemoElement.Appearance {
-        return DemoElement.Appearance { label in
-            label.numberOfLines = 0
-            label.font = .systemFont(ofSize: 16.0, weight: .regular)
-        }
-    }
-    
-    var headerAppearance : HeaderElement.Appearance {
-        return HeaderElement.Appearance { label in
-            label.font = .systemFont(ofSize: 18.0, weight: .bold)
-        }
-    }
-    
-    var footerAppearance : FooterElement.Appearance {
-        return FooterElement.Appearance { label in
-            label.textColor = .darkGray
-            label.numberOfLines = 0
-            label.font = .systemFont(ofSize: 14.0, weight: .regular)
-            label.textAlignment = .center
-        }
-    }
-    
     func updateTable(animated : Bool)
     {
-        listView.appearance = defaultAppearance
+        listView.appearance = demoAppearance
         
         listView.setContent(animated: animated) { list in
             
@@ -71,21 +49,16 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.columns = .init(count: 2, spacing: 10.0)
                      
-                    section.header = HeaderFooter(
-                        with: HeaderElement(title: "Section Header"),
-                        appearance: self.headerAppearance
-                    )
+                    section.header = HeaderFooter(with: DemoHeader(title: "Section Header"))
                     
                     section.footer = HeaderFooter(
-                        with: FooterElement(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        appearance: self.footerAppearance,
+                        with: DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
                         sizing: .thatFits(.noConstraint)
                     )
                     
                     section += sectionRows.map { row in
                         Item(
                             with: row,
-                            appearance: self.itemAppearance,
                             sizing: .thatFits(.atLeast(.default))
                         )
                     }
@@ -96,8 +69,8 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     @objc func addItem()
     {
-        self.rows[0].insert(DemoElement(text: Date().description), at: 0)
-        self.rows[1].insert(DemoElement(text: Date().description), at: 0)
+        self.rows[0].insert(DemoItem(text: Date().description), at: 0)
+        self.rows[1].insert(DemoItem(text: Date().description), at: 0)
         
         self.updateTable(animated: true)
     }
@@ -113,52 +86,5 @@ final class CollectionViewBasicDemoViewController : UIViewController
         }
         
         self.updateTable(animated: true)
-    }
-}
-
-
-struct HeaderElement : HeaderFooterElement, Equatable
-{
-    var title : String
-    
-    // HeaderFooterElement
-    
-    typealias Appearance = HeaderAppearance<UILabel>
-    
-    func apply(to views: HeaderFooterElementView<UILabel, UIView>, reason: ApplyReason)
-    {
-        views.content.text = self.title
-    }
-}
-
-struct FooterElement : HeaderFooterElement, Equatable
-{
-    var text : String
-    
-    // HeaderFooterElement
-    
-    typealias Appearance = FooterAppearance<UILabel>
-    
-    func apply(to views: HeaderFooterElementView<UILabel, UIView>, reason: ApplyReason)
-    {
-        views.content.text = self.text
-    }
-}
-
-struct DemoElement : ItemElement, Equatable
-{
-    var text : String
-
-    // ItemElement
-    
-    typealias Appearance = ItemAppearance<UILabel>
-    
-    var identifier: Identifier<DemoElement> {
-        return .init(self.text)
-    }
-    
-    func apply(to view: Appearance.View, with state : ItemState, reason: ApplyReason)
-    {
-        view.content.text = self.text
     }
 }
