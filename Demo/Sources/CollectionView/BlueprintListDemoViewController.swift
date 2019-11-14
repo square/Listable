@@ -50,7 +50,7 @@ struct PodcastRow : BlueprintItemElement, Equatable
         return .init(self.podcast.name)
     }
 
-    func element(with state: ItemState) -> Element
+    func element(with info : ApplyItemElementInfo) -> Element
     {
         return Inset(uniformInset: 10.0, wrapping: Row { row in
             row.horizontalUnderflow = .growUniformly

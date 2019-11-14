@@ -20,7 +20,7 @@ public struct List : BlueprintUI.Element
         
     public init(build : ListDescription.Build)
     {
-        self.listDescription = ListDescription(build: build)
+        self.listDescription = ListDescription(appearance: .init(), behavior: .init(), scrollInsets: .init(), build: build)
     }
     
     //

@@ -48,7 +48,7 @@ public protocol ItemElement
      
      Do not retain a reference to the passed in views – they are reused by the list.
      */
-    func apply(to view : Appearance.ContentView, with state : ItemState, reason: ApplyReason)
+    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
     
     //
     // MARK: Tracking Changes
@@ -98,7 +98,13 @@ public extension ItemElement where Self:Equatable
  when the appearance of an element changes, versus on each display.
  */
 public protocol ItemElementAppearance
-{    
+{
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
+    
     //
     // MARK: Creating & Providing Views
     //
@@ -133,9 +139,7 @@ public protocol ItemElementAppearance
      
      Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
-    func apply(to view : ContentView, with state : ItemState, previous : Self?)
-    
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func apply(to view : ContentView, with info : ApplyItemElementInfo)
 }
 
 
@@ -147,4 +151,10 @@ public extension ItemElementAppearance where Self:Equatable
     }
 }
 
+
+public struct ApplyItemElementInfo
+{
+    public var state : ItemState
+    public var reordering : ReorderingActions
+}
 

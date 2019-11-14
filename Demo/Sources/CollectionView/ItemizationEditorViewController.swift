@@ -208,7 +208,7 @@ struct ChoiceItem : BlueprintItemElement, Equatable
     
     // MARK: BlueprintItemElement
     
-    func element(with state: ItemState) -> Element
+    func element(with info: ApplyItemElementInfo) -> Element
     {
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),
@@ -226,7 +226,7 @@ struct ChoiceItem : BlueprintItemElement, Equatable
             })
         )
         
-        if state.isSelected {
+        if info.state.isSelected {
             box.backgroundColor = UIColor(white: 0.90, alpha: 1.0)
             box.borderStyle = .solid(color: .init(white: 0.6, alpha: 1.0), width: 2.0)
             box.shadowStyle = .simple(radius: 2.0, opacity: 0.25, offset: .init(width: 0, height: 1.0), color: .black)
@@ -257,7 +257,8 @@ struct ToggleItem : BlueprintItemElement
     
     var onToggle : (Bool) -> ()
     
-    func wasUpdated(comparedTo other: ToggleItem) -> Bool {
+    func wasUpdated(comparedTo other: ToggleItem) -> Bool
+    {
         return self.content != other.content
     }
     
@@ -265,7 +266,7 @@ struct ToggleItem : BlueprintItemElement
         return .init(self.content.title)
     }
     
-    func element(with state: ItemState) -> Element
+    func element(with info: ApplyItemElementInfo) -> Element
     {
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),

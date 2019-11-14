@@ -20,7 +20,7 @@ public protocol BlueprintItemElement : ItemElement where Appearance == Blueprint
     // MARK: Creating Blueprint Element Representations (Required)
     //
     
-    func element(with state : ItemState) -> BlueprintUI.Element
+    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
 }
 
 
@@ -47,6 +47,7 @@ public extension Listable.Item where Element : BlueprintItemElement
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
+        reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
         onSelect : OnSelect? = nil,
@@ -60,6 +61,7 @@ public extension Listable.Item where Element : BlueprintItemElement
             layout: layout,
             selection: selection,
             swipeActions: swipeActions,
+            reordering: reordering,
             bind: bind,
             onDisplay: onDisplay,
             onSelect: onSelect,
@@ -79,9 +81,9 @@ public extension BlueprintItemElement
     // MARK: ItemElement
     //
     
-    func apply(to view: Appearance.ContentView, with state : ItemState, reason: ApplyReason)
-    {        
-        view.element = self.element(with: state)
+    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
+    {
+        view.element = self.element(with: info)
     }
 }
 
@@ -96,13 +98,16 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
     
     public static func createReusableItemView(frame: CGRect) -> ContentView
     {
-        return BlueprintView(frame: frame)
+        let view = BlueprintView(frame: frame)
+        view.backgroundColor = .clear
+        
+        return view
     }
     
     public func update(view: BlueprintView, with position: ItemPosition) {}
     
-    public func apply(to view: BlueprintView, with state : ItemState, previous: BlueprintItemElementAppearance?) {}
-    
+    public func apply(to view: BlueprintView, with info: ApplyItemElementInfo) {}
+
     public func wasUpdated(comparedTo other: BlueprintItemElementAppearance) -> Bool
     {
         return false

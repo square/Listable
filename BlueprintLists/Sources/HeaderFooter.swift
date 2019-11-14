@@ -65,8 +65,6 @@ public extension BlueprintHeaderFooterElement
     func apply(to view: Appearance.ContentView, reason: ApplyReason)
     {
         view.element = self.element
-        
-        view.backgroundColor = .clear
     }
 }
 
@@ -81,10 +79,13 @@ public struct BlueprintHeaderFooterElementAppearance : HeaderFooterElementAppear
     
     public static func createReusableHeaderFooterView(frame: CGRect) -> ContentView
     {
-        return BlueprintView(frame: frame)
+        let view = BlueprintView(frame: frame)
+        view.backgroundColor = .clear
+        
+        return view
     }
     
-    public func apply(to view: ContentView, previous: BlueprintHeaderFooterElementAppearance?) {}
+    public func apply(to view: ContentView) {}
     
     public func wasUpdated(comparedTo other: BlueprintHeaderFooterElementAppearance) -> Bool
     {

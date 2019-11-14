@@ -11,9 +11,7 @@ import UIKit
 final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
 {
     let content : Element.Appearance.ContentView
-    
-    var appearance : Element.Appearance? = nil
-    
+        
     override init(frame: CGRect)
     {
         self.content = Element.Appearance.createReusableItemView(frame: frame)

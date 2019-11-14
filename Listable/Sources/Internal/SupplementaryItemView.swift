@@ -11,9 +11,7 @@ import UIKit
 final class SupplementaryItemView<Element:HeaderFooterElement> : UICollectionReusableView
 {
     let content : Element.Appearance.ContentView
-    
-    var appearance : Element.Appearance? = nil
-    
+        
     override init(frame: CGRect)
     {
         self.content = Element.Appearance.createReusableHeaderFooterView(frame: frame)

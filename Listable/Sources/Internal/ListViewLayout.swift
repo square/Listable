@@ -105,7 +105,7 @@ class ListViewLayout : UICollectionViewLayout
     
     func invalidateEntireLayout()
     {
-        self.neededLayoutType = .fullLayout
+        self.neededLayoutType = .requeryDataSourceCounts
     }
     
     private(set) var shouldAskForItemSizesDuringLayoutInvalidation : Bool = false
@@ -136,7 +136,31 @@ class ListViewLayout : UICollectionViewLayout
         
         super.invalidateLayout(with: context)
         
+        // Handle Moved Items
+        
+        if
+            let from = context.previousIndexPathsForInteractivelyMovingItems,
+            let to = context.targetIndexPathsForInteractivelyMovingItems
+        {
+            let from = from[0]
+            let to = to[0]
+            
+            let item = self.layoutResult.item(at: from)
+            item.liveIndexPath = to
+                    
+            self.layoutResult.move(from: from, to: to)
+            
+            if from != to {
+                context.performedInteractiveMove = true
+                self.layoutResult.reindexLiveIndexPaths()
+            }
+        }
+        
+        // Handle View Width Changing
+        
         context.widthChanged = self.layoutResult.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+        
+        // Update Needed Layout Type
                 
         self.neededLayoutType.merge(with: context)
     }
@@ -150,6 +174,24 @@ class ListViewLayout : UICollectionViewLayout
         return context
     }
     
+    override func invalidationContextForEndingInteractiveMovementOfItems(
+        toFinalIndexPaths indexPaths: [IndexPath],
+        previousIndexPaths: [IndexPath],
+        movementCancelled: Bool
+    ) -> UICollectionViewLayoutInvalidationContext
+    {
+        precondition(movementCancelled == false, "Cancelling moves is currently not supported.")
+        
+        self.layoutResult.reindexLiveIndexPaths()
+        self.layoutResult.reindexDelegateProvidedIndexPaths()
+                                
+        return super.invalidationContextForEndingInteractiveMovementOfItems(
+            toFinalIndexPaths: indexPaths,
+            previousIndexPaths: previousIndexPaths,
+            movementCancelled: movementCancelled
+        )
+    }
+    
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool
     {
         return true
@@ -159,6 +201,8 @@ class ListViewLayout : UICollectionViewLayout
     {
         var updateHeaders : Bool = false
         var widthChanged : Bool = false
+        
+        var performedInteractiveMove : Bool = false
     }
     
     //
@@ -168,27 +212,28 @@ class ListViewLayout : UICollectionViewLayout
     private enum NeededLayoutType {
         case none
         case updateHeaders
-        case fullLayout
+        case relayout
+        case requeryDataSourceCounts
         
         mutating func merge(with context : UICollectionViewLayoutInvalidationContext)
         {
             let context = context as! InvalidationContext
-                        
-            let needsFullLayout : Bool = context.invalidateEverything || context.invalidateDataSourceCounts || context.widthChanged
             
-            switch self {
-            case .none:
-                if needsFullLayout {
-                    self = .fullLayout
-                } else if context.updateHeaders {
-                    self = .updateHeaders
+            let requeryDataSourceCounts = context.invalidateEverything || context.invalidateDataSourceCounts
+            let needsRelayout = context.widthChanged || context.performedInteractiveMove
+            
+            if requeryDataSourceCounts {
+                self = .requeryDataSourceCounts
+            } else if needsRelayout {
+                switch self {
+                case .none, .updateHeaders: self = .relayout
+                case .relayout, .requeryDataSourceCounts: break
                 }
-            case .updateHeaders:
-                if needsFullLayout {
-                    self = .fullLayout
+            } else if context.updateHeaders {
+                switch self {
+                case .none: self = .updateHeaders
+                case .updateHeaders, .relayout, .requeryDataSourceCounts: break
                 }
-                
-            case .fullLayout: break
             }
         }
         
@@ -200,7 +245,7 @@ class ListViewLayout : UICollectionViewLayout
         }
     }
     
-    private var neededLayoutType : NeededLayoutType = .fullLayout
+    private var neededLayoutType : NeededLayoutType = .requeryDataSourceCounts
         
     override func prepare()
     {
@@ -212,7 +257,8 @@ class ListViewLayout : UICollectionViewLayout
             switch self.neededLayoutType {
             case .none: return true
             case .updateHeaders: return self.performHeaderLayout()
-            case .fullLayout: return self.performFullLayout()
+            case .relayout: return self.performRelayout()
+            case .requeryDataSourceCounts: return self.performRequeryDataSourceCountsAndLayout()
             }
         }())
     }
@@ -241,12 +287,18 @@ class ListViewLayout : UICollectionViewLayout
     
     private func performHeaderLayout() -> Bool
     {
-        self.previousLayoutResult = self.layoutResult
-        
         return self.layoutResult.updateHeaders(in: self.collectionView!)
     }
     
-    private func performFullLayout() -> Bool
+    private func performRelayout() -> Bool
+    {
+        return self.layoutResult.layout(
+            delegate: self.delegate,
+            in: self.collectionView!
+        )
+    }
+    
+    private func performRequeryDataSourceCountsAndLayout() -> Bool
     {
         self.previousLayoutResult = self.layoutResult
         
@@ -274,17 +326,17 @@ class ListViewLayout : UICollectionViewLayout
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layoutResult.elements(in: rect)
+        return self.layoutResult.layoutAttributes(in: rect)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutResult.element(at: indexPath)
+        return self.layoutResult.layoutAttributes(at: indexPath)
     }
     
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutResult.supplementaryElement(of: elementKind, at: indexPath)
+        return self.layoutResult.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
     }
     
     //
@@ -296,7 +348,7 @@ class ListViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layoutResult.element(at: itemIndexPath)
+            let attributes = self.layoutResult.layoutAttributes(at: itemIndexPath)
             
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -312,7 +364,7 @@ class ListViewLayout : UICollectionViewLayout
         let wasDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
 
         if wasDeleted {
-            let attributes = self.previousLayoutResult.element(at: itemIndexPath)
+            let attributes = self.previousLayoutResult.layoutAttributes(at: itemIndexPath)
 
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -321,6 +373,20 @@ class ListViewLayout : UICollectionViewLayout
         } else {
             return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
         }
+    }
+    
+    //
+    // MARK: UICollectionViewLayout Methods: Moving Items
+    //
+    
+    override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
+    {
+        let defaultAttributes = self.layoutResult.layoutAttributes(at: indexPath)
+        let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
+        
+        attributes.center.x = defaultAttributes.center.x
+        
+        return attributes
     }
 }
 
@@ -376,7 +442,7 @@ internal extension ListViewLayout
         let header : SupplementaryItemLayoutInfo?
         let footer : SupplementaryItemLayoutInfo?
         
-        let sections : [SectionLayoutInfo]
+        private(set) var sections : [SectionLayoutInfo]
         
         //
         // MARK: Initialization
@@ -458,9 +524,13 @@ internal extension ListViewLayout
                     }(),
                     columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
                     items: itemCount.mapEach { itemIndex in
-                        ItemLayoutInfo(
+                        let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                        
+                        return ItemLayoutInfo(
+                            delegateProvidedIndexPath: indexPath,
+                            liveIndexPath: indexPath,
                             direction: layoutDirection,
-                            layout: delegate.layoutForItem(at: IndexPath(item: itemIndex, section: sectionIndex), in: collectionView)
+                            layout: delegate.layoutForItem(at: indexPath, in: collectionView)
                         )
                     }
                 )
@@ -471,7 +541,7 @@ internal extension ListViewLayout
         // MARK: Fetching Elements
         //
         
-        func elements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
+        func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
         {
             var attributes = [UICollectionViewLayoutAttributes]()
                         
@@ -493,10 +563,9 @@ internal extension ListViewLayout
                     }
                 }
                 
-                for (itemIndex, item) in section.items.enumerated() {
+                for item in section.items {
                     if rect.intersects(item.frame) {
-                        let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                        attributes.append(item.layoutAttributes(with: indexPath))
+                        attributes.append(item.layoutAttributes(with: item.liveIndexPath))
                     }
                 }
                 
@@ -516,14 +585,19 @@ internal extension ListViewLayout
             return attributes
         }
         
-        func element(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+        func item(at indexPath : IndexPath) -> ItemLayoutInfo
         {
-            let item = self.sections[indexPath.section].items[indexPath.item]
+            return self.sections[indexPath.section].items[indexPath.item]
+        }
+        
+        func layoutAttributes(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+        {
+            let item = self.item(at: indexPath)
             
             return item.layoutAttributes(with: indexPath)
         }
         
-        func supplementaryElement(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
+        func supplementaryLayoutAttributes(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
         {
             let section = self.sections[indexPath.section]
 
@@ -539,6 +613,36 @@ internal extension ListViewLayout
         //
         // MARK: Peforming Layouts
         //
+        
+        func reindexLiveIndexPaths()
+        {
+            self.sections.forEachWithIndex { sectionIndex, _, section in
+                section.items.forEachWithIndex { itemIndex, _, item in
+                    item.liveIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        func reindexDelegateProvidedIndexPaths()
+        {
+            self.sections.forEachWithIndex { sectionIndex, _, section in
+                section.items.forEachWithIndex { itemIndex, _, item in
+                    item.delegateProvidedIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                }
+            }
+        }
+        
+        func move(from : IndexPath, to : IndexPath)
+        {
+            guard from != to else {
+                return
+            }
+            
+            let info = self.item(at: from)
+            
+            self.sections[from.section].items.remove(at: from.item)
+            self.sections[to.section].items.insert(info, at: to.item)
+        }
         
         func shouldInvalidateLayoutFor(newCollectionViewSize : CGSize) -> Bool
         {
@@ -666,7 +770,7 @@ internal extension ListViewLayout
                 
                 if section.columns.count == 1 {
                     section.items.forEachWithIndex { itemIndex, isLast, item in
-                        let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                        let indexPath = item.liveIndexPath
                         
                         let width = item.layout.width.merge(with: section.layout.width)
                         let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: self.layoutDirection)
@@ -698,7 +802,7 @@ internal extension ListViewLayout
                             item.value.x = columnXOrigin
                             item.value.y = lastContentMaxY
                             
-                            let indexPath = IndexPath(item: item.index, section: sectionIndex)
+                            let indexPath = item.value.liveIndexPath
                             let height = delegate.heightForItem(at: indexPath, in: collectionView, width: itemWidth, layoutDirection: self.layoutDirection)
                             
                             item.value.size = self.layoutDirection.size(width: itemWidth, height: height)
@@ -796,7 +900,7 @@ internal extension ListViewLayout
         
         let columns : Section.Columns
         
-        let items : [ItemLayoutInfo]
+        var items : [ItemLayoutInfo]
         
         var size : CGSize = .zero
         var x : CGFloat = .zero
@@ -876,6 +980,9 @@ internal extension ListViewLayout
     
     final class ItemLayoutInfo
     {
+        var delegateProvidedIndexPath : IndexPath
+        var liveIndexPath : IndexPath
+        
         let direction : LayoutDirection
         let layout : ItemLayout
         
@@ -890,8 +997,16 @@ internal extension ListViewLayout
             )
         }
         
-        init(direction : LayoutDirection, layout : ItemLayout)
+        init(
+            delegateProvidedIndexPath : IndexPath,
+            liveIndexPath : IndexPath,
+            direction : LayoutDirection,
+            layout : ItemLayout
+        )
         {
+            self.delegateProvidedIndexPath = delegateProvidedIndexPath
+            self.liveIndexPath = liveIndexPath
+            
             self.direction = direction
             self.layout = layout
         }
@@ -958,10 +1073,6 @@ fileprivate struct UpdateItems : Equatable
     
     let insertedItems : Set<InsertItem>
     let deletedItems : Set<DeleteItem>
-    let movedItems : Set<MoveItem>
-    
-    let reloadedItems : Set<OverlappingItem>
-    let noneItems : Set<OverlappingItem>
     
     init(with updateItems : [UICollectionViewUpdateItem])
     {
@@ -970,10 +1081,6 @@ fileprivate struct UpdateItems : Equatable
 
        var insertedItems = Set<InsertItem>()
        var deletedItems = Set<DeleteItem>()
-       var movedItems = Set<MoveItem>()
-
-       var reloadedItems = Set<OverlappingItem>()
-       var noneItems = Set<OverlappingItem>()
 
        for item in updateItems {
             switch item.updateAction {
@@ -995,29 +1102,9 @@ fileprivate struct UpdateItems : Equatable
                     deletedItems.insert(.init(oldIndexPath: indexPath))
                 }
                 
-            case .move:
-                let oldIndexPath = item.indexPathBeforeUpdate!
-                let newIndexPath = item.indexPathAfterUpdate!
-                
-                let deleteItem = DeleteItem(oldIndexPath: oldIndexPath)
-                let insertItem = InsertItem(newIndexPath: newIndexPath)
-                
-                deletedItems.insert(deleteItem)
-                insertedItems.insert(insertItem)
-                
-                movedItems.insert(.init(deleteItem: deleteItem, insertItem: insertItem))
-                
-            case .reload:
-                let oldIndexPath = item.indexPathBeforeUpdate!
-                let newIndexPath = item.indexPathAfterUpdate!
-                
-                reloadedItems.insert(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
-                
-            case .none:
-                let oldIndexPath = item.indexPathBeforeUpdate!
-                let newIndexPath = item.indexPathAfterUpdate!
-                
-                noneItems.insert(.init(oldIndexPath: oldIndexPath, newIndexPath: newIndexPath))
+            case .move: break
+            case .reload: break
+            case .none: break
                 
             @unknown default: fatalError()
             }
@@ -1028,9 +1115,6 @@ fileprivate struct UpdateItems : Equatable
         
         self.insertedItems = insertedItems
         self.deletedItems = deletedItems
-        self.movedItems = movedItems
-        self.reloadedItems = reloadedItems
-        self.noneItems = noneItems
     }
     
     struct InsertSection : Hashable
@@ -1051,18 +1135,6 @@ fileprivate struct UpdateItems : Equatable
     struct DeleteItem : Hashable
     {
         var oldIndexPath : IndexPath
-    }
-    
-    struct MoveItem : Hashable
-    {
-        var deleteItem : DeleteItem
-        var insertItem : InsertItem
-    }
-    
-    struct OverlappingItem : Hashable
-    {
-        var oldIndexPath : IndexPath
-        var newIndexPath : IndexPath
     }
 }
 

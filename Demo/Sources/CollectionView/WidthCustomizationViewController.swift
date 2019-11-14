@@ -119,7 +119,7 @@ fileprivate struct CardElement : BlueprintItemElement, Equatable
         return .init(self.title)
     }
     
-    func element(with state: ItemState) -> Element
+    func element(with info : ApplyItemElementInfo) -> Element
     {
         return Box(
             backgroundColor: self.color,

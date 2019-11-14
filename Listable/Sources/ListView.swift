@@ -18,6 +18,7 @@ public final class ListView : UIView
     {
         self.appearance = appearance
         
+        self.behavior = Behavior()
         self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
         
         self.storage = Storage()
@@ -44,7 +45,9 @@ public final class ListView : UIView
         
         super.init(frame: frame)
         
-        self.storage.presentationState.view = self.collectionView
+        self.storage.presentationState.listView = self
+        self.storage.presentationState.collectionView = self.collectionView
+        
         self.dataSource.view = self
         self.delegate.view = self
         
@@ -95,6 +98,21 @@ public final class ListView : UIView
         self.backgroundColor = self.appearance.backgroundColor
         
         self.storage.presentationState.resetAllCachedHeights()
+    }
+    
+    public var behavior : Behavior {
+        didSet {
+            guard oldValue != self.behavior else {
+                return
+            }
+            
+            self.applyBehavior()
+        }
+    }
+    
+    private func applyBehavior()
+    {
+        // Nothing right now.
     }
     
     public var scrollInsets : ScrollInsets {
@@ -184,7 +202,7 @@ public final class ListView : UIView
     
     public func setContent(animated : Bool = false, _ builder : ListDescription.Build)
     {
-        let description = ListDescription(appearance: self.appearance, build: builder)
+        let description = ListDescription(appearance: self.appearance, behavior: self.behavior, scrollInsets: self.scrollInsets, build: builder)
         
         self.setProperties(with: description, animated: animated)
     }
@@ -229,6 +247,7 @@ public final class ListView : UIView
     public func setProperties(with description : ListDescription, animated: Bool = false)
     {
         self.appearance = description.appearance
+        self.behavior = description.behavior
         self.setContent(animated: animated, description.content)
         self.scrollInsets = description.scrollInsets
     }
@@ -576,6 +595,31 @@ public final class ListView : UIView
             )
         )
     }
+    
+    //
+    // MARK: Moving Items
+    //
+    
+    internal func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
+    {
+        guard let indexPath = self.storage.presentationState.indexPath(for: item) else {
+            return false
+        }
+        
+        return self.collectionView.beginInteractiveMovementForItem(at: indexPath)
+    }
+    
+    internal func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
+    {
+        let position = recognizer.location(in: self.collectionView)
+        
+        self.collectionView.updateInteractiveMovementTargetPosition(position)
+    }
+    
+    internal func endInteractiveMovement()
+    {
+        self.collectionView.endInteractiveMovement()
+    }
 }
 
 
@@ -615,6 +659,12 @@ fileprivate extension ListView
         var allContent : Content = Content()
 
         let presentationState : PresentationState = PresentationState()
+        
+        func moveItem(from : IndexPath, to : IndexPath)
+        {
+            self.allContent.moveItem(from: from, to: to)
+            self.presentationState.moveItem(from: from, to: to)
+        }
         
         func remove(item itemToRemove : AnyPresentationItemState) -> IndexPath?
         {
@@ -693,12 +743,25 @@ fileprivate extension ListView
 
         func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
         {
-            return false
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.reordering != nil
         }
         
         func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
         {
+            let item = self.presentationState.item(at: destinationIndexPath)
+            
+            print("Moved item from \(sourceIndexPath) to \(destinationIndexPath)")
+            
             self.view.updateVisibleCellPositions()
+            
+            item.moved(with: Reordering.Result(
+                fromSection: self.presentationState.sections[sourceIndexPath.section].model,
+                fromIndexPath: sourceIndexPath,
+                toSection: self.presentationState.sections[destinationIndexPath.section].model,
+                toIndexPath: destinationIndexPath
+            ))
         }
     }
     
@@ -816,6 +879,29 @@ fileprivate extension ListView
             }
             
             item.didEndDisplay()
+        }
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath,
+            toProposedIndexPath proposedIndexPath: IndexPath
+            ) -> IndexPath
+        {
+            let item = self.presentationState.item(at: originalIndexPath)
+            
+            if originalIndexPath != proposedIndexPath {
+                // TODO: Validate
+                
+                if originalIndexPath.section == proposedIndexPath.section {
+                    self.view.storage.moveItem(from: originalIndexPath, to: proposedIndexPath)
+
+                    return proposedIndexPath
+                } else {
+                    return originalIndexPath
+                }
+            } else {
+                return proposedIndexPath
+            }
         }
         
         // MARK: ListViewLayoutDelegate
@@ -981,6 +1067,8 @@ fileprivate extension ListView
         {
             guard scrollView.bounds.size.height > 0 else { return }
             
+            // Updating Paged Content
+            
             let scrollingDown = self.lastPosition < scrollView.contentOffset.y
             
             self.lastPosition = scrollView.contentOffset.y
@@ -989,7 +1077,15 @@ fileprivate extension ListView
                 self.view.updatePresentationState(for: .scrolledDown)
             }
             
+            // Update Item Visibility
+            
             self.view.updateVisibleItemsAndSections()
+            
+            // Dismiss Keyboard
+            
+            if self.view.behavior.dismissesKeyboardOnScroll {
+                self.view.endEditing(true)
+            }
         }
     }
 }
