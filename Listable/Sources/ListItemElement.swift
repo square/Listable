@@ -38,7 +38,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     
     public func apply(to view: ContentView, with state: ItemState, reason: ApplyReason)
     {
-        view.setProperties(with: self.listDescription, animated: true)
+        view.setProperties(with: self.listDescription)
     }
     
     public func wasUpdated(comparedTo other: ListItemElement) -> Bool

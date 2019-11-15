@@ -20,7 +20,10 @@ public struct List : BlueprintUI.Element
         
     public init(build : ListDescription.Build)
     {
-        self.listDescription = ListDescription(build: build)
+        self.listDescription = ListDescription { list in
+            list.animated = (UIView.inheritedAnimationDuration > 0.0)
+            build(&list)
+        }
     }
     
     //
@@ -39,7 +42,7 @@ public struct List : BlueprintUI.Element
             }
             
             config.apply { listView in
-                listView.setProperties(with: self.listDescription, animated: true)
+                listView.setProperties(with: self.listDescription)
             }
         }
     }
