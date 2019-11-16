@@ -10,16 +10,19 @@ import Foundation
 
 public struct ListDescription
 {
+    public var animated : Bool
+    
     public var appearance : Appearance
     public var content : Content
-    
     public var scrollInsets : ScrollInsets
 
     public typealias Build = (inout ListDescription) -> ()
     
-    public init(appearance : Appearance = Appearance(), build : Build)
+    public init(build : Build)
     {
-        self.appearance = appearance
+        self.animated = true
+        
+        self.appearance = Appearance()
         self.content = Content()
         self.scrollInsets = ScrollInsets(top: nil, bottom: nil)
 
