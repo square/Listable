@@ -23,7 +23,13 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     {
         self.contentIdentifier = AnyHashable(identifier)
         
-        self.listDescription = ListDescription(appearance: .init(), behavior: .init(), scrollInsets: .init(), build: build)
+        self.listDescription = ListDescription(
+            animated: true,
+            appearance: .init(),
+            behavior: .init(),
+            scrollInsets: .init(),
+            build: build
+        )
     }
     
     //
@@ -38,7 +44,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     
     public func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
     {
-        view.setProperties(with: self.listDescription, animated: true)
+        view.setProperties(with: self.listDescription)
     }
     
     public func wasUpdated(comparedTo other: ListItemElement) -> Bool

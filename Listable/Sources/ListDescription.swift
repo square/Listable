@@ -10,6 +10,7 @@ import Foundation
 
 public struct ListDescription
 {
+    public var animated : Bool
     public var appearance : Appearance
     public var behavior : Behavior
     public var scrollInsets : ScrollInsets
@@ -19,12 +20,14 @@ public struct ListDescription
     public typealias Build = (inout ListDescription) -> ()
     
     public init(
+        animated: Bool,
         appearance : Appearance,
         behavior : Behavior,
         scrollInsets : ScrollInsets,
         build : Build
     )
     {
+        self.animated = animated
         self.appearance = appearance
         self.behavior = behavior
         self.scrollInsets = scrollInsets

@@ -42,7 +42,9 @@ final class CollectionViewBasicDemoViewController : UIViewController
     {
         listView.appearance = demoAppearance
         
-        listView.setContent(animated: animated) { list in
+        listView.setContent { list in
+            
+            list.animated = animated
             
             list += self.rows.map { sectionRows in
                 Section(identifier: "Demo Section") { section in

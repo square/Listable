@@ -16,20 +16,46 @@ final class BlueprintListDemoViewController : UIViewController
 {
     let blueprintView = BlueprintView()
     
+    var showingData : Bool = true
+    
     override func loadView()
     {
         self.title = "Podcasts"
         
         self.view = self.blueprintView
         
-        self.blueprintView.element = self.content
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Animated", style: .plain, target: self, action: #selector(toggleAnimated)),
+            UIBarButtonItem(title: "No Animation", style: .plain, target: self, action: #selector(toggleNoAnimation)),
+        ]
+        
+        self.reloadData()
     }
     
-    var content : Element {
-        return List { list in
+    @objc func toggleAnimated()
+    {
+        UIView.animate(withDuration: 1.0) {
+            self.showingData.toggle()
+            self.reloadData()
+        }
+    }
+    
+    @objc func toggleNoAnimation()
+    {
+        self.showingData.toggle()
+        self.reloadData()
+    }
+    
+    func reloadData()
+    {
+        self.blueprintView.element = List { list in
             let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
             
             list += Section(identifier: "podcasts") { section in
+                
+                guard self.showingData else {
+                    return
+                }
 
                 section += podcasts.map { podcast in
                     Item(

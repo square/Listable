@@ -200,11 +200,17 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(animated : Bool = false, _ builder : ListDescription.Build)
+    public func setContent(with builder : ListDescription.Build)
     {
-        let description = ListDescription(appearance: self.appearance, behavior: self.behavior, scrollInsets: self.scrollInsets, build: builder)
+        let description = ListDescription(
+            animated: true,
+            appearance: self.appearance,
+            behavior: self.behavior,
+            scrollInsets: self.scrollInsets,
+            build: builder
+        )
         
-        self.setProperties(with: description, animated: animated)
+        self.setProperties(with: description)
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
@@ -244,12 +250,13 @@ public final class ListView : UIView
         })
     }
     
-    public func setProperties(with description : ListDescription, animated: Bool = false)
+    public func setProperties(with description : ListDescription)
     {
         self.appearance = description.appearance
         self.behavior = description.behavior
-        self.setContent(animated: animated, description.content)
         self.scrollInsets = description.scrollInsets
+        
+        self.setContent(animated: description.animated, description.content)
     }
     
     private func setContentFromSource(animated : Bool = false)

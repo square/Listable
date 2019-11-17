@@ -20,7 +20,13 @@ public struct List : BlueprintUI.Element
         
     public init(build : ListDescription.Build)
     {
-        self.listDescription = ListDescription(appearance: .init(), behavior: .init(), scrollInsets: .init(), build: build)
+        self.listDescription = ListDescription(
+            animated: UIView.inheritedAnimationDuration > 0.0,
+            appearance: .init(),
+            behavior: .init(),
+            scrollInsets: .init(),
+            build: build
+        )
     }
     
     //
@@ -39,7 +45,7 @@ public struct List : BlueprintUI.Element
             }
             
             config.apply { listView in
-                listView.setProperties(with: self.listDescription, animated: true)
+                listView.setProperties(with: self.listDescription)
             }
         }
     }
