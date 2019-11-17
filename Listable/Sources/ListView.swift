@@ -572,6 +572,10 @@ public final class ListView : UIView
             }
         }
         
+        if changes.hasIndexAffectingChanges {
+            self.cancelInteractiveMovement()
+        }
+        
         self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
@@ -626,6 +630,11 @@ public final class ListView : UIView
     internal func endInteractiveMovement()
     {
         self.collectionView.endInteractiveMovement()
+    }
+    
+    private func cancelInteractiveMovement()
+    {
+        self.collectionView.cancelInteractiveMovement()
     }
 }
 
