@@ -6,6 +6,33 @@
 //
 
 
+public extension Item where Element == ListItemElement
+{
+    static func list<Identifier:Hashable>(identifier : Identifier, sizing : ListItemSizing, build : ListDescription.Build) -> Item<ListItemElement>
+    {
+        return Item(
+            with: ListItemElement(identifier: identifier, build: build),
+            sizing: sizing.toStandardSizing,
+            layout: ItemLayout(width: .fill)
+        )
+    }
+}
+
+
+public enum ListItemSizing : Equatable
+{
+    case `default`
+    case fixed(CGFloat)
+    
+    var toStandardSizing : Sizing {
+        switch self {
+        case .default: return .default
+        case .fixed(let height): return .fixed(height)
+        }
+    }
+}
+
+
 public struct ListItemElement : ItemElement, ItemElementAppearance
 {
     //

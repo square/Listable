@@ -11,6 +11,8 @@ protocol AnyPresentationItemState : AnyObject
     var isDisplayed : Bool { get }
     func setAndPerform(isDisplayed: Bool)
     
+    var itemPosition : ItemPosition { get set }
+    
     var anyModel : AnyItem { get }
     
     var reorderingActions : ReorderingActions { get }
@@ -25,7 +27,6 @@ protocol AnyPresentationItemState : AnyObject
     func setNew(item anyItem : AnyItem, reason : UpdateReason)
     
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
-    func updatePosition(with cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
     
     func performUserDidSelectItem(isSelected: Bool)
@@ -180,6 +181,15 @@ final class PresentationState
         }
         
         return nil
+    }
+    
+    internal func forEachItem(_ block : (IndexPath, AnyPresentationItemState) -> ())
+    {
+        self.sections.forEachWithIndex { sectionIndex, _, section in
+            section.items.forEachWithIndex { itemIndex, _, item in
+                block(IndexPath(item: itemIndex, section: sectionIndex), item)
+            }
+        }
     }
     
     //
@@ -521,6 +531,8 @@ final class PresentationState
         
         let reorderingActions: ReorderingActions
         
+        var itemPosition : ItemPosition
+        
         private var visibleCell : ItemElementCell<Element>?
         
         init(with model : Item<Element>, listView : ListView)
@@ -528,6 +540,7 @@ final class PresentationState
             self.model = model
             
             self.reorderingActions = ReorderingActions()
+            self.itemPosition = .single
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
@@ -542,14 +555,17 @@ final class PresentationState
                     
                     self.model.element = element
                     
-                    if let view = self.visibleCell?.content {
+                    if let cell = self.visibleCell {
+                        let applyInfo = ApplyItemElementInfo(
+                            state: .init(cell: cell),
+                            position: self.itemPosition,
+                            reordering: self.reorderingActions
+                        )
+                        
                         self.model.element.apply(
-                            to: view,
-                            for: .willDisplay,
-                            with: ApplyItemElementInfo(
-                                state: .init(isSelected: false, isHighlighted: false),
-                                reordering: self.reorderingActions
-                            )
+                            to: cell.content,
+                            for: .wasUpdated,
+                            with: applyInfo
                         )
                     }
                 }
@@ -610,14 +626,6 @@ final class PresentationState
                 reason: .willDisplay
             )
             
-            // Update appearance for position.
-            
-            self.updatePosition(
-                with: anyCell,
-                in: collectionView,
-                for: indexPath
-            )
-            
             return cell
         }
         
@@ -625,14 +633,17 @@ final class PresentationState
         {
             let cell = anyCell as! ItemElementCell<Element>
             
+            let applyInfo = ApplyItemElementInfo(
+                state: itemState,
+                position: self.itemPosition,
+                reordering: self.reorderingActions
+            )
+                        
             // Appearance
             
             self.model.appearance.apply(
                 to: cell.content,
-                with: ApplyItemElementInfo(
-                    state: itemState,
-                    reordering: self.reorderingActions
-                )
+                with: applyInfo
             )
             
             // Apply Model State
@@ -640,10 +651,7 @@ final class PresentationState
             self.model.element.apply(
                 to: cell.content,
                 for: reason,
-                with: ApplyItemElementInfo(
-                    state: itemState,
-                    reordering: self.reorderingActions
-                )
+                with: applyInfo
             )
         }
         
@@ -680,13 +688,6 @@ final class PresentationState
             let cell = (anyCell as! ItemElementCell<Element>)
             
             self.visibleCell = cell
-        }
-        
-        func updatePosition(with anyCell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
-        {
-            let cell = (anyCell as! ItemElementCell<Element>)
-
-            self.model.appearance.update(view: cell.content, with: collectionView.position(for: indexPath))
         }
         
         func didEndDisplay()
@@ -756,26 +757,3 @@ fileprivate struct HeightKey : Hashable
     var layoutDirection : LayoutDirection
 }
 
-fileprivate extension UICollectionView
-{
-    func position(for indexPath : IndexPath) -> ItemPosition
-    {
-        let itemCount = self.numberOfItems(inSection: indexPath.section)
-        
-        let itemIndex = indexPath.item
-        
-        if itemCount == 0 {
-            return .single
-        } else if itemCount == 1 {
-            return .single
-        } else {
-            if itemIndex == 0 {
-                return .first
-            } else if itemIndex == (itemCount - 1) {
-                return .last
-            } else {
-                return .middle
-            }
-        }
-    }
-}

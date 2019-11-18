@@ -32,7 +32,7 @@ public final class ListView : UIView
             appearance: self.appearance
         )
         
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+        self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: self.layout)
         
         self.keyboardObserver = KeyboardObserver()
         
@@ -275,6 +275,12 @@ public final class ListView : UIView
     public override var frame: CGRect {
         didSet {
             /**
+             Set the frame explicitly, so that the layout can occur
+             within performBatchUpdates. Waiting for layoutSubviews() is too late.
+             */
+            self.collectionView.frame = self.bounds
+            
+            /**
              Once the view actually has a size, we can provide content.
             
              There's no value in having content with no view size, as we cannot
@@ -327,17 +333,10 @@ public final class ListView : UIView
     // MARK: Updating Content
     //
     
-    fileprivate func updateVisibleCellPositions()
+    fileprivate func setPresentationStateItemPositions()
     {
-        let indexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        let items : [(IndexPath, AnyPresentationItemState)] = indexPaths.map {
-            return ($0, self.storage.presentationState.item(at: $0))
-        }
-        
-        for (indexPath, item) in items {
-            let cell = self.collectionView.cellForItem(at: indexPath)!
-            item.updatePosition(with: cell, in: collectionView, for: indexPath)
+        self.storage.presentationState.forEachItem { indexPath, item in
+            item.itemPosition = self.layout.positionForItem(at: indexPath)
         }
     }
     
@@ -506,6 +505,8 @@ public final class ListView : UIView
         completion callerCompletion : @escaping (Bool) -> ()
         )
     {
+        // Figure out visible content.
+        
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
         
         let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
@@ -516,12 +517,18 @@ public final class ListView : UIView
             self.storage.presentationState.update(with: diff, slice: visibleSlice)
         }
         
+        // Update Refresh Control
+        
         self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        
+        // Update Collection View
         
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
         }
+        
+        // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
     }
@@ -539,7 +546,6 @@ public final class ListView : UIView
                 
         let batchUpdates = {
             updateBackingData()
-                                    
             // Sections
 
             view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
@@ -770,8 +776,6 @@ fileprivate extension ListView
             
             print("Moved item from \(sourceIndexPath) to \(destinationIndexPath)")
             
-            self.view.updateVisibleCellPositions()
-            
             item.moved(with: Reordering.Result(
                 fromSection: self.presentationState.sections[sourceIndexPath.section].model,
                 fromIndexPath: sourceIndexPath,
@@ -903,10 +907,10 @@ fileprivate extension ListView
             toProposedIndexPath proposedIndexPath: IndexPath
             ) -> IndexPath
         {
-            let item = self.presentationState.item(at: originalIndexPath)
             
             if originalIndexPath != proposedIndexPath {
                 // TODO: Validate
+                // let item = self.presentationState.item(at: originalIndexPath)
                 
                 if originalIndexPath.section == proposedIndexPath.section {
                     self.view.storage.moveItem(from: originalIndexPath, to: proposedIndexPath)
@@ -921,6 +925,11 @@ fileprivate extension ListView
         }
         
         // MARK: ListViewLayoutDelegate
+        
+        func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
+        {
+            self.view.setPresentationStateItemPositions()
+        }
         
         private let cellMeasurementCache = ReusableViewCache()
         

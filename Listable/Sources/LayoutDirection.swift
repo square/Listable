@@ -86,4 +86,12 @@ public enum LayoutDirection : Hashable
         case .horizontal: return CGSize(width: .greatestFiniteMagnitude, height: width)
         }
     }
+    
+    public func horizontalPadding(with insets : UIEdgeInsets) -> HorizontalPadding
+    {
+        switch self {
+        case .vertical: return HorizontalPadding(left: insets.left, right: insets.right)
+        case .horizontal: return HorizontalPadding(left: insets.bottom, right: insets.top)
+        }
+    }
 }

@@ -128,14 +128,7 @@ public protocol ItemElementAppearance
     //
     
     /**
-     Called when the position of an element within a section changes.
-     
-     If you are drawing dividers or borders on cells, use this method as a change to update those borders or dividers.
-     */
-    func update(view : ContentView, with position : ItemPosition)
-    
-    /**
-     Called to apply the appearance to a given set of views before they are displayed on screen.
+     Called to apply the appearance to a given set of views before they are displayed on screen, or when an item position changes.
      
      Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
@@ -155,6 +148,7 @@ public extension ItemElementAppearance where Self:Equatable
 public struct ApplyItemElementInfo
 {
     public var state : ItemState
+    public var position : ItemPosition
     public var reordering : ReorderingActions
 }
 

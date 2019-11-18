@@ -135,12 +135,12 @@ public enum CustomWidth : Equatable
     
     public struct Custom : Equatable
     {
-        public var padding : UIEdgeInsets
+        public var padding : HorizontalPadding
         public var width : WidthConstraint
         public var alignment : Alignment
         
         public init(
-            padding : UIEdgeInsets = .zero,
+            padding : HorizontalPadding = .zero,
             width : WidthConstraint = .noConstraint,
             alignment : Alignment = .center
         )
@@ -152,7 +152,11 @@ public enum CustomWidth : Equatable
         
         public func position(with viewSize : CGSize, layoutDirection : LayoutDirection) -> Position
         {
-            let width = ListLayout.width(with: viewSize, padding: self.padding, constraint: self.width, layoutDirection: layoutDirection)
+            let width = ListLayout.width(
+                with: layoutDirection.width(for: viewSize),
+                padding: self.padding,
+                constraint: self.width
+            )
             
             return Position(
                 origin: self.alignment.originWith(
@@ -172,21 +176,15 @@ public enum CustomWidth : Equatable
         case center
         case right
         
-        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : UIEdgeInsets, layoutDirection : LayoutDirection) -> CGFloat
+        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding, layoutDirection : LayoutDirection) -> CGFloat
         {
             switch self {
             case .left:
-                switch layoutDirection {
-                case .vertical: return padding.left
-                case .horizontal: return padding.bottom
-                }
+                return padding.left
             case .center:
                 return round((parentWidth - width) / 2.0)
             case .right:
-                switch layoutDirection {
-                case .vertical: return parentWidth - width - padding.right
-                case .horizontal: return parentWidth - width - padding.top
-                }
+                return parentWidth - width - padding.right
             }
         }
     }
@@ -195,5 +193,28 @@ public enum CustomWidth : Equatable
     {
         var origin : CGFloat
         var width : CGFloat
+    }
+}
+
+
+public struct HorizontalPadding : Equatable
+{
+    public var left : CGFloat
+    public var right : CGFloat
+    
+    public static var zero : HorizontalPadding {
+        return HorizontalPadding(left: 0.0, right: 0.0)
+    }
+    
+    public init(left : CGFloat = 0.0, right : CGFloat = 0.0)
+    {
+        self.left = left
+        self.right = right
+    }
+    
+    public init(uniform : CGFloat = 0.0)
+    {
+        self.left = uniform
+        self.right = uniform
     }
 }
