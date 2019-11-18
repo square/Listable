@@ -11,20 +11,28 @@ import Foundation
 public struct ListDescription
 {
     public var animated : Bool
-    
     public var appearance : Appearance
-    public var content : Content
+    public var behavior : Behavior
     public var scrollInsets : ScrollInsets
+    
+    public var content : Content
 
     public typealias Build = (inout ListDescription) -> ()
     
-    public init(build : Build)
+    public init(
+        animated: Bool,
+        appearance : Appearance,
+        behavior : Behavior,
+        scrollInsets : ScrollInsets,
+        build : Build
+    )
     {
-        self.animated = true
+        self.animated = animated
+        self.appearance = appearance
+        self.behavior = behavior
+        self.scrollInsets = scrollInsets
         
-        self.appearance = Appearance()
         self.content = Content()
-        self.scrollInsets = ScrollInsets(top: nil, bottom: nil)
 
         build(&self)
     }
@@ -45,32 +53,3 @@ public struct ListDescription
     }
 }
 
-
-public struct ScrollInsets : Equatable
-{
-    public var top: CGFloat?
-    public var bottom: CGFloat?
-
-    public init(top: CGFloat? = nil, bottom: CGFloat? = nil)
-    {
-        self.top = top
-        self.bottom = bottom
-    }
-    
-    func insets(with insets : UIEdgeInsets, layoutDirection : LayoutDirection) -> UIEdgeInsets
-    {
-        var insets = insets
-        
-        switch layoutDirection {
-        case .vertical:
-            insets.top = self.top ?? insets.top
-            insets.bottom = self.bottom ?? insets.bottom
-            
-        case .horizontal:
-            insets.left = self.top ?? insets.left
-            insets.right = self.bottom ?? insets.right
-        }
-        
-        return insets
-    }
-}

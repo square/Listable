@@ -61,7 +61,7 @@ struct TextFieldElement : BlueprintItemElement, Equatable
         return .init(self.content)
     }
     
-    func element(with state: ItemState) -> Element
+    func element(with info : ApplyItemElementInfo) -> Element
     {
         let textField = TextField(text: self.content)
         

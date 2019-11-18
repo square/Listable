@@ -84,6 +84,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(WidthCustomizationViewController())
                 })
+                
+                section += Item(
+                    with: DemoItem(text: "Reordering"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(ReorderingViewController())
+                })
             }
         }
     }

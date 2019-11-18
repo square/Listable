@@ -129,7 +129,7 @@ fileprivate struct CardElement : BlueprintItemElement, Equatable
     var detail : String
     var color : UIColor
     
-    func element(with state: ItemState) -> Element
+    func element(with info : ApplyItemElementInfo) -> Element
     {
         return Box(
             backgroundColor: self.color,

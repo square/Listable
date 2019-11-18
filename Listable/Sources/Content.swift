@@ -100,6 +100,18 @@ public struct Content
     // MARK: Mutating Content
     //
     
+    mutating func moveItem(from : IndexPath, to : IndexPath)
+    {
+        guard from != to else {
+            return
+        }
+        
+        let item = self.item(at: from)
+        
+        self.remove(at: from)
+        self.insert(item: item, at: to)
+    }
+    
     public mutating func removeEmpty()
     {
         self.sections.removeAll {
@@ -125,6 +137,11 @@ public struct Content
     internal mutating func remove(at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.remove(at: indexPath.item)
+    }
+    
+    internal mutating func insert(item : AnyItem, at indexPath : IndexPath)
+    {
+        self.sections[indexPath.section].items.insert(item, at: indexPath.item)
     }
     
     //

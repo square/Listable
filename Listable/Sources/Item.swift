@@ -19,19 +19,20 @@ public protocol AnyItem : AnyItem_Internal
 {
     var identifier : AnyIdentifier { get }
     
-    var selection : ItemSelection { get }
+    var layout : ItemLayout { get set }
+    var selection : ItemSelection { get set }
+    
+    var reordering : Reordering? { get set }
     
     func elementEqual(to other : AnyItem) -> Bool
 }
 
 public protocol AnyItem_Internal
 {
-    var layout : ItemLayout { get }
-    
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     
-    func newPresentationItemState() -> Any
+    func newPresentationItemState(in listView : ListView) -> Any
 }
 
 
@@ -48,6 +49,8 @@ public struct Item<Element:ItemElement> : AnyItem
     public var selection : ItemSelection
     
     public var swipeActions : SwipeActions?
+    
+    public var reordering : Reordering?
         
     public typealias OnSelect = (Element) -> ()
     public var onSelect : OnSelect?
@@ -90,6 +93,7 @@ public struct Item<Element:ItemElement> : AnyItem
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
+        reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
         onEndDisplay : OnEndDisplay? = nil,
@@ -106,6 +110,8 @@ public struct Item<Element:ItemElement> : AnyItem
         self.selection = selection
         
         self.swipeActions = swipeActions
+        
+        self.reordering = reordering
         
         self.bind = bind
         
@@ -156,9 +162,9 @@ public struct Item<Element:ItemElement> : AnyItem
         return self.element.wasMoved(comparedTo: other.element)
     }
     
-    public func newPresentationItemState() -> Any
+    public func newPresentationItemState(in listView : ListView) -> Any
     {
-        return PresentationState.ItemState(self)
+        return PresentationState.ItemState(with: self, listView: listView)
     }
 }
 
@@ -171,6 +177,7 @@ public extension Item where Element.Appearance == Element
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
+        reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
         onEndDisplay : OnEndDisplay? = nil,
@@ -185,12 +192,50 @@ public extension Item where Element.Appearance == Element
             layout: layout,
             selection: selection,
             swipeActions: swipeActions,
+            reordering: reordering,
             bind: bind,
             onDisplay: onDisplay,
             onEndDisplay: onEndDisplay,
             onSelect: onSelect,
             onDeselect: onDeselect
         )
+    }
+}
+
+
+public struct Reordering
+{
+    public var sections : Sections
+    
+    public typealias CanReorder = (Result) -> Bool
+    public var canReorder : CanReorder?
+    
+    public typealias DidReorder = (Result) -> ()
+    public var didReorder : DidReorder
+    
+    public init(
+        sections : Sections = .same,
+        canReorder : CanReorder? = nil,
+        didReorder : @escaping DidReorder
+    )
+    {
+        self.sections = sections
+        self.canReorder = canReorder
+        self.didReorder = didReorder
+    }
+    
+    public enum Sections : Equatable
+    {
+        case same
+    }
+    
+    public struct Result
+    {
+        public var fromSection : Section
+        public var fromIndexPath : IndexPath
+        
+        public var toSection : Section
+        public var toIndexPath : IndexPath
     }
 }
 

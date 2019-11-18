@@ -23,7 +23,13 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     {
         self.contentIdentifier = AnyHashable(identifier)
         
-        self.listDescription = ListDescription(build: build)
+        self.listDescription = ListDescription(
+            animated: true,
+            appearance: .init(),
+            behavior: .init(),
+            scrollInsets: .init(),
+            build: build
+        )
     }
     
     //
@@ -36,7 +42,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         return .init(self.contentIdentifier)
     }
     
-    public func apply(to view: ContentView, with state: ItemState, reason: ApplyReason)
+    public func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
     {
         view.setProperties(with: self.listDescription)
     }
@@ -59,5 +65,5 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     
     public func update(view: ListView, with position: ItemPosition) { }
     
-    public func apply(to view: ListView, with state: ItemState, previous: ListItemElement.Appearance?) {}
+    public func apply(to view: ListView, with info : ApplyItemElementInfo) {}
 }

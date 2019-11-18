@@ -20,10 +20,13 @@ public struct List : BlueprintUI.Element
         
     public init(build : ListDescription.Build)
     {
-        self.listDescription = ListDescription { list in
-            list.animated = (UIView.inheritedAnimationDuration > 0.0)
-            build(&list)
-        }
+        self.listDescription = ListDescription(
+            animated: UIView.inheritedAnimationDuration > 0.0,
+            appearance: .init(),
+            behavior: .init(),
+            scrollInsets: .init(),
+            build: build
+        )
     }
     
     //

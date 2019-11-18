@@ -158,7 +158,7 @@ struct SearchRowAppearance : ItemElementAppearance
     
     func update(view: ContentView, with position: ItemPosition) {}
     
-    func apply(to view: ContentView, with state: ItemState, previous: SearchRowAppearance?) {}
+    func apply(to view: SearchBar, with info: ApplyItemElementInfo) {}
     
     func wasUpdated(comparedTo other: SearchRowAppearance) -> Bool
     {
@@ -180,7 +180,7 @@ struct SearchRow : ItemElement
         return .init("search")
     }
     
-    func apply(to view: Appearance.ContentView, with state: ItemState, reason: ApplyReason)
+    func apply(to view: SearchBar, for reason: ApplyReason, with info: ApplyItemElementInfo)
     {
         view.onStateChanged = self.onChange
         view.text = self.text
@@ -225,7 +225,8 @@ struct WordRow : BlueprintItemElement, Equatable
     
     // MARK: BlueprintItemElement
     
-    func element(with state: ItemState) -> Element {
+    func element(with info: ApplyItemElementInfo) -> Element
+    {
         return Box(
             backgroundColor: .init(white: 0.96, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),

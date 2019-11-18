@@ -52,8 +52,7 @@ struct DemoHeader : BlueprintHeaderFooterElement, Equatable
             )
         )
         
-        box.borderStyle = .solid(color: .white(0.7), width: 1.0)
-        box.shadowStyle = .simple(radius: 2.0, opacity: 0.20, offset: .init(width: 0, height: 1.0), color: .black)
+        box.borderStyle = .solid(color: .white(0.85), width: 2.0)
         
         return box
     }
@@ -68,7 +67,8 @@ struct DemoItem : BlueprintItemElement, Equatable
         return .init(self.text)
     }
     
-    func element(with state: ItemState) -> Element {
+    func element(with info : ApplyItemElementInfo) -> Element
+    {
         var box = Box(
             backgroundColor: .white,
             cornerStyle: .rounded(radius: 6.0),
@@ -78,8 +78,7 @@ struct DemoItem : BlueprintItemElement, Equatable
             )
         )
         
-        box.borderStyle = .solid(color: .white(0.8), width: 1.0)
-        box.shadowStyle = .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0, height: 1.0), color: .black)
+        box.borderStyle = .solid(color: .white(0.9), width: 2.0)
         
         return box
     }

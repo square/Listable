@@ -13,6 +13,8 @@ protocol AnyPresentationItemState : AnyObject
     
     var anyModel : AnyItem { get }
     
+    var reorderingActions : ReorderingActions { get }
+    
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
     
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
@@ -30,6 +32,8 @@ protocol AnyPresentationItemState : AnyObject
     
     func resetCachedHeights()
     func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    
+    func moved(with result : Reordering.Result)
 }
 
 
@@ -75,7 +79,8 @@ final class PresentationState
     // MARK: Public Properties
     //
     
-    unowned var view : UICollectionView!
+    unowned var listView : ListView!
+    unowned var collectionView : UICollectionView!
     
     var refreshControl : RefreshControl.PresentationState?
     
@@ -164,22 +169,55 @@ final class PresentationState
         return IndexPath(item: (lastSection.section.items.count - 1), section: lastSection.index)
     }
     
-    //
-    // MARK: Mutating Data
-    //
-    
-    func remove(item itemToRemove : AnyPresentationItemState) -> IndexPath?
+    internal func indexPath(for itemToFind : AnyPresentationItemState) -> IndexPath?
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (itemIndex, item) in section.items.enumerated() {
-                if item === itemToRemove {
-                    self.sections[sectionIndex].removeItem(at: itemIndex)
+                if item === itemToFind {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 }
             }
         }
         
         return nil
+    }
+    
+    //
+    // MARK: Mutating Data
+    //
+    
+    func moveItem(from : IndexPath, to : IndexPath)
+    {
+        guard from != to else {
+            return
+        }
+        
+        let item = self.item(at: from)
+        
+        self.remove(at: from)
+        self.insert(item: item, at: to)
+    }
+    
+    @discardableResult
+    func remove(at indexPath : IndexPath) -> AnyPresentationItemState
+    {
+        return self.sections[indexPath.section].items.remove(at: indexPath.item)
+    }
+    
+    func remove(item itemToRemove : AnyPresentationItemState) -> IndexPath?
+    {
+        guard let indexPath = self.indexPath(for: itemToRemove) else {
+            return nil
+        }
+        
+        self.sections[indexPath.section].removeItem(at: indexPath.item)
+        
+        return indexPath
+    }
+    
+    func insert(item : AnyPresentationItemState, at indexPath : IndexPath)
+    {
+        self.sections[indexPath.section].insert(item: item, at: indexPath.item)
     }
     
     //
@@ -211,9 +249,9 @@ final class PresentationState
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
-            added: { section in SectionState(model: section) },
-            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes) },
-            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes) }
+            added: { section in SectionState(with: section, listView: self.listView) },
+            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.listView) },
+            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.listView) }
         )
     }
     
@@ -225,14 +263,14 @@ final class PresentationState
             let newControl = RefreshControl.PresentationState(new)
 
             if #available(iOS 10.0, *) {
-                self.view.refreshControl = newControl.view
+                self.collectionView.refreshControl = newControl.view
             } else {
-                self.view.addSubview(newControl.view)
+                self.collectionView.addSubview(newControl.view)
             }
             self.refreshControl = newControl
         } else if let existing = refreshControl, new == nil {
             if #available(iOS 10.0, *) {
-                self.view.refreshControl = nil
+                self.collectionView.refreshControl = nil
             } else {
                 existing.view.removeFromSuperview()
             }
@@ -265,7 +303,7 @@ final class PresentationState
         
         self.registeredSupplementaryViewsObjectIdentifiers.insert(identifier)
         
-        self.view.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
+        self.collectionView.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
     }
     
     private var registeredCellObjectIdentifiers : Set<ObjectIdentifier> = Set()
@@ -282,7 +320,7 @@ final class PresentationState
         
         self.registeredCellObjectIdentifiers.insert(identifier)
         
-        self.view.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
+        self.collectionView.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
     }
     
     final class SectionState
@@ -294,7 +332,7 @@ final class PresentationState
         
         var items : [AnyPresentationItemState]
         
-        init(model : Section)
+        init(with model : Section, listView : ListView)
         {
             self.model = model
             
@@ -302,7 +340,7 @@ final class PresentationState
             self.footer = SectionState.headerFooterState(with: self.footer, new: model.footer)
             
             self.items = self.model.items.map {
-                $0.newPresentationItemState() as! AnyPresentationItemState
+                $0.newPresentationItemState(in: listView) as! AnyPresentationItemState
             }
         }
         
@@ -312,10 +350,17 @@ final class PresentationState
             self.items.remove(at: index)
         }
         
+        fileprivate func insert(item : AnyPresentationItemState, at index : Int)
+        {
+            self.model.items.insert(item.anyModel, at: index)
+            self.items.insert(item, at: index)
+        }
+        
         fileprivate func update(
             with oldSection : Section,
             new newSection : Section,
-            changes : SectionedDiff<Section, AnyItem>.ItemChanges
+            changes : SectionedDiff<Section, AnyItem>.ItemChanges,
+            listView : ListView
             )
         {
             self.model = newSection
@@ -326,7 +371,7 @@ final class PresentationState
             self.items = changes.transform(
                 old: self.items,
                 removed: { _, _ in },
-                added: { $0.newPresentationItemState() as! AnyPresentationItemState },
+                added: { $0.newPresentationItemState(in: listView) as! AnyPresentationItemState },
                 moved: { old, new, item in item.setNew(item: new, reason: .move) },
                 updated: { old, new, item in item.setNew(item: new, reason: .update) },
                 noChange: { old, new, item in item.setNew(item: new, reason: .noChange) }
@@ -392,9 +437,7 @@ final class PresentationState
         {
             let view = anyView as! SupplementaryItemView<Element>
             
-            self.model.appearance.apply(to: view.content, previous: view.appearance)
-            view.appearance = self.model.appearance
-            
+            self.model.appearance.apply(to: view.content)
             self.model.element.apply(to: view.content, reason: reason)
         }
         
@@ -457,9 +500,7 @@ final class PresentationState
                     create: {
                         return SupplementaryItemView<Element>()
                 }, { view in
-                    self.model.appearance.apply(to: view.content, previous: view.appearance)
-                    view.appearance = self.model.appearance
-                    
+                    self.model.appearance.apply(to: view.content)
                     self.model.element.apply(to: view.content, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
@@ -478,11 +519,15 @@ final class PresentationState
         
         let binding : Binding<Element>?
         
+        let reorderingActions: ReorderingActions
+        
         private var visibleCell : ItemElementCell<Element>?
         
-        init(_ model : Item<Element>)
+        init(with model : Item<Element>, listView : ListView)
         {
             self.model = model
+            
+            self.reorderingActions = ReorderingActions()
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
@@ -497,11 +542,14 @@ final class PresentationState
                     
                     self.model.element = element
                     
-                    if let views = self.visibleCell?.content {
+                    if let view = self.visibleCell?.content {
                         self.model.element.apply(
-                            to: views,
-                            with: .init(isSelected: false, isHighlighted: false),
-                            reason: .willDisplay
+                            to: view,
+                            for: .willDisplay,
+                            with: ApplyItemElementInfo(
+                                state: .init(isSelected: false, isHighlighted: false),
+                                reordering: self.reorderingActions
+                            )
                         )
                     }
                 }
@@ -513,6 +561,9 @@ final class PresentationState
             } else {
                 self.binding = nil
             }
+            
+            self.reorderingActions.item = self
+            self.reorderingActions.listView = listView
         }
         
         deinit {
@@ -574,13 +625,25 @@ final class PresentationState
         {
             let cell = anyCell as! ItemElementCell<Element>
             
-            self.model.appearance.apply(to: cell.content, with: itemState, previous: cell.appearance)
-            cell.appearance = self.model.appearance
-                        
+            // Appearance
+            
+            self.model.appearance.apply(
+                to: cell.content,
+                with: ApplyItemElementInfo(
+                    state: itemState,
+                    reordering: self.reorderingActions
+                )
+            )
+            
+            // Apply Model State
+            
             self.model.element.apply(
                 to: cell.content,
-                with: itemState,
-                reason: reason
+                for: reason,
+                with: ApplyItemElementInfo(
+                    state: itemState,
+                    reordering: self.reorderingActions
+                )
             )
         }
         
@@ -678,6 +741,11 @@ final class PresentationState
                 
                 return height
             }
+        }
+        
+        func moved(with result : Reordering.Result)
+        {
+            self.model.reordering?.didReorder(result)
         }
     }
 }

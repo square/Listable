@@ -224,6 +224,16 @@ struct SectionedDiff<Section, Item>
         var updatedItems : [ItemChanges.Updated] = []
         var movedItems : [ItemChanges.Moved] = []
         
+        var hasIndexAffectingChanges : Bool {
+            return
+                self.deletedSections.isEmpty == false ||
+                self.insertedItems.isEmpty == false ||
+                self.movedSections.isEmpty == false ||
+                self.deletedItems.isEmpty == false ||
+                self.insertedItems.isEmpty == false ||
+                self.movedItems.isEmpty == false
+        }
+        
         init(sectionChanges changes : SectionChanges)
         {
             // Inserted & Removed Sections
