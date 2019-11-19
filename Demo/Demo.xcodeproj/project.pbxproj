@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
 		0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */; };
+		0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */; };
 		0A46A00B23793C0200B35811 /* WidthCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */; };
@@ -38,6 +39,7 @@
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
 		0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
+		0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicesPaymentScheduleDemoViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLayoutViewController.swift; sourceTree = "<group>"; };
 		0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidthCustomizationViewController.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */,
 				0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */,
 				0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */,
+				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				0A46A00B23793C0200B35811 /* WidthCustomizationViewController.swift in Sources */,
 				0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */,
 				0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */,
+				0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
 				0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */,
 				0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,

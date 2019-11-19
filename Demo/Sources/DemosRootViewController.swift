@@ -86,10 +86,17 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Reordering"),
+                    with: DemoItem(text: "Reordering (Experimental)"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(ReorderingViewController())
+                })
+                
+                section += Item(
+                    with: DemoItem(text: "Invoices Payment Schedule"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(InvoicesPaymentScheduleDemoViewController())
                 })
             }
         }

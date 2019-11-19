@@ -242,10 +242,19 @@ public struct Reordering
 
 public struct ItemLayout : Equatable
 {
+    public var itemSpacing : CGFloat?
+    public var itemToSectionFooterSpacing : CGFloat?
+    
     public var width : CustomWidth
     
-    public init(width : CustomWidth = .default)
+    public init(
+        itemSpacing : CGFloat? = nil,
+        itemToSectionFooterSpacing : CGFloat? = nil,
+        width : CustomWidth = .default
+    )
     {
+        self.itemSpacing = itemSpacing
+        self.itemSpacing = itemSpacing
         self.width = width
     }
 }

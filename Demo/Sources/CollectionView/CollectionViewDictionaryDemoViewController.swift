@@ -145,7 +145,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     }
 }
 
-struct SearchRowAppearance : ItemElementAppearance
+fileprivate struct SearchRowAppearance : ItemElementAppearance
 {
     // MARK: ItemElementAppearance
     
@@ -166,7 +166,7 @@ struct SearchRowAppearance : ItemElementAppearance
     }
 }
 
-struct SearchRow : ItemElement
+fileprivate struct SearchRow : ItemElement
 {
     var text : String
     
@@ -191,7 +191,7 @@ struct SearchRow : ItemElement
     }
 }
 
-struct SectionHeader : BlueprintHeaderFooterElement, Equatable
+fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable
 {
     var title : String
     
@@ -218,7 +218,7 @@ struct SectionHeader : BlueprintHeaderFooterElement, Equatable
 }
 
 
-struct WordRow : BlueprintItemElement, Equatable
+fileprivate struct WordRow : BlueprintItemElement, Equatable
 {
     var title : String
     var detail : String
@@ -251,7 +251,7 @@ struct WordRow : BlueprintItemElement, Equatable
 }
 
 
-final class SearchBar : UISearchBar, UISearchBarDelegate
+fileprivate final class SearchBar : UISearchBar, UISearchBarDelegate
 {
     override init(frame: CGRect)
     {

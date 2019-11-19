@@ -53,9 +53,8 @@ final class WidthCustomizationViewController : UIViewController
             
             list += Section(identifier: "custom-1") { section in
 
-                section.layout = Section.Layout(
-                    width: .custom(.init(
-                        padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0),
+                section.layout = Section.Layout(width: .custom(.init(
+                        padding: HorizontalPadding(uniform: 10.0),
                         width: .atMost(200.0),
                         alignment: .left
                         )
@@ -72,7 +71,7 @@ final class WidthCustomizationViewController : UIViewController
                     with: CardElement(title: "Left Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(.noConstraint),
                     layout: .init(width: .custom(.init(
-                        padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0),
+                        padding: HorizontalPadding(uniform: 10.0),
                         width: .atMost(200.0),
                         alignment: .left
                         ))
@@ -83,7 +82,7 @@ final class WidthCustomizationViewController : UIViewController
                     with: CardElement(title: "Center Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(.noConstraint),
                     layout: .init(width: .custom(.init(
-                        padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0),
+                        padding: HorizontalPadding(uniform: 10.0),
                         width: .atMost(200.0),
                         alignment: .center
                         ))
@@ -94,7 +93,7 @@ final class WidthCustomizationViewController : UIViewController
                     with: CardElement(title: "Right Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(.noConstraint),
                     layout: .init(width: .custom(.init(
-                        padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0),
+                        padding: HorizontalPadding(uniform: 10.0),
                         width: .atMost(200.0),
                         alignment: .right
                         ))

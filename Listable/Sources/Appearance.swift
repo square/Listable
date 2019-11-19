@@ -58,13 +58,16 @@ public struct ListSizing : Equatable
     
     public var listHeaderHeight : CGFloat
     public var listFooterHeight : CGFloat
+    
+    public var itemPositionGroupingHeight : CGFloat
         
     public init(
         itemHeight : CGFloat = 50.0,
         sectionHeaderHeight : CGFloat = 60.0,
         sectionFooterHeight : CGFloat = 40.0,
         listHeaderHeight : CGFloat = 60.0,
-        listFooterHeight : CGFloat = 60.0
+        listFooterHeight : CGFloat = 60.0,
+        itemPositionGroupingHeight : CGFloat = 0.0
     )
     {
         self.itemHeight = itemHeight
@@ -72,6 +75,7 @@ public struct ListSizing : Equatable
         self.sectionFooterHeight = sectionFooterHeight
         self.listHeaderHeight = listHeaderHeight
         self.listFooterHeight = listFooterHeight
+        self.itemPositionGroupingHeight = itemPositionGroupingHeight
     }
     
     public mutating func set(with block: (inout ListSizing) -> ())
@@ -129,20 +133,12 @@ public struct ListLayout : Equatable
     }
     
     internal static func width(
-        with viewSize : CGSize,
-        padding : UIEdgeInsets,
-        constraint : WidthConstraint,
-        layoutDirection : LayoutDirection
+        with width : CGFloat,
+        padding : HorizontalPadding,
+        constraint : WidthConstraint
     ) -> CGFloat
     {
-        let paddedWidth : CGFloat = {
-            let viewWidth = layoutDirection.width(for: viewSize)
-            
-            switch layoutDirection {
-            case .vertical: return viewWidth - padding.left - padding.right
-            case .horizontal: return viewWidth - padding.top - padding.bottom
-            }
-        }()
+        let paddedWidth = width - padding.left - padding.right
         
         return constraint.clamp(paddedWidth)
     }
