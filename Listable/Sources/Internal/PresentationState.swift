@@ -80,8 +80,7 @@ final class PresentationState
     // MARK: Public Properties
     //
     
-    unowned var listView : ListView!
-    unowned var collectionView : UICollectionView!
+    unowned var view : ListView!
     
     var refreshControl : RefreshControl.PresentationState?
     
@@ -259,9 +258,9 @@ final class PresentationState
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
-            added: { section in SectionState(with: section, listView: self.listView) },
-            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.listView) },
-            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.listView) }
+            added: { section in SectionState(with: section, listView: self.view) },
+            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.view) },
+            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.view) }
         )
     }
     
@@ -273,14 +272,14 @@ final class PresentationState
             let newControl = RefreshControl.PresentationState(new)
 
             if #available(iOS 10.0, *) {
-                self.collectionView.refreshControl = newControl.view
+                self.view.collectionView.refreshControl = newControl.view
             } else {
-                self.collectionView.addSubview(newControl.view)
+                self.view.collectionView.addSubview(newControl.view)
             }
             self.refreshControl = newControl
         } else if let existing = refreshControl, new == nil {
             if #available(iOS 10.0, *) {
-                self.collectionView.refreshControl = nil
+                self.view.collectionView.refreshControl = nil
             } else {
                 existing.view.removeFromSuperview()
             }
@@ -313,7 +312,7 @@ final class PresentationState
         
         self.registeredSupplementaryViewsObjectIdentifiers.insert(identifier)
         
-        self.collectionView.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
+        self.view.collectionView.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
     }
     
     private var registeredCellObjectIdentifiers : Set<ObjectIdentifier> = Set()
@@ -330,7 +329,7 @@ final class PresentationState
         
         self.registeredCellObjectIdentifiers.insert(identifier)
         
-        self.collectionView.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
+        self.view.collectionView.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
     }
     
     final class SectionState
