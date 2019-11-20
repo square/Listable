@@ -19,5 +19,7 @@ Pod::Spec.new do |s|
     test_spec.resources = 'Listable/Tests/Resources/**/*'
 
     test_spec.framework = 'XCTest'
+
+    test_spec.requires_app_host = true
   end
 end
