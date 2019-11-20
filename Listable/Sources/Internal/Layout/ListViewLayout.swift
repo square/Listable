@@ -50,23 +50,18 @@ class ListViewLayout : UICollectionViewLayout
             guard oldValue != self.appearance else {
                 return
             }
-                                    
-            self.invalidateEntireLayout()
             
-            switch self.appearance.underflow {
-            case .alwaysBounceVertical(let bounce):
-                switch appearance.direction {
-                case .vertical:
-                    self.collectionView?.alwaysBounceVertical = bounce
-                    self.collectionView?.alwaysBounceHorizontal = false
-                case .horizontal:
-                    self.collectionView?.alwaysBounceVertical = false
-                    self.collectionView?.alwaysBounceHorizontal = bounce
-                }
-            case .pinTo(_):
-                fatalError("Other types of underflow are not yet implemented.")
-            }
+            self.applyAppearance()
         }
+    }
+    
+    private func applyAppearance()
+    {
+        guard self.collectionView != nil else {
+            return
+        }
+        
+        self.invalidateEntireLayout()
     }
     
     //
@@ -87,6 +82,8 @@ class ListViewLayout : UICollectionViewLayout
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
         super.init()
+        
+        self.applyAppearance()
     }
     
     @available(*, unavailable)
