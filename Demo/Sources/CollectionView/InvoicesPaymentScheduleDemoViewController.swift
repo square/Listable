@@ -60,7 +60,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.requestsInitialDeposit = isOn
                     }),
-                    sizing: .thatFits(.noConstraint)
+                    sizing: .thatFits
                 )
                                 
                 section += Item(
@@ -69,7 +69,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.splitsIntoMilestones = isOn
                     }),
-                    sizing: .thatFits(.noConstraint)
+                    sizing: .thatFits
                 )
             }
         
@@ -78,12 +78,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     
                     section.header = HeaderFooter(
                         with: SectionHeader(text: "Deposit Request"),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
                         with: SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section += Item(
@@ -96,7 +96,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits(.noConstraint),
+                        sizing: .thatFits,
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -109,7 +109,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                 }
             }
@@ -119,12 +119,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     
                     section.header = HeaderFooter(
                         with: SectionHeader(text: "Balance Split"),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
                         with: SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section += Item(
@@ -137,7 +137,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits(.noConstraint),
+                        sizing: .thatFits,
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -150,7 +150,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section += Item(
@@ -162,7 +162,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                 }
             }

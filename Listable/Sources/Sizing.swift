@@ -11,9 +11,14 @@ import Foundation
 public enum Sizing : Equatable
 {
     case `default`
+    
     case fixed(CGFloat)
-    case thatFits(Constraint)
-    case autolayout(Constraint)
+    
+    case thatFits
+    case thatFitsWith(Constraint)
+    
+    case autolayout
+    case autolayoutWith(Constraint)
     
     public func measure(with view : UIView, width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat) -> CGFloat
     {
@@ -25,13 +30,19 @@ public enum Sizing : Equatable
             case .fixed(let fixedHeight):
                 return fixedHeight
                 
-            case .thatFits(let constraints):
+            case .thatFits:
+                return Sizing.thatFitsWith(.noConstraint).measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                
+            case .thatFitsWith(let constraints):
                 let fittingSize = layoutDirection.fittingSize(with: width)
                 let size = view.sizeThatFits(fittingSize)
                 
                 return constraints.clamp(layoutDirection.height(for: size), with: defaultHeight)
                 
-            case .autolayout(let constraints):
+            case .autolayout:
+                return Sizing.autolayoutWith(.noConstraint).measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                
+            case .autolayoutWith(let constraints):
                 let fittingSize = layoutDirection.fittingSize(with: width)
                 
                 let size : CGSize
