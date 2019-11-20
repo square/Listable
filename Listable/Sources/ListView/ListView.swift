@@ -216,7 +216,7 @@ public final class ListView : UIView
     public func setContent(with builder : ListDescription.Build)
     {
         let description = ListDescription(
-            animated: true,
+            animatesChanges: true,
             appearance: self.appearance,
             behavior: self.behavior,
             scrollInsets: self.scrollInsets,
@@ -269,7 +269,7 @@ public final class ListView : UIView
         self.behavior = description.behavior
         self.scrollInsets = description.scrollInsets
         
-        self.setContent(animated: description.animated, description.content)
+        self.setContent(animated: description.animatesChanges, description.content)
     }
     
     private func setContentFromSource(animated : Bool = false)

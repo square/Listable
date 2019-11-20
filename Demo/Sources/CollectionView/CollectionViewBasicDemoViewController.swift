@@ -44,7 +44,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
         
         listView.setContent { list in
             
-            list.animated = animated
+            list.animatesChanges = animated
             
             list += self.rows.map { sectionRows in
                 Section(identifier: "Demo Section") { section in

@@ -21,7 +21,7 @@ public struct List : BlueprintUI.Element
     public init(build : ListDescription.Build)
     {
         self.listDescription = ListDescription(
-            animated: UIView.inheritedAnimationDuration > 0.0,
+            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             appearance: .init(),
             behavior: .init(),
             scrollInsets: .init(),

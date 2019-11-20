@@ -50,7 +50,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     {
         self.list.setContent { list in
             
-            list.animated = animated
+            list.animatesChanges = animated
                    
             list += Section(identifier: SectionIdentifier.toggles) { section in
                 

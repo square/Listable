@@ -51,7 +51,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         self.contentIdentifier = AnyHashable(identifier)
         
         self.listDescription = ListDescription(
-            animated: true,
+            animatesChanges: true,
             appearance: .init(),
             behavior: .init(),
             scrollInsets: .init(),
