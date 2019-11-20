@@ -171,9 +171,11 @@ final class ItemizationEditorViewController : UIViewController
                 itemSpacing: 20.0,
                 itemToSectionFooterSpacing: 20.0,
                 stickySectionHeaders: false
+            ),
+            underflow: UnderflowBehavior(
+                alwaysBounce: true,
+                alignment: .top
             )
-            ,
-            underflow: .alwaysBounceVertical(true)
         )
     }
 }

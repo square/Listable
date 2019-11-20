@@ -118,10 +118,7 @@ public final class ListView : UIView
         
         // Scroll View Config
         
-        switch self.appearance.underflow {
-        case .alwaysBounceVertical(let bounce): self.collectionView.setAlwaysBounce(bounce, direction: self.appearance.direction)
-        case .pinTo(_): fatalError("Other types of underflow are not yet implemented.")
-        }
+        self.collectionView.setAlwaysBounce(self.appearance.underflow.alwaysBounce, direction: self.appearance.direction)
     }
     
     public var behavior : Behavior {

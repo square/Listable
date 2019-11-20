@@ -28,7 +28,7 @@ public struct Appearance : Equatable
         direction : LayoutDirection = .vertical,
         sizing : ListSizing = ListSizing(),
         layout : ListLayout = ListLayout(),
-        underflow : UnderflowBehavior = .alwaysBounceVertical(true)
+        underflow : UnderflowBehavior = UnderflowBehavior()
     )
     {
         self.backgroundColor = backgroundColor
@@ -145,16 +145,35 @@ public struct ListLayout : Equatable
 }
 
 
-public enum UnderflowBehavior : Equatable
+public struct UnderflowBehavior : Equatable
 {
-    case alwaysBounceVertical(Bool)
-    case pinTo(PinAlignment)
+    public var alwaysBounce : Bool
+    public var alignment : Alignment
     
-    public enum PinAlignment : Equatable
+    public init(alwaysBounce : Bool = true, alignment : Alignment = .top)
+    {
+        self.alwaysBounce = alwaysBounce
+        self.alignment = alignment
+    }
+    
+    public enum Alignment : Equatable
     {
         case top
         case center
         case bottom
+        
+        func offsetFor(contentHeight : CGFloat, viewHeight: CGFloat) -> CGFloat
+        {
+            guard contentHeight < viewHeight else {
+                return 0.0
+            }
+            
+            switch self {
+            case .top: return 0.0
+            case .center: return round((viewHeight - contentHeight) / 2.0)
+            case .bottom: return viewHeight - contentHeight
+            }
+        }
     }
 }
 
