@@ -107,10 +107,21 @@ public final class ListView : UIView
     
     private func applyAppearance()
     {
+        // Appearance
+        
         self.layout.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
         
+        // Row Sizing
+        
         self.storage.presentationState.resetAllCachedHeights()
+        
+        // Scroll View Config
+        
+        switch self.appearance.underflow {
+        case .alwaysBounceVertical(let bounce): self.collectionView.setAlwaysBounce(bounce, direction: self.appearance.direction)
+        case .pinTo(_): fatalError("Other types of underflow are not yet implemented.")
+        }
     }
     
     public var behavior : Behavior {
@@ -688,7 +699,7 @@ extension ListView : KeyboardObserverDelegate
 
 
 
-fileprivate extension UICollectionView
+fileprivate extension UIScrollView
 {    
     func isScrolledNearBottom() -> Bool
     {
@@ -696,5 +707,17 @@ fileprivate extension UICollectionView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
+    }
+    
+    func setAlwaysBounce(_ bounce : Bool, direction : LayoutDirection)
+    {
+        switch direction {
+        case .vertical:
+            self.alwaysBounceVertical = bounce
+            self.alwaysBounceHorizontal = false
+        case .horizontal:
+            self.alwaysBounceVertical = false
+            self.alwaysBounceHorizontal = bounce
+        }
     }
 }
