@@ -55,13 +55,13 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.footer = HeaderFooter(
                         with: DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section += sectionRows.map { row in
                         Item(
                             with: row,
-                            sizing: .thatFits(.atLeast(.default))
+                            sizing: .thatFitsWith(.atLeast(.default))
                         )
                     }
                 }

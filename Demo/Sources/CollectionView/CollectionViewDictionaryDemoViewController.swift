@@ -111,7 +111,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                     
                     section.header = HeaderFooter(
                         with: SectionHeader(title: letter.letter),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
                     section += letter.words.compactMap { word in
@@ -119,7 +119,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                             hasContent = true
                             return Item(
                                 with: WordRow(title: word.word, detail: word.description),
-                                sizing: .thatFits(.atMost(250.0))
+                                sizing: .thatFitsWith(.atMost(250.0))
                             )
                         } else {
                             return nil
@@ -137,7 +137,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                             title: "No Results For '\(state.value.filter)'",
                             detail: "Please enter a different search."
                         ),
-                        sizing: .thatFits(.atMost(250.0))
+                        sizing: .thatFitsWith(.atMost(250.0))
                     )
                 }
             }

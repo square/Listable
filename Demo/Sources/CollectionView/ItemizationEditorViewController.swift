@@ -72,8 +72,8 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.variations) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: variationsTitle), sizing: .thatFits(.noConstraint))
-                section.footer = HeaderFooter(with: Footer(text: footerText), sizing: .thatFits(.noConstraint))
+                section.header = HeaderFooter(with: Header(title: variationsTitle), sizing: .thatFits)
+                section.footer = HeaderFooter(with: Footer(text: footerText), sizing: .thatFits)
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
@@ -93,8 +93,8 @@ final class ItemizationEditorViewController : UIViewController
                     
                     section.columns = .init(count: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(with: Header(title: set.name), sizing: .thatFits(.noConstraint))
-                    section.footer = HeaderFooter(with: Footer(text: "Choose modifiers"), sizing: .thatFits(.noConstraint))
+                    section.header = HeaderFooter(with: Header(title: set.name), sizing: .thatFits)
+                    section.footer = HeaderFooter(with: Footer(text: "Choose modifiers"), sizing: .thatFits)
                     
                     section += set.all.map { modifier in
                         Item(
@@ -113,7 +113,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.discounts) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: "Discounts"), sizing: .thatFits(.noConstraint))
+                section.header = HeaderFooter(with: Header(title: "Discounts"), sizing: .thatFits)
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     Item(
@@ -133,7 +133,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.taxes) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: "Taxes"), sizing: .thatFits(.noConstraint))
+                section.header = HeaderFooter(with: Header(title: "Taxes"), sizing: .thatFits)
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     Item(
