@@ -370,8 +370,13 @@ class ListViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
+            let wasSectionInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: itemIndexPath.section))
+            
             let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-            attributes?.alpha = 1.0
+            
+            if wasSectionInserted == false {
+                attributes?.alpha = 1.0
+            }
             
             return attributes
         }
@@ -379,9 +384,9 @@ class ListViewLayout : UICollectionViewLayout
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let wasDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
-
-        if wasDeleted {
+        let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
+        
+        if wasItemDeleted {
             let attributes = self.previousLayoutResult.layoutAttributes(at: itemIndexPath)
 
             attributes.frame.origin.y -= attributes.frame.size.height
@@ -389,8 +394,13 @@ class ListViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
+            let wasSectionDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: itemIndexPath.section))
+            
             let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-            attributes?.alpha = 1.0
+            
+            if wasSectionDeleted == false {
+                attributes?.alpha = 1.0
+            }
             
             return attributes
         }
