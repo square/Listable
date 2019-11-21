@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
+		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */; };
 		0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
@@ -38,6 +39,7 @@
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
+		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
 		0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicesPaymentScheduleDemoViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		0AEB96A522FBCBA500341DFF = {
 			isa = PBXGroup;
 			children = (
+				0A0E070323870A5700DDD27D /* README.md */,
 				0AEB96C322FBCC1D00341DFF /* Sources */,
 				0AEB96E522FBCC5300341DFF /* Resources */,
 				0AEB96B022FBCBA500341DFF /* Demo */,
@@ -249,6 +252,7 @@
 				0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */,
 				0A8AEF892315F68400CCB7F3 /* the-impact.png in Resources */,
 				0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */,
+				0A0E070423870A5700DDD27D /* README.md in Resources */,
 				0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
