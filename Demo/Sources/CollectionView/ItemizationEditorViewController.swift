@@ -116,17 +116,13 @@ final class ItemizationEditorViewController : UIViewController
                 section.header = HeaderFooter(with: Header(title: "Discounts"), sizing: .thatFits)
                 
                 section += self.availableOptions.allDiscounts.map { discount in
-                    Item(
-                        with: ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
-                            if isOn {
-                                self.itemization.add(discount)
-                            } else {
-                                self.itemization.remove(discount)
-                            }
-                        },
-                        sizing: self.itemization.has(discount) ? .fixed(130.0) : .default,
-                        selection: .isSelectable(isSelected: false)
-                    )
+                    ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
+                        if isOn {
+                            self.itemization.add(discount)
+                        } else {
+                            self.itemization.remove(discount)
+                        }
+                    }
                 }
             }
             
@@ -136,17 +132,13 @@ final class ItemizationEditorViewController : UIViewController
                 section.header = HeaderFooter(with: Header(title: "Taxes"), sizing: .thatFits)
                 
                 section += self.availableOptions.allTaxes.map { tax in
-                    Item(
-                        with: ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
-                            if isOn {
-                                self.itemization.add(tax)
-                            } else {
-                                self.itemization.remove(tax)
-                            }
-                        },
-                        sizing: self.itemization.has(tax) ? .fixed(130.0) : .default,
-                        selection: .isSelectable(isSelected: false)
-                    )
+                    ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
+                        if isOn {
+                            self.itemization.add(tax)
+                        } else {
+                            self.itemization.remove(tax)
+                        }
+                    }
                 }
             }
         }

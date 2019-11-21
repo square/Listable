@@ -8,6 +8,7 @@
 import UIKit
 
 import Listable
+import BlueprintLists
 
 
 final class CollectionViewBasicDemoViewController : UIViewController
@@ -58,12 +59,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
                         sizing: .thatFits
                     )
                     
-                    section += sectionRows.map { row in
-                        Item(
-                            with: row,
-                            sizing: .thatFitsWith(.atLeast(.default))
-                        )
-                    }
+                    section += sectionRows
                 }
             }
         }
