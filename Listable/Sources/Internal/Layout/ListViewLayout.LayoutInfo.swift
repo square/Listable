@@ -317,8 +317,10 @@ internal extension ListViewLayout
             let direction = self.appearance.direction
             let layout = self.appearance.layout
             
-            let viewWidth = direction.width(for: collectionView.bounds.size)
             let viewSize = collectionView.bounds.size
+            
+            let viewWidth = direction.width(for: collectionView.bounds.size)
+            let viewHeight = direction.height(for: collectionView.bounds.size)
             
             let rootWidth = ListLayout.width(
                 with: direction.width(for: viewSize),
@@ -529,6 +531,8 @@ internal extension ListViewLayout
             
             self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
             
+            self.adjustPositionsForLayoutUnderflow(contentHeight: lastContentMaxY, viewHeight: viewHeight, in: collectionView)
+            
             self.updateHeaders(in: collectionView)
             
             return true
@@ -538,6 +542,40 @@ internal extension ListViewLayout
         {
             self.sections.forEach { section in
                 section.setItemPositions(with: self.appearance)
+            }
+        }
+        
+        private func adjustPositionsForLayoutUnderflow(contentHeight : CGFloat, viewHeight: CGFloat, in collectionView : UICollectionView)
+        {
+            // Take into account the safe area, since that pushes content alignment down within our view.
+            
+            let safeAreaInsets : CGFloat = {
+                switch self.appearance.direction {
+                case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
+                case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
+                }
+            }()
+            
+            let additionalOffset = self.appearance.underflow.alignment.offsetFor(
+                contentHeight: contentHeight,
+                viewHeight: viewHeight - safeAreaInsets
+            )
+            
+            // If we're pinned to the top of the view, there's no adjustment needed.
+            
+            guard additionalOffset > 0.0 else {
+                return
+            }
+            
+            // Provide additional adjustment.
+            
+            for section in self.sections {
+                section.header?.y += additionalOffset
+                section.footer?.y += additionalOffset
+                
+                for item in section.items {
+                    item.y += additionalOffset
+                }
             }
         }
     }
@@ -797,5 +835,17 @@ fileprivate extension Int
         }
         
         return mapped
+    }
+}
+
+
+internal extension UIView
+{
+    var lst_safeAreaInsets : UIEdgeInsets {
+        if #available(iOS 11.0, *) {
+            return self.safeAreaInsets
+        } else {
+            return .zero
+        }
     }
 }
