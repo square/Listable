@@ -150,8 +150,6 @@ fileprivate struct SearchRowAppearance : ItemElementAppearance
         return SearchBar(frame: frame)
     }
     
-    func update(view: ContentView, with position: ItemPosition) {}
-    
     func apply(to view: SearchBar, with info: ApplyItemElementInfo) {}
     
     func wasUpdated(comparedTo other: SearchRowAppearance) -> Bool
