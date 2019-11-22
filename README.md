@@ -404,7 +404,7 @@ public extension ItemElementAppearance where Self:Equatable
 }
 ```
 
-Continuing the example from above, an implementation of `SubtitleItemAppearance` might look like this. We'll assume a 
+Continuing the example from above, an implementation of `SubtitleItemAppearance` might look like this. We'll assume a theme is passed to ensure the appearance matches the look of the app.
 
 ```swift
 struct SubtitleItemAppearance : ItemElementAppearance
@@ -469,7 +469,7 @@ self.listView.setContent { list in
 #### HeaderFooterElement
 Again, a similar API to  `ItemElement`, but with a reduced surface area, given the reduced concerns of header and footers.
 
-```
+```swift
 public protocol HeaderFooterElement
 {\
     associatedtype Appearance:HeaderFooterElementAppearance
@@ -482,7 +482,7 @@ public protocol HeaderFooterElement
 
 As usual, if your `HeaderFooterElement` is `Equatable`, you get `wasUpdated` for free.
 
-```
+```swift
 public extension HeaderFooterElement where Self:Equatable
 {    
     func wasUpdated(comparedTo other : Self) -> Bool
@@ -513,7 +513,7 @@ struct Header : HeaderFooterElement, Equatable
 #### HeaderFooterElementAppearance
 As with `ItemElementAppearance`,  `HeaderFooterElementAppearance` describes how your header or footer appears on screen. 
 
-```
+```swift
 public protocol HeaderFooterElementAppearance
 {
     associatedtype ContentView:UIView
@@ -528,7 +528,7 @@ public protocol HeaderFooterElementAppearance
 
 Per usual, you get `wasUpdated` for free if you're `Equatable`:
 
-```
+```swift
 public extension HeaderFooterElementAppearance where Self:Equatable
 {
     func wasUpdated(comparedTo other : Self) -> Bool
@@ -541,7 +541,7 @@ public extension HeaderFooterElementAppearance where Self:Equatable
 
 Completing the above example, we end up with this:
 
-```
+```swift
 struct HeaderAppearance : HeaderFooterElementAppearance, Equatable
 {
     var theme : AppTheme // Assume `AppTheme` is Equatable.
@@ -575,7 +575,7 @@ struct HeaderAppearance : HeaderFooterElementAppearance, Equatable
 ### Section
 `Section` – surprise – represents a given section in a list. Most of your interaction with `Section` will be through the init & builder API, as shown above.
 
-```
+```swift
 Section(identifier: "section") { section in
     section += self.podcasts.map {
         PodcastRow(podcast: $0)
@@ -585,7 +585,7 @@ Section(identifier: "section") { section in
 
 However, section has many properties to allow for configuration. You can customize the layout, the number of and layout of columns, set the header and footer, and obviously provide items, via the `items` property, and via the many provided overrides of the `+=` operator.
 
-```
+```swift
 public struct Section
 {    
     public var layout : Layout
@@ -619,7 +619,7 @@ var elementRepresentation : Element {
 ### BlueprintItemElement
 `BlueprintItemElement` simplifies the `ItemElement` creation process, asking you for only an `Element` description.
 
-```
+```swift
 public protocol BlueprintItemElement : ItemElement where Appearance == BlueprintItemElementAppearance
 {
     func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
@@ -629,7 +629,7 @@ public protocol BlueprintItemElement : ItemElement where Appearance == Blueprint
 ### BlueprintHeaderFooterElement
 Similarly, `` makes creating a header or footer easy – just implement `element`.
 
-```
+```swift
 public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appearance == BlueprintHeaderFooterElementAppearance
 {
     var element : BlueprintUI.Element { get }
