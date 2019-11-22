@@ -157,7 +157,7 @@ public struct UnderflowBehavior : Equatable
 
 ### Self-Sizing Cells
 
-Another common painpoint for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparent for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. Default pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
+Another common painpoint for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
 
 ```swift
 public enum Sizing : Equatable
@@ -410,6 +410,8 @@ Continuing the example from above, an implementation of `SubtitleItemAppearance`
 struct SubtitleItemAppearance : ItemElementAppearance
 {
     var theme : AppTheme // Assume `AppTheme` is Equatable.
+    
+    // ItemElementAppearance
 
     typealias ContentView = View
 
@@ -440,27 +442,199 @@ struct SubtitleItemAppearance : ItemElementAppearance
 ```
 
 ### HeaderFooter
-Todo
+How to describe a header or footer within a list. Very similar API to `ItemElement`, but with less stuff, as headers and footers are display-only.
+
+```
+public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
+{
+    public var element : Element
+    public var appearance : Element.Appearance
+    
+    public var sizing : Sizing
+    public var layout : HeaderFooterLayout
+}
+```
+
+You set headers and footers on sections via the `header` and `footer` parameter.
+
+```swift
+self.listView.setContent { list in
+    list += Section(identifier: "section-1") { section in
+        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.footer = HeaderFooter(with: DemoFooter(text: "And this is a footer. Please check the EULA for details."))
+    } 
+}
+```
 
 #### HeaderFooterElement
-Todo
+Again, a similar API to  `ItemElement`, but with a reduced surface area, given the reduced concerns of header and footers.
+
+```
+public protocol HeaderFooterElement
+{\
+    associatedtype Appearance:HeaderFooterElementAppearance
+
+    func apply(to view : Appearance.ContentView, reason : ApplyReason)
+
+    func wasUpdated(comparedTo other : Self) -> Bool
+}
+```
+
+As usual, if your `HeaderFooterElement` is `Equatable`, you get `wasUpdated` for free.
+
+```
+public extension HeaderFooterElement where Self:Equatable
+{    
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+```
+
+A standard implementation may look like this:
+
+```swift
+struct Header : HeaderFooterElement, Equatable
+{
+    var title : String
+    
+    // HeaderFooterElement
+
+    typealias Appearance = HeaderAppearance
+
+    func apply(to view : Appearance.ContentView, for reason: ApplyReason)
+    {
+        view.titleLabel.text = self.title       
+    }
+}
+```
 
 #### HeaderFooterElementAppearance
-Todo
+As with `ItemElementAppearance`,  `HeaderFooterElementAppearance` describes how your header or footer appears on screen. 
+
+```
+public protocol HeaderFooterElementAppearance
+{
+    associatedtype ContentView:UIView
+    
+    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
+    
+    func apply(to view : ContentView)
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
+}
+```
+
+Per usual, you get `wasUpdated` for free if you're `Equatable`:
+
+```
+public extension HeaderFooterElementAppearance where Self:Equatable
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+
+```
+
+Completing the above example, we end up with this:
+
+```
+struct HeaderAppearance : HeaderFooterElementAppearance, Equatable
+{
+    var theme : AppTheme // Assume `AppTheme` is Equatable.
+
+    // HeaderFooterElementAppearance
+
+    typealias ContentView = View
+    
+    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
+    {
+        return View(frame: frame)
+    }
+    
+    func apply(to view : ContentView)
+    {
+        // Apply the values from the theme.
+    
+        view.titleLabel.font = theme.headerFont
+        view.titleLabel.textColor = theme.headerColor
+    }
+        
+    final class View : UIView
+    {
+        let titleLabel : UILabel
+        
+        ... The rest of the view implementation.         
+    }
+}
+```
 
 ### Section
-Todo
+`Section` – surprise – represents a given section in a list. Most of your interaction with `Section` will be through the init & builder API, as shown above.
+
+```
+Section(identifier: "section") { section in
+    section += self.podcasts.map {
+        PodcastRow(podcast: $0)
+    }
+}
+```
+
+However, section has many properties to allow for configuration. You can customize the layout, the number of and layout of columns, set the header and footer, and obviously provide items, via the `items` property, and via the many provided overrides of the `+=` operator.
+
+```
+public struct Section
+{    
+    public var layout : Layout
+    public var columns : Columns
+    
+    public var header : AnyHeaderFooter?
+    public var footer : AnyHeaderFooter?
+    
+    public var items : [AnyItem]
+}
+```
 
 Additionally, if you're using Blueprint integration with  `BlueprintLists`, you will also interact with the following types.
 
 ### List
-Todo
+Without Blueprint, you'd usually use `list.setContent { ... }`. However Blueprint trees are just descriptions of UI – as such, `List` is just a struct which describes a list.
+
+```swift
+var elementRepresentation : Element {
+    List { list in
+        list += Section(identifier: "section") { section in
+            
+            section += self.podcasts.map {
+                PodcastRow(podcast: $0)
+            }
+        }
+    }
+}
+````
 
 ### BlueprintItemElement
-Todo
+`BlueprintItemElement` simplifies the `ItemElement` creation process, asking you for only an `Element` description.
+
+```
+public protocol BlueprintItemElement : ItemElement where Appearance == BlueprintItemElementAppearance
+{
+    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
+}
+```
 
 ### BlueprintHeaderFooterElement
-Todo
+Similarly, `` makes creating a header or footer easy – just implement `element`.
+
+```
+public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appearance == BlueprintHeaderFooterElementAppearance
+{
+    var element : BlueprintUI.Element { get }
+}
+```
 
 
 ## Getting Started
