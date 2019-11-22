@@ -1,3 +1,5 @@
+**Note** – Listable is still experimental :see_no_evil:. While it is shipping in [Square Point of Sale](https://squareup.com/us/en/point-of-sale) in several places, we're still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months. We expect to reach 1.0 stability and quality in late Q1 2020.
+
 # Listable
 
 Listable is a declarative list framework for iOS, which allows you to concisely create rich, live updating list based layouts which are highly customizable across many axes: padding, spacing, number of columns, alignment, etc. It's designed to be performant: Handling lists of 10k+ items without issue on most devices.
@@ -627,7 +629,7 @@ public protocol BlueprintItemElement : ItemElement where Appearance == Blueprint
 ```
 
 ### BlueprintHeaderFooterElement
-Similarly, `` makes creating a header or footer easy – just implement `element`.
+Similarly, `BlueprintHeaderFooterElement` makes creating a header or footer easy – just implement `element`.
 
 ```swift
 public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appearance == BlueprintHeaderFooterElementAppearance
