@@ -195,7 +195,7 @@ var elementRepresentation : Element {
 }
 ```
 
-And in this example, we see how to create a simple `ItemElement` that uses Blueprint to render its content.
+And in this example, we see how to create a simple `BlueprintItemElement` that uses Blueprint to render its content.
 
 ```swift
 struct DemoItem : BlueprintItemElement, Equatable
@@ -266,7 +266,7 @@ This allows you to confgure the list view however needed within the `setContent`
 ### Item
 You can think of `Item` as the wrapper for the content _you_ provide to the list – similar to how a `UITableViewCell` wraps a content view and provides other configuration options. 
 
-An `Item` is what you add to a section to represent a row in a list. It contains your provided content (`ItemElement`), plus the appearance of the item, alongside things like sizing, layout customization, selection behaviour, reordering behaviour, and callbacks which are performed when an item is selected, displayed, etc.
+An `Item` is what you add to a section to represent a row in a list. It contains your provided content (`ItemElement`), plus the appearance of the item (`ItemElementAppearance`), alongside things like sizing, layout customization, selection behaviour, reordering behaviour, and callbacks which are performed when an item is selected, displayed, etc.
 
 ```swift
 public struct Item<Element:ItemElement> : AnyItem
@@ -300,7 +300,7 @@ public struct Item<Element:ItemElement> : AnyItem
 ```
 You can add an item to a section via either the `add` function, or via the `+=` override. 
 
-```
+```swift
 section += Item(
     with: AnElement(title: "Hello, World!"),
     appearance: StandardRowAppearance(),
@@ -309,18 +309,135 @@ section += Item(
 )
 ```
 
-However, if you want to use all default values from the `Item` initializer, you can skip a step and simply add your `ItemElement` to the section directly.
+However, if you want to use all default values from the `Item` initializer, and your `ItemElement` conforms to `ItemElementAppearance`, you can skip a step and simply add your `ItemElement` to the section directly.
 
-```
+```swift
 section += AnElement(title: "Hello, World!")
 ```
 
 
 #### ItemElement
-Todo
+The core value type which represents row content. This view model which describes the content of a given row / item, via the `identifier`, and the `wasMoved` and `wasUpdated` methods. You describe how it's drawn via the `Appearance` `associatedtype`. When it's time to display the item on screen, or size an item, `apply(to:for:with:)` is called, which is where you push the content from your `ItemElement` onto a view.
+
+```swift
+public protocol ItemElement
+{
+    var identifier : Identifier<Self> { get }
+
+    associatedtype Appearance:ItemElementAppearance
+
+    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
+
+    func wasMoved(comparedTo other : Self) -> Bool
+    func wasUpdated(comparedTo other : Self) -> Bool
+}
+```
+
+You usually do not need to implement all these! If your `ItemElement` is `Equatable`, you get `wasUpdated` for free – and by default, `wasMoved` is the same was `wasUpdated`.
+
+```swift
+public extension ItemElement
+{
+    func wasMoved(comparedTo other : Self) -> Bool
+    {
+        return self.wasUpdated(comparedTo: other)
+    }
+}
+
+
+public extension ItemElement where Self:Equatable
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+```
+
+This is all a bit abstract, so consider the following example: An `ItemElement` which provides a title and detail label.
+
+```swift
+struct SubtitleItem : ItemElement, Equatable
+{
+    var title : String
+    var detail : String
+    
+    // ItemElement
+
+    typealias Appearance = SubtitleItemAppearance
+
+    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
+    {
+        view.titleLabel.text = self.title
+        view.detailLabel.text = self.detail        
+    }
+}
+```
+
+What is `SubtitleItemAppearance`...?
 
 #### ItemElementAppearance
-Todo
+The visual appearance of an item! Why is this separate from `ItemElement`? To allow multiple underlying model types to share the same appearance, and to split overall concerns: `ItemElement` is concerned with binding content to a view, and `ItemElementAppearance` is concerned with how to draw and set up that view. It has a similar API to `ItemElement`.
+
+```swift
+public protocol ItemElementAppearance
+{
+    associatedtype ContentView:UIView
+    
+    static func createReusableItemView(frame : CGRect) -> ContentView
+    
+    func apply(to view : ContentView, with info : ApplyItemElementInfo)
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
+}
+```
+
+If your `ItemElementAppearance` is `Equatable`, you get `wasUpdated` for free.
+
+```swift
+public extension ItemElementAppearance where Self:Equatable
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+```
+
+Continuing the example from above, an implementation of `SubtitleItemAppearance` might look like this. We'll assume a 
+
+```swift
+struct SubtitleItemAppearance : ItemElementAppearance
+{
+    var theme : AppTheme // Assume `AppTheme` is Equatable.
+
+    typealias ContentView = View
+
+    static func createReusableItemView(frame : CGRect) -> ContentView
+    {
+        return View(frame: frame)
+    }
+
+    func apply(to view : ContentView, with info : ApplyItemElementInfo)
+    {
+        // Apply the values from the theme.
+    
+        view.titleLabel.font = theme.headerFont
+        view.titleLabel.textColor = theme.headerColor
+        
+        view.detailLabel.font = theme.detailFont
+        view.detailLabel.textColor = theme.detailColor
+    }
+    
+    final class View : UIView
+    {
+        let titleLabel : UILabel
+        let detailLabel : UILabel
+        
+        ... The rest of the view implementation. 
+    }
+}
+```
 
 ### HeaderFooter
 Todo
