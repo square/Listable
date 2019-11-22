@@ -100,12 +100,6 @@ public extension ItemElement where Self:Equatable
 public protocol ItemElementAppearance
 {
     //
-    // MARK: Tracking Changes
-    //
-    
-    func wasUpdated(comparedTo other : Self) -> Bool
-    
-    //
     // MARK: Creating & Providing Views
     //
     
@@ -133,6 +127,12 @@ public protocol ItemElementAppearance
      Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
     func apply(to view : ContentView, with info : ApplyItemElementInfo)
+    
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
 }
 
 
