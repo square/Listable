@@ -12,14 +12,17 @@ class BundleFinder : NSObject {}
 
 public class EnglishDictionary
 {
-    static let dictionary : EnglishDictionary = EnglishDictionary()
+    public static let dictionary : EnglishDictionary = EnglishDictionary()
     
-    let wordsByLetter : [Letter]
-    let allWords : [Word]
+    public let wordsByLetter : [Letter]
+    public let allWords : [Word]
     
     init()
     {
-        let stream = InputStream(url: Bundle.main.url(forResource: "dictionary", withExtension: "json")!)!
+        let main = Bundle(for: EnglishDictionary.self)
+        let bundle = Bundle(url: main.url(forResource: "EnglishDictionaryResources", withExtension: "bundle")!)!
+        
+        let stream = InputStream(url: bundle.url(forResource: "dictionary", withExtension: "json")!)!
         defer { stream.close() }
         stream.open()
         
@@ -47,9 +50,10 @@ public class EnglishDictionary
         self.allWords = words.sorted { $0.word < $1.word }
     }
     
-    class Letter  {
-        let letter : String
-        var words : [Word] = []
+    public class Letter
+    {
+        public let letter : String
+        public var words : [Word] = []
         
         init(letter : String)
         {
@@ -64,8 +68,9 @@ public class EnglishDictionary
         }
     }
     
-    struct Word {
-        let word : String
-        let description : String
+    public struct Word : Equatable
+    {
+        public  let word : String
+        public let description : String
     }
 }

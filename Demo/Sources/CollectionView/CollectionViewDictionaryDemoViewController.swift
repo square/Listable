@@ -10,6 +10,7 @@ import Listable
 import BlueprintLists
 import BlueprintUI
 import BlueprintUICommonControls
+import EnglishDictionary
 
 
 final public class CollectionViewDictionaryDemoViewController : UIViewController

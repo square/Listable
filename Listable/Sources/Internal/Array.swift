@@ -13,9 +13,12 @@ extension Array
     func forEachWithIndex(_ block : (Int, Bool, Element) -> ())
     {
         let count = self.count
+        var index : Int = 0
         
-        for (index, element) in self.enumerated() {
+        while index < count {
+            let element = self[index]
             block(index, index == (count - 1), element)
+            index += 1
         }
     }
     
@@ -25,9 +28,12 @@ extension Array
         mapped.reserveCapacity(self.count)
         
         let count = self.count
+        var index : Int = 0
         
-        for (index, element) in self.enumerated() {
+        while index < count {
+            let element = self[index]
             mapped.append(block(index, index == (count - 1), element))
+            index += 1
         }
         
         return mapped
@@ -39,11 +45,16 @@ extension Array
         mapped.reserveCapacity(self.count)
         
         let count = self.count
+        var index : Int = 0
         
-        for (index, element) in self.enumerated() {
+        while index < count {
+            let element = self[index]
+            
             if let value = block(index, index == (count - 1), element) {
                 mapped.append(value)
             }
+            
+            index += 1
         }
         
         return mapped

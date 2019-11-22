@@ -1,8 +1,8 @@
 //
-//  Diff.swift
-//  CheckoutApplet
+//  SectionedDiff.swift
+//  Listable
 //
-//  Created by Kyle Van Essen on 6/16/19.
+//  Created by Kyle Van Essen on 11/22/19.
 //
 
 import Foundation
@@ -40,15 +40,11 @@ struct SectionedDiff<Section, Item>
     
     struct Configuration
     {
-        var moveDetection : MoveDetection
-        
         var section : SectionProviders
         var item : ItemProviders
         
-        init(moveDetection : MoveDetection = .checkAll, section : SectionProviders, item : ItemProviders)
+        init(section : SectionProviders, item : ItemProviders)
         {
-            self.moveDetection = moveDetection
-            
             self.section = section
             self.item = item
         }
@@ -65,7 +61,7 @@ struct SectionedDiff<Section, Item>
                 identifier : @escaping (Section) -> AnyIdentifier,
                 items : @escaping (Section) -> [Item],
                 movedHint : @escaping (Section, Section) -> Bool
-            )
+                )
             {
                 self.identifier = identifier
                 self.items = items
@@ -84,7 +80,7 @@ struct SectionedDiff<Section, Item>
                 identifier : @escaping (Item) -> AnyIdentifier,
                 updated : @escaping (Item, Item) -> Bool,
                 movedHint : @escaping (Item, Item) -> Bool
-            )
+                )
             {
                 self.identifier = identifier
                 self.updated = updated
@@ -103,7 +99,7 @@ struct SectionedDiff<Section, Item>
         
         let sectionsChangeCount : Int
         let itemsChangeCount : Int
-                
+        
         private let diff : ArrayDiff<Section>
         
         init(old : [Section], new : [Section], configuration : Configuration)
@@ -111,7 +107,6 @@ struct SectionedDiff<Section, Item>
             self.diff = ArrayDiff(
                 old: old,
                 new: new,
-                configuration: .init(moveDetection: configuration.moveDetection),
                 identifierProvider: { configuration.section.identifier($0) },
                 movedHint: { configuration.section.movedHint($0, $1) },
                 updated: { _, _ in false }
@@ -133,21 +128,21 @@ struct SectionedDiff<Section, Item>
             
             self.moved = diff.moved.map {
                 Moved(
-                    oldIndex: $0.oldIndex,
-                    newIndex: $0.newIndex,
-                    oldValue: $0.old,
-                    newValue: $0.new,
+                    oldIndex: $0.old.oldIndex,
+                    newIndex: $0.new.newIndex,
+                    oldValue: $0.old.old,
+                    newValue: $0.new.new,
                     
                     itemChanges: SectionedDiff.ItemChanges(
-                        old: $0.old,
-                        oldIndex: $0.oldIndex,
-                        new: $0.new,
-                        newIndex: $0.newIndex,
+                        old: $0.old.old,
+                        oldIndex: $0.old.oldIndex,
+                        new: $0.new.new,
+                        newIndex: $0.new.newIndex,
                         configuration: configuration
                     )
                 )
             }
-                        
+            
             self.noChange = diff.noChange.map {
                 return NoChange(
                     oldIndex: $0.oldIndex,
@@ -213,6 +208,7 @@ struct SectionedDiff<Section, Item>
         }
     }
     
+    
     struct AggregatedChanges
     {
         var deletedSections : [SectionChanges.Removed] = []
@@ -227,41 +223,41 @@ struct SectionedDiff<Section, Item>
         var hasIndexAffectingChanges : Bool {
             return
                 self.deletedSections.isEmpty == false ||
-                self.insertedItems.isEmpty == false ||
-                self.movedSections.isEmpty == false ||
-                self.deletedItems.isEmpty == false ||
-                self.insertedItems.isEmpty == false ||
-                self.movedItems.isEmpty == false
+                    self.insertedItems.isEmpty == false ||
+                    self.movedSections.isEmpty == false ||
+                    self.deletedItems.isEmpty == false ||
+                    self.insertedItems.isEmpty == false ||
+                    self.movedItems.isEmpty == false
         }
         
         init(sectionChanges changes : SectionChanges)
         {
             // Inserted & Removed Sections
-
+            
             self.deletedSections = changes.removed
             self.insertedSections = changes.added
-
-
+            
+            
             // Moved Sections
             
             self.movedSections = changes.moved
-
+            
             // Deleted Items
-
+            
             changes.moved.forEach {
                 self.deletedItems += $0.itemChanges.removed
             }
-
+            
             changes.noChange.forEach {
                 self.deletedItems += $0.itemChanges.removed
             }
-
+            
             // Inserted Items
             
             changes.moved.forEach {
                 self.insertedItems += $0.itemChanges.added
             }
-
+            
             changes.noChange.forEach {
                 self.insertedItems += $0.itemChanges.added
             }
@@ -271,22 +267,23 @@ struct SectionedDiff<Section, Item>
             changes.moved.forEach {
                 self.updatedItems += $0.itemChanges.updated
             }
-
+            
             changes.noChange.forEach {
                 self.updatedItems += $0.itemChanges.updated
             }
-
+            
             // Moved Items
             
             changes.moved.forEach {
                 self.movedItems += $0.itemChanges.moved
             }
-
+            
             changes.noChange.forEach {
                 self.movedItems += $0.itemChanges.moved
             }
         }
     }
+    
     
     struct ItemChanges
     {
@@ -300,7 +297,7 @@ struct SectionedDiff<Section, Item>
         let changeCount : Int
         
         let diff : ArrayDiff<Item>
-
+        
         init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
         {
             self.init(
@@ -317,7 +314,6 @@ struct SectionedDiff<Section, Item>
             self.diff = ArrayDiff(
                 old: old,
                 new: new,
-                configuration: .init(moveDetection: configuration.moveDetection),
                 identifierProvider: { configuration.item.identifier($0) },
                 movedHint: { configuration.item.movedHint($0, $1) },
                 updated: { configuration.item.updated($0, $1) }
@@ -339,10 +335,10 @@ struct SectionedDiff<Section, Item>
             
             self.moved = diff.moved.map {
                 Moved(
-                    oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
-                    newIndex: IndexPath(item: $0.newIndex, section: newIndex),
-                    oldValue: $0.old,
-                    newValue: $0.new
+                    oldIndex: IndexPath(item: $0.old.oldIndex, section: oldIndex),
+                    newIndex: IndexPath(item: $0.new.newIndex, section: newIndex),
+                    oldValue: $0.old.old,
+                    newValue: $0.new.new
                 )
             }
             
@@ -414,235 +410,20 @@ struct SectionedDiff<Section, Item>
 }
 
 
-enum MoveDetection
-{
-    case onlyHinted
-    case checkAll
-}
+extension SectionedDiff.SectionChanges.Added : Equatable where Section:Equatable {}
+extension SectionedDiff.SectionChanges.Removed : Equatable where Section:Equatable {}
+extension SectionedDiff.SectionChanges.Moved : Equatable where Section:Equatable, Item:Equatable {}
+extension SectionedDiff.SectionChanges.NoChange : Equatable where Section:Equatable, Item:Equatable {}
 
+extension SectionedDiff.AggregatedChanges : Equatable where Section:Equatable, Item:Equatable {}
 
-struct ArrayDiff<Element>
-{
-    var added : [Added]
-    var removed : [Removed]
-    
-    var moved : [Moved]
-    var updated : [Updated]
-    var noChange : [NoChange]
-    
-    var changeCount : Int
-    
-    struct Added
-    {
-        let newIndex : Int
-        
-        let new : Element
-    }
-    
-    struct Removed
-    {
-        let oldIndex : Int
-        
-        let old : Element
-    }
-    
-    struct Moved
-    {
-        let oldIndex : Int
-        let newIndex : Int
-        
-        let old : Element
-        let new : Element
-    }
-    
-    struct Updated
-    {
-        let oldIndex : Int
-        let newIndex : Int
-        
-        let old : Element
-        let new : Element
-    }
-    
-    struct NoChange
-    {
-        let oldIndex : Int
-        let newIndex : Int
-        
-        let old : Element
-        let new : Element
-    }
-    
-    struct Configuration
-    {
-        var moveDetection : MoveDetection
-        
-        init(moveDetection : MoveDetection = .checkAll)
-        {
-            self.moveDetection = moveDetection
-        }
-    }
-    
-    init(
-        old : [Element],
-        new : [Element],
-        configuration : Configuration = Configuration(),
-        identifierProvider : (Element) -> AnyHashable,
-        movedHint : (Element, Element) -> Bool,
-        updated : (Element, Element) -> Bool
-        )
-    {
-        // Create diffable collections for fast lookup.
-        
-        let old = DiffableCollection(elements: old, identifierProvider)
-        let new = DiffableCollection(elements: new, identifierProvider)
-        
-        //
-        // Additions and Removals.
-        //
-        
-        let added = new.subtractDifference(from: old)
-        let removed = old.subtractDifference(from: new)
-        
-        self.added = added.map {
-            Added(newIndex: $0.index, new: $0.value)
-        }
-        
-        self.removed = removed.map {
-            Removed(oldIndex: $0.index, old: $0.value)
-        }
-        
-        //
-        // Moves, Updates, and No Change.
-        //
-        
-        self.moved = []
-        self.updated = []
-        self.noChange = []
-        
-        // Create pairs and figure out move hints.
-        
-        let pairs = Pair.pairs(withNew: new, old: old, movedHint: movedHint, updated: updated)
-        
-        let (moveHinted, moveNotHinted) = pairs.separate { pair in pair.moveHinted }
-        
-        // We iterate over moves first, in order to ensure move hints have an effect.
-        // If there are no move hints, then whatever transforms result in the new array will be applied.
-        
-        var sorted = [Pair]()
-        sorted += moveHinted.sorted { $0.distance > $1.distance }
-        sorted += moveNotHinted.sorted { $0.distance > $1.distance }
-        
-        for pair in sorted {
-            let moved : Bool = {
-                let indexChanged = { old.index(of: pair.identifier) != new.index(of: pair.identifier) }
-                
-                switch configuration.moveDetection {
-                case .checkAll: return indexChanged()
-                case .onlyHinted: return pair.moveHinted ? indexChanged() : false
-                }
-            }()
-            
-            if moved {
-                old.move(
-                    from: old.index(of: pair.identifier),
-                    to: new.index(of: pair.identifier)
-                )
-                
-                self.moved.append(Moved(
-                    oldIndex: pair.old.index,
-                    newIndex: pair.new.index,
-                    old: pair.old.value,
-                    new: pair.new.value
-                ))
-            } else if pair.updated {
-                self.updated.append(Updated(
-                    oldIndex: pair.old.index,
-                    newIndex: pair.new.index,
-                    old: pair.old.value,
-                    new: pair.new.value
-                ))
-            } else {
-                self.noChange.append(NoChange(
-                    oldIndex: pair.old.index,
-                    newIndex: pair.new.index,
-                    old: pair.old.value,
-                    new: pair.new.value
-                ))
-            }
-        }
-        
-        // We are done – sort arrays.
-                
-        self.added.sort { $0.newIndex < $1.newIndex }
-        self.removed.sort { $0.oldIndex > $1.oldIndex }
-        
-        self.moved.sort { $0.newIndex > $1.newIndex }
-        self.updated.sort { $0.newIndex > $1.newIndex }
-        self.noChange.sort { $0.newIndex > $1.newIndex }
-        
-        self.changeCount = self.added.count
-            + self.removed.count
-            + self.moved.count
-            + self.updated.count
-    }
-    
-    private final class Pair
-    {
-        let new : DiffContainer<Element>
-        let old : DiffContainer<Element>
-        
-        let identifier : UniqueIdentifier<Element>
-        
-        let distance : Int
-        
-        let moveHinted : Bool
-        let updated : Bool
-        
-        init(
-            new : DiffContainer<Element>,
-            old : DiffContainer<Element>,
-            identifier : UniqueIdentifier<Element>,
-            distance : Int,
-            moveHinted : Bool,
-            updated : Bool
-            )
-        {
-            self.new = new
-            self.old = old
-            
-            self.identifier = identifier
-            
-            self.distance = distance
-            
-            self.moveHinted = moveHinted
-            self.updated = updated
-        }
-        
-        static func pairs(
-            withNew new : DiffableCollection<Element>,
-            old : DiffableCollection<Element>,
-            movedHint : (Element, Element) -> Bool,
-            updated : (Element, Element) -> Bool
-            ) -> [Pair]
-        {
-            return new.containers.map { newContainer in
-                
-                let identifier = newContainer.identifier
-                let oldContainer = old.container(for: identifier)
-                
-                return Pair(
-                    new: newContainer,
-                    old: oldContainer,
-                    identifier: identifier,
-                    distance: abs(new.index(of: identifier) - old.index(of: identifier)),
-                    moveHinted: movedHint(oldContainer.value, newContainer.value),
-                    updated: updated(oldContainer.value, newContainer.value)
-                )
-            }
-        }
-    }
-}
+extension SectionedDiff.ItemChanges : Equatable where Item:Equatable {}
+
+extension SectionedDiff.ItemChanges.Added : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges.Removed : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges.Moved : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges.Updated : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges.NoChange : Equatable where Item:Equatable {}
 
 
 extension SectionedDiff.SectionChanges
@@ -821,245 +602,12 @@ extension SectionedDiff.ItemChanges
             case .move(let mapped, _): return mapped
             }
         }
-    
+        
         var oldIndex : Int {
             switch self {
             case .remove(_, let remove): return remove.oldIndex.item
             case .move(_, let move): return move.oldIndex.item
             }
         }
-    }
-}
-
-fileprivate class DiffContainer<Value>
-{
-    let identifier : UniqueIdentifier<Value>
-    let value : Value
-    let index : Int
-    
-    init(
-        value : Value,
-        index : Int,
-        identifierProvider : (Value) -> AnyHashable,
-        identifierFactory : UniqueIdentifier<Value>.Factory
-        )
-    {
-        self.value = value
-        self.index = index
-        
-        self.identifier = identifierFactory.identifier(for: identifierProvider(self.value))
-    }
-    
-    static func containers(with elements : [Value], identifierProvider : (Value) -> AnyHashable) -> [DiffContainer]
-    {
-        let identifierFactory = UniqueIdentifier<Value>.Factory()
-        identifierFactory.reserveCapacity(elements.count)
-        
-        return elements.mapWithIndex { index, _, value in
-            return DiffContainer(
-                value: value,
-                index: index,
-                identifierProvider: identifierProvider,
-                identifierFactory: identifierFactory
-            )
-        }
-    }
-}
-
-
-private final class UniqueIdentifier<Type> : Hashable
-{
-    private let base : AnyHashable
-    private let modifier : Int
-    
-    private let hash : Int
-    
-    init(base : AnyHashable, modifier : Int)
-    {
-        self.base = base
-        self.modifier = modifier
-        
-        var hasher = Hasher()
-        hasher.combine(self.base)
-        hasher.combine(self.modifier)
-        self.hash = hasher.finalize()
-    }
-    
-    static func == (lhs: UniqueIdentifier, rhs: UniqueIdentifier) -> Bool
-    {
-        return lhs.hash == rhs.hash && lhs.base == rhs.base && lhs.modifier == rhs.modifier
-    }
-    
-    func hash(into hasher: inout Hasher)
-    {
-        hasher.combine(self.hash)
-    }
-    
-    final class Factory
-    {
-        private var counts : [AnyHashable:Int] = [:]
-        
-        func reserveCapacity(_ minimumCapacity : Int)
-        {
-            self.counts.reserveCapacity(minimumCapacity)
-        }
-        
-        func identifier(for base : AnyHashable) -> UniqueIdentifier
-        {
-            let count = self.counts[base, default:1]
-            
-            self.counts[base] = (count + 1)
-            
-            return UniqueIdentifier(base: base, modifier: count)
-        }
-    }
-}
-
-private final class DiffableCollection<Value>
-{
-    private(set) var containers : [DiffContainer<Value>]
-    private var containersByIdentifier : [UniqueIdentifier<Value>:DiffContainer<Value>]
-    
-    init(elements : [Value], _ identifierProvider : (Value) -> AnyHashable)
-    {
-        self.identifierContainerIndexes.reserveCapacity(elements.count)
-        
-        self.containers = DiffContainer.containers(with: elements, identifierProvider: identifierProvider)
-        
-        self.containersByIdentifier = self.containers.toUniqueDictionary { _, container in
-            return (container.identifier, container)
-        }
-    }
-    
-    // MARK: Querying The Collection
-    
-    func index(of identifier : UniqueIdentifier<Value>) -> Int
-    {
-        self.generateIndexLookupsIfNeeded()
-        
-        return self.identifierContainerIndexes[identifier]!
-    }
-    
-    func contains(identifier : UniqueIdentifier<Value>) -> Bool
-    {
-        return self.containersByIdentifier[identifier] != nil
-    }
-    
-    func container(for identifier : UniqueIdentifier<Value>) -> DiffContainer<Value>
-    {
-        return self.containersByIdentifier[identifier]!
-    }
-    
-    func difference(from other : DiffableCollection) -> [DiffContainer<Value>]
-    {
-        return self.containers.compactMap { element in
-            if other.contains(identifier: element.identifier) == false {
-                return element
-            } else {
-                return nil
-            }
-        }
-    }
-    
-    func subtractDifference(from other : DiffableCollection) -> [DiffContainer<Value>]
-    {
-        let difference = self.difference(from: other)
-        
-        self.remove(containers: difference)
-        
-        return difference
-    }
-    
-    // MARK: Core Mutating Methods
-    
-    func move(from : Int, to: Int)
-    {
-        guard from != to else {
-            return
-        }
-        
-        let value = self.containers[from]
-        
-        self.containers.remove(at: from)
-        self.containers.insert(value, at: to)
-        
-        self.resetIndexLookups()
-    }
-    
-    func remove(containers : [DiffContainer<Value>])
-    {
-        containers.forEach {
-            self.containersByIdentifier.removeValue(forKey: $0.identifier)
-        }
-        
-        let indexes = containers.map({
-            return self.index(of: $0.identifier)
-        }).sorted(by: { $0 > $1 })
-        
-        indexes.forEach {
-            self.containers.remove(at: $0)
-        }
-        
-        self.resetIndexLookups()
-    }
-    
-    // MARK: Private Methods
-    
-    private var identifierContainerIndexes : [UniqueIdentifier<Value>:Int] = [:]
-    
-    private func resetIndexLookups()
-    {
-        self.identifierContainerIndexes.removeAll(keepingCapacity: true)
-    }
-    
-    private func generateIndexLookupsIfNeeded()
-    {
-        guard self.identifierContainerIndexes.isEmpty else {
-            return
-        }
-        
-        for (index, container) in self.containers.enumerated() {
-            self.identifierContainerIndexes[container.identifier] = index
-        }
-    }
-}
-
-private extension Array
-{
-    func separate(_ block : (Element) -> Bool) -> ([Element], [Element])
-    {
-        var left = [Element]()
-        var right = [Element]()
-        
-        for element in self {
-            if block(element) {
-                left.append(element)
-            } else {
-                right.append(element)
-            }
-        }
-        
-        return (left, right)
-    }
-}
-
-private extension Array
-{    
-    func toUniqueDictionary<Key:Hashable, Value>(_ block : (Int, Element) -> (Key, Value)) -> Dictionary<Key,Value>
-    {
-        var dictionary = Dictionary<Key,Value>()
-        dictionary.reserveCapacity(self.count)
-        
-        for (index, element) in self.enumerated() {
-            let (key,value) = block(index, element)
-            
-            guard dictionary[key] == nil else {
-                fatalError("Existing entry for key '\(key)' not allowed for unique dictionaries.")
-            }
-            
-            dictionary[key] = value
-        }
-        
-        return dictionary
     }
 }

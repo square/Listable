@@ -115,10 +115,10 @@ extension KeyboardObserver
 {
     struct NotificationInfo : Equatable
     {
-        fileprivate var endingFrame : CGRect = .zero
+        var endingFrame : CGRect = .zero
         
-        fileprivate var animationDuration : Double = 0.0
-        fileprivate var animationCurve : UInt = 0
+        var animationDuration : Double = 0.0
+        var animationCurve : UInt = 0
         
         init() {}
         
