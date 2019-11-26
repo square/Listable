@@ -28,8 +28,8 @@ final class ReuseIdentifier<Element> : Hashable
         }
     }
     
-    
     let stringValue : String
+    let identifier : ObjectIdentifier
     
     //
     // MARK: Private Methods
@@ -39,10 +39,8 @@ final class ReuseIdentifier<Element> : Hashable
     {
         self.identifier = ObjectIdentifier(Element.self)
         
-        self.stringValue = "\(String(reflecting: Element.self))(\(self.identifier))"
+        self.stringValue = "\(self.identifier)"
     }
-    
-    private let identifier : ObjectIdentifier
     
     //
     // MARK: Equatable
@@ -50,7 +48,7 @@ final class ReuseIdentifier<Element> : Hashable
     
     static func == (lhs: ReuseIdentifier, rhs: ReuseIdentifier) -> Bool
     {
-        return lhs.identifier == rhs.identifier
+        return lhs === rhs
     }
     
     //

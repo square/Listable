@@ -19,6 +19,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
         super.init(frame: frame)
         
         self.backgroundColor = .clear
+        self.contentView.backgroundColor = .clear
         
         self.layer.masksToBounds = false
         self.contentView.layer.masksToBounds = false
