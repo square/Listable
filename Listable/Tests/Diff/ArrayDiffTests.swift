@@ -27,7 +27,7 @@ class ArrayDiffTests: XCTestCase
     
     func test_insert_and_remove()
     {
-        self.perform("Empty to filled") {
+        self.testcase("Empty to filled") {
             let old = [String]()
             let new = ["a", "b", "c", "d"]
             
@@ -50,7 +50,7 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.noChange, [])
         }
         
-        self.perform("Filled to to empty") {
+        self.testcase("Filled to to empty") {
             let old = ["a", "b", "c", "d"]
             let new = [String]()
             
@@ -74,7 +74,7 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.noChange, [])
         }
         
-        self.perform("Add more items") {
+        self.testcase("Add more items") {
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a2", "b", "c", "c2", "d", "d2"]
             
@@ -102,7 +102,7 @@ class ArrayDiffTests: XCTestCase
             ])
         }
         
-        self.perform("Remove items") {
+        self.testcase("Remove items") {
             let old = ["a", "a2", "b", "c", "c2", "d", "d2"]
             let new = ["a", "b", "c", "d"]
             
@@ -131,7 +131,7 @@ class ArrayDiffTests: XCTestCase
             ])
         }
         
-        self.perform("Add and remove items") {
+        self.testcase("Add and remove items") {
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a2", "c", "c2", "d2"]
             
@@ -164,7 +164,7 @@ class ArrayDiffTests: XCTestCase
     
     func test_move_and_update()
     {
-        self.perform("Move items") {
+        self.testcase("Move items") {
             let old = ["a", "b", "c", "d"]
             let new = ["b", "c", "d", "a"]
             
@@ -193,7 +193,7 @@ class ArrayDiffTests: XCTestCase
             ])
         }
         
-        self.perform("Update items") {
+        self.testcase("Update items") {
             let old = ["a", "b", "c", "d"]
             let new = ["A", "b", "c", "d"]
             
@@ -219,7 +219,7 @@ class ArrayDiffTests: XCTestCase
             ])
         }
         
-        self.perform("Update and moved items") {
+        self.testcase("Update and moved items") {
             let old = ["a", "b", "c", "d"]
             let new = ["A", "c", "d", "B"]
             
@@ -252,7 +252,7 @@ class ArrayDiffTests: XCTestCase
     
     func test_insert_and_remove_duplicate_items()
     {
-        self.perform("Insert duplicate items") {
+        self.testcase("Insert duplicate items") {
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a", "b", "b", "c", "c", "d", "d"]
             
@@ -281,7 +281,7 @@ class ArrayDiffTests: XCTestCase
             ])
         }
         
-        self.perform("Remove duplicate items") {
+        self.testcase("Remove duplicate items") {
             let old = ["a", "a", "b", "b", "c", "c", "d", "d"]
             let new = ["a", "b", "c", "d"]
             
@@ -314,11 +314,11 @@ class ArrayDiffTests: XCTestCase
     
     func test_transform_with_random_mutations()
     {
-        let iterations : Int = 1000
+        let iterations : Int = 100
         
         var rng = StableRNG()
         
-        self.perform("Removing elements") {
+        self.testcase("Removing elements") {
             
             for _ in 1...iterations {
                 let old = numbers
@@ -336,7 +336,7 @@ class ArrayDiffTests: XCTestCase
             }
         }
         
-        self.perform("Inserting elements") {
+        self.testcase("Inserting elements") {
 
             for _ in 1...iterations {
                 let old = numbers
@@ -354,7 +354,7 @@ class ArrayDiffTests: XCTestCase
             }
         }
         
-        self.perform("Shuffling elements") {
+        self.testcase("Shuffling elements") {
             
             for _ in 1...iterations {
                 let old = numbers
@@ -366,7 +366,7 @@ class ArrayDiffTests: XCTestCase
             }
         }
         
-        self.perform("Shuffling, Removing, and Inserting elements") {
+        self.testcase("Shuffling, Removing, and Inserting elements") {
             
             for _ in 1...iterations {
                 let old = numbers

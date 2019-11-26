@@ -10,9 +10,23 @@ import XCTest
 
 extension XCTestCase
 {
-    func perform(_ name : String = "", _ block : () -> ())
+    func testcase(_ name : String = "", _ block : () -> ())
     {
         block()
+    }
+    
+    func assertThrowsError(test : () throws -> (), verify : (Error) -> ())
+    {
+        var thrown = false
+        
+        do {
+            try test()
+        } catch {
+            thrown = true
+            verify(error)
+        }
+        
+        XCTAssertTrue(thrown, "Expected an error to be thrown but one was not.")
     }
     
     func waitFor(timeout : TimeInterval = 10.0, predicate : () -> Bool)

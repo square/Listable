@@ -29,6 +29,7 @@ final class ReuseIdentifier<Element> : Hashable
     }
     
     let stringValue : String
+    let identifier : ObjectIdentifier
     
     //
     // MARK: Private Methods
@@ -40,8 +41,6 @@ final class ReuseIdentifier<Element> : Hashable
         
         self.stringValue = "\(self.identifier)"
     }
-    
-    private let identifier : ObjectIdentifier
     
     //
     // MARK: Equatable
