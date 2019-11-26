@@ -50,23 +50,19 @@ class ListViewLayout : UICollectionViewLayout
             guard oldValue != self.appearance else {
                 return
             }
-                                    
-            self.invalidateEntireLayout()
             
-            switch self.appearance.underflow {
-            case .alwaysBounceVertical(let bounce):
-                switch appearance.direction {
-                case .vertical:
-                    self.collectionView?.alwaysBounceVertical = bounce
-                    self.collectionView?.alwaysBounceHorizontal = false
-                case .horizontal:
-                    self.collectionView?.alwaysBounceVertical = false
-                    self.collectionView?.alwaysBounceHorizontal = bounce
-                }
-            case .pinTo(_):
-                fatalError("Other types of underflow are not yet implemented.")
-            }
+            self.applyAppearance()
         }
+    }
+    
+    private func applyAppearance()
+    {
+        guard self.collectionView != nil else {
+            return
+        }
+        
+        self.neededLayoutType.merge(with: .rebuild)
+        self.invalidateLayout()
     }
     
     //
@@ -87,6 +83,8 @@ class ListViewLayout : UICollectionViewLayout
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
         super.init()
+        
+        self.applyAppearance()
     }
     
     @available(*, unavailable)
@@ -116,11 +114,6 @@ class ListViewLayout : UICollectionViewLayout
     // MARK: Invalidation & Invalidation Contexts
     //
     
-    func invalidateEntireLayout()
-    {
-        self.neededLayoutType = .requeryDataSourceCounts
-    }
-    
     private(set) var shouldAskForItemSizesDuringLayoutInvalidation : Bool = false
     
     func setShouldAskForItemSizesDuringLayoutInvalidation()
@@ -137,7 +130,7 @@ class ListViewLayout : UICollectionViewLayout
         super.invalidateLayout()
         
         if self.shouldAskForItemSizesDuringLayoutInvalidation {
-            self.invalidateEntireLayout()
+            self.neededLayoutType = .rebuild
             self.shouldAskForItemSizesDuringLayoutInvalidation = false
         }
     }
@@ -226,7 +219,7 @@ class ListViewLayout : UICollectionViewLayout
         case none
         case updateHeaders
         case relayout
-        case requeryDataSourceCounts
+        case rebuild
         
         mutating func merge(with context : UICollectionViewLayoutInvalidationContext)
         {
@@ -236,17 +229,27 @@ class ListViewLayout : UICollectionViewLayout
             let needsRelayout = context.widthChanged || context.performedInteractiveMove
             
             if requeryDataSourceCounts {
-                self = .requeryDataSourceCounts
+                self.merge(with: .rebuild)
             } else if needsRelayout {
-                switch self {
-                case .none, .updateHeaders: self = .relayout
-                case .relayout, .requeryDataSourceCounts: break
-                }
+                self.merge(with: .relayout)
             } else if context.updateHeaders {
-                switch self {
-                case .none: self = .updateHeaders
-                case .updateHeaders, .relayout, .requeryDataSourceCounts: break
-                }
+                self.merge(with: .updateHeaders)
+            }
+        }
+        
+        mutating func merge(with new : NeededLayoutType)
+        {
+            if new.priority > self.priority {
+                self = new
+            }
+        }
+        
+        private var priority : Int {
+            switch self {
+            case .none: return 0
+            case .updateHeaders: return 1
+            case .relayout: return 2
+            case .rebuild: return 3
             }
         }
         
@@ -258,7 +261,7 @@ class ListViewLayout : UICollectionViewLayout
         }
     }
     
-    private var neededLayoutType : NeededLayoutType = .requeryDataSourceCounts
+    private var neededLayoutType : NeededLayoutType = .rebuild
         
     override func prepare()
     {
@@ -269,9 +272,9 @@ class ListViewLayout : UICollectionViewLayout
         self.neededLayoutType.update(with: {
             switch self.neededLayoutType {
             case .none: return true
-            case .updateHeaders: return self.performHeaderLayout()
+            case .updateHeaders: return self.performUpdateHeaders()
             case .relayout: return self.performRelayout()
-            case .requeryDataSourceCounts: return self.performRequeryDataSourceCountsAndLayout()
+            case .rebuild: return self.performRebuild()
             }
         }())
     }
@@ -298,7 +301,7 @@ class ListViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
     
-    private func performHeaderLayout() -> Bool
+    private func performUpdateHeaders() -> Bool
     {
         return self.layoutResult.updateHeaders(in: self.collectionView!)
     }
@@ -311,7 +314,7 @@ class ListViewLayout : UICollectionViewLayout
         )
     }
     
-    private func performRequeryDataSourceCountsAndLayout() -> Bool
+    private func performRebuild() -> Bool
     {
         self.previousLayoutResult = self.layoutResult
         
@@ -367,15 +370,23 @@ class ListViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            return super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+            let wasSectionInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: itemIndexPath.section))
+            
+            let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+            
+            if wasSectionInserted == false {
+                attributes?.alpha = 1.0
+            }
+            
+            return attributes
         }
     }
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let wasDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
-
-        if wasDeleted {
+        let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
+        
+        if wasItemDeleted {
             let attributes = self.previousLayoutResult.layoutAttributes(at: itemIndexPath)
 
             attributes.frame.origin.y -= attributes.frame.size.height
@@ -383,8 +394,40 @@ class ListViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+            let wasSectionDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: itemIndexPath.section))
+            
+            let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+            
+            if wasSectionDeleted == false {
+                attributes?.alpha = 1.0
+            }
+            
+            return attributes
         }
+    }
+    
+    override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    {
+        let wasInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: elementIndexPath.section))
+        let attributes = super.initialLayoutAttributesForAppearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
+        
+        if wasInserted == false {
+            attributes?.alpha = 1.0
+        }
+        
+        return attributes
+    }
+    
+    override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    {
+        let wasDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
+        let attributes = super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
+        
+        if wasDeleted == false {
+            attributes?.alpha = 1.0
+        }
+        
+        return attributes
     }
     
     //

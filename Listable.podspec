@@ -16,10 +16,12 @@ Pod::Spec.new do |s|
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Listable/Tests/**/*.{swift}'
-    test_spec.resources = 'Listable/Tests/Resources/**/*'
+    test_spec.ios.resource_bundle = { 'ListableTestsResources' => 'Listable/Tests/Resources/**/*.*' }
 
     test_spec.framework = 'XCTest'
 
     test_spec.requires_app_host = true
+
+    test_spec.dependency 'EnglishDictionary'
   end
 end

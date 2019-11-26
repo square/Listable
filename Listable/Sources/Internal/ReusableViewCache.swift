@@ -10,20 +10,22 @@ import Foundation
 
 final class ReusableViewCache
 {
-    private var views : [String:[Any]] = [:]
+    private var views : [String:[AnyObject]] = [:]
     
     init() {}
     
-    func push<Content,View>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
+    func push<Content,View:AnyObject>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
+        
+        precondition(views.contains { $0 === view } == false, "Cannot push a view which is already in the cache.")
         
         views.append(view)
         
         self.views[reuseIdentifier.stringValue] = views
     }
     
-    func pop<Content,View>(with reuseIdentifier: ReuseIdentifier<Content>, _ create : () -> View) -> View
+    func pop<Content,View:AnyObject>(with reuseIdentifier: ReuseIdentifier<Content>, _ create : () -> View) -> View
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
@@ -35,7 +37,7 @@ final class ReusableViewCache
         }
     }
     
-    func use<Content,View, Result>(with reuseIdentifier: ReuseIdentifier<Content>, create : () -> View, _ use : (View) -> Result) -> Result
+    func use<Content,View:AnyObject, Result>(with reuseIdentifier: ReuseIdentifier<Content>, create : () -> View, _ use : (View) -> Result) -> Result
     {
         let views = self.views[reuseIdentifier.stringValue, default: []]
         

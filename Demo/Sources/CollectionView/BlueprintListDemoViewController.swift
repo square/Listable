@@ -58,10 +58,7 @@ final class BlueprintListDemoViewController : UIViewController
                 }
 
                 section += podcasts.map { podcast in
-                    Item(
-                        with: PodcastRow(podcast: podcast),
-                        sizing: .thatFits(.noConstraint)
-                    )
+                    PodcastRow(podcast: podcast)
                 }
             }
         }

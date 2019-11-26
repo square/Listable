@@ -10,6 +10,7 @@ import Listable
 import BlueprintLists
 import BlueprintUI
 import BlueprintUICommonControls
+import EnglishDictionary
 
 
 final public class CollectionViewDictionaryDemoViewController : UIViewController
@@ -109,17 +110,14 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             content += self.dictionary.wordsByLetter.map { letter in
                 return Section(identifier: letter.letter) { section in
                     
-                    section.header = HeaderFooter(
-                        with: SectionHeader(title: letter.letter),
-                        sizing: .thatFits(.noConstraint)
-                    )
+                    section.header = HeaderFooter(with: SectionHeader(title: letter.letter))
                     
                     section += letter.words.compactMap { word in
                         if state.value.include(word.word) {
                             hasContent = true
                             return Item(
                                 with: WordRow(title: word.word, detail: word.description),
-                                sizing: .thatFits(.atMost(250.0))
+                                sizing: .thatFitsWith(.atMost(250.0))
                             )
                         } else {
                             return nil
@@ -132,12 +130,9 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             
             if hasContent == false {
                 content += Section(identifier: "empty") { section in
-                    section += Item(
-                        with: WordRow(
-                            title: "No Results For '\(state.value.filter)'",
-                            detail: "Please enter a different search."
-                        ),
-                        sizing: .thatFits(.atMost(250.0))
+                    section += WordRow(
+                        title: "No Results For '\(state.value.filter)'",
+                        detail: "Please enter a different search."
                     )
                 }
             }
@@ -155,8 +150,6 @@ fileprivate struct SearchRowAppearance : ItemElementAppearance
     {
         return SearchBar(frame: frame)
     }
-    
-    func update(view: ContentView, with position: ItemPosition) {}
     
     func apply(to view: SearchBar, with info: ApplyItemElementInfo) {}
     

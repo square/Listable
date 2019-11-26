@@ -43,7 +43,7 @@ public extension Listable.Item where Element : BlueprintItemElement
     
     init(
         with element : Element,
-        sizing : Sizing = .default,
+        sizing : Sizing = .thatFitsWith(.atLeast(.default)),
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
@@ -69,7 +69,6 @@ public extension Listable.Item where Element : BlueprintItemElement
         )
     }
 }
-
 
 //
 // MARK: Applying Blueprint Elements

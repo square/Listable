@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
+		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */; };
 		0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */; };
 		0A46A00B23793C0200B35811 /* WidthCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */; };
 		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
-		0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590003236A371600F463DA /* EnglishDictionary.swift */; };
 		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
 		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
 		0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF802315F68400CCB7F3 /* planet-money.jpg */; };
@@ -31,20 +31,19 @@
 		0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D222FBCC1D00341DFF /* Blueprint.swift */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
 		0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D422FBCC1D00341DFF /* Font.swift */; };
-		0AEB96E722FBCC5400341DFF /* dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96E622FBCC5300341DFF /* dictionary.json */; };
 		C16C0AC6F56D2268011EDFF2 /* libPods-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
+		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
 		0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicesPaymentScheduleDemoViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLayoutViewController.swift; sourceTree = "<group>"; };
 		0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidthCustomizationViewController.swift; sourceTree = "<group>"; };
 		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
-		0A590003236A371600F463DA /* EnglishDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishDictionary.swift; sourceTree = "<group>"; };
 		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
 		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
 		0A8AEF802315F68400CCB7F3 /* planet-money.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "planet-money.jpg"; sourceTree = "<group>"; };
@@ -63,7 +62,6 @@
 		0AEB96D222FBCC1D00341DFF /* Blueprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blueprint.swift; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEB96D422FBCC1D00341DFF /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
-		0AEB96E622FBCC5300341DFF /* dictionary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dictionary.json; sourceTree = "<group>"; };
 		32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9EC890C0D683F6A704AB9ED /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +95,7 @@
 		0AEB96A522FBCBA500341DFF = {
 			isa = PBXGroup;
 			children = (
+				0A0E070323870A5700DDD27D /* README.md */,
 				0AEB96C322FBCC1D00341DFF /* Sources */,
 				0AEB96E522FBCC5300341DFF /* Resources */,
 				0AEB96B022FBCBA500341DFF /* Demo */,
@@ -140,7 +139,6 @@
 		0AEB96CD22FBCC1D00341DFF /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				0A590003236A371600F463DA /* EnglishDictionary.swift */,
 				0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */,
 				0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */,
 				0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */,
@@ -158,7 +156,6 @@
 			isa = PBXGroup;
 			children = (
 				0A8AEF7D2315F68400CCB7F3 /* Podcasts */,
-				0AEB96E622FBCC5300341DFF /* dictionary.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -192,6 +189,7 @@
 				0AEB96AA22FBCBA500341DFF /* Sources */,
 				0AEB96AB22FBCBA500341DFF /* Frameworks */,
 				0AEB96AC22FBCBA500341DFF /* Resources */,
+				0962BCC5212D1D80188F1F5B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -245,10 +243,10 @@
 				0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */,
 				0A8AEF8B2315F68400CCB7F3 /* nancy.png in Resources */,
 				0A8AEF8A2315F68400CCB7F3 /* wait-wait.png in Resources */,
-				0AEB96E722FBCC5400341DFF /* dictionary.json in Resources */,
 				0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */,
 				0A8AEF892315F68400CCB7F3 /* the-impact.png in Resources */,
 				0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */,
+				0A0E070423870A5700DDD27D /* README.md in Resources */,
 				0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,6 +254,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0962BCC5212D1D80188F1F5B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Demo/Pods-Demo-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Demo/Pods-Demo-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Demo/Pods-Demo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		BFE813C074247E73A5CE35F0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -292,7 +307,6 @@
 				0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */,
 				0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
 				0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */,
-				0A590005236A371700F463DA /* EnglishDictionary.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,

@@ -22,6 +22,10 @@ final class KeyboardObserver
     
     weak var delegate : KeyboardObserverDelegate?
     
+    //
+    // MARK: Initialization
+    //
+    
     init(center : NotificationCenter = .default)
     {
         self.center = center
@@ -36,13 +40,13 @@ final class KeyboardObserver
     // MARK: Handling Changes
     //
     
-    internal enum KeyboardFrame : Equatable
+    enum KeyboardFrame : Equatable
     {
         case notVisible
         case visible(frame: CGRect)
     }
     
-    internal func currentFrame(in view : UIView) -> KeyboardFrame?
+    func currentFrame(in view : UIView) -> KeyboardFrame?
     {
         guard view.window != nil else {
             return nil
@@ -61,6 +65,24 @@ final class KeyboardObserver
         }
     }
     
+    private func animate(with info : NotificationInfo, _ block : @escaping () -> ())
+    {
+        if info.animationDuration > 0.0 {
+            UIView.animate(
+                withDuration: info.animationDuration,
+                delay: 0.0,
+                options: .init(rawValue: info.animationCurve << 16),
+                animations: block
+            )
+        } else {
+            block()
+        }
+    }
+    
+    //
+    // MARK: Receiving Updates
+    //
+    
     private func receivedUpdatedKeyboardInfo(_ new : NotificationInfo)
     {
         let old = self.latestNotification
@@ -75,20 +97,6 @@ final class KeyboardObserver
         
         self.animate(with: new) {
             self.delegate?.keyboardFrameWillChange(observer: self)
-        }
-    }
-    
-    private func animate(with info : NotificationInfo, _ block : @escaping () -> ())
-    {
-        if info.animationDuration > 0.0 {
-            UIView.animate(
-                withDuration: info.animationDuration,
-                delay: 0.0,
-                options: .init(rawValue: info.animationCurve << 16),
-                animations: block
-            )
-        } else {
-            block()
         }
     }
     
@@ -115,12 +123,10 @@ extension KeyboardObserver
 {
     struct NotificationInfo : Equatable
     {
-        fileprivate var endingFrame : CGRect = .zero
+        var endingFrame : CGRect = .zero
         
-        fileprivate var animationDuration : Double = 0.0
-        fileprivate var animationCurve : UInt = 0
-        
-        init() {}
+        var animationDuration : Double = 0.0
+        var animationCurve : UInt = 0
         
         init(with notification : Notification) throws
         {
@@ -129,30 +135,30 @@ extension KeyboardObserver
             }
             
             guard let endingFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-                throw ParseError.missingEndingFrame(userInfo: userInfo)
+                throw ParseError.missingEndingFrame
             }
             
             self.endingFrame = endingFrame
             
             guard let animationDuration = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else {
-                throw ParseError.missingAnimationDuration(userInfo: userInfo)
+                throw ParseError.missingAnimationDuration
             }
             
             self.animationDuration = animationDuration
             
             guard let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue else {
-                throw ParseError.missingAnimationCurve(userInfo: userInfo)
+                throw ParseError.missingAnimationCurve
             }
             
             self.animationCurve = animationCurve
         }
         
-        enum ParseError : Error
+        enum ParseError : Error, Equatable
         {
             case missingUserInfo
-            case missingEndingFrame(userInfo: [AnyHashable:Any])
-            case missingAnimationDuration(userInfo: [AnyHashable:Any])
-            case missingAnimationCurve(userInfo: [AnyHashable:Any])
+            case missingEndingFrame
+            case missingAnimationDuration
+            case missingAnimationCurve
         }
     }
 }

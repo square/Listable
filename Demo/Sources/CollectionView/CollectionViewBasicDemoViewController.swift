@@ -8,6 +8,7 @@
 import UIKit
 
 import Listable
+import BlueprintLists
 
 
 final class CollectionViewBasicDemoViewController : UIViewController
@@ -29,19 +30,18 @@ final class CollectionViewBasicDemoViewController : UIViewController
     override func loadView()
     {
         self.navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addItem)),
-            UIBarButtonItem(title: "Remove", style: .plain, target: self, action: #selector(removeItem))
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
+            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeItem)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(cycleUnderflow))
         ]
         
-        self.view = listView
-        
+        self.view = self.listView
+        self.listView.appearance = demoAppearance
         self.updateTable(animated: false)
     }
     
     func updateTable(animated : Bool)
     {
-        listView.appearance = demoAppearance
-        
         listView.setContent { list in
             
             list.animatesChanges = animated
@@ -55,15 +55,10 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.footer = HeaderFooter(
                         with: DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        sizing: .thatFits(.noConstraint)
+                        sizing: .thatFits
                     )
                     
-                    section += sectionRows.map { row in
-                        Item(
-                            with: row,
-                            sizing: .thatFits(.atLeast(.default))
-                        )
-                    }
+                    section += sectionRows
                 }
             }
         }
@@ -88,5 +83,18 @@ final class CollectionViewBasicDemoViewController : UIViewController
         }
         
         self.updateTable(animated: true)
+    }
+    
+    @objc func cycleUnderflow()
+    {
+        UIView.animate(withDuration: 0.3) {
+            self.listView.appearance.underflow.alignment = {
+                switch self.listView.appearance.underflow.alignment {
+                case .top: return .center
+                case .center: return .bottom
+                case .bottom: return .top
+                }
+            }()
+        }
     }
 }

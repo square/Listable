@@ -40,12 +40,6 @@ public extension HeaderFooterElement where Self:Equatable
 public protocol HeaderFooterElementAppearance
 {
     //
-    // MARK: Tracking Changes
-    //
-    
-    func wasUpdated(comparedTo other : Self) -> Bool
-    
-    //
     // MARK: Creating & Providing Views
     //
     
@@ -58,6 +52,12 @@ public protocol HeaderFooterElementAppearance
     //
     
     func apply(to view : ContentView)
+    
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func wasUpdated(comparedTo other : Self) -> Bool
 }
 
 
