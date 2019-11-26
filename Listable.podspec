@@ -23,5 +23,6 @@ Pod::Spec.new do |s|
     test_spec.requires_app_host = true
 
     test_spec.dependency 'EnglishDictionary'
+    test_spec.dependency 'Snapshot'
   end
 end

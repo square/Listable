@@ -154,7 +154,7 @@ public struct Content
         
         var remaining : Int = indexPath.item + additionalItems
         
-        sliced.sections = self.sections.compactMapWithIndex { sectionIndex, section in
+        sliced.sections = self.sections.compactMapWithIndex { sectionIndex, _, section in
             if sectionIndex < indexPath.section {
                 return section
             } else {
@@ -243,23 +243,5 @@ internal extension Content
                 }
             }
         }
-    }
-}
-
-
-private extension Array
-{
-    func compactMapWithIndex<Mapped>(_ block : (Int, Element) -> Mapped?) -> [Mapped]
-    {
-        var mapped = [Mapped]()
-        mapped.reserveCapacity(self.count)
-        
-        for (index, element) in self.enumerated() {
-            if let value = block(index, element) {
-                mapped.append(value)
-            }
-        }
-        
-        return mapped
     }
 }

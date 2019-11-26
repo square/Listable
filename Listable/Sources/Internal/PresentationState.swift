@@ -124,8 +124,8 @@ final class PresentationState
     }
     
     var selectedIndexPaths : [IndexPath] {
-        let indexes : [[IndexPath]] = self.sections.flatMapWithIndex { sectionIndex, _, section in
-            return section.items.flatMapWithIndex { itemIndex, _, item in
+        let indexes : [[IndexPath]] = self.sections.compactMapWithIndex { sectionIndex, _, section in
+            return section.items.compactMapWithIndex { itemIndex, _, item in
                 if item.anyModel.selection.isSelected {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 } else {
@@ -158,7 +158,7 @@ final class PresentationState
     
     public var lastIndexPath : IndexPath?
     {
-        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.flatMapWithIndex { index, _, state in
+        let nonEmptySections : [(index:Int, section:SectionState)] = self.sections.compactMapWithIndex { index, _, state in
             return state.items.isEmpty ? nil : (index, state)
         }
         
