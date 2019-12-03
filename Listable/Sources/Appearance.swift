@@ -109,7 +109,7 @@ public struct ListLayout : Equatable
         sectionHeaderBottomSpacing : CGFloat = 0.0,
         itemSpacing : CGFloat = 0.0,
         itemToSectionFooterSpacing : CGFloat = 0.0,
-        stickySectionHeaders : Bool = false
+        stickySectionHeaders : Bool = true
     )
     {
         self.padding = padding

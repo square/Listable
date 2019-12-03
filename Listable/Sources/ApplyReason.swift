@@ -11,7 +11,7 @@ public enum ApplyReason : Hashable
     case willDisplay
     case wasUpdated
     
-    var animated : Bool {
+    public var shouldAnimate : Bool {
         switch self {
         case .willDisplay: return false
         case .wasUpdated: return true

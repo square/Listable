@@ -39,7 +39,7 @@ extension Array
         return mapped
     }
     
-    func flatMapWithIndex<Mapped>(_ block : (Int, Bool, Element) -> Mapped?) -> [Mapped]
+    func compactMapWithIndex<Mapped>(_ block : (Int, Bool, Element) -> Mapped?) -> [Mapped]
     {
         var mapped = [Mapped]()
         mapped.reserveCapacity(self.count)

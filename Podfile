@@ -1,7 +1,10 @@
+source 'https://cdn.cocoapods.org/'
+
 platform :ios, '9.3'
 
 project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
+
 
 target 'Demo' do
 	# Local Pods
@@ -15,3 +18,10 @@ target 'Demo' do
 	# Internal Pods
 	pod 'EnglishDictionary', :path => 'Internal Pods/EnglishDictionary/EnglishDictionary.podspec'
 end
+
+
+target 'Test Targets' do
+	# XCTest-Referencing Pods
+	pod 'Snapshot', :path => 'Internal Pods/Snapshot/Snapshot.podspec', :testspecs => ['Tests']
+end
+
