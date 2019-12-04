@@ -58,7 +58,7 @@ public enum Sizing : Equatable
             }
         }()
         
-        return value.rounded()
+        return ceil(value)
     }
     
     public enum ConstraintValue : Equatable
