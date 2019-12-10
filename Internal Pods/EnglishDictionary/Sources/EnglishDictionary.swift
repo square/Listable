@@ -70,7 +70,7 @@ public class EnglishDictionary
     
     public struct Word : Equatable
     {
-        public  let word : String
+        public let word : String
         public let description : String
     }
 }
