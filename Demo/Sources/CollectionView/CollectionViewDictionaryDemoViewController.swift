@@ -31,7 +31,9 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.stickySectionHeaders = true
         }
         
-        listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.State())
+        self.listView.behavior.dismissesKeyboardOnScroll = true
+        
+        self.listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.SearchState())
         
         self.view = self.listView
         
@@ -59,75 +61,68 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         )
     }
     
-    final class Source : ListViewSource
+
+    struct Source : ListViewSource
     {
         let dictionary : EnglishDictionary
         
-        init(dictionary : EnglishDictionary)
-        {
-            self.dictionary = dictionary
-        }
-        
-        struct State : Equatable
+        struct SearchState : Equatable
         {
             var filter : String = ""
-            
-            var isRefreshing : Bool = false
-            
+                        
             func include(_ word : String) -> Bool
             {
-                return self.filter.isEmpty || word.contains(self.filter.lowercased())
+                guard self.filter.isEmpty == false else {
+                    return true
+                }
+                
+                return word.contains(self.filter.lowercased())
             }
         }
 
-        func content(with state: SourceState<State>, content: inout Content)
+        func content(with state: SourceState<SearchState>, content: inout Content)
         {
-            if #available(iOS 10.0, *) {
-                content.refreshControl = RefreshControl(isRefreshing: state.value.isRefreshing) {
-                    
-                    state.value.isRefreshing = true
-                    
-                    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-                        state.value.isRefreshing = false
-                    }
-                }
-            }
+            // Add the search bar section.
             
             content += Section(identifier: "search") { rows in
-                rows += Item(
-                    with: SearchRow(
-                        text: state.value.filter,
-                        onChange: { string in
-                            state.value.filter = string
-                    }
-                ), appearance: SearchRowAppearance(),
-                   layout: .init(width: .fill)
-                )
+                // When the search bar's text changes, update the filter.
+                let search = SearchBarElement(text: state.value.filter) { string in
+                    state.value.filter = string
+                }
+                
+                rows += Item(with: search, layout: .init(width: .fill))
             }
             
             var hasContent = false
             
+            // Add a section for each letter in the dictionary.
+            
             content += self.dictionary.wordsByLetter.map { letter in
                 return Section(identifier: letter.letter) { section in
                     
+                    // Set the header.
                     section.header = HeaderFooter(with: SectionHeader(title: letter.letter))
                     
+                    // Only include word rows that pass the filter.
                     section += letter.words.compactMap { word in
-                        if state.value.include(word.word) {
-                            hasContent = true
-                            return Item(
-                                with: WordRow(title: word.word, detail: word.description),
-                                sizing: .thatFitsWith(.atMost(250.0))
-                            )
-                        } else {
+                        guard state.value.include(word.word) else {
                             return nil
                         }
+                        
+                        hasContent = true
+                        
+                        return Item(
+                            with: WordRow(title: word.word, detail: word.description),
+                            sizing: .thatFitsWith(.atMost(250.0))
+                        )
                     }
                 }
             }
             
+            // Remove filtered sections.
             content.removeEmpty()
             
+            // If there's no content, show an empty state.
             if hasContent == false {
                 content += Section(identifier: "empty") { section in
                     section += WordRow(
@@ -140,8 +135,30 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     }
 }
 
-fileprivate struct SearchRowAppearance : ItemElementAppearance
+fileprivate struct SearchBarElement : ItemElement, ItemElementAppearance
 {
+    var text : String
+    
+    var onChange : (String) -> ()
+    
+    // MARK: ItemElement
+    
+    typealias Appearance = SearchBarElement
+    
+    var identifier: Identifier<SearchBarElement> {
+        return .init("search")
+    }
+    
+    func apply(to view: SearchBar, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    {
+        view.onStateChanged = self.onChange
+        view.text = self.text
+    }
+    
+    func wasUpdated(comparedTo other: SearchBarElement) -> Bool {
+        return self.text != other.text
+    }
+    
     // MARK: ItemElementAppearance
     
     typealias ContentView = SearchBar
@@ -152,36 +169,6 @@ fileprivate struct SearchRowAppearance : ItemElementAppearance
     }
     
     func apply(to view: SearchBar, with info: ApplyItemElementInfo) {}
-    
-    func wasUpdated(comparedTo other: SearchRowAppearance) -> Bool
-    {
-        return false
-    }
-}
-
-fileprivate struct SearchRow : ItemElement
-{
-    var text : String
-    
-    var onChange : (String) -> ()
-    
-    // MARK: ItemElement
-    
-    typealias Appearance = SearchRowAppearance
-    
-    var identifier: Identifier<SearchRow> {
-        return .init("search")
-    }
-    
-    func apply(to view: SearchBar, for reason: ApplyReason, with info: ApplyItemElementInfo)
-    {
-        view.onStateChanged = self.onChange
-        view.text = self.text
-    }
-    
-    func wasUpdated(comparedTo other: SearchRow) -> Bool {
-        return self.text != other.text
-    }
 }
 
 fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable
