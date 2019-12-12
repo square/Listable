@@ -33,7 +33,11 @@ internal extension ListView
             return item.dequeueAndPrepareCollectionViewCell(in: collectionView, for: indexPath)
         }
         
-        func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView
+        func collectionView(
+            _ collectionView: UICollectionView,
+            viewForSupplementaryElementOfKind kind: String,
+            at indexPath: IndexPath
+            ) -> UICollectionReusableView
         {
             switch ListViewLayout.SupplementaryKind(rawValue: kind)! {
             case .listHeader:
@@ -63,6 +67,12 @@ internal extension ListView
                     self.presentationState.registerSupplementaryView(of: kind, for: footer)
                     return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
+                
+            case .overscrollFooter:
+                if let footer = self.presentationState.overscrollFooter {
+                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
+                    return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
+                }
             }
             
             fatalError()
@@ -75,7 +85,11 @@ internal extension ListView
             return item.anyModel.reordering != nil
         }
         
-        func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+        func collectionView(
+            _ collectionView: UICollectionView,
+            moveItemAt sourceIndexPath: IndexPath,
+            to destinationIndexPath: IndexPath
+            )
         {
             let item = self.presentationState.item(at: destinationIndexPath)
             

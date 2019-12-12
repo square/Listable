@@ -38,6 +38,7 @@ class ListSizingTests : XCTestCase
         XCTAssertEqual(sizing.sectionFooterHeight, 40.0)
         XCTAssertEqual(sizing.listHeaderHeight, 60.0)
         XCTAssertEqual(sizing.listFooterHeight, 60.0)
+        XCTAssertEqual(sizing.overscrollFooterHeight, 60.0)
         XCTAssertEqual(sizing.itemPositionGroupingHeight, 0.0)
     }
 }

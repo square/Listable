@@ -86,6 +86,7 @@ final class PresentationState
     
     var header : AnyPresentationHeaderFooterState?
     var footer : AnyPresentationHeaderFooterState?
+    var overscrollFooter : AnyPresentationHeaderFooterState?
     
     var sections : [PresentationState.SectionState]
         
@@ -254,7 +255,9 @@ final class PresentationState
         
         self.header = SectionState.headerFooterState(with: self.header, new: slice.content.header)
         self.footer = SectionState.headerFooterState(with: self.footer, new: slice.content.footer)
-                
+        
+        self.overscrollFooter = SectionState.headerFooterState(with: self.overscrollFooter, new: slice.content.overscrollFooter)
+                        
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },

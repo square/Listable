@@ -44,6 +44,10 @@ final class CollectionViewBasicDemoViewController : UIViewController
     {
         listView.setContent { list in
             
+            list.content.overscrollFooter = HeaderFooter(
+                with: DemoHeader(title: "Thanks for using Listable!!")
+            )
+            
             list.animatesChanges = animated
             
             list += self.rows.map { sectionRows in
