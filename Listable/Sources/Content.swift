@@ -27,6 +27,8 @@ public struct Content
     public var header : AnyHeaderFooter?
     public var footer : AnyHeaderFooter?
     
+    public var overscrollFooter : AnyHeaderFooter?
+    
     public var sections : [Section]
     
     public var itemCount : Int {
@@ -56,6 +58,7 @@ public struct Content
         refreshControl : RefreshControl? = nil,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
+        overscrollFooter : AnyHeaderFooter? = nil,
         sections : [Section] = []
         )
     {
@@ -67,6 +70,8 @@ public struct Content
         
         self.header = header
         self.footer = footer
+        
+        self.overscrollFooter = overscrollFooter
         
         self.sections = sections
     }

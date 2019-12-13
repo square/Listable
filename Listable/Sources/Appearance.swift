@@ -58,6 +58,7 @@ public struct ListSizing : Equatable
     
     public var listHeaderHeight : CGFloat
     public var listFooterHeight : CGFloat
+    public var overscrollFooterHeight : CGFloat
     
     public var itemPositionGroupingHeight : CGFloat
         
@@ -67,6 +68,7 @@ public struct ListSizing : Equatable
         sectionFooterHeight : CGFloat = 40.0,
         listHeaderHeight : CGFloat = 60.0,
         listFooterHeight : CGFloat = 60.0,
+        overscrollFooterHeight : CGFloat = 60.0,
         itemPositionGroupingHeight : CGFloat = 0.0
     )
     {
@@ -75,6 +77,7 @@ public struct ListSizing : Equatable
         self.sectionFooterHeight = sectionFooterHeight
         self.listHeaderHeight = listHeaderHeight
         self.listFooterHeight = listFooterHeight
+        self.overscrollFooterHeight = overscrollFooterHeight
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
     }
     

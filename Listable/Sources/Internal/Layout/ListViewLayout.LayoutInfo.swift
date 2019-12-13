@@ -18,6 +18,8 @@ extension ListViewLayout
         case sectionHeader = "Listable.ListViewLayout.SectionHeader"
         case sectionFooter = "Listable.ListViewLayout.SectionFooter"
         
+        case overscrollFooter = "Listable.ListViewLayout.OverscrollFooter"
+        
         var zIndex : Int {
             switch self {
             case .listHeader: return 1
@@ -25,6 +27,8 @@ extension ListViewLayout
                 
             case .sectionHeader: return 2
             case .sectionFooter: return 1
+                
+            case .overscrollFooter: return 1
             }
         }
         
@@ -36,6 +40,8 @@ extension ListViewLayout
                 
             case .sectionHeader: return IndexPath(item: 0, section: section)
             case .sectionFooter: return IndexPath(item: 0, section: section)
+                
+            case .overscrollFooter: return IndexPath(item: 0, section: 0)
             }
         }
     }
@@ -58,6 +64,8 @@ internal extension ListViewLayout
         let header : SupplementaryItemLayoutInfo?
         let footer : SupplementaryItemLayoutInfo?
         
+        let overscrollFooter : SupplementaryItemLayoutInfo?
+        
         private(set) var sections : [SectionLayoutInfo]
         
         //
@@ -73,6 +81,7 @@ internal extension ListViewLayout
             
             self.header = nil
             self.footer = nil
+            self.overscrollFooter = nil
             
             self.sections = []
         }
@@ -107,6 +116,16 @@ internal extension ListViewLayout
                     kind: SupplementaryKind.listFooter,
                     direction: appearance.direction,
                     layout: delegate.layoutForListFooter(in: collectionView)
+                )
+            }()
+            
+            self.overscrollFooter = {
+                guard delegate.hasOverscrollFooter(in: collectionView) else { return nil }
+                
+                return SupplementaryItemLayoutInfo(
+                    kind: SupplementaryKind.overscrollFooter,
+                    direction: appearance.direction,
+                    layout: delegate.layoutForOverscrollFooter(in: collectionView)
                 )
             }()
             
@@ -160,7 +179,7 @@ internal extension ListViewLayout
             
             if let header = self.header {
                 if rect.intersects(header.visibleFrame) {
-                    attributes.append(header.layoutAttributes(with: SupplementaryKind.listHeader.indexPath(in: 0)))
+                    attributes.append(header.layoutAttributes(with: header.kind.indexPath(in: 0)))
                 }
             }
             
@@ -172,7 +191,7 @@ internal extension ListViewLayout
                 
                 if let header = section.header {
                     if rect.intersects(header.visibleFrame) {
-                        attributes.append(header.layoutAttributes(with: SupplementaryKind.sectionHeader.indexPath(in: sectionIndex)))
+                        attributes.append(header.layoutAttributes(with: header.kind.indexPath(in: sectionIndex)))
                     }
                 }
                 
@@ -184,14 +203,20 @@ internal extension ListViewLayout
                 
                 if let footer = section.footer {
                     if rect.intersects(footer.visibleFrame) {
-                        attributes.append(footer.layoutAttributes(with: SupplementaryKind.sectionFooter.indexPath(in: sectionIndex)))
+                        attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: sectionIndex)))
                     }
                 }
             }
             
             if let footer = self.footer {
                 if rect.intersects(footer.visibleFrame) {
-                    attributes.append(footer.layoutAttributes(with: SupplementaryKind.listFooter.indexPath(in: 0)))
+                    attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
+                }
+            }
+            
+            if let footer = self.overscrollFooter {
+                if rect.intersects(footer.visibleFrame) {
+                    attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
                 }
             }
             
@@ -220,6 +245,8 @@ internal extension ListViewLayout
                 
             case .sectionHeader: return section.header?.layoutAttributes(with: indexPath)
             case .sectionFooter: return section.footer?.layoutAttributes(with: indexPath)
+                
+            case .overscrollFooter: return self.overscrollFooter?.layoutAttributes(with: indexPath)
             }
         }
         
@@ -268,16 +295,16 @@ internal extension ListViewLayout
         @discardableResult
         func updateHeaders(in collectionView : UICollectionView) -> Bool
         {
-            guard collectionView.frame.size.isEmpty == false else {
-                return false
-            }
-            
             guard self.appearance.layout.stickySectionHeaders else {
                 return true
             }
             
-            let direction = self.appearance.direction
+            guard collectionView.frame.size.isEmpty == false else {
+                return false
+            }
             
+            let direction = self.appearance.direction
+
             let visibleFrame = CGRect(
                 x: collectionView.contentOffset.x + collectionView.lst_safeAreaInsets.left,
                 y: collectionView.contentOffset.y + collectionView.lst_safeAreaInsets.top,
@@ -300,6 +327,34 @@ internal extension ListViewLayout
                         header.pinnedY = nil
                     }
                 }
+            }
+            
+            return true
+        }
+        
+        @discardableResult
+        func updateOverscrollPosition(in collectionView : UICollectionView) -> Bool
+        {
+            guard let footer = self.overscrollFooter else {
+                return true
+            }
+            
+            guard collectionView.frame.size.isEmpty == false else {
+                return false
+            }
+            
+            let direction = self.appearance.direction
+            
+            let contentHeight = direction.height(for: self.contentSize)
+            let viewHeight = direction.height(for: collectionView.bounds.size)
+            
+            // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
+            // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
+            
+            if contentHeight >= viewHeight {
+                footer.y = contentHeight + direction.bottom(with: collectionView.lst_safeAreaInsets)
+            } else {
+                footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
             }
             
             return true
@@ -529,11 +584,25 @@ internal extension ListViewLayout
                 lastContentMaxY += layout.sectionHeaderBottomSpacing
             }
             
+            //
+            // Overscroll Footer
+            //
+            
+            if let footer = self.overscrollFooter {
+                let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+                let height = delegate.heightForOverscrollFooter(in: collectionView, width: position.width, layoutDirection: direction)
+                
+                footer.size = direction.size(width: position.width, height: height)
+                
+                footer.x = position.origin
+            }
+            
             self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
             
             self.adjustPositionsForLayoutUnderflow(contentHeight: lastContentMaxY, viewHeight: viewHeight, in: collectionView)
             
             self.updateHeaders(in: collectionView)
+            self.updateOverscrollPosition(in: collectionView)
             
             return true
         }

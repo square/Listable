@@ -23,6 +23,10 @@ protocol ListViewLayoutDelegate : AnyObject
     func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
     func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
     
+    func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
+    func heightForOverscrollFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
+    
     func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
     
     func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
@@ -171,15 +175,6 @@ class ListViewLayout : UICollectionViewLayout
         self.neededLayoutType.merge(with: context)
     }
     
-    override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext
-    {
-        let context = super.invalidationContext(forBoundsChange: newBounds) as! InvalidationContext
-        
-        context.updateHeaders = self.appearance.layout.stickySectionHeaders
-        
-        return context
-    }
-    
     override func invalidationContextForEndingInteractiveMovementOfItems(
         toFinalIndexPaths indexPaths: [IndexPath],
         previousIndexPaths: [IndexPath],
@@ -205,7 +200,6 @@ class ListViewLayout : UICollectionViewLayout
     
     private final class InvalidationContext : UICollectionViewLayoutInvalidationContext
     {
-        var updateHeaders : Bool = false
         var widthChanged : Bool = false
         
         var performedInteractiveMove : Bool = false
@@ -217,7 +211,6 @@ class ListViewLayout : UICollectionViewLayout
     
     private enum NeededLayoutType {
         case none
-        case updateHeaders
         case relayout
         case rebuild
         
@@ -232,8 +225,6 @@ class ListViewLayout : UICollectionViewLayout
                 self.merge(with: .rebuild)
             } else if needsRelayout {
                 self.merge(with: .relayout)
-            } else if context.updateHeaders {
-                self.merge(with: .updateHeaders)
             }
         }
         
@@ -247,9 +238,8 @@ class ListViewLayout : UICollectionViewLayout
         private var priority : Int {
             switch self {
             case .none: return 0
-            case .updateHeaders: return 1
-            case .relayout: return 2
-            case .rebuild: return 3
+            case .relayout: return 1
+            case .rebuild: return 2
             }
         }
         
@@ -272,11 +262,13 @@ class ListViewLayout : UICollectionViewLayout
         self.neededLayoutType.update(with: {
             switch self.neededLayoutType {
             case .none: return true
-            case .updateHeaders: return self.performUpdateHeaders()
             case .relayout: return self.performRelayout()
             case .rebuild: return self.performRebuild()
             }
         }())
+        
+        self.performUpdateHeaders()
+        self.performUpdateOverscroll()
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem])
@@ -301,9 +293,14 @@ class ListViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
     
-    private func performUpdateHeaders() -> Bool
+    private func performUpdateHeaders()
     {
-        return self.layoutResult.updateHeaders(in: self.collectionView!)
+        self.layoutResult.updateHeaders(in: self.collectionView!)
+    }
+    
+    private func performUpdateOverscroll()
+    {
+        self.layoutResult.updateOverscrollPosition(in: self.collectionView!)
     }
     
     private func performRelayout() -> Bool
