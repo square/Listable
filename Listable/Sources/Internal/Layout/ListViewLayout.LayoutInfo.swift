@@ -172,6 +172,8 @@ internal extension ListViewLayout
         //
         // MARK: Fetching Elements
         //
+            
+        // TODO: This is called a lot! Optimize it by caching the layout attributes and by checking the passed in frame.s
         
         func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
         {
@@ -215,9 +217,10 @@ internal extension ListViewLayout
             }
             
             if let footer = self.overscrollFooter {
-                if rect.intersects(footer.visibleFrame) {
-                    attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
-                }
+                // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
+                // Instead, just return it all the time to ensure the collection view will display it when needed.
+                
+                attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
             }
             
             return attributes
@@ -352,7 +355,7 @@ internal extension ListViewLayout
             // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
             
             if contentHeight >= viewHeight {
-                footer.y = contentHeight + direction.bottom(with: collectionView.lst_safeAreaInsets)
+                footer.y = contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
             } else {
                 footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
             }
