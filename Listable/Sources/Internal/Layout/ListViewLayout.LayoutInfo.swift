@@ -309,8 +309,8 @@ internal extension ListViewLayout
             let direction = self.appearance.direction
 
             let visibleFrame = CGRect(
-                x: collectionView.contentOffset.x + collectionView.lst_safeAreaInsets.left,
-                y: collectionView.contentOffset.y + collectionView.lst_safeAreaInsets.top,
+                x: collectionView.contentOffset.x + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.left,
+                y: collectionView.contentOffset.y + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.top,
                 width: collectionView.bounds.size.width,
                 height: collectionView.bounds.size.height
             )
@@ -355,9 +355,9 @@ internal extension ListViewLayout
             // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
             
             if contentHeight >= viewHeight {
-                footer.y = contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
+                footer.y = contentHeight + direction.bottom(with: collectionView.lst_safeAreaAdjustmentsForCurrentSystem)
             } else {
-                footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
+                footer.y = viewHeight - direction.top(with: collectionView.lst_safeAreaAdjustmentsForCurrentSystem)
             }
             
             return true
@@ -623,8 +623,8 @@ internal extension ListViewLayout
             
             let safeAreaInsets : CGFloat = {
                 switch self.appearance.direction {
-                case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
-                case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
+                case .vertical: return collectionView.lst_safeAreaAdjustmentsForCurrentSystem.top + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.bottom
+                case .horizontal: return collectionView.lst_safeAreaAdjustmentsForCurrentSystem.left + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.right
                 }
             }()
             
@@ -911,13 +911,28 @@ fileprivate extension Int
 }
 
 
-internal extension UIView
+//fileprivate extension UIView
+//{
+//    var lst_safeAreaInsets : UIEdgeInsets {
+//        if #available(iOS 11.0, *) {
+//            return self.safeAreaInsets
+//        } else {
+//            return .zero
+//        }
+//    }
+//}
+
+
+fileprivate extension UIScrollView
 {
-    var lst_safeAreaInsets : UIEdgeInsets {
+    var lst_safeAreaAdjustmentsForCurrentSystem : UIEdgeInsets {
         if #available(iOS 11.0, *) {
             return self.safeAreaInsets
         } else {
-            return .zero
+            // In iOS 10 and earlier, contentInset is used when insetting below navigation bars and tab bars.
+            return self.contentInset
         }
     }
 }
+
+
