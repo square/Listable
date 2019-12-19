@@ -47,6 +47,13 @@ extension ListViewLayout
     }
 }
 
+internal protocol ListViewLayoutCollectionView
+{
+    var numberOfSections : Int { get }
+}
+
+extension UICollectionView : ListViewLayoutCollectionView {}
+
 
 internal extension ListViewLayout
 {

@@ -82,7 +82,7 @@ class ListViewLayout : UICollectionViewLayout
         self.appearance = appearance
         
         self.layoutResult = LayoutInfo()
-        self.previousLayoutResult = self.layoutResult
+        self.previousLayoutResult = LayoutInfo()
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         

@@ -614,7 +614,7 @@ public final class ListView : UIView
         }
     }
     
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
+    internal static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
     {
         return SectionedDiff(
             old: old,
