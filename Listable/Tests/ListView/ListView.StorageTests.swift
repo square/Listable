@@ -42,7 +42,13 @@ class ListView_StorageTests: XCTestCase
         
         storage.moveItem(from: IndexPath(item: 0, section: 0), to: IndexPath(item: 1, section: 1))
         
+        let items : [[Item<TestElement>]] = storage.allContent.sections.map {
+            return $0.items as! [Item<TestElement>]
+        }
         
+        XCTAssertEqual(items, [
+        []
+        ])
     }
     
     func test_remove()
