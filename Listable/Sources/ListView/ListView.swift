@@ -51,6 +51,25 @@ public final class ListView : UIView
         
         super.init(frame: frame)
         
+        // ...And now that we're initialized...
+        
+        // Set up Delegate callbacks.
+        
+        self.delegate.actions = Delegate.Actions(
+            updatePresentationState: { reason in
+                self.updatePresentationState(for: reason)
+            },
+            moveItem: { from, to in
+                self.storage.moveItem(from: from, to: to)
+            },
+            updateVisibleItems: {
+                self.updateVisibleItemsAndSections()
+            },
+            dismissesKeyboardOnScroll: {
+                return self.behavior.dismissesKeyboardOnScroll
+            }
+        )
+        
         // Associate ourselves with our child objects.
             
         self.keyboardObserver.delegate = self
@@ -59,6 +78,8 @@ public final class ListView : UIView
         
         self.collectionView.frame = self.bounds
         self.addSubview(self.collectionView)
+        
+        // Apply various appearance requirements.
         
         self.applyAppearance()
         self.applyScrollInsets()

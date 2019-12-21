@@ -16,7 +16,7 @@ extension ListView
             var moveItem : (IndexPath, IndexPath) -> ()
             var updateVisibleItems : () -> ()
             
-            var shouldDismissKeyboardOnScroll : () -> Bool
+            var dismissesKeyboardOnScroll : () -> Bool
         }
     
         var actions : Actions
@@ -29,7 +29,7 @@ extension ListView
                 updatePresentationState: { _ in },
                 moveItem: { _, _ in },
                 updateVisibleItems: { },
-                shouldDismissKeyboardOnScroll: { false }
+                dismissesKeyboardOnScroll: { false }
             )
             
             self.presentationState = presentationState
@@ -216,11 +216,12 @@ extension ListView
             
             // Dismiss Keyboard
             
-            if self.actions.shouldDismissKeyboardOnScroll() {
+            if self.actions.dismissesKeyboardOnScroll() {
                 scrollView.endEditing(true)
             }
         }
     }
+    
     
     final class LayoutDelegate : ListViewLayoutDelegate
     {
