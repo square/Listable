@@ -12,9 +12,10 @@ import XCTest
 
 class ListView_StorageTests: XCTestCase
 {
-    func testStorage() -> ListView.Storage
+    func testStorage(with view : ListView) -> ListView.Storage
     {
         let storage = ListView.Storage()
+        storage.presentationState.view = view
         
         storage.allContent = Content { content in
             content += Section(identifier: "section-1") { section in
@@ -23,9 +24,9 @@ class ListView_StorageTests: XCTestCase
             }
             
             content += Section(identifier: "section-2") { section in
-                section += Item(with: TestElement(name: "row-1"), appearance: TestElement.Appearance())
-                section += Item(with: TestElement(name: "row-2"), appearance: TestElement.Appearance())
                 section += Item(with: TestElement(name: "row-3"), appearance: TestElement.Appearance())
+                section += Item(with: TestElement(name: "row-4"), appearance: TestElement.Appearance())
+                section += Item(with: TestElement(name: "row-5"), appearance: TestElement.Appearance())
             }
         }
         
@@ -38,7 +39,8 @@ class ListView_StorageTests: XCTestCase
     
     func test_moveItem()
     {
-        let storage = self.testStorage()
+        let view = ListView()
+        let storage = self.testStorage(with: view)
         
         storage.moveItem(from: IndexPath(item: 0, section: 0), to: IndexPath(item: 1, section: 1))
         
@@ -46,8 +48,20 @@ class ListView_StorageTests: XCTestCase
             return $0.items as! [Item<TestElement>]
         }
         
-        XCTAssertEqual(items, [
-        []
+        let names : [[String]] = items.map {
+            $0.map { $0.element.name }
+        }
+        
+        XCTAssertEqual(names, [
+            [
+                "row-2",
+            ],
+            [
+                "row-3",
+                "row-1",
+                "row-4",
+                "row-5",
+            ],
         ])
     }
     

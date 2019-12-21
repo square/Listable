@@ -403,7 +403,7 @@ internal extension ListViewLayout
              */
             self.setItemPositions()
             
-            delegate.listViewLayoutUpdatedItemPositions(collectionView)
+            delegate.listViewLayoutUpdatedItemPositions(self)
             
             //
             // Set Frame Origins

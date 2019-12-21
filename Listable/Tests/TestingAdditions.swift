@@ -1,5 +1,5 @@
 //
-//  XCTestCaseAdditions.swift
+//  TestingAdditions.swift
 //  Listable-Unit-Tests
 //
 //  Created by Kyle Van Essen on 11/22/19.
@@ -7,6 +7,23 @@
 
 import XCTest
 
+@testable import Listable
+
+
+extension Section
+{
+}
+
+extension Array
+{
+    func typedMap<TypedElement, Contained>(_ type : TypedElement.Type, map : (TypedElement) -> Contained) -> [Contained]
+    {
+        return self.map {
+            let item = $0 as! TypedElement
+            return map(item)
+        }
+    }
+}
 
 extension XCTestCase
 {

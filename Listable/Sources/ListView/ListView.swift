@@ -26,11 +26,13 @@ public final class ListView : UIView
         self.storage = Storage()
         self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
         
-        self.dataSource = DataSource()
-        self.delegate = Delegate()
+        self.dataSource = DataSource(presentationState: self.storage.presentationState)
+        
+        self.delegate = Delegate(presentationState: self.storage.presentationState)
+        self.layoutDelegate = LayoutDelegate(presentationState: self.storage.presentationState, appearance: self.appearance)
         
         self.layout = ListViewLayout(
-            delegate: self.delegate,
+            delegate: self.layoutDelegate,
             appearance: self.appearance
         )
         
@@ -50,14 +52,7 @@ public final class ListView : UIView
         super.init(frame: frame)
         
         // Associate ourselves with our child objects.
-        
-        self.storage.presentationState.view = self
-        
-        self.dataSource.presentationState = self.storage.presentationState
-        
-        self.delegate.view = self
-        self.delegate.presentationState = self.storage.presentationState
-        
+            
         self.keyboardObserver.delegate = self
         
         // Size and update views.
@@ -88,6 +83,7 @@ public final class ListView : UIView
     
     private let dataSource : DataSource
     private let delegate : Delegate
+    private let layoutDelegate : LayoutDelegate
     
     private let keyboardObserver : KeyboardObserver
     
@@ -109,8 +105,12 @@ public final class ListView : UIView
     {
         // Appearance
         
-        self.layout.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
+        
+        // Child Objects
+        
+        self.layoutDelegate.appearance = self.appearance
+        self.layout.appearance = self.appearance
         
         // Row Sizing
         
@@ -354,13 +354,6 @@ public final class ListView : UIView
     // MARK: Updating Content
     //
     
-    internal func setPresentationStateItemPositions()
-    {
-        self.storage.presentationState.forEachItem { indexPath, item in
-            item.itemPosition = self.layout.positionForItem(at: indexPath)
-        }
-    }
-    
     private func updateCollectionViewConfiguration()
     {
         let view = self.collectionView
@@ -535,12 +528,17 @@ public final class ListView : UIView
         let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
                 
         let updateBackingData = {
-            self.storage.presentationState.update(with: diff, slice: visibleSlice)
+            self.storage.presentationState.update(with: diff, slice: visibleSlice, in: self)
         }
         
-        // Update Refresh Control
-        
-        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        /**
+         Update Refresh Control
+         
+         Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
+         we trigger a bug where updated indexes are calculated incorrectly.
+         */
+ 
+        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl, in: self.collectionView)
         
         // Update Collection View
         

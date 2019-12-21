@@ -8,13 +8,32 @@
 
 extension ListView
 {
-    final class Delegate : NSObject, UICollectionViewDelegate, ListViewLayoutDelegate
+    final class Delegate : NSObject, UICollectionViewDelegate
     {
-        unowned var view : ListView!
-        unowned var presentationState : PresentationState!
+        struct Actions
+        {
+            var updatePresentationState : (Content.Slice.UpdateReason) -> ()
+            var moveItem : (IndexPath, IndexPath) -> ()
+            var updateVisibleItems : () -> ()
+            
+            var shouldDismissKeyboardOnScroll : () -> Bool
+        }
+    
+        var actions : Actions
         
-        private let itemMeasurementCache = ReusableViewCache()
-        private let headerFooterMeasurementCache = ReusableViewCache()
+        unowned let presentationState : PresentationState
+        
+        init(presentationState : PresentationState)
+        {
+            self.actions = Actions(
+                updatePresentationState: { _ in },
+                moveItem: { _, _ in },
+                updateVisibleItems: { },
+                shouldDismissKeyboardOnScroll: { false }
+            )
+            
+            self.presentationState = presentationState
+        }
         
         // MARK: UICollectionViewDelegate
         
@@ -152,7 +171,7 @@ extension ListView
                 // let item = self.presentationState.item(at: originalIndexPath)
                 
                 if originalIndexPath.section == proposedIndexPath.section {
-                    self.view.storage.moveItem(from: originalIndexPath, to: proposedIndexPath)
+                    self.actions.moveItem(originalIndexPath, proposedIndexPath)
                     
                     return proposedIndexPath
                 } else {
@@ -163,11 +182,65 @@ extension ListView
             }
         }
         
+        // MARK: UIScrollViewDelegate
+        
+        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
+        {
+            self.actions.updatePresentationState(.didEndDecelerating)
+        }
+        
+        func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
+        {
+            self.actions.updatePresentationState(.scrolledToTop)
+        }
+        
+        private var lastPosition : CGFloat = 0.0
+        
+        func scrollViewDidScroll(_ scrollView: UIScrollView)
+        {
+            guard scrollView.bounds.size.height > 0 else { return }
+            
+            // Updating Paged Content
+            
+            let scrollingDown = self.lastPosition < scrollView.contentOffset.y
+            
+            self.lastPosition = scrollView.contentOffset.y
+            
+            if scrollingDown {
+                self.actions.updatePresentationState(.scrolledDown)
+            }
+            
+            // Update Item Visibility
+            
+            self.actions.updateVisibleItems()
+            
+            // Dismiss Keyboard
+            
+            if self.actions.shouldDismissKeyboardOnScroll() {
+                scrollView.endEditing(true)
+            }
+        }
+    }
+    
+    final class LayoutDelegate : ListViewLayoutDelegate
+    {
+        unowned let presentationState : PresentationState
+        var appearance : Appearance
+        
+        init(presentationState : PresentationState, appearance : Appearance)
+        {
+            self.presentationState = presentationState
+            self.appearance = appearance
+        }
+        
+        private let itemMeasurementCache = ReusableViewCache()
+        private let headerFooterMeasurementCache = ReusableViewCache()
+        
         // MARK: ListViewLayoutDelegate
         
-        func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
+        func listViewLayoutUpdatedItemPositions(_ layout : ListViewLayout)
         {
-            self.view.setPresentationStateItemPositions()
+            self.presentationState.setItemPositions(from: layout)
         }
                 
         func heightForItem(
@@ -182,7 +255,7 @@ extension ListView
             return item.height(
                 width: width,
                 layoutDirection : layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.itemHeight,
+                defaultHeight: self.appearance.sizing.itemHeight,
                 measurementCache: self.itemMeasurementCache
             )
         }
@@ -210,7 +283,7 @@ extension ListView
             return header.height(
                 width: width,
                 layoutDirection : layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.listHeaderHeight,
+                defaultHeight: self.appearance.sizing.listHeaderHeight,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -238,7 +311,7 @@ extension ListView
             return footer.height(
                 width: width,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.listFooterHeight,
+                defaultHeight: self.appearance.sizing.listFooterHeight,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -266,7 +339,7 @@ extension ListView
             return footer.height(
                 width: width,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.overscrollFooterHeight,
+                defaultHeight: self.appearance.sizing.overscrollFooterHeight,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -305,7 +378,7 @@ extension ListView
             return header.height(
                 width: width,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.sectionHeaderHeight,
+                defaultHeight: self.appearance.sizing.sectionHeaderHeight,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -338,7 +411,7 @@ extension ListView
             return footer.height(
                 width: width,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.sectionFooterHeight,
+                defaultHeight: self.appearance.sizing.sectionFooterHeight,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -356,45 +429,6 @@ extension ListView
             let section = self.presentationState.sections[sectionIndex]
             
             return section.model.columns
-        }
-        
-        // MARK: UIScrollViewDelegate
-        
-        func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
-        {
-            self.view.updatePresentationState(for: .didEndDecelerating)
-        }
-        
-        func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
-        {
-            self.view.updatePresentationState(for: .scrolledToTop)
-        }
-        
-        private var lastPosition : CGFloat = 0.0
-        
-        func scrollViewDidScroll(_ scrollView: UIScrollView)
-        {
-            guard scrollView.bounds.size.height > 0 else { return }
-            
-            // Updating Paged Content
-            
-            let scrollingDown = self.lastPosition < scrollView.contentOffset.y
-            
-            self.lastPosition = scrollView.contentOffset.y
-            
-            if scrollingDown {
-                self.view.updatePresentationState(for: .scrolledDown)
-            }
-            
-            // Update Item Visibility
-            
-            self.view.updateVisibleItemsAndSections()
-            
-            // Dismiss Keyboard
-            
-            if self.view.behavior.dismissesKeyboardOnScroll {
-                self.view.endEditing(true)
-            }
         }
     }
 }

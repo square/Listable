@@ -79,9 +79,7 @@ final class PresentationState
     //
     // MARK: Public Properties
     //
-    
-    unowned var view : ListView!
-    
+        
     var refreshControl : RefreshControl.PresentationState?
     
     var header : AnyPresentationHeaderFooterState?
@@ -230,6 +228,13 @@ final class PresentationState
         self.sections[indexPath.section].insert(item: item, at: indexPath.item)
     }
     
+    func setItemPositions(from layout : ListViewLayout)
+    {
+        self.forEachItem { indexPath, item in
+            item.itemPosition = layout.positionForItem(at: indexPath)
+        }
+    }
+    
     //
     // MARK: Height Caching
     //
@@ -247,7 +252,7 @@ final class PresentationState
     // MARK: Updating Content & State
     //
     
-    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice)
+    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice, in view : ListView)
     {
         self.containsAllItems = slice.containsAllItems
         
@@ -261,13 +266,13 @@ final class PresentationState
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
-            added: { section in SectionState(with: section, listView: self.view) },
-            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.view) },
-            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: self.view) }
+            added: { section in SectionState(with: section, listView: view) },
+            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: view) },
+            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: view) }
         )
     }
     
-    internal func updateRefreshControl(with new : RefreshControl?)
+    internal func updateRefreshControl(with new : RefreshControl?, in view : UICollectionView)
     {
         if let existing = self.refreshControl, let new = new {
             existing.update(with: new)
@@ -275,14 +280,14 @@ final class PresentationState
             let newControl = RefreshControl.PresentationState(new)
 
             if #available(iOS 10.0, *) {
-                self.view.collectionView.refreshControl = newControl.view
+                view.refreshControl = newControl.view
             } else {
-                self.view.collectionView.addSubview(newControl.view)
+                view.addSubview(newControl.view)
             }
             self.refreshControl = newControl
         } else if let existing = refreshControl, new == nil {
             if #available(iOS 10.0, *) {
-                self.view.collectionView.refreshControl = nil
+                view.refreshControl = nil
             } else {
                 existing.view.removeFromSuperview()
             }
@@ -303,7 +308,7 @@ final class PresentationState
     
     private var registeredSupplementaryViewsObjectIdentifiers : Set<SupplementaryIdentifier> = Set()
         
-    func registerSupplementaryView(of kind : String, for headerFooter : AnyPresentationHeaderFooterState)
+    func registerSupplementaryView(of kind : String, for headerFooter : AnyPresentationHeaderFooterState, in view : UICollectionView)
     {
         let info = headerFooter.cellRegistrationInfo
         
@@ -315,12 +320,12 @@ final class PresentationState
         
         self.registeredSupplementaryViewsObjectIdentifiers.insert(identifier)
         
-        self.view.collectionView.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
+        view.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
     }
     
     private var registeredCellObjectIdentifiers : Set<ObjectIdentifier> = Set()
     
-    func registerCell(for item : AnyPresentationItemState)
+    func registerCell(for item : AnyPresentationItemState, in view : UICollectionView)
     {
         let info = item.cellRegistrationInfo
         
@@ -332,7 +337,7 @@ final class PresentationState
         
         self.registeredCellObjectIdentifiers.insert(identifier)
         
-        self.view.collectionView.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
+        view.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
     }
     
     final class SectionState

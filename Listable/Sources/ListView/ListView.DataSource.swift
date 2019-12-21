@@ -10,7 +10,12 @@ internal extension ListView
 {
     final class DataSource : NSObject, UICollectionViewDataSource
     {
-        unowned var presentationState : PresentationState!
+        let presentationState : PresentationState
+        
+        init(presentationState : PresentationState)
+        {
+            self.presentationState = presentationState
+        }
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
         {
@@ -28,7 +33,7 @@ internal extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            self.presentationState.registerCell(for: item)
+            self.presentationState.registerCell(for: item, in: collectionView)
             
             return item.dequeueAndPrepareCollectionViewCell(in: collectionView, for: indexPath)
         }
@@ -42,13 +47,13 @@ internal extension ListView
             switch ListViewLayout.SupplementaryKind(rawValue: kind)! {
             case .listHeader:
                 if let header = self.presentationState.header {
-                    self.presentationState.registerSupplementaryView(of: kind, for: header)
+                    self.presentationState.registerSupplementaryView(of: kind, for: header, in: collectionView)
                     return header.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
                 
             case .listFooter:
                 if let footer = self.presentationState.footer {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
+                    self.presentationState.registerSupplementaryView(of: kind, for: footer, in: collectionView)
                     return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
                 
@@ -56,7 +61,7 @@ internal extension ListView
                 let section = self.presentationState.sections[indexPath.section]
                 
                 if let header = section.header {
-                    self.presentationState.registerSupplementaryView(of: kind, for: header)
+                    self.presentationState.registerSupplementaryView(of: kind, for: header, in: collectionView)
                     return header.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
                 
@@ -64,13 +69,13 @@ internal extension ListView
                 let section = self.presentationState.sections[indexPath.section]
                 
                 if let footer = section.footer {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
+                    self.presentationState.registerSupplementaryView(of: kind, for: footer, in: collectionView)
                     return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
                 
             case .overscrollFooter:
                 if let footer = self.presentationState.overscrollFooter {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
+                    self.presentationState.registerSupplementaryView(of: kind, for: footer, in: collectionView)
                     return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
                 }
             }
