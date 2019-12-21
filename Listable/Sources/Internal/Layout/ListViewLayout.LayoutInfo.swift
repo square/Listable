@@ -177,6 +177,16 @@ internal extension ListViewLayout
         }
         
         //
+        // MARK: Querying The Layout
+        //
+        
+        func positionForItem(at indexPath : IndexPath) -> ItemPosition
+        {
+            let item = self.item(at: indexPath)
+            return item.position
+        }
+        
+        //
         // MARK: Fetching Elements
         //
             
@@ -404,7 +414,7 @@ internal extension ListViewLayout
             self.setItemPositions()
             
             delegate.listViewLayoutUpdatedItemPositions(self)
-            
+                                    
             //
             // Set Frame Origins
             //

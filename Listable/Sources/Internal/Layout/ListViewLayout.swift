@@ -10,7 +10,7 @@ import UIKit
 
 protocol ListViewLayoutDelegate : AnyObject
 {
-    func listViewLayoutUpdatedItemPositions(_ layout : ListViewLayout)
+    func listViewLayoutUpdatedItemPositions(_ info : ListViewLayout.LayoutInfo)
     
     func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
     func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
@@ -93,17 +93,6 @@ class ListViewLayout : UICollectionViewLayout
     
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError() }
-    
-    //
-    // MARK: Querying The Layout
-    //
-    
-    func positionForItem(at indexPath : IndexPath) -> ItemPosition
-    {
-        let item = self.layoutResult.item(at: indexPath)
-        
-        return item.position
-    }
     
     //
     // MARK: Private Properties

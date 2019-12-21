@@ -238,9 +238,9 @@ extension ListView
         
         // MARK: ListViewLayoutDelegate
         
-        func listViewLayoutUpdatedItemPositions(_ layout : ListViewLayout)
+        func listViewLayoutUpdatedItemPositions(_ info : ListViewLayout.LayoutInfo)
         {
-            self.presentationState.setItemPositions(from: layout)
+            self.presentationState.setItemPositions(from: info)
         }
                 
         func heightForItem(

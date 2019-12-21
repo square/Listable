@@ -228,10 +228,10 @@ final class PresentationState
         self.sections[indexPath.section].insert(item: item, at: indexPath.item)
     }
     
-    func setItemPositions(from layout : ListViewLayout)
+    func setItemPositions(from info : ListViewLayout.LayoutInfo)
     {
         self.forEachItem { indexPath, item in
-            item.itemPosition = layout.positionForItem(at: indexPath)
+            item.itemPosition = info.positionForItem(at: indexPath)
         }
     }
     

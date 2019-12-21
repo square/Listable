@@ -12,8 +12,8 @@ target 'Demo' do
 	pod 'BlueprintLists', :path => 'BlueprintLists.podspec', :testspecs => ['Tests']
 
 	# External Pods
-	pod 'BlueprintUI'
-	pod 'BlueprintUICommonControls'
+	pod 'BlueprintUI', :inhibit_warnings => true
+	pod 'BlueprintUICommonControls', :inhibit_warnings => true
 
 	# Internal Pods
 	pod 'EnglishDictionary', :path => 'Internal Pods/EnglishDictionary/EnglishDictionary.podspec'
