@@ -248,7 +248,7 @@ final class PresentationState
     // MARK: Updating Content & State
     //
     
-    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice, in view : ListView)
+    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice, reorderingDelegate : ReorderingActionsDelegate)
     {
         self.containsAllItems = slice.containsAllItems
         
@@ -262,9 +262,9 @@ final class PresentationState
         self.sections = diff.changes.transform(
             old: self.sections,
             removed: { _, _ in },
-            added: { section in SectionState(with: section, listView: view) },
-            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: view) },
-            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, listView: view) }
+            added: { section in SectionState(with: section, reorderingDelegate: reorderingDelegate) },
+            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, reorderingDelegate: reorderingDelegate) },
+            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, reorderingDelegate: reorderingDelegate) }
         )
     }
     
@@ -345,7 +345,7 @@ final class PresentationState
         
         var items : [AnyPresentationItemState]
         
-        init(with model : Section, listView : ListView)
+        init(with model : Section, reorderingDelegate : ReorderingActionsDelegate)
         {
             self.model = model
             
@@ -353,7 +353,7 @@ final class PresentationState
             self.footer = SectionState.headerFooterState(with: self.footer, new: model.footer)
             
             self.items = self.model.items.map {
-                $0.newPresentationItemState(in: listView) as! AnyPresentationItemState
+                $0.newPresentationItemState(with: reorderingDelegate) as! AnyPresentationItemState
             }
         }
         
@@ -373,7 +373,7 @@ final class PresentationState
             with oldSection : Section,
             new newSection : Section,
             changes : SectionedDiff<Section, AnyItem>.ItemChanges,
-            listView : ListView
+            reorderingDelegate : ReorderingActionsDelegate
             )
         {
             self.model = newSection
@@ -384,7 +384,7 @@ final class PresentationState
             self.items = changes.transform(
                 old: self.items,
                 removed: { _, _ in },
-                added: { $0.newPresentationItemState(in: listView) as! AnyPresentationItemState },
+                added: { $0.newPresentationItemState(with: reorderingDelegate) as! AnyPresentationItemState },
                 moved: { old, new, item in item.setNew(item: new, reason: .move) },
                 updated: { old, new, item in item.setNew(item: new, reason: .update) },
                 noChange: { old, new, item in item.setNew(item: new, reason: .noChange) }
@@ -538,7 +538,7 @@ final class PresentationState
         
         private var visibleCell : ItemElementCell<Element>?
         
-        init(with model : Item<Element>, listView : ListView)
+        init(with model : Item<Element>, reorderingDelegate : ReorderingActionsDelegate)
         {
             self.model = model
             
@@ -582,7 +582,7 @@ final class PresentationState
             }
             
             self.reorderingActions.item = self
-            self.reorderingActions.listView = listView
+            self.reorderingActions.delegate = reorderingDelegate
         }
         
         deinit {

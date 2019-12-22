@@ -533,7 +533,7 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
-        
+    
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
         for reason : Content.UpdateReason,
@@ -549,7 +549,7 @@ public final class ListView : UIView
         let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
                 
         let updateBackingData = {
-            self.storage.presentationState.update(with: diff, slice: visibleSlice, in: self)
+            self.storage.presentationState.update(with: diff, slice: visibleSlice, reorderingDelegate: self)
         }
         
         /**
@@ -652,9 +652,13 @@ public final class ListView : UIView
             )
         )
     }
-    
+}
+
+
+extension ListView : ReorderingActionsDelegate
+{
     //
-    // MARK: Moving Items
+    // MARK: ReorderingActionsDelegate (Moving Items)
     //
     
     internal func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
@@ -678,7 +682,7 @@ public final class ListView : UIView
         self.collectionView.endInteractiveMovement()
     }
     
-    private func cancelInteractiveMovement()
+    internal func cancelInteractiveMovement()
     {
         self.collectionView.cancelInteractiveMovement()
     }

@@ -6,12 +6,21 @@
 //
 
 
+internal protocol ReorderingActionsDelegate : AnyObject
+{
+    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
+    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
+    func endInteractiveMovement()
+    func cancelInteractiveMovement()
+}
+
+
 public final class ReorderingActions
 {
     public private(set) var isMoving : Bool
     
     internal weak var item : AnyPresentationItemState?
-    internal weak var listView : ListView?
+    internal weak var delegate : ReorderingActionsDelegate?
     
     init()
     {
@@ -26,8 +35,8 @@ public final class ReorderingActions
         
         self.isMoving = true
         
-        if let listView = self.listView, let item = self.item {
-            return listView.beginInteractiveMovementFor(item: item)
+        if let delegate = self.delegate, let item = self.item {
+            return delegate.beginInteractiveMovementFor(item: item)
         } else {
             return false
         }
@@ -39,7 +48,7 @@ public final class ReorderingActions
             return
         }
         
-        self.listView?.updateInteractiveMovementTargetPosition(with: recognizer)
+        self.delegate?.updateInteractiveMovementTargetPosition(with: recognizer)
     }
     
     public func end()
@@ -50,6 +59,6 @@ public final class ReorderingActions
         
         self.isMoving = false
         
-        self.listView?.endInteractiveMovement()
+        self.delegate?.endInteractiveMovement()
     }
 }

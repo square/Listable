@@ -12,10 +12,107 @@ import XCTest
 
 class ListView_StorageTests: XCTestCase
 {
-    func testStorage(with view : ListView) -> ListView.Storage
+    func test_moveItem()
     {
+        let fixture = self.newFixture()
+        
+        fixture.storage.moveItem(from: IndexPath(item: 0, section: 0), to: IndexPath(item: 1, section: 1))
+        
+        let content = fixture.storage.allContent.sections.mapElements(as: TestElement.self) { $0.name }
+        let presentation = fixture.storage.presentationState.sections.mapElements(as: TestElement.self) { $0.name }
+        
+        let expected = [
+            [
+                "row-2",
+            ],
+            [
+                "row-3",
+                "row-1",
+                "row-4",
+                "row-5",
+            ],
+        ]
+        
+        XCTAssertEqual(expected, content)
+        XCTAssertEqual(expected, presentation)
+    }
+    
+    func test_remove()
+    {
+        self.testcase("Result is found") {
+            let fixture = self.newFixture()
+            
+            let item = fixture.storage.presentationState.item(at: IndexPath(item: 1, section: 1))
+            
+            let removed = fixture.storage.remove(item: item)
+            
+            XCTAssertEqual(removed, IndexPath(item: 1, section: 1))
+            
+            let content = fixture.storage.allContent.sections.mapElements(as: TestElement.self) { $0.name }
+            let presentation = fixture.storage.presentationState.sections.mapElements(as: TestElement.self) { $0.name }
+            
+            let expected = [
+                [
+                    "row-1",
+                    "row-2",
+                ],
+                [
+                    "row-3",
+                    "row-5",
+                ],
+            ]
+            
+            XCTAssertEqual(expected, content)
+            XCTAssertEqual(expected, presentation)
+        }
+        
+        self.testcase("Result is not found") {
+            let fixture = self.newFixture()
+            
+            let item = PresentationState.ItemState(
+                with: Item<TestElement>(
+                    with: TestElement(name: "an-item"),
+                    appearance: TestElement.Appearance()
+                ),
+                reorderingDelegate: fixture.reordering
+            )
+            
+            let removed = fixture.storage.remove(item: item)
+            
+            XCTAssertEqual(removed, nil)
+            
+            let content = fixture.storage.allContent.sections.mapElements(as: TestElement.self) { $0.name }
+            let presentation = fixture.storage.presentationState.sections.mapElements(as: TestElement.self) { $0.name }
+            
+            let expected = [
+                [
+                    "row-1",
+                    "row-2",
+                ],
+                [
+                    "row-3",
+                    "row-4",
+                    "row-5",
+                ],
+            ]
+            
+            XCTAssertEqual(expected, content)
+            XCTAssertEqual(expected, presentation)
+        }
+    }
+    
+    struct Fixture
+    {
+        let reordering : ReorderingActionsDelegate
+        
+        let storage : ListView.Storage
+    }
+    
+    func newFixture() -> Fixture
+    {
+        let reordering = ReorderingDelegate_Stub()
+        
         let storage = ListView.Storage()
-        storage.presentationState.view = view
         
         storage.allContent = Content { content in
             content += Section(identifier: "section-1") { section in
@@ -32,63 +129,12 @@ class ListView_StorageTests: XCTestCase
         
         let diff = ListView.diffWith(old : [], new: storage.allContent.sections)
         
-        storage.presentationState.update(with: diff, slice: Content.Slice(containsAllItems: true, content: storage.allContent))
+        storage.presentationState.update(
+            with: diff,
+            slice: Content.Slice(containsAllItems: true, content: storage.allContent),
+            reorderingDelegate: reordering
+        )
         
-        return storage
-    }
-    
-    func test_moveItem()
-    {
-        let view = ListView()
-        let storage = self.testStorage(with: view)
-        
-        storage.moveItem(from: IndexPath(item: 0, section: 0), to: IndexPath(item: 1, section: 1))
-        
-        let items : [[Item<TestElement>]] = storage.allContent.sections.map {
-            return $0.items as! [Item<TestElement>]
-        }
-        
-        let names : [[String]] = items.map {
-            $0.map { $0.element.name }
-        }
-        
-        XCTAssertEqual(names, [
-            [
-                "row-2",
-            ],
-            [
-                "row-3",
-                "row-1",
-                "row-4",
-                "row-5",
-            ],
-        ])
-    }
-    
-    func test_remove()
-    {
-        
-    }
-}
-
-fileprivate struct TestElement : ItemElement, Equatable
-{
-    var name : String
-    
-    var identifier: Identifier<TestElement> {
-        return .init(self.name)
-    }
-    
-    func apply(to view: TestElement.Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
-
-    struct Appearance : ItemElementAppearance, Equatable
-    {
-        typealias ContentView = UIView
-        
-        static func createReusableItemView(frame: CGRect) -> UIView {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {}
+        return Fixture(reordering: reordering, storage: storage)
     }
 }

@@ -32,7 +32,7 @@ public protocol AnyItem_Internal
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyWasUpdated(comparedTo other : AnyItem) -> Bool
     
-    func newPresentationItemState(in listView : ListView) -> Any
+    func newPresentationItemState(with reorderingDelegate : Any) -> Any
 }
 
 
@@ -162,9 +162,10 @@ public struct Item<Element:ItemElement> : AnyItem
         return self.element.wasMoved(comparedTo: other.element)
     }
     
-    public func newPresentationItemState(in listView : ListView) -> Any
+    public func newPresentationItemState(with reorderingDelegate : Any) -> Any
     {
-        return PresentationState.ItemState(with: self, listView: listView)
+        /// `reorderingDelegate` is passed in as an `Any`to avoid making `ReorderingActionsDelegate` public.
+        return PresentationState.ItemState(with: self, reorderingDelegate: reorderingDelegate as! ReorderingActionsDelegate)
     }
 }
 
