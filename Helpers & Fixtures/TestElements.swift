@@ -18,7 +18,10 @@ struct TestElement : ItemElement, Equatable
         return .init(self.name)
     }
     
-    func apply(to view: TestElement.Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to view: TestElement.Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    {
+        
+    }
 
     struct Appearance : ItemElementAppearance, Equatable
     {
@@ -28,6 +31,9 @@ struct TestElement : ItemElement, Equatable
             return UIView(frame: frame)
         }
         
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {}
+        func apply(to view: UIView, with info: ApplyItemElementInfo)
+        {
+            
+        }
     }
 }

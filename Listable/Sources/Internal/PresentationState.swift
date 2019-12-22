@@ -307,7 +307,6 @@ final class PresentationState
     func registerSupplementaryView(of kind : String, for headerFooter : AnyPresentationHeaderFooterState, in view : UICollectionView)
     {
         let info = headerFooter.cellRegistrationInfo
-        
         let identifier = SupplementaryIdentifier(identifier: ObjectIdentifier(info.class), kind: kind)
         
         guard self.registeredSupplementaryViewsObjectIdentifiers.contains(identifier) == false else {
@@ -319,12 +318,19 @@ final class PresentationState
         view.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
     }
     
+    func hasRegisteredSupplementaryView(of kind : String, for headerFooter : AnyPresentationHeaderFooterState, in view : UICollectionView) -> Bool
+    {
+        let info = headerFooter.cellRegistrationInfo
+        let identifier = SupplementaryIdentifier(identifier: ObjectIdentifier(info.class), kind: kind)
+        
+        return self.registeredSupplementaryViewsObjectIdentifiers.contains(identifier)
+    }
+    
     private var registeredCellObjectIdentifiers : Set<ObjectIdentifier> = Set()
     
     func registerCell(for item : AnyPresentationItemState, in view : UICollectionView)
     {
         let info = item.cellRegistrationInfo
-        
         let identifier = ObjectIdentifier(info.class)
         
         guard self.registeredCellObjectIdentifiers.contains(identifier) == false else {
@@ -334,6 +340,14 @@ final class PresentationState
         self.registeredCellObjectIdentifiers.insert(identifier)
         
         view.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
+    }
+    
+    func hasRegisteredCell(for item : AnyPresentationItemState, in view : UICollectionView) -> Bool
+    {
+        let info = item.cellRegistrationInfo
+        let identifier = ObjectIdentifier(info.class)
+        
+        return self.registeredCellObjectIdentifiers.contains(identifier)
     }
     
     final class SectionState

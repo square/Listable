@@ -33,16 +33,11 @@ class ListView_DataSourceTests: XCTestCase
         let fixture = self.newFixture()
         
         let anyCell = fixture.dataSource.collectionView(fixture.collectionView, cellForItemAt: IndexPath(item: 1, section: 1))
-        
         let cell = anyCell as! ItemElementCell<TestElement>
         
-        self.testcase("Should register the cell for reuse") {
-            
-        }
+        // Verify the cell is prepared for display.
         
-        self.testcase("Should prepare the cell for display") {
-            
-        }
+        
     }
     
     func test_collectionView_viewForSupplementaryElementOfKind_at()
