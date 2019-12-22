@@ -190,7 +190,6 @@ class ListViewLayout : UICollectionViewLayout
     private final class InvalidationContext : UICollectionViewLayoutInvalidationContext
     {
         var widthChanged : Bool = false
-        
         var performedInteractiveMove : Bool = false
     }
     

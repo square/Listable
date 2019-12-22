@@ -490,7 +490,7 @@ public final class ListView : UIView
     // MARK: Updating Presentation State
     //
     
-    internal func updatePresentationState(for reason : Content.Slice.UpdateReason, completion : @escaping (Bool) -> () = { _ in })
+    internal func updatePresentationState(for reason : Content.UpdateReason, completion : @escaping (Bool) -> () = { _ in })
     {
         let indexPaths = self.collectionView.indexPathsForVisibleItems
         
@@ -536,7 +536,7 @@ public final class ListView : UIView
         
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
-        for reason : Content.Slice.UpdateReason,
+        for reason : Content.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> ()
         )
     {

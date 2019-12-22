@@ -146,13 +146,9 @@ final class PresentationState
     
     func sections(at indexes : [Int]) -> [SectionState]
     {
-        var sections : [SectionState] = []
-        
-        indexes.forEach {
-            sections.append(self.sections[$0])
+        return indexes.map {
+            self.sections[$0]
         }
-        
-        return sections
     }
     
     public var lastIndexPath : IndexPath?

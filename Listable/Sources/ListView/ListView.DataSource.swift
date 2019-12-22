@@ -16,6 +16,8 @@ internal extension ListView
         {
             self.presentationState = presentationState
         }
+        
+        // MARK: UICollectionViewDataSource
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
         {

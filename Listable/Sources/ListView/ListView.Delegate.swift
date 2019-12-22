@@ -12,7 +12,7 @@ extension ListView
     {
         struct Actions
         {
-            var updatePresentationState : (Content.Slice.UpdateReason) -> ()
+            var updatePresentationState : (Content.UpdateReason) -> ()
             var moveItem : (IndexPath, IndexPath) -> ()
             var updateVisibleItems : () -> ()
             
