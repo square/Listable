@@ -17,6 +17,11 @@ public struct Snapshot<Iteration:SnapshotIteration>
     internal typealias OnFail = (_ message : String, _ file : StaticString, _ line : UInt) -> ()
     internal var onFail : OnFail = XCTFail
     
+    public init(with iteration : Iteration, test : @escaping Test)
+    {
+        self.init(iterations : [iteration], test: test)
+    }
+    
     public init(iterations : [Iteration], test : @escaping Test)
     {
         let hasIterations = iterations.isEmpty == false

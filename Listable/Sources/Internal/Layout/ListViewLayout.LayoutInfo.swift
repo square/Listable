@@ -10,7 +10,7 @@ import Foundation
 
 extension ListViewLayout
 {
-    enum SupplementaryKind : String
+    enum SupplementaryKind : String, CaseIterable
     {
         case listHeader = "Listable.ListViewLayout.ListHeader"
         case listFooter = "Listable.ListViewLayout.ListFooter"

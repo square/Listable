@@ -50,6 +50,8 @@ public struct SizedViewIteration : SnapshotIteration
         render.frame.origin = .zero
         render.frame.size = self.size
         
+        render.layoutIfNeeded()
+        
         return render
     }
 }

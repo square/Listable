@@ -18,22 +18,63 @@ struct TestElement : ItemElement, Equatable
         return .init(self.name)
     }
     
-    func apply(to view: TestElement.Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    func apply(to view: Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo)
     {
+        view.text = self.name
         
+        view.elementApplicationCount += 1
     }
 
     struct Appearance : ItemElementAppearance, Equatable
     {
-        typealias ContentView = UIView
+        typealias ContentView = Label
         
-        static func createReusableItemView(frame: CGRect) -> UIView {
-            return UIView(frame: frame)
+        static func createReusableItemView(frame: CGRect) -> ContentView {
+            return Label(frame: frame)
         }
         
-        func apply(to view: UIView, with info: ApplyItemElementInfo)
+        func apply(to view: ContentView, with info: ApplyItemElementInfo)
         {
-            
+            view.appearanceApplicationCount += 1
         }
+    }
+    
+    final class Label : UILabel
+    {
+        var elementApplicationCount : Int = 0
+        var appearanceApplicationCount : Int = 0
+    }
+}
+
+
+struct TestSupplementary : HeaderFooterElement, Equatable
+{
+    var name : String
+    
+    func apply(to view: Appearance.ContentView, reason: ApplyReason)
+    {
+        view.text = self.name
+        view.elementApplicationCount += 1
+    }
+    
+    struct Appearance : HeaderFooterElementAppearance, Equatable
+    {
+        typealias ContentView = Label
+        
+        static func createReusableHeaderFooterView(frame: CGRect) -> TestSupplementary.Label
+        {
+            return Label(frame: frame)
+        }
+        
+        func apply(to view: TestSupplementary.Label)
+        {
+            view.appearanceApplicationCount += 1
+        }
+    }
+    
+    final class Label : UILabel
+    {
+        var elementApplicationCount : Int = 0
+        var appearanceApplicationCount : Int = 0
     }
 }

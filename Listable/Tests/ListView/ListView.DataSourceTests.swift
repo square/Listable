@@ -30,24 +30,21 @@ class ListView_DataSourceTests: XCTestCase
     
     func test_collectionView_cellForItemAt()
     {
-        let fixture = self.newFixture()
-        
-        let anyCell = fixture.dataSource.collectionView(fixture.collectionView, cellForItemAt: IndexPath(item: 1, section: 1))
-        let cell = anyCell as! ItemElementCell<TestElement>
-        
-        // Verify the cell is prepared for display.
-        
-        
+        /// Tested via integration tests.
+        /// Can't test via unit tests as the collection view expects this method only to be called at specific times.
     }
     
     func test_collectionView_viewForSupplementaryElementOfKind_at()
     {
-
+        /// Tested via integration tests.
+        /// Can't test via unit tests as the collection view expects this method only to be called at specific times.
     }
     
     func test_collectionView_canMoveItemAt()
     {
-
+        let fixture = self.newFixture()
+        
+        
     }
     
     func test_collectionView_moveItemAt_to()
@@ -74,12 +71,50 @@ class ListView_DataSourceTests: XCTestCase
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: ListViewLayout(delegate: layoutDelegate, appearance: Appearance()))
         
         let content = Content { content in
+            
+            content.header = HeaderFooter(
+                with: TestSupplementary(name: "list-header"),
+                appearance: TestSupplementary.Appearance()
+            )
+            
+            content.footer = HeaderFooter(
+                with: TestSupplementary(name: "list-footer"),
+                appearance: TestSupplementary.Appearance()
+            )
+            
+            content.overscrollFooter = HeaderFooter(
+                with: TestSupplementary(name: "overscroll-footer"),
+                appearance: TestSupplementary.Appearance()
+            )
+            
             content += Section(identifier: "section-1") { section in
+                
+                section.header = HeaderFooter(
+                    with: TestSupplementary(name: "header-1"),
+                    appearance: TestSupplementary.Appearance()
+                )
+                
+                section.footer = HeaderFooter(
+                    with: TestSupplementary(name: "footer-1"),
+                    appearance: TestSupplementary.Appearance()
+                )
+                
                 section += Item(with: TestElement(name: "row-1"), appearance: TestElement.Appearance())
                 section += Item(with: TestElement(name: "row-2"), appearance: TestElement.Appearance())
             }
             
             content += Section(identifier: "section-2") { section in
+                
+                section.header = HeaderFooter(
+                    with: TestSupplementary(name: "header-2"),
+                    appearance: TestSupplementary.Appearance()
+                )
+                
+                section.footer = HeaderFooter(
+                    with: TestSupplementary(name: "footer-2"),
+                    appearance: TestSupplementary.Appearance()
+                )
+                
                 section += Item(with: TestElement(name: "row-3"), appearance: TestElement.Appearance())
                 section += Item(with: TestElement(name: "row-4"), appearance: TestElement.Appearance())
                 section += Item(with: TestElement(name: "row-5"), appearance: TestElement.Appearance())
