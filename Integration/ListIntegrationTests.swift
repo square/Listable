@@ -61,9 +61,16 @@ class ListIntegrationTests : XCTestCase
         }
     }
     
-    private var plainAppearance : Appearance
+    private var baseAppearance : Appearance
     {
         var appearance = Appearance()
+        
+        return appearance
+    }
+    
+    private var plainAppearance : Appearance
+    {
+        var appearance = self.baseAppearance
         
         appearance.set { _ in
             
@@ -74,7 +81,7 @@ class ListIntegrationTests : XCTestCase
     
     private var groupedAppearance : Appearance
     {
-        var appearance = Appearance()
+        var appearance = self.baseAppearance
         
         appearance.set { _ in
             
