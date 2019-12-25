@@ -63,8 +63,28 @@ internal extension ListViewLayout
         // MARK: Public Properties
         //
         
-        var collectionViewSize : CGSize
-        var collectionViewSafeAreaInsets : UIEdgeInsets
+        var viewProperties : ViewProperties
+        
+        struct ViewProperties : Equatable
+        {
+            let size : CGSize
+            let safeAreaInsets : UIEdgeInsets
+            let contentInset : UIEdgeInsets
+            
+            init()
+            {
+                self.size = .zero
+                self.safeAreaInsets = .zero
+                self.contentInset = .zero
+            }
+            
+            init(collectionView : UICollectionView)
+            {
+                self.size = collectionView.bounds.size
+                self.safeAreaInsets = collectionView.lst_safeAreaInsets
+                self.contentInset = collectionView.contentInset
+            }
+        }
         
         var contentSize : CGSize
         
@@ -83,8 +103,7 @@ internal extension ListViewLayout
         
         init()
         {
-            self.collectionViewSize = .zero
-            self.collectionViewSafeAreaInsets = .zero
+            self.viewProperties = ViewProperties()
             
             self.contentSize = .zero
             
@@ -105,8 +124,7 @@ internal extension ListViewLayout
         {
             let sectionCount = collectionView.numberOfSections
             
-            self.collectionViewSize = collectionView.bounds.size
-            self.collectionViewSafeAreaInsets = collectionView.lst_safeAreaInsets
+            self.viewProperties = ViewProperties(collectionView: collectionView)
             
             self.contentSize = .zero
             
@@ -311,12 +329,12 @@ internal extension ListViewLayout
         func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
         {
             /**
-             We invalidate if the height changes, or if the safe area changes,
-             to ensure that `UnderflowBehavior.Alignment` is reapplied correctly,
-             as it is dependent on both the `height` of the view, and the `safeAreaInsets`.
+             We invalidate if the height changes, or if the safe area changes (regardless of layout direction)
+             to ensure that `UnderflowBehavior.Alignment` is reapplied correctly, as it is dependent on
+             both the `height` of the view, and the `safeAreaInsets`.
              */
-            
-            return self.collectionViewSize != collectionView.bounds.size || self.collectionViewSafeAreaInsets != collectionView.lst_safeAreaInsets
+                        
+            return self.viewProperties != ViewProperties(collectionView: collectionView)
         }
         
         @discardableResult
@@ -409,6 +427,8 @@ internal extension ListViewLayout
                 padding: direction.horizontalPadding(with: layout.padding),
                 constraint: layout.width
             )
+            
+            self.viewProperties = ViewProperties(collectionView: collectionView)
             
             //
             // Item Positioning
