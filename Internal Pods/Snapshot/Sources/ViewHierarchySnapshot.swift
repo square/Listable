@@ -16,6 +16,9 @@ public struct ViewHierarchySnapshot : SnapshotOutputFormat
     
     public static func snapshotData(with renderingFormat : UIView) throws -> Data
     {
+        renderingFormat.layoutIfNeeded()
+        RunLoop.current.run(mode: .default, before: Date())
+        
         let hierarchy = renderingFormat.textHierarchy
         let string = hierarchy.stringValue
         

@@ -97,8 +97,10 @@ class SnapshotTests : XCTestCase
     }
     
     func test_image_and_text_output()
-    {        
-        let snapshot = Snapshot(iterations: iOSDevice.allAvailable.toSnapshotIterations()) { iteration in
+    {
+        let hostingView = UIApplication.shared.delegate!.window!!.rootViewController!.view!
+        
+        let snapshot = Snapshot(iterations: iOSDevice.allAvailable.toSnapshotIterations(with: hostingView)) { iteration in
             let root = ViewType1(frame: .init(origin: .zero, size: .init(width: 150.0, height: 150.0)))
             root.backgroundColor = .init(white: 0.8, alpha: 1.0)
 
@@ -159,6 +161,11 @@ fileprivate struct TestIteration : SnapshotIteration
     func prepare(render: String) -> String
     {
         return render
+    }
+    
+    func tearDown(render: String)
+    {
+        // Nothing
     }
 }
 

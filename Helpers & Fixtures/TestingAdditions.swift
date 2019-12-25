@@ -47,6 +47,21 @@ extension XCTestCase
         XCTFail("waitUntil timed out waiting for a check to pass.")
     }
     
+    func waitFor(duration : TimeInterval)
+    {
+        let end = Date(timeIntervalSinceNow: abs(duration))
+        
+        self.waitFor(predicate: {
+            Date() >= end
+        })
+    }
+    
+    func waitForOneRunloop()
+    {
+        let runloop = RunLoop.main
+        runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
+    }
+    
     func waitFor(timeout : TimeInterval = 10.0, block : (() -> ()) -> ())
     {
         var isDone : Bool = false

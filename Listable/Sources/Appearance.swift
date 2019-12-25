@@ -159,7 +159,7 @@ public struct UnderflowBehavior : Equatable
         self.alignment = alignment
     }
     
-    public enum Alignment : Equatable
+    public enum Alignment : Equatable, CaseIterable
     {
         case top
         case center

@@ -101,4 +101,9 @@ class UnderflowBehavior_Alignment_Tests : XCTestCase
             XCTAssertEqual(UnderflowBehavior.Alignment.bottom.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 50.0)
         }
     }
+    
+    func test_resizing_view_relays_out_contents()
+    {
+        XCTFail("TODO")
+    }
 }

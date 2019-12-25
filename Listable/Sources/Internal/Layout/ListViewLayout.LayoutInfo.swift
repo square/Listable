@@ -304,10 +304,12 @@ internal extension ListViewLayout
         
         func shouldInvalidateLayoutFor(newCollectionViewSize : CGSize) -> Bool
         {
-            switch self.appearance.direction {
-            case .vertical: return self.collectionViewSize.width != newCollectionViewSize.width
-            case .horizontal: return self.collectionViewSize.height != newCollectionViewSize.height
-            }
+            return newCollectionViewSize != self.collectionViewSize
+            
+//            switch self.appearance.direction {
+//            case .vertical: return self.collectionViewSize.width != newCollectionViewSize.width
+//            case .horizontal: return self.collectionViewSize.height != newCollectionViewSize.height
+//            }
         }
         
         @discardableResult

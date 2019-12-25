@@ -17,11 +17,6 @@ public struct Snapshot<Iteration:SnapshotIteration>
     internal typealias OnFail = (_ message : String, _ file : StaticString, _ line : UInt) -> ()
     internal var onFail : OnFail = XCTFail
     
-    public init(with iteration : Iteration, test : @escaping Test)
-    {
-        self.init(iterations : [iteration], test: test)
-    }
-    
     public init(iterations : [Iteration], test : @escaping Test)
     {
         let hasIterations = iterations.isEmpty == false
@@ -57,7 +52,10 @@ public struct Snapshot<Iteration:SnapshotIteration>
             )
                         
             do {
-                let rendering = iteration.prepare(render: try self.test(iteration))
+                let testResult = try self.test(iteration)
+                defer { iteration.tearDown(render: testResult) }
+                
+                let rendering = iteration.prepare(render: testResult)
                 let data = try OutputFormat.snapshotData(with: rendering)
                 
                 let existingData = try self.existingData(at: url)
@@ -150,4 +148,6 @@ public protocol SnapshotIteration
     var name : String { get }
     
     func prepare(render : RenderingFormat) -> RenderingFormat
+    
+    func tearDown(render : RenderingFormat)
 }

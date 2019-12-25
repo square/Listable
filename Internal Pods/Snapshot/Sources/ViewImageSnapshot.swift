@@ -16,6 +16,9 @@ public struct ViewImageSnapshot : SnapshotOutputFormat
     
     public static func snapshotData(with renderingFormat : UIView) throws -> Data
     {
+        renderingFormat.layoutIfNeeded()
+        RunLoop.current.run(mode: .default, before: Date())
+        
         return renderingFormat.toImage.pngData()!
     }
     
@@ -28,7 +31,7 @@ public struct ViewImageSnapshot : SnapshotOutputFormat
     
     public static func validate(render newView : UIView, existingData: Data) throws
     {
-        let existing = try ViewImageSnapshot.image(with: existingData)
+        let existing = try ViewImageSnapshot.image(with: existingData, scale: newView.layer.contentsScale)
         let new = newView.toImage
         
         guard existing.size == new.size else {
@@ -40,13 +43,13 @@ public struct ViewImageSnapshot : SnapshotOutputFormat
         }
     }
     
-    private static func image(with data : Data) throws -> UIImage
+    private static func image(with data : Data, scale : CGFloat) throws -> UIImage
     {
         guard data.isEmpty == false else {
             throw Error.zeroSizeData
         }
         
-        guard let image = UIImage(data: data) else {
+        guard let image = UIImage(data: data, scale: scale) else {
             throw Error.couldNotLoadReferenceImage
         }
         
@@ -66,7 +69,7 @@ public struct ViewImageSnapshot : SnapshotOutputFormat
 extension UIView
 {    
     var toImage : UIImage {
-        UIGraphicsBeginImageContext(self.bounds.size)
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, self.layer.contentsScale)
 
         self.layer.render(in: UIGraphicsGetCurrentContext()!)
 

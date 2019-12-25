@@ -37,6 +37,16 @@ public extension HeaderFooterElement where Self:Equatable
 }
 
 
+/// Conform in this case as well, so wasUpdated can be synthesized by the compiler.
+public extension HeaderFooterElement where Self:Equatable, Self:HeaderFooterElementAppearance
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+
+
 public protocol HeaderFooterElementAppearance
 {
     //

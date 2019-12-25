@@ -157,6 +157,7 @@ class ListViewLayout : UICollectionViewLayout
         
         // Handle View Width Changing
         
+        // TODO: Remove this method, rename
         context.widthChanged = self.layoutResult.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
         
         // Update Needed Layout Type

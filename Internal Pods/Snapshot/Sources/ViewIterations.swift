@@ -22,8 +22,13 @@ public struct ViewIteration : SnapshotIteration
     public var name : String
     
     public func prepare(render : UIView) -> UIView
-    {
+    {        
         return render
+    }
+    
+    public func tearDown(render : UIView)
+    {
+        // We do not perform any side effects.
     }
 }
 
@@ -49,9 +54,12 @@ public struct SizedViewIteration : SnapshotIteration
     {
         render.frame.origin = .zero
         render.frame.size = self.size
-        
-        render.layoutIfNeeded()
-        
+                
         return render
+    }
+    
+    public func tearDown(render : UIView)
+    {
+        // We do not perform any side effects.
     }
 }

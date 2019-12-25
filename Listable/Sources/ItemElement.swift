@@ -90,6 +90,15 @@ public extension ItemElement where Self:Equatable
     }
 }
 
+/// Conform in this case as well, so wasUpdated can be synthesized by the compiler. 
+public extension ItemElement where Self:Equatable, Self:ItemElementAppearance
+{
+    func wasUpdated(comparedTo other : Self) -> Bool
+    {
+        return self != other
+    }
+}
+
 
 /**
  Represents how your ItemElement should be rendered on screen by the list.

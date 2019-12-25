@@ -10,10 +10,12 @@ import UIKit
 
 public struct iOSDeviceIteration : SnapshotIteration
 {
+    public let hostingView : UIView
     public let device : iOSDevice
     
-    public init(device : iOSDevice)
+    public init(with hostingView : UIView, device : iOSDevice)
     {
+        self.hostingView = hostingView
         self.device = device
     }
     
@@ -30,7 +32,17 @@ public struct iOSDeviceIteration : SnapshotIteration
         let wrapper = iOSDevice.DeviceView(device: self.device)
         wrapper.content = view
         
+        self.hostingView.addSubview(wrapper)
+        
         return wrapper
+    }
+    
+    public func tearDown(render : UIView)
+    {
+        // TODO: Temporary... Remove.
+        self.hostingView.subviews.forEach {
+            $0.removeFromSuperview()
+        }
     }
 }
 
@@ -45,6 +57,18 @@ public struct iOSDevice
     
     public let portraitSize : CGSize
     public let portraitSafeAreaInsets : UIEdgeInsets
+    
+    public var availableOnCurrentSystemVersion : Bool {
+        if self.safeAreaInsets == .zero {
+            return true
+        } else {
+            if #available(iOS 11.0, *) {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
     
     public var orientation : UIInterfaceOrientation {
         didSet {
@@ -141,7 +165,7 @@ public struct iOSDevice
             iOSDevice.iPad,
             iOSDevice.iPadPro_10_5,
             iOSDevice.iPadPro_12_9,
-        ]
+            ].availableOnCurrentSystemVersion()
     }
     
     public static var important : [iOSDevice]
@@ -153,7 +177,7 @@ public struct iOSDevice
             
             iOSDevice.iPad,
             iOSDevice.iPadPro_12_9,
-        ]
+            ].availableOnCurrentSystemVersion()
     }
     
     public static var iPhone5 : iOSDevice {
@@ -188,7 +212,7 @@ public struct iOSDevice
             name: "iPhone X",
             scale: 3.0,
             portraitSize: CGSize(width: 375.0, height: 812.0),
-            portraitSafeAreaInsets: .zero // TODO: Propert safe area insets.
+            portraitSafeAreaInsets: .zero // TODO: Proper safe area insets.
         )
     }
     
@@ -197,7 +221,7 @@ public struct iOSDevice
             name: "iPhone Xs Max",
             scale: 3.0,
             portraitSize: CGSize(width: 414.0, height: 896.0),
-            portraitSafeAreaInsets: .zero // TODO: Propert safe area insets.
+            portraitSafeAreaInsets: .zero //UIEdgeInsets(top: 44.0, left: 0.0, bottom: 34.0, right: 0.0)
         )
     }
     
@@ -224,18 +248,23 @@ public struct iOSDevice
             name: "iPad Pro (12.9 inch)",
             scale: 2.0,
             portraitSize: CGSize(width: 1024.0, height: 1366.0),
-            portraitSafeAreaInsets: .zero // TODO: Propert safe area insets.
+            portraitSafeAreaInsets: .zero // TODO: Proper safe area insets.
         )
     }
 }
 
 public extension Array where Element == iOSDevice
 {
-    func toSnapshotIterations() -> [iOSDeviceIteration]
+    func toSnapshotIterations(with hostingView : UIView) -> [iOSDeviceIteration]
     {
         return self.map {
-            iOSDeviceIteration(device: $0)
+            iOSDeviceIteration(with: hostingView, device: $0)
         }
+    }
+    
+    func availableOnCurrentSystemVersion() -> [iOSDevice]
+    {
+        return self.filter { $0.availableOnCurrentSystemVersion }
     }
 }
 
@@ -247,9 +276,14 @@ public extension iOSDevice
         
         public var content : UIView? {
             didSet {
+                guard oldValue !== self.content else {
+                    return
+                }
+                
                 oldValue?.removeFromSuperview()
                 
                 if let content = self.content {
+                    content.removeFromSuperview()
                     self.viewController.view.addSubview(content)
                 }
                 
