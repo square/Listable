@@ -51,15 +51,15 @@ class ListIntegrationTests : XCTestCase
             }
         }
         
-        self.testEach(testCase: "top") { view in
-            view.setContent(content)
-            view.appearance.underflow.alignment = .top
-        }
-        
-        self.testEach(testCase: "center") { view in
-            view.setContent(content)
-            view.appearance.underflow.alignment = .center
-        }
+//        self.testEach(testCase: "top") { view in
+//            view.setContent(content)
+//            view.appearance.underflow.alignment = .top
+//        }
+//
+//        self.testEach(testCase: "center") { view in
+//            view.setContent(content)
+//            view.appearance.underflow.alignment = .center
+//        }
         
         self.testEach(testCase: "bottom") { view in
             view.setContent(content)

@@ -63,7 +63,9 @@ internal extension ListViewLayout
         // MARK: Public Properties
         //
         
-        let collectionViewSize : CGSize
+        var collectionViewSize : CGSize
+        var collectionViewSafeAreaInsets : UIEdgeInsets
+        
         var contentSize : CGSize
         
         let appearance : Appearance
@@ -82,6 +84,8 @@ internal extension ListViewLayout
         init()
         {
             self.collectionViewSize = .zero
+            self.collectionViewSafeAreaInsets = .zero
+            
             self.contentSize = .zero
             
             self.appearance = Appearance()
@@ -102,6 +106,8 @@ internal extension ListViewLayout
             let sectionCount = collectionView.numberOfSections
             
             self.collectionViewSize = collectionView.bounds.size
+            self.collectionViewSafeAreaInsets = collectionView.lst_safeAreaInsets
+            
             self.contentSize = .zero
             
             self.appearance = appearance
@@ -302,14 +308,15 @@ internal extension ListViewLayout
             self.sections[to.section].items.insert(info, at: to.item)
         }
         
-        func shouldInvalidateLayoutFor(newCollectionViewSize : CGSize) -> Bool
+        func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
         {
-            return newCollectionViewSize != self.collectionViewSize
+            /**
+             We invalidate if the height changes, or if the safe area changes,
+             to ensure that `UnderflowBehavior.Alignment` is reapplied correctly,
+             as it is dependent on both the `height` of the view, and the `safeAreaInsets`.
+             */
             
-//            switch self.appearance.direction {
-//            case .vertical: return self.collectionViewSize.width != newCollectionViewSize.width
-//            case .horizontal: return self.collectionViewSize.height != newCollectionViewSize.height
-//            }
+            return self.collectionViewSize != collectionView.bounds.size || self.collectionViewSafeAreaInsets != collectionView.lst_safeAreaInsets
         }
         
         @discardableResult

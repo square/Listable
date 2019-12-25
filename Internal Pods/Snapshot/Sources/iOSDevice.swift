@@ -284,30 +284,20 @@ public extension iOSDevice
                 
                 if let content = self.content {
                     content.removeFromSuperview()
-                    self.viewController.view.addSubview(content)
+                    self.addSubview(content)
                 }
                 
                 self.setSubviewFrames()
             }
         }
-        
-        private let viewController : ViewController
-        
+                
         public init(device : iOSDevice)
         {
-            self.viewController = ViewController()
-            
             self.device = device
             
             super.init(frame: CGRect(origin: .zero, size: device.size))
             
             self.layer.contentsScale = self.device.scale
-            
-            if #available(iOS 11, *) {
-                self.viewController.additionalSafeAreaInsets = self.device.safeAreaInsets
-            }
-            
-            self.addSubview(self.viewController.view)
             
             self.setSubviewFrames()
         }
@@ -330,8 +320,7 @@ public extension iOSDevice
         
         private func setSubviewFrames()
         {
-            self.viewController.view.frame = self.bounds
-            self.content?.frame = self.viewController.view.bounds
+            self.content?.frame = self.bounds
         }
         
         private final class ViewController : UIViewController

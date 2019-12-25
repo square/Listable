@@ -157,8 +157,7 @@ class ListViewLayout : UICollectionViewLayout
         
         // Handle View Width Changing
         
-        // TODO: Remove this method, rename
-        context.widthChanged = self.layoutResult.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+        context.sizeChanged = self.layoutResult.shouldInvalidateLayoutFor(collectionView: view)
         
         // Update Needed Layout Type
                 
@@ -190,7 +189,8 @@ class ListViewLayout : UICollectionViewLayout
     
     private final class InvalidationContext : UICollectionViewLayoutInvalidationContext
     {
-        var widthChanged : Bool = false
+        var sizeChanged : Bool = false
+        
         var performedInteractiveMove : Bool = false
     }
     
@@ -208,7 +208,7 @@ class ListViewLayout : UICollectionViewLayout
             let context = context as! InvalidationContext
             
             let requeryDataSourceCounts = context.invalidateEverything || context.invalidateDataSourceCounts
-            let needsRelayout = context.widthChanged || context.performedInteractiveMove
+            let needsRelayout = context.sizeChanged || context.performedInteractiveMove
             
             if requeryDataSourceCounts {
                 self.merge(with: .rebuild)
