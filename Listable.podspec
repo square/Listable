@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.version      = '1.0.0.LOCAL'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 9.3.'
   s.homepage     = 'https://github.com/kyleve/Listable'
-  s.license      = { type: 'Proprietary', text: "© #{Date.today.year} Square, Inc." }
+  s.license      = { type: 'Proprietary', text: "© 2020 Square, Inc." }
   s.author       = { 'iOS Team' => 'seller-ios@squareup.com' }
   s.source       = { git: 'Not Published', tag: "podify/#{s.version}" }
 
