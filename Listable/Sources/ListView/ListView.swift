@@ -69,6 +69,21 @@ public final class ListView : UIView
         self.applyScrollInsets()
     }
     
+    deinit
+    {
+        /**
+         Even though these are zeroing weak references in UIKIt as of iOS 9.0,
+         
+         We still want to nil these out, because _our_ `delegate` and `dataSource`
+         objects have unowned references back to us (`ListView`). We do not want
+         any `delegate` or `dataSource` callbacks to trigger referencing
+         that unowned reference (eg, in `scrollViewDidScroll:`).
+         */
+        
+        self.collectionView.delegate = nil
+        self.collectionView.dataSource = nil
+    }
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError() }
     

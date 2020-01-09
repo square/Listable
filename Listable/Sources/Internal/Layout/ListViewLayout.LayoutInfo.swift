@@ -307,10 +307,12 @@ internal extension ListViewLayout
             }
             
             let direction = self.appearance.direction
+            
+            let adjustments = collectionView.lst_safeAreaAdjustmentsForCurrentSystem
 
             let visibleFrame = CGRect(
-                x: collectionView.contentOffset.x + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.left,
-                y: collectionView.contentOffset.y + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.top,
+                x: collectionView.contentOffset.x,
+                y: collectionView.contentOffset.y + adjustments.top,
                 width: collectionView.bounds.size.width,
                 height: collectionView.bounds.size.height
             )
@@ -354,10 +356,12 @@ internal extension ListViewLayout
             // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
             // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
             
+            let adjustments = collectionView.lst_safeAreaAdjustmentsForCurrentSystem
+            
             if contentHeight >= viewHeight {
-                footer.y = contentHeight + direction.bottom(with: collectionView.lst_safeAreaAdjustmentsForCurrentSystem)
+                footer.y = contentHeight + direction.bottom(with: adjustments)
             } else {
-                footer.y = viewHeight - direction.top(with: collectionView.lst_safeAreaAdjustmentsForCurrentSystem)
+                footer.y = viewHeight - direction.top(with: adjustments)
             }
             
             return true
@@ -620,17 +624,19 @@ internal extension ListViewLayout
         private func adjustPositionsForLayoutUnderflow(contentHeight : CGFloat, viewHeight: CGFloat, in collectionView : UICollectionView)
         {
             // Take into account the safe area, since that pushes content alignment down within our view.
+        
+            let adjustments = collectionView.lst_safeAreaAdjustmentsForCurrentSystem
             
-            let safeAreaInsets : CGFloat = {
+            let inset : CGFloat = {
                 switch self.appearance.direction {
-                case .vertical: return collectionView.lst_safeAreaAdjustmentsForCurrentSystem.top + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.bottom
-                case .horizontal: return collectionView.lst_safeAreaAdjustmentsForCurrentSystem.left + collectionView.lst_safeAreaAdjustmentsForCurrentSystem.right
+                case .vertical: return adjustments.top + adjustments.bottom
+                case .horizontal: return adjustments.left + adjustments.right
                 }
             }()
             
             let additionalOffset = self.appearance.underflow.alignment.offsetFor(
                 contentHeight: contentHeight,
-                viewHeight: viewHeight - safeAreaInsets
+                viewHeight: viewHeight - inset
             )
             
             // If we're pinned to the top of the view, there's no adjustment needed.
@@ -909,18 +915,6 @@ fileprivate extension Int
         return mapped
     }
 }
-
-
-//fileprivate extension UIView
-//{
-//    var lst_safeAreaInsets : UIEdgeInsets {
-//        if #available(iOS 11.0, *) {
-//            return self.safeAreaInsets
-//        } else {
-//            return .zero
-//        }
-//    }
-//}
 
 
 fileprivate extension UIScrollView
