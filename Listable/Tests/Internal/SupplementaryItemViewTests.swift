@@ -1,5 +1,5 @@
 //
-//  SupplementaryItemViewTests.swift
+//  SupplementaryContainerViewTests.swift
 //  Listable-Unit-Tests
 //
 //  Created by Kyle Van Essen on 11/22/19.
@@ -10,28 +10,83 @@ import XCTest
 @testable import Listable
 
 
-class SupplementaryItemViewTests: XCTestCase
+class SupplementaryContainerViewTests: XCTestCase
 {
+    func newHeaderFooter() -> AnyPresentationHeaderFooterState
+    {
+        let headerFooter = HeaderFooter(with: TestHeaderFooterElement(), appearance: TestHeaderFooterElement.Appearance())
+        return PresentationState.HeaderFooterState(headerFooter)
+    }
+    
     func test_init()
     {
-        let view = SupplementaryItemView<TestHeaderFooterElement>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        let view = SupplementaryContainerView(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
         
         XCTAssertEqual(view.backgroundColor, .clear)
         XCTAssertEqual(view.layer.masksToBounds, false)
-        
-        XCTAssertEqual(view.content.superview, view)
     }
     
     func test_sizeThatFits()
     {
-        // The default implementation of size that fits on UIView returns the existing size of the view.
-        // Make sure that value is returned from the cell.
+        let cache = ReusableViewCache()
+        let view = SupplementaryContainerView(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        view.reuseCache = cache
         
-        let view1 = SupplementaryItemView<TestHeaderFooterElement>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
-        XCTAssertEqual(view1.sizeThatFits(.zero), CGSize(width: 100.0, height: 100.0))
+        XCTAssertEqual(view.sizeThatFits(.zero), .zero)
         
-        let view2 = SupplementaryItemView<TestHeaderFooterElement>(frame: CGRect(origin: .zero, size: CGSize(width: 150.0, height: 150.0)))
-        XCTAssertEqual(view2.sizeThatFits(.zero), CGSize(width: 150.0, height: 150.0))
+        view.headerFooter = self.newHeaderFooter()
+        
+        XCTAssertEqual(view.sizeThatFits(.zero), CGSize(width: 100, height: 100))
+    }
+    
+    func test_headerFooter()
+    {
+        let cache = ReusableViewCache()
+        let view = SupplementaryContainerView(frame: .zero)
+        view.reuseCache = cache
+        
+        XCTAssertEqual(view.content, nil)
+        
+        // Add a header
+        
+        view.headerFooter = self.newHeaderFooter()
+        view.sizeToFit()
+        
+        // Make sure the view is set
+        
+        XCTAssertNotNil(view.content)
+        
+        let content = view.content!
+        
+        XCTAssertTrue(type(of: content) === TestHeaderFooterElement.Appearance.View.self)
+        XCTAssertEqual(view.frame.size, CGSize(width: 100, height: 100))
+        
+        // Unset the header footer, make sure the view is pushed back into the cache.
+        
+        view.headerFooter = nil
+        
+        XCTAssertNil(view.content)
+        
+        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterElement.self)), 1)
+        
+        // And now, let's set the header one more time to make sure it pulls from the cache.
+        
+        view.headerFooter = self.newHeaderFooter()
+        
+        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterElement.self)), 0)
+    }
+    
+    func test_prepareForReuse()
+    {
+        let cache = ReusableViewCache()
+        let view = SupplementaryContainerView(frame: .zero)
+        view.reuseCache = cache
+        
+        view.headerFooter = self.newHeaderFooter()
+        
+        view.prepareForReuse()
+        
+        XCTAssertNil(view.headerFooter)
     }
 }
 
@@ -39,17 +94,25 @@ fileprivate struct TestHeaderFooterElement : HeaderFooterElement, Equatable
 {
     // MARK: HeaderFooterElement
     
-    func apply(to view: UIView, reason: ApplyReason) {}
+    func apply(to view: Appearance.View, reason: ApplyReason) {}
         
     struct Appearance : HeaderFooterElementAppearance, Equatable
     {
-        typealias ContentView = UIView
+        typealias ContentView = View
         
-        static func createReusableHeaderFooterView(frame: CGRect) -> UIView
+        static func createReusableHeaderFooterView(frame: CGRect) -> View
         {
-            return UIView(frame: frame)
+            return View(frame: frame)
         }
         
-        func apply(to view: UIView) {}
+        func apply(to view: View) {}
+        
+        final class View : UIView
+        {
+            override func sizeThatFits(_ size: CGSize) -> CGSize
+            {
+                return CGSize(width: 100, height: 100)
+            }
+        }
     }
 }

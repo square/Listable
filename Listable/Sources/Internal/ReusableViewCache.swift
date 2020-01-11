@@ -14,11 +14,18 @@ final class ReusableViewCache
     
     init() {}
     
+    func count<Content>(for reuseIdentifier : ReuseIdentifier<Content>) -> Int
+    {
+        let views = self.views[reuseIdentifier.stringValue, default: []]
+
+        return views.count
+    }
+    
     func push<Content,View:AnyObject>(_ view : View, with reuseIdentifier: ReuseIdentifier<Content>)
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
-        precondition(views.contains { $0 === view } == false, "Cannot push a view which is already in the cache.")
+        listablePrecondition(views.contains { $0 === view } == false, "Cannot push a view which is already in the cache.")
         
         views.append(view)
         

@@ -92,7 +92,7 @@ class ListViewLayout : UICollectionViewLayout
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { listableFatal() }
     
     //
     // MARK: Querying The Layout
@@ -181,7 +181,7 @@ class ListViewLayout : UICollectionViewLayout
         movementCancelled: Bool
     ) -> UICollectionViewLayoutInvalidationContext
     {
-        precondition(movementCancelled == false, "Cancelling moves is currently not supported.")
+        listablePrecondition(movementCancelled == false, "Cancelling moves is currently not supported.")
         
         self.layoutResult.reindexLiveIndexPaths()
         self.layoutResult.reindexDelegateProvidedIndexPaths()
@@ -487,7 +487,7 @@ fileprivate struct UpdateItems : Equatable
             case .reload: break
             case .none: break
                 
-            @unknown default: fatalError()
+            @unknown default: listableFatal()
             }
         }
         
@@ -518,4 +518,3 @@ fileprivate struct UpdateItems : Equatable
         var oldIndexPath : IndexPath
     }
 }
-

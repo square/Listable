@@ -25,14 +25,20 @@ final class CollectionViewBasicDemoViewController : UIViewController
         ],
         ]
     
+    var showsOverscrollFooter : Bool = true
+    var showsSectionHeaders : Bool = true
+    
     let listView = ListView()
     
     override func loadView()
     {
         self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "UF", style: .plain, target: self, action: #selector(cycleUnderflow)),
+            UIBarButtonItem(title: "OS", style: .plain, target: self, action: #selector(toggleOverscroll)),
+            UIBarButtonItem(title: "SH", style: .plain, target: self, action: #selector(toggleSectionHeaders)),
+            
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeItem)),
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(cycleUnderflow))
         ]
         
         self.view = self.listView
@@ -44,9 +50,11 @@ final class CollectionViewBasicDemoViewController : UIViewController
     {
         listView.setContent { list in
             
-            list.content.overscrollFooter = HeaderFooter(
-                with: DemoHeader(title: "Thanks for using Listable!!")
-            )
+            if self.showsOverscrollFooter {
+                list.content.overscrollFooter = HeaderFooter(
+                    with: DemoHeader(title: "Thanks for using Listable!!")
+                )
+            }
             
             list.animatesChanges = animated
             
@@ -55,7 +63,11 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.columns = .init(count: 2, spacing: 10.0)
                      
-                    section.header = HeaderFooter(with: DemoHeader(title: "Section Header"))
+                    if self.showsSectionHeaders {
+                        section.header = HeaderFooter(with: DemoHeader(title: "Section Header"))
+                    } else {
+                        section.header = HeaderFooter(with: DemoHeader2(title: "Section Header"))
+                    }
                     
                     section.footer = HeaderFooter(
                         with: DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
@@ -66,6 +78,20 @@ final class CollectionViewBasicDemoViewController : UIViewController
                 }
             }
         }
+    }
+    
+    @objc func toggleOverscroll()
+    {
+        self.showsOverscrollFooter.toggle()
+        
+        self.updateTable(animated: true)
+    }
+    
+    @objc func toggleSectionHeaders()
+    {
+        self.showsSectionHeaders.toggle()
+        
+        self.updateTable(animated: true)
     }
     
     @objc func addItem()

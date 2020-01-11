@@ -92,7 +92,7 @@ public struct ReorderGesture : Element
 
             case .ended: self.onDone?()
             case .cancelled, .failed: self.onDone?()
-            @unknown default: fatalError()
+            @unknown default: listableFatal()
             }
         }
     }
@@ -116,7 +116,7 @@ public struct ReorderGesture : Element
         
         @available(*, unavailable)
         required init?(coder aDecoder: NSCoder) {
-            fatalError()
+            listableFatal()
         }
     }
 }

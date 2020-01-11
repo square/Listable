@@ -10,7 +10,7 @@ import Foundation
 
 extension ListViewLayout
 {
-    enum SupplementaryKind : String
+    enum SupplementaryKind : String, CaseIterable
     {
         case listHeader = "Listable.ListViewLayout.ListHeader"
         case listFooter = "Listable.ListViewLayout.ListFooter"
@@ -61,10 +61,10 @@ internal extension ListViewLayout
         
         let appearance : Appearance
         
-        let header : SupplementaryItemLayoutInfo?
-        let footer : SupplementaryItemLayoutInfo?
+        let header : SupplementaryItemLayoutInfo
+        let footer : SupplementaryItemLayoutInfo
         
-        let overscrollFooter : SupplementaryItemLayoutInfo?
+        let overscrollFooter : SupplementaryItemLayoutInfo
         
         private(set) var sections : [SectionLayoutInfo]
         
@@ -79,9 +79,9 @@ internal extension ListViewLayout
             
             self.appearance = Appearance()
             
-            self.header = nil
-            self.footer = nil
-            self.overscrollFooter = nil
+            self.header = SupplementaryItemLayoutInfo.empty(.listHeader, direction: appearance.direction)
+            self.footer = SupplementaryItemLayoutInfo.empty(.listFooter, direction: appearance.direction)
+            self.overscrollFooter = SupplementaryItemLayoutInfo.empty(.overscrollFooter, direction: appearance.direction)
             
             self.sections = []
         }
@@ -100,32 +100,41 @@ internal extension ListViewLayout
             self.appearance = appearance
             
             self.header = {
-                guard delegate.hasListHeader(in: collectionView) else { return nil }
+                guard delegate.hasListHeader(in: collectionView) else {
+                    return SupplementaryItemLayoutInfo.empty(.listHeader, direction: appearance.direction)
+                }
                 
                 return SupplementaryItemLayoutInfo(
                     kind: SupplementaryKind.listHeader,
                     direction: appearance.direction,
-                    layout: delegate.layoutForListHeader(in: collectionView)
+                    layout: delegate.layoutForListHeader(in: collectionView),
+                    isPopulated: true
                 )
             }()
             
             self.footer = {
-                guard delegate.hasListFooter(in: collectionView) else { return nil }
+                guard delegate.hasListFooter(in: collectionView) else {
+                    return SupplementaryItemLayoutInfo.empty(.listFooter, direction: appearance.direction)
+                }
                 
                 return SupplementaryItemLayoutInfo(
                     kind: SupplementaryKind.listFooter,
                     direction: appearance.direction,
-                    layout: delegate.layoutForListFooter(in: collectionView)
+                    layout: delegate.layoutForListFooter(in: collectionView),
+                    isPopulated: true
                 )
             }()
             
             self.overscrollFooter = {
-                guard delegate.hasOverscrollFooter(in: collectionView) else { return nil }
+                guard delegate.hasOverscrollFooter(in: collectionView) else {
+                    return SupplementaryItemLayoutInfo.empty(.overscrollFooter, direction: appearance.direction)
+                }
                 
                 return SupplementaryItemLayoutInfo(
                     kind: SupplementaryKind.overscrollFooter,
                     direction: appearance.direction,
-                    layout: delegate.layoutForOverscrollFooter(in: collectionView)
+                    layout: delegate.layoutForOverscrollFooter(in: collectionView),
+                    isPopulated: true
                 )
             }()
             
@@ -137,23 +146,29 @@ internal extension ListViewLayout
                     direction: appearance.direction,
                     layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
                     header: {
-                        guard delegate.hasHeader(in: sectionIndex, in: collectionView) else { return nil }
+                        guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
+                            return SupplementaryItemLayoutInfo.empty(.sectionHeader, direction: appearance.direction)
+                        }
                         
                         return SupplementaryItemLayoutInfo(
                             kind: SupplementaryKind.sectionHeader,
                             direction: appearance.direction,
-                            layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView)
+                            layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
+                            isPopulated: true
                         )
-                }(),
+                    }(),
                     footer: {
-                        guard delegate.hasFooter(in: sectionIndex, in: collectionView) else { return nil }
+                        guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
+                            return SupplementaryItemLayoutInfo.empty(.sectionFooter, direction: appearance.direction)
+                        }
                         
                         return SupplementaryItemLayoutInfo(
                             kind: SupplementaryKind.sectionFooter,
                             direction: appearance.direction,
-                            layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView)
+                            layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
+                            isPopulated: true
                         )
-                }(),
+                    }(),
                     columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
                     items: itemCount.mapEach { itemIndex in
                         let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
@@ -177,13 +192,26 @@ internal extension ListViewLayout
         
         func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
         {
+            /**
+             Supplementary items are technically attached to index paths. Eg, list headers
+             and footers are attached to (0,0), and section headers and footers are attached to
+             (sectionIndex, 0). Because of this, we can't return any list headers or footers
+             unless there's at least one section – the collection view will not have anything to
+             attach them to, and will then crash.
+             */
+            guard self.sections.isEmpty == false else {
+                return []
+            }
+            
             var attributes = [UICollectionViewLayoutAttributes]()
             
-            if let header = self.header {
-                if rect.intersects(header.visibleFrame) {
-                    attributes.append(header.layoutAttributes(with: header.kind.indexPath(in: 0)))
-                }
+            // List Header
+            
+            if rect.intersects(self.header.visibleFrame) {
+                attributes.append(self.header.layoutAttributes(with: header.kind.indexPath(in: 0)))
             }
+            
+            // Sections
             
             for (sectionIndex, section) in self.sections.enumerated() {
                 
@@ -191,11 +219,13 @@ internal extension ListViewLayout
                     continue
                 }
                 
-                if let header = section.header {
-                    if rect.intersects(header.visibleFrame) {
-                        attributes.append(header.layoutAttributes(with: header.kind.indexPath(in: sectionIndex)))
-                    }
+                // Section Header
+                
+                if rect.intersects(section.header.visibleFrame) {
+                    attributes.append(section.header.layoutAttributes(with: section.header.kind.indexPath(in: sectionIndex)))
                 }
+                
+                // Items
                 
                 for item in section.items {
                     if rect.intersects(item.frame) {
@@ -203,25 +233,25 @@ internal extension ListViewLayout
                     }
                 }
                 
-                if let footer = section.footer {
-                    if rect.intersects(footer.visibleFrame) {
-                        attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: sectionIndex)))
-                    }
-                }
-            }
-            
-            if let footer = self.footer {
-                if rect.intersects(footer.visibleFrame) {
-                    attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
-                }
-            }
-            
-            if let footer = self.overscrollFooter {
-                // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
-                // Instead, just return it all the time to ensure the collection view will display it when needed.
+                // Section Footer
                 
-                attributes.append(footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
+                if rect.intersects(section.footer.visibleFrame) {
+                    attributes.append(section.footer.layoutAttributes(with: section.footer.kind.indexPath(in: sectionIndex)))
+                }
             }
+            
+            // List Footer
+            
+            if rect.intersects(self.footer.visibleFrame) {
+                attributes.append(self.footer.layoutAttributes(with: footer.kind.indexPath(in: 0)))
+            }
+            
+            // Overscroll Footer
+            
+            // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
+            // Instead, just return it all the time to ensure the collection view will display it when needed.
+            
+            attributes.append(self.overscrollFooter.layoutAttributes(with: self.overscrollFooter.kind.indexPath(in: 0)))
             
             return attributes
         }
@@ -243,13 +273,13 @@ internal extension ListViewLayout
             let section = self.sections[indexPath.section]
             
             switch SupplementaryKind(rawValue: kind)! {
-            case .listHeader: return self.header?.layoutAttributes(with: indexPath)
-            case .listFooter: return self.footer?.layoutAttributes(with: indexPath)
+            case .listHeader: return self.header.layoutAttributes(with: indexPath)
+            case .listFooter: return self.footer.layoutAttributes(with: indexPath)
                 
-            case .sectionHeader: return section.header?.layoutAttributes(with: indexPath)
-            case .sectionFooter: return section.footer?.layoutAttributes(with: indexPath)
+            case .sectionHeader: return section.header.layoutAttributes(with: indexPath)
+            case .sectionFooter: return section.footer.layoutAttributes(with: indexPath)
                 
-            case .overscrollFooter: return self.overscrollFooter?.layoutAttributes(with: indexPath)
+            case .overscrollFooter: return self.overscrollFooter.layoutAttributes(with: indexPath)
             }
         }
         
@@ -318,17 +348,18 @@ internal extension ListViewLayout
             self.sections.forEachWithIndex { sectionIndex, isLast, section in
                 let sectionMaxY = direction.maxY(for: section.frame)
                 
-                if let header = section.header {
-                    if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleFrame.origin) {
-                        
-                        // Make sure the pinned origin stays within the section's frame.
-                        header.pinnedY = min(
-                            direction.y(for: visibleFrame.origin),
-                            sectionMaxY - direction.height(for: header.size)
-                        )
-                    } else {
-                        header.pinnedY = nil
-                    }
+                let header = section.header
+                
+                if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleFrame.origin) {
+                    
+                    // Make sure the pinned origin stays within the section's frame.
+                    
+                    header.pinnedY = min(
+                        direction.y(for: visibleFrame.origin),
+                        sectionMaxY - direction.height(for: header.size)
+                    )
+                } else {
+                    header.pinnedY = nil
                 }
             }
             
@@ -338,13 +369,11 @@ internal extension ListViewLayout
         @discardableResult
         func updateOverscrollPosition(in collectionView : UICollectionView) -> Bool
         {
-            guard let footer = self.overscrollFooter else {
-                return true
-            }
-            
             guard collectionView.frame.size.isEmpty == false else {
                 return false
             }
+            
+            let footer = self.overscrollFooter
             
             let direction = self.appearance.direction
             
@@ -409,15 +438,19 @@ internal extension ListViewLayout
             // Header
             //
             
-            if let header = self.header {
+            performLayout(for: self.header) { header in
+                let hasListHeader = self.header.isPopulated
+                
                 let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
-                let height = delegate.heightForListHeader(in: collectionView, width: position.width, layoutDirection: direction)
+                let height = hasListHeader ? delegate.heightForListHeader(in: collectionView, width: position.width, layoutDirection: direction) : 0.0
                 
                 header.x = position.origin
                 header.size = direction.size(width: position.width, height: height)
-                
                 header.y = lastContentMaxY
-                lastContentMaxY = direction.maxY(for: header.defaultFrame)
+                
+                if hasListHeader {
+                    lastContentMaxY = direction.maxY(for: header.defaultFrame)
+                }
             }
             
             switch direction {
@@ -444,25 +477,27 @@ internal extension ListViewLayout
                 // Section Header
                 //
                 
-                if let header = section.header {
+                let hasSectionHeader = section.header.isPopulated
+                let hasSectionFooter = section.footer.isPopulated
+                
+                performLayout(for: section.header) { header in
                     let width = header.layout.width.merge(with: section.layout.width)
                     let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
-                    let height = delegate.heightForHeader(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: direction)
+                    let height = hasSectionHeader ? delegate.heightForHeader(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: direction) : 0.0
                     
                     header.x = position.origin
                     header.size = direction.size(width: position.width, height: height)
-                    
                     header.y = lastContentMaxY
                     
-                    lastContentMaxY = direction.maxY(for: header.defaultFrame)
-                    lastContentMaxY += layout.sectionHeaderBottomSpacing
+                    if hasSectionHeader {
+                        lastContentMaxY = direction.maxY(for: section.header.defaultFrame)
+                        lastContentMaxY += layout.sectionHeaderBottomSpacing
+                    }
                 }
                 
                 //
                 // Section Items
                 //
-                
-                let hasSectionFooter = section.footer != nil
                 
                 if section.columns.count == 1 {
                     section.items.forEachWithIndex { itemIndex, isLast, item in
@@ -474,11 +509,10 @@ internal extension ListViewLayout
                         
                         item.x = itemPosition.origin
                         item.y = lastContentMaxY
-                        
                         item.size = direction.size(width: itemPosition.width, height: height)
                         
                         lastContentMaxY += height
-                        
+
                         if isLast {
                             if hasSectionFooter {
                                 lastContentMaxY += item.layout.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
@@ -534,16 +568,18 @@ internal extension ListViewLayout
                 // Section Footer
                 //
                 
-                if let footer = section.footer {
+                performLayout(for: section.footer) { footer in
                     let width = footer.layout.width.merge(with: section.layout.width)
                     let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
-                    let height = delegate.heightForFooter(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: direction)
+                    let height = hasSectionFooter ? delegate.heightForFooter(in: sectionIndex, in: collectionView, width: position.width, layoutDirection: direction) : 0.0
                     
                     footer.size = direction.size(width: position.width, height: height)
                     footer.x = position.origin
                     footer.y = lastContentMaxY
                     
-                    lastContentMaxY = direction.maxY(for: footer.defaultFrame)
+                    if hasSectionFooter {
+                        lastContentMaxY = direction.maxY(for: footer.defaultFrame)
+                    }
                 }
                 
                 //
@@ -574,31 +610,39 @@ internal extension ListViewLayout
             // Footer
             //
             
-            if let footer = self.footer {
+            performLayout(for: self.footer) { footer in
+                let hasFooter = footer.isPopulated
+                
                 let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
-                let height = delegate.heightForListFooter(in: collectionView, width: position.width, layoutDirection: direction)
+                let height = hasFooter ? delegate.heightForListFooter(in: collectionView, width: position.width, layoutDirection: direction) : 0.0
                 
                 footer.size = direction.size(width: position.width, height: height)
-                
                 footer.x = position.origin
                 footer.y = lastContentMaxY
                 
-                lastContentMaxY = direction.maxY(for: footer.defaultFrame)
-                lastContentMaxY += layout.sectionHeaderBottomSpacing
+                if hasFooter {
+                    lastContentMaxY = direction.maxY(for: footer.defaultFrame)
+                    lastContentMaxY += layout.sectionHeaderBottomSpacing
+                }
             }
             
             //
             // Overscroll Footer
             //
-            
-            if let footer = self.overscrollFooter {
+                        
+            performLayout(for: self.overscrollFooter) { footer in
+                let hasFooter = footer.isPopulated
+
                 let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
-                let height = delegate.heightForOverscrollFooter(in: collectionView, width: position.width, layoutDirection: direction)
-                
-                footer.size = direction.size(width: position.width, height: height)
+                let height = hasFooter ? delegate.heightForOverscrollFooter(in: collectionView, width: position.width, layoutDirection: direction) : 0.0
                 
                 footer.x = position.origin
+                footer.size = direction.size(width: position.width, height: height)
             }
+            
+            //
+            // Remaining Calculations
+            //
             
             self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
             
@@ -642,8 +686,8 @@ internal extension ListViewLayout
             // Provide additional adjustment.
             
             for section in self.sections {
-                section.header?.y += additionalOffset
-                section.footer?.y += additionalOffset
+                section.header.y += additionalOffset
+                section.footer.y += additionalOffset
                 
                 for item in section.items {
                     item.y += additionalOffset
@@ -665,8 +709,8 @@ extension ListViewLayout.LayoutInfo
         let direction : LayoutDirection
         let layout : Section.Layout
         
-        let header : SupplementaryItemLayoutInfo?
-        let footer : SupplementaryItemLayoutInfo?
+        let header : SupplementaryItemLayoutInfo
+        let footer : SupplementaryItemLayoutInfo
         
         let columns : Section.Columns
         
@@ -686,8 +730,8 @@ extension ListViewLayout.LayoutInfo
         init(
             direction : LayoutDirection,
             layout : Section.Layout,
-            header : SupplementaryItemLayoutInfo?,
-            footer : SupplementaryItemLayoutInfo?,
+            header : SupplementaryItemLayoutInfo,
+            footer : SupplementaryItemLayoutInfo,
             columns : Section.Columns,
             items : [ItemLayoutInfo]
             )
@@ -768,9 +812,16 @@ extension ListViewLayout.LayoutInfo
     
     final class SupplementaryItemLayoutInfo
     {
+        static func empty(_ kind : ListViewLayout.SupplementaryKind, direction: LayoutDirection) -> SupplementaryItemLayoutInfo
+        {
+            return SupplementaryItemLayoutInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false)
+        }
+        
         let kind : ListViewLayout.SupplementaryKind
         let direction : LayoutDirection
         let layout : HeaderFooterLayout
+        
+        let isPopulated : Bool
         
         var size : CGSize = .zero
         var x : CGFloat = .zero
@@ -791,11 +842,12 @@ extension ListViewLayout.LayoutInfo
             )
         }
         
-        init(kind : ListViewLayout.SupplementaryKind, direction : LayoutDirection, layout : HeaderFooterLayout)
+        init(kind : ListViewLayout.SupplementaryKind, direction : LayoutDirection, layout : HeaderFooterLayout, isPopulated: Bool)
         {
             self.kind = kind
             self.direction = direction
             self.layout = layout
+            self.isPopulated = isPopulated
         }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
@@ -920,4 +972,9 @@ internal extension UIView
             return .zero
         }
     }
+}
+
+fileprivate func performLayout<Input>(for input : Input, _ block : (Input) -> ())
+{
+    block(input)
 }

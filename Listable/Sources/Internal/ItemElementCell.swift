@@ -28,7 +28,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { listableFatal() }
     
     // MARK: UIView
     

@@ -41,18 +41,13 @@ protocol AnyPresentationItemState : AnyObject
 protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
+        
+    func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
+    func enqueueReusableHeaderFooterView(_ view : UIView, in cache : ReusableViewCache)
     
-    var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
-    
-    func dequeueAndPrepareCollectionReusableView(in collectionView : UICollectionView, of kind : String, for indexPath : IndexPath) -> UICollectionReusableView
-    
-    func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
-    func applyToVisibleView()
+    func applyTo(view anyView : UIView, reason : ApplyReason)
     
     func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
-    
-    func willDisplay(view : UICollectionReusableView, in collectionView : UICollectionView, for indexPath : IndexPath)
-    func didEndDisplay()
     
     func resetCachedHeights()
     func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
@@ -84,9 +79,9 @@ final class PresentationState
     
     var refreshControl : RefreshControl.PresentationState?
     
-    var header : AnyPresentationHeaderFooterState?
-    var footer : AnyPresentationHeaderFooterState?
-    var overscrollFooter : AnyPresentationHeaderFooterState?
+    var header : HeaderFooterViewStatePair = .init()
+    var footer : HeaderFooterViewStatePair = .init()
+    var overscrollFooter : HeaderFooterViewStatePair = .init()
     
     var sections : [PresentationState.SectionState]
         
@@ -253,10 +248,9 @@ final class PresentationState
         
         self.contentIdentifier = slice.content.identifier
         
-        self.header = SectionState.headerFooterState(with: self.header, new: slice.content.header)
-        self.footer = SectionState.headerFooterState(with: self.footer, new: slice.content.footer)
-        
-        self.overscrollFooter = SectionState.headerFooterState(with: self.overscrollFooter, new: slice.content.overscrollFooter)
+        self.header.state = SectionState.headerFooterState(with: self.header.state, new: slice.content.header)
+        self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: slice.content.footer)
+        self.overscrollFooter.state = SectionState.headerFooterState(with: self.overscrollFooter.state, new: slice.content.overscrollFooter)
                         
         self.sections = diff.changes.transform(
             old: self.sections,
@@ -295,29 +289,6 @@ final class PresentationState
     // MARK: Cell & Supplementary View Registration
     //
     
-    struct SupplementaryIdentifier : Hashable
-    {
-        let identifier : ObjectIdentifier
-        let kind : String
-    }
-    
-    private var registeredSupplementaryViewsObjectIdentifiers : Set<SupplementaryIdentifier> = Set()
-        
-    func registerSupplementaryView(of kind : String, for headerFooter : AnyPresentationHeaderFooterState)
-    {
-        let info = headerFooter.cellRegistrationInfo
-        
-        let identifier = SupplementaryIdentifier(identifier: ObjectIdentifier(info.class), kind: kind)
-        
-        guard self.registeredSupplementaryViewsObjectIdentifiers.contains(identifier) == false else {
-            return
-        }
-        
-        self.registeredSupplementaryViewsObjectIdentifiers.insert(identifier)
-        
-        self.view.collectionView.register(info.class, forSupplementaryViewOfKind: kind, withReuseIdentifier: info.reuseIdentifier)
-    }
-    
     private var registeredCellObjectIdentifiers : Set<ObjectIdentifier> = Set()
     
     func registerCell(for item : AnyPresentationItemState)
@@ -339,8 +310,8 @@ final class PresentationState
     {
         var model : Section
         
-        var header : AnyPresentationHeaderFooterState?
-        var footer : AnyPresentationHeaderFooterState?
+        var header : HeaderFooterViewStatePair = .init()
+        var footer : HeaderFooterViewStatePair = .init()
         
         var items : [AnyPresentationItemState]
         
@@ -348,8 +319,8 @@ final class PresentationState
         {
             self.model = model
             
-            self.header = SectionState.headerFooterState(with: self.header, new: model.header)
-            self.footer = SectionState.headerFooterState(with: self.footer, new: model.footer)
+            self.header.state = SectionState.headerFooterState(with: self.header.state, new: model.header)
+            self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: model.footer)
             
             self.items = self.model.items.map {
                 $0.newPresentationItemState(in: listView) as! AnyPresentationItemState
@@ -377,8 +348,8 @@ final class PresentationState
         {
             self.model = newSection
             
-            self.header = SectionState.headerFooterState(with: self.header, new: self.model.header)
-            self.footer = SectionState.headerFooterState(with: self.footer, new: self.model.footer)
+            self.header.state = SectionState.headerFooterState(with: self.header.state, new: self.model.header)
+            self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: self.model.footer)
             
             self.items = changes.transform(
                 old: self.items,
@@ -415,17 +386,51 @@ final class PresentationState
         }
     }
     
+    final class HeaderFooterViewStatePair
+    {
+        var state : AnyPresentationHeaderFooterState? {
+            didSet {
+                guard oldValue !== self.state else {
+                    return
+                }
+                
+                guard let container = self.visibleContainer else {
+                    return
+                }
+                
+                container.headerFooter = self.state
+            }
+        }
+        
+        private(set) var visibleContainer : SupplementaryContainerView?
+        
+        func willDisplay(view : SupplementaryContainerView)
+        {
+            self.visibleContainer = view
+        }
+        
+        func didEndDisplay()
+        {
+            self.visibleContainer = nil
+        }
+        
+        func applyToVisibleView()
+        {
+            guard let view = visibleContainer?.content, let state = self.state else {
+                return
+            }
+            
+            state.applyTo(view: view, reason: .wasUpdated)
+        }
+    }
+    
     final class HeaderFooterState<Element:HeaderFooterElement> : AnyPresentationHeaderFooterState
     {
         var model : HeaderFooter<Element>
-        
-        private var visibleView : SupplementaryItemView<Element>?
-        
+                
         init(_ model : HeaderFooter<Element>)
         {
-            self.model = model
-            
-            self.cellRegistrationInfo = (class: SupplementaryItemView<Element>.self, reuseIdentifier: self.model.reuseIdentifier.stringValue)
+            self.model = model            
         }
         
         // MARK: AnyPresentationHeaderFooterState
@@ -433,33 +438,34 @@ final class PresentationState
         var anyModel: AnyHeaderFooter {
             return self.model
         }
-        
-        public let cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String)
-        
-        public func dequeueAndPrepareCollectionReusableView(in collectionView : UICollectionView, of kind : String, for indexPath : IndexPath) -> UICollectionReusableView
+                
+        func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
         {
-            let anyView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: self.model.reuseIdentifier.stringValue, for: indexPath)
-                        
-            self.applyTo(view: anyView, reason: .willDisplay)
-            
-            return anyView
-        }
-        
-        func applyTo(view anyView : UICollectionReusableView, reason : ApplyReason)
-        {
-            let view = anyView as! SupplementaryItemView<Element>
-            
-            self.model.appearance.apply(to: view.content)
-            self.model.element.apply(to: view.content, reason: reason)
-        }
-        
-        func applyToVisibleView()
-        {
-            guard let view = self.visibleView else {
-                return
+            let view = cache.pop(with: self.model.reuseIdentifier) {
+                return Element.Appearance.createReusableHeaderFooterView(frame: frame)
             }
             
-            self.applyTo(view: view, reason: .wasUpdated)
+            self.applyTo(view: view, reason: .willDisplay)
+            
+            return view
+        }
+        
+        func enqueueReusableHeaderFooterView(_ view : UIView, in cache : ReusableViewCache)
+        {
+            cache.push(view, with: self.model.reuseIdentifier)
+        }
+        
+        func createReusableHeaderFooterView(frame : CGRect) -> UIView
+        {
+            return Element.Appearance.createReusableHeaderFooterView(frame: frame)
+        }
+        
+        func applyTo(view : UIView, reason : ApplyReason)
+        {
+            let view = view as! Element.Appearance.ContentView
+            
+            self.model.appearance.apply(to: view)
+            self.model.element.apply(to: view, reason: reason)
         }
         
         func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
@@ -477,16 +483,6 @@ final class PresentationState
             if reason != .noChange {
                 self.resetCachedHeights()
             }
-        }
-        
-        func willDisplay(view : UICollectionReusableView, in collectionView : UICollectionView, for indexPath : IndexPath)
-        {
-            self.visibleView = (view as! SupplementaryItemView<Element>)
-        }
-        
-        func didEndDisplay()
-        {
-            self.visibleView = nil
         }
         
         private var cachedHeights : [HeightKey:CGFloat] = [:]
@@ -510,10 +506,10 @@ final class PresentationState
                 let height : CGFloat = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return SupplementaryItemView<Element>()
+                        return Element.Appearance.createReusableHeaderFooterView(frame: .zero)
                 }, { view in
-                    self.model.appearance.apply(to: view.content)
-                    self.model.element.apply(to: view.content, reason: .willDisplay)
+                    self.model.appearance.apply(to: view)
+                    self.model.element.apply(to: view, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
                 })

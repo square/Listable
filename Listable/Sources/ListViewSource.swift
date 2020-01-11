@@ -172,7 +172,7 @@ public final class StaticSource : ListViewSource
     
     public func content(with state: SourceState<StaticSource.State>, content: inout Content)
     {
-        fatalError()
+        listableFatal()
     }
     
     public func content(with state: SourceState<StaticSource.State>) -> Content

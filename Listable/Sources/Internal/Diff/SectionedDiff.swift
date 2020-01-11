@@ -14,7 +14,6 @@ struct SectionedDiff<Section, Item>
     let new : [Section]
     
     let changes : SectionChanges
-    let aggregatedChanges : AggregatedChanges
     
     init(old : [Section], new: [Section], configuration : Configuration)
     {
@@ -26,8 +25,6 @@ struct SectionedDiff<Section, Item>
             new: new,
             configuration: configuration
         )
-        
-        self.aggregatedChanges = AggregatedChanges(sectionChanges: self.changes)
     }
     
     static func calculate(on queue : DispatchQueue, old : [Section], new: [Section], configuration : Configuration, completion : @escaping (SectionedDiff) -> ())
@@ -168,7 +165,7 @@ struct SectionedDiff<Section, Item>
                 self.moved.reduce(0, { $0 + $1.itemChanges.changeCount }) +
                 self.noChange.reduce(0, { $0 + $1.itemChanges.changeCount })
             
-            precondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
+            listablePrecondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
         
         struct Added
@@ -205,82 +202,6 @@ struct SectionedDiff<Section, Item>
             let newValue : Section
             
             let itemChanges : ItemChanges
-        }
-    }
-    
-    
-    struct AggregatedChanges
-    {
-        var deletedSections : [SectionChanges.Removed] = []
-        var insertedSections : [SectionChanges.Added] = []
-        var movedSections : [SectionChanges.Moved] = []
-        
-        var deletedItems : [ItemChanges.Removed] = []
-        var insertedItems : [ItemChanges.Added] = []
-        var updatedItems : [ItemChanges.Updated] = []
-        var movedItems : [ItemChanges.Moved] = []
-        
-        var hasIndexAffectingChanges : Bool {
-            return
-                self.deletedSections.isEmpty == false ||
-                    self.insertedItems.isEmpty == false ||
-                    self.movedSections.isEmpty == false ||
-                    self.deletedItems.isEmpty == false ||
-                    self.insertedItems.isEmpty == false ||
-                    self.movedItems.isEmpty == false
-        }
-        
-        init(sectionChanges changes : SectionChanges)
-        {
-            // Inserted & Removed Sections
-            
-            self.deletedSections = changes.removed
-            self.insertedSections = changes.added
-            
-            
-            // Moved Sections
-            
-            self.movedSections = changes.moved
-            
-            // Deleted Items
-            
-            changes.moved.forEach {
-                self.deletedItems += $0.itemChanges.removed
-            }
-            
-            changes.noChange.forEach {
-                self.deletedItems += $0.itemChanges.removed
-            }
-            
-            // Inserted Items
-            
-            changes.moved.forEach {
-                self.insertedItems += $0.itemChanges.added
-            }
-            
-            changes.noChange.forEach {
-                self.insertedItems += $0.itemChanges.added
-            }
-            
-            // Updated Items
-            
-            changes.moved.forEach {
-                self.updatedItems += $0.itemChanges.updated
-            }
-            
-            changes.noChange.forEach {
-                self.updatedItems += $0.itemChanges.updated
-            }
-            
-            // Moved Items
-            
-            changes.moved.forEach {
-                self.movedItems += $0.itemChanges.moved
-            }
-            
-            changes.noChange.forEach {
-                self.movedItems += $0.itemChanges.moved
-            }
         }
     }
     
@@ -414,8 +335,6 @@ extension SectionedDiff.SectionChanges.Added : Equatable where Section:Equatable
 extension SectionedDiff.SectionChanges.Removed : Equatable where Section:Equatable {}
 extension SectionedDiff.SectionChanges.Moved : Equatable where Section:Equatable, Item:Equatable {}
 extension SectionedDiff.SectionChanges.NoChange : Equatable where Section:Equatable, Item:Equatable {}
-
-extension SectionedDiff.AggregatedChanges : Equatable where Section:Equatable, Item:Equatable {}
 
 extension SectionedDiff.ItemChanges : Equatable where Item:Equatable {}
 

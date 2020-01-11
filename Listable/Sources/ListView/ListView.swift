@@ -60,6 +60,12 @@ public final class ListView : UIView
         
         self.keyboardObserver.delegate = self
         
+        // Register supplementary views.
+        
+        ListViewLayout.SupplementaryKind.allCases.forEach {
+            SupplementaryContainerView.register(in: self.collectionView, for: $0.rawValue)
+        }
+        
         // Size and update views.
         
         self.collectionView.frame = self.bounds
@@ -69,8 +75,23 @@ public final class ListView : UIView
         self.applyScrollInsets()
     }
     
+    deinit
+    {
+        /**
+         Even though these are zeroing weak references in UIKIt as of iOS 9.0,
+         
+         We still want to nil these out, because _our_ `delegate` and `dataSource`
+         objects have unowned references back to us (`ListView`). We do not want
+         any `delegate` or `dataSource` callbacks to trigger referencing
+         that unowned reference (eg, in `scrollViewDidScroll:`).
+         */
+
+        self.collectionView.delegate = nil
+        self.collectionView.dataSource = nil
+    }
+    
     @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { listableFatal() }
     
     //
     // MARK: Internal Properties
@@ -528,19 +549,27 @@ public final class ListView : UIView
     {
         // Figure out visible content.
         
+        let presentationState = self.storage.presentationState
+        
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
         
         let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
         
-        let diff = ListView.diffWith(old: self.storage.presentationState.sectionModels, new: visibleSlice.content.sections)
+        let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
                 
         let updateBackingData = {
-            self.storage.presentationState.update(with: diff, slice: visibleSlice)
+            presentationState.update(with: diff, slice: visibleSlice)
         }
         
         // Update Refresh Control
         
-        self.storage.presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        /**
+         Update Refresh Control
+         
+         Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
+         we trigger a bug where updated indexes are calculated incorrectly.
+         */
+        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
         
         // Update Collection View
         
@@ -563,7 +592,7 @@ public final class ListView : UIView
     {
         let view = self.collectionView
         
-        let changes = diff.aggregatedChanges
+        let changes = CollectionViewChanges(sectionChanges: diff.changes)
                 
         let batchUpdates = {
             updateBackingData()
@@ -585,18 +614,7 @@ public final class ListView : UIView
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            // Perform Updates Of Visible Section Headers & Footers
-            
-            self.visibleSections.forEach {
-                $0.section.header?.applyToVisibleView()
-                $0.section.footer?.applyToVisibleView()
-            }
-            
-            // Perform Updates Of Visible Items
-            
-            self.visibleItems.forEach {
-                $0.item.applyToVisibleCell()
-            }
+            self.applyToVisibleViews()
         }
         
         if changes.hasIndexAffectingChanges {
@@ -611,6 +629,30 @@ public final class ListView : UIView
             UIView.performWithoutAnimation {
                 view.performBatchUpdates(batchUpdates, completion: completion)
             }
+        }
+    }
+    
+    private func applyToVisibleViews()
+    {
+        let presentationState = self.storage.presentationState
+        
+        // Perform Updates Of Visible Table Headers & Footers
+
+        presentationState.header.applyToVisibleView()
+        presentationState.footer.applyToVisibleView()
+        presentationState.overscrollFooter.applyToVisibleView()
+        
+        // Perform Updates Of Visible Section Headers & Footers
+        
+        self.visibleSections.forEach {
+            $0.section.header.applyToVisibleView()
+            $0.section.footer.applyToVisibleView()
+        }
+        
+        // Perform Updates Of Visible Items
+        
+        self.visibleItems.forEach {
+            $0.item.applyToVisibleCell()
         }
     }
     

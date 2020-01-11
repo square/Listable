@@ -54,4 +54,19 @@ extension XCTestCase
             return isDone
         })
     }
+    
+    func waitFor(duration : TimeInterval)
+    {
+        let end = Date(timeIntervalSinceNow: abs(duration))
+
+        self.waitFor(predicate: {
+            Date() >= end
+        })
+    }
+    
+    func waitForOneRunloop()
+    {
+        let runloop = RunLoop.main
+        runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
+    }
 }

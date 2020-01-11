@@ -14,7 +14,7 @@ public protocol AnyHeaderFooter_Internal
 {
     var layout : HeaderFooterLayout { get }
     
-    func apply(to headerFooterView : UICollectionReusableView, reason: ApplyReason)
+    func apply(to headerFooterView : UIView, reason: ApplyReason)
     
     func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
     
@@ -67,11 +67,11 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     
     // MARK: AnyHeaderFooter_Internal
     
-    public func apply(to anyView : UICollectionReusableView, reason: ApplyReason)
+    public func apply(to anyView : UIView, reason: ApplyReason)
     {
-        let view = anyView as! SupplementaryItemView<Element>
+        let view = anyView as! Element.Appearance.ContentView
         
-        self.element.apply(to: view.content, reason: reason)
+        self.element.apply(to: view, reason: reason)
     }
         
     public func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool

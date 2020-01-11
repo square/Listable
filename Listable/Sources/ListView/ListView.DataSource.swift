@@ -33,49 +33,32 @@ internal extension ListView
             return item.dequeueAndPrepareCollectionViewCell(in: collectionView, for: indexPath)
         }
         
+        private let headerFooterReuseCache = ReusableViewCache()
+        
         func collectionView(
             _ collectionView: UICollectionView,
             viewForSupplementaryElementOfKind kind: String,
             at indexPath: IndexPath
             ) -> UICollectionReusableView
         {
-            switch ListViewLayout.SupplementaryKind(rawValue: kind)! {
-            case .listHeader:
-                if let header = self.presentationState.header {
-                    self.presentationState.registerSupplementaryView(of: kind, for: header)
-                    return header.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
-                }
-                
-            case .listFooter:
-                if let footer = self.presentationState.footer {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
-                    return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
-                }
-                
-            case .sectionHeader:
-                let section = self.presentationState.sections[indexPath.section]
-                
-                if let header = section.header {
-                    self.presentationState.registerSupplementaryView(of: kind, for: header)
-                    return header.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
-                }
-                
-            case .sectionFooter:
-                let section = self.presentationState.sections[indexPath.section]
-                
-                if let footer = section.footer {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
-                    return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
-                }
-                
-            case .overscrollFooter:
-                if let footer = self.presentationState.overscrollFooter {
-                    self.presentationState.registerSupplementaryView(of: kind, for: footer)
-                    return footer.dequeueAndPrepareCollectionReusableView(in: collectionView, of: kind, for: indexPath)
-                }
-            }
+            let container = SupplementaryContainerView.dequeue(
+                in: collectionView,
+                for: kind,
+                at: indexPath,
+                reuseCache: self.headerFooterReuseCache
+            )
             
-            fatalError()
+            container.headerFooter = {
+                switch ListViewLayout.SupplementaryKind(rawValue: kind)! {
+                case .listHeader: return self.presentationState.header.state
+                case .listFooter: return self.presentationState.footer.state
+                case .sectionHeader: return self.presentationState.sections[indexPath.section].header.state
+                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer.state
+                case .overscrollFooter: return self.presentationState.overscrollFooter.state
+                }
+            }()
+            
+            return container
         }
         
         func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
@@ -92,9 +75,7 @@ internal extension ListView
             )
         {
             let item = self.presentationState.item(at: destinationIndexPath)
-            
-            print("Moved item from \(sourceIndexPath) to \(destinationIndexPath)")
-            
+                        
             item.moved(with: Reordering.Result(
                 fromSection: self.presentationState.sections[sourceIndexPath.section].model,
                 fromIndexPath: sourceIndexPath,

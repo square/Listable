@@ -548,7 +548,7 @@ private extension Array
             let (key,value) = block(index, element)
             
             guard dictionary[key] == nil else {
-                fatalError("Existing entry for key '\(key)' not allowed for unique dictionaries.")
+                listableFatal("Existing entry for key '\(key)' not allowed for unique dictionaries.")
             }
             
             dictionary[key] = value
