@@ -58,6 +58,28 @@ struct DemoHeader : BlueprintHeaderFooterElement, Equatable
     }
 }
 
+struct DemoHeader2 : BlueprintHeaderFooterElement, Equatable
+{
+    var title : String
+    
+    var element: Element {
+        var box = Box(
+            backgroundColor: .init(white: 0.95, alpha: 1.0),
+            cornerStyle: .rounded(radius: 10.0),
+            wrapping: Inset(
+                top: 30.0, bottom: 30.0, left: 10.0, right: 10.0,
+                wrapping: Label(text: self.title) {
+                    $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+                }
+            )
+        )
+        
+        box.borderStyle = .solid(color: .white(0.85), width: 2.0)
+        
+        return box
+    }
+}
+
 
 struct DemoItem : BlueprintItemElement, Equatable
 {

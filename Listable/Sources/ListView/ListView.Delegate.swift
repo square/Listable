@@ -16,6 +16,8 @@ extension ListView
         private let itemMeasurementCache = ReusableViewCache()
         private let headerFooterMeasurementCache = ReusableViewCache()
         
+        private let headerFooterViewCache = ReusableViewCache()
+        
         // MARK: UICollectionViewDelegate
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool
@@ -91,39 +93,31 @@ extension ListView
             item.didEndDisplay()
         }
         
-        private var displayedSupplementaryItems : [ObjectIdentifier:AnyPresentationHeaderFooterState] = [:]
+        private var displayedSupplementaryItems : [ObjectIdentifier:PresentationState.HeaderFooterViewStatePair] = [:]
         
         func collectionView(
             _ collectionView: UICollectionView,
-            willDisplaySupplementaryView view: UICollectionReusableView,
-            forElementKind elementKind: String,
+            willDisplaySupplementaryView anyView: UICollectionReusableView,
+            forElementKind kindString: String,
             at indexPath: IndexPath
             )
         {
-            let item : AnyPresentationHeaderFooterState = {
-                switch ListViewLayout.SupplementaryKind(rawValue: elementKind)! {
-                case .listHeader:
-                    return self.presentationState.header!
-                    
-                case .listFooter:
-                    return self.presentationState.footer!
-                    
-                case .sectionHeader:
-                    let section = self.presentationState.sections[indexPath.section]
-                    return section.header!
-                    
-                case .sectionFooter:
-                    let section = self.presentationState.sections[indexPath.section]
-                    return section.footer!
-                    
-                case .overscrollFooter:
-                    return self.presentationState.overscrollFooter!
+            let container = anyView as! SupplementaryContainerView
+            let kind = ListViewLayout.SupplementaryKind(rawValue: kindString)!
+            
+            let headerFooter : PresentationState.HeaderFooterViewStatePair = {
+                switch kind {
+                case .listHeader: return self.presentationState.header
+                case .listFooter: return self.presentationState.footer
+                case .sectionHeader: return self.presentationState.sections[indexPath.section].header
+                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer
+                case .overscrollFooter: return self.presentationState.overscrollFooter
                 }
             }()
             
-            item.willDisplay(view: view, in: collectionView, for: indexPath)
+            headerFooter.willDisplay(view: container)
             
-            self.displayedSupplementaryItems[ObjectIdentifier(view)] = item
+            self.displayedSupplementaryItems[ObjectIdentifier(view)] = headerFooter
         }
         
         func collectionView(
@@ -133,11 +127,11 @@ extension ListView
             at indexPath: IndexPath
             )
         {
-            guard let item = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
+            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
                 return
             }
             
-            item.didEndDisplay()
+            headerFooter.didEndDisplay()
         }
         
         func collectionView(
@@ -196,7 +190,7 @@ extension ListView
         
         func hasListHeader(in collectionView : UICollectionView) -> Bool
         {
-            return self.presentationState.header != nil
+            return self.presentationState.header.state != nil
         }
         
         func heightForListHeader(
@@ -205,7 +199,7 @@ extension ListView
             layoutDirection : LayoutDirection
             ) -> CGFloat
         {
-            let header = self.presentationState.header!
+            let header = self.presentationState.header.state!
             
             return header.height(
                 width: width,
@@ -217,14 +211,14 @@ extension ListView
         
         func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
         {
-            let header = self.presentationState.header!
+            let header = self.presentationState.header.state!
             
             return header.anyModel.layout
         }
         
         func hasListFooter(in collectionView : UICollectionView) -> Bool
         {
-            return self.presentationState.footer != nil
+            return self.presentationState.footer.state != nil
         }
         
         func heightForListFooter(
@@ -233,7 +227,7 @@ extension ListView
             layoutDirection : LayoutDirection
             ) -> CGFloat
         {
-            let footer = self.presentationState.footer!
+            let footer = self.presentationState.footer.state!
             
             return footer.height(
                 width: width,
@@ -245,14 +239,14 @@ extension ListView
         
         func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
         {
-            let footer = self.presentationState.footer!
+            let footer = self.presentationState.footer.state!
             
             return footer.anyModel.layout
         }
         
         func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
         {
-            return self.presentationState.overscrollFooter != nil
+            return self.presentationState.overscrollFooter.state != nil
         }
         
         func heightForOverscrollFooter(
@@ -261,7 +255,7 @@ extension ListView
             layoutDirection : LayoutDirection
             ) -> CGFloat
         {
-            let footer = self.presentationState.overscrollFooter!
+            let footer = self.presentationState.overscrollFooter.state!
             
             return footer.height(
                 width: width,
@@ -273,7 +267,7 @@ extension ListView
         
         func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
         {
-            let footer = self.presentationState.overscrollFooter!
+            let footer = self.presentationState.overscrollFooter.state!
             
             return footer.anyModel.layout
         }
@@ -289,7 +283,7 @@ extension ListView
         {
             let section = self.presentationState.sections[sectionIndex]
             
-            return section.header != nil
+            return section.header.state != nil
         }
                 
         func heightForHeader(
@@ -300,7 +294,7 @@ extension ListView
             ) -> CGFloat
         {
             let section = self.presentationState.sections[sectionIndex]
-            let header = section.header!
+            let header = section.header.state!
             
             return header.height(
                 width: width,
@@ -313,7 +307,7 @@ extension ListView
         func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
         {
             let section = self.presentationState.sections[sectionIndex]
-            let header = section.header!
+            let header = section.header.state!
             
             return header.anyModel.layout
         }
@@ -322,7 +316,7 @@ extension ListView
         {
             let section = self.presentationState.sections[sectionIndex]
             
-            return section.footer != nil
+            return section.footer.state != nil
         }
                 
         func heightForFooter(
@@ -333,7 +327,7 @@ extension ListView
             ) -> CGFloat
         {
             let section = self.presentationState.sections[sectionIndex]
-            let footer = section.footer!
+            let footer = section.footer.state!
             
             return footer.height(
                 width: width,
@@ -346,7 +340,7 @@ extension ListView
         func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
         {
             let section = self.presentationState.sections[sectionIndex]
-            let footer = section.footer!
+            let footer = section.footer.state!
             
             return footer.anyModel.layout
         }

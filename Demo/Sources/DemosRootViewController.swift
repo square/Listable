@@ -104,6 +104,20 @@ public final class DemosRootViewController : UIViewController
                         self.push(InvoicesPaymentScheduleDemoViewController())
                 })
             }
+            
+            list += Section(identifier: "flow-layout") { section in
+                
+                section.header = HeaderFooter(
+                    with: DemoHeader(title: "Flow Layouts")
+                )
+                
+                section += Item(
+                    with: DemoItem(text: "Flow Layout"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(FlowLayoutViewController())
+                })
+            }
         }
     }
 }

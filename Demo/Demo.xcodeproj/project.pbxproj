@@ -14,6 +14,7 @@
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */; };
 		0A46A00B23793C0200B35811 /* WidthCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */; };
+		0A58D85123CD3FCF00583C25 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */; };
 		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
 		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
 		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
@@ -45,6 +46,7 @@
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLayoutViewController.swift; sourceTree = "<group>"; };
 		0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidthCustomizationViewController.swift; sourceTree = "<group>"; };
+		0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
 		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
 		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				0A46A00A23793C0200B35811 /* WidthCustomizationViewController.swift */,
 				0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */,
 				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
+				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,
 				0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */,
+				0A58D85123CD3FCF00583C25 /* FlowLayoutViewController.swift in Sources */,
 				0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */,
 				0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */,
 				0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */,
