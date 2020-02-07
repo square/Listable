@@ -508,7 +508,7 @@ internal extension ListViewLayout
                         let height = delegate.heightForItem(at: indexPath, in: collectionView, width: itemPosition.width, layoutDirection: direction)
                         
                         item.x = itemPosition.origin
-                        item.y = lastContentMaxY
+                        item.y = lastContentMaxY + (item.layout.minimumAboveItemSpacing ?? 0.0)
                         item.size = direction.size(width: itemPosition.width, height: height)
                         
                         lastContentMaxY += height
@@ -790,9 +790,10 @@ extension ListViewLayout.LayoutInfo
             var lastSpacing : CGFloat = 0.0
             
             items.forEachWithIndex { index, isLast, item in
-                let inNewGroup = groupingHeight == 0.0 ? lastSpacing > 0.0 : lastSpacing > groupingHeight
+                let lastSpacingCausesNewGroup = groupingHeight == 0.0 ? lastSpacing > 0.0 : lastSpacing > groupingHeight
+                let currentItemCausesNewGroup = item.layout.minimumAboveItemSpacing ?? 0.0 > groupingHeight
                 
-                if inNewGroup {
+                if lastSpacingCausesNewGroup || currentItemCausesNewGroup {
                     all.append(current)
                     current = []
                 }

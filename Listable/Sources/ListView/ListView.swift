@@ -624,7 +624,9 @@ public final class ListView : UIView
         self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
-            view.performBatchUpdates(batchUpdates, completion: completion)
+            UIView.animate(withDuration: 0.25) {
+                view.performBatchUpdates(batchUpdates, completion: completion)
+            }
         } else {
             UIView.performWithoutAnimation {
                 view.performBatchUpdates(batchUpdates, completion: completion)

@@ -21,6 +21,20 @@ public protocol BlueprintItemElement : ItemElement where Appearance == Blueprint
     //
     
     func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
+    
+    //
+    // MARK: Providing Default Item Values
+    //
+    
+    var defaultItemLayout : ItemLayout { get }
+}
+
+
+public extension BlueprintItemElement
+{
+    var defaultItemLayout : ItemLayout {
+        return ItemLayout()
+    }
 }
 
 
@@ -44,7 +58,7 @@ public extension Listable.Item where Element : BlueprintItemElement
     init(
         with element : Element,
         sizing : Sizing = .thatFitsWith(.atLeast(.default)),
-        layout : ItemLayout = ItemLayout(),
+        layout : ItemLayout? = nil,
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
         reordering : Reordering? = nil,
@@ -56,7 +70,7 @@ public extension Listable.Item where Element : BlueprintItemElement
     {
         self.init(
             with: element,
-            appearance: BlueprintItemElementAppearance(),
+            appearance: BlueprintItemElementAppearance(defaultItemLayout: element.defaultItemLayout),
             sizing: sizing,
             layout: layout,
             selection: selection,
@@ -111,4 +125,6 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
     {
         return false
     }
+    
+    public var defaultItemLayout : ItemLayout
 }

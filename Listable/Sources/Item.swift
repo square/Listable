@@ -90,7 +90,7 @@ public struct Item<Element:ItemElement> : AnyItem
         with element : Element,
         appearance : Element.Appearance,
         sizing : Sizing = .default,
-        layout : ItemLayout = ItemLayout(),
+        layout : ItemLayout? = nil,
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
         reordering : Reordering? = nil,
@@ -105,7 +105,12 @@ public struct Item<Element:ItemElement> : AnyItem
         self.appearance = appearance
         
         self.sizing = sizing
-        self.layout = layout
+        
+        if let layout = layout {
+            self.layout = layout
+        } else {
+            self.layout = self.appearance.defaultItemLayout
+        }
         
         self.selection = selection
         
@@ -244,17 +249,22 @@ public struct ItemLayout : Equatable
 {
     public var itemSpacing : CGFloat?
     public var itemToSectionFooterSpacing : CGFloat?
+ 
+    public var minimumAboveItemSpacing : CGFloat?
     
     public var width : CustomWidth
     
     public init(
         itemSpacing : CGFloat? = nil,
         itemToSectionFooterSpacing : CGFloat? = nil,
+        minimumAboveItemSpacing : CGFloat? = nil,
         width : CustomWidth = .default
     )
     {
         self.itemSpacing = itemSpacing
         self.itemSpacing = itemSpacing
+        self.minimumAboveItemSpacing = minimumAboveItemSpacing
+        
         self.width = width
     }
 }

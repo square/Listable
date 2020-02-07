@@ -133,6 +133,20 @@ public protocol ItemElementAppearance
     //
     
     func wasUpdated(comparedTo other : Self) -> Bool
+    
+    //
+    // MARK: Providing Default Item Values
+    //
+    
+    var defaultItemLayout : ItemLayout { get }
+}
+
+
+public extension ItemElementAppearance
+{
+    var defaultItemLayout : ItemLayout {
+        return ItemLayout()
+    }
 }
 
 
