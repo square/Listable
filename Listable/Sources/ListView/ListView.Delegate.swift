@@ -386,7 +386,7 @@ extension ListView
             
             // Dismiss Keyboard
             
-            if self.view.behavior.dismissesKeyboardOnScroll {
+            if self.view.behavior.dismissesKeyboardOnScroll && scrollView.isTracking {
                 self.view.endEditing(true)
             }
         }
