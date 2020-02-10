@@ -154,7 +154,7 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
-        // Nothing right now.
+        self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
     }
     
     public var scrollInsets : ScrollInsets {

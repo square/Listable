@@ -10,10 +10,10 @@ import Foundation
 
 public struct Behavior : Equatable
 {
-    public var dismissesKeyboardOnScroll : Bool
+    public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
     
-    public init(dismissesKeyboardOnScroll : Bool = false)
+    public init(keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive)
     {
-        self.dismissesKeyboardOnScroll = dismissesKeyboardOnScroll
+        self.keyboardDismissMode = keyboardDismissMode
     }
 }
