@@ -103,6 +103,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(InvoicesPaymentScheduleDemoViewController())
                 })
+                
+                section += Item(
+                    with: DemoItem(text: "Refresh Control"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(RefreshControlViewController())
+                })
             }
             
             list += Section(identifier: "flow-layout") { section in
