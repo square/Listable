@@ -28,7 +28,7 @@ final class KeyboardTestingViewController : UIViewController
                 with: DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            // This works (builder for a concrete type `Section`...
+            // This works (builder for a concrete type `Section`)...
             
             list.content.build {
                 Section(identifier: "")
