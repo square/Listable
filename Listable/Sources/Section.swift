@@ -119,6 +119,11 @@ public struct Section
     // MARK: Adding & Removing Multiple Items
     //
     
+    mutating public func build(@SectionItemsBuilder _ items : () -> [AnyItem])
+    {
+        self.items = items()
+    }
+    
     public static func += (lhs : inout Section, rhs : [AnyItem])
     {
         lhs.items += rhs
@@ -254,5 +259,15 @@ private struct HashableSectionInfo<Value:Hashable> : SectionInfo
     func wasMoved(comparedTo other : HashableSectionInfo) -> Bool
     {
         return self.value != other.value
+    }
+}
+
+
+@_functionBuilder
+public struct SectionItemsBuilder
+{
+    public static func buildBlock(_ items : AnyItem...) -> [AnyItem]
+    {
+        return Array(items)
     }
 }

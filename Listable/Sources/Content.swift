@@ -124,6 +124,11 @@ public struct Content
         }
     }
     
+    public mutating func build(@SectionsBuilder _ sections : () -> [Section])
+    {
+        self.sections = sections()
+    }
+    
     public mutating func add(_ section : Section)
     {
         self.sections.append(section)
@@ -196,6 +201,16 @@ public extension Content
         return sections.allSatisfy { both in
             both.0.elementsEqual(to: both.1)
         }
+    }
+}
+
+
+@_functionBuilder
+public struct SectionsBuilder
+{
+    public static func buildBlock(_ sections : Section...) -> [Section]
+    {
+        return Array(sections)
     }
 }
 
