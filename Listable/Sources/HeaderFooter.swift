@@ -16,7 +16,7 @@ public protocol AnyHeaderFooter_Internal
     
     func apply(to headerFooterView : UIView, reason: ApplyReason)
     
-    func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
+    func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     
     func newPresentationHeaderFooterState() -> Any
 }
@@ -74,13 +74,13 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
         self.element.apply(to: view, reason: reason)
     }
         
-    public func anyWasUpdated(comparedTo other : AnyHeaderFooter) -> Bool
+    public func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     {
         guard let other = other as? HeaderFooter<Element> else {
-            return true
+            return false
         }
         
-        return self.element.wasUpdated(comparedTo: other.element)  || self.appearance.wasUpdated(comparedTo: other.appearance)
+        return self.element.isEquivalent(to: other.element) && self.appearance.isEquivalent(to: other.appearance)
     }
     
     public func newPresentationHeaderFooterState() -> Any

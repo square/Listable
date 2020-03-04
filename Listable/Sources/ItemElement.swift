@@ -13,7 +13,7 @@ public protocol ItemElement
     //
     
     /**
-     Iidentifies the element across updates to the list. This value must remain the same,
+     Identifies the element across updates to the list. This value must remain the same,
      otherwise the element will be considered a new item, and the old one removed from the list.
      
      Does not have to be globally unique – the list will make a "best guess" if there are multiple elements
@@ -64,29 +64,30 @@ public protocol ItemElement
     func wasMoved(comparedTo other : Self) -> Bool
     
     /**
-     Return true if the element' changed based on the old value passed into the function.
+     Return false if the element' changed based on the old value passed into the function.
      
-     If this method returns true, the row representing the element is reloaded.
+     If this method returns false, the row representing the element is reloaded.
      
-     There is a default implementation of this method which checks the equality of `content`.
+     There is a default implementation of this method when `ItemElement ` conforms to `Equatable`
+     which returns `self == other`.
      */
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 
 public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
-        return self.wasUpdated(comparedTo: other)
+        return self.isEquivalent(to: other) == false
     }
 }
 
 
 public extension ItemElement where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 
@@ -132,15 +133,15 @@ public protocol ItemElementAppearance
     // MARK: Tracking Changes
     //
     
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 
 
 public extension ItemElementAppearance where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 

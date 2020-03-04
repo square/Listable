@@ -319,7 +319,7 @@ section += AnElement(title: "Hello, World!")
 
 
 #### ItemElement
-The core value type which represents row content. This view model which describes the content of a given row / item, via the `identifier`, and the `wasMoved` and `wasUpdated` methods. You describe how it's drawn via the `Appearance` `associatedtype`. When it's time to display the item on screen, or size an item, `apply(to:for:with:)` is called, which is where you push the content from your `ItemElement` onto a view.
+The core value type which represents row content. This view model which describes the content of a given row / item, via the `identifier`, and the `wasMoved` and `isEquivalent` methods. You describe how it's drawn via the `Appearance` `associatedtype`. When it's time to display the item on screen, or size an item, `apply(to:for:with:)` is called, which is where you push the content from your `ItemElement` onto a view.
 
 ```swift
 public protocol ItemElement
@@ -331,27 +331,27 @@ public protocol ItemElement
     func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
 
     func wasMoved(comparedTo other : Self) -> Bool
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 ```
 
-You usually do not need to implement all these! If your `ItemElement` is `Equatable`, you get `wasUpdated` for free – and by default, `wasMoved` is the same was `wasUpdated`.
+You usually do not need to implement all these! If your `ItemElement` is `Equatable`, you get `isEquivalent` for free – and by default, `wasMoved` is the same was `isEquivalent(other:) == false`.
 
 ```swift
 public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
-        return self.wasUpdated(comparedTo: other)
+        return self.isEquivalent(to: other) == false
     }
 }
 
 
 public extension ItemElement where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 ```
@@ -390,18 +390,18 @@ public protocol ItemElementAppearance
     
     func apply(to view : ContentView, with info : ApplyItemElementInfo)
     
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 ```
 
-If your `ItemElementAppearance` is `Equatable`, you get `wasUpdated` for free.
+If your `ItemElementAppearance` is `Equatable`, you get `isEquivalent` for free.
 
 ```swift
 public extension ItemElementAppearance where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 ```
@@ -478,18 +478,18 @@ public protocol HeaderFooterElement
 
     func apply(to view : Appearance.ContentView, reason : ApplyReason)
 
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 ```
 
-As usual, if your `HeaderFooterElement` is `Equatable`, you get `wasUpdated` for free.
+As usual, if your `HeaderFooterElement` is `Equatable`, you get `isEquivalent` for free.
 
 ```swift
 public extension HeaderFooterElement where Self:Equatable
 {    
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 ```
@@ -524,18 +524,18 @@ public protocol HeaderFooterElementAppearance
     
     func apply(to view : ContentView)
     
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 ```
 
-Per usual, you get `wasUpdated` for free if you're `Equatable`:
+Per usual, you get `isEquivalent` for free if you're `Equatable`:
 
 ```swift
 public extension HeaderFooterElementAppearance where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 
