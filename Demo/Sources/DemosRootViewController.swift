@@ -54,6 +54,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(BlueprintListDemoViewController())
                 })
+
+                section += Item(
+                    with: DemoItem(text: "Bottom Pinning"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(BottomPinnedViewController())
+                })
                 
                 section += Item(
                     with: DemoItem(text: "Itemization Editor"),
