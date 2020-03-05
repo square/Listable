@@ -155,8 +155,8 @@ fileprivate struct SearchBarElement : ItemElement, ItemElementAppearance
         view.text = self.text
     }
     
-    func wasUpdated(comparedTo other: SearchBarElement) -> Bool {
-        return self.text != other.text
+    func isEquivalent(to other: SearchBarElement) -> Bool {
+        return self.text == other.text
     }
     
     // MARK: ItemElementAppearance

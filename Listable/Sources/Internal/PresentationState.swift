@@ -474,7 +474,7 @@ final class PresentationState
             
             self.model = anyHeaderFooter as! HeaderFooter<Element>
             
-            let reason : UpdateReason = self.model.anyWasUpdated(comparedTo: oldModel) ? .update : .noChange
+            let reason : UpdateReason = self.model.anyIsEquivalent(to: oldModel) ? .noChange : .update
             
             if oldModel.sizing != self.model.sizing {
                 self.resetCachedHeights()

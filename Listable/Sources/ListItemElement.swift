@@ -74,9 +74,9 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         view.setProperties(with: self.listDescription)
     }
     
-    public func wasUpdated(comparedTo other: ListItemElement) -> Bool
+    public func isEquivalent(to other: ListItemElement) -> Bool
     {
-        return true
+        return false
     }
     
     //

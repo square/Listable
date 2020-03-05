@@ -284,8 +284,8 @@ fileprivate struct ToggleRow : BlueprintItemElement
         return .init(self.content.text)
     }
     
-    func wasUpdated(comparedTo other: ToggleRow) -> Bool {
-        return self.content != other.content
+    func isEquivalent(to other: ToggleRow) -> Bool {
+        return self.content == other.content
     }
 }
 
@@ -335,9 +335,9 @@ fileprivate struct SegmentedControlRow : BlueprintItemElement
         return .init(self.id)
     }
     
-    func wasUpdated(comparedTo other: SegmentedControlRow) -> Bool
+    func isEquivalent(to other: SegmentedControlRow) -> Bool
     {
-        return false
+        return true
     }
 }
 
@@ -400,9 +400,9 @@ fileprivate struct AmountRow : BlueprintItemElement
         return .init(self.content.title)
     }
     
-    func wasUpdated(comparedTo other: AmountRow) -> Bool
+    func isEquivalent(to other: AmountRow) -> Bool
     {
-        return self.content != other.content
+        return self.content == other.content
     }
     
 }
@@ -421,8 +421,8 @@ fileprivate struct ButtonRow : BlueprintItemElement
         return .init(self.text)
     }
     
-    func wasUpdated(comparedTo other: ButtonRow) -> Bool
+    func isEquivalent(to other: ButtonRow) -> Bool
     {
-        return self.text != other.text
+        return self.text == other.text
     }
 }

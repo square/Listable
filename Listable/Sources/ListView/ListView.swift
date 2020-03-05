@@ -669,7 +669,7 @@ public final class ListView : UIView
                 ),
                 item: .init(
                     identifier: { $0.identifier },
-                    updated: { $0.anyWasUpdated(comparedTo: $1) },
+                    updated: { $0.anyIsEquivalent(to: $1) == false },
                     movedHint: { $0.anyWasMoved(comparedTo: $1) }
                 )
             )

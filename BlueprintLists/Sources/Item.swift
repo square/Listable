@@ -107,8 +107,8 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
     
     public func apply(to view: BlueprintView, with info: ApplyItemElementInfo) {}
 
-    public func wasUpdated(comparedTo other: BlueprintItemElementAppearance) -> Bool
+    public func isEquivalent(to other: BlueprintItemElementAppearance) -> Bool
     {
-        return false
+        return true
     }
 }
