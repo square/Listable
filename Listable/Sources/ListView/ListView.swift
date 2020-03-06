@@ -169,10 +169,13 @@ public final class ListView : UIView
     
     func applyScrollInsets()
     {
-        self.collectionView.contentInset = self.scrollInsets.insets(
+        let insets = self.scrollInsets.insets(
             with: self.collectionView.contentInset,
             layoutDirection: self.appearance.direction
         )
+
+        self.collectionView.contentInset = insets
+        self.collectionView.scrollIndicatorInsets = insets
     }
     
     //
@@ -724,6 +727,7 @@ extension ListView : KeyboardObserverDelegate
         }
         
         self.collectionView.contentInset.bottom = inset
+        self.collectionView.scrollIndicatorInsets.bottom = inset
     }
     
     //
