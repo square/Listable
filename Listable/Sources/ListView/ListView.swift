@@ -719,11 +719,17 @@ extension ListView : KeyboardObserverDelegate
             return
         }
         
-        var inset : CGFloat
+        let inset : CGFloat
         
         switch frame {
-        case .notVisible: inset = 0.0
-        case .visible(let frame): inset = (self.bounds.size.height - frame.origin.y)
+        case .notVisible:
+            inset = 0.0
+        case .visible(let frame):
+            if #available(iOS 11, *) {
+                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+            } else {
+                inset = (self.bounds.size.height - frame.origin.y)
+            }
         }
         
         self.collectionView.contentInset.bottom = inset
