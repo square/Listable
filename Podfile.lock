@@ -5,8 +5,8 @@ PODS:
   - BlueprintLists/Tests (0.1.1):
     - BlueprintUI
     - Listable
-  - BlueprintUI (0.3.0)
-  - BlueprintUICommonControls (0.3.1):
+  - BlueprintUI (0.6.0)
+  - BlueprintUICommonControls (0.6.0):
     - BlueprintUI
   - EnglishDictionary (1.0.0.LOCAL)
   - Listable (1.0.0.LOCAL)
@@ -28,7 +28,7 @@ DEPENDENCIES:
   - Snapshot/Tests (from `Internal Pods/Snapshot/Snapshot.podspec`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - BlueprintUI
     - BlueprintUICommonControls
 
@@ -44,8 +44,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BlueprintLists: 545f9ffeb9e7f0e4dcf1824878756e480c9d69b6
-  BlueprintUI: fce00cd8b9e73cf09462b8b74159b6d1f40d9f93
-  BlueprintUICommonControls: e9e1dfa75f3088bb31f6813ff9d8d7dd86af81cc
+  BlueprintUI: c1edf5bf3e38e08e26742f6befb7df00710f7f3e
+  BlueprintUICommonControls: 43afff4f45499bdbdf371dc4cd5d0a7a8dfd728e
   EnglishDictionary: f03968b9382ddc5c8dd63535efbf783c6cd45f1c
   Listable: 75c416389a1bde57699eb61c881d6b18adbc4e13
   Snapshot: cda3414db426919d09f775434b36289c8e864183

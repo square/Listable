@@ -24,15 +24,15 @@ public protocol HeaderFooterElement
     // MARK: Tracking Changes
     //
     
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 
 
 public extension HeaderFooterElement where Self:Equatable
 {    
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }
 
@@ -57,14 +57,14 @@ public protocol HeaderFooterElementAppearance
     // MARK: Tracking Changes
     //
     
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
 }
 
 
 public extension HeaderFooterElementAppearance where Self:Equatable
 {
-    func wasUpdated(comparedTo other : Self) -> Bool
+    func isEquivalent(to other : Self) -> Bool
     {
-        return self != other
+        return self == other
     }
 }

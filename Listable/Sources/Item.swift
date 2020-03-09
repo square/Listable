@@ -30,7 +30,7 @@ public protocol AnyItem : AnyItem_Internal
 public protocol AnyItem_Internal
 {
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
-    func anyWasUpdated(comparedTo other : AnyItem) -> Bool
+    func anyIsEquivalent(to other : AnyItem) -> Bool
     
     func newPresentationItemState(in listView : ListView) -> Any
 }
@@ -149,13 +149,13 @@ public struct Item<Element:ItemElement> : AnyItem
     
     // MARK: AnyItem_Internal
     
-    public func anyWasUpdated(comparedTo other : AnyItem) -> Bool
+    public func anyIsEquivalent(to other : AnyItem) -> Bool
     {
         guard let other = other as? Item<Element> else {
-            return true
+            return false
         }
         
-        return self.element.wasUpdated(comparedTo: other.element) || self.appearance.wasUpdated(comparedTo: other.appearance)
+        return self.element.isEquivalent(to: other.element) && self.appearance.isEquivalent(to: other.appearance)
     }
     
     public func anyWasMoved(comparedTo other : AnyItem) -> Bool

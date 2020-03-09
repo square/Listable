@@ -31,7 +31,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.stickySectionHeaders = true
         }
         
-        self.listView.behavior.dismissesKeyboardOnScroll = true
+        self.listView.behavior.keyboardDismissMode = .onDrag
         
         self.listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.SearchState())
         
@@ -155,8 +155,8 @@ fileprivate struct SearchBarElement : ItemElement, ItemElementAppearance
         view.text = self.text
     }
     
-    func wasUpdated(comparedTo other: SearchBarElement) -> Bool {
-        return self.text != other.text
+    func isEquivalent(to other: SearchBarElement) -> Bool {
+        return self.text == other.text
     }
     
     // MARK: ItemElementAppearance

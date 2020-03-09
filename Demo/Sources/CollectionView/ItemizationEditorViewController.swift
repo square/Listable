@@ -251,9 +251,9 @@ struct ToggleItem : BlueprintItemElement
     
     var onToggle : (Bool) -> ()
     
-    func wasUpdated(comparedTo other: ToggleItem) -> Bool
+    func isEquivalent(to other: ToggleItem) -> Bool
     {
-        return self.content != other.content
+        return self.content == other.content
     }
     
     var identifier: Identifier<ToggleItem> {

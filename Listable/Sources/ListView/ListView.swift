@@ -169,10 +169,13 @@ public final class ListView : UIView
     
     func applyScrollInsets()
     {
-        self.collectionView.contentInset = self.scrollInsets.insets(
+        let insets = self.scrollInsets.insets(
             with: self.collectionView.contentInset,
             layoutDirection: self.appearance.direction
         )
+
+        self.collectionView.contentInset = insets
+        self.collectionView.scrollIndicatorInsets = insets
     }
     
     //
@@ -671,7 +674,7 @@ public final class ListView : UIView
                 ),
                 item: .init(
                     identifier: { $0.identifier },
-                    updated: { $0.anyWasUpdated(comparedTo: $1) },
+                    updated: { $0.anyIsEquivalent(to: $1) == false },
                     movedHint: { $0.anyWasMoved(comparedTo: $1) }
                 )
             )
@@ -718,14 +721,21 @@ extension ListView : KeyboardObserverDelegate
             return
         }
         
-        var inset : CGFloat
+        let inset : CGFloat
         
         switch frame {
-        case .notVisible: inset = 0.0
-        case .visible(let frame): inset = (self.bounds.size.height - frame.origin.y)
+        case .notVisible:
+            inset = 0.0
+        case .visible(let frame):
+            if #available(iOS 11, *) {
+                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+            } else {
+                inset = (self.bounds.size.height - frame.origin.y)
+            }
         }
         
         self.collectionView.contentInset.bottom = inset
+        self.collectionView.scrollIndicatorInsets.bottom = inset
     }
     
     //
