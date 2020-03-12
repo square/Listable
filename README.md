@@ -446,7 +446,7 @@ struct SubtitleItemAppearance : ItemElementAppearance
 ### HeaderFooter
 How to describe a header or footer within a list. Very similar API to `ItemElement`, but with less stuff, as headers and footers are display-only.
 
-```
+```swift
 public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
 {
     public var element : Element
