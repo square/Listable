@@ -230,7 +230,47 @@ public final class ListView : UIView
         } else {
             scroll()
         }
-    
+
+        return true
+    }
+
+    @discardableResult
+    public func scrollToBottom(animated : Bool = true) -> Bool {
+
+        // Make sure we have a valid last index path.
+
+        guard let toIndexPath = self.storage.allContent.lastIndexPath() else {
+            return false
+        }
+
+        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
+            return false
+        }
+
+        // Perform scrolling.
+
+        let scroll = {
+            let contentHeight = self.layout.collectionViewContentSize.height
+            let contentFrameHeight = self.collectionView.contentFrame.height
+
+            guard contentHeight > contentFrameHeight else {
+                return
+            }
+
+            let contentOffsetY = contentHeight - contentFrameHeight -
+                self.collectionView.lst_adjustedContentInset.top
+            let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
+            self.collectionView.setContentOffset(contentOffset, animated: animated)
+        }
+
+        if lastLoadedIndexPath < toIndexPath {
+            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
+                scroll()
+            }
+        } else {
+            scroll()
+        }
+
         return true
     }
     
@@ -553,8 +593,16 @@ public final class ListView : UIView
         let presentationState = self.storage.presentationState
         
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
-        
-        let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+
+        let visibleSlice: Content.Slice
+
+        if self.bounds.isEmpty {
+            visibleSlice = Content.Slice()
+        } else if self.behavior.pinItemsToBottom {
+            visibleSlice = Content.Slice(containsAllItems: true, content: self.storage.allContent)
+        } else {
+            visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+        }
         
         let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
                 
@@ -577,6 +625,17 @@ public final class ListView : UIView
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
+        }
+
+        // Perform any other behavior-related changes.
+
+        switch reason {
+        case .contentChanged:
+            if self.behavior.pinItemsToBottom {
+                self.scrollToBottom()
+            }
+
+        default: break
         }
         
         // Update info for new contents.
@@ -747,7 +806,23 @@ extension ListView : KeyboardObserverDelegate
 
 
 fileprivate extension UIScrollView
-{    
+{
+
+    /// The frame of the collection view inset by the adjusted content inset,
+    /// i.e., the visible frame of the content.
+    var contentFrame : CGRect {
+        return self.bounds.inset(by: self.lst_adjustedContentInset)
+    }
+
+    /// `adjustedContentInset` on iOS >= 11, `contentInset` otherwise.
+    var lst_adjustedContentInset : UIEdgeInsets {
+        if #available(iOS 11, *) {
+            return self.adjustedContentInset
+        } else {
+            return self.contentInset
+        }
+    }
+
     func isScrolledNearBottom() -> Bool
     {
         let viewHeight = self.bounds.size.height

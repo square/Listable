@@ -100,6 +100,18 @@ public struct Content
         
         return nil
     }
+
+    public func lastIndexPath() -> IndexPath?
+    {
+        guard let lastSectionIndexWithItems = sections.lastIndex(where: { !$0.items.isEmpty }) else {
+            return nil
+        }
+
+        return IndexPath(
+            item: sections[lastSectionIndexWithItems].items.count,
+            section: lastSectionIndexWithItems
+        )
+    }
     
     //
     // MARK: Mutating Content
