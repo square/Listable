@@ -188,7 +188,7 @@ internal extension ListViewLayout
         // MARK: Fetching Elements
         //
             
-        // TODO: This is called a lot! Optimize it by caching the layout attributes and by checking the passed in frame.s
+        // TODO: This is called a lot! Optimize it by caching the layout attributes and by checking the passed in frames.
         
         func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
         {

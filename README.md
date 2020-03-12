@@ -80,7 +80,7 @@ A core design principle of Listable is performance! Lists are _usually_ small, b
 
 This performance is achieved through an internal batching system, which only queries and diffs the items needed to display the current scroll point, plus some scrollover. Views are only created for what is currently on screen. This allows culling of most content pushed into the list for long lists.
 
-Further, height and sizing measurements are cached more efficiently than in a regular collection view implementation, which for large lists, can boost scrolling performance and prevent droppd frames.
+Further, height and sizing measurements are cached more efficiently than in a regular collection view implementation, which for large lists, can boost scrolling performance and prevent dropped frames.
 
 
 ### Highly Customizable
@@ -262,7 +262,7 @@ public struct ListDescription
 }
 ```
 
-This allows you to confgure the list view however needed within the `setContent` update.
+This allows you to configure the list view however needed within the `setContent` update.
 
 
 ### Item
