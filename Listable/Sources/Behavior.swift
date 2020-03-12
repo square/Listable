@@ -11,9 +11,14 @@ import Foundation
 public struct Behavior : Equatable
 {
     public var dismissesKeyboardOnScroll : Bool
+    public var pinItemsToBottom : Bool
     
-    public init(dismissesKeyboardOnScroll : Bool = false)
+    public init(
+        dismissesKeyboardOnScroll : Bool = false,
+        pinItemsToBottom : Bool = false
+    )
     {
         self.dismissesKeyboardOnScroll = dismissesKeyboardOnScroll
+        self.pinItemsToBottom = pinItemsToBottom
     }
 }
