@@ -56,13 +56,8 @@ final class BottomPinnedViewController : UIViewController
     private func updateItems() {
         self.list.setContent { list in
             list.appearance = demoAppearance
+            list.behavior.pinItemsToBottom = true
             list += Section(identifier: "first", items: items.map { Item(with: $0) })
-        }
-
-        if let lastItem = items.last {
-            let position = ItemScrollPosition(position: .bottom, ifAlreadyVisible: .scrollToPosition,
-                                              offset: demoAppearance.layout.padding.bottom)
-            list.scrollTo(item: lastItem.identifier, position: position, animated: true)
         }
     }
 }
