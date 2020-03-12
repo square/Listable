@@ -559,6 +559,10 @@ public final class ListView : UIView
         case .contentChanged:
             self.updateCollectionViewConfiguration()
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+
+            if self.behavior.pinItemsToBottom {
+                self.scrollToBottom()
+            }
             
         case .didEndDecelerating:
             if presentationStateTruncated {
@@ -627,17 +631,6 @@ public final class ListView : UIView
             callerCompletion(finished)
         }
 
-        // Perform any other behavior-related changes.
-
-        switch reason {
-        case .contentChanged:
-            if self.behavior.pinItemsToBottom {
-                self.scrollToBottom()
-            }
-
-        default: break
-        }
-        
         // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
