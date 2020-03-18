@@ -6,7 +6,7 @@
 //
 
 
-public protocol HeaderFooterElement
+public protocol HeaderFooterElement : KeyPathEquivalency
 {
     //
     // MARK: Converting To View For Display
@@ -37,7 +37,7 @@ public extension HeaderFooterElement where Self:Equatable
 }
 
 
-public protocol HeaderFooterElementAppearance
+public protocol HeaderFooterElementAppearance : KeyPathEquivalency
 {
     //
     // MARK: Creating & Providing Views

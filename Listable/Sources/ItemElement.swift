@@ -6,7 +6,7 @@
 //
 
 
-public protocol ItemElement
+public protocol ItemElement : KeyPathEquivalency
 {
     //
     // MARK: Identification
@@ -98,7 +98,7 @@ public extension ItemElement where Self:Equatable
  The appearance conforms to Equatable – this is so apply(to:) is only called
  when the appearance of an element changes, versus on each display.
  */
-public protocol ItemElementAppearance
+public protocol ItemElementAppearance : KeyPathEquivalency
 {
     //
     // MARK: Creating & Providing Views
