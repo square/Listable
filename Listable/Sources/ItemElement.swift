@@ -38,6 +38,11 @@ public protocol ItemElement
      */
     associatedtype Appearance:ItemElementAppearance
     
+    /**
+     
+     */
+    associatedtype SwipeActionsAppearance:ItemElementSwipeActionsAppearance = EmptyItemElementSwipeActionsAppearance
+    
     //
     // MARK: Applying To Displayed View
     //
@@ -142,6 +147,52 @@ public extension ItemElementAppearance where Self:Equatable
     func isEquivalent(to other : Self) -> Bool
     {
         return self == other
+    }
+}
+
+
+/**
+ TODO
+ */
+public protocol ItemElementSwipeActionsAppearance
+{
+    //
+    // MARK: Creating & Providing Views
+    //
+    
+    /// TODO
+    associatedtype ContentView:UIView
+    
+    /**
+     TODO
+     */
+    static func createView(frame : CGRect) -> ContentView
+    
+    //
+    // MARK: Updating View State
+    //
+    
+    /**
+     TODO
+     */
+    func apply(swipeActions : SwipeActions, to view : ContentView)
+}
+
+
+public struct EmptyItemElementSwipeActionsAppearance : ItemElementSwipeActionsAppearance
+{
+    public init() {}
+    
+    // MARK: ItemElementSwipeActionsAppearance
+    
+    public typealias ContentView = UIView
+    
+    public static func createView(frame: CGRect) -> UIView {
+        return UIView(frame: frame)
+    }
+    
+    public func apply(swipeActions: SwipeActions, to view: UIView) {
+        // Nothing.
     }
 }
 

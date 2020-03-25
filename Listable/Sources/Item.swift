@@ -49,6 +49,7 @@ public struct Item<Element:ItemElement> : AnyItem
     public var selection : ItemSelection
     
     public var swipeActions : SwipeActions?
+    public var swipeActionsAppearance : Element.SwipeActionsAppearance?
     
     public var reordering : Reordering?
         
@@ -93,6 +94,7 @@ public struct Item<Element:ItemElement> : AnyItem
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
+        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
@@ -110,6 +112,7 @@ public struct Item<Element:ItemElement> : AnyItem
         self.selection = selection
         
         self.swipeActions = swipeActions
+        self.swipeActionsAppearance = swipeActionsAppearance
         
         self.reordering = reordering
         

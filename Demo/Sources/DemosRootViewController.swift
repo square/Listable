@@ -118,6 +118,20 @@ public final class DemosRootViewController : UIViewController
                         self.push(FlowLayoutViewController())
                 })
             }
+            
+            list += Section(identifier: "table-view") { section in
+                
+                section.header = HeaderFooter(
+                    with: DemoHeader(title: "Table Views")
+                )
+                
+                section += Item(
+                    with: DemoItem(text: "Swipe To Action"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(DemoTableViewController())
+                })
+            }
         }
     }
 }
