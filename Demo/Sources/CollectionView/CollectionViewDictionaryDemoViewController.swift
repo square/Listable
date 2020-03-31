@@ -252,12 +252,10 @@ fileprivate final class SearchBar : UISearchBar, UISearchBarDelegate
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
     {
-        if #available(iOS 10.0, *) {
-            self.searchTimer?.invalidate()
-            
-            self.searchTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) { _ in
-                self.onStateChanged?(searchText)
-            }
+        self.searchTimer?.invalidate()
+        
+        self.searchTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) { _ in
+            self.onStateChanged?(searchText)
         }
     }
 }

@@ -267,20 +267,10 @@ final class PresentationState
             existing.update(with: new)
         } else if self.refreshControl == nil, let new = new {
             let newControl = RefreshControl.PresentationState(new)
-
-            if #available(iOS 10.0, *) {
-                self.view.collectionView.refreshControl = newControl.view
-            } else {
-                self.view.collectionView.addSubview(newControl.view)
-            }
+            self.view.collectionView.refreshControl = newControl.view
             self.refreshControl = newControl
-        } else if let existing = refreshControl, new == nil {
-            if #available(iOS 10.0, *) {
-                self.view.collectionView.refreshControl = nil
-            } else {
-                existing.view.removeFromSuperview()
-            }
-
+        } else if self.refreshControl != nil, new == nil {
+            self.view.collectionView.refreshControl = nil
             self.refreshControl = nil
         }
     }
