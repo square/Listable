@@ -38,9 +38,7 @@ public final class ListView : UIView
         
         self.keyboardObserver = KeyboardObserver()
         
-        if #available(iOS 10.0, *) {
-            self.collectionView.isPrefetchingEnabled = false
-        }
+        self.collectionView.isPrefetchingEnabled = false
                 
         self.collectionView.dataSource = self.dataSource
         self.collectionView.delegate = self.delegate
