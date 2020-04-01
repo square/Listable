@@ -21,7 +21,7 @@ public final class ListView : UIView
         self.appearance = appearance
         
         self.behavior = Behavior()
-        self.autoScrollingBehavior = .none
+        self.autoScrollAction = .none
         self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
         
         self.storage = Storage()
@@ -156,7 +156,7 @@ public final class ListView : UIView
         // Nothing right now.
     }
 
-    public var autoScrollingBehavior : AutoScrollingBehavior
+    public var autoScrollAction : AutoScrollAction
     
     public var scrollInsets : ScrollInsets {
         didSet {
@@ -222,7 +222,7 @@ public final class ListView : UIView
         
         // Otherwise, perform scrolling.
         
-        return self.updatePresentationStateAndScroll(toIndexPath: toIndexPath) {
+        return self.updatePresentationStateForScroll(toIndexPath: toIndexPath) {
             self.collectionView.scrollToItem(
                 at: toIndexPath,
                 at: position.position.UICollectionViewScrollPosition,
@@ -232,7 +232,7 @@ public final class ListView : UIView
     }
 
     @discardableResult
-    public func scrollToBottom(animated : Bool = true) -> Bool {
+    public func scrollToBottom(animated : Bool = false) -> Bool {
 
         // Make sure we have a valid last index path.
 
@@ -242,7 +242,7 @@ public final class ListView : UIView
 
         // Perform scrolling.
 
-        return self.updatePresentationStateAndScroll(toIndexPath: toIndexPath)  {
+        return self.updatePresentationStateForScroll(toIndexPath: toIndexPath)  {
             let contentHeight = self.layout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
@@ -272,7 +272,7 @@ public final class ListView : UIView
             animatesChanges: true,
             appearance: self.appearance,
             behavior: self.behavior,
-            autoScrollingBehavior: self.autoScrollingBehavior,
+            autoScrollAction: self.autoScrollAction,
             scrollInsets: self.scrollInsets,
             build: builder
         )
@@ -321,7 +321,7 @@ public final class ListView : UIView
     {
         self.appearance = description.appearance
         self.behavior = description.behavior
-        self.autoScrollingBehavior = description.autoScrollingBehavior
+        self.autoScrollAction = description.autoScrollAction
         self.scrollInsets = description.scrollInsets
         
         self.setContent(animated: description.animatesChanges, description.content)
@@ -584,11 +584,12 @@ public final class ListView : UIView
         if self.bounds.isEmpty {
             visibleSlice = Content.Slice()
         } else {
-            switch self.autoScrollingBehavior {
+            switch self.autoScrollAction {
             case .none:
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-            case .scrollToItemOnInsert:
-                visibleSlice = Content.Slice(containsAllItems: true, content: self.storage.allContent)
+            case .scrollToItemOnInsert(let autoScrollItem, _):
+                let indexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) ?? indexPath
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
             }
         }
 
@@ -615,7 +616,7 @@ public final class ListView : UIView
             callerCompletion(finished)
         }
 
-        if case let AutoScrollingBehavior.scrollToItemOnInsert(autoScrollItem, autoScrollPosition) = self.autoScrollingBehavior,
+        if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition) = self.autoScrollAction,
             !diff.old.contains(item: autoScrollItem), diff.new.contains(item: autoScrollItem)
         {
             self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: true)
@@ -626,7 +627,7 @@ public final class ListView : UIView
         self.updateCollectionViewSelections(animated: reason.animated)
     }
 
-    private func updatePresentationStateAndScroll(toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
+    private func updatePresentationStateForScroll(toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
 
         // Make sure we have a last loaded index path.
 

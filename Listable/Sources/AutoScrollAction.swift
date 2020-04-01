@@ -1,5 +1,5 @@
 //
-//  AutoScrollingBehavior.swift
+//  AutoScrollAction.swift
 //  Listable
 //
 //  Created by Kyle Bashour on 3/30/20.
@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum AutoScrollingBehavior
+public enum AutoScrollAction
 {
     /// The list never automatically scrolls.
     case none
