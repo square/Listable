@@ -94,6 +94,8 @@ struct SectionedDiff<Section, Item>
         let moved : [Moved]
         let noChange : [NoChange]
         
+        let addedItemIdentifiers : Set<AnyIdentifier>
+        
         let sectionsChangeCount : Int
         let itemsChangeCount : Int
         
@@ -156,6 +158,25 @@ struct SectionedDiff<Section, Item>
                     )
                 )
             }
+            
+            let addedIDs : [[AnyIdentifier]] = self.added.map {
+                let items = configuration.section.items($0.newValue)
+                return items.map { configuration.item.identifier($0) }
+            }
+            
+            let movedIDs : [[AnyIdentifier]] = self.moved.map {
+                let items = configuration.section.items($0.newValue)
+                return items.map { configuration.item.identifier($0) }
+            }
+            
+            let noChangeIDs : [[AnyIdentifier]] = self.noChange.map {
+                let items = configuration.section.items($0.newValue)
+                return items.map { configuration.item.identifier($0) }
+            }
+            
+            let allIDs = addedIDs.flatMap { $0 } + movedIDs.flatMap { $0 } + noChangeIDs.flatMap { $0 }
+            
+            self.addedItemIdentifiers = Set(allIDs)
             
             self.sectionsChangeCount = self.added.count
                 + self.removed.count
