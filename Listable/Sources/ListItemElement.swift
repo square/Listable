@@ -54,6 +54,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
             animatesChanges: true,
             appearance: .init(),
             behavior: .init(),
+            autoScrollingBehavior: .none,
             scrollInsets: .init(),
             build: build
         )

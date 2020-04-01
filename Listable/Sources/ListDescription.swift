@@ -14,6 +14,7 @@ public struct ListDescription
     
     public var appearance : Appearance
     public var behavior : Behavior
+    public var autoScrollingBehavior : AutoScrollingBehavior
     public var scrollInsets : ScrollInsets
     
     public var content : Content
@@ -24,6 +25,7 @@ public struct ListDescription
         animatesChanges: Bool,
         appearance : Appearance,
         behavior : Behavior,
+        autoScrollingBehavior : AutoScrollingBehavior,
         scrollInsets : ScrollInsets,
         build : Build
     )
@@ -31,6 +33,7 @@ public struct ListDescription
         self.animatesChanges = animatesChanges
         self.appearance = appearance
         self.behavior = behavior
+        self.autoScrollingBehavior = autoScrollingBehavior
         self.scrollInsets = scrollInsets
         
         self.content = Content()

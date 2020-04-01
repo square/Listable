@@ -21,6 +21,7 @@ public final class ListView : UIView
         self.appearance = appearance
         
         self.behavior = Behavior()
+        self.autoScrollingBehavior = .none
         self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
         
         self.storage = Storage()
@@ -154,7 +155,22 @@ public final class ListView : UIView
     {
         // Nothing right now.
     }
-    
+
+    public var autoScrollingBehavior : AutoScrollingBehavior {
+        didSet {
+            guard oldValue != self.autoScrollingBehavior else {
+                return
+            }
+
+            self.applyAutoScrollingBehavior()
+        }
+    }
+
+    private func applyAutoScrollingBehavior()
+    {
+        // Nothing right now.
+    }
+
     public var scrollInsets : ScrollInsets {
         didSet {
             guard oldValue != self.scrollInsets else {
@@ -261,6 +277,7 @@ public final class ListView : UIView
             animatesChanges: true,
             appearance: self.appearance,
             behavior: self.behavior,
+            autoScrollingBehavior: self.autoScrollingBehavior,
             scrollInsets: self.scrollInsets,
             build: builder
         )
@@ -309,6 +326,7 @@ public final class ListView : UIView
     {
         self.appearance = description.appearance
         self.behavior = description.behavior
+        self.autoScrollingBehavior = description.autoScrollingBehavior
         self.scrollInsets = description.scrollInsets
         
         self.setContent(animated: description.animatesChanges, description.content)
@@ -532,10 +550,6 @@ public final class ListView : UIView
             self.updateCollectionViewConfiguration()
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
 
-            if self.behavior.pinItemsToBottom {
-                self.scrollToBottom()
-            }
-            
         case .didEndDecelerating:
             if presentationStateTruncated {
                 self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
@@ -574,14 +588,17 @@ public final class ListView : UIView
 
         if self.bounds.isEmpty {
             visibleSlice = Content.Slice()
-        } else if self.behavior.pinItemsToBottom {
-            visibleSlice = Content.Slice(containsAllItems: true, content: self.storage.allContent)
         } else {
-            visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+            switch self.autoScrollingBehavior {
+            case .none:
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+            case .scrollToBottomForNewItems:
+                visibleSlice = Content.Slice(containsAllItems: true, content: self.storage.allContent)
+            }
         }
-        
+
         let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
-                
+
         let updateBackingData = {
             presentationState.update(with: diff, slice: visibleSlice)
         }
@@ -601,6 +618,15 @@ public final class ListView : UIView
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
+        }
+
+        // TODO: this is horrrrible
+        let oldLastIndex = IndexPath(item: (diff.old.last?.items.count ?? 1) - 1, section: diff.old.count - 1)
+        let newLastIndex = IndexPath(item: (diff.new.last?.items.count ?? 1) - 1, section: diff.new.count - 1)
+        let isNewItemAppended = (newLastIndex.section > oldLastIndex.section || newLastIndex.item > oldLastIndex.item) && diff.changes.itemsChangeCount == 1
+
+        if isNewItemAppended && self.autoScrollingBehavior == .scrollToBottomForNewItems {
+            self.scrollToBottom()
         }
 
         // Update info for new contents.
