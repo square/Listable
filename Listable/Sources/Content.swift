@@ -101,6 +101,8 @@ public struct Content
         return nil
     }
 
+    /// This function returns the true last index path of the content,
+    /// while the one in PresentationState is the last index of the loaded content.
     public func lastIndexPath() -> IndexPath?
     {
         guard let lastSectionIndexWithItems = sections.lastIndex(where: { !$0.items.isEmpty }) else {
