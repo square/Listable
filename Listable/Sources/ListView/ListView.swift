@@ -156,21 +156,8 @@ public final class ListView : UIView
         // Nothing right now.
     }
 
-    public var autoScrollingBehavior : AutoScrollingBehavior {
-        didSet {
-            guard oldValue != self.autoScrollingBehavior else {
-                return
-            }
-
-            self.applyAutoScrollingBehavior()
-        }
-    }
-
-    private func applyAutoScrollingBehavior()
-    {
-        // Nothing right now.
-    }
-
+    public var autoScrollingBehavior : AutoScrollingBehavior
+    
     public var scrollInsets : ScrollInsets {
         didSet {
             guard oldValue != self.scrollInsets else {
@@ -216,12 +203,20 @@ public final class ListView : UIView
         guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
             return false
         }
+
+        // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
         
+        let isAlreadyVisible: Bool = {
+            guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
+                return false
+            }
+
+            return self.collectionView.contentFrame.contains(frame)
+        }()
+
         // If the item is already visible and that's good enough, return.
-        
-        let isAlreadyVisible = self.collectionView.indexPathsForVisibleItems.contains(toIndexPath)
-        
-        if  isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+
+        if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
             return true
         }
         
@@ -592,7 +587,7 @@ public final class ListView : UIView
             switch self.autoScrollingBehavior {
             case .none:
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-            case .scrollToBottomForNewItems:
+            case .scrollToItemOnInsert:
                 visibleSlice = Content.Slice(containsAllItems: true, content: self.storage.allContent)
             }
         }
@@ -620,13 +615,10 @@ public final class ListView : UIView
             callerCompletion(finished)
         }
 
-        // TODO: this is horrrrible
-        let oldLastIndex = IndexPath(item: (diff.old.last?.items.count ?? 1) - 1, section: diff.old.count - 1)
-        let newLastIndex = IndexPath(item: (diff.new.last?.items.count ?? 1) - 1, section: diff.new.count - 1)
-        let isNewItemAppended = (newLastIndex.section > oldLastIndex.section || newLastIndex.item > oldLastIndex.item) && diff.changes.itemsChangeCount == 1
-
-        if isNewItemAppended && self.autoScrollingBehavior == .scrollToBottomForNewItems {
-            self.scrollToBottom()
+        if case let AutoScrollingBehavior.scrollToItemOnInsert(autoScrollItem, autoScrollPosition) = self.autoScrollingBehavior,
+            !diff.old.contains(item: autoScrollItem), diff.new.contains(item: autoScrollItem)
+        {
+            self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: true)
         }
 
         // Update info for new contents.
@@ -853,5 +845,12 @@ fileprivate extension UIScrollView
             self.alwaysBounceVertical = false
             self.alwaysBounceHorizontal = bounce
         }
+    }
+}
+
+extension Array where Element == Section {
+    func contains(item: AnyItem) -> Bool {
+        return self.flatMap { $0.items }
+            .contains { $0.identifier == item.identifier }
     }
 }

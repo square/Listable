@@ -56,8 +56,21 @@ final class BottomPinnedViewController : UIViewController
     private func updateItems() {
         self.list.setContent { list in
             list.appearance = demoAppearance
-            list.autoScrollingBehavior = .scrollToBottomForNewItems
-            list += Section(identifier: "first", items: items.map { Item(with: $0) })
+
+            let items = self.items.map { Item(with: $0) }
+            list += Section(identifier: "items", items: items)
+
+            if let last = items.last {
+                list.autoScrollingBehavior = .scrollToItemOnInsert(last, position: .init(position: .bottom))
+            }
+
+            let itemization = [
+                BottomPinnedItem(text: "Tax $2.00"),
+                BottomPinnedItem(text: "Discount $4.00"),
+                BottomPinnedItem(text: "Total $10.00"),
+            ]
+
+            list += Section(identifier: "itemization", items: itemization.map { Item(with: $0) })
         }
     }
 }

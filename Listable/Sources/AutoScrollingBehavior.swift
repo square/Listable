@@ -8,11 +8,11 @@
 import Foundation
 
 
-public enum AutoScrollingBehavior : Equatable
+public enum AutoScrollingBehavior
 {
     /// The list never automatically scrolls.
     case none
 
-    /// Scrolls to the bottom when a new item is inserted at the bottom of the list.
-    case scrollToBottomForNewItems
+    /// Scrolls to the specified item when the list is updated.
+    case scrollToItemOnInsert(_ item: AnyItem, position: ItemScrollPosition)
 }
