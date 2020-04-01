@@ -165,12 +165,12 @@ struct SectionedDiff<Section, Item>
             }
             
             let movedIDs : [[AnyIdentifier]] = self.moved.map {
-                let items = configuration.section.items($0.newValue)
+                let items = $0.itemChanges.added
                 return items.map { configuration.item.identifier($0) }
             }
             
             let noChangeIDs : [[AnyIdentifier]] = self.noChange.map {
-                let items = configuration.section.items($0.newValue)
+                let items = $0.itemChanges.added
                 return items.map { configuration.item.identifier($0) }
             }
             
