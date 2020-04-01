@@ -848,7 +848,7 @@ fileprivate extension UIScrollView
     }
 }
 
-extension Array where Element == Section {
+private extension Array where Element == Section {
     func contains(item: AnyItem) -> Bool {
         return self.flatMap { $0.items }
             .contains { $0.identifier == item.identifier }
