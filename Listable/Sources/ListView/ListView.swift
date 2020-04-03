@@ -617,7 +617,7 @@ public final class ListView : UIView
         }
 
         if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition) = self.autoScrollAction,
-            !diff.old.contains(item: autoScrollItem), diff.new.contains(item: autoScrollItem)
+            diff.changes.addedItemIdentifiers.contains(autoScrollItem.identifier)
         {
             self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: true)
         }
@@ -846,12 +846,5 @@ fileprivate extension UIScrollView
             self.alwaysBounceVertical = false
             self.alwaysBounceHorizontal = bounce
         }
-    }
-}
-
-private extension Array where Element == Section {
-    func contains(item: AnyItem) -> Bool {
-        return self.flatMap { $0.items }
-            .contains { $0.identifier == item.identifier }
     }
 }
