@@ -61,7 +61,7 @@ final class BottomPinnedViewController : UIViewController
             list += Section(identifier: "items", items: items)
 
             if let last = items.last {
-                list.autoScrollAction = .scrollToItemOnInsert(last, position: .init(position: .bottom))
+                list.autoScrollAction = .scrollToItemOnInsert(last, position: .init(position: .bottom), animated: true)
             }
 
             let itemization = [

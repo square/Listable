@@ -587,7 +587,7 @@ public final class ListView : UIView
             switch self.autoScrollAction {
             case .none:
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-            case .scrollToItemOnInsert(let autoScrollItem, _):
+            case .scrollToItemOnInsert(let autoScrollItem, _, _):
                 let indexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) ?? indexPath
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
             }
@@ -616,10 +616,10 @@ public final class ListView : UIView
             callerCompletion(finished)
         }
 
-        if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition) = self.autoScrollAction,
+        if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition, animated) = self.autoScrollAction,
             diff.changes.addedItemIdentifiers.contains(autoScrollItem.identifier)
         {
-            self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: true)
+            self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: animated)
         }
 
         // Update info for new contents.
