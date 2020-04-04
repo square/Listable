@@ -585,10 +585,16 @@ public final class ListView : UIView
             visibleSlice = Content.Slice()
         } else {
             switch self.autoScrollAction {
-            case .none:
-                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
             case .scrollToItemOnInsert(let autoScrollItem, _, _):
-                let indexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) ?? indexPath
+                guard let autoScrollIndexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) else {
+                    fallthrough
+                }
+
+                let greaterIndexPath = max(autoScrollIndexPath, indexPath)
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
+
+            case .none:
+
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
             }
         }
