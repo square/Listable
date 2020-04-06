@@ -56,10 +56,10 @@ public final class DemosRootViewController : UIViewController
                 })
 
                 section += Item(
-                    with: DemoItem(text: "Bottom Pinning"),
+                    with: DemoItem(text: "Auto Scrolling (Bottom Pin)"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
-                        self.push(BottomPinnedViewController())
+                        self.push(AutoScrollingViewController())
                 })
                 
                 section += Item(

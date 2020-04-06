@@ -14,7 +14,7 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 
-final class BottomPinnedViewController : UIViewController
+final class AutoScrollingViewController : UIViewController
 {
     let list = ListView()
 

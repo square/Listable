@@ -593,9 +593,6 @@ public final class ListView : UIView
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
 
-                // After performing the action once, we discard it
-                self.autoScrollAction = .none
-
             case .none:
 
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
