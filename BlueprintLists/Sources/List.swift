@@ -24,6 +24,7 @@ public struct List : BlueprintUI.Element
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             appearance: .init(),
             behavior: .init(),
+            autoScrollAction: .none,
             scrollInsets: .init(),
             build: build
         )
