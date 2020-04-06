@@ -222,7 +222,7 @@ public final class ListView : UIView
         
         // Otherwise, perform scrolling.
         
-        return self.updatePresentationStateForScroll(toIndexPath: toIndexPath) {
+        return self.preparePresentationStateForScroll(toIndexPath: toIndexPath) {
             self.collectionView.scrollToItem(
                 at: toIndexPath,
                 at: position.position.UICollectionViewScrollPosition,
@@ -242,7 +242,7 @@ public final class ListView : UIView
 
         // Perform scrolling.
 
-        return self.updatePresentationStateForScroll(toIndexPath: toIndexPath)  {
+        return self.preparePresentationStateForScroll(toIndexPath: toIndexPath)  {
             let contentHeight = self.layout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
@@ -633,7 +633,7 @@ public final class ListView : UIView
         self.updateCollectionViewSelections(animated: reason.animated)
     }
 
-    private func updatePresentationStateForScroll(toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
+    private func preparePresentationStateForScroll(toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
 
         // Make sure we have a last loaded index path.
 
