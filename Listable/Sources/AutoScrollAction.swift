@@ -8,8 +8,8 @@
 import Foundation
 
 
-public enum AutoScrollAction
-{
+/// Options for auto-scrolling to items when the list is updated.
+public enum AutoScrollAction {
     /// The list never automatically scrolls.
     case none
 

@@ -105,6 +105,8 @@ public final class ListView : UIView
     //
     
     private var sourcePresenter : AnySourcePresenter
+
+    private var autoScrollAction : AutoScrollAction
     
     private let dataSource : DataSource
     private let delegate : Delegate
@@ -155,8 +157,6 @@ public final class ListView : UIView
     {
         // Nothing right now.
     }
-
-    public var autoScrollAction : AutoScrollAction
     
     public var scrollInsets : ScrollInsets {
         didSet {
@@ -222,7 +222,7 @@ public final class ListView : UIView
         
         // Otherwise, perform scrolling.
         
-        return self.preparePresentationStateForScroll(toIndexPath: toIndexPath) {
+        return self.preparePresentationStateForScroll(to: toIndexPath) {
             self.collectionView.scrollToItem(
                 at: toIndexPath,
                 at: position.position.UICollectionViewScrollPosition,
@@ -242,7 +242,7 @@ public final class ListView : UIView
 
         // Perform scrolling.
 
-        return self.preparePresentationStateForScroll(toIndexPath: toIndexPath)  {
+        return self.preparePresentationStateForScroll(to: toIndexPath)  {
             let contentHeight = self.layout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
@@ -593,6 +593,9 @@ public final class ListView : UIView
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
 
+                // After performing the action once, we discard it
+                self.autoScrollAction = .none
+
             case .none:
 
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
@@ -633,7 +636,7 @@ public final class ListView : UIView
         self.updateCollectionViewSelections(animated: reason.animated)
     }
 
-    private func preparePresentationStateForScroll(toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
+    private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
 
         // Make sure we have a last loaded index path.
 
