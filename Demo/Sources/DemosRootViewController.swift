@@ -134,7 +134,7 @@ public final class DemosRootViewController : UIViewController
                     image: nil, onTap: { _ in
                         print("Delete")
                         return true
-                    }), performsFirstOnFullSwipe: true),
+                    }), performsFirstOnFullSwipe: false),
                     onSelect : { _ in
                         self.push(DemoTableViewController())
                 })

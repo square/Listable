@@ -152,7 +152,7 @@ public extension ItemElementAppearance where Self:Equatable
 
 
 /**
- TODO
+ Currently unsupported. Custom implementation for the swipe action views. 
  */
 public protocol ItemElementSwipeActionsAppearance
 {
@@ -160,12 +160,18 @@ public protocol ItemElementSwipeActionsAppearance
     // MARK: Creating & Providing Views
     //
     
-    /// TODO
+    /// The type of the content view of the swipe action view behind the element.
+    /// The content view is drawn under the elements ContentView
     associatedtype ContentView:UIView
     
     /**
-     TODO
-     */
+    Create and return a new set of views to be used to render the element.
+
+    These views are reused by the list view, similar to collection view or table view cell recycling.
+
+    Do not do configuration in this method that will be changed by your app's theme or appearance – instead
+    do that work in apply(to:), so the appearance will be updated if the appearance of elements changes.
+    */
     static func createView(frame : CGRect) -> ContentView
     
     //
@@ -173,7 +179,10 @@ public protocol ItemElementSwipeActionsAppearance
     //
     
     /**
-     TODO
+
+     Called to apply the appearance to a given set of views before they are displayed on screen, or when an item position changes.
+
+     Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
      */
     func apply(swipeActions : SwipeActions, to view : ContentView)
 }

@@ -14,7 +14,7 @@ protocol SwipeControllerDelegate: class {
 
 }
 
-class SwipeController: NSObject {
+final class SwipeController {
 
     enum State {
         case pending
@@ -51,8 +51,6 @@ class SwipeController: NSObject {
         self.containerView = containerView
         self.gestureRecognizer = UIPanGestureRecognizer()
         self.swipeView = swipeView
-
-        super.init()
     }
 
     func configure()
@@ -153,11 +151,15 @@ class SwipeController: NSObject {
 
     func calculateNewOrigin(clearTranslation: Bool = false) -> CGPoint
     {
-        let translationInContainer: CGPoint = gestureRecognizer.translation(in: containerView!)
-        // TODO Factor in Velocity
-        let oldPoint = contentView!.frame.origin.x
+        guard let containerView = self.containerView, let contentView = self.contentView else {
+            return CGPoint.zero
+        }
+
+        let translationInContainer: CGPoint = gestureRecognizer.translation(in: containerView)
+        let oldPoint = contentView.frame.origin.x
+
         if clearTranslation {
-            gestureRecognizer.setTranslation(.zero, in: containerView!)
+            gestureRecognizer.setTranslation(.zero, in: containerView)
         }
 
         return CGPoint(x: oldPoint + translationInContainer.x, y: 0)
@@ -217,19 +219,19 @@ extension SwipeController {
         private var action: SwipeAction
 
         private var imageView: UIImageView?
-        private var titleView: UILabel!
-        private var gestureRecognizer: UITapGestureRecognizer!
+        private var titleView: UILabel?
+        private var gestureRecognizer: UITapGestureRecognizer
         private var stackView = UIStackView()
 
         init(action: SwipeAction)
         {
             self.action = action
             self.state = .pending
+            self.gestureRecognizer = UITapGestureRecognizer()
             super.init(frame: .zero)
 
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
+            self.gestureRecognizer.addTarget(self, action: #selector(onTap))
             self.addGestureRecognizer(gestureRecognizer)
-            self.gestureRecognizer = gestureRecognizer
 
             self.backgroundColor = action.backgroundColor ?? .red
 
@@ -271,7 +273,11 @@ extension SwipeController {
 
         func preferredSize() -> CGSize
         {
-            var size = self.titleView.sizeThatFits(self.bounds.size)
+            guard let titleView = self.titleView else {
+                return self.sizeThatFits(UIScreen.main.bounds.size)
+            }
+
+            var size = titleView.sizeThatFits(self.bounds.size)
             size.width += SwipeView.padding.left + SwipeView.padding.right
             return size
         }
