@@ -378,7 +378,7 @@ internal extension ListViewLayout
             let direction = self.appearance.direction
             
             let contentHeight = direction.height(for: self.contentSize)
-            let viewHeight = direction.height(for: collectionView.bounds.size)
+            let viewHeight = direction.height(for: collectionView.contentFrame.size)
             
             // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
             // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
