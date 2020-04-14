@@ -129,12 +129,15 @@ public final class DemosRootViewController : UIViewController
                     with: DemoItem(text: "Swipe To Action"),
                     selection: .isSelectable(isSelected: false),
                     swipeActions: SwipeActions(SwipeAction(
-                    title: "Delete",
-                    backgroundColor: .purple,
-                    image: nil, onTap: { _ in
-                        print("Delete")
-                        return true
-                    }), performsFirstOnFullSwipe: false),
+                        title: "Delete",
+                        backgroundColor: .purple,
+                        image: nil,
+                        onTap: { _ in
+                            print("Deleted")
+                            return true
+                        }
+                    ),performsFirstOnFullSwipe: true),
+                    swipeActionsAppearance: DefaultItemElementSwipeActionsAppearance(),
                     onSelect : { _ in
                         self.push(DemoTableViewController())
                 })

@@ -9,48 +9,59 @@ import Foundation
 
 protocol SwipeControllerDelegate: class {
 
-    func swipeController(panDidMove controller: SwipeController)
-    func swipeController(panDidEnd controller: SwipeController)
+    func swipeControllerPanDidMove()
+    func swipeControllerPanDidEnd()
 
 }
 
-final class SwipeController {
+public enum SwipeControllerState {
 
-    enum State {
-        case pending
-        case swiping(swipeThrough: Bool)
-        case locked
-        case finished
-    }
+    // Docked position without the action view showing
+    case pending
+    // Viewer panning revealing the actions view, passedSwipeThroughThreshold or not
+    case swiping(passedSwipeThroughThreshold: Bool)
+    // Pan was released and Actions are visible occupying their required space from preferredSize()
+    case locked
+    // Pan has swiped all the way to the end, only when isSwipeThroughEnabled is true
+    case finished
 
-    var state: State = .pending {
+}
+
+final class SwipeController<Appearance: ItemElementSwipeActionsAppearance> {
+
+    var state: SwipeControllerState = .pending {
         didSet {
-            self.swipeView?.state = state
+            if let swipeView = self.swipeView {
+                appearance.apply(swipeControllerState: state, to: swipeView)
+            }
         }
     }
 
-    var actions: SwipeActions
+    private (set) var actions: SwipeActions
 
-    weak var swipeView: SwipeView?
-    weak var contentView: UIView?
-    weak var containerView: UIView?
+    private(set) var appearance: Appearance
+    private(set) weak var swipeView: Appearance.ContentView?
+    private(set) weak var contentView: UIView?
+    private(set) weak var containerView: UIView?
+    private(set) var gestureRecognizer: UIPanGestureRecognizer
+
     weak var delegate: SwipeControllerDelegate?
 
     private weak var collectionView: UICollectionView?
 
-    private(set) var gestureRecognizer: UIPanGestureRecognizer
-
     init(
+        appearance: Appearance,
+        swipeView: Appearance.ContentView,
         actions: SwipeActions,
         contentView: UIView,
-        containerView: UIView,
-        swipeView: SwipeView)
-    {
+        containerView: UIView
+    ) {
+        self.appearance = appearance
+        self.swipeView = swipeView
         self.actions = actions
         self.contentView = contentView
         self.containerView = containerView
         self.gestureRecognizer = UIPanGestureRecognizer()
-        self.swipeView = swipeView
     }
 
     func configure()
@@ -63,15 +74,6 @@ final class SwipeController {
     {
         containerView?.removeGestureRecognizer(self.gestureRecognizer)
     }
-
-    func performSwipeThroughAction()
-    {
-        if let action = actions.actions.first {
-            let _ = action.onTap(action)
-        }
-    }
-
-    // MARK: - Panning
 
     @objc func onPan(_ pan: UIPanGestureRecognizer)
     {
@@ -89,65 +91,18 @@ final class SwipeController {
         }
     }
 
-    private func panChanged(_ pan: UIPanGestureRecognizer)
-    {
-        let originInContainer = calculateNewOrigin()
-        state = panningState(originInContainer: originInContainer)
-
-        delegate?.swipeController(panDidMove: self)
-    }
-
-    private func panEnded(_ pan: UIPanGestureRecognizer)
-    {
-        let originInContainer = calculateNewOrigin()
-        state = endState(originInContainer: originInContainer)
-
-        delegate?.swipeController(panDidEnd: self)
-
-        if case .finished = state, swipeThroughEnabled {
-            self.performSwipeThroughAction()
-        }
-    }
-
-    private func panningState(originInContainer: CGPoint) -> State
-    {
-        if originInContainer.x > 0 {
-            return .pending
-        } else
-            if originInContainer.x < self.swipeThroughOriginX && self.swipeThroughEnabled {
-            return .swiping(swipeThrough: true)
-        } else {
-            return .swiping(swipeThrough: false)
-        }
-    }
-
-    private func endState(originInContainer: CGPoint) -> State
-    {
-        guard let swipeView = swipeView else { fatalError() }
-
-        let holdXPosition = -swipeView.preferredSize().width
-
-        if originInContainer.x < swipeThroughOriginX && swipeThroughEnabled  {
-            return .finished
-        } else if originInContainer.x < holdXPosition {
-            return .locked
-        } else {
-            return .pending
-        }
-
-    }
-
-    // MARK: - UICollectionView
-
     @objc func collectionViewPan()
     {
         self.state = .pending
-        self.delegate?.swipeController(panDidEnd: self)
+        self.delegate?.swipeControllerPanDidEnd()
         self.collectionView?.panGestureRecognizer.removeTarget(self, action: nil)
         self.collectionView = nil
     }
 
-    // ARK: - Helpers
+}
+
+// MARK: - Panning
+extension SwipeController {
 
     func calculateNewOrigin(clearTranslation: Bool = false) -> CGPoint
     {
@@ -165,7 +120,67 @@ final class SwipeController {
         return CGPoint(x: oldPoint + translationInContainer.x, y: 0)
     }
 
-    var swipeThroughEnabled: Bool
+    func performSwipeThroughAction()
+    {
+        if let action = actions.actions.first {
+            let _ = action.onTap(action)
+        }
+    }
+
+    private func panChanged(_ pan: UIPanGestureRecognizer)
+    {
+        let originInContainer = calculateNewOrigin()
+        state = panningState(originInContainer: originInContainer)
+
+        delegate?.swipeControllerPanDidMove()
+    }
+
+    private func panEnded(_ pan: UIPanGestureRecognizer)
+    {
+        let originInContainer = calculateNewOrigin()
+        state = endState(originInContainer: originInContainer)
+
+        delegate?.swipeControllerPanDidEnd()
+
+        if case .finished = state, isSwipeThroughEnabled {
+            self.performSwipeThroughAction()
+        }
+    }
+
+    private func panningState(originInContainer: CGPoint) -> SwipeControllerState
+    {
+        if originInContainer.x > 0 {
+            return .pending
+        } else
+            if originInContainer.x < self.swipeThroughOriginX && isSwipeThroughEnabled {
+            return .swiping(passedSwipeThroughThreshold: true)
+        } else {
+            return .swiping(passedSwipeThroughThreshold: false)
+        }
+    }
+
+    private func endState(originInContainer: CGPoint) -> SwipeControllerState
+    {
+        guard let swipeView = swipeView else { fatalError() }
+
+        let holdXPosition = -appearance.preferredSize(for: swipeView).width
+
+        if originInContainer.x < swipeThroughOriginX && isSwipeThroughEnabled  {
+            return .finished
+        } else if originInContainer.x < holdXPosition {
+            return .locked
+        } else {
+            return .pending
+        }
+
+    }
+
+}
+
+// MARK: - Helpers
+extension SwipeController {
+
+    var isSwipeThroughEnabled: Bool
     {
         return actions.performsFirstOnFullSwipe
     }
@@ -190,102 +205,6 @@ final class SwipeController {
 
         return nil
 
-    }
-}
-
-extension SwipeController {
-
-    class SwipeView: UIView {
-
-        private static var padding: UIEdgeInsets
-        {
-            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        }
-
-        var state: SwipeController.State
-        {
-            didSet {
-                UIView.animate(withDuration: 0.2) {
-                    switch self.state {
-                    case .pending, .swiping(swipeThrough: false), .locked:
-                        self.stackView.alignment = .center
-                    case .swiping(swipeThrough: true), .finished:
-                        self.stackView.alignment = .leading
-                    }
-                }
-            }
-        }
-
-        private var action: SwipeAction
-
-        private var imageView: UIImageView?
-        private var titleView: UILabel?
-        private var gestureRecognizer: UITapGestureRecognizer
-        private var stackView = UIStackView()
-
-        init(action: SwipeAction)
-        {
-            self.action = action
-            self.state = .pending
-            self.gestureRecognizer = UITapGestureRecognizer()
-            super.init(frame: .zero)
-
-            self.gestureRecognizer.addTarget(self, action: #selector(onTap))
-            self.addGestureRecognizer(gestureRecognizer)
-
-            self.backgroundColor = action.backgroundColor ?? .red
-
-            if let title = action.title {
-                let titleView = UILabel()
-                titleView.text = title
-                titleView.textColor = .white
-                titleView.lineBreakMode = .byClipping
-                self.stackView.addArrangedSubview(titleView)
-                self.titleView = titleView
-            }
-
-            if let image = action.image {
-                let imageView = UIImageView(image: image)
-                self.stackView.addArrangedSubview(imageView)
-                self.imageView = imageView
-            }
-
-            stackView.spacing = 2
-            stackView.alignment = .center
-            stackView.axis = .vertical
-            stackView.distribution = .fill
-            stackView.isLayoutMarginsRelativeArrangement = true
-            stackView.layoutMargins = SwipeView.padding
-
-            self.addSubview(self.stackView)
-        }
-
-        required init?(coder: NSCoder)
-        {
-            fatalError("init(coder:) has not been implemented")
-        }
-
-        override func layoutSubviews()
-        {
-            super.layoutSubviews()
-            self.stackView.frame = self.bounds
-        }
-
-        func preferredSize() -> CGSize
-        {
-            guard let titleView = self.titleView else {
-                return self.sizeThatFits(UIScreen.main.bounds.size)
-            }
-
-            var size = titleView.sizeThatFits(self.bounds.size)
-            size.width += SwipeView.padding.left + SwipeView.padding.right
-            return size
-        }
-
-        @objc func onTap()
-        {
-            let _ = self.action.onTap(action)
-        }
     }
 
 }

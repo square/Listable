@@ -37,7 +37,7 @@ public struct SwipeAction
     public typealias OnTap = (SwipeAction) -> Bool
     public var onTap : OnTap
     
-    public init(title: String?, backgroundColor: UIColor, image: UIImage? = nil, onTap : @escaping OnTap)
+    public init(title: String, backgroundColor: UIColor, image: UIImage? = nil, onTap : @escaping OnTap)
     {
         self.title = title
         self.backgroundColor = backgroundColor

@@ -47,6 +47,7 @@ public extension Listable.Item where Element : BlueprintItemElement
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,
+        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
@@ -61,6 +62,7 @@ public extension Listable.Item where Element : BlueprintItemElement
             layout: layout,
             selection: selection,
             swipeActions: swipeActions,
+            swipeActionsAppearance: swipeActionsAppearance,
             reordering: reordering,
             bind: bind,
             onDisplay: onDisplay,
@@ -84,6 +86,7 @@ public extension BlueprintItemElement
     {
         view.element = self.element(with: info)
     }
+    
 }
 
 

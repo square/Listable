@@ -180,11 +180,27 @@ public protocol ItemElementSwipeActionsAppearance
     
     /**
 
-     Called to apply the appearance to a given set of views before they are displayed on screen, or when an item position changes.
+     Called to apply the actions appearance to a given set of views before they are displayed on screen, or when an item position changes.
 
-     Eg, this is where you would set fonts, spacing, colors, etc, to apply your app's theme.
+     Eg, this is where you would set fonts, spacing, colors, etc, actions, to apply your app's theme.
      */
     func apply(swipeActions : SwipeActions, to view : ContentView)
+
+    /**
+
+    Called to apply the current SwipeControllerState to the underlying view.
+
+    Eg, the default iOS action view changes the title label alignment at different states in the swipe animation.
+    */
+    func apply(swipeControllerState: SwipeControllerState, to view : ContentView)
+
+    /**
+
+    Called to apply the actions appearance to a given set of views before they are displayed on screen, or when an item position changes.
+
+    Eg, this is where you would set fonts, spacing, colors, etc, actions, to apply your app's theme.
+    */
+    func preferredSize(for view: ContentView) -> CGSize
 }
 
 
@@ -202,6 +218,14 @@ public struct EmptyItemElementSwipeActionsAppearance : ItemElementSwipeActionsAp
     
     public func apply(swipeActions: SwipeActions, to view: UIView) {
         // Nothing.
+    }
+
+    public func apply(swipeControllerState: SwipeControllerState, to view: UIView) {
+        // no op
+    }
+
+    public func preferredSize(for view: UIView) -> CGSize {
+        return .zero
     }
 }
 
