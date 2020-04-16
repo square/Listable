@@ -17,11 +17,11 @@ protocol SwipeControllerDelegate: class {
 public enum SwipeControllerState {
 
     // Docked position without the action view showing
-    case pending
+    case closed
     // Viewer panning revealing the actions view, passedSwipeThroughThreshold or not
     case swiping(passedSwipeThroughThreshold: Bool)
     // Pan was released and Actions are visible occupying their required space from preferredSize()
-    case locked
+    case open
     // Pan has swiped all the way to the end, only when isSwipeThroughEnabled is true
     case finished
 
@@ -29,7 +29,7 @@ public enum SwipeControllerState {
 
 final class SwipeController<Appearance: ItemElementSwipeActionsAppearance> {
 
-    var state: SwipeControllerState = .pending {
+    private(set) var state: SwipeControllerState = .closed {
         didSet {
             if let swipeView = self.swipeView {
                 appearance.apply(swipeControllerState: state, to: swipeView)
@@ -37,13 +37,13 @@ final class SwipeController<Appearance: ItemElementSwipeActionsAppearance> {
         }
     }
 
-    private (set) var actions: SwipeActions
+    var actions: SwipeActions
 
     private(set) var appearance: Appearance
-    private(set) weak var swipeView: Appearance.ContentView?
-    private(set) weak var contentView: UIView?
-    private(set) weak var containerView: UIView?
-    private(set) var gestureRecognizer: UIPanGestureRecognizer
+    private weak var swipeView: Appearance.ContentView?
+    private weak var contentView: UIView?
+    private weak var containerView: UIView?
+    private var gestureRecognizer: UIPanGestureRecognizer
 
     weak var delegate: SwipeControllerDelegate?
 
@@ -93,7 +93,7 @@ final class SwipeController<Appearance: ItemElementSwipeActionsAppearance> {
 
     @objc func collectionViewPan()
     {
-        self.state = .pending
+        self.state = .closed
         self.delegate?.swipeControllerPanDidEnd()
         self.collectionView?.panGestureRecognizer.removeTarget(self, action: nil)
         self.collectionView = nil
@@ -150,7 +150,7 @@ extension SwipeController {
     private func panningState(originInContainer: CGPoint) -> SwipeControllerState
     {
         if originInContainer.x > 0 {
-            return .pending
+            return .closed
         } else
             if originInContainer.x < self.swipeThroughOriginX && isSwipeThroughEnabled {
             return .swiping(passedSwipeThroughThreshold: true)
@@ -168,9 +168,9 @@ extension SwipeController {
         if originInContainer.x < swipeThroughOriginX && isSwipeThroughEnabled  {
             return .finished
         } else if originInContainer.x < holdXPosition {
-            return .locked
+            return .open
         } else {
-            return .pending
+            return .closed
         }
 
     }

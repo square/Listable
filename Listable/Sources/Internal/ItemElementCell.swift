@@ -10,13 +10,13 @@ import UIKit
 
 final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
 {
-    let content : ContentView
+    let content : ContentContainerView
         
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
         
-        self.content = ContentView(frame: bounds)
+        self.content = ContentContainerView(frame: bounds)
         
         super.init(frame: frame)
         

@@ -655,7 +655,6 @@ final class PresentationState
             )
             
             // Apply Swipe To Action Appearance
-            
             if let actions = self.model.swipeActions, let appearance = self.model.swipeActionsAppearance {
                 cell.content.registerSwipeActionsIfNeeded(actions: actions, appearance: appearance)
             } else {

@@ -103,6 +103,9 @@ public struct Item<Element:ItemElement> : AnyItem
         onDeselect : OnDeselect? = nil
         )
     {
+        assert((swipeActions != nil) == (swipeActionsAppearance != nil),
+               "A swipeActionsAppearance must be provided if swipeActions is provided")
+
         self.element = element
         self.appearance = appearance
         

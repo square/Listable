@@ -10,7 +10,7 @@ import UIKit
 
 extension ItemElementCell
 {
-    final class ContentView : UIView, SwipeControllerDelegate
+    final class ContentContainerView : UIView, SwipeControllerDelegate
     {
         private(set) var contentView : Element.Appearance.ContentView
 
@@ -48,10 +48,10 @@ extension ItemElementCell
             let newOrigin_x: CGFloat
 
             switch swipeController.state {
-            case .pending:
+            case .closed:
                 newOrigin_x = 0
 
-            case .locked:
+            case .open:
                 let lowerThreshold = swipeController.appearance.preferredSize(for: swipeView).width
                 newOrigin_x = -lowerThreshold
 
@@ -92,8 +92,14 @@ extension ItemElementCell
 
         public func registerSwipeActionsIfNeeded(actions: SwipeActions, appearance: Element.SwipeActionsAppearance)
         {
-            guard self.swipeController == nil else { return } // Already Registered
+            // Update if already initialized
+            if let swipeController = self.swipeController, let swipeView = self.swipeView {
+                swipeController.actions = actions
+                appearance.apply(swipeActions: actions, to: swipeView)
+                return
+            }
 
+            // Follow through with initialization
             let swipeView = Element.SwipeActionsAppearance.createView(frame: .zero)
 
             let swipeController = SwipeController<Element.SwipeActionsAppearance>(
@@ -111,9 +117,6 @@ extension ItemElementCell
 
             self.swipeController = swipeController
             self.swipeView = swipeView
-
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
 
             appearance.apply(swipeActions: actions, to: swipeView)
         }

@@ -11,27 +11,24 @@ public final class DefaultItemElementSwipeActionsAppearance: ItemElementSwipeAct
 
     public init() { }
 
-}
-
-// MARK: - ItemElementSwipeActionsAppearance
-public extension DefaultItemElementSwipeActionsAppearance {
-
-    static func createView(frame: CGRect) -> SwipeView {
+    public static func createView(frame: CGRect) -> SwipeView {
         return .init()
     }
 
-    func apply(swipeActions: SwipeActions, to view: SwipeView) {
-        // Currently only supporting first action
+    public func apply(swipeActions: SwipeActions, to view: SwipeView) {
+        guard swipeActions.actions.count <= 1 else {
+            fatalError("More than one action is not currently supported")
+        }
         if let action = swipeActions.actions.first {
             view.action = action
         }
     }
 
-    func apply(swipeControllerState: SwipeControllerState, to view: DefaultItemElementSwipeActionsAppearance.SwipeView) {
-        view.state = swipeControllerState
+    public func apply(swipeControllerState: SwipeControllerState, to view: DefaultItemElementSwipeActionsAppearance.SwipeView) {
+        view.setState(swipeControllerState, animated: true)
     }
 
-    func preferredSize(for view: SwipeView) -> CGSize {
+    public func preferredSize(for view: SwipeView) -> CGSize {
         return view.preferredSize()
     }
 
@@ -44,59 +41,44 @@ extension DefaultItemElementSwipeActionsAppearance {
 
         private static var padding: UIEdgeInsets
         {
-            return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+            return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
 
-        var state: SwipeControllerState
-        {
-            didSet {
-                UIView.animate(withDuration: 0.2) {
-                    switch self.state {
-                    case .pending, .swiping(passedSwipeThroughThreshold: false), .locked:
-                        self.stackView.alignment = .center
-                    case .swiping(passedSwipeThroughThreshold: true), .finished:
-                        self.stackView.alignment = .leading
-                    }
-                }
-            }
-        }
+        private (set) var state: SwipeControllerState
 
         var action: SwipeAction? {
             didSet {
-                self.titleView?.text = action?.title
+                self.titleView.text = action?.title
                 self.backgroundColor = action?.backgroundColor ?? .white
 
                 if let image = action?.image {
-                    if let imageView = self.imageView {
-                        imageView.image = image
-                    } else {
-                        let imageView = UIImageView(image: image)
-                        self.stackView.addArrangedSubview(imageView)
-                        self.imageView = imageView
+                    self.imageView.image = image
+
+                    if !stackView.arrangedSubviews.contains(imageView) {
+                        stackView.addArrangedSubview(imageView)
                     }
                 }
             }
         }
 
-        private var imageView: UIImageView?
-        private var titleView: UILabel?
-        private var gestureRecognizer: UITapGestureRecognizer
-        private var stackView = UIStackView()
+        lazy private var imageView = UIImageView()
+        private let titleView: UILabel
+        private let gestureRecognizer: UITapGestureRecognizer
+        private let stackView = UIStackView()
 
         init()
         {
-            self.state = .pending
+            self.state = .closed
             self.gestureRecognizer = UITapGestureRecognizer()
+            self.titleView = UILabel()
             super.init(frame: .zero)
 
             self.gestureRecognizer.addTarget(self, action: #selector(onTap))
             self.addGestureRecognizer(gestureRecognizer)
 
-            let titleView = UILabel()
             titleView.textColor = .white
             titleView.lineBreakMode = .byClipping
             self.stackView.addArrangedSubview(titleView)
-            self.titleView = titleView
 
             stackView.spacing = 2
             stackView.alignment = .center
@@ -121,10 +103,6 @@ extension DefaultItemElementSwipeActionsAppearance {
 
         func preferredSize() -> CGSize
         {
-            guard let titleView = self.titleView else {
-                return self.sizeThatFits(UIScreen.main.bounds.size)
-            }
-
             var size = titleView.sizeThatFits(self.bounds.size)
             size.width += SwipeView.padding.left + SwipeView.padding.right
             return size
@@ -134,6 +112,21 @@ extension DefaultItemElementSwipeActionsAppearance {
         {
             if let action = self.action {
                 let _ = action.onTap(action)
+            }
+        }
+
+        public func setState(_ state: SwipeControllerState, animated: Bool)
+        {
+            self.state = state
+            if animated {
+                UIView.animate(withDuration: 0.2) {
+                    switch self.state {
+                    case .closed, .swiping(passedSwipeThroughThreshold: false), .open:
+                        self.stackView.alignment = .center
+                    case .swiping(passedSwipeThroughThreshold: true), .finished:
+                        self.stackView.alignment = .leading
+                    }
+                }
             }
         }
     }
