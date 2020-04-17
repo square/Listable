@@ -21,6 +21,7 @@ public final class ListView : UIView
         self.appearance = appearance
         
         self.behavior = Behavior()
+        self.autoScrollAction = .none
         self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
         
         self.storage = Storage()
@@ -38,9 +39,7 @@ public final class ListView : UIView
         
         self.keyboardObserver = KeyboardObserver()
         
-        if #available(iOS 10.0, *) {
-            self.collectionView.isPrefetchingEnabled = false
-        }
+        self.collectionView.isPrefetchingEnabled = false
                 
         self.collectionView.dataSource = self.dataSource
         self.collectionView.delegate = self.delegate
@@ -106,6 +105,8 @@ public final class ListView : UIView
     //
     
     private var sourcePresenter : AnySourcePresenter
+
+    private var autoScrollAction : AutoScrollAction
     
     private let dataSource : DataSource
     private let delegate : Delegate
@@ -202,38 +203,58 @@ public final class ListView : UIView
         guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
             return false
         }
+
+        // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
         
-        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
-            return false
-        }
-        
+        let isAlreadyVisible: Bool = {
+            guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
+                return false
+            }
+
+            return self.collectionView.contentFrame.contains(frame)
+        }()
+
         // If the item is already visible and that's good enough, return.
-        
-        let isAlreadyVisible = self.collectionView.indexPathsForVisibleItems.contains(toIndexPath)
-        
-        if  isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+
+        if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
             return true
         }
         
         // Otherwise, perform scrolling.
         
-        let scroll = {
+        return self.preparePresentationStateForScroll(to: toIndexPath) {
             self.collectionView.scrollToItem(
                 at: toIndexPath,
                 at: position.position.UICollectionViewScrollPosition,
                 animated: animated
             )
         }
-        
-        if lastLoadedIndexPath < toIndexPath {
-            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
-                scroll()
-            }
-        } else {
-            scroll()
+    }
+
+    @discardableResult
+    public func scrollToBottom(animated : Bool = false) -> Bool {
+
+        // Make sure we have a valid last index path.
+
+        guard let toIndexPath = self.storage.allContent.lastIndexPath() else {
+            return false
         }
-    
-        return true
+
+        // Perform scrolling.
+
+        return self.preparePresentationStateForScroll(to: toIndexPath)  {
+            let contentHeight = self.layout.collectionViewContentSize.height
+            let contentFrameHeight = self.collectionView.contentFrame.height
+
+            guard contentHeight > contentFrameHeight else {
+                return
+            }
+
+            let contentOffsetY = contentHeight - contentFrameHeight -
+                self.collectionView.lst_adjustedContentInset.top
+            let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
+            self.collectionView.setContentOffset(contentOffset, animated: animated)
+        }
     }
     
     //
@@ -251,6 +272,7 @@ public final class ListView : UIView
             animatesChanges: true,
             appearance: self.appearance,
             behavior: self.behavior,
+            autoScrollAction: self.autoScrollAction,
             scrollInsets: self.scrollInsets,
             build: builder
         )
@@ -299,6 +321,7 @@ public final class ListView : UIView
     {
         self.appearance = description.appearance
         self.behavior = description.behavior
+        self.autoScrollAction = description.autoScrollAction
         self.scrollInsets = description.scrollInsets
         
         self.setContent(animated: description.animatesChanges, description.content)
@@ -521,7 +544,7 @@ public final class ListView : UIView
         case .contentChanged:
             self.updateCollectionViewConfiguration()
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
-            
+
         case .didEndDecelerating:
             if presentationStateTruncated {
                 self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
@@ -555,11 +578,29 @@ public final class ListView : UIView
         let presentationState = self.storage.presentationState
         
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
-        
-        let visibleSlice = self.bounds.isEmpty ? Content.Slice() : self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-        
+
+        let visibleSlice: Content.Slice
+
+        if self.bounds.isEmpty {
+            visibleSlice = Content.Slice()
+        } else {
+            switch self.autoScrollAction {
+            case .scrollToItemOnInsert(let autoScrollItem, _, _):
+                guard let autoScrollIndexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) else {
+                    fallthrough
+                }
+
+                let greaterIndexPath = max(autoScrollIndexPath, indexPath)
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
+
+            case .none:
+
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+            }
+        }
+
         let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
-                
+
         let updateBackingData = {
             presentationState.update(with: diff, slice: visibleSlice)
         }
@@ -580,12 +621,39 @@ public final class ListView : UIView
             self.updateVisibleItemsAndSections()
             callerCompletion(finished)
         }
-        
+
+        if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition, animated) = self.autoScrollAction,
+            diff.changes.addedItemIdentifiers.contains(autoScrollItem.identifier)
+        {
+            self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: animated)
+        }
+
         // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
     }
-        
+
+    private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
+
+        // Make sure we have a last loaded index path.
+
+        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
+            return false
+        }
+
+        // Update presentation state if needed, then scroll.
+
+        if lastLoadedIndexPath < toIndexPath {
+            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
+                scroll()
+            }
+        } else {
+            scroll()
+        }
+
+        return true
+    }
+
     private func performBatchUpdates(
         with diff : SectionedDiff<Section,AnyItem>,
         animated: Bool,
@@ -746,10 +814,9 @@ extension ListView : KeyboardObserverDelegate
     }
 }
 
-
-
 fileprivate extension UIScrollView
-{    
+{
+
     func isScrolledNearBottom() -> Bool
     {
         let viewHeight = self.bounds.size.height
