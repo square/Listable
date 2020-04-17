@@ -26,6 +26,7 @@
 		0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */; };
 		0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */; };
 		0AE855512390933100F2E245 /* Test_Targets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE855502390933100F2E245 /* Test_Targets.swift */; };
+		0AEA09BD242A941700F9ED0C /* DemoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEA09BC242A941700F9ED0C /* DemoTableViewController.swift */; };
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
 		0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96CE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift */; };
@@ -61,6 +62,7 @@
 		0AE8554E2390933100F2E245 /* Test Targets.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Targets.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AE855502390933100F2E245 /* Test_Targets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Targets.swift; sourceTree = "<group>"; };
 		0AE855522390933100F2E245 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0AEA09BC242A941700F9ED0C /* DemoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewController.swift; sourceTree = "<group>"; };
 		0AEB96AE22FBCBA500341DFF /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEB96B822FBCBA600341DFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEB96BB22FBCBA600341DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */,
 				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
+				0AEA09BC242A941700F9ED0C /* DemoTableViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0A46A00B23793C0200B35811 /* WidthCustomizationViewController.swift in Sources */,
 				0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */,
+				0AEA09BD242A941700F9ED0C /* DemoTableViewController.swift in Sources */,
 				0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */,
 				0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
 				0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */,

@@ -454,6 +454,8 @@ final class PresentationState
         {
             let view = view as! Element.Appearance.ContentView
             
+            // TODO: Merge this with the other place we apply to views.
+            
             self.model.appearance.apply(to: view)
             self.model.element.apply(to: view, reason: reason)
         }
@@ -551,7 +553,7 @@ final class PresentationState
                         )
                         
                         self.model.element.apply(
-                            to: cell.content,
+                            to: cell.content.contentView,
                             for: .wasUpdated,
                             with: applyInfo
                         )
@@ -630,17 +632,24 @@ final class PresentationState
             // Appearance
             
             self.model.appearance.apply(
-                to: cell.content,
+                to: cell.content.contentView,
                 with: applyInfo
             )
             
             // Apply Model State
             
             self.model.element.apply(
-                to: cell.content,
+                to: cell.content.contentView,
                 for: reason,
                 with: applyInfo
             )
+            
+            // Apply Swipe To Action Appearance
+            if let actions = self.model.swipeActions, let appearance = self.model.swipeActionsAppearance {
+                cell.content.registerSwipeActionsIfNeeded(actions: actions, appearance: appearance)
+            } else {
+                cell.content.deregisterSwipeIfNeeded()
+            }
         }
         
         func applyToVisibleCell()

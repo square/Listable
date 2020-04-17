@@ -38,6 +38,11 @@ public protocol ItemElement
      */
     associatedtype Appearance:ItemElementAppearance
     
+    /**
+     
+     */
+    associatedtype SwipeActionsAppearance:ItemElementSwipeActionsAppearance = EmptyItemElementSwipeActionsAppearance
+    
     //
     // MARK: Applying To Displayed View
     //
@@ -142,6 +147,85 @@ public extension ItemElementAppearance where Self:Equatable
     func isEquivalent(to other : Self) -> Bool
     {
         return self == other
+    }
+}
+
+
+/**
+ Currently unsupported. Custom implementation for the swipe action views. 
+ */
+public protocol ItemElementSwipeActionsAppearance
+{
+    //
+    // MARK: Creating & Providing Views
+    //
+    
+    /// The type of the content view of the swipe action view behind the element.
+    /// The content view is drawn under the elements ContentView
+    associatedtype ContentView:UIView
+    
+    /**
+    Create and return a new set of views to be used to render the element.
+
+    These views are reused by the list view, similar to collection view or table view cell recycling.
+
+    Do not do configuration in this method that will be changed by your app's theme or appearance – instead
+    do that work in apply(to:), so the appearance will be updated if the appearance of elements changes.
+    */
+    static func createView(frame : CGRect) -> ContentView
+    
+    //
+    // MARK: Updating View State
+    //
+    
+    /**
+
+     Called to apply the actions appearance to a given set of views before they are displayed on screen, or when an item position changes.
+
+     Eg, this is where you would set fonts, spacing, colors, etc, actions, to apply your app's theme.
+     */
+    func apply(swipeActions : SwipeActions, to view : ContentView)
+
+    /**
+
+    Called to apply the current SwipeControllerState to the underlying view.
+
+    Eg, the default iOS action view changes the title label alignment at different states in the swipe animation.
+    */
+    func apply(swipeControllerState: SwipeControllerState, to view : ContentView)
+
+    /**
+
+    Called to apply the actions appearance to a given set of views before they are displayed on screen, or when an item position changes.
+
+    Eg, this is where you would set fonts, spacing, colors, etc, actions, to apply your app's theme.
+    */
+    func preferredSize(for view: ContentView) -> CGSize
+}
+
+
+public struct EmptyItemElementSwipeActionsAppearance : ItemElementSwipeActionsAppearance
+{
+    public init() {}
+    
+    // MARK: ItemElementSwipeActionsAppearance
+    
+    public typealias ContentView = UIView
+    
+    public static func createView(frame: CGRect) -> UIView {
+        return UIView(frame: frame)
+    }
+    
+    public func apply(swipeActions: SwipeActions, to view: UIView) {
+        // Nothing.
+    }
+
+    public func apply(swipeControllerState: SwipeControllerState, to view: UIView) {
+        // no op
+    }
+
+    public func preferredSize(for view: UIView) -> CGSize {
+        return .zero
     }
 }
 

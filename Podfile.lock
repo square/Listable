@@ -28,7 +28,7 @@ DEPENDENCIES:
   - Snapshot/Tests (from `Internal Pods/Snapshot/Snapshot.podspec`)
 
 SPEC REPOS:
-  trunk:
+  https://cdn.cocoapods.org/:
     - BlueprintUI
     - BlueprintUICommonControls
 
