@@ -638,7 +638,6 @@ public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appeara
 }
 ```
 
-
 ## Getting Started
 
 Listable can be consumed via CocoaPods. Add one or both of these lines to your `Podfile` in order to consume Listable and BlueprintLists (the Blueprint wrapper for Listable).
