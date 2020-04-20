@@ -71,7 +71,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
     
     override func sizeThatFits(_ size: CGSize) -> CGSize
     {
-        return self.content.sizeThatFits(size)
+        return self.content.contentView.sizeThatFits(size)
     }
     
     override func layoutSubviews()
