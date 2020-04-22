@@ -7,25 +7,20 @@
 
 import Listable
 
-
 //
 // MARK: Building Content
 //
 
+extension Section {
+  //
+  // MARK: Adding Items
+  //
 
-public extension Section
-{
-    //
-    // MARK: Adding Items
-    //
-    
-    static func += <Element:BlueprintItemElement>(lhs : inout Section, rhs : Element)
-    {
-        lhs += Item(with: rhs)
-    }
-    
-    static func += <Element:BlueprintItemElement>(lhs : inout Section, rhs : [Element])
-    {
-        lhs.items += rhs.map { Item(with: $0) }
-    }
+  public static func += <Element: BlueprintItemElement>(lhs: inout Section, rhs: Element) {
+    lhs += Item(with: rhs)
+  }
+
+  public static func += <Element: BlueprintItemElement>(lhs: inout Section, rhs: [Element]) {
+    lhs.items += rhs.map { Item(with: $0) }
+  }
 }

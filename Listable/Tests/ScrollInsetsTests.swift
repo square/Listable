@@ -7,7 +7,6 @@
 
 import XCTest
 
-class ScrollInsetsTests: XCTestCase
-{
+class ScrollInsetsTests: XCTestCase {
 
 }

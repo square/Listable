@@ -7,11 +7,8 @@
 
 import XCTest
 
+class Tests: XCTestCase {
+  func test_empty() {
 
-class Tests : XCTestCase
-{
-    func test_empty()
-    {
-        
-    }
+  }
 }

@@ -7,13 +7,10 @@
 
 import Foundation
 
+public struct Behavior: Equatable {
+  public var dismissesKeyboardOnScroll: Bool
 
-public struct Behavior : Equatable
-{
-    public var dismissesKeyboardOnScroll : Bool
-    
-    public init(dismissesKeyboardOnScroll : Bool = false)
-    {
-        self.dismissesKeyboardOnScroll = dismissesKeyboardOnScroll
-    }
+  public init(dismissesKeyboardOnScroll: Bool = false) {
+    self.dismissesKeyboardOnScroll = dismissesKeyboardOnScroll
+  }
 }

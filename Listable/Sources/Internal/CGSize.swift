@@ -7,10 +7,8 @@
 
 import Foundation
 
-
-internal extension CGSize
-{
-    var isEmpty : Bool {
-        return self.width == 0.0 || self.height == 0.0
-    }
+extension CGSize {
+  var isEmpty: Bool {
+    return self.width == 0.0 || self.height == 0.0
+  }
 }

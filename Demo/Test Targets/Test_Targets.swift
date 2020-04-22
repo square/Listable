@@ -8,8 +8,6 @@
 
 import XCTest
 
-
-class Test_Targets: XCTestCase
-{
-    // This target only exists so we can reference test-only pods in our Podfile. It has no behaviour of its own.
+class Test_Targets: XCTestCase {
+  // This target only exists so we can reference test-only pods in our Podfile. It has no behaviour of its own.
 }

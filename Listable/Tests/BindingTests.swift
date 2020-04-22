@@ -7,7 +7,6 @@
 
 import XCTest
 
-class BindingTests: XCTestCase
-{
+class BindingTests: XCTestCase {
 
 }

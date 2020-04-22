@@ -6,66 +6,59 @@
 //
 
 import BlueprintUI
-
 import Listable
 
+public struct List: BlueprintUI.Element {
+  public var listDescription: ListDescription
 
-public struct List : BlueprintUI.Element
-{
-    public var listDescription : ListDescription
-    
-    //
-    // MARK: Initialization
-    //
-        
-    public init(build : ListDescription.Build)
+  //
+  // MARK: Initialization
+  //
+
+  public init(build: ListDescription.Build) {
+    self.listDescription = ListDescription(
+      animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+      appearance: .init(),
+      behavior: .init(),
+      autoScrollAction: .none,
+      scrollInsets: .init(),
+      build: build
+    )
+  }
+
+  //
+  // MARK: BlueprintUI.Element
+  //
+
+  public var content: ElementContent {
+    return ElementContent(layout: Layout())
+  }
+
+  public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {
+    return ListView.describe { config in
+      config.builder = {
+        return ListView(frame: bounds, appearance: self.listDescription.appearance)
+      }
+
+      config.apply { listView in
+        listView.setProperties(with: self.listDescription)
+      }
+    }
+  }
+
+  //
+  // MARK: Blueprint Layout Definition
+  //
+
+  private struct Layout: BlueprintUI.Layout {
+    func measure(in constraint: SizeConstraint, items: [(traits: (), content: Measurable)])
+      -> CGSize
     {
-        self.listDescription = ListDescription(
-            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
-            appearance: .init(),
-            behavior: .init(),
-            autoScrollAction: .none,
-            scrollInsets: .init(),
-            build: build
-        )
+      return constraint.maximum
     }
-    
-    //
-    // MARK: BlueprintUI.Element
-    //
-    
-    public var content : ElementContent {
-        return ElementContent(layout: Layout())
+
+    func layout(size: CGSize, items: [(traits: (), content: Measurable)]) -> [LayoutAttributes] {
+      return []
     }
-    
-    public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
-    {
-        return ListView.describe { config in
-            config.builder = {
-                return ListView(frame: bounds, appearance: self.listDescription.appearance)
-            }
-            
-            config.apply { listView in
-                listView.setProperties(with: self.listDescription)
-            }
-        }
-    }
-    
-    //
-    // MARK: Blueprint Layout Definition
-    //
-    
-    private struct Layout : BlueprintUI.Layout
-    {
-        func measure(in constraint: SizeConstraint, items: [(traits: (), content: Measurable)]) -> CGSize
-        {
-            return constraint.maximum
-        }
-        
-        func layout(size: CGSize, items: [(traits: (), content: Measurable)]) -> [LayoutAttributes]
-        {
-            return []
-        }
-    }
+  }
 }
-

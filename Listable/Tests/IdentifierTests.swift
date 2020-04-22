@@ -7,7 +7,6 @@
 
 import XCTest
 
-class IdentifierTests: XCTestCase
-{
+class IdentifierTests: XCTestCase {
 
 }

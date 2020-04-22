@@ -9,13 +9,10 @@ import XCTest
 
 @testable import Listable
 
+class BehaviorTests: XCTestCase {
+  func test_init() {
+    let behavior = Behavior()
 
-class BehaviorTests: XCTestCase
-{
-    func test_init()
-    {
-        let behavior = Behavior()
-        
-        XCTAssertEqual(behavior.dismissesKeyboardOnScroll, false)
-    }
+    XCTAssertEqual(behavior.dismissesKeyboardOnScroll, false)
+  }
 }

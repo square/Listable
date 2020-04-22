@@ -7,7 +7,6 @@
 
 import XCTest
 
-class SizingTests: XCTestCase
-{
+class SizingTests: XCTestCase {
 
 }

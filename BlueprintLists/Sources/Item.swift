@@ -6,112 +6,101 @@
 //
 
 import BlueprintUI
-
 import Listable
-
 
 //
 // MARK: Blueprint Elements
 //
 
-public protocol BlueprintItemElement : ItemElement where Appearance == BlueprintItemElementAppearance
-{
-    //
-    // MARK: Creating Blueprint Element Representations (Required)
-    //
-    
-    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
-}
+public protocol BlueprintItemElement: ItemElement
+where Appearance == BlueprintItemElementAppearance {
+  //
+  // MARK: Creating Blueprint Element Representations (Required)
+  //
 
+  func element(with info: ApplyItemElementInfo) -> BlueprintUI.Element
+}
 
 //
 // MARK: Creating Blueprint Items
 //
 
+extension Listable.Item where Element: BlueprintItemElement {
+  public init(
+    _ element: Element,
+    build: Build
+  ) {
+    self.init(with: element)
 
-public extension Listable.Item where Element : BlueprintItemElement
-{
-    init(
-        _ element : Element,
-        build : Build
-        )
-    {
-        self.init(with: element)
-        
-        build(&self)
-    }
-    
-    init(
-        with element : Element,
-        sizing : Sizing = .thatFitsWith(.atLeast(.default)),
-        layout : ItemLayout = ItemLayout(),
-        selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActions? = nil,
-        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
-        reordering : Reordering? = nil,
-        bind : CreateBinding? = nil,
-        onDisplay : OnDisplay? = nil,
-        onSelect : OnSelect? = nil,
-        onDeselect : OnDeselect? = nil
-        )
-    {
-        self.init(
-            with: element,
-            appearance: BlueprintItemElementAppearance(),
-            sizing: sizing,
-            layout: layout,
-            selection: selection,
-            swipeActions: swipeActions,
-            swipeActionsAppearance: swipeActionsAppearance,
-            reordering: reordering,
-            bind: bind,
-            onDisplay: onDisplay,
-            onSelect: onSelect,
-            onDeselect: onDeselect
-        )
-    }
+    build(&self)
+  }
+
+  public init(
+    with element: Element,
+    sizing: Sizing = .thatFitsWith(.atLeast(.default)),
+    layout: ItemLayout = ItemLayout(),
+    selection: ItemSelection = .notSelectable,
+    swipeActions: SwipeActions? = nil,
+    swipeActionsAppearance: Element.SwipeActionsAppearance? = nil,
+    reordering: Reordering? = nil,
+    bind: CreateBinding? = nil,
+    onDisplay: OnDisplay? = nil,
+    onSelect: OnSelect? = nil,
+    onDeselect: OnDeselect? = nil
+  ) {
+    self.init(
+      with: element,
+      appearance: BlueprintItemElementAppearance(),
+      sizing: sizing,
+      layout: layout,
+      selection: selection,
+      swipeActions: swipeActions,
+      swipeActionsAppearance: swipeActionsAppearance,
+      reordering: reordering,
+      bind: bind,
+      onDisplay: onDisplay,
+      onSelect: onSelect,
+      onDeselect: onDeselect
+    )
+  }
 }
 
 //
 // MARK: Applying Blueprint Elements
 //
 
-public extension BlueprintItemElement
-{
-    //
-    // MARK: ItemElement
-    //
-    
-    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
-    {
-        view.element = self.element(with: info)
-    }
-    
+extension BlueprintItemElement {
+  //
+  // MARK: ItemElement
+  //
+
+  public func apply(
+    to view: Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo
+  ) {
+    view.element = self.element(with: info)
+  }
+
 }
 
+public struct BlueprintItemElementAppearance: ItemElementAppearance {
+  //
+  // MARK: ItemElementAppearance
+  //
 
-public struct BlueprintItemElementAppearance : ItemElementAppearance
-{
-    //
-    // MARK: ItemElementAppearance
-    //
-    
-    public typealias ContentView = BlueprintView
-    
-    public static func createReusableItemView(frame: CGRect) -> ContentView
-    {
-        let view = BlueprintView(frame: frame)
-        view.backgroundColor = .clear
-        
-        return view
-    }
-    
-    public func update(view: BlueprintView, with position: ItemPosition) {}
-    
-    public func apply(to view: BlueprintView, with info: ApplyItemElementInfo) {}
+  public typealias ContentView = BlueprintView
 
-    public func isEquivalent(to other: BlueprintItemElementAppearance) -> Bool
-    {
-        return true
-    }
+  public static func createReusableItemView(frame: CGRect) -> ContentView {
+    let view = BlueprintView(frame: frame)
+    view.backgroundColor = .clear
+
+    return view
+  }
+
+  public func update(view: BlueprintView, with position: ItemPosition) {}
+
+  public func apply(to view: BlueprintView, with info: ApplyItemElementInfo) {}
+
+  public func isEquivalent(to other: BlueprintItemElementAppearance) -> Bool {
+    return true
+  }
 }

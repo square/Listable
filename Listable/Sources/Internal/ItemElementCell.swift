@@ -7,36 +7,34 @@
 
 import UIKit
 
+final class ItemElementCell<Element: ItemElement>: UICollectionViewCell {
+  let content: ContentContainerView
 
-final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
-{
-    let content : ContentContainerView
-        
-    override init(frame: CGRect)
-    {
-        let bounds = CGRect(origin: .zero, size: frame.size)
-        
-        self.content = ContentContainerView(frame: bounds)
-        
-        super.init(frame: frame)
-        
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
-        
-        self.layer.masksToBounds = false
-        self.contentView.layer.masksToBounds = false
+  override init(frame: CGRect) {
+    let bounds = CGRect(origin: .zero, size: frame.size)
 
-        self.contentView.addSubview(self.content)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { listableFatal() }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
-    {
-        // Note – Please keep this comment in sync with the comment in SupplementaryContainerView.
-        
-        /**
+    self.content = ContentContainerView(frame: bounds)
+
+    super.init(frame: frame)
+
+    self.backgroundColor = .clear
+    self.contentView.backgroundColor = .clear
+
+    self.layer.masksToBounds = false
+    self.contentView.layer.masksToBounds = false
+
+    self.contentView.addSubview(self.content)
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) { listableFatal() }
+
+  override func preferredLayoutAttributesFitting(
+    _ layoutAttributes: UICollectionViewLayoutAttributes
+  ) -> UICollectionViewLayoutAttributes {
+    // Note – Please keep this comment in sync with the comment in SupplementaryContainerView.
+
+    /**
          Listable already properly sizes each cell. We do not use self-sizing cells.
          Thus, just return the existing layout attributes.
          
@@ -63,22 +61,19 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
          
          We do not want these. Thus, this is fine.
          */
-        
-        return layoutAttributes
-    }
-    
-    // MARK: UIView
-    
-    override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        return self.content.contentView.sizeThatFits(size)
-    }
-    
-    override func layoutSubviews()
-    {
-        super.layoutSubviews()
-                
-        self.content.frame = self.contentView.bounds
-    }
-}
 
+    return layoutAttributes
+  }
+
+  // MARK: UIView
+
+  override func sizeThatFits(_ size: CGSize) -> CGSize {
+    return self.content.contentView.sizeThatFits(size)
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    self.content.frame = self.contentView.bounds
+  }
+}

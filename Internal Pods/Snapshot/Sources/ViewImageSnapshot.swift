@@ -7,82 +7,71 @@
 
 import UIKit
 
+public struct ViewImageSnapshot: SnapshotOutputFormat {
+  // MARK: SnapshotOutputFormat
 
-public struct ViewImageSnapshot : SnapshotOutputFormat
-{
-    // MARK: SnapshotOutputFormat
-    
-    public typealias RenderingFormat = UIView
-    
-    public static func snapshotData(with renderingFormat : UIView) throws -> Data
-    {
-        return renderingFormat.toImage.pngData()!
+  public typealias RenderingFormat = UIView
+
+  public static func snapshotData(with renderingFormat: UIView) throws -> Data {
+    return renderingFormat.toImage.pngData()!
+  }
+
+  public static var outputInfo: SnapshotOutputInfo {
+    return SnapshotOutputInfo(
+      directoryName: "Images",
+      fileExtension: "snapshot.png"
+    )
+  }
+
+  public static func validate(render newView: UIView, existingData: Data) throws {
+    let existing = try ViewImageSnapshot.image(with: existingData)
+    let new = newView.toImage
+
+    guard existing.size == new.size else {
+      throw Error.differentSizes
     }
-    
-    public static var outputInfo : SnapshotOutputInfo {
-        return SnapshotOutputInfo(
-            directoryName: "Images",
-            fileExtension: "snapshot.png"
-        )
+
+    guard UIImage.compareImages(lhs: existing, rhs: new) else {
+      throw Error.notMatching
     }
-    
-    public static func validate(render newView : UIView, existingData: Data) throws
-    {
-        let existing = try ViewImageSnapshot.image(with: existingData)
-        let new = newView.toImage
-        
-        guard existing.size == new.size else {
-            throw Error.differentSizes
-        }
-        
-        guard UIImage.compareImages(lhs: existing, rhs: new) else {
-            throw Error.notMatching
-        }
+  }
+
+  private static func image(with data: Data) throws -> UIImage {
+    guard data.isEmpty == false else {
+      throw Error.zeroSizeData
     }
-    
-    private static func image(with data : Data) throws -> UIImage
-    {
-        guard data.isEmpty == false else {
-            throw Error.zeroSizeData
-        }
-        
-        guard let image = UIImage(data: data) else {
-            throw Error.couldNotLoadReferenceImage
-        }
-        
-        return image
+
+    guard let image = UIImage(data: data) else {
+      throw Error.couldNotLoadReferenceImage
     }
-    
-    public enum Error : Swift.Error
-    {
-        case differentSizes
-        case notMatching
-        case zeroSizeData
-        case couldNotLoadReferenceImage
-    }
+
+    return image
+  }
+
+  public enum Error: Swift.Error {
+    case differentSizes
+    case notMatching
+    case zeroSizeData
+    case couldNotLoadReferenceImage
+  }
 }
 
+extension UIView {
+  var toImage: UIImage {
+    UIGraphicsBeginImageContext(self.bounds.size)
 
-extension UIView
-{    
-    var toImage : UIImage {
-        UIGraphicsBeginImageContext(self.bounds.size)
+    self.layer.render(in: UIGraphicsGetCurrentContext()!)
 
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+    let image = UIGraphicsGetImageFromCurrentImageContext()!
 
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
 
-        UIGraphicsEndImageContext()
-
-        return image
-    }
+    return image
+  }
 }
 
-
-extension UIImage
-{
-    static func compareImages(lhs : UIImage, rhs : UIImage) -> Bool
-    {
-        return lhs.pngData() == rhs.pngData()
-    }
+extension UIImage {
+  static func compareImages(lhs: UIImage, rhs: UIImage) -> Bool {
+    return lhs.pngData() == rhs.pngData()
+  }
 }

@@ -7,7 +7,6 @@
 
 import XCTest
 
-class ListViewSourceTests: XCTestCase
-{
+class ListViewSourceTests: XCTestCase {
 
 }

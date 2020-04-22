@@ -7,7 +7,6 @@
 
 import XCTest
 
-class ListItemElementTests: XCTestCase
-{
+class ListItemElementTests: XCTestCase {
 
 }

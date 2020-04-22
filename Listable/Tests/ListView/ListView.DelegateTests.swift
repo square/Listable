@@ -7,7 +7,6 @@
 
 import XCTest
 
-class ListView_DelegateTests: XCTestCase
-{
+class ListView_DelegateTests: XCTestCase {
 
 }
