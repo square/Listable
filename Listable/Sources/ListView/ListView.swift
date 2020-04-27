@@ -323,6 +323,7 @@ public final class ListView : UIView
         self.behavior = description.behavior
         self.autoScrollAction = description.autoScrollAction
         self.scrollInsets = description.scrollInsets
+        self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
         
         self.setContent(animated: description.animatesChanges, description.content)
     }
