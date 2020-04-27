@@ -10,6 +10,9 @@ import Foundation
 
 public struct ListDescription
 {
+
+    public var accessibilityIdentifier: String? = nil
+
     public var animatesChanges : Bool
     
     public var appearance : Appearance
