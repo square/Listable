@@ -8,13 +8,14 @@
 import Foundation
 
 
-final class DefaultListLayout
+final class DefaultListLayout : ListLayout
 {
     //
     // MARK: Public Properties
     //
     
     let collectionViewSize : CGSize
+    
     var contentSize : CGSize
     
     let appearance : Appearance
@@ -45,7 +46,7 @@ final class DefaultListLayout
     }
     
     init(
-        delegate : ListViewLayoutDelegate,
+        delegate : CollectionViewLayoutDelegate,
         appearance : Appearance,
         in collectionView : UICollectionView
         )
@@ -351,7 +352,7 @@ final class DefaultListLayout
     }
     
     func layout(
-        delegate : ListViewLayoutDelegate,
+        delegate : CollectionViewLayoutDelegate,
         in collectionView : UICollectionView
         ) -> Bool
     {
