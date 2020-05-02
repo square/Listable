@@ -103,7 +103,7 @@ extension ListView
             )
         {
             let container = anyView as! SupplementaryContainerView
-            let kind = ListViewLayout.SupplementaryKind(rawValue: kindString)!
+            let kind = CollectionViewLayout.SupplementaryKind(rawValue: kindString)!
             
             let headerFooter : PresentationState.HeaderFooterViewStatePair = {
                 switch kind {

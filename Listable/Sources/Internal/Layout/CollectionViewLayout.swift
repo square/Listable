@@ -1,5 +1,5 @@
 //
-//  ListViewLayout.swift
+//  CollectionViewLayout.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 9/23/19.
@@ -41,7 +41,7 @@ protocol ListViewLayoutDelegate : AnyObject
 }
 
 
-class ListViewLayout : UICollectionViewLayout
+final class CollectionViewLayout : UICollectionViewLayout
 {
     //
     // MARK: Properties
@@ -81,8 +81,8 @@ class ListViewLayout : UICollectionViewLayout
         self.delegate = delegate
         self.appearance = appearance
         
-        self.layoutResult = LayoutInfo()
-        self.previousLayoutResult = self.layoutResult
+        self.layoutInfo = LayoutInfo()
+        self.previousLayoutResult = self.layoutInfo
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
@@ -100,7 +100,7 @@ class ListViewLayout : UICollectionViewLayout
     
     func positionForItem(at indexPath : IndexPath) -> ItemPosition
     {
-        let item = self.layoutResult.item(at: indexPath)
+        let item = self.layoutInfo.item(at: indexPath)
         
         return item.position
     }
@@ -109,7 +109,7 @@ class ListViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private var layoutResult : LayoutInfo
+    private var layoutInfo : LayoutInfo
     private var previousLayoutResult : LayoutInfo
     
     private var changesDuringCurrentUpdate : UpdateItems
@@ -155,20 +155,20 @@ class ListViewLayout : UICollectionViewLayout
             let from = from[0]
             let to = to[0]
             
-            let item = self.layoutResult.item(at: from)
+            let item = self.layoutInfo.item(at: from)
             item.liveIndexPath = to
                     
-            self.layoutResult.move(from: from, to: to)
+            self.layoutInfo.move(from: from, to: to)
             
             if from != to {
                 context.performedInteractiveMove = true
-                self.layoutResult.reindexLiveIndexPaths()
+                self.layoutInfo.reindexLiveIndexPaths()
             }
         }
         
         // Handle View Width Changing
         
-        context.widthChanged = self.layoutResult.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+        context.widthChanged = self.layoutInfo.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
         
         // Update Needed Layout Type
                 
@@ -183,8 +183,8 @@ class ListViewLayout : UICollectionViewLayout
     {
         listablePrecondition(movementCancelled == false, "Cancelling moves is currently not supported.")
         
-        self.layoutResult.reindexLiveIndexPaths()
-        self.layoutResult.reindexDelegateProvidedIndexPaths()
+        self.layoutInfo.reindexLiveIndexPaths()
+        self.layoutInfo.reindexDelegateProvidedIndexPaths()
                                 
         return super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
@@ -295,17 +295,17 @@ class ListViewLayout : UICollectionViewLayout
     
     private func performUpdateHeaders()
     {
-        self.layoutResult.updateHeaders(in: self.collectionView!)
+        self.layoutInfo.updateHeaders(in: self.collectionView!)
     }
     
     private func performUpdateOverscroll()
     {
-        self.layoutResult.updateOverscrollPosition(in: self.collectionView!)
+        self.layoutInfo.updateOverscrollPosition(in: self.collectionView!)
     }
     
     private func performRelayout() -> Bool
     {
-        return self.layoutResult.layout(
+        return self.layoutInfo.layout(
             delegate: self.delegate,
             in: self.collectionView!
         )
@@ -313,15 +313,15 @@ class ListViewLayout : UICollectionViewLayout
     
     private func performRebuild() -> Bool
     {
-        self.previousLayoutResult = self.layoutResult
+        self.previousLayoutResult = self.layoutInfo
         
-        self.layoutResult = LayoutInfo(
+        self.layoutInfo = LayoutInfo(
             delegate: self.delegate,
             appearance: self.appearance,
             in: self.collectionView!
         )
         
-        return self.layoutResult.layout(
+        return self.layoutInfo.layout(
             delegate: self.delegate,
             in: self.collectionView!
         )
@@ -333,22 +333,22 @@ class ListViewLayout : UICollectionViewLayout
     
     override var collectionViewContentSize : CGSize
     {
-        return self.layoutResult.contentSize
+        return self.layoutInfo.contentSize
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layoutResult.layoutAttributes(in: rect)
+        return self.layoutInfo.layoutAttributes(in: rect)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutResult.layoutAttributes(at: indexPath)
+        return self.layoutInfo.layoutAttributes(at: indexPath)
     }
     
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutResult.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
+        return self.layoutInfo.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
     }
     
     //
@@ -360,7 +360,7 @@ class ListViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layoutResult.layoutAttributes(at: itemIndexPath)
+            let attributes = self.layoutInfo.layoutAttributes(at: itemIndexPath)
             
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -433,12 +433,57 @@ class ListViewLayout : UICollectionViewLayout
     
     override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
     {
-        let defaultAttributes = self.layoutResult.layoutAttributes(at: indexPath)
+        let defaultAttributes = self.layoutInfo.layoutAttributes(at: indexPath)
         let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
         
         attributes.center.x = defaultAttributes.center.x
         
         return attributes
+    }
+}
+
+
+//
+// MARK: Supplementary Items
+//
+
+
+extension CollectionViewLayout
+{
+    enum SupplementaryKind : String, CaseIterable
+    {
+        case listHeader = "Listable.ListViewLayout.ListHeader"
+        case listFooter = "Listable.ListViewLayout.ListFooter"
+        
+        case sectionHeader = "Listable.ListViewLayout.SectionHeader"
+        case sectionFooter = "Listable.ListViewLayout.SectionFooter"
+        
+        case overscrollFooter = "Listable.ListViewLayout.OverscrollFooter"
+        
+        var zIndex : Int {
+            switch self {
+            case .listHeader: return 1
+            case .listFooter: return 1
+                
+            case .sectionHeader: return 2
+            case .sectionFooter: return 1
+                
+            case .overscrollFooter: return 1
+            }
+        }
+        
+        func indexPath(in section : Int) -> IndexPath
+        {
+            switch self {
+            case .listHeader: return IndexPath(item: 0, section: 0)
+            case .listFooter: return IndexPath(item: 0, section: 0)
+                
+            case .sectionHeader: return IndexPath(item: 0, section: section)
+            case .sectionFooter: return IndexPath(item: 0, section: section)
+                
+            case .overscrollFooter: return IndexPath(item: 0, section: 0)
+            }
+        }
     }
 }
 

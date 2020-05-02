@@ -30,7 +30,7 @@ public final class ListView : UIView
         self.dataSource = DataSource()
         self.delegate = Delegate()
         
-        self.layout = ListViewLayout(
+        self.layout = CollectionViewLayout(
             delegate: self.delegate,
             appearance: self.appearance
         )
@@ -61,7 +61,7 @@ public final class ListView : UIView
         
         // Register supplementary views.
         
-        ListViewLayout.SupplementaryKind.allCases.forEach {
+        CollectionViewLayout.SupplementaryKind.allCases.forEach {
             SupplementaryContainerView.register(in: self.collectionView, for: $0.rawValue)
         }
         
@@ -98,7 +98,7 @@ public final class ListView : UIView
     
     internal let storage : Storage
     internal let collectionView : UICollectionView
-    internal let layout : ListViewLayout
+    internal let layout : CollectionViewLayout
     
     //
     // MARK: Private Properties
