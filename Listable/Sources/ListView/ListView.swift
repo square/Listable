@@ -61,7 +61,7 @@ public final class ListView : UIView
         
         // Register supplementary views.
         
-        CollectionViewLayout.SupplementaryKind.allCases.forEach {
+        SupplementaryKind.allCases.forEach {
             SupplementaryContainerView.register(in: self.collectionView, for: $0.rawValue)
         }
         

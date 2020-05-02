@@ -81,7 +81,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.delegate = delegate
         self.appearance = appearance
         
-        self.layoutInfo = LayoutInfo()
+        self.layoutInfo = DefaultListLayout()
         self.previousLayoutResult = self.layoutInfo
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
@@ -109,8 +109,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private var layoutInfo : LayoutInfo
-    private var previousLayoutResult : LayoutInfo
+    private var layoutInfo : DefaultListLayout
+    private var previousLayoutResult : DefaultListLayout
     
     private var changesDuringCurrentUpdate : UpdateItems
     
@@ -315,7 +315,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         self.previousLayoutResult = self.layoutInfo
         
-        self.layoutInfo = LayoutInfo(
+        self.layoutInfo = DefaultListLayout(
             delegate: self.delegate,
             appearance: self.appearance,
             in: self.collectionView!
@@ -439,51 +439,6 @@ final class CollectionViewLayout : UICollectionViewLayout
         attributes.center.x = defaultAttributes.center.x
         
         return attributes
-    }
-}
-
-
-//
-// MARK: Supplementary Items
-//
-
-
-extension CollectionViewLayout
-{
-    enum SupplementaryKind : String, CaseIterable
-    {
-        case listHeader = "Listable.ListViewLayout.ListHeader"
-        case listFooter = "Listable.ListViewLayout.ListFooter"
-        
-        case sectionHeader = "Listable.ListViewLayout.SectionHeader"
-        case sectionFooter = "Listable.ListViewLayout.SectionFooter"
-        
-        case overscrollFooter = "Listable.ListViewLayout.OverscrollFooter"
-        
-        var zIndex : Int {
-            switch self {
-            case .listHeader: return 1
-            case .listFooter: return 1
-                
-            case .sectionHeader: return 2
-            case .sectionFooter: return 1
-                
-            case .overscrollFooter: return 1
-            }
-        }
-        
-        func indexPath(in section : Int) -> IndexPath
-        {
-            switch self {
-            case .listHeader: return IndexPath(item: 0, section: 0)
-            case .listFooter: return IndexPath(item: 0, section: 0)
-                
-            case .sectionHeader: return IndexPath(item: 0, section: section)
-            case .sectionFooter: return IndexPath(item: 0, section: section)
-                
-            case .overscrollFooter: return IndexPath(item: 0, section: 0)
-            }
-        }
     }
 }
 

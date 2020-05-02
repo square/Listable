@@ -147,14 +147,14 @@ final class ItemizationEditorViewController : UIViewController
     var listAppearance : Appearance {
         return Appearance(
             backgroundColor: .white,
-            sizing: ListSizing(
+            sizing: Appearance.Sizing(
                 itemHeight: 70.0,
                 sectionHeaderHeight: 50.0,
                 sectionFooterHeight: 50.0,
                 listHeaderHeight: 100.0,
                 listFooterHeight: 100.0
             ),
-            layout: ListLayout(
+            layout: Appearance.Layout(
                 padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
                 width: .atMost(600.0),
                 interSectionSpacingWithNoFooter: 20.0,
@@ -164,7 +164,7 @@ final class ItemizationEditorViewController : UIViewController
                 itemToSectionFooterSpacing: 20.0,
                 stickySectionHeaders: false
             ),
-            underflow: UnderflowBehavior(
+            underflow: Appearance.UnderflowBehavior(
                 alwaysBounce: true,
                 alignment: .top
             )

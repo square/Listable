@@ -15,7 +15,7 @@ import BlueprintUICommonControls
 let demoAppearance = Appearance {
     $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
                 
-    $0.layout = ListLayout(
+    $0.layout = Appearance.Layout(
         padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
         width: .atMost(600.0),
         interSectionSpacingWithNoFooter: 20.0,

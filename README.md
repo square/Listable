@@ -36,7 +36,7 @@ self.listView.setContent { list in
 
 ### Declarative Interface & Intelligent Updates
 
-The core power and benefit of Listable comes from its declarative-style API, which allows you to implement SwiftUI or React style one-way data flow within your app's list views, eliminating many common state management bugs you encouner with standard UITableView or UICollectionView delegate-based solutions. You only need to tell the list what should be in it right now – it does the hard parts of diffing the changes to perform rich animated updates when new content is provided.
+The core power and benefit of Listable comes from its declarative-style API, which allows you to implement SwiftUI or React style one-way data flow within your app's list views, eliminating many common state management bugs you encounter with standard UITableView or UICollectionView delegate-based solutions. You only need to tell the list what should be in it right now – it does the hard parts of diffing the changes to perform rich animated updates when new content is provided.
 
 Let's say you start with an empty table, like so:
 
@@ -89,7 +89,7 @@ Listable makes very few assumptions of the appearance of your content. The curre
 
 Further, the layout and appearance controls vended by `ListView` allow for customization of the layout to draw lists in nearly any way desired.
 
-This is primarily controlled through the `Appearance` object, which is broken down further into ways to control layout direction (horizontal vs. vertical), default sizing, layout controls, and underflow behaviour.
+This is primarily controlled through the `Appearance` object, which is broken down further into ways to control layout direction (horizontal vs. vertical), default sizing, layout controls, and underflow behavior.
 
 ```swift
 public struct Appearance : Equatable
@@ -98,16 +98,16 @@ public struct Appearance : Equatable
     
     public var direction : LayoutDirection
     
-    public var sizing : ListSizing
-    public var layout : ListLayout
+    public var sizing : Sizing
+    public var layout : Layout
     public var underflow : UnderflowBehavior
 }
 ``` 
 
-You use the `ListSizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
+You use the `Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
 
 ```swift
-public struct ListSizing : Equatable
+public struct Sizing : Equatable
 {
     public var itemHeight : CGFloat
     
@@ -121,10 +121,10 @@ public struct ListSizing : Equatable
 }
 ```
 
-You can use `ListLayout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
+You can use `Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
 
 ```swift
-public struct ListLayout : Equatable
+public struct Layout : Equatable
 {
     public var padding : UIEdgeInsets
     public var width : WidthConstraint
@@ -140,7 +140,7 @@ public struct ListLayout : Equatable
 }
 ```
 
-Finally, `UnderflowBehaviour` allows customizing what happens when a list's content is shorter than its container view: Should the scroll view bounce, should the content be centered, etc.
+Finally, `UnderflowBehavior` allows customizing what happens when a list's content is shorter than its container view: Should the scroll view bounce, should the content be centered, etc.
 
 ```swift
 public struct UnderflowBehavior : Equatable
@@ -159,7 +159,7 @@ public struct UnderflowBehavior : Equatable
 
 ### Self-Sizing Cells
 
-Another common painpoint for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
+Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
 
 ```swift
 public enum Sizing : Equatable
