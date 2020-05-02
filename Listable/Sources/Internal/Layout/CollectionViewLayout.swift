@@ -16,6 +16,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     unowned let delegate : CollectionViewLayoutDelegate
     
+    let layoutType : ListLayout.Type = DefaultListLayout.self
+    
     var appearance : Appearance {
         didSet {
             guard oldValue != self.appearance else {
@@ -48,7 +50,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.delegate = delegate
         self.appearance = appearance
         
-        self.layout = DefaultListLayout()
+        self.layout = self.layoutType.init()
         self.previousLayout = self.layout
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
@@ -76,8 +78,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private var layout : DefaultListLayout
-    private var previousLayout : DefaultListLayout
+    private var layout : ListLayout
+    private var previousLayout : ListLayout
     
     private var changesDuringCurrentUpdate : UpdateItems
     
@@ -282,7 +284,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         self.previousLayout = self.layout
         
-        self.layout = DefaultListLayout(
+        self.layout = self.layoutType.init(
             delegate: self.delegate,
             appearance: self.appearance,
             in: self.collectionView!
