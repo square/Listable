@@ -8,7 +8,7 @@
 
 extension ListView
 {
-    final class Delegate : NSObject, UICollectionViewDelegate, ListViewLayoutDelegate
+    final class Delegate : NSObject, UICollectionViewDelegate, CollectionViewLayoutDelegate
     {
         unowned var view : ListView!
         unowned var presentationState : PresentationState!

@@ -8,46 +8,13 @@
 import UIKit
 
 
-protocol ListViewLayoutDelegate : AnyObject
-{
-    func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
-    
-    func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
-    
-    func hasListHeader(in collectionView : UICollectionView) -> Bool
-    func heightForListHeader(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
-    
-    func hasListFooter(in collectionView : UICollectionView) -> Bool
-    func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
-    
-    func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
-    func heightForOverscrollFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
-    
-    func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
-    
-    func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
-    
-    func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
-    func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
-    
-    func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns
-}
-
-
 final class CollectionViewLayout : UICollectionViewLayout
 {
     //
     // MARK: Properties
     //
     
-    unowned let delegate : ListViewLayoutDelegate
+    unowned let delegate : CollectionViewLayoutDelegate
     
     var appearance : Appearance {
         didSet {
@@ -74,15 +41,15 @@ final class CollectionViewLayout : UICollectionViewLayout
     //
     
     init(
-        delegate : ListViewLayoutDelegate,
+        delegate : CollectionViewLayoutDelegate,
         appearance : Appearance
     )
     {
         self.delegate = delegate
         self.appearance = appearance
         
-        self.layoutInfo = DefaultListLayout()
-        self.previousLayoutResult = self.layoutInfo
+        self.layout = DefaultListLayout()
+        self.previousLayout = self.layout
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
@@ -100,7 +67,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     func positionForItem(at indexPath : IndexPath) -> ItemPosition
     {
-        let item = self.layoutInfo.item(at: indexPath)
+        let item = self.layout.item(at: indexPath)
         
         return item.position
     }
@@ -109,8 +76,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private var layoutInfo : DefaultListLayout
-    private var previousLayoutResult : DefaultListLayout
+    private var layout : DefaultListLayout
+    private var previousLayout : DefaultListLayout
     
     private var changesDuringCurrentUpdate : UpdateItems
     
@@ -155,20 +122,20 @@ final class CollectionViewLayout : UICollectionViewLayout
             let from = from[0]
             let to = to[0]
             
-            let item = self.layoutInfo.item(at: from)
+            let item = self.layout.item(at: from)
             item.liveIndexPath = to
                     
-            self.layoutInfo.move(from: from, to: to)
+            self.layout.move(from: from, to: to)
             
             if from != to {
                 context.performedInteractiveMove = true
-                self.layoutInfo.reindexLiveIndexPaths()
+                self.layout.reindexLiveIndexPaths()
             }
         }
         
         // Handle View Width Changing
         
-        context.widthChanged = self.layoutInfo.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+        context.widthChanged = self.layout.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
         
         // Update Needed Layout Type
                 
@@ -183,8 +150,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         listablePrecondition(movementCancelled == false, "Cancelling moves is currently not supported.")
         
-        self.layoutInfo.reindexLiveIndexPaths()
-        self.layoutInfo.reindexDelegateProvidedIndexPaths()
+        self.layout.reindexLiveIndexPaths()
+        self.layout.reindexDelegateProvidedIndexPaths()
                                 
         return super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
@@ -295,17 +262,17 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     private func performUpdateHeaders()
     {
-        self.layoutInfo.updateHeaders(in: self.collectionView!)
+        self.layout.updateHeaders(in: self.collectionView!)
     }
     
     private func performUpdateOverscroll()
     {
-        self.layoutInfo.updateOverscrollPosition(in: self.collectionView!)
+        self.layout.updateOverscrollPosition(in: self.collectionView!)
     }
     
     private func performRelayout() -> Bool
     {
-        return self.layoutInfo.layout(
+        return self.layout.layout(
             delegate: self.delegate,
             in: self.collectionView!
         )
@@ -313,15 +280,15 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     private func performRebuild() -> Bool
     {
-        self.previousLayoutResult = self.layoutInfo
+        self.previousLayout = self.layout
         
-        self.layoutInfo = DefaultListLayout(
+        self.layout = DefaultListLayout(
             delegate: self.delegate,
             appearance: self.appearance,
             in: self.collectionView!
         )
         
-        return self.layoutInfo.layout(
+        return self.layout.layout(
             delegate: self.delegate,
             in: self.collectionView!
         )
@@ -333,22 +300,22 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     override var collectionViewContentSize : CGSize
     {
-        return self.layoutInfo.contentSize
+        return self.layout.contentSize
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layoutInfo.layoutAttributes(in: rect)
+        return self.layout.layoutAttributes(in: rect)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutInfo.layoutAttributes(at: indexPath)
+        return self.layout.layoutAttributes(at: indexPath)
     }
     
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layoutInfo.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
+        return self.layout.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
     }
     
     //
@@ -360,7 +327,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layoutInfo.layoutAttributes(at: itemIndexPath)
+            let attributes = self.layout.layoutAttributes(at: itemIndexPath)
             
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -384,7 +351,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
         
         if wasItemDeleted {
-            let attributes = self.previousLayoutResult.layoutAttributes(at: itemIndexPath)
+            let attributes = self.previousLayout.layoutAttributes(at: itemIndexPath)
 
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -433,13 +400,51 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
     {
-        let defaultAttributes = self.layoutInfo.layoutAttributes(at: indexPath)
+        let defaultAttributes = self.layout.layoutAttributes(at: indexPath)
         let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
         
         attributes.center.x = defaultAttributes.center.x
         
         return attributes
     }
+}
+
+
+//
+// MARK: Delegate For Layout Information
+//
+
+
+protocol CollectionViewLayoutDelegate : AnyObject
+{
+    func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
+    
+    func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
+    
+    func hasListHeader(in collectionView : UICollectionView) -> Bool
+    func heightForListHeader(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func hasListFooter(in collectionView : UICollectionView) -> Bool
+    func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
+    func heightForOverscrollFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
+    
+    func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
+    func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
+    func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
+    
+    func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns
 }
 
 
