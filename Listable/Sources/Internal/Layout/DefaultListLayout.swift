@@ -20,7 +20,7 @@ final class DefaultListLayout : ListLayout
     
     let appearance : Appearance
     
-    let content : ContentInfo
+    let content : ListLayoutContent
     
     //
     // MARK: Initialization
@@ -34,7 +34,7 @@ final class DefaultListLayout : ListLayout
         
         self.appearance = Appearance()
         
-        self.content = ContentInfo(with: self.appearance)
+        self.content = ListLayoutContent(with: self.appearance)
     }
     
     init(
@@ -51,15 +51,15 @@ final class DefaultListLayout : ListLayout
         
         self.appearance = appearance
         
-        self.content = ContentInfo(
+        self.content = ListLayoutContent(
             with: self.appearance,
             
             header: {
                 guard delegate.hasListHeader(in: collectionView) else {
-                    return SupplementaryItemLayoutInfo.empty(.listHeader, direction: appearance.direction)
+                    return .empty(.listHeader, direction: appearance.direction)
                 }
                 
-                return SupplementaryItemLayoutInfo(
+                return .init(
                     kind: SupplementaryKind.listHeader,
                     direction: appearance.direction,
                     layout: delegate.layoutForListHeader(in: collectionView),
@@ -69,10 +69,10 @@ final class DefaultListLayout : ListLayout
             
             footer: {
                 guard delegate.hasListFooter(in: collectionView) else {
-                    return SupplementaryItemLayoutInfo.empty(.listFooter, direction: appearance.direction)
+                    return .empty(.listFooter, direction: appearance.direction)
                 }
                 
-                return SupplementaryItemLayoutInfo(
+                return .init(
                     kind: SupplementaryKind.listFooter,
                     direction: appearance.direction,
                     layout: delegate.layoutForListFooter(in: collectionView),
@@ -82,10 +82,10 @@ final class DefaultListLayout : ListLayout
             
             overscrollFooter: {
                 guard delegate.hasOverscrollFooter(in: collectionView) else {
-                    return SupplementaryItemLayoutInfo.empty(.overscrollFooter, direction: appearance.direction)
+                    return .empty(.overscrollFooter, direction: appearance.direction)
                 }
                 
-                return SupplementaryItemLayoutInfo(
+                return .init(
                     kind: SupplementaryKind.overscrollFooter,
                     direction: appearance.direction,
                     layout: delegate.layoutForOverscrollFooter(in: collectionView),
@@ -97,17 +97,17 @@ final class DefaultListLayout : ListLayout
                 
                 let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
                 
-                return SectionLayoutInfo(
+                return .init(
                     direction: appearance.direction,
                     
                     layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
                     
                     header: {
                         guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
-                            return SupplementaryItemLayoutInfo.empty(.sectionHeader, direction: appearance.direction)
+                            return .empty(.sectionHeader, direction: appearance.direction)
                         }
                         
-                        return SupplementaryItemLayoutInfo(
+                        return .init(
                             kind: SupplementaryKind.sectionHeader,
                             direction: appearance.direction,
                             layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
@@ -117,10 +117,10 @@ final class DefaultListLayout : ListLayout
                     
                     footer: {
                         guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
-                            return SupplementaryItemLayoutInfo.empty(.sectionFooter, direction: appearance.direction)
+                            return .empty(.sectionFooter, direction: appearance.direction)
                         }
                         
-                        return SupplementaryItemLayoutInfo(
+                        return .init(
                             kind: SupplementaryKind.sectionFooter,
                             direction: appearance.direction,
                             layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
@@ -133,7 +133,7 @@ final class DefaultListLayout : ListLayout
                     items: itemCount.mapEach { itemIndex in
                         let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
                         
-                        return ItemLayoutInfo(
+                        return .init(
                             delegateProvidedIndexPath: indexPath,
                             liveIndexPath: indexPath,
                             direction: appearance.direction,
@@ -217,7 +217,7 @@ final class DefaultListLayout : ListLayout
         return attributes
     }
     
-    func item(at indexPath : IndexPath) -> ItemLayoutInfo
+    func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
     {
         return self.content.sections[indexPath.section].items[indexPath.item]
     }
@@ -652,251 +652,6 @@ final class DefaultListLayout : ListLayout
             for item in section.items {
                 item.y += additionalOffset
             }
-        }
-    }
-}
-
-
-extension DefaultListLayout
-{
-    final class ContentInfo
-    {
-        let header : SupplementaryItemLayoutInfo
-        let footer : SupplementaryItemLayoutInfo
-        
-        let overscrollFooter : SupplementaryItemLayoutInfo
-        
-        let sections : [SectionLayoutInfo]
-        
-        init(with appearance : Appearance)
-        {
-            self.header = SupplementaryItemLayoutInfo.empty(.listHeader, direction: appearance.direction)
-            self.footer = SupplementaryItemLayoutInfo.empty(.listFooter, direction: appearance.direction)
-            self.overscrollFooter = SupplementaryItemLayoutInfo.empty(.overscrollFooter, direction: appearance.direction)
-            
-            self.sections = []
-        }
-        
-        init(
-            with appearance : Appearance,
-            header : SupplementaryItemLayoutInfo,
-            footer : SupplementaryItemLayoutInfo,
-            overscrollFooter : SupplementaryItemLayoutInfo,
-            sections : [SectionLayoutInfo]
-        )
-        {
-            self.header = header
-            self.footer = footer
-            self.overscrollFooter = overscrollFooter
-            
-            self.sections = sections
-        }
-    }
-    
-    //
-    // MARK: Layout Information
-    //
-    
-    final class SectionLayoutInfo
-    {
-        let direction : LayoutDirection
-        let layout : Section.Layout
-        
-        let header : SupplementaryItemLayoutInfo
-        let footer : SupplementaryItemLayoutInfo
-        
-        let columns : Section.Columns
-        
-        var items : [ItemLayoutInfo]
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        
-        var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-        
-        init(
-            direction : LayoutDirection,
-            layout : Section.Layout,
-            header : SupplementaryItemLayoutInfo,
-            footer : SupplementaryItemLayoutInfo,
-            columns : Section.Columns,
-            items : [ItemLayoutInfo]
-            )
-        {
-            self.direction = direction
-            self.layout = layout
-            
-            self.header = header
-            self.footer = footer
-            
-            self.columns = columns
-            
-            self.items = items
-        }
-        
-        fileprivate func setItemPositions(with appearance : Appearance)
-        {
-            if self.columns.count == 1 {
-                let groups = SectionLayoutInfo.grouped(
-                    items: self.items,
-                    groupingHeight: appearance.sizing.itemPositionGroupingHeight,
-                    appearance: appearance
-                )
-                
-                groups.forEach { group in
-                    let itemCount = group.count
-                    
-                    group.forEachWithIndex { index, isLast, item in
-                        
-                        if itemCount == 1 {
-                            item.position = .single
-                        } else {
-                            if index == 0 {
-                                item.position = .first
-                            } else if isLast {
-                                item.position = .last
-                            } else {
-                                item.position = .middle
-                            }
-                        }
-                    }
-                }
-            } else {
-                // If we have columns, every item will receive "single" positioning for now.
-                // Depending on use, we may want to make this smarter.
-                
-                self.items.forEach { $0.position = .single }
-            }
-        }
-        
-        private static func grouped(items : [ItemLayoutInfo], groupingHeight : CGFloat, appearance : Appearance) -> [[ItemLayoutInfo]]
-        {
-            var all = [[ItemLayoutInfo]]()
-            var current = [ItemLayoutInfo]()
-            
-            var lastSpacing : CGFloat = 0.0
-            
-            items.forEachWithIndex { index, isLast, item in
-                let inNewGroup = groupingHeight == 0.0 ? lastSpacing > 0.0 : lastSpacing > groupingHeight
-                
-                if inNewGroup {
-                    all.append(current)
-                    current = []
-                }
-                
-                current.append(item)
-                
-                lastSpacing = item.layout.itemSpacing ?? appearance.layout.itemSpacing
-            }
-            
-            if current.isEmpty == false {
-                all.append(current)
-            }
-            
-            return all
-        }
-    }
-    
-    final class SupplementaryItemLayoutInfo
-    {
-        static func empty(_ kind : SupplementaryKind, direction: LayoutDirection) -> SupplementaryItemLayoutInfo
-        {
-            return SupplementaryItemLayoutInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false)
-        }
-        
-        let kind : SupplementaryKind
-        let direction : LayoutDirection
-        let layout : HeaderFooterLayout
-        
-        let isPopulated : Bool
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        var pinnedY : CGFloat? = nil
-        
-        var defaultFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-        
-        var visibleFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.pinnedY ?? self.y),
-                size: self.size
-            )
-        }
-        
-        init(kind : SupplementaryKind, direction : LayoutDirection, layout : HeaderFooterLayout, isPopulated: Bool)
-        {
-            self.kind = kind
-            self.direction = direction
-            self.layout = layout
-            self.isPopulated = isPopulated
-        }
-        
-        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-        {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: self.kind.rawValue, with: indexPath)
-            
-            attributes.frame = self.visibleFrame
-            attributes.zIndex = self.kind.zIndex
-            
-            return attributes
-        }
-    }
-    
-    final class ItemLayoutInfo
-    {
-        var delegateProvidedIndexPath : IndexPath
-        var liveIndexPath : IndexPath
-        
-        let direction : LayoutDirection
-        let layout : ItemLayout
-        
-        var position : ItemPosition = .single
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        
-        var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-        
-        init(
-            delegateProvidedIndexPath : IndexPath,
-            liveIndexPath : IndexPath,
-            direction : LayoutDirection,
-            layout : ItemLayout
-            )
-        {
-            self.delegateProvidedIndexPath = delegateProvidedIndexPath
-            self.liveIndexPath = liveIndexPath
-            
-            self.direction = direction
-            self.layout = layout
-        }
-        
-        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-        {
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            
-            attributes.frame = self.frame
-            attributes.zIndex = 0
-            
-            return attributes
         }
     }
 }
