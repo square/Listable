@@ -14,9 +14,9 @@ final class DefaultListLayout : ListLayout
     // MARK: Public Properties
     //
     
-    let collectionViewSize : CGSize
-    
     var contentSize : CGSize
+    
+    var viewProperties : CollectionViewLayoutProperties
     
     let appearance : Appearance
     
@@ -33,8 +33,9 @@ final class DefaultListLayout : ListLayout
     
     init()
     {
-        self.collectionViewSize = .zero
         self.contentSize = .zero
+        
+        self.viewProperties = CollectionViewLayoutProperties()
         
         self.appearance = Appearance()
         
@@ -53,8 +54,9 @@ final class DefaultListLayout : ListLayout
     {
         let sectionCount = collectionView.numberOfSections
         
-        self.collectionViewSize = collectionView.bounds.size
         self.contentSize = .zero
+        
+        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
         
         self.appearance = appearance
         
@@ -276,12 +278,9 @@ final class DefaultListLayout : ListLayout
         self.sections[to.section].items.insert(info, at: to.item)
     }
     
-    func shouldInvalidateLayoutFor(newCollectionViewSize : CGSize) -> Bool
+    func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
     {
-        switch self.appearance.direction {
-        case .vertical: return self.collectionViewSize.width != newCollectionViewSize.width
-        case .horizontal: return self.collectionViewSize.height != newCollectionViewSize.height
-        }
+        return self.viewProperties != CollectionViewLayoutProperties(collectionView: collectionView)
     }
     
     @discardableResult
@@ -373,6 +372,8 @@ final class DefaultListLayout : ListLayout
             padding: direction.horizontalPadding(with: layout.padding),
             constraint: layout.width
         )
+        
+        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
         
         //
         // Item Positioning

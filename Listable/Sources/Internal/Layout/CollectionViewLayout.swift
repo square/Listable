@@ -135,7 +135,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         // Handle View Width Changing
         
-        context.widthChanged = self.layout.shouldInvalidateLayoutFor(newCollectionViewSize: view.bounds.size)
+        context.viewPropertiesChanged = self.layout.shouldInvalidateLayoutFor(collectionView: view)
         
         // Update Needed Layout Type
                 
@@ -167,7 +167,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     private final class InvalidationContext : UICollectionViewLayoutInvalidationContext
     {
-        var widthChanged : Bool = false
+        var viewPropertiesChanged : Bool = false
         
         var performedInteractiveMove : Bool = false
     }
@@ -186,7 +186,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             let context = context as! InvalidationContext
             
             let requeryDataSourceCounts = context.invalidateEverything || context.invalidateDataSourceCounts
-            let needsRelayout = context.widthChanged || context.performedInteractiveMove
+            let needsRelayout = context.viewPropertiesChanged || context.performedInteractiveMove
             
             if requeryDataSourceCounts {
                 self.merge(with: .rebuild)
@@ -408,6 +408,33 @@ final class CollectionViewLayout : UICollectionViewLayout
         return attributes
     }
 }
+
+
+//
+// MARK: Invalidation Helpers
+//
+
+
+struct CollectionViewLayoutProperties : Equatable
+ {
+     let size : CGSize
+     let safeAreaInsets : UIEdgeInsets
+     let contentInset : UIEdgeInsets
+
+     init()
+     {
+         self.size = .zero
+         self.safeAreaInsets = .zero
+         self.contentInset = .zero
+     }
+
+     init(collectionView : UICollectionView)
+     {
+         self.size = collectionView.bounds.size
+         self.safeAreaInsets = collectionView.lst_safeAreaInsets
+         self.contentInset = collectionView.contentInset
+     }
+ }
 
 
 //
