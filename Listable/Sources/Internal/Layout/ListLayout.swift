@@ -8,6 +8,7 @@
 import Foundation
 
 
-protocol ListLayout : AnyObject {
-    
+protocol ListLayout : AnyObject
+{
+
 }
