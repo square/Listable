@@ -18,6 +18,8 @@ public final class ListView : UIView
     {
         // Create all default values.
         
+        self.layoutType = .list
+        
         self.appearance = appearance
         
         self.behavior = Behavior()
@@ -116,6 +118,16 @@ public final class ListView : UIView
     //
     // MARK: Appearance
     //
+    
+    public var layoutType : ListLayoutType {
+        didSet {
+            guard oldValue != self.layoutType else {
+                return
+            }
+            
+            listableFatal("Changing the list layout type to anything but `list` is currently not supported.")
+        }
+    }
     
     public var appearance : Appearance {
         didSet {
@@ -270,10 +282,12 @@ public final class ListView : UIView
     {
         let description = ListDescription(
             animatesChanges: true,
+            layoutType: self.layoutType,
             appearance: self.appearance,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
             scrollInsets: self.scrollInsets,
+            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             build: builder
         )
         
@@ -319,6 +333,7 @@ public final class ListView : UIView
     
     public func setProperties(with description : ListDescription)
     {
+        self.layoutType = description.layoutType
         self.appearance = description.appearance
         self.behavior = description.behavior
         self.autoScrollAction = description.autoScrollAction
