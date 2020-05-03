@@ -66,18 +66,101 @@ public final class ListLayoutContent
     }
     
     init(
-        with appearance : Appearance,
-        header : SupplementaryItemInfo,
-        footer : SupplementaryItemInfo,
-        overscrollFooter : SupplementaryItemInfo,
-        sections : [SectionInfo]
-    )
+        delegate : CollectionViewLayoutDelegate,
+        appearance : Appearance,
+        in collectionView : UICollectionView
+        )
     {
-        self.header = header
-        self.footer = footer
-        self.overscrollFooter = overscrollFooter
+        self.header = {
+            guard delegate.hasListHeader(in: collectionView) else {
+                return .empty(.listHeader, direction: appearance.direction)
+            }
+            
+            return .init(
+                kind: SupplementaryKind.listHeader,
+                direction: appearance.direction,
+                layout: delegate.layoutForListHeader(in: collectionView),
+                isPopulated: true
+            )
+        }()
         
-        self.sections = sections
+        self.footer = {
+            guard delegate.hasListFooter(in: collectionView) else {
+                return .empty(.listFooter, direction: appearance.direction)
+            }
+            
+            return .init(
+                kind: SupplementaryKind.listFooter,
+                direction: appearance.direction,
+                layout: delegate.layoutForListFooter(in: collectionView),
+                isPopulated: true
+            )
+        }()
+        
+        self.overscrollFooter = {
+            guard delegate.hasOverscrollFooter(in: collectionView) else {
+                return .empty(.overscrollFooter, direction: appearance.direction)
+            }
+            
+            return .init(
+                kind: SupplementaryKind.overscrollFooter,
+                direction: appearance.direction,
+                layout: delegate.layoutForOverscrollFooter(in: collectionView),
+                isPopulated: true
+            )
+        }()
+        
+        let sectionCount = collectionView.numberOfSections
+        
+        self.sections = (0..<sectionCount).map { sectionIndex in
+            
+            let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
+            
+            return .init(
+                direction: appearance.direction,
+                
+                layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
+                
+                header: {
+                    guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
+                        return .empty(.sectionHeader, direction: appearance.direction)
+                    }
+                    
+                    return .init(
+                        kind: SupplementaryKind.sectionHeader,
+                        direction: appearance.direction,
+                        layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
+                        isPopulated: true
+                    )
+                }(),
+                
+                footer: {
+                    guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
+                        return .empty(.sectionFooter, direction: appearance.direction)
+                    }
+                    
+                    return .init(
+                        kind: SupplementaryKind.sectionFooter,
+                        direction: appearance.direction,
+                        layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
+                        isPopulated: true
+                    )
+                }(),
+                
+                columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
+                
+                items: (0..<itemCount).map { itemIndex in
+                    let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                    
+                    return .init(
+                        delegateProvidedIndexPath: indexPath,
+                        liveIndexPath: indexPath,
+                        direction: appearance.direction,
+                        layout: delegate.layoutForItem(at: indexPath, in: collectionView)
+                    )
+                }
+            )
+        }
     }
     
     //
