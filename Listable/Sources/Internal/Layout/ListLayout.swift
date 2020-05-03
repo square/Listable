@@ -10,7 +10,58 @@ import Foundation
 
 protocol ListLayout : AnyObject
 {
-
+    //
+    // MARK: Public Properties
+    //
+    
+    var contentSize : CGSize { get }
+    
+    //
+    // MARK: Initialization
+    //
+    
+    init()
+    
+    init(
+        delegate : CollectionViewLayoutDelegate,
+        appearance : Appearance,
+        in collectionView : UICollectionView
+    )
+    
+    //
+    // MARK: Fetching Elements
+    //
+    
+    func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
+    
+    func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
+    
+    func layoutAttributes(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+    
+    func supplementaryLayoutAttributes(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
+    
+    //
+    // MARK: Peforming Layouts
+    //
+    
+    func reindexLiveIndexPaths()
+    
+    func reindexDelegateProvidedIndexPaths()
+    
+    func move(from : IndexPath, to : IndexPath)
+    
+    func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
+    
+    @discardableResult
+    func updateHeaders(in collectionView : UICollectionView) -> Bool
+    
+    @discardableResult
+    func updateOverscrollPosition(in collectionView : UICollectionView) -> Bool
+    
+    func layout(
+        delegate : CollectionViewLayoutDelegate,
+        in collectionView : UICollectionView
+    ) -> Bool
 }
 
 
