@@ -52,10 +52,12 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         
         self.listDescription = ListDescription(
             animatesChanges: true,
+            layoutType: .list,
             appearance: .init(),
             behavior: .init(),
             autoScrollAction: .none,
             scrollInsets: .init(),
+            accessibilityIdentifier: nil,
             build: build
         )
     }

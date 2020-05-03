@@ -444,7 +444,7 @@ struct CollectionViewLayoutProperties : Equatable
 //
 
 
-protocol CollectionViewLayoutDelegate : AnyObject
+public protocol CollectionViewLayoutDelegate : AnyObject
 {
     func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
     

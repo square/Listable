@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol ListLayout : AnyObject
+public protocol ListLayout : AnyObject
 {
     //
     // MARK: Public Properties
@@ -65,7 +65,7 @@ protocol ListLayout : AnyObject
 }
 
 
-final class ListLayoutContent
+public final class ListLayoutContent
 {
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
@@ -105,7 +105,7 @@ final class ListLayoutContent
 //
 
 
-extension ListLayoutContent
+public extension ListLayoutContent
 {
     final class SectionInfo
     {

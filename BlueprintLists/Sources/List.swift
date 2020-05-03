@@ -22,10 +22,12 @@ public struct List : BlueprintUI.Element
     {
         self.listDescription = ListDescription(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+            layoutType: .list,
             appearance: .init(),
             behavior: .init(),
             autoScrollAction: .none,
             scrollInsets: .init(),
+            accessibilityIdentifier: nil,
             build: build
         )
     }
