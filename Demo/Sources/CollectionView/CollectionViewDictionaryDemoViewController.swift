@@ -31,7 +31,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             $0.stickySectionHeaders = true
         }
         
-        self.listView.behavior.dismissesKeyboardOnScroll = true
+        self.listView.behavior.keyboardDismissMode = .interactive
         
         self.listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.SearchState())
         

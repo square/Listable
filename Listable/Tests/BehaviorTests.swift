@@ -16,6 +16,6 @@ class BehaviorTests: XCTestCase
     {
         let behavior = Behavior()
         
-        XCTAssertEqual(behavior.dismissesKeyboardOnScroll, false)
+        XCTAssertEqual(behavior.keyboardDismissMode, .interactive)
     }
 }

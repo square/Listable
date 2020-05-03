@@ -73,6 +73,7 @@ public final class ListView : UIView
         self.addSubview(self.collectionView)
         
         self.applyAppearance()
+        self.applyBehavior()
         self.applyScrollInsets()
     }
     
@@ -167,7 +168,7 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
-        // Nothing right now.
+        self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
     }
     
     public var scrollInsets : ScrollInsets {
