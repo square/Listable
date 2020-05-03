@@ -17,6 +17,7 @@ final class GridListLayout : ListLayout
     var contentSize : CGSize
         
     let appearance : Appearance
+    let behavior : Behavior
     
     let content : ListLayoutContent
     
@@ -29,6 +30,7 @@ final class GridListLayout : ListLayout
         self.contentSize = .zero
                 
         self.appearance = Appearance()
+        self.behavior = Behavior()
         
         self.content = ListLayoutContent(with: self.appearance)
     }
@@ -36,12 +38,14 @@ final class GridListLayout : ListLayout
     init(
         delegate : CollectionViewLayoutDelegate,
         appearance : Appearance,
+        behavior : Behavior,
         in collectionView : UICollectionView
         )
     {
         self.contentSize = .zero
                 
         self.appearance = appearance
+        self.behavior = behavior
         
         self.content = ListLayoutContent(
             delegate: delegate,

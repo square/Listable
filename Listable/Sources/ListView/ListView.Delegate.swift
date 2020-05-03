@@ -389,12 +389,6 @@ extension ListView
             // Update Item Visibility
             
             self.view.updateVisibleItemsAndSections()
-            
-            // Dismiss Keyboard
-            
-            if self.view.behavior.dismissesKeyboardOnScroll {
-                self.view.endEditing(true)
-            }
         }
     }
 }

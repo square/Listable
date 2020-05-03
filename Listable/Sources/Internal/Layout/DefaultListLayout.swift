@@ -17,6 +17,7 @@ final class DefaultListLayout : ListLayout
     var contentSize : CGSize
         
     let appearance : Appearance
+    let behavior : Behavior
     
     let content : ListLayoutContent
     
@@ -29,6 +30,7 @@ final class DefaultListLayout : ListLayout
         self.contentSize = .zero
                 
         self.appearance = Appearance()
+        self.behavior = Behavior()
         
         self.content = ListLayoutContent(with: self.appearance)
     }
@@ -36,12 +38,14 @@ final class DefaultListLayout : ListLayout
     init(
         delegate : CollectionViewLayoutDelegate,
         appearance : Appearance,
+        behavior : Behavior,
         in collectionView : UICollectionView
         )
     {
         self.contentSize = .zero
                 
         self.appearance = appearance
+        self.behavior = behavior
         
         self.content = ListLayoutContent(
             delegate: delegate,
@@ -420,7 +424,7 @@ final class DefaultListLayout : ListLayout
             }
         }()
         
-        let additionalOffset = self.appearance.underflow.alignment.offsetFor(
+        let additionalOffset = self.behavior.underflow.alignment.offsetFor(
             contentHeight: contentHeight,
             viewHeight: viewHeight - safeAreaInsets
         )

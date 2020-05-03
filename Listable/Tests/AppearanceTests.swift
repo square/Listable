@@ -22,7 +22,6 @@ class AppearanceTests: XCTestCase
         
         XCTAssertEqual(appearance.sizing, Appearance.Sizing())
         XCTAssertEqual(appearance.layout, Appearance.Layout())
-        XCTAssertEqual(appearance.underflow, Appearance.UnderflowBehavior())
     }
 }
 
@@ -69,36 +68,6 @@ class ListLayoutTests : XCTestCase
         self.testcase("Has width constraint") {
             XCTAssertEqual(100.0, Appearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .fixed(100.0)))
             XCTAssertEqual(110.0, Appearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .atMost(200.0)))
-        }
-    }
-}
-
-
-class UnderflowBehaviorTests : XCTestCase
-{
-    func test_init()
-    {
-        let underflow = Appearance.UnderflowBehavior()
-        
-        XCTAssertEqual(underflow.alwaysBounce, true)
-        XCTAssertEqual(underflow.alignment, .top)
-    }
-}
-
-class UnderflowBehavior_Alignment_Tests : XCTestCase
-{
-    func test_offsetFor()
-    {
-        self.testcase("Larger than content") {
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.top.offsetFor(contentHeight: 200.0, viewHeight: 100.0), 0.0)
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.center.offsetFor(contentHeight: 200.0, viewHeight: 100.0), 0.0)
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.bottom.offsetFor(contentHeight: 200.0, viewHeight: 100.0), 0.0)
-        }
-        
-        self.testcase("Smaller than content") {
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.top.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 0.0)
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.center.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 25.0)
-            XCTAssertEqual(Appearance.UnderflowBehavior.Alignment.bottom.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 50.0)
         }
     }
 }

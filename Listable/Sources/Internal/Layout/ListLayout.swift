@@ -17,6 +17,7 @@ public protocol ListLayout : AnyObject
     var contentSize : CGSize { get }
     
     var appearance : Appearance { get }
+    var behavior : Behavior { get }
     
     var content : ListLayoutContent { get }
     
@@ -29,6 +30,7 @@ public protocol ListLayout : AnyObject
     init(
         delegate : CollectionViewLayoutDelegate,
         appearance : Appearance,
+        behavior : Behavior,
         in collectionView : UICollectionView
     )
     
