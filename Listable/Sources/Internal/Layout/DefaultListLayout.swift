@@ -15,9 +15,7 @@ final class DefaultListLayout : ListLayout
     //
     
     var contentSize : CGSize
-    
-    var viewProperties : CollectionViewLayoutProperties
-    
+        
     let appearance : Appearance
     
     let content : ListLayoutContent
@@ -29,9 +27,7 @@ final class DefaultListLayout : ListLayout
     init()
     {
         self.contentSize = .zero
-        
-        self.viewProperties = CollectionViewLayoutProperties()
-        
+                
         self.appearance = Appearance()
         
         self.content = ListLayoutContent(with: self.appearance)
@@ -46,9 +42,7 @@ final class DefaultListLayout : ListLayout
         let sectionCount = collectionView.numberOfSections
         
         self.contentSize = .zero
-        
-        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
-        
+                
         self.appearance = appearance
         
         self.content = ListLayoutContent(
@@ -217,71 +211,9 @@ final class DefaultListLayout : ListLayout
         return attributes
     }
     
-    func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
-    {
-        return self.content.sections[indexPath.section].items[indexPath.item]
-    }
-    
-    func layoutAttributes(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-    {
-        let item = self.item(at: indexPath)
-        
-        return item.layoutAttributes(with: indexPath)
-    }
-    
-    func supplementaryLayoutAttributes(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
-    {
-        let section = self.content.sections[indexPath.section]
-        
-        switch SupplementaryKind(rawValue: kind)! {
-        case .listHeader: return self.content.header.layoutAttributes(with: indexPath)
-        case .listFooter: return self.content.footer.layoutAttributes(with: indexPath)
-            
-        case .sectionHeader: return section.header.layoutAttributes(with: indexPath)
-        case .sectionFooter: return section.footer.layoutAttributes(with: indexPath)
-            
-        case .overscrollFooter: return self.content.overscrollFooter.layoutAttributes(with: indexPath)
-        }
-    }
-    
     //
-    // MARK: Peforming Layouts
+    // MARK: Performing Layouts
     //
-    
-    func reindexLiveIndexPaths()
-    {
-        self.content.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.liveIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func reindexDelegateProvidedIndexPaths()
-    {
-        self.content.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.delegateProvidedIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func move(from : IndexPath, to : IndexPath)
-    {
-        guard from != to else {
-            return
-        }
-        
-        let info = self.item(at: from)
-        
-        self.content.sections[from.section].items.remove(at: from.item)
-        self.content.sections[to.section].items.insert(info, at: to.item)
-    }
-    
-    func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
-    {
-        return self.viewProperties != CollectionViewLayoutProperties(collectionView: collectionView)
-    }
     
     @discardableResult
     func updateHeaders(in collectionView : UICollectionView) -> Bool
@@ -372,9 +304,7 @@ final class DefaultListLayout : ListLayout
             padding: direction.horizontalPadding(with: layout.padding),
             constraint: layout.width
         )
-        
-        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
-        
+                
         //
         // Item Positioning
         //
@@ -784,17 +714,6 @@ fileprivate extension Int
     }
 }
 
-
-internal extension UIView
-{
-    var lst_safeAreaInsets : UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
-    }
-}
 
 fileprivate func performLayout<Input>(for input : Input, _ block : (Input) -> ())
 {

@@ -55,6 +55,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
+        self.viewProperties = CollectionViewLayoutProperties()
+        
         super.init()
         
         self.applyAppearance()
@@ -69,7 +71,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     func positionForItem(at indexPath : IndexPath) -> ItemPosition
     {
-        let item = self.layout.item(at: indexPath)
+        let item = self.layout.content.item(at: indexPath)
         
         return item.position
     }
@@ -82,6 +84,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     private var previousLayout : ListLayout
     
     private var changesDuringCurrentUpdate : UpdateItems
+    
+    private var viewProperties : CollectionViewLayoutProperties
     
     //
     // MARK: Invalidation & Invalidation Contexts
@@ -124,20 +128,20 @@ final class CollectionViewLayout : UICollectionViewLayout
             let from = from[0]
             let to = to[0]
             
-            let item = self.layout.item(at: from)
+            let item = self.layout.content.item(at: from)
             item.liveIndexPath = to
                     
-            self.layout.move(from: from, to: to)
+            self.layout.content.move(from: from, to: to)
             
             if from != to {
                 context.performedInteractiveMove = true
-                self.layout.reindexLiveIndexPaths()
+                self.layout.content.reindexLiveIndexPaths()
             }
         }
         
         // Handle View Width Changing
         
-        context.viewPropertiesChanged = self.layout.shouldInvalidateLayoutFor(collectionView: view)
+        context.viewPropertiesChanged = self.viewProperties != CollectionViewLayoutProperties(collectionView: view)
         
         // Update Needed Layout Type
                 
@@ -152,8 +156,8 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         listablePrecondition(movementCancelled == false, "Cancelling moves is currently not supported.")
         
-        self.layout.reindexLiveIndexPaths()
-        self.layout.reindexDelegateProvidedIndexPaths()
+        self.layout.content.reindexLiveIndexPaths()
+        self.layout.content.reindexDelegateProvidedIndexPaths()
                                 
         return super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
@@ -274,10 +278,14 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     private func performRelayout() -> Bool
     {
-        return self.layout.layout(
+        let didLayout = self.layout.layout(
             delegate: self.delegate,
             in: self.collectionView!
         )
+        
+        self.viewProperties = CollectionViewLayoutProperties(collectionView: self.collectionView!)
+        
+        return didLayout
     }
     
     private func performRebuild() -> Bool
@@ -290,10 +298,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             in: self.collectionView!
         )
         
-        return self.layout.layout(
-            delegate: self.delegate,
-            in: self.collectionView!
-        )
+        return self.performRelayout()
     }
     
     //
@@ -307,17 +312,17 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layout.layoutAttributes(in: rect)
+        return self.layout.content.layoutAttributes(in: rect)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layout.layoutAttributes(at: indexPath)
+        return self.layout.content.layoutAttributes(at: indexPath)
     }
     
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layout.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
+        return self.layout.content.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
     }
     
     //
@@ -329,7 +334,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layout.layoutAttributes(at: itemIndexPath)
+            let attributes = self.layout.content.layoutAttributes(at: itemIndexPath)
             
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -353,7 +358,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
         
         if wasItemDeleted {
-            let attributes = self.previousLayout.layoutAttributes(at: itemIndexPath)
+            let attributes = self.previousLayout.content.layoutAttributes(at: itemIndexPath)
 
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -402,12 +407,29 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
     {
-        let defaultAttributes = self.layout.layoutAttributes(at: indexPath)
+        let defaultAttributes = self.layout.content.layoutAttributes(at: indexPath)
         let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
         
         attributes.center.x = defaultAttributes.center.x
         
         return attributes
+    }
+}
+
+
+//
+// MARK: Layout Extensions
+//
+
+
+internal extension UIView
+{
+    var lst_safeAreaInsets : UIEdgeInsets {
+        if #available(iOS 11.0, *) {
+            return self.safeAreaInsets
+        } else {
+            return .zero
+        }
     }
 }
 

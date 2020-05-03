@@ -30,7 +30,7 @@ public enum ListLayoutType : Equatable
     public var layoutType : ListLayout.Type {
         switch self {
         case .list: return DefaultListLayout.self
-        case .grid: fatalError()
+        case .grid: fatalError() //return GridListLayout.self
         case .experimental(let custom): return custom.type
         }
     }
