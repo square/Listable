@@ -34,7 +34,8 @@ public final class ListView : UIView
         
         self.layout = CollectionViewLayout(
             delegate: self.delegate,
-            appearance: self.appearance
+            appearance: self.appearance,
+            behavior: self.behavior
         )
         
         self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: self.layout)
@@ -150,10 +151,6 @@ public final class ListView : UIView
         // Row Sizing
         
         self.storage.presentationState.resetAllCachedSizes()
-        
-        // Scroll View Config
-        
-        self.collectionView.setAlwaysBounce(self.appearance.underflow.alwaysBounce, direction: self.appearance.direction)
     }
     
     public var behavior : Behavior {
@@ -168,7 +165,16 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
+        self.layout.behavior = self.behavior
+        
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
+        
+        // Scroll View Config
+        
+        self.collectionView.setAlwaysBounce(
+            self.behavior.underflow.alwaysBounce,
+            direction: self.appearance.direction
+        )
     }
     
     public var scrollInsets : ScrollInsets {

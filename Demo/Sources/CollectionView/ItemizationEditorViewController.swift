@@ -53,6 +53,11 @@ final class ItemizationEditorViewController : UIViewController
             
             list.appearance = self.listAppearance
             
+            list.behavior.underflow = .init(
+                alwaysBounce: true,
+                alignment: .top
+            )
+            
             let variationsTitle : String = {
                 if let selected = self.itemization.variations.selected.first {
                     return selected.name
@@ -163,10 +168,6 @@ final class ItemizationEditorViewController : UIViewController
                 itemSpacing: 20.0,
                 itemToSectionFooterSpacing: 20.0,
                 stickySectionHeaders: false
-            ),
-            underflow: Appearance.UnderflowBehavior(
-                alwaysBounce: true,
-                alignment: .top
             )
         )
     }

@@ -118,8 +118,8 @@ final class CollectionViewBasicDemoViewController : UIViewController
     @objc func cycleUnderflow()
     {
         UIView.animate(withDuration: 0.3) {
-            self.listView.appearance.underflow.alignment = {
-                switch self.listView.appearance.underflow.alignment {
+            self.listView.behavior.underflow.alignment = {
+                switch self.listView.behavior.underflow.alignment {
                 case .top: return .center
                 case .center: return .bottom
                 case .bottom: return .top

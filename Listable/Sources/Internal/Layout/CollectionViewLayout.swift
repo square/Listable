@@ -38,17 +38,39 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.invalidateLayout()
     }
     
+    var behavior : Behavior {
+        didSet {
+            guard oldValue != self.behavior else {
+                return
+            }
+            
+            self.applyBehavior()
+        }
+    }
+    
+    private func applyBehavior()
+    {
+        guard self.collectionView != nil else {
+            return
+        }
+        
+        self.neededLayoutType.merge(with: .rebuild)
+        self.invalidateLayout()
+    }
+    
     //
     // MARK: Initialization
     //
     
     init(
         delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance
+        appearance : Appearance,
+        behavior : Behavior
     )
     {
         self.delegate = delegate
         self.appearance = appearance
+        self.behavior = behavior
         
         self.layout = self.layoutType.init()
         self.previousLayout = self.layout
@@ -60,6 +82,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         super.init()
         
         self.applyAppearance()
+        self.applyBehavior()
     }
     
     @available(*, unavailable)
@@ -284,6 +307,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.layout = self.layoutType.init(
             delegate: self.delegate,
             appearance: self.appearance,
+            behavior: self.behavior,
             in: self.collectionView!
         )
         

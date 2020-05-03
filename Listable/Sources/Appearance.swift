@@ -14,7 +14,6 @@ public struct Appearance : Equatable
     
     public var sizing : Sizing
     public var layout : Layout
-    public var underflow : UnderflowBehavior
         
     public init(_ configure : (inout Appearance) -> ())
     {
@@ -27,8 +26,7 @@ public struct Appearance : Equatable
         backgroundColor : UIColor = .white,
         direction : LayoutDirection = .vertical,
         sizing : Sizing = Sizing(),
-        layout : Layout = Layout(),
-        underflow : UnderflowBehavior = UnderflowBehavior()
+        layout : Layout = Layout()
     )
     {
         self.backgroundColor = backgroundColor
@@ -37,7 +35,6 @@ public struct Appearance : Equatable
         
         self.sizing = sizing
         self.layout = layout
-        self.underflow = underflow
     }
     
     public mutating func set(with block : (inout Appearance) -> ())
@@ -146,39 +143,6 @@ public extension Appearance
             let paddedWidth = width - padding.left - padding.right
             
             return constraint.clamp(paddedWidth)
-        }
-    }
-
-
-    struct UnderflowBehavior : Equatable
-    {
-        public var alwaysBounce : Bool
-        public var alignment : Alignment
-        
-        public init(alwaysBounce : Bool = true, alignment : Alignment = .top)
-        {
-            self.alwaysBounce = alwaysBounce
-            self.alignment = alignment
-        }
-        
-        public enum Alignment : Equatable
-        {
-            case top
-            case center
-            case bottom
-            
-            func offsetFor(contentHeight : CGFloat, viewHeight: CGFloat) -> CGFloat
-            {
-                guard contentHeight < viewHeight else {
-                    return 0.0
-                }
-                
-                switch self {
-                case .top: return 0.0
-                case .center: return round((viewHeight - contentHeight) / 2.0)
-                case .bottom: return viewHeight - contentHeight
-                }
-            }
         }
     }
 }
