@@ -2,48 +2,44 @@
 //  ListLayoutType.swift
 //  Listable
 //
-//  Created by Kyle Van Essen on 5/2/20.
+//  Created by Kyle Van Essen on 5/3/20.
 //
 
 import Foundation
 
-/**
- The type of layout to use to draw and lay out the list.
- 
- WARNING
- -------
- This is still highly experimental, and the layout API is in the process of being teased out
- from the core collection view implementation. As such, you should **really** only be using
- the `.list` type here. Doing otherwise is unsupported and will likely break or crash.
- */
+
 public enum ListLayoutType : Equatable
 {
     case list
     case grid
-
-    case experimental(Custom)
     
-    public static func experimental(_ type : ListLayout.Type) -> ListLayoutType {
-        .experimental(.init(type))
-    }
+    case custom(Custom)
     
     public var layoutType : ListLayout.Type {
         switch self {
         case .list: return DefaultListLayout.self
-        case .grid: fatalError() //return GridListLayout.self
-        case .experimental(let custom): return custom.type
+        case .grid: return GridListLayout.self
+        case .custom(let custom): return custom.layoutType
         }
     }
     
-    public struct Custom : Equatable {
-        public var type : ListLayout.Type
+    public static func custom(_ layoutType : ListLayout.Type) -> Self
+    {
+        .custom(Custom(layoutType))
+    }
+    
+    public struct Custom : Equatable
+    {
+        var layoutType : ListLayout.Type
         
-        public init(_ type : ListLayout.Type) {
-            self.type = type
+        public init(_ layoutType : ListLayout.Type)
+        {
+            self.layoutType = layoutType
         }
         
-        public static func == (lhs : Self, rhs : Self) -> Bool {
-            ObjectIdentifier(lhs.type) == ObjectIdentifier(rhs.type)
+        public static func == (lhs : Self, rhs : Self) -> Bool
+        {
+            ObjectIdentifier(lhs.layoutType) == ObjectIdentifier(rhs.layoutType)
         }
     }
 }

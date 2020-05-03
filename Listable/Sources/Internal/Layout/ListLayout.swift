@@ -63,7 +63,7 @@ public extension ListLayout
     @discardableResult
     func updateHeaderPositions(in collectionView : UICollectionView) -> Bool
     {
-        guard self.appearance.layout.stickySectionHeaders else {
+        guard self.appearance.stickySectionHeaders else {
             return true
         }
         
@@ -120,6 +120,40 @@ public extension ListLayout
         }
         
         return true
+    }
+    
+    func adjustPositionsForLayoutUnderflow(contentHeight : CGFloat, viewHeight: CGFloat, in collectionView : UICollectionView)
+    {
+        // Take into account the safe area, since that pushes content alignment down within our view.
+        
+        let safeAreaInsets : CGFloat = {
+            switch self.appearance.direction {
+            case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
+            case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
+            }
+        }()
+        
+        let additionalOffset = self.behavior.underflow.alignment.offsetFor(
+            contentHeight: contentHeight,
+            viewHeight: viewHeight - safeAreaInsets
+        )
+        
+        // If we're pinned to the top of the view, there's no adjustment needed.
+        
+        guard additionalOffset > 0.0 else {
+            return
+        }
+        
+        // Provide additional adjustment.
+        
+        for section in self.content.sections {
+            section.header.y += additionalOffset
+            section.footer.y += additionalOffset
+            
+            for item in section.items {
+                item.y += additionalOffset
+            }
+        }
     }
 }
 
@@ -341,6 +375,12 @@ public final class ListLayoutContent
     // MARK: Performing Layouts
     //
     
+    func setSectionContentsFrames() {
+        self.sections.forEach {
+            $0.setContentsFrameWithContent()
+        }
+    }
+    
     func reindexLiveIndexPaths()
     {
         self.sections.forEachWithIndex { sectionIndex, _, section in
@@ -402,7 +442,7 @@ public extension ListLayoutContent
                 size: self.size
             )
         }
-        
+                
         init(
             direction : LayoutDirection,
             layout : Section.Layout,
@@ -423,66 +463,15 @@ public extension ListLayoutContent
             self.items = items
         }
         
-        func setItemPositions(with appearance : Appearance)
-        {
-            if self.columns.count == 1 {
-                let groups = SectionInfo.grouped(
-                    items: self.items,
-                    groupingHeight: appearance.sizing.itemPositionGroupingHeight,
-                    appearance: appearance
-                )
-                
-                groups.forEach { group in
-                    let itemCount = group.count
-                    
-                    group.forEachWithIndex { index, isLast, item in
-                        
-                        if itemCount == 1 {
-                            item.position = .single
-                        } else {
-                            if index == 0 {
-                                item.position = .first
-                            } else if isLast {
-                                item.position = .last
-                            } else {
-                                item.position = .middle
-                            }
-                        }
-                    }
-                }
-            } else {
-                // If we have columns, every item will receive "single" positioning for now.
-                // Depending on use, we may want to make this smarter.
-                
-                self.items.forEach { $0.position = .single }
-            }
-        }
-        
-        private static func grouped(items : [ItemInfo], groupingHeight : CGFloat, appearance : Appearance) -> [[ItemInfo]]
-        {
-            var all = [[ItemInfo]]()
-            var current = [ItemInfo]()
+        func setContentsFrameWithContent() {
+            let allFrames : [CGRect] = [[
+                    self.header.defaultFrame,
+                    self.footer.defaultFrame
+                ],
+                self.items.map { $0.frame }
+                ].flatMap { $0 }
             
-            var lastSpacing : CGFloat = 0.0
-            
-            items.forEachWithIndex { index, isLast, item in
-                let inNewGroup = groupingHeight == 0.0 ? lastSpacing > 0.0 : lastSpacing > groupingHeight
-                
-                if inNewGroup {
-                    all.append(current)
-                    current = []
-                }
-                
-                current.append(item)
-                
-                lastSpacing = item.layout.itemSpacing ?? appearance.layout.itemSpacing
-            }
-            
-            if current.isEmpty == false {
-                all.append(current)
-            }
-            
-            return all
+            //self.contentsFrame = .from(unioned: allFrames)
         }
     }
     
@@ -583,5 +572,28 @@ public extension ListLayoutContent
             
             return attributes
         }
+    }
+}
+
+
+extension CGRect {
+    static func from(unioned rects : [CGRect]) -> CGRect {
+        
+        // Only include non-empty frames.
+        var rects = rects.filter {
+            $0.isEmpty == false
+        }
+        
+        guard let last = rects.popLast() else {
+            return .zero
+        }
+        
+        var frame = last
+        
+        for rect in rects {
+            frame = frame.union(rect)
+        }
+        
+        return frame
     }
 }

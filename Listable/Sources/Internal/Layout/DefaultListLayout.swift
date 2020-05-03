@@ -8,8 +8,128 @@
 import Foundation
 
 
-final class DefaultListLayout : ListLayout
+public extension Appearance
 {
+    var list : ListAppearance {
+        get {
+            self[ListAppearance.self, default: ListAppearance()]
+        }
+        
+        set {
+            self[ListAppearance.self] = newValue
+        }
+    }
+}
+
+
+public struct ListAppearance : Equatable
+{
+    public var sizing : Sizing
+    public var layout : Layout
+    
+    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
+    {
+        self.sizing = sizing
+        self.layout = layout
+    }
+    
+    public struct Sizing : Equatable
+    {
+        public var itemHeight : CGFloat
+        
+        public var sectionHeaderHeight : CGFloat
+        public var sectionFooterHeight : CGFloat
+        
+        public var listHeaderHeight : CGFloat
+        public var listFooterHeight : CGFloat
+        public var overscrollFooterHeight : CGFloat
+        
+        public var itemPositionGroupingHeight : CGFloat
+            
+        public init(
+            itemHeight : CGFloat = 50.0,
+            sectionHeaderHeight : CGFloat = 60.0,
+            sectionFooterHeight : CGFloat = 40.0,
+            listHeaderHeight : CGFloat = 60.0,
+            listFooterHeight : CGFloat = 60.0,
+            overscrollFooterHeight : CGFloat = 60.0,
+            itemPositionGroupingHeight : CGFloat = 0.0
+        )
+        {
+            self.itemHeight = itemHeight
+            self.sectionHeaderHeight = sectionHeaderHeight
+            self.sectionFooterHeight = sectionFooterHeight
+            self.listHeaderHeight = listHeaderHeight
+            self.listFooterHeight = listFooterHeight
+            self.overscrollFooterHeight = overscrollFooterHeight
+            self.itemPositionGroupingHeight = itemPositionGroupingHeight
+        }
+        
+        public mutating func set(with block: (inout Sizing) -> ())
+        {
+            var edited = self
+            block(&edited)
+            self = edited
+        }
+    }
+    
+
+    public struct Layout : Equatable
+    {
+        public var padding : UIEdgeInsets
+        public var width : WidthConstraint
+
+        public var interSectionSpacingWithNoFooter : CGFloat
+        public var interSectionSpacingWithFooter : CGFloat
+        
+        public var sectionHeaderBottomSpacing : CGFloat
+        public var itemSpacing : CGFloat
+        public var itemToSectionFooterSpacing : CGFloat
+                
+        public init(
+            padding : UIEdgeInsets = .zero,
+            width : WidthConstraint = .noConstraint,
+            interSectionSpacingWithNoFooter : CGFloat = 0.0,
+            interSectionSpacingWithFooter : CGFloat = 0.0,
+            sectionHeaderBottomSpacing : CGFloat = 0.0,
+            itemSpacing : CGFloat = 0.0,
+            itemToSectionFooterSpacing : CGFloat = 0.0
+        )
+        {
+            self.padding = padding
+            self.width = width
+            
+            self.interSectionSpacingWithNoFooter = interSectionSpacingWithNoFooter
+            self.interSectionSpacingWithFooter = interSectionSpacingWithFooter
+            
+            self.sectionHeaderBottomSpacing = sectionHeaderBottomSpacing
+            self.itemSpacing = itemSpacing
+            self.itemToSectionFooterSpacing = itemToSectionFooterSpacing
+        }
+
+        public mutating func set(with block : (inout Layout) -> ())
+        {
+            var edited = self
+            block(&edited)
+            self = edited
+        }
+        
+        internal static func width(
+            with width : CGFloat,
+            padding : HorizontalPadding,
+            constraint : WidthConstraint
+        ) -> CGFloat
+        {
+            let paddedWidth = width - padding.left - padding.right
+            
+            return constraint.clamp(paddedWidth)
+        }
+    }
+}
+
+
+final class DefaultListLayout : ListLayout
+{    
     //
     // MARK: Public Properties
     //
@@ -81,14 +201,14 @@ final class DefaultListLayout : ListLayout
         }
         
         let direction = self.appearance.direction
-        let layout = self.appearance.layout
+        let layout = self.appearance.list.layout
+        let sizing = self.appearance.list.sizing
         
         let viewSize = collectionView.bounds.size
         
         let viewWidth = direction.width(for: collectionView.bounds.size)
-        let viewHeight = direction.height(for: collectionView.bounds.size)
         
-        let rootWidth = Appearance.Layout.width(
+        let rootWidth = ListAppearance.Layout.width(
             with: direction.width(for: viewSize),
             padding: direction.horizontalPadding(with: layout.padding),
             constraint: layout.width
@@ -128,7 +248,7 @@ final class DefaultListLayout : ListLayout
                 height = delegate.sizeForListHeader(
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.listHeaderHeight),
+                    defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
                     layoutDirection: direction
                 ).height
             } else {
@@ -181,7 +301,7 @@ final class DefaultListLayout : ListLayout
                         in: sectionIndex,
                         in: collectionView,
                         measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.sectionHeaderHeight),
+                        defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight),
                         layoutDirection: direction
                     ).height
                 } else {
@@ -213,7 +333,7 @@ final class DefaultListLayout : ListLayout
                         at: indexPath,
                         in: collectionView,
                         measuredIn: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.itemHeight),
+                        defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
                         layoutDirection: direction
                     ).height
                     
@@ -243,23 +363,23 @@ final class DefaultListLayout : ListLayout
                     var columnXOrigin = section.x
                     
                     row.forEachWithIndex { columnIndex, isLast, item in
-                        item.value.x = columnXOrigin
-                        item.value.y = lastContentMaxY
+                        item.x = columnXOrigin
+                        item.y = lastContentMaxY
                         
-                        let indexPath = item.value.liveIndexPath
+                        let indexPath = item.liveIndexPath
                                                 
                         let height = delegate.sizeForItem(
                             at: indexPath,
                             in: collectionView,
                             measuredIn: CGSize(width: itemWidth, height: .greatestFiniteMagnitude),
-                            defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.itemHeight),
+                            defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
                             layoutDirection: direction
                         ).height
                         
-                        let itemSpacing = item.value.layout.itemSpacing ?? layout.itemSpacing
-                        let itemToSectionFooterSpacing = item.value.layout.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                        let itemSpacing = item.layout.itemSpacing ?? layout.itemSpacing
+                        let itemToSectionFooterSpacing = item.layout.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
                         
-                        item.value.size = direction.size(width: itemWidth, height: height)
+                        item.size = direction.size(width: itemWidth, height: height)
                         
                         maxHeight = max(height, maxHeight)
                         maxItemSpacing = max(itemSpacing, maxItemSpacing)
@@ -295,7 +415,7 @@ final class DefaultListLayout : ListLayout
                         in: sectionIndex,
                         in: collectionView,
                         measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.sectionFooterHeight),
+                        defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight),
                         layoutDirection: direction
                     ).height
                 } else {
@@ -350,7 +470,7 @@ final class DefaultListLayout : ListLayout
                 height = delegate.sizeForListFooter(
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.listFooterHeight),
+                    defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight),
                     layoutDirection: direction
                 ).height
             } else {
@@ -382,7 +502,7 @@ final class DefaultListLayout : ListLayout
                 height = delegate.sizeForOverscrollFooter(
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: self.appearance.sizing.overscrollFooterHeight),
+                    defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight),
                     layoutDirection: direction
                 ).height
             } else {
@@ -399,10 +519,6 @@ final class DefaultListLayout : ListLayout
         
         self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
         
-        self.adjustPositionsForLayoutUnderflow(contentHeight: lastContentMaxY, viewHeight: viewHeight, in: collectionView)
-        
-        self.updateLayout(in: collectionView)
-        
         return true
     }
     
@@ -412,58 +528,83 @@ final class DefaultListLayout : ListLayout
             section.setItemPositions(with: self.appearance)
         }
     }
-    
-    private func adjustPositionsForLayoutUnderflow(contentHeight : CGFloat, viewHeight: CGFloat, in collectionView : UICollectionView)
+}
+
+
+fileprivate extension ListLayoutContent.SectionInfo
+{
+    func setItemPositions(with appearance : Appearance)
     {
-        // Take into account the safe area, since that pushes content alignment down within our view.
-        
-        let safeAreaInsets : CGFloat = {
-            switch self.appearance.direction {
-            case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
-            case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
-            }
-        }()
-        
-        let additionalOffset = self.behavior.underflow.alignment.offsetFor(
-            contentHeight: contentHeight,
-            viewHeight: viewHeight - safeAreaInsets
-        )
-        
-        // If we're pinned to the top of the view, there's no adjustment needed.
-        
-        guard additionalOffset > 0.0 else {
-            return
-        }
-        
-        // Provide additional adjustment.
-        
-        for section in self.content.sections {
-            section.header.y += additionalOffset
-            section.footer.y += additionalOffset
+        if self.columns.count == 1 {
+            let groups = ListLayoutContent.SectionInfo.grouped(
+                items: self.items,
+                groupingHeight: appearance.list.sizing.itemPositionGroupingHeight,
+                appearance: appearance
+            )
             
-            for item in section.items {
-                item.y += additionalOffset
+            groups.forEach { group in
+                let itemCount = group.count
+                
+                group.forEachWithIndex { index, isLast, item in
+                    
+                    if itemCount == 1 {
+                        item.position = .single
+                    } else {
+                        if index == 0 {
+                            item.position = .first
+                        } else if isLast {
+                            item.position = .last
+                        } else {
+                            item.position = .middle
+                        }
+                    }
+                }
             }
+        } else {
+            // If we have columns, every item will receive "single" positioning for now.
+            // Depending on use, we may want to make this smarter.
+            
+            self.items.forEach { $0.position = .single }
         }
     }
+    
+    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : Appearance) -> [[ListLayoutContent.ItemInfo]]
+    {
+        var all = [[ListLayoutContent.ItemInfo]]()
+        var current = [ListLayoutContent.ItemInfo]()
+        
+        var lastSpacing : CGFloat = 0.0
+        
+        items.forEachWithIndex { index, isLast, item in
+            let inNewGroup = groupingHeight == 0.0 ? lastSpacing > 0.0 : lastSpacing > groupingHeight
+            
+            if inNewGroup {
+                all.append(current)
+                current = []
+            }
+            
+            current.append(item)
+            
+            lastSpacing = item.layout.itemSpacing ?? appearance.list.layout.itemSpacing
+        }
+        
+        if current.isEmpty == false {
+            all.append(current)
+        }
+        
+        return all
+    }
+
 }
 
 
 fileprivate extension Section.Columns
 {
-    struct Grouped<Value>
+    func group<Value>(values : [Value]) -> [[Value]]
     {
-        var value : Value
-        var index : Int
-    }
-    
-    func group<Value>(values input : [Value]) -> [[Grouped<Value>]]
-    {
-        var values : [Grouped<Value>] = input.mapWithIndex { index, _, value in
-            return Grouped(value: value, index: index)
-        }
+        var values = values
         
-        var grouped : [[Grouped<Value>]] = []
+        var grouped : [[Value]] = []
         
         while values.count > 0 {
             grouped.append(values.safeDropFirst(self.count))

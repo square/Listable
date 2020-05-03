@@ -89,7 +89,7 @@ Listable makes very few assumptions of the appearance of your content. The curre
 
 Further, the layout and appearance controls vended by `ListView` allow for customization of the layout to draw lists in nearly any way desired.
 
-This is primarily controlled through the `Appearance` object, which is broken down further into ways to control layout direction (horizontal vs. vertical), default sizing, layout controls, and underflow behavior.
+This is primarily controlled through the `Appearance` object:
 
 ```swift
 public struct Appearance : Equatable
@@ -98,16 +98,16 @@ public struct Appearance : Equatable
     
     public var direction : LayoutDirection
     
-    public var sizing : Sizing
-    public var layout : Layout
-    public var underflow : UnderflowBehavior
+    public var stickySectionHeaders : Bool
+    
+    public var list : ListAppearance
 }
 ``` 
 
-You use the `Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
+You use the `ListAppearance.Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
 
 ```swift
-public struct Sizing : Equatable
+public struct ListAppearance.Sizing : Equatable
 {
     public var itemHeight : CGFloat
     
@@ -121,10 +121,10 @@ public struct Sizing : Equatable
 }
 ```
 
-You can use `Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
+You can use `ListAppearance.Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
 
 ```swift
-public struct Layout : Equatable
+public struct ListAppearance.Layout : Equatable
 {
     public var padding : UIEdgeInsets
     public var width : WidthConstraint
@@ -140,10 +140,19 @@ public struct Layout : Equatable
 }
 ```
 
-Finally, `UnderflowBehavior` allows customizing what happens when a list's content is shorter than its container view: Should the scroll view bounce, should the content be centered, etc.
+Finally, the `Behavior` and  `Behavior.Underflow` allows customizing what happens when a list's content is shorter than its container view: Should the scroll view bounce, should the content be centered, etc.
 
 ```swift
-public struct UnderflowBehavior : Equatable
+public struct Behavior : Equatable
+{
+    public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
+    
+    public var underflow : Underflow
+```
+
+```swift
+
+struct Underflow : Equatable
 {
     public var alwaysBounce : Bool
     public var alignment : Alignment
@@ -253,10 +262,15 @@ What is that `list` parameter, you ask...?
 public struct ListDescription
 {
     public var animatesChanges : Bool
-    
+
+    public var layoutType : ListLayoutType
     public var appearance : Appearance
+    
     public var behavior : Behavior
+    public var autoScrollAction : AutoScrollAction
     public var scrollInsets : ScrollInsets
+    
+    public var accessibilityIdentifier: String?
     
     public var content : Content
 }

@@ -8,6 +8,7 @@
 import Foundation
 
 
+/// TODO: Rename to `ListProperties`.
 public struct ListDescription
 {
     public var animatesChanges : Bool
@@ -40,7 +41,9 @@ public struct ListDescription
         
         self.layoutType = layoutType
         self.appearance = appearance
+        
         self.behavior = behavior
+        
         self.autoScrollAction = autoScrollAction
         self.scrollInsets = scrollInsets
         self.accessibilityIdentifier = accessibilityIdentifier

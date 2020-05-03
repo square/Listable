@@ -150,26 +150,26 @@ final class ItemizationEditorViewController : UIViewController
     }
     
     var listAppearance : Appearance {
-        return Appearance(
-            backgroundColor: .white,
-            sizing: Appearance.Sizing(
-                itemHeight: 70.0,
-                sectionHeaderHeight: 50.0,
-                sectionFooterHeight: 50.0,
-                listHeaderHeight: 100.0,
-                listFooterHeight: 100.0
-            ),
-            layout: Appearance.Layout(
-                padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                width: .atMost(600.0),
-                interSectionSpacingWithNoFooter: 20.0,
-                interSectionSpacingWithFooter: 20.0,
-                sectionHeaderBottomSpacing: 0.0,
-                itemSpacing: 20.0,
-                itemToSectionFooterSpacing: 20.0,
-                stickySectionHeaders: false
+        Appearance(backgroundColor: .white, stickySectionHeaders: false) {
+            $0.list = ListAppearance(
+                sizing: .init(
+                    itemHeight: 70.0,
+                    sectionHeaderHeight: 50.0,
+                    sectionFooterHeight: 50.0,
+                    listHeaderHeight: 100.0,
+                    listFooterHeight: 100.0
+                ),
+                layout: .init(
+                    padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
+                    width: .atMost(600.0),
+                    interSectionSpacingWithNoFooter: 20.0,
+                    interSectionSpacingWithFooter: 20.0,
+                    sectionHeaderBottomSpacing: 0.0,
+                    itemSpacing: 20.0,
+                    itemToSectionFooterSpacing: 20.0
+                )
             )
-        )
+        }
     }
 }
 
