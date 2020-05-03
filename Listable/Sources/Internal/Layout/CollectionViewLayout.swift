@@ -240,8 +240,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             }
         }())
         
-        self.performUpdateHeaders()
-        self.performUpdateOverscroll()
+        self.layout.updateLayout(in: self.collectionView!)
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem])
@@ -265,16 +264,6 @@ final class CollectionViewLayout : UICollectionViewLayout
     //
     // MARK: Performing Layouts
     //
-    
-    private func performUpdateHeaders()
-    {
-        self.layout.updateHeaders(in: self.collectionView!)
-    }
-    
-    private func performUpdateOverscroll()
-    {
-        self.layout.updateOverscrollPosition(in: self.collectionView!)
-    }
     
     private func performRelayout() -> Bool
     {

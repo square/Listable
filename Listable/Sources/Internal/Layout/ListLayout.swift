@@ -16,6 +16,8 @@ public protocol ListLayout : AnyObject
     
     var contentSize : CGSize { get }
     
+    var appearance : Appearance { get }
+    
     var content : ListLayoutContent { get }
     
     //
@@ -33,17 +35,90 @@ public protocol ListLayout : AnyObject
     //
     // MARK: Performing Layouts
     //
-            
-    @discardableResult
-    func updateHeaders(in collectionView : UICollectionView) -> Bool
     
     @discardableResult
-    func updateOverscrollPosition(in collectionView : UICollectionView) -> Bool
+    func updateLayout(in collectionView : UICollectionView) -> Bool
     
     func layout(
         delegate : CollectionViewLayoutDelegate,
         in collectionView : UICollectionView
     ) -> Bool
+}
+
+
+public extension ListLayout
+{
+    func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
+    {
+        CGRect(
+            x: collectionView.contentOffset.x + collectionView.lst_safeAreaInsets.left,
+            y: collectionView.contentOffset.y + collectionView.lst_safeAreaInsets.top,
+            width: collectionView.bounds.size.width,
+            height: collectionView.bounds.size.height
+        )
+    }
+    
+    @discardableResult
+    func updateHeaderPositions(in collectionView : UICollectionView) -> Bool
+    {
+        guard self.appearance.layout.stickySectionHeaders else {
+            return true
+        }
+        
+        guard collectionView.frame.size.isEmpty == false else {
+            return false
+        }
+        
+        let direction = self.appearance.direction
+
+        let visibleFrame = self.visibleContentFrame(for: collectionView)
+        
+        self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
+            let sectionMaxY = direction.maxY(for: section.frame)
+            
+            let header = section.header
+            
+            if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleFrame.origin) {
+                
+                // Make sure the pinned origin stays within the section's frame.
+                
+                header.pinnedY = min(
+                    direction.y(for: visibleFrame.origin),
+                    sectionMaxY - direction.height(for: header.size)
+                )
+            } else {
+                header.pinnedY = nil
+            }
+        }
+        
+        return true
+    }
+    
+    @discardableResult
+    func updateOverscrollFooterPosition(in collectionView : UICollectionView) -> Bool
+    {
+        guard collectionView.frame.size.isEmpty == false else {
+            return false
+        }
+        
+        let footer = self.content.overscrollFooter
+        
+        let direction = self.appearance.direction
+        
+        let contentHeight = direction.height(for: self.contentSize)
+        let viewHeight = direction.height(for: collectionView.contentFrame.size)
+        
+        // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
+        // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
+        
+        if contentHeight >= viewHeight {
+            footer.y = contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
+        } else {
+            footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
+        }
+        
+        return true
+    }
 }
 
 
