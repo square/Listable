@@ -22,12 +22,12 @@ public extension Item where Element == ListItemElement
 public enum ListItemSizing : Equatable
 {
     case `default`
-    case fixed(CGFloat)
+    case fixed(width: CGFloat = 0.0, height : CGFloat = 0.0)
     
     var toStandardSizing : Sizing {
         switch self {
         case .default: return .default
-        case .fixed(let height): return .fixed(height)
+        case .fixed(let w, let h): return .fixed(width: w, height: h)
         }
     }
 }

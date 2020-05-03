@@ -12,7 +12,7 @@ public enum Sizing : Equatable
 {
     case `default`
     
-    case fixed(CGFloat)
+    case fixed(width : CGFloat = 0.0, height : CGFloat = 0.0)
     
     case thatFits
     case thatFitsWith(Constraint)
@@ -20,30 +20,40 @@ public enum Sizing : Equatable
     case autolayout
     case autolayoutWith(Constraint)
     
-    public func measure(with view : UIView, width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat) -> CGFloat
+    public func measure(with view : UIView, in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize) -> CGSize
     {
-        let value : CGFloat = {
+        let value : CGSize = {
             switch self {
             case .default:
-                return defaultHeight
+                return defaultSize
                 
-            case .fixed(let fixedHeight):
-                return fixedHeight
+            case .fixed(let width, let height):
+                return CGSize(width: width, height: height)
                 
             case .thatFits:
-                return Sizing.thatFitsWith(.noConstraint).measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                return Sizing.thatFitsWith(.noConstraint).measure(
+                    with: view,
+                    in: sizeConstraint,
+                    layoutDirection: layoutDirection,
+                    defaultSize: defaultSize
+                )
                 
-            case .thatFitsWith(let constraints):
-                let fittingSize = layoutDirection.fittingSize(with: width)
+            case .thatFitsWith(let constraint):
+                let fittingSize = layoutDirection.size(for: sizeConstraint)
                 let size = view.sizeThatFits(fittingSize)
                 
-                return constraints.clamp(layoutDirection.height(for: size), with: defaultHeight)
+                return constraint.clamp(size, with: defaultSize)
                 
             case .autolayout:
-                return Sizing.autolayoutWith(.noConstraint).measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                return Sizing.autolayoutWith(.noConstraint).measure(
+                    with: view,
+                    in: sizeConstraint,
+                    layoutDirection: layoutDirection,
+                    defaultSize: defaultSize
+                )
                 
-            case .autolayoutWith(let constraints):
-                let fittingSize = layoutDirection.fittingSize(with: width)
+            case .autolayoutWith(let constraint):
+                let fittingSize = layoutDirection.size(for: sizeConstraint)
                 
                 let size : CGSize
                 
@@ -54,49 +64,81 @@ public enum Sizing : Equatable
                     size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
                 }
                 
-                return constraints.clamp(layoutDirection.height(for: size), with: defaultHeight)
+                return constraint.clamp(size, with: defaultSize)
             }
         }()
         
-        return ceil(value)
+        return CGSize(
+            width: ceil(value.width),
+            height: ceil(value.height)
+        )
     }
     
-    public enum ConstraintValue : Equatable
+    public struct Constraint : Equatable
     {
-        case `default`
-        case fixed(CGFloat)
+        public var width : Axis
+        public var height : Axis
         
-        public func value(with defaultHeight : CGFloat) -> CGFloat
+        public static var noConstraint : Constraint {
+            Constraint(
+                width: .noConstraint,
+                height: .noConstraint
+            )
+        }
+        
+        public init(_ value : Axis)
         {
-            switch self {
-            case .`default`: return defaultHeight
-            case .fixed(let fixed): return fixed
+            self.width = value
+            self.height = value
+        }
+        
+        public init(
+            width : Axis,
+            height : Axis
+        ) {
+            self.width = width
+            self.height = height
+        }
+        
+        public func clamp(_ value : CGSize, with defaultSize : CGSize) -> CGSize
+        {
+            return CGSize(
+                width: self.width.clamp(value.width, with: defaultSize.width),
+                height: self.height.clamp(value.height, with: defaultSize.height)
+            )
+        }
+        
+        public enum Axis : Equatable
+        {
+            case noConstraint
+            
+            case atLeast(Value)
+            case atMost(CGFloat)
+            
+            case within(Value, CGFloat)
+            
+            public enum Value : Equatable
+            {
+                case `default`
+                case fixed(CGFloat)
+                
+                public func value(with defaultHeight : CGFloat) -> CGFloat
+                {
+                    switch self {
+                    case .`default`: return defaultHeight
+                    case .fixed(let fixed): return fixed
+                    }
+                }
             }
-        }
-    }
-    
-    public enum Constraint : Equatable
-    {
-        case noConstraint
-        
-        case atLeast(ConstraintValue)
-        case atMost(CGFloat)
-        
-        case within(ConstraintValue, CGFloat)
-        
-        public enum Limit
-        {
-            case fixed(CGFloat)
-            case listHeight
-        }
-        
-        public func clamp(_ value : CGFloat, with defaultHeight : CGFloat) -> CGFloat
-        {
-            switch self {
-            case .noConstraint: return value
-            case .atLeast(let minimum): return max(minimum.value(with: defaultHeight), value)
-            case .atMost(let maximum): return min(maximum, value)
-            case .within(let minimum, let maximum): return max(minimum.value(with: defaultHeight), min(maximum, value))
+            
+            public func clamp(_ value : CGFloat, with defaultValue : CGFloat) -> CGFloat
+            {
+                switch self {
+                case .noConstraint: return value
+                case .atLeast(let minimum): return max(minimum.value(with: defaultValue), value)
+                case .atMost(let maximum): return min(maximum, value)
+                case .within(let minimum, let maximum): return max(minimum.value(with: defaultValue), min(maximum, value))
+                }
             }
         }
     }

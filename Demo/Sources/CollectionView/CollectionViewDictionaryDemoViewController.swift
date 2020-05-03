@@ -113,7 +113,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                         
                         return Item(
                             with: WordRow(title: word.word, detail: word.description),
-                            sizing: .thatFitsWith(.atMost(250.0))
+                            sizing: .thatFitsWith(.init(.atMost(250.0)))
                         )
                     }
                 }

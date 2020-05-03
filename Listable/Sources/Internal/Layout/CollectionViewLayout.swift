@@ -448,29 +448,29 @@ public protocol CollectionViewLayoutDelegate : AnyObject
 {
     func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
     
-    func heightForItem(at indexPath : IndexPath, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForItem(at indexPath : IndexPath, in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
     
     func hasListHeader(in collectionView : UICollectionView) -> Bool
-    func heightForListHeader(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForListHeader(in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func hasListFooter(in collectionView : UICollectionView) -> Bool
-    func heightForListFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForListFooter(in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
-    func heightForOverscrollFooter(in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForOverscrollFooter(in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
     
     func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForHeader(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForHeader(in sectionIndex : Int, in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-    func heightForFooter(in sectionIndex : Int, in collectionView : UICollectionView, width : CGFloat, layoutDirection : LayoutDirection) -> CGFloat
+    func sizeForFooter(in sectionIndex : Int, in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
     
     func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns

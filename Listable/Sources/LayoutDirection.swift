@@ -39,6 +39,14 @@ public enum LayoutDirection : Hashable
         }
     }
     
+    public func size(for size : CGSize) -> CGSize
+    {
+        switch self {
+        case .vertical: return CGSize(width: size.width, height: size.height)
+        case .horizontal: return CGSize(width: size.height, height: size.width)
+        }
+    }
+    
     public func size(width : CGFloat, height : CGFloat) -> CGSize
     {
         switch self {
@@ -76,14 +84,6 @@ public enum LayoutDirection : Hashable
         switch self {
         case .vertical: return point.y
         case .horizontal: return point.x
-        }
-    }
-    
-    public func fittingSize(with width : CGFloat) -> CGSize
-    {
-        switch self {
-        case .vertical: return CGSize(width: width, height: .greatestFiniteMagnitude)
-        case .horizontal: return CGSize(width: .greatestFiniteMagnitude, height: width)
         }
     }
     
