@@ -15,9 +15,7 @@ final class DefaultListLayout : ListLayout
     //
     
     var contentSize : CGSize
-    
-    var viewProperties : CollectionViewLayoutProperties
-    
+        
     let appearance : Appearance
     
     let content : ListLayoutContent
@@ -29,9 +27,7 @@ final class DefaultListLayout : ListLayout
     init()
     {
         self.contentSize = .zero
-        
-        self.viewProperties = CollectionViewLayoutProperties()
-        
+                
         self.appearance = Appearance()
         
         self.content = ListLayoutContent(with: self.appearance)
@@ -43,245 +39,20 @@ final class DefaultListLayout : ListLayout
         in collectionView : UICollectionView
         )
     {
-        let sectionCount = collectionView.numberOfSections
-        
         self.contentSize = .zero
-        
-        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
-        
+                
         self.appearance = appearance
         
         self.content = ListLayoutContent(
-            with: self.appearance,
-            
-            header: {
-                guard delegate.hasListHeader(in: collectionView) else {
-                    return .empty(.listHeader, direction: appearance.direction)
-                }
-                
-                return .init(
-                    kind: SupplementaryKind.listHeader,
-                    direction: appearance.direction,
-                    layout: delegate.layoutForListHeader(in: collectionView),
-                    isPopulated: true
-                )
-            }(),
-            
-            footer: {
-                guard delegate.hasListFooter(in: collectionView) else {
-                    return .empty(.listFooter, direction: appearance.direction)
-                }
-                
-                return .init(
-                    kind: SupplementaryKind.listFooter,
-                    direction: appearance.direction,
-                    layout: delegate.layoutForListFooter(in: collectionView),
-                    isPopulated: true
-                )
-            }(),
-            
-            overscrollFooter: {
-                guard delegate.hasOverscrollFooter(in: collectionView) else {
-                    return .empty(.overscrollFooter, direction: appearance.direction)
-                }
-                
-                return .init(
-                    kind: SupplementaryKind.overscrollFooter,
-                    direction: appearance.direction,
-                    layout: delegate.layoutForOverscrollFooter(in: collectionView),
-                    isPopulated: true
-                )
-            }(),
-            
-            sections: sectionCount.mapEach { sectionIndex in
-                
-                let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
-                
-                return .init(
-                    direction: appearance.direction,
-                    
-                    layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
-                    
-                    header: {
-                        guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
-                            return .empty(.sectionHeader, direction: appearance.direction)
-                        }
-                        
-                        return .init(
-                            kind: SupplementaryKind.sectionHeader,
-                            direction: appearance.direction,
-                            layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
-                            isPopulated: true
-                        )
-                    }(),
-                    
-                    footer: {
-                        guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
-                            return .empty(.sectionFooter, direction: appearance.direction)
-                        }
-                        
-                        return .init(
-                            kind: SupplementaryKind.sectionFooter,
-                            direction: appearance.direction,
-                            layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
-                            isPopulated: true
-                        )
-                    }(),
-                    
-                    columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
-                    
-                    items: itemCount.mapEach { itemIndex in
-                        let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                        
-                        return .init(
-                            delegateProvidedIndexPath: indexPath,
-                            liveIndexPath: indexPath,
-                            direction: appearance.direction,
-                            layout: delegate.layoutForItem(at: indexPath, in: collectionView)
-                        )
-                    }
-                )
-            }
+            delegate: delegate,
+            appearance: appearance,
+            in: collectionView
         )
     }
     
     //
-    // MARK: Fetching Elements
+    // MARK: Performing Layouts
     //
-        
-    // TODO: This is called a lot! Optimize it by caching the layout attributes and by checking the passed in frames.
-    
-    func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
-    {
-        /**
-         Supplementary items are technically attached to index paths. Eg, list headers
-         and footers are attached to (0,0), and section headers and footers are attached to
-         (sectionIndex, 0). Because of this, we can't return any list headers or footers
-         unless there's at least one section – the collection view will not have anything to
-         attach them to, and will then crash.
-         */
-        guard self.content.sections.isEmpty == false else {
-            return []
-        }
-        
-        var attributes = [UICollectionViewLayoutAttributes]()
-        
-        // List Header
-        
-        if rect.intersects(self.content.header.visibleFrame) {
-            attributes.append(self.content.header.layoutAttributes(with: self.content.header.kind.indexPath(in: 0)))
-        }
-        
-        // Sections
-        
-        for (sectionIndex, section) in self.content.sections.enumerated() {
-            
-            guard rect.intersects(section.frame) else {
-                continue
-            }
-            
-            // Section Header
-            
-            if rect.intersects(section.header.visibleFrame) {
-                attributes.append(section.header.layoutAttributes(with: section.header.kind.indexPath(in: sectionIndex)))
-            }
-            
-            // Items
-            
-            for item in section.items {
-                if rect.intersects(item.frame) {
-                    attributes.append(item.layoutAttributes(with: item.liveIndexPath))
-                }
-            }
-            
-            // Section Footer
-            
-            if rect.intersects(section.footer.visibleFrame) {
-                attributes.append(section.footer.layoutAttributes(with: section.footer.kind.indexPath(in: sectionIndex)))
-            }
-        }
-        
-        // List Footer
-        
-        if rect.intersects(self.content.footer.visibleFrame) {
-            attributes.append(self.content.footer.layoutAttributes(with: self.content.footer.kind.indexPath(in: 0)))
-        }
-        
-        // Overscroll Footer
-        
-        // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
-        // Instead, just return it all the time to ensure the collection view will display it when needed.
-        
-        attributes.append(self.content.overscrollFooter.layoutAttributes(with: self.content.overscrollFooter.kind.indexPath(in: 0)))
-        
-        return attributes
-    }
-    
-    func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
-    {
-        return self.content.sections[indexPath.section].items[indexPath.item]
-    }
-    
-    func layoutAttributes(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-    {
-        let item = self.item(at: indexPath)
-        
-        return item.layoutAttributes(with: indexPath)
-    }
-    
-    func supplementaryLayoutAttributes(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
-    {
-        let section = self.content.sections[indexPath.section]
-        
-        switch SupplementaryKind(rawValue: kind)! {
-        case .listHeader: return self.content.header.layoutAttributes(with: indexPath)
-        case .listFooter: return self.content.footer.layoutAttributes(with: indexPath)
-            
-        case .sectionHeader: return section.header.layoutAttributes(with: indexPath)
-        case .sectionFooter: return section.footer.layoutAttributes(with: indexPath)
-            
-        case .overscrollFooter: return self.content.overscrollFooter.layoutAttributes(with: indexPath)
-        }
-    }
-    
-    //
-    // MARK: Peforming Layouts
-    //
-    
-    func reindexLiveIndexPaths()
-    {
-        self.content.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.liveIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func reindexDelegateProvidedIndexPaths()
-    {
-        self.content.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.delegateProvidedIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func move(from : IndexPath, to : IndexPath)
-    {
-        guard from != to else {
-            return
-        }
-        
-        let info = self.item(at: from)
-        
-        self.content.sections[from.section].items.remove(at: from.item)
-        self.content.sections[to.section].items.insert(info, at: to.item)
-    }
-    
-    func shouldInvalidateLayoutFor(collectionView : UICollectionView) -> Bool
-    {
-        return self.viewProperties != CollectionViewLayoutProperties(collectionView: collectionView)
-    }
     
     @discardableResult
     func updateHeaders(in collectionView : UICollectionView) -> Bool
@@ -372,9 +143,7 @@ final class DefaultListLayout : ListLayout
             padding: direction.horizontalPadding(with: layout.padding),
             constraint: layout.width
         )
-        
-        self.viewProperties = CollectionViewLayoutProperties(collectionView: collectionView)
-        
+                
         //
         // Item Positioning
         //
@@ -769,32 +538,6 @@ fileprivate extension Array
     }
 }
 
-
-fileprivate extension Int
-{
-    func mapEach<Mapped>(_ block : (Int) -> Mapped) -> [Mapped]
-    {
-        var mapped = [Mapped]()
-        
-        for index in 0..<self {
-            mapped.append(block(index))
-        }
-        
-        return mapped
-    }
-}
-
-
-internal extension UIView
-{
-    var lst_safeAreaInsets : UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
-    }
-}
 
 fileprivate func performLayout<Input>(for input : Input, _ block : (Input) -> ())
 {
