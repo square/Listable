@@ -43,7 +43,7 @@ public extension Listable.Item where Element : BlueprintItemElement
     
     init(
         with element : Element,
-        sizing : Sizing = .thatFitsWith(.atLeast(.default)),
+        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
         swipeActions : SwipeActions? = nil,

@@ -31,8 +31,8 @@ protocol AnyPresentationItemState : AnyObject
     
     func performUserDidSelectItem(isSelected: Bool)
     
-    func resetCachedHeights()
-    func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    func resetCachedSizes()
+    func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
     
     func moved(with result : Reordering.Result)
 }
@@ -49,8 +49,8 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     
     func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
     
-    func resetCachedHeights()
-    func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+    func resetCachedSizes()
+    func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
 }
 
 
@@ -229,11 +229,11 @@ final class PresentationState
     // MARK: Height Caching
     //
     
-    func resetAllCachedHeights()
+    func resetAllCachedSizes()
     {
         self.sections.forEach { section in
             section.items.forEach { item in
-                item.resetCachedHeights()
+                item.resetCachedSizes()
             }
         }
     }
@@ -469,33 +469,37 @@ final class PresentationState
             let reason : UpdateReason = self.model.anyIsEquivalent(to: oldModel) ? .noChange : .update
             
             if oldModel.sizing != self.model.sizing {
-                self.resetCachedHeights()
+                self.resetCachedSizes()
             }
             
             if reason != .noChange {
-                self.resetCachedHeights()
+                self.resetCachedSizes()
             }
         }
         
-        private var cachedHeights : [HeightKey:CGFloat] = [:]
+        private var cachedSizes : [SizeKey:CGSize] = [:]
         
-        func resetCachedHeights()
+        func resetCachedSizes()
         {
-            self.cachedHeights.removeAll()
+            self.cachedSizes.removeAll()
         }
         
-        func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
+        func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
         {
-            guard width > 0.0 else {
-                return 0.0
+            guard sizeConstraint.isEmpty == false else {
+                return .zero
             }
             
-            let heightKey = HeightKey(width: width, layoutDirection: layoutDirection)
+            let key = SizeKey(
+                width: sizeConstraint.width,
+                height: sizeConstraint.height,
+                layoutDirection: layoutDirection
+            )
             
-            if let height = self.cachedHeights[heightKey] {
-                return height
+            if let size = self.cachedSizes[key] {
+                return size
             } else {
-                let height : CGFloat = measurementCache.use(
+                let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
                         return Element.Appearance.createReusableHeaderFooterView(frame: .zero)
@@ -503,12 +507,12 @@ final class PresentationState
                     self.model.appearance.apply(to: view)
                     self.model.element.apply(to: view, reason: .willDisplay)
                     
-                    return self.model.sizing.measure(with: view, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                    return self.model.sizing.measure(with: view, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
                 })
                 
-                self.cachedHeights[heightKey] = height
+                self.cachedSizes[key] = size
                 
-                return height
+                return size
             }
         }
     }
@@ -672,11 +676,11 @@ final class PresentationState
             self.model = anyItem as! Item<Element>
             
             if oldModel.sizing != self.model.sizing {
-                self.resetCachedHeights()
+                self.resetCachedSizes()
             }
             
             if reason != .noChange {
-                self.resetCachedHeights()
+                self.resetCachedSizes()
             }
         }
         
@@ -705,25 +709,29 @@ final class PresentationState
             self.applyToVisibleCell()
         }
         
-        private var cachedHeights : [HeightKey:CGFloat] = [:]
+        private var cachedSizes : [SizeKey:CGSize] = [:]
         
-        func resetCachedHeights()
+        func resetCachedSizes()
         {
-            self.cachedHeights.removeAll()
+            self.cachedSizes.removeAll()
         }
         
-        func height(width : CGFloat, layoutDirection : LayoutDirection, defaultHeight : CGFloat, measurementCache : ReusableViewCache) -> CGFloat
-        {
-            guard width > 0.0 else {
-                return 0.0
+        func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+        {            
+            guard sizeConstraint.isEmpty == false else {
+                return .zero
             }
             
-            let heightKey = HeightKey(width: width, layoutDirection: layoutDirection)
+            let key = SizeKey(
+                width: sizeConstraint.width,
+                height: sizeConstraint.height,
+                layoutDirection: layoutDirection
+            )
             
-            if let height = self.cachedHeights[heightKey] {
-                return height
+            if let size = self.cachedSizes[key] {
+                return size
             } else {
-                let height : CGFloat = measurementCache.use(
+                let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
                         return ItemElementCell<Element>()
@@ -732,12 +740,12 @@ final class PresentationState
                     
                     self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
                     
-                    return self.model.sizing.measure(with: cell, width: width, layoutDirection: layoutDirection, defaultHeight: defaultHeight)
+                    return self.model.sizing.measure(with: cell, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
                 })
                 
-                self.cachedHeights[heightKey] = height
+                self.cachedSizes[key] = size
                 
-                return height
+                return size
             }
         }
         
@@ -748,9 +756,10 @@ final class PresentationState
     }
 }
 
-fileprivate struct HeightKey : Hashable
+fileprivate struct SizeKey : Hashable
 {
     var width : CGFloat
+    var height : CGFloat
     var layoutDirection : LayoutDirection
 }
 

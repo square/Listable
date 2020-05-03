@@ -164,19 +164,20 @@ extension ListView
             self.view.setPresentationStateItemPositions()
         }
                 
-        func heightForItem(
+        func sizeForItem(
             at indexPath : IndexPath,
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+        ) -> CGSize
         {
             let item = self.presentationState.item(at: indexPath)
             
-            return item.height(
-                width: width,
-                layoutDirection : layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.itemHeight,
+            return item.size(
+                in: sizeConstraint,
+                layoutDirection: layoutDirection,
+                defaultSize: defaultSize,
                 measurementCache: self.itemMeasurementCache
             )
         }
@@ -193,18 +194,19 @@ extension ListView
             return self.presentationState.header.state != nil
         }
         
-        func heightForListHeader(
+        func sizeForListHeader(
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+            ) -> CGSize
         {
             let header = self.presentationState.header.state!
-            
-            return header.height(
-                width: width,
+                        
+            return header.size(
+                in: sizeConstraint,
                 layoutDirection : layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.listHeaderHeight,
+                defaultSize: defaultSize,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -221,18 +223,19 @@ extension ListView
             return self.presentationState.footer.state != nil
         }
         
-        func heightForListFooter(
+        func sizeForListFooter(
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+            ) -> CGSize
         {
             let footer = self.presentationState.footer.state!
             
-            return footer.height(
-                width: width,
+            return footer.size(
+                in: sizeConstraint,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.listFooterHeight,
+                defaultSize: defaultSize,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -249,18 +252,19 @@ extension ListView
             return self.presentationState.overscrollFooter.state != nil
         }
         
-        func heightForOverscrollFooter(
+        func sizeForOverscrollFooter(
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+            ) -> CGSize
         {
             let footer = self.presentationState.overscrollFooter.state!
             
-            return footer.height(
-                width: width,
+            return footer.size(
+                in: sizeConstraint,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.overscrollFooterHeight,
+                defaultSize: defaultSize,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -286,20 +290,21 @@ extension ListView
             return section.header.state != nil
         }
                 
-        func heightForHeader(
+        func sizeForHeader(
             in sectionIndex : Int,
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+            ) -> CGSize
         {
             let section = self.presentationState.sections[sectionIndex]
             let header = section.header.state!
             
-            return header.height(
-                width: width,
+            return header.size(
+                in: sizeConstraint,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.sectionHeaderHeight,
+                defaultSize: defaultSize,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }
@@ -319,20 +324,21 @@ extension ListView
             return section.footer.state != nil
         }
                 
-        func heightForFooter(
+        func sizeForFooter(
             in sectionIndex : Int,
             in collectionView : UICollectionView,
-            width : CGFloat,
+            measuredIn sizeConstraint : CGSize,
+            defaultSize : CGSize,
             layoutDirection : LayoutDirection
-            ) -> CGFloat
+            ) -> CGSize
         {
             let section = self.presentationState.sections[sectionIndex]
             let footer = section.footer.state!
             
-            return footer.height(
-                width: width,
+            return footer.size(
+                in: sizeConstraint,
                 layoutDirection: layoutDirection,
-                defaultHeight: self.view.layout.appearance.sizing.sectionFooterHeight,
+                defaultSize: defaultSize,
                 measurementCache: self.headerFooterMeasurementCache
             )
         }

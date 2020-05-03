@@ -148,7 +148,7 @@ public final class ListView : UIView
         
         // Row Sizing
         
-        self.storage.presentationState.resetAllCachedHeights()
+        self.storage.presentationState.resetAllCachedSizes()
         
         // Scroll View Config
         
@@ -215,26 +215,25 @@ public final class ListView : UIView
         guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
             return false
         }
-
-        // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
-        
-        let isAlreadyVisible: Bool = {
-            guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
-                return false
-            }
-
-            return self.collectionView.contentFrame.contains(frame)
-        }()
-
-        // If the item is already visible and that's good enough, return.
-
-        if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
-            return true
-        }
-        
-        // Otherwise, perform scrolling.
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
+            
+            // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
+            
+            let isAlreadyVisible: Bool = {
+                guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
+                    return false
+                }
+
+                return self.collectionView.contentFrame.contains(frame)
+            }()
+
+            // If the item is already visible and that's good enough, return.
+
+            if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+                return
+            }
+            
             self.collectionView.scrollToItem(
                 at: toIndexPath,
                 at: position.position.UICollectionViewScrollPosition,

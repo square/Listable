@@ -41,7 +41,7 @@ public extension Listable.HeaderFooter where Element : BlueprintHeaderFooterElem
     
     init(
         with element : Element,
-        sizing : Sizing = .thatFitsWith(.atLeast(.default)),
+        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
