@@ -1,4 +1,4 @@
-**Note** – Listable is still experimental :see_no_evil:. While it is shipping in [Square Point of Sale](https://squareup.com/us/en/point-of-sale) in several places, we're still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months. We expect to reach 1.0 stability and quality in late Q1 2020.
+**Note** – Listable is still experimental :see_no_evil:. While it is shipping in [Square Point of Sale](https://squareup.com/us/en/point-of-sale) in several places, we're still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months.
 
 # Listable
 
