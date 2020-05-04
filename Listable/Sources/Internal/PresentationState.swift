@@ -466,13 +466,9 @@ final class PresentationState
             
             self.model = anyHeaderFooter as! HeaderFooter<Element>
             
-            let reason : UpdateReason = self.model.anyIsEquivalent(to: oldModel) ? .noChange : .update
+            let isEquivalent = self.model.anyIsEquivalent(to: oldModel)
             
-            if oldModel.sizing != self.model.sizing {
-                self.resetCachedSizes()
-            }
-            
-            if reason != .noChange {
+            if isEquivalent == false {
                 self.resetCachedSizes()
             }
         }
@@ -493,7 +489,8 @@ final class PresentationState
             let key = SizeKey(
                 width: sizeConstraint.width,
                 height: sizeConstraint.height,
-                layoutDirection: layoutDirection
+                layoutDirection: layoutDirection,
+                sizing: self.model.sizing
             )
             
             if let size = self.cachedSizes[key] {
@@ -670,14 +667,8 @@ final class PresentationState
         }
         
         func setNew(item anyItem: AnyItem, reason: UpdateReason)
-        {
-            let oldModel = self.model
-            
+        {            
             self.model = anyItem as! Item<Element>
-            
-            if oldModel.sizing != self.model.sizing {
-                self.resetCachedSizes()
-            }
             
             if reason != .noChange {
                 self.resetCachedSizes()
@@ -725,7 +716,8 @@ final class PresentationState
             let key = SizeKey(
                 width: sizeConstraint.width,
                 height: sizeConstraint.height,
-                layoutDirection: layoutDirection
+                layoutDirection: layoutDirection,
+                sizing: self.model.sizing
             )
             
             if let size = self.cachedSizes[key] {
@@ -761,5 +753,6 @@ fileprivate struct SizeKey : Hashable
     var width : CGFloat
     var height : CGFloat
     var layoutDirection : LayoutDirection
+    var sizing : Sizing
 }
 
