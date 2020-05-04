@@ -17,7 +17,7 @@ enum SupplementaryKind : String, CaseIterable
     case sectionFooter = "Listable.SectionFooter"
     
     case overscrollFooter = "Listable.OverscrollFooter"
-    
+        
     var zIndex : Int {
         switch self {
         case .listHeader: return 1

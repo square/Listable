@@ -35,10 +35,10 @@ public final class DemosRootViewController : UIViewController
                 with: DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "collection-view") { section in
+            list += Section(identifier: "list-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "Collection Views")
+                    with: DemoHeader(title: "List Views")
                 )
                 
                 section += Item(
@@ -112,10 +112,10 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "flow-layout") { section in
+            list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "Flow Layouts")
+                    with: DemoHeader(title: "UICollectionViews")
                 )
                 
                 section += Item(
@@ -129,7 +129,7 @@ public final class DemosRootViewController : UIViewController
             list += Section(identifier: "table-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "Table Views")
+                    with: DemoHeader(title: "UITableViews")
                 )
                 
                 section += Item(
@@ -147,6 +147,20 @@ public final class DemosRootViewController : UIViewController
                     swipeActionsAppearance: DefaultItemElementSwipeActionsAppearance(),
                     onSelect : { _ in
                         self.push(DemoTableViewController())
+                })
+            }
+            
+            list += Section(identifier: "scroll-view") { section in
+                
+                section.header = HeaderFooter(
+                    with: DemoHeader(title: "UIScrollViews")
+                )
+                
+                section += Item(
+                    with: DemoItem(text: "Edges Playground"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(ScrollViewEdgesPlaygroundViewController())
                 })
             }
         }

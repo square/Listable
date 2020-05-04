@@ -129,7 +129,7 @@ public struct Item<Element:ItemElement> : AnyItem
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
         
-        self.identifier = AnyIdentifier(self.element.identifier)
+        self.identifier = self.element.identifier.toAny
     }
     
     // MARK: AnyItem

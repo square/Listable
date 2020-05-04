@@ -31,6 +31,10 @@ public struct Content
     
     public var sections : [Section]
     
+    public var sectionsWithItems : [Section] {
+        self.sections.filter { $0.items.isEmpty == false}
+    }
+    
     public var itemCount : Int {
         return self.sections.reduce(0, { $0 + $1.items.count })
     }
@@ -79,6 +83,22 @@ public struct Content
     //
     // MARK: Finding Content
     //
+    
+    public var firstItem : AnyItem? {
+        guard let first = self.sectionsWithItems.first?.items.first else {
+            return nil
+        }
+        
+        return first
+    }
+    
+    public var lastItem : AnyItem? {
+        guard let last = self.sectionsWithItems.last?.items.last else {
+            return nil
+        }
+        
+        return last
+    }
     
     public func item(at indexPath : IndexPath) -> AnyItem
     {

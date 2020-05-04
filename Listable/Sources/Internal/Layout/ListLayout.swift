@@ -251,6 +251,19 @@ public final class ListLayoutContent
         return item.layoutAttributes(with: indexPath)
     }
     
+    func supplementaryItem(of kind : SupplementaryKind, in section : Int) -> ListLayoutContent.SupplementaryItemInfo
+    {
+        switch kind {
+        case .listHeader: return self.header
+        case .listFooter: return self.footer
+            
+        case .sectionHeader: return self.sections[section].header
+        case .sectionFooter: return self.sections[section].footer
+            
+        case .overscrollFooter: return self.overscrollFooter
+        }
+    }
+    
     func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
     {
         return self.sections[indexPath.section].items[indexPath.item]

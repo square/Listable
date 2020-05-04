@@ -211,7 +211,7 @@ public final class ListView : UIView
     @discardableResult
     public func scrollTo<Element:ItemElement>(item : Identifier<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
-        return self.scrollTo(item: AnyIdentifier(item), position: position, animated: animated)
+        return self.scrollTo(item: item.toAny, position: position, animated: animated)
     }
     
     @discardableResult
@@ -228,9 +228,7 @@ public final class ListView : UIView
             // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
             
             let isAlreadyVisible: Bool = {
-                guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
-                    return false
-                }
+                let frame = self.layout.frameForItem(at: toIndexPath)
 
                 return self.collectionView.contentFrame.contains(frame)
             }()
@@ -477,21 +475,20 @@ public final class ListView : UIView
     // MARK: Updating Displayed Items
     //
     
-    private struct VisibleSection : Hashable
+    private struct VisibleHeaderFooterItem : Hashable
     {
-        let section : PresentationState.SectionState
+        let headerFooter : PresentationState.HeaderFooterViewStatePair
         
         func hash(into hasher: inout Hasher)
         {
-            hasher.combine(ObjectIdentifier(self.section))
+            hasher.combine(ObjectIdentifier(self.headerFooter))
         }
         
-        static func == (lhs : VisibleSection, rhs : VisibleSection) -> Bool
+        static func == (lhs : Self, rhs : Self) -> Bool
         {
-            return lhs.section === rhs.section
+            return lhs.headerFooter === rhs.headerFooter
         }
     }
-    
     
     private struct VisibleItem : Hashable
     {
@@ -502,29 +499,59 @@ public final class ListView : UIView
             hasher.combine(ObjectIdentifier(self.item))
         }
         
-        static func == (lhs : VisibleItem, rhs : VisibleItem) -> Bool
+        static func == (lhs : Self, rhs : Self) -> Bool
         {
             return lhs.item === rhs.item
         }
     }
     
-    private var visibleSections : Set<VisibleSection> = Set()
-    private var visibleItems : Set<VisibleItem> = Set()
-    
-    internal func updateVisibleItemsAndSections()
+    private func calculateVisibleItems() -> Set<VisibleItem>
     {
-        // Visible Items & Sections
+        let visibleFrame = self.collectionView.bounds
         
         let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems
         
-        let newVisibleItems = Set(visibleIndexPaths.map {
-            VisibleItem(item: self.storage.presentationState.item(at: $0))
+        return Set(visibleIndexPaths.compactMap {
+            let frame = self.layout.frameForItem(at: $0)
+            
+            if visibleFrame.intersects(frame) {
+                return VisibleItem(item: self.storage.presentationState.item(at: $0))
+            } else {
+                return nil
+            }
         })
+    }
+    
+    private func calculateVisibleHeaderFooterItems() -> Set<VisibleHeaderFooterItem>
+    {        
+        let visibleFrame = self.collectionView.bounds
         
-        let visibleSectionIndexes : Set<Int> = visibleIndexPaths.reduce(into: Set(), { $0.insert($1.section) })
-        let visibleSections = self.storage.presentationState.sections(at: Array(visibleSectionIndexes))
+        let visibleHeaderFooters : [(SupplementaryKind, [IndexPath])] = SupplementaryKind.allCases.map {
+            ($0, self.collectionView.indexPathsForVisibleSupplementaryElements(ofKind: $0.rawValue))
+        }
         
-        // Message Changes
+        return Set(visibleHeaderFooters.map { kind, indexPaths in
+            indexPaths.compactMap { indexPath in
+                let frame = self.layout.frameForSupplementaryItem(of: kind, in: indexPath.section)
+                
+                if visibleFrame.intersects(frame) {
+                    return VisibleHeaderFooterItem(headerFooter: self.storage.presentationState.headerFooter(of: kind, in: indexPath.section))
+                } else {
+                    return nil
+                }
+            }
+        }.flatMap { $0 })
+    }
+    
+    private var visibleHeaderFooterItems : Set<VisibleHeaderFooterItem> = Set()
+    private var visibleItems : Set<VisibleItem> = Set()
+    
+    func updateVisibleItemsAndSections()
+    {
+        let newVisibleItems = self.calculateVisibleItems()
+        let newVisibleHeaderFooterItems = self.calculateVisibleHeaderFooterItems()
+        
+        // Find which items are newly visible (or are no longer visible).
         
         let removed = self.visibleItems.subtracting(newVisibleItems)
         let added = newVisibleItems.subtracting(self.visibleItems)
@@ -537,8 +564,10 @@ public final class ListView : UIView
             $0.item.setAndPerform(isDisplayed: true)
         }
         
+        // Update the stored visible items.
+        
         self.visibleItems = newVisibleItems
-        self.visibleSections = Set(visibleSections.map { VisibleSection(section: $0)} )
+        self.visibleHeaderFooterItems = newVisibleHeaderFooterItems
     }
     
     //
@@ -601,25 +630,7 @@ public final class ListView : UIView
         
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
-        let visibleSlice: Content.Slice
-
-        if self.bounds.isEmpty {
-            visibleSlice = Content.Slice()
-        } else {
-            switch self.autoScrollAction {
-            case .scrollToItemOnInsert(let autoScrollItem, _, _):
-                guard let autoScrollIndexPath = self.storage.allContent.indexPath(for: autoScrollItem.identifier) else {
-                    fallthrough
-                }
-
-                let greaterIndexPath = max(autoScrollIndexPath, indexPath)
-                visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
-
-            case .none:
-
-                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
-            }
-        }
+        let visibleSlice = self.newVisibleSlice(to: indexPath)
 
         let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
 
@@ -641,18 +652,70 @@ public final class ListView : UIView
         
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
             self.updateVisibleItemsAndSections()
+            
             callerCompletion(finished)
         }
-
-        if case let AutoScrollAction.scrollToItemOnInsert(autoScrollItem, autoScrollPosition, animated) = self.autoScrollAction,
-            diff.changes.addedItemIdentifiers.contains(autoScrollItem.identifier)
-        {
-            self.scrollTo(item: autoScrollItem, position: autoScrollPosition, animated: animated)
-        }
+        
+        // Perform any needed auto scroll actions.
+        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
         // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
+    }
+    
+    private func newVisibleSlice(to indexPath : IndexPath) -> Content.Slice
+    {
+        if self.bounds.isEmpty {
+            return Content.Slice()
+        } else {
+            switch self.autoScrollAction {
+            case .scrollToItem(let insertInfo):
+                guard let autoScrollIndexPath = self.storage.allContent.indexPath(for: insertInfo.insertedIdentifier) else {
+                    fallthrough
+                }
+
+                let greaterIndexPath = max(autoScrollIndexPath, indexPath)
+                return self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
+
+            case .none:
+
+                return self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+            }
+        }
+    }
+    
+    private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool)
+    {
+        switch self.autoScrollAction {
+        case .none:
+            return
+            
+        case .scrollToItem(let info):
+            let wasInserted = addedItems.contains(info.insertedIdentifier)
+            
+            if wasInserted {
+                let visibleItems = Set(self.visibleItems.map { item in
+                    item.item.anyModel.identifier
+                })
+                
+                let positionInfo = ListScrollPositionInfo(
+                    scrollView: self.collectionView,
+                    visibleItems: visibleItems,
+                    isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
+                    isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
+                )
+                
+                if info.shouldPerform(positionInfo) {
+                    /// Only animate the scroll if both the update **and** the scroll action are animated.
+                    let bothAnimate = info.animated && animated
+                    
+                    if let destination = info.destination.destination(with: self.content) {
+                        self.scrollTo(item: destination, position: info.position, animated: bothAnimate)
+                    }
+                }
+            }
+        }
     }
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
@@ -737,9 +800,8 @@ public final class ListView : UIView
         
         // Perform Updates Of Visible Section Headers & Footers
         
-        self.visibleSections.forEach {
-            $0.section.header.applyToVisibleView()
-            $0.section.footer.applyToVisibleView()
+        self.visibleHeaderFooterItems.forEach {
+            $0.headerFooter.applyToVisibleView()
         }
         
         // Perform Updates Of Visible Items

@@ -56,6 +56,10 @@ public final class Identifier<Element> : Hashable
         self.hash = hasher.finalize()
     }
     
+    public var toAny : AnyIdentifier {
+        AnyIdentifier(self)
+    }
+    
     // Equatable
     
     public static func == (lhs: Identifier<Element>, rhs: Identifier<Element>) -> Bool
