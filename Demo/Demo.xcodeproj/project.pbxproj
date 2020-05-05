@@ -34,6 +34,7 @@
 		0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D222FBCC1D00341DFF /* Blueprint.swift */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
 		0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D422FBCC1D00341DFF /* Font.swift */; };
+		27F030C824622A8A0030A345 /* CrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F030C724622A8A0030A345 /* CrashViewController.swift */; };
 		42180BB244DD1F51618E1B34 /* libPods-Test Targets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */; };
 		C16C0AC6F56D2268011EDFF2 /* libPods-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */; };
 		C2560A942411830D00F6B31E /* AutoScrollingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2560A932411830D00F6B31E /* AutoScrollingViewController.swift */; };
@@ -72,6 +73,7 @@
 		0AEB96D222FBCC1D00341DFF /* Blueprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blueprint.swift; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEB96D422FBCC1D00341DFF /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		27F030C724622A8A0030A345 /* CrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashViewController.swift; sourceTree = "<group>"; };
 		32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2560A932411830D00F6B31E /* AutoScrollingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingViewController.swift; sourceTree = "<group>"; };
 		C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Test Targets.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +186,7 @@
 				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
 				0AEA09BC242A941700F9ED0C /* DemoTableViewController.swift */,
+				27F030C724622A8A0030A345 /* CrashViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
+				27F030C824622A8A0030A345 /* CrashViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,
 				C2560A942411830D00F6B31E /* AutoScrollingViewController.swift in Sources */,
 				0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */,

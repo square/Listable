@@ -40,7 +40,14 @@ public final class DemosRootViewController : UIViewController
                 section.header = HeaderFooter(
                     with: DemoHeader(title: "Collection Views")
                 )
-                
+
+                section += Item(
+                    with: DemoItem(text: "Layout crash"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect: { _ in
+                        self.push(CrashViewController())
+                })
+
                 section += Item(
                     with: DemoItem(text: "Basic Demo"),
                     selection: .isSelectable(isSelected: false),
