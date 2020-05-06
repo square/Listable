@@ -30,6 +30,8 @@ extension ItemElementCell {
 
             super.init(frame: frame)
 
+            isAccessibilityElement = true
+
             self.addSubview(self.contentView)
 
             NotificationCenter.default.addObserver(
@@ -96,6 +98,7 @@ extension ItemElementCell {
             removeGestureRecognizer(configuration.panGestureRecognizer)
             configuration.swipeView.removeFromSuperview()
 
+            accessibilityCustomActions = nil
             swipeConfiguration = nil
             swipeState = .closed
 
@@ -105,13 +108,7 @@ extension ItemElementCell {
         public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, reason: ApplyReason) {
             if swipeConfiguration == nil {
 
-                let swipeView = Element.SwipeActionsView { expandActions in
-                    if expandActions {
-                        self.set(state: .expandActions, animated: true)
-                    } else {
-                        self.set(state: .closed, animated: true)
-                    }
-                }
+                let swipeView = Element.SwipeActionsView(didPerformAction: self.didPerformAction)
 
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true
@@ -128,14 +125,12 @@ extension ItemElementCell {
 
             swipeConfiguration?.numberOfActions = actions.actions.count
             swipeConfiguration?.swipeView.apply(actions: actions)
+            configureAccessibilityActions(for: actions.actions)
 
             if reason == .willDisplay {
                 set(state: .closed)
             }
         }
-
-        // MARK: - Swipe Controller Delegate
-
 
         @objc private func handlePan(sender: UIPanGestureRecognizer) {
             guard let configuration = swipeConfiguration else { return }
@@ -198,6 +193,14 @@ extension ItemElementCell {
             }
         }
 
+        private func didPerformAction(expandActions: Bool) {
+            if expandActions {
+                self.set(state: .expandActions, animated: true)
+            } else {
+                self.set(state: .closed, animated: true)
+            }
+        }
+
         private func set(state: SwipeActionState, animated: Bool = false) {
             swipeState = state
 
@@ -216,12 +219,31 @@ extension ItemElementCell {
                 set(state: .closed, animated: true)
             }
         }
+
+        @objc private func performAccessibilityAction(_ action: AccessibilitySwipeAction) {
+            action.action.handler(self.didPerformAction)
+        }
+
+        private func configureAccessibilityActions(for actions: [SwipeAction]) {
+            self.accessibilityCustomActions = actions.map {
+                AccessibilitySwipeAction(action: $0, target: self, selector: #selector(performAccessibilityAction))
+            }
+        }
     }
 
     struct SwipeConfiguration {
         let panGestureRecognizer: UIPanGestureRecognizer
         let swipeView: Element.SwipeActionsView
         var numberOfActions: Int
+    }
+}
+
+private class AccessibilitySwipeAction: UIAccessibilityCustomAction {
+    let action: SwipeAction
+
+    init(action: SwipeAction, target: Any?, selector: Selector) {
+        self.action = action
+        super.init(name: action.title ?? "", target: target, selector: selector)
     }
 }
 
