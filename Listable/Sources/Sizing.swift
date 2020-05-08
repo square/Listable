@@ -205,7 +205,7 @@ public enum CustomWidth : Equatable
         
         public func position(with viewSize : CGSize, layoutDirection : LayoutDirection) -> Position
         {
-            let width = Appearance.Layout.width(
+            let width = ListAppearance.Layout.width(
                 with: layoutDirection.width(for: viewSize),
                 padding: self.padding,
                 constraint: self.width

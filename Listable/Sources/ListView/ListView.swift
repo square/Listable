@@ -17,9 +17,7 @@ public final class ListView : UIView
     public init(frame: CGRect = .zero, appearance : Appearance = Appearance())
     {
         // Create all default values.
-        
-        self.layoutType = .list
-        
+
         self.appearance = appearance
         
         self.behavior = Behavior()
@@ -32,13 +30,19 @@ public final class ListView : UIView
         self.dataSource = DataSource()
         self.delegate = Delegate()
         
-        self.layout = CollectionViewLayout(
+        let initialLayout = CollectionViewLayout(
             delegate: self.delegate,
+            layoutType: .list,
             appearance: self.appearance,
             behavior: self.behavior
         )
         
-        self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: self.layout)
+        self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: initialLayout)
+        
+        self.layoutManager = LayoutManager(
+            layout: initialLayout,
+            collectionView: self.collectionView
+        )
         
         self.keyboardObserver = KeyboardObserver()
         
@@ -102,11 +106,12 @@ public final class ListView : UIView
     
     internal let storage : Storage
     internal let collectionView : UICollectionView
-    internal let layout : CollectionViewLayout
     
     //
     // MARK: Private Properties
     //
+    
+    private let layoutManager : LayoutManager
     
     private var sourcePresenter : AnySourcePresenter
 
@@ -127,16 +132,6 @@ public final class ListView : UIView
     // MARK: Appearance
     //
     
-    public var layoutType : ListLayoutType {
-        didSet {
-            guard oldValue != self.layoutType else {
-                return
-            }
-            
-            listableFatal("Changing the list layout type to anything but `list` is currently not supported.")
-        }
-    }
-    
     public var appearance : Appearance {
         didSet {
             guard oldValue != self.appearance else {
@@ -151,13 +146,40 @@ public final class ListView : UIView
     {
         // Appearance
         
-        self.layout.appearance = self.appearance
+        self.layoutManager.current.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
         
         // Row Sizing
         
         self.storage.presentationState.resetAllCachedSizes()
+        
+        // Scroll View
+        
+        self.updateCollectionViewBounce()
     }
+    
+    //
+    // MARK: Layout
+    //
+    
+    public var layoutType : ListLayoutType {
+        get {
+            self.layoutManager.current.layoutType
+        }
+        
+        set {
+            self.set(layoutType: newValue)
+        }
+    }
+    
+    public func set(layoutType : ListLayoutType, animated : Bool = false, completion : @escaping () -> () = {})
+    {
+        self.layoutManager.set(layoutType: layoutType, animated: animated, completion: completion)
+    }
+    
+    //
+    // MARK: Behavior
+    //
     
     public var behavior : Behavior {
         didSet {
@@ -171,17 +193,26 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
-        self.layout.behavior = self.behavior
+        self.layoutManager.current.behavior = self.behavior
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
-        // Scroll View Config
+        // Scroll View
         
+        self.updateCollectionViewBounce()
+    }
+    
+    private func updateCollectionViewBounce()
+    {
         self.collectionView.setAlwaysBounce(
             self.behavior.underflow.alwaysBounce,
             direction: self.appearance.direction
         )
     }
+    
+    //
+    // MARK: Scroll Insets
+    //
     
     public var scrollInsets : ScrollInsets {
         didSet {
@@ -234,7 +265,7 @@ public final class ListView : UIView
             // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
             
             let isAlreadyVisible: Bool = {
-                guard let frame = self.layout.layoutAttributesForItem(at: toIndexPath)?.frame else {
+                guard let frame = self.layoutManager.current.layoutAttributesForItem(at: toIndexPath)?.frame else {
                     return false
                 }
 
@@ -267,16 +298,16 @@ public final class ListView : UIView
         // Perform scrolling.
 
         return self.preparePresentationStateForScroll(to: toIndexPath)  {
-            let contentHeight = self.layout.collectionViewContentSize.height
+            let contentHeight = self.layoutManager.current.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
             guard contentHeight > contentFrameHeight else {
                 return
             }
 
-            let contentOffsetY = contentHeight - contentFrameHeight -
-                self.collectionView.lst_adjustedContentInset.top
+            let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.lst_adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
+            
             self.collectionView.setContentOffset(contentOffset, animated: animated)
         }
     }
@@ -346,17 +377,18 @@ public final class ListView : UIView
     
     public func setProperties(with description : ListDescription)
     {
-        self.layoutType = description.layoutType
+        let animated = description.animatesChanges
+        
         self.appearance = description.appearance
         self.behavior = description.behavior
         self.autoScrollAction = description.autoScrollAction
         self.scrollInsets = description.scrollInsets
-        
         self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
-        
         self.debuggingIdentifier = description.debuggingIdentifier
+
+        self.set(layoutType: description.layoutType, animated: animated)
         
-        self.setContent(animated: description.animatesChanges, description.content)
+        self.setContent(animated: animated, description.content)
     }
     
     private func setContentFromSource(animated : Bool = false)
@@ -370,7 +402,9 @@ public final class ListView : UIView
         self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
     
+    //
     // MARK: UIView
+    //
     
     public override var frame: CGRect {
         didSet {
@@ -436,7 +470,7 @@ public final class ListView : UIView
     internal func setPresentationStateItemPositions()
     {
         self.storage.presentationState.forEachItem { indexPath, item in
-            item.itemPosition = self.layout.positionForItem(at: indexPath)
+            item.itemPosition = self.layoutManager.current.positionForItem(at: indexPath)
         }
     }
     
@@ -742,7 +776,7 @@ public final class ListView : UIView
             self.cancelInteractiveMovement()
         }
         
-        self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
+        self.layoutManager.current.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
             view.performBatchUpdates(batchUpdates, completion: completion)

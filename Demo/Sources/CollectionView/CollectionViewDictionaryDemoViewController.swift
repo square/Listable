@@ -21,14 +21,12 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.listView.appearance.layout.set {
+        self.listView.appearance.list.layout.set {
             $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0)
             $0.width = .atMost(600.0)
             $0.sectionHeaderBottomSpacing = 10.0
             $0.itemSpacing = 7.0
             $0.interSectionSpacingWithNoFooter = 10.0
-            
-            $0.stickySectionHeaders = true
         }
         
         self.listView.behavior.keyboardDismissMode = .interactive

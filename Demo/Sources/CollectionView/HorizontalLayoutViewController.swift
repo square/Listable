@@ -23,8 +23,8 @@ final class HorizontalLayoutViewController : UIViewController
         
         self.listView.setContent { list in
                         
-            list.appearance.layout.itemSpacing = 20.0
-            list.appearance.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+            list.appearance.list.layout.itemSpacing = 20.0
+            list.appearance.list.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
             
             list.content.overscrollFooter = HeaderFooter(
                 with: HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
@@ -41,15 +41,14 @@ final class HorizontalLayoutViewController : UIViewController
 
                     horizontal.appearance.direction = .horizontal
 
-                    horizontal.appearance.layout.set {
+                    horizontal.appearance.list.layout.set {
                         $0.itemSpacing = 20.0
                         $0.sectionHeaderBottomSpacing = 20.0
-                        $0.stickySectionHeaders = true
                     }
 
                     horizontal.scrollInsets = .init(
-                        top: list.appearance.layout.padding.left,
-                        bottom: list.appearance.layout.padding.right
+                        top: list.appearance.list.layout.padding.left,
+                        bottom: list.appearance.list.layout.padding.right
                     )
 
                     horizontal.content.overscrollFooter = HeaderFooter(
