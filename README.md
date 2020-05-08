@@ -1,4 +1,4 @@
-**Note** – Listable is still experimental :see_no_evil:. While it is shipping in [Square Point of Sale](https://squareup.com/us/en/point-of-sale) in several places, we're still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months. We expect to reach 1.0 stability and quality in late Q1 2020.
+**Note** – Listable is still experimental :see_no_evil:. While it is shipping in [Square Point of Sale](https://squareup.com/us/en/point-of-sale) in several places, we're still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months.
 
 # Listable
 
@@ -239,6 +239,9 @@ struct DemoItem : BlueprintItemElement, Equatable
 }
 ```
 
+## Instruments.app Integration
+
+Listable provides integration with the `os_signpost` API for measuring the duration of events in your application. If you are experiencing issues with list performance in your app, you can profile it in Instruments, and add the `os_signpost` instrument to inspect the timing for various layout and update passes.
 
 ## Primary API & Surface Area
 

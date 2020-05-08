@@ -244,6 +244,12 @@ final class PresentationState
     
     func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice)
     {
+        SignpostLogger.log(.begin, log: .updateContent, name: "Update Presentation State", for: self.view)
+        
+        defer {
+            SignpostLogger.log(.end, log: .updateContent, name: "Update Presentation State", for: self.view)
+        }
+        
         self.containsAllItems = slice.containsAllItems
         
         self.contentIdentifier = slice.content.identifier
@@ -499,6 +505,8 @@ final class PresentationState
             if let size = self.cachedSizes[key] {
                 return size
             } else {
+                SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
+                
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
@@ -511,6 +519,8 @@ final class PresentationState
                 })
                 
                 self.cachedSizes[key] = size
+                
+                SignpostLogger.log(.end, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                 
                 return size
             }
@@ -731,6 +741,8 @@ final class PresentationState
             if let size = self.cachedSizes[key] {
                 return size
             } else {
+                SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemElement", for: self.model)
+                
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
@@ -744,6 +756,8 @@ final class PresentationState
                 })
                 
                 self.cachedSizes[key] = size
+                
+                SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemElement", for: self.model)
                 
                 return size
             }
