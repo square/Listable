@@ -230,6 +230,9 @@ struct DemoItem : BlueprintItemElement, Equatable
 }
 ```
 
+## Instruments.app Integration
+
+Listable provides integration with the `os_signpost` API for measuring the duration of events in your application. If you are experiencing issues with list performance in your app, you can profile it in Instruments, and add the `os_signpost` instrument to inspect the timing for various layout and update passes.
 
 ## Primary API & Surface Area
 

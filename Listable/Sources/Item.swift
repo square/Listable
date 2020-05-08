@@ -70,6 +70,8 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias CreateBinding = (Element) -> Binding<Element>
     internal let bind : CreateBinding?
     
+    public var debuggingIdentifier : String? = nil
+    
     //
     // MARK: Initialization
     //
@@ -171,6 +173,17 @@ public struct Item<Element:ItemElement> : AnyItem
     public func newPresentationItemState(in listView : ListView) -> Any
     {
         return PresentationState.ItemState(with: self, listView: listView)
+    }
+}
+
+
+extension Item : SignpostLoggable
+{
+    var signpostInfo : SignpostLoggingInfo {
+        SignpostLoggingInfo(
+            identifier: self.debuggingIdentifier,
+            instanceIdentifier: nil
+        )
     }
 }
 
