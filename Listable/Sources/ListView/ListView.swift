@@ -118,6 +118,12 @@ public final class ListView : UIView
     private let keyboardObserver : KeyboardObserver
     
     //
+    // MARK: Debugging
+    //
+    
+    public var debuggingIdentifier : String? = nil
+    
+    //
     // MARK: Appearance
     //
     
@@ -294,6 +300,7 @@ public final class ListView : UIView
             autoScrollAction: self.autoScrollAction,
             scrollInsets: self.scrollInsets,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
+            debuggingIdentifier: self.debuggingIdentifier,
             build: builder
         )
         
@@ -344,7 +351,10 @@ public final class ListView : UIView
         self.behavior = description.behavior
         self.autoScrollAction = description.autoScrollAction
         self.scrollInsets = description.scrollInsets
+        
         self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
+        
+        self.debuggingIdentifier = description.debuggingIdentifier
         
         self.setContent(animated: description.animatesChanges, description.content)
     }
@@ -545,8 +555,17 @@ public final class ListView : UIView
     // MARK: Updating Presentation State
     //
     
-    internal func updatePresentationState(for reason : Content.Slice.UpdateReason, completion : @escaping (Bool) -> () = { _ in })
-    {
+    internal func updatePresentationState(
+        for reason : Content.Slice.UpdateReason,
+        completion callerCompletion : @escaping (Bool) -> () = { _ in }
+    ) {
+        SignpostLogger.log(.begin, log: .updateContent, name: "List Update", for: self)
+        
+        let completion = { (completed : Bool) in
+            callerCompletion(completed)
+            SignpostLogger.log(.end, log: .updateContent, name: "List Update", for: self)
+        }
+        
         let indexPaths = self.collectionView.indexPathsForVisibleItems
         
         let indexPath = indexPaths.first
@@ -620,8 +639,10 @@ public final class ListView : UIView
                 visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
             }
         }
-
-        let diff = ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
+        
+        let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
+            ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
+        }
 
         let updateBackingData = {
             presentationState.update(with: diff, slice: visibleSlice)
@@ -680,9 +701,16 @@ public final class ListView : UIView
         with diff : SectionedDiff<Section,AnyItem>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
-        completion : @escaping (Bool) -> ()
+        completion callerCompletion : @escaping (Bool) -> ()
     )
     {
+        SignpostLogger.log(.begin, log: .updateContent, name: "Update UICollectionView", for: self)
+        
+        let completion = { (completed : Bool) in
+            callerCompletion(completed)
+            SignpostLogger.log(.end, log: .updateContent, name: "Update UICollectionView", for: self)
+        }
+        
         let view = self.collectionView
         
         let changes = CollectionViewChanges(sectionChanges: diff.changes)
@@ -800,6 +828,15 @@ public final class ListView : UIView
     }
 }
 
+extension ListView : SignpostLoggable
+{
+    var signpostInfo : SignpostLoggingInfo {
+        SignpostLoggingInfo(
+            identifier: self.debuggingIdentifier,
+            instanceIdentifier: String(format: "%p", unsafeBitCast(self, to: Int.self))
+        )
+    }
+}
 
 extension ListView : KeyboardObserverDelegate
 {

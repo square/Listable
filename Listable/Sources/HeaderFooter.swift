@@ -30,6 +30,8 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
     
+    public var debuggingIdentifier : String? = nil
+    
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
     //
@@ -86,6 +88,17 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public func newPresentationHeaderFooterState() -> Any
     {
         return PresentationState.HeaderFooterState(self)
+    }
+}
+
+
+extension HeaderFooter : SignpostLoggable
+{
+    var signpostInfo : SignpostLoggingInfo {
+        SignpostLoggingInfo(
+            identifier: self.debuggingIdentifier,
+            instanceIdentifier: nil
+        )
     }
 }
 

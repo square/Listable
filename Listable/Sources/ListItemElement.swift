@@ -58,6 +58,7 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
             autoScrollAction: .none,
             scrollInsets: .init(),
             accessibilityIdentifier: nil,
+            debuggingIdentifier: nil,
             build: build
         )
     }

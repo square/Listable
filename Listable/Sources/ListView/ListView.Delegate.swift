@@ -376,6 +376,12 @@ extension ListView
         {
             guard scrollView.bounds.size.height > 0 else { return }
             
+            SignpostLogger.log(.begin, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
+            
+            defer {
+                SignpostLogger.log(.end, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
+            }
+            
             // Updating Paged Content
             
             let scrollingDown = self.lastPosition < scrollView.contentOffset.y
