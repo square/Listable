@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum Sizing : Equatable
+public enum Sizing : Hashable
 {
     case `default`
     
@@ -74,7 +74,7 @@ public enum Sizing : Equatable
         )
     }
     
-    public struct Constraint : Equatable
+    public struct Constraint : Hashable
     {
         public var width : Axis
         public var height : Axis
@@ -108,7 +108,7 @@ public enum Sizing : Equatable
             )
         }
         
-        public enum Axis : Equatable
+        public enum Axis : Hashable
         {
             case noConstraint
             
@@ -117,7 +117,7 @@ public enum Sizing : Equatable
             
             case within(Value, CGFloat)
             
-            public enum Value : Equatable
+            public enum Value : Hashable
             {
                 case `default`
                 case fixed(CGFloat)
