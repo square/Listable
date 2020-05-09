@@ -28,6 +28,7 @@ public struct List : BlueprintUI.Element
             autoScrollAction: .none,
             scrollInsets: .init(),
             accessibilityIdentifier: nil,
+            debuggingIdentifier: nil,
             build: build
         )
     }
