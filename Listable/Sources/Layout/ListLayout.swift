@@ -410,12 +410,60 @@ public final class ListLayoutContent
         self.sections[from.section].items.remove(at: from.item)
         self.sections[to.section].items.insert(info, at: to.item)
     }
+    
+    //
+    // MARK: Layout Data
+    //
+    
+    var layoutAttributes : ListLayoutAttributes {
+        ListLayoutAttributes(
+            header: self.header.isPopulated ? .init(frame: self.header.defaultFrame) : nil,
+            footer: self.footer.isPopulated ? .init(frame: self.footer.defaultFrame) : nil,
+            overscrollFooter: self.overscrollFooter.isPopulated ? .init(frame: self.overscrollFooter.defaultFrame) : nil,
+            sections: self.sections.map { section in
+                .init(
+                    frame: section.frame,
+                    header: section.header.isPopulated ? .init(frame: section.header.defaultFrame) : nil,
+                    footer: section.footer.isPopulated ? .init(frame: section.footer.defaultFrame) : nil,
+                    items: section.items.map { item in
+                        .init(frame: item.frame)
+                    }
+                )
+            }
+        )
+    }
 }
 
 
 //
 // MARK: Layout Information
 //
+
+
+public struct ListLayoutAttributes : Equatable {
+    
+    var header : Supplementary?
+    var footer : Supplementary?
+    var overscrollFooter : Supplementary?
+    
+    var sections : [Section]
+    
+    public struct Section : Equatable {
+        var frame : CGRect
+        
+        var header : Supplementary?
+        var footer : Supplementary?
+        var items : [Item]
+    }
+    
+    public struct Supplementary : Equatable {
+        var frame : CGRect
+    }
+    
+    public struct Item : Equatable {
+        var frame : CGRect
+    }
+}
 
 
 public extension ListLayoutContent
