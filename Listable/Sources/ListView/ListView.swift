@@ -106,6 +106,7 @@ public final class ListView : UIView
     
     internal let storage : Storage
     internal let collectionView : UICollectionView
+    internal let delegate : Delegate
     
     //
     // MARK: Private Properties
@@ -118,7 +119,7 @@ public final class ListView : UIView
     private var autoScrollAction : AutoScrollAction
     
     private let dataSource : DataSource
-    private let delegate : Delegate
+    
     
     private let keyboardObserver : KeyboardObserver
     

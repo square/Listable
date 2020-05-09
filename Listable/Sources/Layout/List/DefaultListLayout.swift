@@ -260,6 +260,7 @@ final class DefaultListLayout : ListLayout
             header.y = lastContentMaxY
             
             if hasListHeader {
+                lastSectionMaxY = direction.maxY(for: header.defaultFrame)
                 lastContentMaxY = direction.maxY(for: header.defaultFrame)
             }
         }
