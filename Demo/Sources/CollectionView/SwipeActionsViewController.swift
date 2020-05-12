@@ -45,17 +45,15 @@ final class SwipeActionsViewController: UIViewController  {
             }
         }
 
-        UIView.animate(withDuration: animated ? 0.3 : 0) {
+        self.blueprintView.element = List { list in
 
-            self.blueprintView.element = List { list in
+            list.animatesChanges = animated
+            list.appearance = appearance
 
-                list.appearance = appearance
-
-                list += Section(identifier: "items") { section in
-                    section += self.items.map { item in
-                        Item(with: SwipeActionsDemoItem(item: item),
-                             swipeActions: self.makeSwipeActions(for: item))
-                    }
+            list += Section(identifier: "items") { section in
+                section += self.items.map { item in
+                    Item(with: SwipeActionsDemoItem(item: item),
+                         swipeActions: self.makeSwipeActions(for: item))
                 }
             }
         }
@@ -144,7 +142,7 @@ final class SwipeActionsViewController: UIViewController  {
                     row.add(child: Label(text: self.item.title))
 
                     let bookmark = UIImage(named: "bookmark")!
-
+                    
                     if item.isSaved {
                         var image = Image(image: bookmark)
                         image.contentMode = .center
