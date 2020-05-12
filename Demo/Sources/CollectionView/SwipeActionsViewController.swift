@@ -41,7 +41,7 @@ final class SwipeActionsViewController: UIViewController  {
 
         let appearance = Appearance {
             if #available(iOS 11, *) {
-                $0.layout = .init(padding: view.safeAreaInsets)
+                $0.list.layout = .init(padding: view.safeAreaInsets)
             }
         }
 
