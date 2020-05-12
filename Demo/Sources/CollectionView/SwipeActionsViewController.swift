@@ -31,9 +31,26 @@ final class SwipeActionsViewController: UIViewController  {
         self.reloadData()
     }
 
+    @available(iOS 11, *)
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        reloadData(animated: false)
+    }
+
     func reloadData(animated: Bool = false) {
+
+        let appearance = Appearance {
+            if #available(iOS 11, *) {
+                $0.layout = .init(padding: view.safeAreaInsets)
+            }
+        }
+
         UIView.animate(withDuration: animated ? 0.3 : 0) {
+
             self.blueprintView.element = List { list in
+
+                list.appearance = appearance
+
                 list += Section(identifier: "items") { section in
                     section += self.items.map { item in
                         Item(with: SwipeActionsDemoItem(item: item),
