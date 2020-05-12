@@ -8,9 +8,14 @@
 import Foundation
 
 
+/// Use SwipeActionsConfiguration to configure an item with SwipeActions.
+/// These are actions that are revealed when swiping on the cell.
 public struct SwipeActionsConfiguration {
 
+    /// The actions to display when the cell is swiped.
     public var actions : [SwipeAction]
+
+    /// Whether the first action is performed automatically with a full swipe.
     public var performsFirstActionWithFullSwipe : Bool
     
     public init(action : SwipeAction, performsFirstActionWithFullSwipe : Bool = false) {
@@ -23,6 +28,7 @@ public struct SwipeActionsConfiguration {
     }
 }
 
+/// Create SwipeActions to define actions that can be performed in a SwipeActionsConfiguration.
 public struct SwipeAction {
 
     /// The completion handler to call after performing the swipe action.

@@ -150,6 +150,12 @@ public extension ItemElementAppearance where Self:Equatable
     }
 }
 
+/**
+ Conform to this protocol to implement a completely custom swipe action view.
+
+ If you do so, you're completely responsible for creating and laying out the actions,
+ as well as updating the layout based on the swipe state.
+ */
 public protocol ItemElementSwipeActionsView: UIView {
 
     var swipeActionsWidth: CGFloat { get }
