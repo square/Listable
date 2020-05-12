@@ -11,7 +11,7 @@ public extension Item where Element == ListItemElement
     static func list<Identifier:Hashable>(identifier : Identifier, sizing : ListItemSizing, build : ListDescription.Build) -> Item<ListItemElement>
     {
         return Item(
-            with: ListItemElement(identifier: identifier, build: build),
+            ListItemElement(identifier: identifier, build: build),
             sizing: sizing.toStandardSizing,
             layout: ItemLayout(width: .fill)
         )
@@ -33,7 +33,7 @@ public enum ListItemSizing : Equatable
 }
 
 
-public struct ListItemElement : ItemElement, ItemElementAppearance
+public struct ListItemElement : ItemElement
 {
     //
     // MARK: Public Properties
@@ -66,16 +66,16 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
     //
     // MARK: ItemElement
     //
-    
-    public typealias Appearance = ListItemElement
+        
+    public typealias ContentView = ListView
     
     public var identifier: Identifier<ListItemElement> {
         return .init(self.contentIdentifier)
     }
     
-    public func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
+    public func apply(to views : ItemElementViews<Self>, for reason: ApplyReason, with info : ApplyItemElementInfo)
     {
-        view.setProperties(with: self.listDescription)
+        views.content.setProperties(with: self.listDescription)
     }
     
     public func isEquivalent(to other: ListItemElement) -> Bool
@@ -83,18 +83,8 @@ public struct ListItemElement : ItemElement, ItemElementAppearance
         return false
     }
     
-    //
-    // MARK: ItemElementAppearance
-    //
-    
-    public typealias ContentView = ListView
-    
-    public static func createReusableItemView(frame : CGRect) -> ListView
+    public static func createReusableContentView(frame : CGRect) -> ListView
     {
-        return ListView(frame: frame)
+        ListView(frame: frame)
     }
-    
-    public func update(view: ListView, with position: ItemPosition) { }
-    
-    public func apply(to view: ListView, with info : ApplyItemElementInfo) {}
 }

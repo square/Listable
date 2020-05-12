@@ -110,11 +110,6 @@ public struct Section
         lhs.add(rhs)
     }
     
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : Element) where Element.Appearance == Element
-    {
-        lhs.add(Item(with: rhs))
-    }
-    
     //
     // MARK: Adding & Removing Multiple Items
     //
@@ -127,13 +122,6 @@ public struct Section
     public static func += <Element:ItemElement>(lhs : inout Section, rhs : [Item<Element>])
     {
         lhs.items += rhs
-    }
-    
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : [Element]) where Element.Appearance == Element
-    {
-        lhs.items += rhs.map {
-            Item(with: $0)
-        }
     }
     
     //

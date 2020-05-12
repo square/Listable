@@ -46,16 +46,11 @@ fileprivate struct TestItemElement : ItemElement, Equatable
         return .init("Test")
     }
     
-    func apply(to view: Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
 
-    struct Appearance : ItemElementAppearance, Equatable
-    {
-        typealias ContentView = UIView
-        
-        static func createReusableItemView(frame: CGRect) -> UIView {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {}
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView {
+        return UIView(frame: frame)
     }
 }

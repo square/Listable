@@ -12,7 +12,7 @@ extension ItemElementCell
 {
     final class ContentContainerView : UIView, SwipeControllerDelegate
     {
-        private(set) var contentView : Element.Appearance.ContentView
+        private(set) var contentView : Element.ContentView
 
         private var swipeController: SwipeController<Element.SwipeActionsAppearance>?
         private(set) var swipeView : Element.SwipeActionsAppearance.ContentView?
@@ -21,7 +21,7 @@ extension ItemElementCell
         {
             let bounds = CGRect(origin: .zero, size: frame.size)
 
-            self.contentView = Element.Appearance.createReusableItemView(frame: bounds)
+            self.contentView = Element.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
 
