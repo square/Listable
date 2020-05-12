@@ -17,7 +17,9 @@ public final class DefaultSwipeActionsView: UIView, ItemElementSwipeActionsView 
     private var firstAction: SwipeAction?
     private var didPerformAction: SwipeAction.CompletionHandler
 
-    public var swipeActionsWidth: CGFloat { calculatedNaturalWidth }
+    public var swipeActionsWidth: CGFloat {
+        calculatedNaturalWidth + lst_safeAreaInsets.right
+    }
 
     private var state: SwipeActionState = .closed
 
@@ -34,22 +36,30 @@ public final class DefaultSwipeActionsView: UIView, ItemElementSwipeActionsView 
     public override func layoutSubviews() {
         super.layoutSubviews()
 
+        // Calculates the x origin for each button based on the width of each button before it
+        // and the percent that the actions are slid open for the overlapping parallax effect
         func xOriginForButton(at index: Int) -> CGFloat {
             let previousButtons = Array(actionButtons[0..<index])
             let position = width(ofButtons: previousButtons)
-            let percentOpen = bounds.width / calculatedNaturalWidth
+            let percentOpen = bounds.width / swipeActionsWidth
             return percentOpen * position
         }
 
         for (index, button) in actionButtons.enumerated() {
+            // Size each button to its natural size, but always match the height
             button.sizeToFit()
             button.frame.size.height = bounds.height
 
+            // Each button is wrapped in a container that enables the parallax effect.
+            // They're positioned using the function above, and the width is based on
+            // the space available before the next button.
             let wrapperView = button.superview!
             wrapperView.frame = button.frame
             wrapperView.frame.origin.x = xOriginForButton(at: index)
             wrapperView.frame.size.width = xOriginForButton(at: index + 1) - xOriginForButton(at: index)
 
+            // If there's only one action, the button stays right-aligned while the container stretches.
+            // For multiple actions, they stay left-aligned.
             if wrapperView.frame.width > button.frame.width && actionButtons.count == 1 {
                 button.frame.origin.x = wrapperView.frame.width - button.frame.width
             } else {
@@ -57,6 +67,13 @@ public final class DefaultSwipeActionsView: UIView, ItemElementSwipeActionsView 
             }
         }
 
+        // Adjust the last button container view to fill the safe area space
+        if let lastButtonContainer = actionButtons.last?.superview {
+            lastButtonContainer.frame.size.width = bounds.width - lastButtonContainer.frame.origin.x
+        }
+
+        // If the last action will be automatically performed or the state is set to expand the actions
+        // for performing the last action, have the last action fill the available space.
         if state == .swiping(willPerformAction: true) || state == .expandActions {
             actionButtons.last?.superview?.frame = bounds
             actionButtons.last?.frame.origin.x = 0
