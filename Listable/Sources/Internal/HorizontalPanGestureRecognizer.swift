@@ -1,5 +1,5 @@
 //
-//  PanDirectionGestureRecognizer.swift
+//  HorizontalPanGestureRecognizer.swift
 //  Listable
 //
 //  Created by Kyle Bashour on 4/21/20.
