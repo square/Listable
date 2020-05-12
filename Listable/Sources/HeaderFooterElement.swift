@@ -27,9 +27,26 @@ public protocol HeaderFooterElement
     func isEquivalent(to other : Self) -> Bool
 }
 
-
+///
+/// If your `HeaderFooterElement` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// This default implementation will be provided for you.
+///
 public extension HeaderFooterElement where Self:Equatable
 {    
+    func isEquivalent(to other : Self) -> Bool
+    {
+        return self == other
+    }
+}
+
+///
+/// Note
+/// ----
+/// This extension is provided alongside the `extension HeaderFooterElement where Self:Equatable`
+/// extension, to avoid ambiguous conformance issues from the swift compiler.
+///
+public extension HeaderFooterElement where Self:Equatable, Self:HeaderFooterElementAppearance
+{
     func isEquivalent(to other : Self) -> Bool
     {
         return self == other
@@ -61,6 +78,10 @@ public protocol HeaderFooterElementAppearance
 }
 
 
+///
+/// If your `HeaderFooterElementAppearance` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// This default implementation will be provided for you.
+///
 public extension HeaderFooterElementAppearance where Self:Equatable
 {
     func isEquivalent(to other : Self) -> Bool

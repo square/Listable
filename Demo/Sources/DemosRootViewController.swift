@@ -63,6 +63,13 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
+                    with: DemoItem(text: "Custom Layouts"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(CustomLayoutsViewController())
+                })
+                
+                section += Item(
                     with: DemoItem(text: "Itemization Editor"),
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in

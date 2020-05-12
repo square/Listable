@@ -15,15 +15,14 @@ import BlueprintUICommonControls
 let demoAppearance = Appearance {
     $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
                 
-    $0.layout = Appearance.Layout(
+    $0.list.layout = .init(
         padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
         width: .atMost(600.0),
         interSectionSpacingWithNoFooter: 20.0,
         interSectionSpacingWithFooter: 20.0,
         sectionHeaderBottomSpacing: 10.0,
         itemSpacing: 6.0,
-        itemToSectionFooterSpacing: 10.0,
-        stickySectionHeaders: true
+        itemToSectionFooterSpacing: 10.0
     )
 }
 

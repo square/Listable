@@ -37,7 +37,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func setAppearance()
     {
-        self.list.appearance.layout.set {
+        self.list.appearance.list.layout.set {
             $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
             $0.interSectionSpacingWithFooter = 30.0
             $0.interSectionSpacingWithNoFooter = 30.0

@@ -79,6 +79,7 @@ public protocol ItemElement
     func isEquivalent(to other : Self) -> Bool
 }
 
+
 public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
@@ -88,9 +89,27 @@ public extension ItemElement
 }
 
 
+///
+/// If your `ItemElement` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// This default implementation will be provided for you.
+///
 public extension ItemElement where Self:Equatable
 {
     func isEquivalent(to other : Self) -> Bool
+    {
+        return self == other
+    }
+}
+
+///
+/// Note
+/// ----
+/// This extension is provided alongside the `public extension ItemElement where Self:Equatablee`
+/// extension, to avoid ambiguous conformance issues from the swift compiler.
+///
+public extension ItemElement where Self:Equatable, Self:ItemElementAppearance
+{
+    func isEquivalent(comparedTo other : Self) -> Bool
     {
         return self == other
     }
@@ -142,6 +161,10 @@ public protocol ItemElementAppearance
 }
 
 
+///
+/// If your `ItemElementAppearance` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// This default implementation will be provided for you.
+///
 public extension ItemElementAppearance where Self:Equatable
 {
     func isEquivalent(to other : Self) -> Bool
