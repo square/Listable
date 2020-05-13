@@ -88,7 +88,7 @@ struct DemoItem : BlueprintItemElement, Equatable
         return .init(self.text)
     }
 
-    typealias SwipeActionsAppearance = DefaultItemElementSwipeActionsAppearance
+    typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemElementInfo) -> Element
     {

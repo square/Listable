@@ -36,14 +36,14 @@ public final class ListView : UIView
             appearance: self.appearance,
             behavior: self.behavior
         )
-        
+
         self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: initialLayout)
         
         self.layoutManager = LayoutManager(
             layout: initialLayout,
             collectionView: self.collectionView
         )
-        
+
         self.keyboardObserver = KeyboardObserver()
         
         self.collectionView.isPrefetchingEnabled = false

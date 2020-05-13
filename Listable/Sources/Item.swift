@@ -48,9 +48,8 @@ public struct Item<Element:ItemElement> : AnyItem
     
     public var selection : ItemSelection
     
-    public var swipeActions : SwipeActions?
-    public var swipeActionsAppearance : Element.SwipeActionsAppearance?
-    
+    public var swipeActions : SwipeActionsConfiguration?
+
     public var reordering : Reordering?
         
     public typealias OnSelect = (Element) -> ()
@@ -95,8 +94,7 @@ public struct Item<Element:ItemElement> : AnyItem
         sizing : Sizing = .default,
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActions? = nil,
-        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
@@ -105,9 +103,6 @@ public struct Item<Element:ItemElement> : AnyItem
         onDeselect : OnDeselect? = nil
         )
     {
-        assert((swipeActions != nil) == (swipeActionsAppearance != nil),
-               "A swipeActionsAppearance must be provided if swipeActions is provided")
-
         self.element = element
         self.appearance = appearance
         
@@ -117,7 +112,6 @@ public struct Item<Element:ItemElement> : AnyItem
         self.selection = selection
         
         self.swipeActions = swipeActions
-        self.swipeActionsAppearance = swipeActionsAppearance
         
         self.reordering = reordering
         
@@ -195,7 +189,7 @@ public extension Item where Element.Appearance == Element
         sizing : Sizing = .default,
         layout : ItemLayout = ItemLayout(),
         selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActions? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,

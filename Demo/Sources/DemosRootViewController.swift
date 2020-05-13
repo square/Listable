@@ -30,7 +30,7 @@ public final class DemosRootViewController : UIViewController
         self.listView.appearance = demoAppearance
         
         self.listView.setContent { list in
-            
+
             list.content.overscrollFooter = HeaderFooter(
                 with: DemoHeader(title: "Thanks for using Listable!!")
             )
@@ -117,6 +117,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(InvoicesPaymentScheduleDemoViewController())
                 })
+
+                section += Item(
+                    with: DemoItem(text: "Swipe Actions"),
+                    selection: .isSelectable(isSelected: false),
+                    onSelect : { _ in
+                        self.push(SwipeActionsViewController())
+                })
             }
             
             list += Section(identifier: "flow-layout") { section in
@@ -130,30 +137,6 @@ public final class DemosRootViewController : UIViewController
                     selection: .isSelectable(isSelected: false),
                     onSelect : { _ in
                         self.push(FlowLayoutViewController())
-                })
-            }
-            
-            list += Section(identifier: "table-view") { section in
-                
-                section.header = HeaderFooter(
-                    with: DemoHeader(title: "Table Views")
-                )
-                
-                section += Item(
-                    with: DemoItem(text: "Swipe To Action"),
-                    selection: .isSelectable(isSelected: false),
-                    swipeActions: SwipeActions(SwipeAction(
-                        title: "Delete",
-                        backgroundColor: .purple,
-                        image: nil,
-                        onTap: { _ in
-                            print("Deleted")
-                            return true
-                        }
-                    ),performsFirstOnFullSwipe: true),
-                    swipeActionsAppearance: DefaultItemElementSwipeActionsAppearance(),
-                    onSelect : { _ in
-                        self.push(DemoTableViewController())
                 })
             }
         }
