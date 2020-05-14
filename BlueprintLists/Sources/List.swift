@@ -38,36 +38,21 @@ public struct List : BlueprintUI.Element
     //
     
     public var content : ElementContent {
-        return ElementContent(layout: Layout())
+        ElementContent { constraint in
+            constraint.maximum
+        }
     }
     
     public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
     {
-        return ListView.describe { config in
+        ListView.describe { config in
             config.builder = {
-                return ListView(frame: bounds, appearance: self.listDescription.appearance)
+                ListView(frame: bounds, appearance: self.listDescription.appearance)
             }
             
             config.apply { listView in
                 listView.setProperties(with: self.listDescription)
             }
-        }
-    }
-    
-    //
-    // MARK: Blueprint Layout Definition
-    //
-    
-    private struct Layout : BlueprintUI.Layout
-    {
-        func measure(in constraint: SizeConstraint, items: [(traits: (), content: Measurable)]) -> CGSize
-        {
-            return constraint.maximum
-        }
-        
-        func layout(size: CGSize, items: [(traits: (), content: Measurable)]) -> [LayoutAttributes]
-        {
-            return []
         }
     }
 }
