@@ -49,9 +49,8 @@ public struct Item<Element:ItemElement> : AnyItem
     
     public var selectionStyle : ItemSelectionStyle
     
-    public var swipeActions : SwipeActions?
-    public var swipeActionsAppearance : Element.SwipeActionsAppearance?
-    
+    public var swipeActions : SwipeActionsConfiguration?
+
     public var reordering : Reordering?
         
     public typealias OnSelect = (Element) -> ()
@@ -94,8 +93,7 @@ public struct Item<Element:ItemElement> : AnyItem
         sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : ItemLayout = ItemLayout(),
         selectionStyle : ItemSelectionStyle = .none,
-        swipeActions : SwipeActions? = nil,
-        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
@@ -104,9 +102,6 @@ public struct Item<Element:ItemElement> : AnyItem
         onDeselect : OnDeselect? = nil
         )
     {
-        assert((swipeActions != nil) == (swipeActionsAppearance != nil),
-               "A swipeActionsAppearance must be provided if swipeActions is provided")
-
         self.element = element
         
         self.sizing = sizing
@@ -115,7 +110,6 @@ public struct Item<Element:ItemElement> : AnyItem
         self.selectionStyle = selectionStyle
         
         self.swipeActions = swipeActions
-        self.swipeActionsAppearance = swipeActionsAppearance
         
         self.reordering = reordering
         

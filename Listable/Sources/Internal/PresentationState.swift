@@ -567,7 +567,7 @@ final class PresentationState
                         )
                         
                         self.model.element.apply(
-                            to: ItemElementViews(content: cell.content.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+                            to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                             for: .wasUpdated,
                             with: applyInfo
                         )
@@ -646,16 +646,16 @@ final class PresentationState
             // Apply Model State
             
             self.model.element.apply(
-                to: ItemElementViews(content: cell.content.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+                to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                 for: reason,
                 with: applyInfo
             )
             
             // Apply Swipe To Action Appearance
-            if let actions = self.model.swipeActions, let appearance = self.model.swipeActionsAppearance {
-                cell.content.registerSwipeActionsIfNeeded(actions: actions, appearance: appearance)
+            if let actions = self.model.swipeActions {
+                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, reason: reason)
             } else {
-                cell.content.deregisterSwipeIfNeeded()
+                cell.contentContainer.deregisterSwipeIfNeeded()
             }
         }
         

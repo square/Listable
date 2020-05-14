@@ -22,7 +22,7 @@ class ItemElementCellTests : XCTestCase
         XCTAssertEqual(cell.contentView.backgroundColor, .clear)
         XCTAssertEqual(cell.contentView.layer.masksToBounds, false)
         
-        XCTAssertEqual(cell.content.superview, cell.contentView)
+        XCTAssertEqual(cell.contentContainer.superview, cell.contentView)
     }
     
     func test_sizeThatFits()

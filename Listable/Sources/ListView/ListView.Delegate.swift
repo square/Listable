@@ -399,6 +399,11 @@ extension ListView
             // Update Item Visibility
             
             self.view.updateVisibleItemsAndSections()
+
+            // Notify swipe actions to close
+
+            let notification = Notification(name: .closeSwipeActions, object: self)
+            NotificationCenter.default.post(notification)
         }
     }
 }
