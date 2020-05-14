@@ -676,6 +676,8 @@ final class PresentationState
         {            
             self.model = anyItem as! Item<Element>
             
+            self.isSelected = self.model.selectionStyle.isSelected
+            
             if reason != .noChange {
                 self.resetCachedSizes()
             }
