@@ -42,85 +42,85 @@ public final class DemosRootViewController : UIViewController
                 )
                 
                 section += Item(
-                    with: DemoItem(text: "Basic Demo"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Basic Demo"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewBasicDemoViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Blueprint Integration"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Blueprint Integration"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(BlueprintListDemoViewController())
                 })
 
                 section += Item(
-                    with: DemoItem(text: "Auto Scrolling (Bottom Pin)"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Auto Scrolling (Bottom Pin)"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(AutoScrollingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Custom Layouts"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Custom Layouts"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CustomLayoutsViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Itemization Editor"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Itemization Editor"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(ItemizationEditorViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "English Dictionary Search"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "English Dictionary Search"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewDictionaryDemoViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Keyboard Testing"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Keyboard Testing"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Horizontal Layout"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Horizontal Layout"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(HorizontalLayoutViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Width Customization"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Width Customization"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(WidthCustomizationViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Reordering (Experimental)"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Reordering (Experimental)"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(ReorderingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Invoices Payment Schedule"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Invoices Payment Schedule"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(InvoicesPaymentScheduleDemoViewController())
                 })
 
                 section += Item(
-                    with: DemoItem(text: "Swipe Actions"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Swipe Actions"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(SwipeActionsViewController())
                 })
@@ -133,8 +133,8 @@ public final class DemosRootViewController : UIViewController
                 )
                 
                 section += Item(
-                    with: DemoItem(text: "Flow Layout"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Flow Layout"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(FlowLayoutViewController())
                 })

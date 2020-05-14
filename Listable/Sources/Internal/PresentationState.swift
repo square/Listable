@@ -29,6 +29,7 @@ protocol AnyPresentationItemState : AnyObject
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
     
+    var isSelected : Bool { get }
     func performUserDidSelectItem(isSelected: Bool)
     
     func resetCachedSizes()
@@ -122,7 +123,7 @@ final class PresentationState
     var selectedIndexPaths : [IndexPath] {
         let indexes : [[IndexPath]] = self.sections.compactMapWithIndex { sectionIndex, _, section in
             return section.items.compactMapWithIndex { itemIndex, _, item in
-                if item.anyModel.selection.isSelected {
+                if item.isSelected {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 } else {
                     return nil
@@ -545,6 +546,8 @@ final class PresentationState
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
+            self.isSelected = model.selectionStyle.isSelected
+            
             if let binding = self.model.bind?(self.model.element)
             {
                 self.binding =  binding
@@ -564,7 +567,7 @@ final class PresentationState
                         )
                         
                         self.model.element.apply(
-                            to: cell.contentContainer.contentView,
+                            to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                             for: .wasUpdated,
                             with: applyInfo
                         )
@@ -639,18 +642,11 @@ final class PresentationState
                 position: self.itemPosition,
                 reordering: self.reorderingActions
             )
-                        
-            // Appearance
-            
-            self.model.appearance.apply(
-                to: cell.contentContainer.contentView,
-                with: applyInfo
-            )
             
             // Apply Model State
             
             self.model.element.apply(
-                to: cell.contentContainer.contentView,
+                to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                 for: reason,
                 with: applyInfo
             )
@@ -680,6 +676,8 @@ final class PresentationState
         {            
             self.model = anyItem as! Item<Element>
             
+            self.isSelected = self.model.selectionStyle.isSelected
+            
             if reason != .noChange {
                 self.resetCachedSizes()
             }
@@ -697,9 +695,11 @@ final class PresentationState
             self.visibleCell = nil
         }
         
+        var isSelected: Bool
+        
         public func performUserDidSelectItem(isSelected: Bool)
         {
-            self.model.selection = .isSelectable(isSelected: isSelected)
+            self.isSelected = isSelected
             
             if isSelected {
                 self.model.onSelect?(self.model.element)

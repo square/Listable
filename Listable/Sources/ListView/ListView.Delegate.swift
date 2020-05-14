@@ -43,7 +43,7 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            return item.anyModel.selection.isSelectable
+            return item.anyModel.selectionStyle.isSelectable
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool
@@ -56,6 +56,10 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
+            
+            if item.anyModel.selectionStyle == .tappable {
+                collectionView.deselectItem(at: indexPath, animated: true)
+            }
         }
         
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)

@@ -21,11 +21,11 @@ public extension Section
     
     static func += <Element:BlueprintItemElement>(lhs : inout Section, rhs : Element)
     {
-        lhs += Item(with: rhs)
+        lhs += Item(rhs)
     }
     
     static func += <Element:BlueprintItemElement>(lhs : inout Section, rhs : [Element])
     {
-        lhs.items += rhs.map { Item(with: $0) }
+        lhs.items += rhs.map { Item($0) }
     }
 }

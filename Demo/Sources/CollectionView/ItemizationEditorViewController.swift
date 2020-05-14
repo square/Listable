@@ -82,8 +82,8 @@ final class ItemizationEditorViewController : UIViewController
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
-                        with: ChoiceItem(title: variation.name, detail: "$0.00"),
-                        selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
+                        ChoiceItem(title: variation.name, detail: "$0.00"),
+                        selectionStyle: .selectable(isSelected: self.itemization.variations.selected.contains(variation)),
                         onSelect: { _ in
                             self.itemization.variations.select(modifier: variation)
                         },
@@ -103,8 +103,8 @@ final class ItemizationEditorViewController : UIViewController
                     
                     section += set.all.map { modifier in
                         Item(
-                            with: ChoiceItem(title: modifier.name, detail: "$0.00"),
-                            selection: .isSelectable(isSelected: false),
+                            ChoiceItem(title: modifier.name, detail: "$0.00"),
+                            selectionStyle: .selectable(isSelected: false),
                             onSelect: { _ in
                                 
                         },

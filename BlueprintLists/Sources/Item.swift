@@ -14,65 +14,74 @@ import Listable
 // MARK: Blueprint Elements
 //
 
-public protocol BlueprintItemElement : ItemElement where Appearance == BlueprintItemElementAppearance
+///
+/// An `ItemElement` specialized for use with Blueprint. Instead of providing
+/// a custom view from `createReusableContentView`, and then updating it in `apply(to:)`,
+/// you instead provide Blueprint element trees, and `Listable` handles mapping this to an underlying `BlueprintView`.
+///
+public protocol BlueprintItemElement : ItemElement
+    where
+    ContentView == BlueprintView,
+    BackgroundView == BlueprintView,
+    SelectedBackgroundView == BlueprintView
 {
     //
-    // MARK: Creating Blueprint Element Representations (Required)
+    // MARK: Creating Blueprint Element Representations
     //
     
+    /// Required. Create and return the element used to represent the content of the element.
+    ///
+    /// You can use the provided `ApplyItemElementInfo` to vary the appearance of your content
+    /// based on the current state of the element.
+    ///
     func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
-}
-
-
-//
-// MARK: Creating Blueprint Items
-//
-
-
-public extension Listable.Item where Element : BlueprintItemElement
-{
-    init(
-        _ element : Element,
-        build : Build
-        )
-    {
-        self.init(with: element)
-        
-        build(&self)
-    }
     
-    init(
-        with element : Element,
-        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
-        layout : ItemLayout = ItemLayout(),
-        selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActionsConfiguration? = nil,
-        reordering : Reordering? = nil,
-        bind : CreateBinding? = nil,
-        onDisplay : OnDisplay? = nil,
-        onSelect : OnSelect? = nil,
-        onDeselect : OnDeselect? = nil
-        )
+    /// Optional. Create and return the element used to represent the background of the element.
+    /// You usually provide this method alongside `selectedBackgroundElement`, if your element
+    /// supports selection or highlighting.
+    ///
+    /// You can use the provided `ApplyItemElementInfo` to vary the appearance of your content
+    /// based on the current state of the element.
+    ///
+    /// Note
+    /// ----
+    /// The default implementation of this method returns nil, and provides no background.
+    ///
+    func backgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
+    
+    /// Optional. Create and return the element used to represent the background of the element when it is selected or highlighted.
+    /// You usually provide this method alongside `backgroundElement`, if your element supports selection or highlighting.
+    ///
+    /// You can use the provided `ApplyItemElementInfo` to vary the appearance of your content
+    /// based on the current state of the element.
+    ///
+    /// Note
+    /// ----
+    /// The default implementation of this method returns nil, and provides no selected background.
+    ///
+    func selectedBackgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
+}
+
+
+public extension BlueprintItemElement
+{
+    //
+    // MARK: Default Implementations
+    //
+    
+    /// By default, elements have no background.
+    func backgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
     {
-        self.init(
-            with: element,
-            appearance: BlueprintItemElementAppearance(),
-            sizing: sizing,
-            layout: layout,
-            selection: selection,
-            swipeActions: swipeActions,
-            reordering: reordering,
-            bind: bind,
-            onDisplay: onDisplay,
-            onSelect: onSelect,
-            onDeselect: onDeselect
-        )
+        nil
+    }
+
+    /// By default, elements have no selected background.
+    func selectedBackgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
+    {
+        nil
     }
 }
 
-//
-// MARK: Applying Blueprint Elements
-//
 
 public extension BlueprintItemElement
 {
@@ -80,23 +89,16 @@ public extension BlueprintItemElement
     // MARK: ItemElement
     //
     
-    func apply(to view : Appearance.ContentView, for reason: ApplyReason, with info : ApplyItemElementInfo)
+    /// Maps the `BlueprintItemElement` methods into the underlying `BlueprintView`s used to render the element.
+    func apply(to views : ItemElementViews<Self>, for reason: ApplyReason, with info : ApplyItemElementInfo)
     {
-        view.element = self.element(with: info)
+        views.content.element = self.element(with: info)
+        views.background.element = self.backgroundElement(with: info)
+        views.selectedBackground.element = self.selectedBackgroundElement(with: info)
     }
     
-}
-
-
-public struct BlueprintItemElementAppearance : ItemElementAppearance
-{
-    //
-    // MARK: ItemElementAppearance
-    //
-    
-    public typealias ContentView = BlueprintView
-    
-    public static func createReusableItemView(frame: CGRect) -> ContentView
+    /// Creates the `BlueprintView` used to render the content of the element.
+    static func createReusableContentView(frame: CGRect) -> ContentView
     {
         let view = BlueprintView(frame: frame)
         view.backgroundColor = .clear
@@ -104,12 +106,13 @@ public struct BlueprintItemElementAppearance : ItemElementAppearance
         return view
     }
     
-    public func update(view: BlueprintView, with position: ItemPosition) {}
-    
-    public func apply(to view: BlueprintView, with info: ApplyItemElementInfo) {}
-
-    public func isEquivalent(to other: BlueprintItemElementAppearance) -> Bool
+    /// Creates the `BlueprintView` used to render the background of the element.
+    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView
     {
-        return true
+        let view = BlueprintView(frame: frame)
+        view.backgroundColor = .clear
+        
+        return view
     }
 }
+

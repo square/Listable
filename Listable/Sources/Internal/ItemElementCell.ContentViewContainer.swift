@@ -12,7 +12,7 @@ extension ItemElementCell {
 
     final class ContentContainerView : UIView {
 
-        let contentView : Element.Appearance.ContentView
+        let contentView : Element.ContentView
 
         private var swipeConfiguration: SwipeConfiguration?
         private var swipeState: SwipeActionState = .closed {
@@ -26,7 +26,7 @@ extension ItemElementCell {
         override init(frame : CGRect) {
             let bounds = CGRect(origin: .zero, size: frame.size)
 
-            self.contentView = Element.Appearance.createReusableItemView(frame: bounds)
+            self.contentView = Element.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
 

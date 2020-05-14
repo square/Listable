@@ -8,17 +8,32 @@
 import UIKit
 
 
+///
+/// An internal cell type used to render items in the list.
+///
+/// Information on how cell selection appearance customization works:
+/// https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/changing_the_appearance_of_selected_and_highlighted_cells
+///
 final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
 {
     let contentContainer : ContentContainerView
-        
+
+    let background : Element.BackgroundView
+    let selectedBackground : Element.SelectedBackgroundView
+
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
         
         self.contentContainer = ContentContainerView(frame: bounds)
         
+        self.background = Element.createReusableBackgroundView(frame: bounds)
+        self.selectedBackground = Element.createReusableSelectedBackgroundView(frame: bounds)
+        
         super.init(frame: frame)
+        
+        self.backgroundView = self.background
+        self.selectedBackgroundView = self.selectedBackground
         
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
