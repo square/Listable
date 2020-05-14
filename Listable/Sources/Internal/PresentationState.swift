@@ -439,7 +439,7 @@ final class PresentationState
         func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
-                return Element.Appearance.createReusableHeaderFooterView(frame: frame)
+                return Element.createReusableHeaderFooterView(frame: frame)
             }
             
             self.applyTo(view: view, reason: .willDisplay)
@@ -454,16 +454,13 @@ final class PresentationState
         
         func createReusableHeaderFooterView(frame : CGRect) -> UIView
         {
-            return Element.Appearance.createReusableHeaderFooterView(frame: frame)
+            return Element.createReusableHeaderFooterView(frame: frame)
         }
         
         func applyTo(view : UIView, reason : ApplyReason)
         {
-            let view = view as! Element.Appearance.ContentView
+            let view = view as! Element.ContentView
             
-            // TODO: Merge this with the other place we apply to views.
-            
-            self.model.appearance.apply(to: view)
             self.model.element.apply(to: view, reason: reason)
         }
         
@@ -508,9 +505,8 @@ final class PresentationState
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return Element.Appearance.createReusableHeaderFooterView(frame: .zero)
+                        return Element.createReusableHeaderFooterView(frame: .zero)
                 }, { view in
-                    self.model.appearance.apply(to: view)
                     self.model.element.apply(to: view, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)

@@ -81,13 +81,13 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .vertical
             
-            list.content.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
                 
                 section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
@@ -144,13 +144,13 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .horizontal
             
-            list.content.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
                 
                 section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
@@ -199,31 +199,20 @@ class DefaultListLayoutTests : XCTestCase
 
 fileprivate struct TestingHeaderFooterElement : HeaderFooterElement {
     
+    var color : UIColor
+    
     func apply(to view: UIView, reason: ApplyReason) {
-        // Nothing
+        view.backgroundColor = self.color
     }
     
     func isEquivalent(to other: TestingHeaderFooterElement) -> Bool {
         false
     }
     
-    struct Appearance : HeaderFooterElementAppearance {
-        
-        var color : UIColor
-
-        typealias ContentView = UIView
-        
-        static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
-            UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView) {
-            view.backgroundColor = self.color
-        }
-        
-        func isEquivalent(to other: TestingHeaderFooterElement.Appearance) -> Bool {
-            false
-        }
+    typealias ContentView = UIView
+    
+    static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
+        UIView(frame: frame)
     }
 }
 

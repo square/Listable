@@ -454,7 +454,6 @@ How to describe a header or footer within a list. Very similar API to `ItemEleme
 public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
 {
     public var element : Element
-    public var appearance : Element.Appearance
     
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
@@ -466,8 +465,8 @@ You set headers and footers on sections via the `header` and `footer` parameter.
 ```swift
 self.listView.setContent { list in
     list += Section(identifier: "section-1") { section in
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
-        section.footer = HeaderFooter(with: DemoFooter(text: "And this is a footer. Please check the EULA for details."))
+        section.header = HeaderFooter(DemoHeader(title: "This Is A Header"))
+        section.footer = HeaderFooter(DemoFooter(text: "And this is a footer. Please check the EULA for details."))
     } 
 }
 ```
@@ -477,12 +476,13 @@ Again, a similar API to  `ItemElement`, but with a reduced surface area, given t
 
 ```swift
 public protocol HeaderFooterElement
-{\
-    associatedtype Appearance:HeaderFooterElementAppearance
-
+{
     func apply(to view : Appearance.ContentView, reason : ApplyReason)
 
     func isEquivalent(to other : Self) -> Bool
+    
+    associatedtype ContentView:UIView
+    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
 }
 ```
 
@@ -504,76 +504,24 @@ A standard implementation may look like this:
 struct Header : HeaderFooterElement, Equatable
 {
     var title : String
-    
-    // HeaderFooterElement
-
-    typealias Appearance = HeaderAppearance
 
     func apply(to view : Appearance.ContentView, for reason: ApplyReason)
     {
         view.titleLabel.text = self.title       
     }
-}
-```
-
-#### HeaderFooterElementAppearance
-As with `ItemElementAppearance`,  `HeaderFooterElementAppearance` describes how your header or footer appears on screen. 
-
-```swift
-public protocol HeaderFooterElementAppearance
-{
-    associatedtype ContentView:UIView
     
-    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
-    
-    func apply(to view : ContentView)
-    
-    func isEquivalent(to other : Self) -> Bool
-}
-```
-
-Per usual, you get `isEquivalent` for free if you're `Equatable`:
-
-```swift
-public extension HeaderFooterElementAppearance where Self:Equatable
-{
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
-    }
-}
-
-```
-
-Completing the above example, we end up with this:
-
-```swift
-struct HeaderAppearance : HeaderFooterElementAppearance, Equatable
-{
-    var theme : AppTheme // Assume `AppTheme` is Equatable.
-
-    // HeaderFooterElementAppearance
-
     typealias ContentView = View
     
-    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
+    static func createReusableContentView(frame : CGRect) -> ContentView
     {
-        return View(frame: frame)
+        View(frame: frame)
     }
     
-    func apply(to view : ContentView)
-    {
-        // Apply the values from the theme.
-    
-        view.titleLabel.font = theme.headerFont
-        view.titleLabel.textColor = theme.headerColor
-    }
-        
-    final class View : UIView
+    private final class View : UIView
     {
         let titleLabel : UILabel
         
-        ... The rest of the view implementation.         
+        ...
     }
 }
 ```
@@ -609,7 +557,9 @@ public struct Section
 If you're using Blueprint integration via the  `BlueprintLists` module, you will also interact with the following types.
 
 ### List
-When using `ListView` directly, you'd use `list.setContent { list in ... }` to set the content of a list. However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListDescription`) that is passed to  `list.setContent { list in ... }`.
+When using `ListView` directly, you'd use `list.setContent { list in ... }` to set the content of a list.
+
+However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListDescription`) that is passed to  `list.setContent { list in ... }`.
 
 ```swift
 var elementRepresentation : Element {
@@ -630,7 +580,7 @@ var elementRepresentation : Element {
 Unless you are supporting highlighting and selection of your `ItemElement`, you do not need to provide implementations of `backgroundElement(:)` and `selectedBackgroundElement(:)` – they default to returning nil. Similar to `ItemElement`, `wasMoved(:)` and `isEquivalent(:)` are also provided based on `Equatable` conformance.
 
 ```swift
-public protocol BlueprintItemElement : ItemElement where Appearance == BlueprintItemElementAppearance
+public protocol BlueprintItemElement : ItemElement
 {
     var identifier : Identifier<Self> { get }
 
@@ -645,13 +595,59 @@ public protocol BlueprintItemElement : ItemElement where Appearance == Blueprint
 }
 ```
 
-### BlueprintHeaderFooterElement
-Similarly, `BlueprintHeaderFooterElement` makes creating a header or footer easy – just implement `element`.
+A standard `BlueprintItemElement` may look something like this:
 
 ```swift
-public protocol BlueprintHeaderFooterElement : HeaderFooterElement where Appearance == BlueprintHeaderFooterElementAppearance
+
+struct PersonElement : BlueprintItemElement, Equatable
 {
+    var name : String
+    var phoneNumber : String
+
+    var identifier : Identifier<Self> {
+        .init(name)
+    }
+    
+    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element {
+        Row {
+            $0.add(child: Label(text: name))
+            $0.add(child: Spacer())
+            $0.add(child: Label(text: name))
+        }
+        .inset(by: 15.0)
+    }
+}
+```
+
+### BlueprintHeaderFooterElement
+Similarly, `BlueprintHeaderFooterElement` makes creating a header or footer easy – just implement `element`, which provides the content element for your header or footer.
+
+```swift
+public protocol BlueprintHeaderFooterElement
+{
+    func isEquivalent(to other : Self) -> Bool
+
     var element : BlueprintUI.Element { get }
+}
+```
+
+A standard `BlueprintHeaderFooterElement` may look something like this:
+
+```swift
+
+struct HeaderElement : BlueprintItemElement, Equatable
+{
+    var name : String
+    var itemCount : String
+    
+    var element : BlueprintUI.Element {
+        Row {
+            $0.add(child: Label(text: name))
+            $0.add(child: Spacer())
+            $0.add(child: Label(text: itemCount))
+        }
+        .inset(by: 15.0)
+    }
 }
 ```
 

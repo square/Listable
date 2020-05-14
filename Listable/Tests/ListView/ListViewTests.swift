@@ -26,7 +26,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section(identifier: "a-section")
-            list.content.overscrollFooter = HeaderFooter(with: TestSupplementary(), appearance: TestSupplementary.Appearance())
+            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         
         listView.collectionView.contentOffset.y = 100
@@ -46,7 +46,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section(identifier: "a-section")
-            list.content.overscrollFooter = HeaderFooter(with: TestSupplementary(), appearance: TestSupplementary.Appearance())
+            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         
         listView.collectionView.contentOffset.y = 100
@@ -78,15 +78,10 @@ fileprivate struct TestSupplementary : HeaderFooterElement, Equatable
 {
     func apply(to view: UIView, reason: ApplyReason) {}
     
-    struct Appearance : HeaderFooterElementAppearance, Equatable
-    {
-        typealias ContentView = UIView
+    typealias ContentView = UIView
 
-        static func createReusableHeaderFooterView(frame: CGRect) -> UIView
-        {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView) {}
+    static func createReusableHeaderFooterView(frame: CGRect) -> UIView
+    {
+        return UIView(frame: frame)
     }
 }
