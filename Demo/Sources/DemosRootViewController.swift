@@ -32,13 +32,13 @@ public final class DemosRootViewController : UIViewController
         self.listView.setContent { list in
 
             list.content.overscrollFooter = HeaderFooter(
-                with: DemoHeader(title: "Thanks for using Listable!!")
+                DemoHeader(title: "Thanks for using Listable!!")
             )
             
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "Collection Views")
+                    DemoHeader(title: "Collection Views")
                 )
                 
                 section += Item(
@@ -129,7 +129,7 @@ public final class DemosRootViewController : UIViewController
             list += Section(identifier: "flow-layout") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "Flow Layouts")
+                    DemoHeader(title: "Flow Layouts")
                 )
                 
                 section += Item(

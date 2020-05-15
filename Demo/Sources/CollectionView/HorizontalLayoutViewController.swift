@@ -27,7 +27,7 @@ final class HorizontalLayoutViewController : UIViewController
             list.appearance.list.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
             
             list.content.overscrollFooter = HeaderFooter(
-                with: HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
+                HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
                 sizing: .fixed(height: 100.0)
             )
             
@@ -52,14 +52,14 @@ final class HorizontalLayoutViewController : UIViewController
                     )
 
                     horizontal.content.overscrollFooter = HeaderFooter(
-                        with: HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
+                        HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
                         sizing: .fixed(height: 100.0)
                     )
 
                     horizontal += Section(identifier: "cards") { section in
 
                         section.header = HeaderFooter(
-                            with: HorizontalHeader(title: "Header", color: .white(0.65)),
+                            HorizontalHeader(title: "Header", color: .white(0.65)),
                             sizing: .fixed(height: 100.0)
                         )
 

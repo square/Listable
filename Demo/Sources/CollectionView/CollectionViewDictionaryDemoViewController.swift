@@ -99,7 +99,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 return Section(identifier: letter.letter) { section in
                     
                     // Set the header.
-                    section.header = HeaderFooter(with: SectionHeader(title: letter.letter))
+                    section.header = HeaderFooter(SectionHeader(title: letter.letter))
                     
                     // Only include word rows that pass the filter.
                     section += letter.words.compactMap { word in

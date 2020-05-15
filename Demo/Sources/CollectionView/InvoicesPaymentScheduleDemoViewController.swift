@@ -77,12 +77,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                 list += Section(identifier: SectionIdentifier.deposits) { section in
                     
                     section.header = HeaderFooter(
-                        with: SectionHeader(text: "Deposit Request"),
+                        SectionHeader(text: "Deposit Request"),
                         sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
-                        with: SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
+                        SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
                         sizing: .thatFits
                     )
                     
@@ -118,12 +118,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                 list += Section(identifier: SectionIdentifier.splits) { section in
                     
                     section.header = HeaderFooter(
-                        with: SectionHeader(text: "Balance Split"),
+                        SectionHeader(text: "Balance Split"),
                         sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
-                        with: SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
+                        SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
                         sizing: .thatFits
                     )
                     
