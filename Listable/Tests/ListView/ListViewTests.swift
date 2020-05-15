@@ -26,7 +26,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section(identifier: "a-section")
-            list.content.overscrollFooter = HeaderFooter(with: TestSupplementary(), appearance: TestSupplementary.Appearance())
+            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         
         listView.collectionView.contentOffset.y = 100
@@ -46,7 +46,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section(identifier: "a-section")
-            list.content.overscrollFooter = HeaderFooter(with: TestSupplementary(), appearance: TestSupplementary.Appearance())
+            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         
         listView.collectionView.contentOffset.y = 100
@@ -63,18 +63,13 @@ fileprivate struct TestElement : ItemElement, Equatable
         return .init(self.title)
     }
     
-    func apply(to view: UIView, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
     
-    struct Appearance : ItemElementAppearance, Equatable
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView
     {
-        typealias ContentView = UIView
-        
-        static func createReusableItemView(frame: CGRect) -> UIView
-        {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {}
+        return UIView(frame: frame)
     }
 }
 
@@ -83,15 +78,10 @@ fileprivate struct TestSupplementary : HeaderFooterElement, Equatable
 {
     func apply(to view: UIView, reason: ApplyReason) {}
     
-    struct Appearance : HeaderFooterElementAppearance, Equatable
-    {
-        typealias ContentView = UIView
+    typealias ContentView = UIView
 
-        static func createReusableHeaderFooterView(frame: CGRect) -> UIView
-        {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView) {}
+    static func createReusableHeaderFooterView(frame: CGRect) -> UIView
+    {
+        return UIView(frame: frame)
     }
 }

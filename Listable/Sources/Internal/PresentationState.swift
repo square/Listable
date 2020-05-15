@@ -29,6 +29,7 @@ protocol AnyPresentationItemState : AnyObject
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
     
+    var isSelected : Bool { get }
     func performUserDidSelectItem(isSelected: Bool)
     
     func resetCachedSizes()
@@ -122,7 +123,7 @@ final class PresentationState
     var selectedIndexPaths : [IndexPath] {
         let indexes : [[IndexPath]] = self.sections.compactMapWithIndex { sectionIndex, _, section in
             return section.items.compactMapWithIndex { itemIndex, _, item in
-                if item.anyModel.selection.isSelected {
+                if item.isSelected {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 } else {
                     return nil
@@ -438,7 +439,7 @@ final class PresentationState
         func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
-                return Element.Appearance.createReusableHeaderFooterView(frame: frame)
+                return Element.createReusableHeaderFooterView(frame: frame)
             }
             
             self.applyTo(view: view, reason: .willDisplay)
@@ -453,16 +454,13 @@ final class PresentationState
         
         func createReusableHeaderFooterView(frame : CGRect) -> UIView
         {
-            return Element.Appearance.createReusableHeaderFooterView(frame: frame)
+            return Element.createReusableHeaderFooterView(frame: frame)
         }
         
         func applyTo(view : UIView, reason : ApplyReason)
         {
-            let view = view as! Element.Appearance.ContentView
+            let view = view as! Element.ContentView
             
-            // TODO: Merge this with the other place we apply to views.
-            
-            self.model.appearance.apply(to: view)
             self.model.element.apply(to: view, reason: reason)
         }
         
@@ -507,9 +505,8 @@ final class PresentationState
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return Element.Appearance.createReusableHeaderFooterView(frame: .zero)
+                        return Element.createReusableHeaderFooterView(frame: .zero)
                 }, { view in
-                    self.model.appearance.apply(to: view)
                     self.model.element.apply(to: view, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
@@ -545,6 +542,8 @@ final class PresentationState
         
             self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
             
+            self.isSelected = model.selectionStyle.isSelected
+            
             if let binding = self.model.bind?(self.model.element)
             {
                 self.binding =  binding
@@ -564,7 +563,7 @@ final class PresentationState
                         )
                         
                         self.model.element.apply(
-                            to: cell.contentContainer.contentView,
+                            to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                             for: .wasUpdated,
                             with: applyInfo
                         )
@@ -639,18 +638,11 @@ final class PresentationState
                 position: self.itemPosition,
                 reordering: self.reorderingActions
             )
-                        
-            // Appearance
-            
-            self.model.appearance.apply(
-                to: cell.contentContainer.contentView,
-                with: applyInfo
-            )
             
             // Apply Model State
             
             self.model.element.apply(
-                to: cell.contentContainer.contentView,
+                to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                 for: reason,
                 with: applyInfo
             )
@@ -680,6 +672,8 @@ final class PresentationState
         {            
             self.model = anyItem as! Item<Element>
             
+            self.isSelected = self.model.selectionStyle.isSelected
+            
             if reason != .noChange {
                 self.resetCachedSizes()
             }
@@ -697,9 +691,11 @@ final class PresentationState
             self.visibleCell = nil
         }
         
+        var isSelected: Bool
+        
         public func performUserDidSelectItem(isSelected: Bool)
         {
-            self.model.selection = .isSelectable(isSelected: isSelected)
+            self.isSelected = isSelected
             
             if isSelected {
                 self.model.onSelect?(self.model.element)

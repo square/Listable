@@ -88,7 +88,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                     state.value.filter = string
                 }
                 
-                rows += Item(with: search, layout: .init(width: .fill))
+                rows += Item(search, layout: .init(width: .fill))
             }
             
             var hasContent = false
@@ -99,7 +99,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 return Section(identifier: letter.letter) { section in
                     
                     // Set the header.
-                    section.header = HeaderFooter(with: SectionHeader(title: letter.letter))
+                    section.header = HeaderFooter(SectionHeader(title: letter.letter))
                     
                     // Only include word rows that pass the filter.
                     section += letter.words.compactMap { word in
@@ -110,7 +110,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                         hasContent = true
                         
                         return Item(
-                            with: WordRow(title: word.word, detail: word.description),
+                            WordRow(title: word.word, detail: word.description),
                             sizing: .thatFitsWith(.init(.atMost(250.0)))
                         )
                     }
@@ -133,40 +133,36 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     }
 }
 
-fileprivate struct SearchBarElement : ItemElement, ItemElementAppearance
+fileprivate struct SearchBarElement : ItemElement
 {
     var text : String
     
     var onChange : (String) -> ()
     
     // MARK: ItemElement
-    
-    typealias Appearance = SearchBarElement
-    
+        
     var identifier: Identifier<SearchBarElement> {
         return .init("search")
     }
     
-    func apply(to view: SearchBar, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    func apply(to views : ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo)
     {
-        view.onStateChanged = self.onChange
-        view.text = self.text
+        views.content.onStateChanged = self.onChange
+        views.content.text = self.text
     }
     
     func isEquivalent(to other: SearchBarElement) -> Bool {
         return self.text == other.text
     }
     
-    // MARK: ItemElementAppearance
-    
     typealias ContentView = SearchBar
     
-    static func createReusableItemView(frame: CGRect) -> ContentView
+    static func createReusableContentView(frame: CGRect) -> ContentView
     {
         return SearchBar(frame: frame)
     }
     
-    func apply(to view: SearchBar, with info: ApplyItemElementInfo) {}
+    func apply(to views : ItemElementViews<Self>, with info: ApplyItemElementInfo) {}
 }
 
 fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable

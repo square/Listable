@@ -27,13 +27,13 @@ final class HorizontalLayoutViewController : UIViewController
             list.appearance.list.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
             
             list.content.overscrollFooter = HeaderFooter(
-                with: HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
+                HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
                 sizing: .fixed(height: 100.0)
             )
             
             list += Section(identifier: "Cards") { section in
                 section += Item(
-                    with: CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.95)),
+                    CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
                 )
                 
@@ -52,58 +52,58 @@ final class HorizontalLayoutViewController : UIViewController
                     )
 
                     horizontal.content.overscrollFooter = HeaderFooter(
-                        with: HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
+                        HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
                         sizing: .fixed(height: 100.0)
                     )
 
                     horizontal += Section(identifier: "cards") { section in
 
                         section.header = HeaderFooter(
-                            with: HorizontalHeader(title: "Header", color: .white(0.65)),
+                            HorizontalHeader(title: "Header", color: .white(0.65)),
                             sizing: .fixed(height: 100.0)
                         )
 
                         section.columns = .init(count: 2, spacing: 20.0)
 
                         section += Item(
-                            with: CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.90)),
+                            CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.90)),
                             sizing: .fixed(height: 300)
                         )
 
                         section += Item(
-                            with: CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85)),
+                            CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85)),
                             sizing: .fixed(height: 300)
                         )
 
                         section += Item(
-                            with: CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80)),
+                            CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80)),
                             sizing: .fixed(height: 300)
                         )
 
                         section += Item(
-                            with: CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75)),
+                            CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75)),
                             sizing: .fixed(height: 300)
                         )
 
                         section += Item(
-                            with: CardElement(title: "This is the fifth card", detail: "Isn't it neat?", color: .white(0.70)),
+                            CardElement(title: "This is the fifth card", detail: "Isn't it neat?", color: .white(0.70)),
                             sizing: .fixed(height: 300)
                         )
 
                         section += Item(
-                            with: CardElement(title: "This is the sixth card", detail: "Isn't it neat?", color: .white(0.65)),
+                            CardElement(title: "This is the sixth card", detail: "Isn't it neat?", color: .white(0.65)),
                             sizing: .fixed(height: 300)
                         )
                     }
                 }
                 
                 section += Item(
-                    with: CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.95)),
+                    CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
                 )
                 
                 section += Item(
-                    with: CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.95)),
+                    CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
                 )
             }

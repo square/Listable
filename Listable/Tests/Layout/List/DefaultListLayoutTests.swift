@@ -81,20 +81,20 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .vertical
             
-            list.content.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
                 
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
             }
         }
         
@@ -144,20 +144,20 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .horizontal
             
-            list.content.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(with: TestingHeaderFooterElement(), appearance: TestingHeaderFooterElement.Appearance(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
                 
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(with: TestingItemElement(), appearance: TestingItemElement.Appearance(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
+                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
             }
         }
         
@@ -199,65 +199,44 @@ class DefaultListLayoutTests : XCTestCase
 
 fileprivate struct TestingHeaderFooterElement : HeaderFooterElement {
     
+    var color : UIColor
+    
     func apply(to view: UIView, reason: ApplyReason) {
-        // Nothing
+        view.backgroundColor = self.color
     }
     
     func isEquivalent(to other: TestingHeaderFooterElement) -> Bool {
         false
     }
     
-    struct Appearance : HeaderFooterElementAppearance {
-        
-        var color : UIColor
-
-        typealias ContentView = UIView
-        
-        static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
-            UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView) {
-            view.backgroundColor = self.color
-        }
-        
-        func isEquivalent(to other: TestingHeaderFooterElement.Appearance) -> Bool {
-            false
-        }
+    typealias ContentView = UIView
+    
+    static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
+        UIView(frame: frame)
     }
 }
 
 
 fileprivate struct TestingItemElement : ItemElement {
     
+    var color : UIColor
+    
     var identifier: Identifier<TestingItemElement> {
         .init("testing")
     }
     
-    func apply(to view: Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo) {
-        // Nothing
+    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    {
+        views.content.backgroundColor = self.color
     }
     
     func isEquivalent(to other: TestingItemElement) -> Bool {
         false
     }
     
-    struct Appearance : ItemElementAppearance {
-        
-        var color : UIColor
-        
-        typealias ContentView = UIView
-        
-        static func createReusableItemView(frame: CGRect) -> UIView {
-            UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {
-            view.backgroundColor = self.color
-        }
-        
-        func isEquivalent(to other: TestingItemElement.Appearance) -> Bool {
-            false
-        }
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView {
+        UIView(frame: frame)
     }
 }

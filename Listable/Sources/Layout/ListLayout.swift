@@ -512,14 +512,14 @@ public extension ListLayoutContent
         }
         
         func setContentsFrameWithContent() {
-            let allFrames : [CGRect] = [[
-                    self.header.defaultFrame,
-                    self.footer.defaultFrame
-                ],
-                self.items.map { $0.frame }
-                ].flatMap { $0 }
-            
-            //self.contentsFrame = .from(unioned: allFrames)
+//            let allFrames : [CGRect] = [[
+//                    self.header.defaultFrame,
+//                    self.footer.defaultFrame
+//                ],
+//                self.items.map { $0.frame }
+//                ].flatMap { $0 }
+//
+//            self.contentsFrame = .from(unioned: allFrames)
         }
     }
     

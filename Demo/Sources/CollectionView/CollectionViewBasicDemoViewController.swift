@@ -52,7 +52,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             
             if self.showsOverscrollFooter {
                 list.content.overscrollFooter = HeaderFooter(
-                    with: DemoHeader(title: "Thanks for using Listable!!")
+                    DemoHeader(title: "Thanks for using Listable!!")
                 )
             }
             
@@ -64,13 +64,13 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     section.columns = .init(count: 2, spacing: 10.0)
                      
                     if self.showsSectionHeaders {
-                        section.header = HeaderFooter(with: DemoHeader(title: "Section Header"))
+                        section.header = HeaderFooter(DemoHeader(title: "Section Header"))
                     } else {
-                        section.header = HeaderFooter(with: DemoHeader2(title: "Section Header"))
+                        section.header = HeaderFooter(DemoHeader2(title: "Section Header"))
                     }
                     
                     section.footer = HeaderFooter(
-                        with: DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
+                        DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
                         sizing: .thatFits
                     )
                     

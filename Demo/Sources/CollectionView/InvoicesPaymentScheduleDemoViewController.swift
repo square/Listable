@@ -55,7 +55,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             list += Section(identifier: SectionIdentifier.toggles) { section in
                 
                 section += Item(
-                    with: ToggleRow(
+                    ToggleRow(
                         content: .init(text: "Request initial deposit", isOn: self.data.requestsInitialDeposit),
                         onToggle: { isOn in
                             self.data.requestsInitialDeposit = isOn
@@ -64,7 +64,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                 )
                                 
                 section += Item(
-                    with: ToggleRow(
+                    ToggleRow(
                         content: .init(text: "Split balance into milestones", isOn: self.data.splitsIntoMilestones),
                         onToggle: { isOn in
                             self.data.splitsIntoMilestones = isOn
@@ -77,17 +77,17 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                 list += Section(identifier: SectionIdentifier.deposits) { section in
                     
                     section.header = HeaderFooter(
-                        with: SectionHeader(text: "Deposit Request"),
+                        SectionHeader(text: "Deposit Request"),
                         sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
-                        with: SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
+                        SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
                         sizing: .thatFits
                     )
                     
                     section += Item(
-                        with: SegmentedControlRow(id: "split-type") { control in
+                        SegmentedControlRow(id: "split-type") { control in
                             control.appendItem(title: "%") {
                                 
                             }
@@ -101,7 +101,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     )
                     
                     section += Item(
-                        with: AmountRow(
+                        AmountRow(
                             content: .init(amount: 100, title: "Deposit", detail: "Due upon receipt"),
                             onAmountChanged: { _ in
                                 
@@ -118,17 +118,17 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                 list += Section(identifier: SectionIdentifier.splits) { section in
                     
                     section.header = HeaderFooter(
-                        with: SectionHeader(text: "Balance Split"),
+                        SectionHeader(text: "Balance Split"),
                         sizing: .thatFits
                     )
                     
                     section.footer = HeaderFooter(
-                        with: SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
+                        SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
                         sizing: .thatFits
                     )
                     
                     section += Item(
-                        with: SegmentedControlRow(id: "split-type") { control in
+                        SegmentedControlRow(id: "split-type") { control in
                             control.appendItem(title: "%") {
                                 
                             }
@@ -142,7 +142,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     )
                     
                     section += Item(
-                        with: AmountRow(
+                        AmountRow(
                             content: .init(amount: 100, title: "Payment 1", detail: "Due in 10 days."),
                             onAmountChanged: { _ in
                                 
@@ -154,7 +154,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     )
                     
                     section += Item(
-                        with: AmountRow(
+                        AmountRow(
                             content: .init(amount: 100, title: "Payment 2", detail: "Due in 20 days."),
                             onAmountChanged: { _ in
                                 
