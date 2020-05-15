@@ -203,10 +203,6 @@ extension ItemElementCell {
 
         private func set(state: SwipeActionState, animated: Bool = false) {
             
-            guard swipeState != state else {
-                return
-            }
-            
             swipeState = state
 
             if animated {
