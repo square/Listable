@@ -15,15 +15,14 @@ import BlueprintUICommonControls
 let demoAppearance = Appearance {
     $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
                 
-    $0.layout = Appearance.Layout(
+    $0.list.layout = .init(
         padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
         width: .atMost(600.0),
         interSectionSpacingWithNoFooter: 20.0,
         interSectionSpacingWithFooter: 20.0,
         sectionHeaderBottomSpacing: 10.0,
         itemSpacing: 6.0,
-        itemToSectionFooterSpacing: 10.0,
-        stickySectionHeaders: true
+        itemToSectionFooterSpacing: 10.0
     )
 }
 
@@ -41,20 +40,15 @@ struct DemoHeader : BlueprintHeaderFooterElement, Equatable
     var title : String
     
     var element: Element {
-        var box = Box(
-            backgroundColor: .white,
-            cornerStyle: .rounded(radius: 10.0),
-            wrapping: Inset(
-                uniformInset: 10.0,
-                wrapping: Label(text: self.title) {
-                    $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
-                }
-            )
+        Label(text: self.title) {
+            $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        }
+        .inset(uniform: 10.0)
+        .box(
+            background: .white,
+            corners: .rounded(radius: 10.0),
+            borders: .solid(color: .white(0.85), width: 2.0)
         )
-        
-        box.borderStyle = .solid(color: .white(0.85), width: 2.0)
-        
-        return box
     }
 }
 
@@ -63,20 +57,15 @@ struct DemoHeader2 : BlueprintHeaderFooterElement, Equatable
     var title : String
     
     var element: Element {
-        var box = Box(
-            backgroundColor: .init(white: 0.95, alpha: 1.0),
-            cornerStyle: .rounded(radius: 10.0),
-            wrapping: Inset(
-                top: 30.0, bottom: 30.0, left: 10.0, right: 10.0,
-                wrapping: Label(text: self.title) {
-                    $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
-                }
-            )
+        Label(text: self.title) {
+            $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        }
+        .inset(top: 30.0, bottom: 30.0, left: 10.0, right: 10.0)
+        .box(
+            background: .init(white: 0.95, alpha: 1.0),
+            corners: .rounded(radius: 10.0),
+            borders: .solid(color: .white(0.85), width: 2.0)
         )
-        
-        box.borderStyle = .solid(color: .white(0.85), width: 2.0)
-        
-        return box
     }
 }
 
@@ -89,22 +78,30 @@ struct DemoItem : BlueprintItemElement, Equatable
         return .init(self.text)
     }
 
-    typealias SwipeActionsAppearance = DefaultItemElementSwipeActionsAppearance
+    typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemElementInfo) -> Element
     {
-        var box = Box(
+        Label(text: self.text)
+            .inset(uniform: 10.0)
+    }
+    
+    func backgroundElement(with info: ApplyItemElementInfo) -> Element?
+    {
+        Box(
             backgroundColor: .white,
             cornerStyle: .rounded(radius: 6.0),
-            wrapping: Inset(
-                uniformInset: 10.0,
-                wrapping: Label(text: self.text)
-            )
+            borderStyle: .solid(color: .white(0.9), width: 2.0)
         )
-        
-        box.borderStyle = .solid(color: .white(0.9), width: 2.0)
-        
-        return box
+    }
+    
+    func selectedBackgroundElement(with info: ApplyItemElementInfo) -> Element?
+    {
+        Box(
+            backgroundColor: info.state.isSelected ? .white(0.9) : .white(0.95),
+            cornerStyle: .rounded(radius: 6.0),
+            borderStyle: .solid(color: .white(0.7), width: 2.0)
+        )
     }
 }
 

@@ -25,10 +25,11 @@ public protocol AnyHeaderFooter_Internal
 public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
 {
     public var element : Element
-    public var appearance : Element.Appearance
     
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
+    
+    public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
@@ -39,25 +40,22 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public typealias Build = (inout HeaderFooter) -> ()
     
     public init(
-        with element : Element,
-        appearance : Element.Appearance,
+        _ element : Element,
         build : Build
         )
     {
-        self.init(with: element, appearance: appearance)
+        self.init(element)
         
         build(&self)
     }
     
     public init(
-        with element : Element,
-        appearance : Element.Appearance,
-        sizing : Sizing = .default,
+        _ element : Element,
+        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
         self.element = element
-        self.appearance = appearance
         
         self.sizing = sizing
         self.layout = layout
@@ -69,7 +67,7 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     
     public func apply(to anyView : UIView, reason: ApplyReason)
     {
-        let view = anyView as! Element.Appearance.ContentView
+        let view = anyView as! Element.ContentView
         
         self.element.apply(to: view, reason: reason)
     }
@@ -80,12 +78,23 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
             return false
         }
         
-        return self.element.isEquivalent(to: other.element) && self.appearance.isEquivalent(to: other.appearance)
+        return self.element.isEquivalent(to: other.element)
     }
     
     public func newPresentationHeaderFooterState() -> Any
     {
         return PresentationState.HeaderFooterState(self)
+    }
+}
+
+
+extension HeaderFooter : SignpostLoggable
+{
+    var signpostInfo : SignpostLoggingInfo {
+        SignpostLoggingInfo(
+            identifier: self.debuggingIdentifier,
+            instanceIdentifier: nil
+        )
     }
 }
 
@@ -97,23 +106,5 @@ public struct HeaderFooterLayout : Equatable
     public init(width : CustomWidth = .default)
     {
         self.width = width
-    }
-}
-
-
-public extension HeaderFooter where Element.Appearance == Element
-{
-    init(
-        with element : Element,
-        sizing : Sizing = .default,
-        layout : HeaderFooterLayout = HeaderFooterLayout()
-    )
-    {
-        self.init(
-            with: element,
-            appearance: element,
-            sizing: sizing,
-            layout: layout
-        )
     }
 }

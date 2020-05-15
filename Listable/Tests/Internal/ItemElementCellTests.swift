@@ -22,7 +22,7 @@ class ItemElementCellTests : XCTestCase
         XCTAssertEqual(cell.contentView.backgroundColor, .clear)
         XCTAssertEqual(cell.contentView.layer.masksToBounds, false)
         
-        XCTAssertEqual(cell.content.superview, cell.contentView)
+        XCTAssertEqual(cell.contentContainer.superview, cell.contentView)
     }
     
     func test_sizeThatFits()
@@ -46,16 +46,11 @@ fileprivate struct TestItemElement : ItemElement, Equatable
         return .init("Test")
     }
     
-    func apply(to view: Appearance.ContentView, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
 
-    struct Appearance : ItemElementAppearance, Equatable
-    {
-        typealias ContentView = UIView
-        
-        static func createReusableItemView(frame: CGRect) -> UIView {
-            return UIView(frame: frame)
-        }
-        
-        func apply(to view: UIView, with info: ApplyItemElementInfo) {}
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView {
+        return UIView(frame: frame)
     }
 }

@@ -21,28 +21,28 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.appearance.layout.itemSpacing = 10.0
+        self.listView.appearance.list.layout.itemSpacing = 10.0
         
         self.listView.setContent { list in
             list.content.overscrollFooter = HeaderFooter(
-                with: DemoHeader(title: "Thanks for using Listable!!")
+                DemoHeader(title: "Thanks for using Listable!!")
             )
             
             list += Section(identifier: "section") { section in
-                section += Item(with: TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 4"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 5"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 6"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 7"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 8"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 9"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 10"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 11"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 12"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 13"), sizing: .fixed(height: 100.0))
-                section += Item(with: TextFieldElement(content: "Item 14"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 4"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 5"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 6"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 7"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 8"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 9"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 10"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 11"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 12"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 13"), sizing: .fixed(height: 100.0))
+                section += Item(TextFieldElement(content: "Item 14"), sizing: .fixed(height: 100.0))
             }
         }
         

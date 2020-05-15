@@ -24,7 +24,7 @@ final class WidthCustomizationViewController : UIViewController
         
         self.listView.setContent { list in
             
-            list.appearance.layout.set {
+            list.appearance.list.layout.set {
                 $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
                 $0.itemSpacing = 20.0
                 $0.interSectionSpacingWithFooter = 20.0
@@ -36,7 +36,7 @@ final class WidthCustomizationViewController : UIViewController
                 section.layout = Section.Layout(width: .default)
                 
                 section += Item(
-                    with: CardElement(title: "Default Row In Default Section", color: .white(0.95)),
+                    CardElement(title: "Default Row In Default Section", color: .white(0.95)),
                     sizing: .thatFits
                 )
             }
@@ -46,7 +46,7 @@ final class WidthCustomizationViewController : UIViewController
                 section.layout = Section.Layout(width: .fill)
                 
                 section += Item(
-                    with: CardElement(title: "Default Row In Fill Section", color: .white(0.95)),
+                    CardElement(title: "Default Row In Fill Section", color: .white(0.95)),
                     sizing: .thatFits
                 )
             }
@@ -62,13 +62,13 @@ final class WidthCustomizationViewController : UIViewController
                 )
                 
                 section += Item(
-                    with: CardElement(title: "Default Row In Left Section", color: .white(0.95)),
+                    CardElement(title: "Default Row In Left Section", color: .white(0.95)),
                     sizing: .thatFits,
                     layout: .init(width: .default)
                 )
                 
                 section += Item(
-                    with: CardElement(title: "Left Aligned In Left Section", color: .white(0.95)),
+                    CardElement(title: "Left Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits,
                     layout: .init(width: .custom(.init(
                         padding: HorizontalPadding(uniform: 10.0),
@@ -79,7 +79,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
                 
                 section += Item(
-                    with: CardElement(title: "Center Aligned In Left Section", color: .white(0.95)),
+                    CardElement(title: "Center Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits,
                     layout: .init(width: .custom(.init(
                         padding: HorizontalPadding(uniform: 10.0),
@@ -90,7 +90,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
                 
                 section += Item(
-                    with: CardElement(title: "Right Aligned In Left Section", color: .white(0.95)),
+                    CardElement(title: "Right Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits,
                     layout: .init(width: .custom(.init(
                         padding: HorizontalPadding(uniform: 10.0),

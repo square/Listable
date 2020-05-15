@@ -8,17 +8,32 @@
 import UIKit
 
 
+///
+/// An internal cell type used to render items in the list.
+///
+/// Information on how cell selection appearance customization works:
+/// https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/changing_the_appearance_of_selected_and_highlighted_cells
+///
 final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
 {
-    let content : ContentContainerView
-        
+    let contentContainer : ContentContainerView
+
+    let background : Element.BackgroundView
+    let selectedBackground : Element.SelectedBackgroundView
+
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
         
-        self.content = ContentContainerView(frame: bounds)
+        self.contentContainer = ContentContainerView(frame: bounds)
+        
+        self.background = Element.createReusableBackgroundView(frame: bounds)
+        self.selectedBackground = Element.createReusableSelectedBackgroundView(frame: bounds)
         
         super.init(frame: frame)
+        
+        self.backgroundView = self.background
+        self.selectedBackgroundView = self.selectedBackground
         
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
@@ -26,7 +41,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
         self.layer.masksToBounds = false
         self.contentView.layer.masksToBounds = false
 
-        self.contentView.addSubview(self.content)
+        self.contentView.addSubview(self.contentContainer)
     }
     
     @available(*, unavailable)
@@ -71,14 +86,14 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
     
     override func sizeThatFits(_ size: CGSize) -> CGSize
     {
-        return self.content.contentView.sizeThatFits(size)
+        return self.contentContainer.contentView.sizeThatFits(size)
     }
     
     override func layoutSubviews()
     {
         super.layoutSubviews()
                 
-        self.content.frame = self.contentView.bounds
+        self.contentContainer.frame = self.contentView.bounds
     }
 }
 

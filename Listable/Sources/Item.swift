@@ -15,17 +15,19 @@ public enum ItemPosition
     case last
 }
 
+
 public protocol AnyItem : AnyItem_Internal
 {
     var identifier : AnyIdentifier { get }
     
     var layout : ItemLayout { get set }
-    var selection : ItemSelection { get set }
+    var selectionStyle : ItemSelectionStyle { get set }
     
     var reordering : Reordering? { get set }
     
     func elementEqual(to other : AnyItem) -> Bool
 }
+
 
 public protocol AnyItem_Internal
 {
@@ -41,16 +43,14 @@ public struct Item<Element:ItemElement> : AnyItem
     public var identifier : AnyIdentifier
     
     public var element : Element
-    public var appearance : Element.Appearance
     
     public var sizing : Sizing
     public var layout : ItemLayout
     
-    public var selection : ItemSelection
+    public var selectionStyle : ItemSelectionStyle
     
-    public var swipeActions : SwipeActions?
-    public var swipeActionsAppearance : Element.SwipeActionsAppearance?
-    
+    public var swipeActions : SwipeActionsConfiguration?
+
     public var reordering : Reordering?
         
     public typealias OnSelect = (Element) -> ()
@@ -70,6 +70,8 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias CreateBinding = (Element) -> Binding<Element>
     internal let bind : CreateBinding?
     
+    public var debuggingIdentifier : String? = nil
+    
     //
     // MARK: Initialization
     //
@@ -77,24 +79,21 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias Build = (inout Item) -> ()
     
     public init(
-        with element : Element,
-        appearance : Element.Appearance,
+        _ element : Element,
         build : Build
         )
     {
-        self.init(with: element, appearance: appearance)
+        self.init(element)
         
         build(&self)
     }
     
     public init(
-        with element : Element,
-        appearance : Element.Appearance,
-        sizing : Sizing = .default,
+        _ element : Element,
+        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : ItemLayout = ItemLayout(),
-        selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActions? = nil,
-        swipeActionsAppearance : Element.SwipeActionsAppearance? = nil,
+        selectionStyle : ItemSelectionStyle = .none,
+        swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
@@ -103,19 +102,14 @@ public struct Item<Element:ItemElement> : AnyItem
         onDeselect : OnDeselect? = nil
         )
     {
-        assert((swipeActions != nil) == (swipeActionsAppearance != nil),
-               "A swipeActionsAppearance must be provided if swipeActions is provided")
-
         self.element = element
-        self.appearance = appearance
         
         self.sizing = sizing
         self.layout = layout
         
-        self.selection = selection
+        self.selectionStyle = selectionStyle
         
         self.swipeActions = swipeActions
-        self.swipeActionsAppearance = swipeActionsAppearance
         
         self.reordering = reordering
         
@@ -156,7 +150,7 @@ public struct Item<Element:ItemElement> : AnyItem
             return false
         }
         
-        return self.element.isEquivalent(to: other.element) && self.appearance.isEquivalent(to: other.appearance)
+        return self.element.isEquivalent(to: other.element)
     }
     
     public func anyWasMoved(comparedTo other : AnyItem) -> Bool
@@ -175,35 +169,12 @@ public struct Item<Element:ItemElement> : AnyItem
 }
 
 
-public extension Item where Element.Appearance == Element
+extension Item : SignpostLoggable
 {
-    init(
-        with element : Element,
-        sizing : Sizing = .default,
-        layout : ItemLayout = ItemLayout(),
-        selection : ItemSelection = .notSelectable,
-        swipeActions : SwipeActions? = nil,
-        reordering : Reordering? = nil,
-        bind : CreateBinding? = nil,
-        onDisplay : OnDisplay? = nil,
-        onEndDisplay : OnEndDisplay? = nil,
-        onSelect : OnSelect? = nil,
-        onDeselect : OnDeselect? = nil
-        )
-    {
-        self.init(
-            with: element,
-            appearance: element,
-            sizing: sizing,
-            layout: layout,
-            selection: selection,
-            swipeActions: swipeActions,
-            reordering: reordering,
-            bind: bind,
-            onDisplay: onDisplay,
-            onEndDisplay: onEndDisplay,
-            onSelect: onSelect,
-            onDeselect: onDeselect
+    var signpostInfo : SignpostLoggingInfo {
+        SignpostLoggingInfo(
+            identifier: self.debuggingIdentifier,
+            instanceIdentifier: nil
         )
     }
 }
@@ -285,22 +256,31 @@ public struct ItemState : Equatable
 }
 
 
-public enum ItemSelection : Equatable
+/// Controls the selection style and behavior of an item in a list.
+public enum ItemSelectionStyle : Equatable
 {
-    case notSelectable
-    case isSelectable(isSelected : Bool)
+    /// The item is not selectable at all.
+    case none
     
-    public var isSelected : Bool {
+    /// The item is temporarily selectable. Once the user lifts their finger, the item is deselected.
+    case tappable
+    
+    /// The item is persistently selectable. Once the user lifts their finger, the item is maintained.
+    case selectable(isSelected : Bool)
+    
+    var isSelected : Bool {
         switch self {
-        case .notSelectable: return false
-        case .isSelectable(let selected): return selected
+        case .none: return false
+        case .tappable: return false
+        case .selectable(let selected): return selected
         }
     }
     
-    public var isSelectable : Bool {
+    var isSelectable : Bool {
         switch self {
-        case .notSelectable: return false
-        case .isSelectable(_): return true
+        case .none: return false
+        case .tappable: return true
+        case .selectable(_): return true
         }
     }
 }

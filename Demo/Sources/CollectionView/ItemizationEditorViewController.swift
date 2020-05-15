@@ -77,13 +77,13 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.variations) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: variationsTitle), sizing: .thatFits)
-                section.footer = HeaderFooter(with: Footer(text: footerText), sizing: .thatFits)
+                section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits)
+                section.footer = HeaderFooter(Footer(text: footerText), sizing: .thatFits)
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
-                        with: ChoiceItem(title: variation.name, detail: "$0.00"),
-                        selection: .isSelectable(isSelected: self.itemization.variations.selected.contains(variation)),
+                        ChoiceItem(title: variation.name, detail: "$0.00"),
+                        selectionStyle: .selectable(isSelected: self.itemization.variations.selected.contains(variation)),
                         onSelect: { _ in
                             self.itemization.variations.select(modifier: variation)
                         },
@@ -98,13 +98,13 @@ final class ItemizationEditorViewController : UIViewController
                     
                     section.columns = .init(count: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(with: Header(title: set.name), sizing: .thatFits)
-                    section.footer = HeaderFooter(with: Footer(text: "Choose modifiers"), sizing: .thatFits)
+                    section.header = HeaderFooter(Header(title: set.name), sizing: .thatFits)
+                    section.footer = HeaderFooter(Footer(text: "Choose modifiers"), sizing: .thatFits)
                     
                     section += set.all.map { modifier in
                         Item(
-                            with: ChoiceItem(title: modifier.name, detail: "$0.00"),
-                            selection: .isSelectable(isSelected: false),
+                            ChoiceItem(title: modifier.name, detail: "$0.00"),
+                            selectionStyle: .selectable(isSelected: false),
                             onSelect: { _ in
                                 
                         },
@@ -118,7 +118,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.discounts) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: "Discounts"), sizing: .thatFits)
+                section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits)
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
@@ -134,7 +134,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(identifier: SectionIdentifier.taxes) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(with: Header(title: "Taxes"), sizing: .thatFits)
+                section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits)
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
@@ -150,26 +150,26 @@ final class ItemizationEditorViewController : UIViewController
     }
     
     var listAppearance : Appearance {
-        return Appearance(
-            backgroundColor: .white,
-            sizing: Appearance.Sizing(
-                itemHeight: 70.0,
-                sectionHeaderHeight: 50.0,
-                sectionFooterHeight: 50.0,
-                listHeaderHeight: 100.0,
-                listFooterHeight: 100.0
-            ),
-            layout: Appearance.Layout(
-                padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                width: .atMost(600.0),
-                interSectionSpacingWithNoFooter: 20.0,
-                interSectionSpacingWithFooter: 20.0,
-                sectionHeaderBottomSpacing: 0.0,
-                itemSpacing: 20.0,
-                itemToSectionFooterSpacing: 20.0,
-                stickySectionHeaders: false
+        Appearance(backgroundColor: .white, stickySectionHeaders: false) {
+            $0.list = ListAppearance(
+                sizing: .init(
+                    itemHeight: 70.0,
+                    sectionHeaderHeight: 50.0,
+                    sectionFooterHeight: 50.0,
+                    listHeaderHeight: 100.0,
+                    listFooterHeight: 100.0
+                ),
+                layout: .init(
+                    padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
+                    width: .atMost(600.0),
+                    interSectionSpacingWithNoFooter: 20.0,
+                    interSectionSpacingWithFooter: 20.0,
+                    sectionHeaderBottomSpacing: 0.0,
+                    itemSpacing: 20.0,
+                    itemToSectionFooterSpacing: 20.0
+                )
             )
-        )
+        }
     }
 }
 

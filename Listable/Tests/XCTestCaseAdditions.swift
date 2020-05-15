@@ -70,3 +70,10 @@ extension XCTestCase
         runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
     }
 }
+
+
+extension UIView {
+    var recursiveDescription : String {
+        self.value(forKey: "recursiveDescription") as! String
+    }
+}

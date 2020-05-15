@@ -7,38 +7,19 @@
 
 
 public protocol HeaderFooterElement
-{
-    //
-    // MARK: Converting To View For Display
-    //
-    
-    associatedtype Appearance:HeaderFooterElementAppearance
-    
+{    
     //
     // MARK: Applying To Displayed View
     //
     
-    func apply(to view : Appearance.ContentView, reason : ApplyReason)
+    func apply(to view : ContentView, reason : ApplyReason)
     
     //
     // MARK: Tracking Changes
     //
     
     func isEquivalent(to other : Self) -> Bool
-}
-
-
-public extension HeaderFooterElement where Self:Equatable
-{    
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
-    }
-}
-
-
-public protocol HeaderFooterElementAppearance
-{
+    
     //
     // MARK: Creating & Providing Views
     //
@@ -46,23 +27,15 @@ public protocol HeaderFooterElementAppearance
     associatedtype ContentView:UIView
     
     static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
-    
-    //
-    // MARK: Updating View State
-    //
-    
-    func apply(to view : ContentView)
-    
-    //
-    // MARK: Tracking Changes
-    //
-    
-    func isEquivalent(to other : Self) -> Bool
 }
 
 
-public extension HeaderFooterElementAppearance where Self:Equatable
-{
+///
+/// If your `HeaderFooterElement` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// This default implementation will be provided for you.
+///
+public extension HeaderFooterElement where Self:Equatable
+{    
     func isEquivalent(to other : Self) -> Bool
     {
         return self == other

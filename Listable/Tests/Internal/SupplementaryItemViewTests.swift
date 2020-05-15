@@ -14,7 +14,7 @@ class SupplementaryContainerViewTests: XCTestCase
 {
     func newHeaderFooter() -> AnyPresentationHeaderFooterState
     {
-        let headerFooter = HeaderFooter(with: TestHeaderFooterElement(), appearance: TestHeaderFooterElement.Appearance())
+        let headerFooter = HeaderFooter(TestHeaderFooterElement())
         return PresentationState.HeaderFooterState(headerFooter)
     }
     
@@ -58,7 +58,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         let content = view.content!
         
-        XCTAssertTrue(type(of: content) === TestHeaderFooterElement.Appearance.View.self)
+        XCTAssertTrue(type(of: content) === TestHeaderFooterElement.View.self)
         XCTAssertEqual(view.frame.size, CGSize(width: 100, height: 100))
         
         // Unset the header footer, make sure the view is pushed back into the cache.
@@ -94,25 +94,20 @@ fileprivate struct TestHeaderFooterElement : HeaderFooterElement, Equatable
 {
     // MARK: HeaderFooterElement
     
-    func apply(to view: Appearance.View, reason: ApplyReason) {}
+    func apply(to view: View, reason: ApplyReason) {}
         
-    struct Appearance : HeaderFooterElementAppearance, Equatable
+    typealias ContentView = View
+    
+    static func createReusableHeaderFooterView(frame: CGRect) -> View
     {
-        typealias ContentView = View
-        
-        static func createReusableHeaderFooterView(frame: CGRect) -> View
+        return View(frame: frame)
+    }
+    
+    final class View : UIView
+    {
+        override func sizeThatFits(_ size: CGSize) -> CGSize
         {
-            return View(frame: frame)
-        }
-        
-        func apply(to view: View) {}
-        
-        final class View : UIView
-        {
-            override func sizeThatFits(_ size: CGSize) -> CGSize
-            {
-                return CGSize(width: 100, height: 100)
-            }
+            return CGSize(width: 100, height: 100)
         }
     }
 }

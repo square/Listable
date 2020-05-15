@@ -43,7 +43,7 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            return item.anyModel.selection.isSelectable
+            return item.anyModel.selectionStyle.isSelectable
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool
@@ -56,6 +56,10 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
+            
+            if item.anyModel.selectionStyle == .tappable {
+                collectionView.deselectItem(at: indexPath, animated: true)
+            }
         }
         
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
@@ -360,6 +364,14 @@ extension ListView
         
         // MARK: UIScrollViewDelegate
         
+        func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
+        {
+            // Notify swipe actions to close
+
+            let notification = Notification(name: .closeSwipeActions, object: self)
+            NotificationCenter.default.post(notification)
+        }
+        
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
@@ -375,6 +387,12 @@ extension ListView
         func scrollViewDidScroll(_ scrollView: UIScrollView)
         {
             guard scrollView.bounds.size.height > 0 else { return }
+            
+            SignpostLogger.log(.begin, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
+            
+            defer {
+                SignpostLogger.log(.end, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
+            }
             
             // Updating Paged Content
             

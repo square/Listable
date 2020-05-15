@@ -30,135 +30,125 @@ public final class DemosRootViewController : UIViewController
         self.listView.appearance = demoAppearance
         
         self.listView.setContent { list in
-            
+
             list.content.overscrollFooter = HeaderFooter(
-                with: DemoHeader(title: "Thanks for using Listable!!")
+                DemoHeader(title: "Thanks for using Listable!!")
             )
             
             list += Section(identifier: "list-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "List Views")
+                    DemoHeader(title: "List Views")
                 )
                 
                 section += Item(
-                    with: DemoItem(text: "Basic Demo"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Basic Demo"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewBasicDemoViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Blueprint Integration"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Blueprint Integration"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(BlueprintListDemoViewController())
                 })
 
                 section += Item(
-                    with: DemoItem(text: "Auto Scrolling (Bottom Pin)"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Auto Scrolling (Bottom Pin)"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(AutoScrollingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Itemization Editor"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Custom Layouts"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(CustomLayoutsViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Itemization Editor"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(ItemizationEditorViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "English Dictionary Search"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "English Dictionary Search"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewDictionaryDemoViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Keyboard Testing"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Keyboard Testing"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Horizontal Layout"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Horizontal Layout"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(HorizontalLayoutViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Width Customization"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Width Customization"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(WidthCustomizationViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Reordering (Experimental)"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Reordering (Experimental)"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(ReorderingViewController())
                 })
                 
                 section += Item(
-                    with: DemoItem(text: "Invoices Payment Schedule"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Invoices Payment Schedule"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(InvoicesPaymentScheduleDemoViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Swipe Actions"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(SwipeActionsViewController())
                 })
             }
             
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "UICollectionViews")
+                    DemoHeader(title: "UICollectionViews")
                 )
-                
+
                 section += Item(
-                    with: DemoItem(text: "Flow Layout"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Flow Layout"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(FlowLayoutViewController())
-                })
-            }
-            
-            list += Section(identifier: "table-view") { section in
-                
-                section.header = HeaderFooter(
-                    with: DemoHeader(title: "UITableViews")
-                )
-                
-                section += Item(
-                    with: DemoItem(text: "Swipe To Action"),
-                    selection: .isSelectable(isSelected: false),
-                    swipeActions: SwipeActions(SwipeAction(
-                        title: "Delete",
-                        backgroundColor: .purple,
-                        image: nil,
-                        onTap: { _ in
-                            print("Deleted")
-                            return true
-                        }
-                    ),performsFirstOnFullSwipe: true),
-                    swipeActionsAppearance: DefaultItemElementSwipeActionsAppearance(),
-                    onSelect : { _ in
-                        self.push(DemoTableViewController())
                 })
             }
             
             list += Section(identifier: "scroll-view") { section in
                 
                 section.header = HeaderFooter(
-                    with: DemoHeader(title: "UIScrollViews")
+                    DemoHeader(title: "UIScrollViews")
                 )
                 
                 section += Item(
-                    with: DemoItem(text: "Edges Playground"),
-                    selection: .isSelectable(isSelected: false),
+                    DemoItem(text: "Edges Playground"),
+                    selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(ScrollViewEdgesPlaygroundViewController())
                 })

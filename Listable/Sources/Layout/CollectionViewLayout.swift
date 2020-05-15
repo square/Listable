@@ -16,7 +16,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     unowned let delegate : CollectionViewLayoutDelegate
     
-    let layoutType : ListLayout.Type = DefaultListLayout.self
+    let layoutType : ListLayoutType
     
     var appearance : Appearance {
         didSet {
@@ -64,15 +64,19 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     init(
         delegate : CollectionViewLayoutDelegate,
+        layoutType : ListLayoutType,
         appearance : Appearance,
         behavior : Behavior
     )
     {
         self.delegate = delegate
+        
+        self.layoutType = layoutType
+        
         self.appearance = appearance
         self.behavior = behavior
         
-        self.layout = self.layoutType.init()
+        self.layout = self.layoutType.layoutType.init()
         self.previousLayout = self.layout
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
@@ -298,13 +302,27 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     private func performRelayout() -> Bool
     {
+        let view = self.collectionView!
+        
+        self.delegate.listViewLayoutUpdatedItemPositions(view)
+        
         let didLayout = self.layout.layout(
             delegate: self.delegate,
-            in: self.collectionView!
+            in: view
         )
         
-        self.viewProperties = CollectionViewLayoutProperties(collectionView: self.collectionView!)
+        if didLayout {
+            self.layout.content.setSectionContentsFrames()
+            
+            let viewHeight = self.appearance.direction.height(for: view.bounds.size)
         
+            self.layout.adjustPositionsForLayoutUnderflow(contentHeight: self.layout.contentSize.height, viewHeight: viewHeight, in: view)
+        
+            self.layout.updateLayout(in: view)
+            
+            self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
+        }
+                
         return didLayout
     }
     
@@ -312,7 +330,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         self.previousLayout = self.layout
         
-        self.layout = self.layoutType.init(
+        self.layout = self.layoutType.layoutType.init(
             delegate: self.delegate,
             appearance: self.appearance,
             behavior: self.behavior,
