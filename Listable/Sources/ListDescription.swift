@@ -28,6 +28,21 @@ public struct ListDescription
 
     public typealias Build = (inout ListDescription) -> ()
     
+    public static func `default`( _ build : Build) -> ListDescription
+    {
+        ListDescription(
+            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+            layoutType: .list,
+            appearance: .init(),
+            behavior: .init(),
+            autoScrollAction: .none,
+            scrollInsets: .init(),
+            accessibilityIdentifier: nil,
+            debuggingIdentifier: nil,
+            build: build
+        )
+    }
+    
     public init(
         animatesChanges: Bool,
         layoutType : ListLayoutType,
