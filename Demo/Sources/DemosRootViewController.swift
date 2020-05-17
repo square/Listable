@@ -124,6 +124,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(SwipeActionsViewController())
                 })
+                
+                section += Item(
+                    DemoItem(text: "Positioning Transformations"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(PositioningTransformViewController())
+                })
             }
             
             list += Section(identifier: "flow-layout") { section in

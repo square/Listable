@@ -25,7 +25,7 @@ public protocol AnyItem : AnyItem_Internal
     
     var reordering : Reordering? { get set }
     
-    func elementEqual(to other : AnyItem) -> Bool
+    var positioningTransformation : PositioningTransformation.Provider? { get }
 }
 
 
@@ -52,18 +52,20 @@ public struct Item<Element:ItemElement> : AnyItem
     public var swipeActions : SwipeActionsConfiguration?
 
     public var reordering : Reordering?
-        
-    public typealias OnSelect = (Element) -> ()
-    public var onSelect : OnSelect?
-    
-    public typealias OnDeselect = (Element) -> ()
-    public var onDeselect : OnDeselect?
     
     public typealias OnDisplay = (Element) -> ()
     public var onDisplay : OnDisplay?
     
     public typealias OnEndDisplay = (Element) -> ()
     public var onEndDisplay : OnEndDisplay?
+    
+    public var positioningTransformation : PositioningTransformation.Provider?
+    
+    public typealias OnSelect = (Element) -> ()
+    public var onSelect : OnSelect?
+    
+    public typealias OnDeselect = (Element) -> ()
+    public var onDeselect : OnDeselect?
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
@@ -98,6 +100,7 @@ public struct Item<Element:ItemElement> : AnyItem
         bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
         onEndDisplay : OnEndDisplay? = nil,
+        positioningTransformation : PositioningTransformation.Provider? = nil,
         onSelect : OnSelect? = nil,
         onDeselect : OnDeselect? = nil
         )
@@ -118,28 +121,14 @@ public struct Item<Element:ItemElement> : AnyItem
         self.onDisplay = onDisplay
         self.onEndDisplay = onEndDisplay
         
+        self.positioningTransformation = positioningTransformation
+        
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
+        self.reuseIdentifier = .identifier(for: Element.self)
         
         self.identifier = AnyIdentifier(self.element.identifier)
-    }
-    
-    // MARK: AnyItem
-    
-    public func elementEqual(to other : AnyItem) -> Bool
-    {
-        guard let other = other as? Item<Element> else {
-            return false
-        }
-        
-        return self.elementEqual(to: other)
-    }
-    
-    internal func elementEqual(to other : Item<Element>) -> Bool
-    {
-        return false
     }
     
     // MARK: AnyItem_Internal
@@ -281,32 +270,6 @@ public enum ItemSelectionStyle : Equatable
         case .none: return false
         case .tappable: return true
         case .selectable(_): return true
-        }
-    }
-}
-
-
-public extension Item where Element:Equatable
-{
-    func elementEqual(to other : Item<Element>) -> Bool
-    {
-        return self.element == other.element
-    }
-}
-
-
-public extension Array where Element == AnyItem
-{
-    func elementsEqual(to other : [AnyItem]) -> Bool
-    {
-        if self.count != other.count {
-            return false
-        }
-        
-        let items = zip(self, other)
-        
-        return items.allSatisfy { both in
-            both.0.elementEqual(to: both.1)
         }
     }
 }

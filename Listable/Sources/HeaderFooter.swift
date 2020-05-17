@@ -29,6 +29,8 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
     
+    public var positioningTransformation : PositioningTransformation.Provider?
+    
     public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
@@ -52,15 +54,17 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public init(
         _ element : Element,
         sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
-        layout : HeaderFooterLayout = HeaderFooterLayout()
-    )
-    {
+        layout : HeaderFooterLayout = HeaderFooterLayout(),
+        positioningTransformation : PositioningTransformation.Provider? = nil
+    ) {
         self.element = element
         
         self.sizing = sizing
         self.layout = layout
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
+        self.positioningTransformation = positioningTransformation
+        
+        self.reuseIdentifier = .identifier(for: Element.self)
     }
     
     // MARK: AnyHeaderFooter_Internal

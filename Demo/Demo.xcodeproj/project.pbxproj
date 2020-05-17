@@ -10,6 +10,7 @@
 		0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */; };
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A2378402373B0010048092A /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */; };
+		0A2B1D0C2471DAAB002D81EC /* PositioningTransformViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2B1D0B2471DAAB002D81EC /* PositioningTransformViewController.swift */; };
 		0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */; };
 		0A40AF77235D41290008736E /* CollectionViewAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A40AF76235D41290008736E /* CollectionViewAppearance.swift */; };
 		0A46A005237892C100B35811 /* HorizontalLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */; };
@@ -17,13 +18,6 @@
 		0A58D85123CD3FCF00583C25 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */; };
 		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
 		0A81AAD0245F696600656DF7 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81AACF245F696600656DF7 /* CustomLayoutsViewController.swift */; };
-		0A8AEF852315F68400CCB7F3 /* are-we-there-yet.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */; };
-		0A8AEF862315F68400CCB7F3 /* this-american-life.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */; };
-		0A8AEF872315F68400CCB7F3 /* planet-money.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF802315F68400CCB7F3 /* planet-money.jpg */; };
-		0A8AEF882315F68400CCB7F3 /* outside-lands.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF812315F68400CCB7F3 /* outside-lands.jpg */; };
-		0A8AEF892315F68400CCB7F3 /* the-impact.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF822315F68400CCB7F3 /* the-impact.png */; };
-		0A8AEF8A2315F68400CCB7F3 /* wait-wait.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF832315F68400CCB7F3 /* wait-wait.png */; };
-		0A8AEF8B2315F68400CCB7F3 /* nancy.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8AEF842315F68400CCB7F3 /* nancy.png */; };
 		0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */; };
 		0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */; };
 		0AE855512390933100F2E245 /* Test_Targets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE855502390933100F2E245 /* Test_Targets.swift */; };
@@ -46,6 +40,7 @@
 		0A0D12A5235FBD2D00DB11CE /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A23783F2373B0010048092A /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
+		0A2B1D0B2471DAAB002D81EC /* PositioningTransformViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositioningTransformViewController.swift; sourceTree = "<group>"; };
 		0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoicesPaymentScheduleDemoViewController.swift; sourceTree = "<group>"; };
 		0A40AF76235D41290008736E /* CollectionViewAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAppearance.swift; sourceTree = "<group>"; };
 		0A46A004237892C100B35811 /* HorizontalLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalLayoutViewController.swift; sourceTree = "<group>"; };
@@ -53,13 +48,6 @@
 		0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
 		0A81AACF245F696600656DF7 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
-		0A8AEF7E2315F68400CCB7F3 /* are-we-there-yet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "are-we-there-yet.png"; sourceTree = "<group>"; };
-		0A8AEF7F2315F68400CCB7F3 /* this-american-life.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "this-american-life.jpg"; sourceTree = "<group>"; };
-		0A8AEF802315F68400CCB7F3 /* planet-money.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "planet-money.jpg"; sourceTree = "<group>"; };
-		0A8AEF812315F68400CCB7F3 /* outside-lands.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "outside-lands.jpg"; sourceTree = "<group>"; };
-		0A8AEF822315F68400CCB7F3 /* the-impact.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "the-impact.png"; sourceTree = "<group>"; };
-		0A8AEF832315F68400CCB7F3 /* wait-wait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-wait.png"; sourceTree = "<group>"; };
-		0A8AEF842315F68400CCB7F3 /* nancy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nancy.png; sourceTree = "<group>"; };
 		0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemizationEditorViewController.swift; sourceTree = "<group>"; };
 		0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingViewController.swift; sourceTree = "<group>"; };
 		0AE8554E2390933100F2E245 /* Test Targets.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Targets.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +163,7 @@
 				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
 				0AEA09BC242A941700F9ED0C /* SwipeActionsViewController.swift */,
+				0A2B1D0B2471DAAB002D81EC /* PositioningTransformViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -395,6 +384,7 @@
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,
 				C2560A942411830D00F6B31E /* AutoScrollingViewController.swift in Sources */,
+				0A2B1D0C2471DAAB002D81EC /* PositioningTransformViewController.swift in Sources */,
 				0AEB96DE22FBCC1D00341DFF /* CollectionViewBasicDemoViewController.swift in Sources */,
 				0A58D85123CD3FCF00583C25 /* FlowLayoutViewController.swift in Sources */,
 				0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */,

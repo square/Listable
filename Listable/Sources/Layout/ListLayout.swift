@@ -267,7 +267,8 @@ public final class ListLayoutContent
                         delegateProvidedIndexPath: indexPath,
                         liveIndexPath: indexPath,
                         direction: appearance.direction,
-                        layout: delegate.layoutForItem(at: indexPath, in: collectionView)
+                        layout: delegate.layoutForItem(at: indexPath, in: collectionView),
+                        positioningTransformation: delegate.positioningTransformationForItem(at: indexPath, in: collectionView)
                     )
                 }
             )
@@ -278,11 +279,14 @@ public final class ListLayoutContent
     // MARK: Fetching Elements
     //
     
-    func layoutAttributes(at indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+    func layoutAttributes(at indexPath : IndexPath, in collectionView : UICollectionView) -> UICollectionViewLayoutAttributes
     {
         let item = self.item(at: indexPath)
         
-        return item.layoutAttributes(with: indexPath)
+        return item.layoutAttributes(
+            with: indexPath,
+            input: .init(with: collectionView, itemFrame: item.frame)
+        )
     }
     
     func item(at indexPath : IndexPath) -> ListLayoutContent.ItemInfo
@@ -305,7 +309,7 @@ public final class ListLayoutContent
         }
     }
     
-    func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
+    func layoutAttributes(for rect: CGRect, in collectionView : UICollectionView) -> [UICollectionViewLayoutAttributes]
     {
         /**
          Supplementary items are technically attached to index paths. Eg, list headers
@@ -344,7 +348,10 @@ public final class ListLayoutContent
             
             for item in section.items {
                 if rect.intersects(item.frame) {
-                    attributes.append(item.layoutAttributes(with: item.liveIndexPath))
+                    attributes.append(item.layoutAttributes(
+                        with: item.liveIndexPath,
+                        input: .init(with: collectionView, itemFrame: item.frame)
+                    ))
                 }
             }
             
@@ -430,6 +437,20 @@ public final class ListLayoutContent
                     }
                 )
             }
+        )
+    }
+}
+
+
+extension PositioningTransformation.Input {
+    
+    init(with scrollView : UIScrollView, itemFrame : CGRect)
+    {
+        self.init(
+            listSize: scrollView.contentSize,
+            listBounds: scrollView.bounds,
+            listSafeAreaInsets: scrollView.lst_safeAreaInsets,
+            itemFrame: itemFrame
         )
     }
 }
@@ -583,6 +604,7 @@ public extension ListLayoutContent
         
         let direction : LayoutDirection
         let layout : ItemLayout
+        let positioningTransformation : PositioningTransformation.Provider?
         
         var position : ItemPosition = .single
         
@@ -601,7 +623,8 @@ public extension ListLayoutContent
             delegateProvidedIndexPath : IndexPath,
             liveIndexPath : IndexPath,
             direction : LayoutDirection,
-            layout : ItemLayout
+            layout : ItemLayout,
+            positioningTransformation : PositioningTransformation.Provider?
             )
         {
             self.delegateProvidedIndexPath = delegateProvidedIndexPath
@@ -609,20 +632,26 @@ public extension ListLayoutContent
             
             self.direction = direction
             self.layout = layout
+            self.positioningTransformation = positioningTransformation
         }
         
-        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+        func layoutAttributes(with indexPath : IndexPath, input : PositioningTransformation.Input) -> UICollectionViewLayoutAttributes
         {
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
             attributes.frame = self.frame
             attributes.zIndex = 0
             
+            if let provider = self.positioningTransformation {
+                let result = provider(input)
+                
+                result.setAttributes(on: attributes)
+            }
+            
             return attributes
         }
     }
 }
-
 
 extension CGRect {
     static func from(unioned rects : [CGRect]) -> CGRect {

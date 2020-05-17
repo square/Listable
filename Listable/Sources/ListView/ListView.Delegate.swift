@@ -193,6 +193,13 @@ extension ListView
             return item.anyModel.layout
         }
         
+        func positioningTransformationForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> PositioningTransformation.Provider?
+        {
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.positioningTransformation
+        }
+        
         func hasListHeader(in collectionView : UICollectionView) -> Bool
         {
             return self.presentationState.header.state != nil

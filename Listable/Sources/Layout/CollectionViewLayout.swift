@@ -343,12 +343,12 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layout.content.layoutAttributes(in: rect)
+        return self.layout.content.layoutAttributes(for: rect, in: self.collectionView!)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        return self.layout.content.layoutAttributes(at: indexPath)
+        return self.layout.content.layoutAttributes(at: indexPath, in: self.collectionView!)
     }
     
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
@@ -365,7 +365,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layout.content.layoutAttributes(at: itemIndexPath)
+            let attributes = self.layout.content.layoutAttributes(at: itemIndexPath, in: self.collectionView!)
             
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -389,7 +389,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
         
         if wasItemDeleted {
-            let attributes = self.previousLayout.content.layoutAttributes(at: itemIndexPath)
+            let attributes = self.previousLayout.content.layoutAttributes(at: itemIndexPath, in: self.collectionView!)
 
             attributes.frame.origin.y -= attributes.frame.size.height
             attributes.alpha = 0.0
@@ -438,7 +438,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
     {
-        let defaultAttributes = self.layout.content.layoutAttributes(at: indexPath)
+        let defaultAttributes = self.layout.content.layoutAttributes(at: indexPath, in: self.collectionView!)
         let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
         
         attributes.center.x = defaultAttributes.center.x
@@ -503,6 +503,7 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     
     func sizeForItem(at indexPath : IndexPath, in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
+    func positioningTransformationForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> PositioningTransformation.Provider?
     
     func hasListHeader(in collectionView : UICollectionView) -> Bool
     func sizeForListHeader(in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize

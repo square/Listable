@@ -197,23 +197,6 @@ public struct Content
 }
 
 
-public extension Content
-{
-    func elementsEqual(to other : Content) -> Bool
-    {
-        if self.sections.count != other.sections.count {
-            return false
-        }
-        
-        let sections = zip(self.sections, other.sections)
-        
-        return sections.allSatisfy { both in
-            both.0.elementsEqual(to: both.1)
-        }
-    }
-}
-
-
 internal extension Content
 {
     struct Slice
