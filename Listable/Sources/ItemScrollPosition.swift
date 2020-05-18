@@ -5,12 +5,7 @@
 //  Created by Kyle Van Essen on 11/5/19.
 //
 
-///
-///
-///
-///
-///
-///
+/// Specifies how to position an item in a list when scrolling to it.
 public struct ItemScrollPosition : Equatable
 {
     /// The position to scroll to within the list.

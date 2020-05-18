@@ -32,7 +32,7 @@ public struct Content
     public var sections : [Section]
     
     public var sectionsWithItems : [Section] {
-        self.sections.filter { $0.items.isEmpty == false}
+        self.sections.filter { $0.items.isEmpty == false }
     }
     
     public var itemCount : Int {

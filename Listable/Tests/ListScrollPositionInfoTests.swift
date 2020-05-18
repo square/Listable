@@ -23,7 +23,7 @@ final class UIRectEdgeTests : XCTestCase
                 safeAreaInsets: .zero
             )
             
-            XCTAssertEqual(edges, UIRectEdge(edges: .all))
+            XCTAssertEqual(edges, .all)
         }
         
         do {
@@ -35,7 +35,7 @@ final class UIRectEdgeTests : XCTestCase
                 safeAreaInsets: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 20.0, right: 10.0)
             )
             
-            XCTAssertEqual(edges, UIRectEdge(edges: .bottom, .right))
+            XCTAssertEqual(edges, [.bottom, .right])
         }
 
         do {
@@ -47,20 +47,23 @@ final class UIRectEdgeTests : XCTestCase
                 safeAreaInsets: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 20.0, right: 10.0)
             )
             
-            XCTAssertEqual(edges, UIRectEdge(edges: .top, .left))
+            XCTAssertEqual(edges, [.top, .left])
         }
 
     }
 }
 
-fileprivate extension UIRectEdge
+
+final class UIEdgeInsetsTests : XCTestCase
 {
-    init(edges : UIRectEdge...)
+    func test_masked()
     {
-        self = UIRectEdge(rawValue: 0)
+        let insets = UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0)
         
-        for edge in edges {
-            self.formUnion(edge)
-        }
+        XCTAssertEqual(insets.masked(by: []), UIEdgeInsets())
+        XCTAssertEqual(insets.masked(by: [.top]), UIEdgeInsets(top: 10.0, left: 0.0, bottom: 0.0, right: 0.0))
+        XCTAssertEqual(insets.masked(by: [.top, .left]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 0.0, right: 0.0))
+        XCTAssertEqual(insets.masked(by: [.top, .left, .bottom]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 0.0))
+        XCTAssertEqual(insets.masked(by: [.top, .left, .bottom, .right]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0))
     }
 }

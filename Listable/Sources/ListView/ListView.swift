@@ -37,12 +37,14 @@ public final class ListView : UIView
             behavior: self.behavior
         )
 
-        self.collectionView = UICollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: initialLayout)
+        self.collectionView = CollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: initialLayout)
         
         self.layoutManager = LayoutManager(
             layout: initialLayout,
             collectionView: self.collectionView
         )
+        
+        self.visibleContent = VisibleContent()
 
         self.keyboardObserver = KeyboardObserver()
         
@@ -57,6 +59,8 @@ public final class ListView : UIView
         
         // Associate ourselves with our child objects.
         
+        self.collectionView.view = self
+                
         self.storage.presentationState.view = self
         
         self.dataSource.presentationState = self.storage.presentationState
@@ -84,6 +88,8 @@ public final class ListView : UIView
     
     deinit
     {
+        self.collectionView.view = nil
+        
         /**
          Even though these are zeroing weak references in UIKIt as of iOS 9.0,
          
@@ -104,26 +110,27 @@ public final class ListView : UIView
     // MARK: Internal Properties
     //
     
-    internal let storage : Storage
-    internal let collectionView : UICollectionView
-    internal let delegate : Delegate
+    let storage : Storage
+    let collectionView : CollectionView
+    let delegate : Delegate
+    
+    var layout : CollectionViewLayout {
+        self.layoutManager.current
+    }
+    
+    private(set) var visibleContent : VisibleContent
     
     //
     // MARK: Private Properties
     //
-    
+        
     private let layoutManager : LayoutManager
-    
-    private var layout : CollectionViewLayout {
-        self.layoutManager.current
-    }
     
     private var sourcePresenter : AnySourcePresenter
 
     private var autoScrollAction : AutoScrollAction
     
     private let dataSource : DataSource
-    
     
     private let keyboardObserver : KeyboardObserver
     
@@ -166,6 +173,19 @@ public final class ListView : UIView
     //
     // MARK: Layout
     //
+    
+    public var scrollPositionInfo : ListScrollPositionInfo {
+        let visibleItems = Set(self.visibleContent.items.map { item in
+            item.item.anyModel.identifier
+        })
+        
+        return ListScrollPositionInfo(
+            scrollView: self.collectionView,
+            visibleItems: visibleItems,
+            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
+            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
+        )
+    }
     
     public var layoutType : ListLayoutType {
         get {
@@ -241,21 +261,35 @@ public final class ListView : UIView
     }
     
     //
-    // MARK: Scrolling To Sections & Items
+    // MARK: Public - Scrolling To Sections & Items
     //
     
+    ///
+    /// Scrolls to the provided item, with the provided positioning.
+    /// If the item is contained in the list, true is returned. If it is not, false is returned.
+    ///
     @discardableResult
     public func scrollTo(item : AnyItem, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
         return self.scrollTo(item: item.identifier, position: position, animated: animated)
     }
     
+    ///
+    /// Scrolls to the item with the provided identifier, with the provided positioning.
+    /// If there is more than one item with the same identifier, the list scrolls to the first.
+    /// If the item is contained in the list, true is returned. If it is not, false is returned.
+    ///
     @discardableResult
     public func scrollTo<Element:ItemElement>(item : Identifier<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
         return self.scrollTo(item: item.toAny, position: position, animated: animated)
     }
     
+    ///
+    /// Scrolls to the item with the provided identifier, with the provided positioning.
+    /// If there is more than one item with the same identifier, the list scrolls to the first.
+    /// If the item is contained in the list, true is returned. If it is not, false is returned.
+    ///
     @discardableResult
     public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
@@ -266,9 +300,7 @@ public final class ListView : UIView
         }
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
-            
-            // Check if the item is visible using its frame, since `visibleIndexPaths` includes items outside of the actual content frame.
-            
+                        
             let isAlreadyVisible: Bool = {
                 let frame = self.layout.frameForItem(at: toIndexPath)
 
@@ -288,9 +320,18 @@ public final class ListView : UIView
             )
         }
     }
-
+    
+    /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
-    public func scrollToBottom(animated : Bool = false) -> Bool {
+    public func scrollToTop(animated : Bool = false) -> Bool {
+        self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
+            self.collectionView.scrollRectToVisible(.zero, animated: animated)
+        }
+    }
+
+    /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
+    @discardableResult
+    public func scrollToLastItem(animated : Bool = false) -> Bool {
 
         // Make sure we have a valid last index path.
 
@@ -467,7 +508,7 @@ public final class ListView : UIView
     }
     
     //
-    // MARK: Updating Content
+    // MARK: Internal - Updating Content
     //
     
     internal func setPresentationStateItemPositions()
@@ -521,106 +562,7 @@ public final class ListView : UIView
     }
     
     //
-    // MARK: Updating Displayed Items
-    //
-    
-    private struct VisibleHeaderFooterItem : Hashable
-    {
-        let headerFooter : PresentationState.HeaderFooterViewStatePair
-        
-        func hash(into hasher: inout Hasher)
-        {
-            hasher.combine(ObjectIdentifier(self.headerFooter))
-        }
-        
-        static func == (lhs : Self, rhs : Self) -> Bool
-        {
-            return lhs.headerFooter === rhs.headerFooter
-        }
-    }
-    
-    private struct VisibleItem : Hashable
-    {
-        let item : AnyPresentationItemState
-        
-        func hash(into hasher: inout Hasher)
-        {
-            hasher.combine(ObjectIdentifier(self.item))
-        }
-        
-        static func == (lhs : Self, rhs : Self) -> Bool
-        {
-            return lhs.item === rhs.item
-        }
-    }
-    
-    private func calculateVisibleItems() -> Set<VisibleItem>
-    {
-        let visibleFrame = self.collectionView.bounds
-        
-        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        return Set(visibleIndexPaths.compactMap {
-            let frame = self.layout.frameForItem(at: $0)
-            
-            if visibleFrame.intersects(frame) {
-                return VisibleItem(item: self.storage.presentationState.item(at: $0))
-            } else {
-                return nil
-            }
-        })
-    }
-    
-    private func calculateVisibleHeaderFooterItems() -> Set<VisibleHeaderFooterItem>
-    {        
-        let visibleFrame = self.collectionView.bounds
-        
-        let visibleHeaderFooters : [(SupplementaryKind, [IndexPath])] = SupplementaryKind.allCases.map {
-            ($0, self.collectionView.indexPathsForVisibleSupplementaryElements(ofKind: $0.rawValue))
-        }
-        
-        return Set(visibleHeaderFooters.map { kind, indexPaths in
-            indexPaths.compactMap { indexPath in
-                let frame = self.layout.frameForSupplementaryItem(of: kind, in: indexPath.section)
-                
-                if visibleFrame.intersects(frame) {
-                    return VisibleHeaderFooterItem(headerFooter: self.storage.presentationState.headerFooter(of: kind, in: indexPath.section))
-                } else {
-                    return nil
-                }
-            }
-        }.flatMap { $0 })
-    }
-    
-    private var visibleHeaderFooterItems : Set<VisibleHeaderFooterItem> = Set()
-    private var visibleItems : Set<VisibleItem> = Set()
-    
-    func updateVisibleItemsAndSections()
-    {
-        let newVisibleItems = self.calculateVisibleItems()
-        let newVisibleHeaderFooterItems = self.calculateVisibleHeaderFooterItems()
-        
-        // Find which items are newly visible (or are no longer visible).
-        
-        let removed = self.visibleItems.subtracting(newVisibleItems)
-        let added = newVisibleItems.subtracting(self.visibleItems)
-        
-        removed.forEach {
-            $0.item.setAndPerform(isDisplayed: false)
-        }
-        
-        added.forEach {
-            $0.item.setAndPerform(isDisplayed: true)
-        }
-        
-        // Update the stored visible items.
-        
-        self.visibleItems = newVisibleItems
-        self.visibleHeaderFooterItems = newVisibleHeaderFooterItems
-    }
-    
-    //
-    // MARK: Updating Presentation State
+    // MARK: Internal - Updating Presentation State
     //
     
     internal func updatePresentationState(
@@ -710,11 +652,11 @@ public final class ListView : UIView
         
         // Update Collection View
         
-        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData) { finished in
-            self.updateVisibleItemsAndSections()
-            
-            callerCompletion(finished)
-        }
+        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
+        
+        // Update the visible items.
+        
+        self.visibleContent.update(with: self)
         
         // Perform any needed auto scroll actions.
         self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
@@ -754,25 +696,12 @@ public final class ListView : UIView
         case .scrollToItem(let info):
             let wasInserted = addedItems.contains(info.insertedIdentifier)
             
-            if wasInserted {
-                let visibleItems = Set(self.visibleItems.map { item in
-                    item.item.anyModel.identifier
-                })
+            if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
+                /// Only animate the scroll if both the update **and** the scroll action are animated.
+                let bothAnimate = info.animated && animated
                 
-                let positionInfo = ListScrollPositionInfo(
-                    scrollView: self.collectionView,
-                    visibleItems: visibleItems,
-                    isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
-                    isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
-                )
-                
-                if info.shouldPerform(positionInfo) {
-                    /// Only animate the scroll if both the update **and** the scroll action are animated.
-                    let bothAnimate = info.animated && animated
-                    
-                    if let destination = info.destination.destination(with: self.content) {
-                        self.scrollTo(item: destination, position: info.position, animated: bothAnimate)
-                    }
+                if let destination = info.destination.destination(with: self.content) {
+                    self.scrollTo(item: destination, position: info.position, animated: bothAnimate)
                 }
             }
         }
@@ -837,7 +766,7 @@ public final class ListView : UIView
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            self.applyToVisibleViews()
+            self.visibleContent.updateVisibleViews()
         }
         
         if changes.hasIndexAffectingChanges {
@@ -852,29 +781,6 @@ public final class ListView : UIView
             UIView.performWithoutAnimation {
                 view.performBatchUpdates(batchUpdates, completion: completion)
             }
-        }
-    }
-    
-    private func applyToVisibleViews()
-    {
-        let presentationState = self.storage.presentationState
-        
-        // Perform Updates Of Visible Table Headers & Footers
-
-        presentationState.header.applyToVisibleView()
-        presentationState.footer.applyToVisibleView()
-        presentationState.overscrollFooter.applyToVisibleView()
-        
-        // Perform Updates Of Visible Section Headers & Footers
-        
-        self.visibleHeaderFooterItems.forEach {
-            $0.headerFooter.applyToVisibleView()
-        }
-        
-        // Perform Updates Of Visible Items
-        
-        self.visibleItems.forEach {
-            $0.item.applyToVisibleCell()
         }
     }
     
@@ -899,7 +805,7 @@ public final class ListView : UIView
     }
     
     //
-    // MARK: Moving Items
+    // MARK: Internal - Moving Items
     //
     
     internal func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
@@ -926,6 +832,29 @@ public final class ListView : UIView
     private func cancelInteractiveMovement()
     {
         self.collectionView.cancelInteractiveMovement()
+    }
+}
+
+extension ListView
+{
+    final class CollectionView : UICollectionView
+    {
+        weak var view : ListView?
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            if let view = self.view {
+                ///
+                /// Update visibility of items and header / footers in the list view.
+                ///
+                /// This is intentionally performed in `layoutSubviews` of the `UICollectionView`,
+                /// **not** within `scrollViewDidScroll`. Why? `visibleContent.update(with:)`
+                /// depends on the collection view's layout, which is not updated until it `layoutSubviews`.
+                ///
+                view.visibleContent.update(with: view)
+            }
+        }
     }
 }
 

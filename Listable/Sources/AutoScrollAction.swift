@@ -63,10 +63,16 @@ public enum AutoScrollAction {
 
 public extension AutoScrollAction
 {
+    /// Where to scroll as a result of an `AutoScrollAction`.
     enum ScrollDestination : Equatable
     {
+        /// Scroll to the first item in the list.
         case firstItem
+        
+        /// Scroll to the last item in the list.
         case lastItem
+        
+        /// Scroll to the item with the specified identifier.
         case item(AnyIdentifier)
         
         func destination(with content : Content) -> AnyIdentifier? {
@@ -78,7 +84,7 @@ public extension AutoScrollAction
         }
     }
     
-    /// Values used to configure the `scrollToItemOnInsert` action.
+    /// Values used to configure the `scrollToItem(onInsertOf:)` action.
     struct OnInsertedItem
     {
         /// The item in the list to scroll to when the `insertedIdentifier` is inserted.
@@ -91,11 +97,13 @@ public extension AutoScrollAction
         public var position : ItemScrollPosition
         
         /// Should the change be animated.
+        ///
         /// Note
         /// ----
         /// The action will only be animated if it is animated, **and** the list update itself is
         /// animated. Otherwise, no animation occurs.
         public var animated : Bool
+        
         /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool
     }

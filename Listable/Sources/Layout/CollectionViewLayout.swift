@@ -96,11 +96,6 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Querying The Layout
     //
     
-    func frameForSupplementaryItem(of kind : SupplementaryKind, in section : Int) -> CGRect
-    {
-        self.layout.content.supplementaryItem(of: kind, in: section).visibleFrame
-    }
-    
     func frameForItem(at indexPath : IndexPath) -> CGRect
     {
         self.layout.content.item(at: indexPath).frame
@@ -351,7 +346,12 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layout.content.layoutAttributes(in: rect)
+        return self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: true)
+    }
+    
+    func visibleLayoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
+    {
+        return self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: false)
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
@@ -461,7 +461,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 //
 
 
-public extension UIView
+extension UIView
 {
     var lst_safeAreaInsets : UIEdgeInsets {
         if #available(iOS 11.0, *) {

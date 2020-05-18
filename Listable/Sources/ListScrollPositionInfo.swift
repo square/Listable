@@ -16,6 +16,10 @@ import Foundation
 /// want to allow an auto-scroll action, etc.
 public struct ListScrollPositionInfo : Equatable {
     
+    //
+    // MARK: Public
+    //
+    
     /// Which items within the list are currently visible.
     public var visibleItems : Set<AnyIdentifier>
     
@@ -25,6 +29,7 @@ public struct ListScrollPositionInfo : Equatable {
     /// If the last item list is partially visible.
     public var isLastItemVisible : Bool
     
+    ///
     /// Used to retrieve the visible content edges for the list's content.
     ///
     /// Eg, for vertical lists:
@@ -68,23 +73,7 @@ public struct ListScrollPositionInfo : Equatable {
     ///
     public func visibleContentEdges(includingSafeAreaEdges safeAreaEdges : UIRectEdge = .all) -> UIRectEdge
     {
-        var safeArea = UIEdgeInsets()
-        
-        if safeAreaEdges.contains(.top) {
-            safeArea.top = self.scrollViewState.safeAreaInsets.top
-        }
-        
-        if safeAreaEdges.contains(.left) {
-            safeArea.left = self.scrollViewState.safeAreaInsets.left
-        }
-        
-        if safeAreaEdges.contains(.bottom) {
-            safeArea.bottom = self.scrollViewState.safeAreaInsets.bottom
-        }
-        
-        if safeAreaEdges.contains(.right) {
-            safeArea.right = self.scrollViewState.safeAreaInsets.right
-        }
+        let safeArea = self.scrollViewState.safeAreaInsets.masked(by: safeAreaEdges)
         
         return UIRectEdge.visibleScrollViewContentEdges(
             bounds: self.scrollViewState.bounds,
@@ -93,7 +82,11 @@ public struct ListScrollPositionInfo : Equatable {
         )
     }
     
-    var scrollViewState : ScrollViewState
+    //
+    // MARK: Private
+    //
+    
+    private let scrollViewState : ScrollViewState
     
     /// Creates a `ListScrollPositionInfo` for the provided scroll view.
     init(
@@ -122,6 +115,31 @@ public struct ListScrollPositionInfo : Equatable {
     }
 }
 
+extension UIEdgeInsets
+{
+    func masked(by edges : UIRectEdge) -> UIEdgeInsets
+    {
+        var insets = UIEdgeInsets()
+        
+        if edges.contains(.top) {
+            insets.top = self.top
+        }
+        
+        if edges.contains(.left) {
+            insets.left = self.left
+        }
+        
+        if edges.contains(.bottom) {
+            insets.bottom = self.bottom
+        }
+        
+        if edges.contains(.right) {
+            insets.right = self.right
+        }
+        
+        return insets
+    }
+}
 
 extension UIRectEdge : CustomDebugStringConvertible
 {

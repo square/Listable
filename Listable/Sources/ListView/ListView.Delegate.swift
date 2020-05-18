@@ -403,10 +403,6 @@ extension ListView
             if scrollingDown {
                 self.view.updatePresentationState(for: .scrolledDown)
             }
-            
-            // Update Item Visibility
-            
-            self.view.updateVisibleItemsAndSections()
         }
     }
 }
