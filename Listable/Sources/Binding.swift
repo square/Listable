@@ -8,6 +8,7 @@
 import Foundation
 
 
+// TODO: Remove me and replace with ContentManager
 public final class Binding<Element>
 {
     private(set) public var element : Element
