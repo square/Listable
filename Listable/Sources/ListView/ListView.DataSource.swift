@@ -28,7 +28,7 @@ internal extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            self.presentationState.registerCell(for: item)
+            self.presentationState.registerCell(for: item, in: collectionView)
             
             return item.dequeueAndPrepareCollectionViewCell(in: collectionView, for: indexPath)
         }

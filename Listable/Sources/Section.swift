@@ -211,19 +211,6 @@ public extension SectionInfo
 }
 
 
-public extension Section
-{
-    func elementsEqual(to other : Section) -> Bool
-    {
-        if self.items.count != other.items.count {
-            return false
-        }
-        
-        return self.items.elementsEqual(to: other.items)
-    }
-}
-
-
 private struct HashableSectionInfo<Value:Hashable> : SectionInfo
 {
     var value : Value

@@ -56,9 +56,7 @@ public final class ListView : UIView
         super.init(frame: frame)
         
         // Associate ourselves with our child objects.
-        
-        self.storage.presentationState.view = self
-        
+                
         self.dataSource.presentationState = self.storage.presentationState
         
         self.delegate.view = self
@@ -667,11 +665,11 @@ public final class ListView : UIView
                 }
 
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
-                visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath, plus: Content.Slice.defaultSize)
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: greaterIndexPath)
 
             case .none:
 
-                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath, plus: Content.Slice.defaultSize)
+                visibleSlice = self.storage.allContent.sliceTo(indexPath: indexPath)
             }
         }
         
@@ -680,7 +678,9 @@ public final class ListView : UIView
         }
 
         let updateBackingData = {
-            presentationState.update(with: diff, slice: visibleSlice)
+            let dependencies = ItemStateDependencies(reorderingDelegate: self, coordinatorDelegate: self)
+            
+            presentationState.update(with: diff, slice: visibleSlice, dependencies: dependencies, loggable: self)
         }
         
         // Update Refresh Control
@@ -691,7 +691,7 @@ public final class ListView : UIView
          Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
          we trigger a bug where updated indexes are calculated incorrectly.
          */
-        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl)
+        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl, in: self.collectionView)
         
         // Update Collection View
         
@@ -831,12 +831,30 @@ public final class ListView : UIView
             )
         )
     }
-    
+}
+
+
+extension ListView : ItemElementCoordinatorDelegate
+{
+    func coordinatorUpdated(for : AnyItem)
+    {
+        /// Todo... Once https://github.com/kyleve/Listable/pull/129 lands,
+        /// check if the item is visible, to control if the subsequent update after the
+        /// invalidation should be animated.
+        self.applyToVisibleViews()
+        
+        self.layoutManager.current.setNeedsRelayout()
+    }
+}
+
+
+extension ListView : ReorderingActionsDelegate
+{
     //
     // MARK: Moving Items
     //
     
-    internal func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
+    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
     {
         guard let indexPath = self.storage.presentationState.indexPath(for: item) else {
             return false
@@ -845,23 +863,24 @@ public final class ListView : UIView
         return self.collectionView.beginInteractiveMovementForItem(at: indexPath)
     }
     
-    internal func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
+    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
     {
         let position = recognizer.location(in: self.collectionView)
         
         self.collectionView.updateInteractiveMovementTargetPosition(position)
     }
     
-    internal func endInteractiveMovement()
+    func endInteractiveMovement()
     {
         self.collectionView.endInteractiveMovement()
     }
     
-    private func cancelInteractiveMovement()
+    func cancelInteractiveMovement()
     {
         self.collectionView.cancelInteractiveMovement()
     }
 }
+
 
 extension ListView : SignpostLoggable
 {
