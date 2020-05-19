@@ -95,6 +95,14 @@ public protocol ItemElement
     static func createReusableContentView(frame : CGRect) -> ContentView
     
     //
+    // MARK: Content Managers
+    //
+    
+    associatedtype ContentManager : ItemElementContentManager
+    
+    
+    
+    //
     // MARK: Creating & Providing Background Views
     //
     
@@ -144,6 +152,22 @@ public protocol ItemElement
      do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
      */
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
+}
+
+
+public protocol ItemElementContentManager
+{
+    associatedtype ViewType : UIView
+    
+    var view : ViewType { get set }
+        
+    func willAppear(animated: Bool)
+
+    func didAppear(animated: Bool)
+
+    func willDisappear(animated: Bool)
+
+    func didDisappear(animated: Bool)
 }
 
 

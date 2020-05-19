@@ -237,6 +237,14 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: Hosting View Controllers
+    //
+    
+    /// The view controller that the list view is hosted in.
+    /// Used to set the parent view controller of any view controllers provided by contained `ItemElement`s.
+    public var parentViewController : UIViewController
+    
+    //
     // MARK: Scrolling To Sections & Items
     //
     
