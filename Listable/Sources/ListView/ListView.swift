@@ -85,9 +85,7 @@ public final class ListView : UIView
     }
     
     deinit
-    {
-        self.collectionView.view = nil
-        
+    {        
         /**
          Even though these are zeroing weak references in UIKIt as of iOS 9.0,
          
@@ -810,11 +808,6 @@ extension ListView : ItemElementCoordinatorDelegate
 {
     func coordinatorUpdated(for : AnyItem)
     {
-        /// Todo... Once https://github.com/kyleve/Listable/pull/129 lands,
-        /// check if the item is visible, to control if the subsequent update after the
-        /// invalidation should be animated.
-        self.visibleContent.updateVisibleViews()
-        
         self.layoutManager.current.setNeedsRelayout()
     }
 }

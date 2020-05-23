@@ -138,6 +138,8 @@ extension PresentationState
                 self.setNew(item: new, reason: .updateFromItemCoordinator)
                 
                 delegate.coordinatorUpdated(for: self.anyModel)
+                
+                self.applyToVisibleCell()
             }
             
             self.storage.didSetState = { [weak self] old, new in

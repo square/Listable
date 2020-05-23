@@ -30,7 +30,7 @@ public enum AutoScrollAction {
     /// // ID of item which should trigger a scroll event (eg the last item in the list).
     /// let identifier = myItem.identifier
     ///
-    /// let action = .scrollTo(.bottom, onInsertOf: identifier, position: .init(position: .bottom), animated: true) { state in
+    /// let action = .scrollTo(.lastItem, onInsertOf: identifier, position: .init(position: .bottom), animated: true) { state in
     ///    // Only scroll to the item if the bottom of the list is already visible.
     ///    return state.isLastItemVisible
     /// }
