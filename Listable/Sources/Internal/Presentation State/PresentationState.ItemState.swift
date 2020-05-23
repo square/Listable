@@ -45,7 +45,7 @@ protocol AnyPresentationItemState : AnyObject
 
 protocol ItemElementCoordinatorDelegate : AnyObject
 {
-    func coordinatorUpdated(for item : AnyItem)
+    func coordinatorUpdated(for item : AnyItem, animated : Bool)
 }
 
 
@@ -99,12 +99,12 @@ extension PresentationState
                         
             let actions = ItemElementCoordinatorActions(
                 current: { storage.model },
-                update: {
+                update: { new, _ in
                     
                     /// This is a temporary update callback, in case the initialization of the
                     /// coordinator causes an update to the item itself.
                     
-                    storage.model = $0
+                    storage.model = new
                 }
             )
 
@@ -130,20 +130,20 @@ extension PresentationState
             
             weak var coordinatorDelegate = dependencies.coordinatorDelegate
             
-            self.coordination.actions.updateCallback = { [weak coordinatorDelegate, weak self] new in
+            self.coordination.actions.updateCallback = { [weak self, weak coordinatorDelegate] new, animated in
                 guard let self = self, let delegate = coordinatorDelegate else {
                     return
                 }
                 
                 self.setNew(item: new, reason: .updateFromItemCoordinator)
                 
-                delegate.coordinatorUpdated(for: self.anyModel)
+                delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
                 
                 self.applyToVisibleCell()
             }
             
             self.storage.didSetState = { [weak self] old, new in
-                self?.stateWasUpdated(old: old, new: new)
+                self?.updateCoordinatorWithStateChange(old: old, new: new)
             }
             
             self.coordination.coordinator.wasCreated()
@@ -237,7 +237,10 @@ extension PresentationState
             let new = anyItem as! Item<Element>
             
             self.storage.model = new
-            self.storage.state.isSelected = new.selectionStyle.isSelected
+            
+            if old.selectionStyle != new.selectionStyle {
+                self.storage.state.isSelected = new.selectionStyle.isSelected
+            }
             
             if reason == .updateFromList || reason == .move {
                 self.coordination.info.original = new
@@ -283,7 +286,7 @@ extension PresentationState
             self.applyToVisibleCell()
         }
         
-        func stateWasUpdated(old : State, new : State)
+        func updateCoordinatorWithStateChange(old : State, new : State)
         {
             let coordinator = self.coordination.coordinator
             
@@ -378,6 +381,10 @@ extension PresentationState.ItemState
         
         var state : State {
             didSet {
+                guard oldValue != self.state else {
+                    return
+                }
+                
                 self.didSetState(oldValue, self.state)
             }
         }
@@ -390,7 +397,8 @@ extension PresentationState.ItemState
         }
     }
     
-    internal struct State {
+    internal struct State : Equatable
+    {
         var isSelected : Bool
         var visibleCell : ItemElementCell<Element>?
     }

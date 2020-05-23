@@ -20,25 +20,89 @@ final class CoordinatorViewController : UIViewController
         self.listView.setContent { list in
             
             list += Section(identifier: "section") { section in
-                section += CoordinatedElement()
-                section += CoordinatedElement()
-                section += CoordinatedElement()
+                section += Podcast.podcasts.map {
+                    Item(
+                        PodcastElement(podcast: $0),
+                        selectionStyle: .selectable(isSelected: false)
+                    )
+                }
             }
         }
     }
 }
 
 
-fileprivate struct CoordinatedElement : BlueprintItemElement, Equatable
+fileprivate struct PodcastElement : BlueprintItemElement, Equatable
 {
-    var string : String = ""
+    var podcast : Podcast
     
-    var identifier: Identifier<CoordinatedElement> {
-        return .init("")
+    var showBottomBar : Bool = false
+    
+    var identifier: Identifier<PodcastElement> {
+        .init(podcast.name)
     }
     
-    func element(with info: ApplyItemElementInfo) -> Element {
-        return Label(text: self.string)
+    func element(with info: ApplyItemElementInfo) -> Element
+    {
+        Column { col in
+            col.horizontalAlignment = .fill
+            col.verticalUnderflow = .growUniformly
+            
+            let info = Row { row in
+                row.horizontalUnderflow = .growUniformly
+                row.verticalAlignment = .center
+                row.minimumHorizontalSpacing = 10.0
+
+                row.add(
+                    growPriority: 0.0,
+                    shrinkPriority: 0.0,
+                    child: Image(image: self.podcast.image)
+                        .box(corners: .rounded(radius: 8.0))
+                        .constrainedTo(width: .absolute(75), height: .absolute(75))
+                )
+
+                row.add(child: Column { column in
+                    column.verticalUnderflow = .justifyToCenter
+                    column.minimumVerticalSpacing = 5.0
+
+                    column.add(growPriority: 0.0, child: Label(text: self.podcast.episode) { label in
+                        label.font = UIFont.systemFont(ofSize: 18.0, weight: .semibold)
+                        label.color = .darkGray
+                    })
+
+                    column.add(growPriority: 0.0, child: Label(text: self.podcast.name) { label in
+                        label.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
+                        label.color = .gray
+                    })
+                    
+                    switch self.podcast.downloadState {
+                    case .notDownloaded: break
+                    case .downloading(let progress):
+                        let formatter = NumberFormatter()
+                        formatter.numberStyle = .percent
+                        
+                        let progress = formatter.string(from: NSNumber(value: progress))!
+                        
+                        column.add(growPriority: 0.0, child: Label(text: progress) { label in
+                            label.font = UIFont.systemFont(ofSize: 16.0, weight: .regular)
+                            label.color = .gray
+                        })
+                    case .downloaded: break
+                    case .error: break
+                    }
+                })
+            }
+            
+            col.add(child: info)
+            
+            col.add(
+                child: Box(backgroundColor: .darkGray).constrainedTo(height: .absolute(self.showBottomBar ? 50.0 : 0.0))
+            )
+        }
+    }
+    
+    func selectedBackgroundElement(with info: ApplyItemElementInfo) -> Element? {
+        Box(backgroundColor: .init(white: 0.9, alpha: 1.0))
     }
     
     func makeCoordinator(actions: CoordinatorActions, info: CoordinatorInfo) -> Coordinator
@@ -48,31 +112,53 @@ fileprivate struct CoordinatedElement : BlueprintItemElement, Equatable
     
     final class Coordinator : ItemElementCoordinator
     {
-        typealias ItemElementType = CoordinatedElement
+        typealias ItemElementType = PodcastElement
         
         let actions: CoordinatorActions
         let info: CoordinatorInfo
         
-        var view : View? {
-            didSet {
-                
-            }
-        }
+        var view : View?
         
         init(actions: CoordinatorActions, info: CoordinatorInfo)
         {
             self.actions = actions
             self.info = info
+        }
+        
+        func wasSelected() {
+            self.actions.update(animated: true) {
+                $0.element.showBottomBar = true
+            }
             
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] timer in
+            Timer.scheduledTimer(withTimeInterval: TimeInterval.random(in: 0.3...0.5), repeats: true) { [weak self] timer in
                 guard let self = self else {
                     timer.invalidate()
                     return
                 }
-                
+                                
                 self.actions.update {
-                    $0.element.string += " \($0.element.string.count)"
+                    switch $0.element.podcast.downloadState {
+                    case .notDownloaded:
+                        $0.element.podcast.downloadState = .downloading(0.0)
+                    case .downloading(let progress):
+                        let newProgress = progress + Double.random(in: 0...0.05)
+                        
+                        if newProgress >= 1.0 {
+                            timer.invalidate()
+                            $0.element.podcast.downloadState = .downloaded
+                        } else {
+                            $0.element.podcast.downloadState = .downloading(newProgress)
+                        }
+                    case .downloaded: break
+                    case .error: break
+                    }
                 }
+            }
+        }
+        
+        func wasDeselected() {
+            self.actions.update(animated: true) {
+                $0.element.showBottomBar = false
             }
         }
     }

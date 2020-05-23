@@ -62,95 +62,136 @@ class PresentationState_ItemStateTests : XCTestCase
     
     func test_setNew()
     {
-        let dependencies = ItemStateDependencies(
-            reorderingDelegate: ReorderingActionsDelegateMock(),
-            coordinatorDelegate: ItemElementCoordinatorDelegateMock()
-        )
+        self.testcase("Only update isSelected if the selectionStyle changes") {
+            let dependencies = ItemStateDependencies(
+                reorderingDelegate: ReorderingActionsDelegateMock(),
+                coordinatorDelegate: ItemElementCoordinatorDelegateMock()
+            )
+                
+            let initial = Item(
+                TestElement(value: "initial"),
+                selectionStyle: .selectable(isSelected: false)
+            )
+            
+            let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+            
+            // Should use the initial isSelected value off of the item.
+            
+            XCTAssertEqual(state.storage.state.isSelected, false)
+            
+            // Should not override the live isSelected state if updating with the same selectionStyle.
+            
+            state.storage.state.isSelected = true
+            
+            state.setNew(item: initial, reason: .updateFromList)
+            
+            XCTAssertEqual(state.storage.state.isSelected, true)
+            
+            // Should update isSelected if the selectionStyle changed.
+            
+            state.storage.state.isSelected = false
+            
+            let updated = Item(
+                TestElement(value: "updated"),
+                selectionStyle: .selectable(isSelected: true)
+            )
+                        
+            state.setNew(item: updated, reason: .updateFromList)
+            
+            XCTAssertEqual(state.storage.state.isSelected, true)
+        }
         
-        let initial = Item(TestElement(value: "initial"))
+        self.testcase("Testing Different ItemUpdateReasons") {
+            let dependencies = ItemStateDependencies(
+                reorderingDelegate: ReorderingActionsDelegateMock(),
+                coordinatorDelegate: ItemElementCoordinatorDelegateMock()
+            )
+                
+            let initial = Item(
+                TestElement(value: "initial"),
+                selectionStyle: .selectable(isSelected: false)
+            )
+            
+            let updated = Item(
+                TestElement(value: "updated"),
+                selectionStyle: .selectable(isSelected: true)
+            )
         
-        var updated = initial
-        
-        // Used to identify if the value was updated later on.
-        updated.element.value = "updated"
-        
-        // Calling setNew pulls the isSelected state off of the item.
-        updated.selectionStyle = .selectable(isSelected: true)
-    
-        for reason in PresentationState.ItemUpdateReason.allCases {
-            switch reason {
-            case .move:
-                let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
-                
-                XCTAssertEqual(state.model.element.value, "initial")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, false)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
+            for reason in PresentationState.ItemUpdateReason.allCases {
+                switch reason {
+                case .move:
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    
+                    XCTAssertEqual(state.model.element.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, false)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                state.setNew(item: updated, reason: .move)
-                
-                XCTAssertEqual(state.model.element.value, "updated")
-                XCTAssertEqual(state.coordination.info.original.element.value, "updated")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
-                XCTAssertEqual(state.storage.state.isSelected, true)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
-                
-            case .updateFromList:
-                let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
-                
-                XCTAssertEqual(state.model.element.value, "initial")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, false)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
+                    state.setNew(item: updated, reason: .move)
+                    
+                    XCTAssertEqual(state.model.element.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "updated")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
+                    XCTAssertEqual(state.storage.state.isSelected, true)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
+                    
+                case .updateFromList:
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    
+                    XCTAssertEqual(state.model.element.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, false)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                state.setNew(item: updated, reason: .updateFromList)
-                
-                XCTAssertEqual(state.model.element.value, "updated")
-                XCTAssertEqual(state.coordination.info.original.element.value, "updated")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
-                XCTAssertEqual(state.storage.state.isSelected, true)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
-                
-            case .updateFromItemCoordinator:
-                let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
-                
-                XCTAssertEqual(state.model.element.value, "initial")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, false)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
+                    state.setNew(item: updated, reason: .updateFromList)
+                    
+                    XCTAssertEqual(state.model.element.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "updated")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
+                    XCTAssertEqual(state.storage.state.isSelected, true)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
+                    
+                case .updateFromItemCoordinator:
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    
+                    XCTAssertEqual(state.model.element.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, false)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                state.setNew(item: updated, reason: .updateFromItemCoordinator)
-                
-                XCTAssertEqual(state.model.element.value, "updated")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, true)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
-                
-            case .noChange:
-                let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
-                
-                XCTAssertEqual(state.model.element.value, "initial")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, false)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
+                    state.setNew(item: updated, reason: .updateFromItemCoordinator)
+                    
+                    XCTAssertEqual(state.model.element.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, true)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
+                    
+                case .noChange:
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    
+                    XCTAssertEqual(state.model.element.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, false)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                state.setNew(item: updated, reason: .noChange)
-                
-                XCTAssertEqual(state.model.element.value, "updated")
-                XCTAssertEqual(state.coordination.info.original.element.value, "initial")
-                XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-                XCTAssertEqual(state.storage.state.isSelected, true)
-                XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
+                    state.setNew(item: updated, reason: .noChange)
+                    
+                    XCTAssertEqual(state.model.element.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
+                    XCTAssertEqual(state.storage.state.isSelected, true)
+                    XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
+                }
             }
         }
     }
     
-    func test_stateWasUpdated()
+    func test_updateCoordinatorWithStateChange()
     {
         let dependencies = ItemStateDependencies(
             reorderingDelegate: ReorderingActionsDelegateMock(),
@@ -168,7 +209,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.willDisplay_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.didEndDisplay_calls.count, 0)
         
-        state.stateWasUpdated(
+        state.updateCoordinatorWithStateChange(
             old: .init(
                 isSelected: false,
                 visibleCell: nil
@@ -183,7 +224,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.willDisplay_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.didEndDisplay_calls.count, 0)
         
-        state.stateWasUpdated(
+        state.updateCoordinatorWithStateChange(
             old: .init(
                 isSelected: true,
                 visibleCell: nil
@@ -200,7 +241,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         // Visible Cells
         
-        state.stateWasUpdated(
+        state.updateCoordinatorWithStateChange(
             old: .init(
                 isSelected: false,
                 visibleCell: nil
@@ -215,7 +256,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.willDisplay_calls.count, 1)
         XCTAssertEqual(state.coordination.coordinator.didEndDisplay_calls.count, 0)
         
-        state.stateWasUpdated(
+        state.updateCoordinatorWithStateChange(
             old: .init(
                 isSelected: false,
                 visibleCell: ItemElementCell()
@@ -364,7 +405,7 @@ fileprivate class ItemElementCoordinatorDelegateMock : ItemElementCoordinatorDel
 {
     var coordinatorUpdated_calls = [AnyItem]()
     
-    func coordinatorUpdated(for item: AnyItem)
+    func coordinatorUpdated(for item: AnyItem, animated : Bool)
     {
         self.coordinatorUpdated_calls.append(item)
     }

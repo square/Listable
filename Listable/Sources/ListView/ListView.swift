@@ -806,9 +806,16 @@ public final class ListView : UIView
 
 extension ListView : ItemElementCoordinatorDelegate
 {
-    func coordinatorUpdated(for : AnyItem)
+    func coordinatorUpdated(for : AnyItem, animated : Bool)
     {
-        self.layoutManager.current.setNeedsRelayout()
+        if animated {
+            UIView.animate(withDuration: 0.25) {
+                self.layoutManager.current.setNeedsRelayout()
+                self.collectionView.layoutIfNeeded()
+            }
+        } else {
+            self.layoutManager.current.setNeedsRelayout()
+        }
     }
 }
 

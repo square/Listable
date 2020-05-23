@@ -130,28 +130,28 @@ public extension ItemElementCoordinator
 public final class ItemElementCoordinatorActions<Element:ItemElement>
 {
     private let currentProvider : () -> Item<Element>
-    var updateCallback : (Item<Element>) -> ()
+    var updateCallback : (Item<Element>, Bool) -> ()
     
-    init(current : @escaping () -> Item<Element>, update : @escaping (Item<Element>) -> ())
+    init(current : @escaping () -> Item<Element>, update : @escaping (Item<Element>, Bool) -> ())
     {
         self.currentProvider = current
         self.updateCallback = update
     }
     
     /// Updates the item to the provided item.
-    public func update(_ new : Item<Element>)
+    public func update(animated: Bool = false, _ new : Item<Element>)
     {
-        self.updateCallback(new)
+        self.updateCallback(new, animated)
     }
     
     /// Allows you to update the item passed into the update closure.
-    public func update(_ update : (inout Item<Element>) -> ())
+    public func update(animated: Bool = false, _ update : (inout Item<Element>) -> ())
     {
-        var updated = self.currentProvider()
+        var new = self.currentProvider()
         
-        update(&updated)
+        update(&new)
         
-        self.update(updated)
+        self.update(animated: animated, new)
     }
 }
 

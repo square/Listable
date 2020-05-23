@@ -75,22 +75,22 @@ struct PodcastRow : BlueprintItemElement, Equatable
 
     func element(with info : ApplyItemElementInfo) -> Element
     {
-        return Inset(uniformInset: 10.0, wrapping: Row { row in
+        
+        Row { row in
             row.horizontalUnderflow = .growUniformly
             row.verticalAlignment = .fill
 
             row.add(
                 growPriority: 0.0,
-                child: ConstrainedSize(
-                    width: .absolute(100.0),
-                    height: .absolute(100.0),
-                    wrapping: Box(cornerStyle: .rounded(radius: 8.0), wrapping: Image(image: self.podcast.image))
-                )
+                shrinkPriority: 0.0,
+                child: Image(image: self.podcast.image)
+                    .box(corners: .rounded(radius: 8.0))
+                    .constrainedTo(width: .absolute(100), height: .absolute(100))
             )
 
             row.add(
                 growPriority: 0.0,
-                child: Spacer(size: CGSize(width: 10.0, height: 0.0))
+                child: Spacer(width: 10.0)
             )
 
             row.add(child: Column { column in
@@ -115,7 +115,8 @@ struct PodcastRow : BlueprintItemElement, Equatable
                     label.color = .lightGray
                 })
             })
-        })
+        }
+        .inset(uniform: 10.0)
     }
     
     func backgroundElement(with state: ItemState) -> Element?
@@ -136,6 +137,15 @@ struct Podcast : Equatable
     var episode : String
     var length : String
     var image : UIImage
+    
+    var downloadState : DownloadState = .notDownloaded
+    
+    enum DownloadState : Equatable {
+        case notDownloaded
+        case downloading(Double)
+        case downloaded
+        case error
+    }
 
     static var podcasts : [Podcast] {
         return [
