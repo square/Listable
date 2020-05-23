@@ -41,8 +41,11 @@ final class AutoScrollingViewController : UIViewController
 
     @objc private func addItem()
     {
+        let last = items.last?.identifier.toAny
+        
         items.append(BottomPinnedItem(text: "Item \(items.count)"))
-        updateItems()
+        
+        updateItems(autoScrollIfVisible: last)
     }
 
     @objc private func removeItem()
@@ -53,7 +56,7 @@ final class AutoScrollingViewController : UIViewController
         }
     }
 
-    private func updateItems() {
+    private func updateItems(autoScrollIfVisible lastItem : AnyIdentifier? = nil) {
         self.list.setContent { list in
             list.appearance = demoAppearance
 
@@ -61,7 +64,15 @@ final class AutoScrollingViewController : UIViewController
             list += Section(identifier: "items", items: items)
 
             if let last = items.last {
-                list.autoScrollAction = .scrollToItemOnInsert(last, position: .init(position: .bottom), animated: true)
+                
+                list.autoScrollAction = .scrollTo(.lastItem, onInsertOf: last.identifier, position: .init(position: .bottom), animated: true) { state in
+                    // Only scroll to the bottom if the bottom item is already visible.
+                    if let identifier = lastItem {
+                        return state.visibleItems.contains(identifier)
+                    } else {
+                        return false
+                    }
+                }
             }
 
             let itemization = [

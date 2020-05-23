@@ -305,7 +305,7 @@ public final class ListLayoutContent
         }
     }
     
-    func layoutAttributes(in rect: CGRect) -> [UICollectionViewLayoutAttributes]
+    func layoutAttributes(in rect: CGRect, alwaysIncludeOverscroll : Bool) -> [UICollectionViewLayoutAttributes]
     {
         /**
          Supplementary items are technically attached to index paths. Eg, list headers
@@ -363,10 +363,11 @@ public final class ListLayoutContent
         
         // Overscroll Footer
         
-        // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
-        // Instead, just return it all the time to ensure the collection view will display it when needed.
-        
-        attributes.append(self.overscrollFooter.layoutAttributes(with: self.overscrollFooter.kind.indexPath(in: 0)))
+        if alwaysIncludeOverscroll || rect.intersects(self.overscrollFooter.visibleFrame) {
+            // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
+            // Instead, just return it all the time to ensure the collection view will display it when needed.
+            attributes.append(self.overscrollFooter.layoutAttributes(with: self.overscrollFooter.kind.indexPath(in: 0)))
+        }
         
         return attributes
     }

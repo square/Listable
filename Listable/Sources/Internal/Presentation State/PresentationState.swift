@@ -70,6 +70,17 @@ final class PresentationState
         return indexes.flatMap { $0 }
     }
     
+    func headerFooter(of kind : SupplementaryKind, in section : Int) -> HeaderFooterViewStatePair
+    {
+        switch kind {
+        case .listHeader: return self.header
+        case .listFooter: return self.footer
+        case .sectionHeader: return self.sections[section].header
+        case .sectionFooter: return self.sections[section].footer
+        case .overscrollFooter: return self.overscrollFooter
+        }
+    }
+    
     func item(at indexPath : IndexPath) -> AnyPresentationItemState
     {
         let section = self.sections[indexPath.section]

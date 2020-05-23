@@ -88,7 +88,7 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
     {
         return self.contentContainer.contentView.sizeThatFits(size)
     }
-    
+
     override func layoutSubviews()
     {
         super.layoutSubviews()

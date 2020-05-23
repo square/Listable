@@ -17,6 +17,7 @@
 		0A58D85123CD3FCF00583C25 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */; };
 		0A590004236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */; };
 		0A81AAD0245F696600656DF7 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81AACF245F696600656DF7 /* CustomLayoutsViewController.swift */; };
+		0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A87BA642463567B0047C3B5 /* CHANGELOG.md */; };
 		0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */; };
 		0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */; };
 		0AE855512390933100F2E245 /* Test_Targets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE855502390933100F2E245 /* Test_Targets.swift */; };
@@ -28,6 +29,7 @@
 		0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D222FBCC1D00341DFF /* Blueprint.swift */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
 		0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D422FBCC1D00341DFF /* Font.swift */; };
+		0AF5D9C92460C0210076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */; };
 		0AF775AA2474D94C0066CFC6 /* CoordinatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */; };
 		27B4DCE9244F88BE001BA9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */; };
 		42180BB244DD1F51618E1B34 /* libPods-Test Targets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */; };
@@ -47,6 +49,7 @@
 		0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0A590002236A371600F463DA /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
 		0A81AACF245F696600656DF7 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
+		0A87BA642463567B0047C3B5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		0AAA0EB0236367D000B32F63 /* ItemizationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemizationEditorViewController.swift; sourceTree = "<group>"; };
 		0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingViewController.swift; sourceTree = "<group>"; };
 		0AE8554E2390933100F2E245 /* Test Targets.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Targets.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,6 +65,7 @@
 		0AEB96D222FBCC1D00341DFF /* Blueprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Blueprint.swift; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEB96D422FBCC1D00341DFF /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewEdgesPlaygroundViewController.swift; sourceTree = "<group>"; };
 		0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorViewController.swift; sourceTree = "<group>"; };
 		27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				0A0E070323870A5700DDD27D /* README.md */,
+				0A87BA642463567B0047C3B5 /* CHANGELOG.md */,
 				0AEB96C322FBCC1D00341DFF /* Sources */,
 				0AEB96E522FBCC5300341DFF /* Resources */,
 				0AEB96B022FBCBA500341DFF /* Demo */,
@@ -162,6 +167,7 @@
 				0AB8B0D1237CD47A00CBC434 /* ReorderingViewController.swift */,
 				0A3FFA6C238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
+				0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */,
 				0AEA09BC242A941700F9ED0C /* SwipeActionsViewController.swift */,
 				0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */,
 			);
@@ -286,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */,
 				0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */,
 				0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */,
 				0A0E070423870A5700DDD27D /* README.md in Resources */,
@@ -381,6 +388,7 @@
 				0A3FFA6D238336870080E0D9 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
 				0AB8B0D2237CD47A00CBC434 /* ReorderingViewController.swift in Sources */,
 				0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */,
+				0AF5D9C92460C0210076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
 				0AEB96DF22FBCC1D00341DFF /* DemosRootViewController.swift in Sources */,
 				0A0D12A6235FBD2D00DB11CE /* BlueprintListDemoViewController.swift in Sources */,
 				C2560A942411830D00F6B31E /* AutoScrollingViewController.swift in Sources */,

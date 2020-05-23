@@ -35,10 +35,10 @@ public final class DemosRootViewController : UIViewController
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "collection-view") { section in
+            list += Section(identifier: "list-view") { section in
                 
                 section.header = HeaderFooter(
-                    DemoHeader(title: "Collection Views")
+                    DemoHeader(title: "List Views")
                 )
                 
                 section += Item(
@@ -117,7 +117,7 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(InvoicesPaymentScheduleDemoViewController())
                 })
-
+                
                 section += Item(
                     DemoItem(text: "Swipe Actions"),
                     selectionStyle: .tappable,
@@ -133,17 +133,31 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "flow-layout") { section in
+            list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
-                    DemoHeader(title: "Flow Layouts")
+                    DemoHeader(title: "UICollectionViews")
                 )
-                
+
                 section += Item(
                     DemoItem(text: "Flow Layout"),
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(FlowLayoutViewController())
+                })
+            }
+            
+            list += Section(identifier: "scroll-view") { section in
+                
+                section.header = HeaderFooter(
+                    DemoHeader(title: "UIScrollViews")
+                )
+                
+                section += Item(
+                    DemoItem(text: "Edges Playground"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(ScrollViewEdgesPlaygroundViewController())
                 })
             }
         }

@@ -23,14 +23,14 @@ public final class AnyIdentifier : Hashable
         self.hash = hasher.finalize()
     }
     
-    // Equatable
+    // MARK: Equatable
     
     public static func == (lhs: AnyIdentifier, rhs: AnyIdentifier) -> Bool
     {
         return lhs.hash == rhs.hash && lhs.value == rhs.value
     }
     
-    // Hashable
+    // MARK: Hashable
     
     public func hash(into hasher: inout Hasher)
     {
@@ -38,12 +38,21 @@ public final class AnyIdentifier : Hashable
     }
 }
 
+
 public final class Identifier<Element> : Hashable
 {
     private let type : ObjectIdentifier
-    private let value : AnyHashable
+    private let value : AnyHashable?
     
     private let hash : Int
+    
+    /// Identifier which identifies by the type of `Element` only.
+    /// If you have multiple of `Element` within a list, it is recommended that
+    /// you use `init(_ value:)` to provide a unique inner value.
+    public convenience init()
+    {
+        self.init("")
+    }
     
     public init<Value:Hashable>(_ value : Value)
     {
@@ -56,22 +65,21 @@ public final class Identifier<Element> : Hashable
         self.hash = hasher.finalize()
     }
     
-    // Equatable
+    public var toAny : AnyIdentifier {
+        AnyIdentifier(self)
+    }
+    
+    // MARK: Equatable
     
     public static func == (lhs: Identifier<Element>, rhs: Identifier<Element>) -> Bool
     {
         return lhs.hash == rhs.hash && lhs.type == rhs.type && lhs.value == rhs.value
     }
     
-    // Hashable
+    // MARK: Hashable
     
     public func hash(into hasher: inout Hasher)
     {
         hasher.combine(self.hash)
     }
-}
-
-public protocol Identifiable
-{
-    var identifier : Identifier<Self> { get }
 }
