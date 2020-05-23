@@ -187,7 +187,7 @@ public struct Content
     // MARK: Slicing Content
     //
     
-    internal func sliceTo(indexPath : IndexPath, plus additionalItems : Int) -> Slice
+    internal func sliceTo(indexPath : IndexPath, plus additionalItems : Int = Content.Slice.defaultCount) -> Slice
     {
         var sliced = self
         
@@ -217,28 +217,11 @@ public struct Content
 }
 
 
-public extension Content
-{
-    func elementsEqual(to other : Content) -> Bool
-    {
-        if self.sections.count != other.sections.count {
-            return false
-        }
-        
-        let sections = zip(self.sections, other.sections)
-        
-        return sections.allSatisfy { both in
-            both.0.elementsEqual(to: both.1)
-        }
-    }
-}
-
-
 internal extension Content
 {
     struct Slice
     {
-        static let defaultSize : Int = 250
+        static let defaultCount : Int = 250
         
         let containsAllItems : Bool
         let content : Content

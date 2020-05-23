@@ -30,6 +30,7 @@
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
 		0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D422FBCC1D00341DFF /* Font.swift */; };
 		0AF5D9C92460C0210076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */; };
+		0AF775AA2474D94C0066CFC6 /* CoordinatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */; };
 		27B4DCE9244F88BE001BA9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */; };
 		42180BB244DD1F51618E1B34 /* libPods-Test Targets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */; };
 		C16C0AC6F56D2268011EDFF2 /* libPods-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */; };
@@ -65,6 +66,7 @@
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEB96D422FBCC1D00341DFF /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewEdgesPlaygroundViewController.swift; sourceTree = "<group>"; };
+		0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorViewController.swift; sourceTree = "<group>"; };
 		27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2560A932411830D00F6B31E /* AutoScrollingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				0A58D85023CD3FCF00583C25 /* FlowLayoutViewController.swift */,
 				0AF5D9C82460C0200076CEA1 /* ScrollViewEdgesPlaygroundViewController.swift */,
 				0AEA09BC242A941700F9ED0C /* SwipeActionsViewController.swift */,
+				0AF775A92474D94C0066CFC6 /* CoordinatorViewController.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				0AEB96E122FBCC1D00341DFF /* Blueprint.swift in Sources */,
 				0A81AAD0245F696600656DF7 /* CustomLayoutsViewController.swift in Sources */,
 				0AAA0EB1236367D000B32F63 /* ItemizationEditorViewController.swift in Sources */,
+				0AF775AA2474D94C0066CFC6 /* CoordinatorViewController.swift in Sources */,
 				0AEB96E322FBCC1D00341DFF /* Font.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

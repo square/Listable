@@ -121,6 +121,13 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Invalidation & Invalidation Contexts
     //
     
+    func setNeedsRelayout()
+    {
+        self.neededLayoutType.merge(with: .relayout)
+        
+        self.invalidateLayout()
+    }
+    
     private(set) var shouldAskForItemSizesDuringLayoutInvalidation : Bool = false
     
     func setShouldAskForItemSizesDuringLayoutInvalidation()

@@ -20,12 +20,12 @@ public protocol AnyItem : AnyItem_Internal
 {
     var identifier : AnyIdentifier { get }
     
+    var sizing : Sizing { get set }
     var layout : ItemLayout { get set }
     var selectionStyle : ItemSelectionStyle { get set }
+    var swipeActions : SwipeActionsConfiguration? { get set }
     
     var reordering : Reordering? { get set }
-    
-    func elementEqual(to other : AnyItem) -> Bool
 }
 
 
@@ -34,7 +34,7 @@ public protocol AnyItem_Internal
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyIsEquivalent(to other : AnyItem) -> Bool
     
-    func newPresentationItemState(in listView : ListView) -> Any
+    func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
 }
 
 
@@ -67,9 +67,6 @@ public struct Item<Element:ItemElement> : AnyItem
     
     internal let reuseIdentifier : ReuseIdentifier<Element>
     
-    public typealias CreateBinding = (Element) -> Binding<Element>
-    internal let bind : CreateBinding?
-    
     public var debuggingIdentifier : String? = nil
     
     //
@@ -90,12 +87,11 @@ public struct Item<Element:ItemElement> : AnyItem
     
     public init(
         _ element : Element,
-        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
-        layout : ItemLayout = ItemLayout(),
-        selectionStyle : ItemSelectionStyle = .none,
+        sizing : Sizing? = nil,
+        layout : ItemLayout? = nil,
+        selectionStyle : ItemSelectionStyle? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
-        bind : CreateBinding? = nil,
         onDisplay : OnDisplay? = nil,
         onEndDisplay : OnEndDisplay? = nil,
         onSelect : OnSelect? = nil,
@@ -103,18 +99,41 @@ public struct Item<Element:ItemElement> : AnyItem
         )
     {
         self.element = element
+                
+        if let sizing = sizing {
+            self.sizing = sizing
+        } else if let sizing = element.defaultItemProperties.sizing {
+            self.sizing = sizing
+        } else {
+            self.sizing = .thatFitsWith(.init(.atLeast(.default)))
+        }
         
-        self.sizing = sizing
-        self.layout = layout
+        if let layout = layout {
+            self.layout = layout
+        } else if let layout = element.defaultItemProperties.layout {
+            self.layout = layout
+        } else {
+            self.layout = ItemLayout()
+        }
         
-        self.selectionStyle = selectionStyle
+        if let selectionStyle = selectionStyle {
+            self.selectionStyle = selectionStyle
+        } else if let selectionStyle = element.defaultItemProperties.selectionStyle {
+            self.selectionStyle = selectionStyle
+        } else {
+            self.selectionStyle = .none
+        }
         
-        self.swipeActions = swipeActions
-        
+        if let swipeActions = swipeActions {
+            self.swipeActions = swipeActions
+        } else if let swipeActions = element.defaultItemProperties.swipeActions {
+            self.swipeActions = swipeActions
+        } else {
+            self.swipeActions = nil
+        }
+                
         self.reordering = reordering
-        
-        self.bind = bind
-        
+                
         self.onDisplay = onDisplay
         self.onEndDisplay = onEndDisplay
         
@@ -124,22 +143,6 @@ public struct Item<Element:ItemElement> : AnyItem
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
         
         self.identifier = self.element.identifier.toAny
-    }
-    
-    // MARK: AnyItem
-    
-    public func elementEqual(to other : AnyItem) -> Bool
-    {
-        guard let other = other as? Item<Element> else {
-            return false
-        }
-        
-        return self.elementEqual(to: other)
-    }
-    
-    internal func elementEqual(to other : Item<Element>) -> Bool
-    {
-        return false
     }
     
     // MARK: AnyItem_Internal
@@ -162,9 +165,42 @@ public struct Item<Element:ItemElement> : AnyItem
         return self.element.wasMoved(comparedTo: other.element)
     }
     
-    public func newPresentationItemState(in listView : ListView) -> Any
+    public func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
     {
-        return PresentationState.ItemState(with: self, listView: listView)
+        PresentationState.ItemState(with: self, dependencies: dependencies)
+    }
+}
+
+
+/// Allows specifying default properties to apply to an item when it is initialized,
+/// if those values are not provided to the initializer.
+/// Only non-nil values are used – if you do not want to provide a default value,
+/// simply leave the property nil.
+///
+/// The order of precedence used when assigning values is:
+/// 1) The value passed to the initializer.
+/// 2) The value from `ItemProperties` on the contained `ItemElement`, if non-nil.
+/// 3) A standard, default value.
+///
+public struct DefaultItemProperties<Element:ItemElement>
+{
+    public var sizing : Sizing?
+    public var layout : ItemLayout?
+    
+    public var selectionStyle : ItemSelectionStyle?
+    
+    public var swipeActions : SwipeActionsConfiguration?
+    
+    public init(
+        sizing : Sizing? = nil,
+        layout : ItemLayout? = nil,
+        selectionStyle : ItemSelectionStyle? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil
+    ) {
+        self.sizing = sizing
+        self.layout = layout
+        self.selectionStyle = selectionStyle
+        self.swipeActions = swipeActions
     }
 }
 
@@ -281,32 +317,6 @@ public enum ItemSelectionStyle : Equatable
         case .none: return false
         case .tappable: return true
         case .selectable(_): return true
-        }
-    }
-}
-
-
-public extension Item where Element:Equatable
-{
-    func elementEqual(to other : Item<Element>) -> Bool
-    {
-        return self.element == other.element
-    }
-}
-
-
-public extension Array where Element == AnyItem
-{
-    func elementsEqual(to other : [AnyItem]) -> Bool
-    {
-        if self.count != other.count {
-            return false
-        }
-        
-        let items = zip(self, other)
-        
-        return items.allSatisfy { both in
-            both.0.elementEqual(to: both.1)
         }
     }
 }

@@ -124,6 +124,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(SwipeActionsViewController())
                 })
+                
+                section += Item(
+                    DemoItem(text: "Item Element Coordinator"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(CoordinatorViewController())
+                })
             }
             
             list += Section(identifier: "collection-view") { section in
