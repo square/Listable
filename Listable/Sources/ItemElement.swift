@@ -6,23 +6,29 @@
 //
 
 
-public protocol ItemElement
+public protocol ItemElement where Coordinator.ItemElementType == Self
 {
     //
     // MARK: Identification
     //
     
-    /**
-     Identifies the element across updates to the list. This value must remain the same,
-     otherwise the element will be considered a new item, and the old one removed from the list.
-     
-     Does not have to be globally unique – the list will make a "best guess" if there are multiple elements
-     with the same identifier. However, diffing of changes will be more correct with a unique identifier.
-     
-     If you're backing your element with some sort of client or server-provided data, consider using its
-     server or client UUID here, or some other unique identifier from the underlying data model.
-     */
+    /// Identifies the element across updates to the list. This value must remain the same,
+    /// otherwise the element will be considered a new item, and the old one removed from the list.
+    ///
+    /// Does not have to be globally unique – the list will make a "best guess" if there are multiple elements
+    /// with the same identifier. However, diffing of changes will be more correct with a unique identifier.
+    ///
+    /// If you're backing your element with some sort of client or server-provided data, consider using its
+    /// server or client UUID here, or some other unique identifier from the underlying data model.
     var identifier : Identifier<Self> { get }
+    
+    //
+    // MARK: Default Item Properties
+    //
+    
+    /// Default values to assign to various properties on the `Item` which wraps
+    /// this `ItemElement`, if those values are not passed to the `Item` initializer.
+    var defaultItemProperties : DefaultItemProperties<Self> { get }
     
     //
     // MARK: Applying To Displayed View
@@ -71,9 +77,8 @@ public protocol ItemElement
     // MARK: Creating & Providing Swipe Action Views
     //
     
-    /**
-
-     */
+    /// The view type to use to render swipe actions (delete, etc) for this item element.
+    /// A default implementation, which matches `UITableView`, is provided.
     associatedtype SwipeActionsView: ItemElementSwipeActionsView = DefaultSwipeActionsView
     
     //
@@ -84,15 +89,31 @@ public protocol ItemElement
     /// The content view is drawn at the top of the view hierarchy, above the background views.
     associatedtype ContentView:UIView
     
-    /**
-     Create and return a new content view used to render the element.
-     
-     Note
-     ----
-     Do not do configuration in this method that will be changed by your view's theme or appearance – instead
-     do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
-     */
+
+    /// Create and return a new content view used to render the element.
+    ///
+    /// Note
+    /// ----
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
     static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    //
+    // MARK: Content Coordination
+    //
+    
+    /// The coordinator type to use to manage the live state of the `Item` and `ItemElement`,
+    /// if you need to update content based on signals such as notifications, view state, appearance state,
+    /// etc.
+    associatedtype Coordinator : ItemElementCoordinator = DefaultItemElementCoordinator<Self>
+    
+    /// The actions passed to the coordinator.
+    typealias CoordinatorActions = ItemElementCoordinatorActions<Self>
+    /// The info passed to the coordinator.
+    typealias CoordinatorInfo = ItemElementCoordinatorInfo<Self>
+    
+    /// Creates a new coordinator with the provided actions and info.
+    func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
     
     //
     // MARK: Creating & Providing Background Views
@@ -109,14 +130,12 @@ public protocol ItemElement
     ///
     associatedtype BackgroundView:UIView = UIView
     
-    /**
-     Create and return a new background view used to render the element's background.
-     
-     Note
-     ----
-     Do not do configuration in this method that will be changed by your view's theme or appearance – instead
-     do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
-     */
+    /// Create and return a new background view used to render the element's background.
+    ///
+    /// Note
+    /// ----
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
     static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
     
     /// The selected background view used to draw the background of the element when it is selected or highlighted.
@@ -130,19 +149,18 @@ public protocol ItemElement
     ///
     associatedtype SelectedBackgroundView:UIView = BackgroundView
     
-    /**
-     Create and return a new background view used to render the element's selected background.
-     
-     This view is displayed when the element is highlighted or selected.
-     
-     If your `BackgroundView` and `SelectedBackgroundView` are the same type, this method
-     is provided automatically by calling `createReusableBackgroundView`.
-     
-     Note
-     ----
-     Do not do configuration in this method that will be changed by your view's theme or appearance – instead
-     do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
-     */
+    
+    /// Create and return a new background view used to render the element's selected background.
+    ///
+    /// This view is displayed when the element is highlighted or selected.
+    ///
+    /// If your `BackgroundView` and `SelectedBackgroundView` are the same type, this method
+    /// is provided automatically by calling `createReusableBackgroundView`.
+    ///
+    /// Note
+    /// ----
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of elements changes.
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
 }
 
@@ -162,14 +180,12 @@ public struct ItemElementViews<Element:ItemElement>
 }
 
 
-///
 /// Information about the current state of the element, which is passed to `apply(to:)`
 /// during configuration and preparation for display.
 ///
 /// You can use this information to alter the display of your element, such as changing
 /// the background color for highlights and selections, providing different corner styles
 /// for different item positions, etc.
-///
 public struct ApplyItemElementInfo
 {
     /// The state of the `Item` currently displaying the element. Is it highlighted, selected, etc.
@@ -183,6 +199,7 @@ public struct ApplyItemElementInfo
 }
 
 
+/// Provide a default implementation of `isEquivalent(to:)` if the `ItemElement` is `Equatable`.
 public extension ItemElement where Self:Equatable
 {
     func isEquivalent(to other : Self) -> Bool
@@ -192,6 +209,7 @@ public extension ItemElement where Self:Equatable
 }
 
 
+/// Implement `wasMoved` in terms of `isEquivalent(to:)` by default.
 public extension ItemElement
 {
     func wasMoved(comparedTo other : Self) -> Bool
@@ -201,6 +219,27 @@ public extension ItemElement
 }
 
 
+/// Provide a default implementation of `defaultItemProperties` which returns an
+/// empty instance that does not provide any defaults.
+public extension ItemElement
+{
+    var defaultItemProperties : DefaultItemProperties<Self> {
+        .init()
+    }
+}
+
+
+/// Provides a default coordinator for items without a specified coordinator.
+public extension ItemElement where Coordinator == DefaultItemElementCoordinator<Self>
+{
+    func makeCoordinator(actions : ItemElementCoordinatorActions<Self>, info : ItemElementCoordinatorInfo<Self>) -> Coordinator
+    {
+        DefaultItemElementCoordinator(actions: actions, info: info, view: nil)
+    }
+}
+
+
+/// Provide a UIView when no special background view is specified.
 public extension ItemElement where BackgroundView == UIView
 {
     static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
@@ -210,6 +249,7 @@ public extension ItemElement where BackgroundView == UIView
 }
 
 
+/// Provide a UIView when no special selected background view is specified.
 public extension ItemElement where BackgroundView == SelectedBackgroundView
 {
     static func createReusableSelectedBackgroundView(frame : CGRect) -> BackgroundView
@@ -218,12 +258,11 @@ public extension ItemElement where BackgroundView == SelectedBackgroundView
     }
 }
 
-/**
- Conform to this protocol to implement a completely custom swipe action view.
 
- If you do so, you're completely responsible for creating and laying out the actions,
- as well as updating the layout based on the swipe state.
- */
+/// Conform to this protocol to implement a completely custom swipe action view.
+///
+/// If you do so, you're completely responsible for creating and laying out the actions,
+/// as well as updating the layout based on the swipe state.
 public protocol ItemElementSwipeActionsView: UIView {
 
     var swipeActionsWidth: CGFloat { get }
