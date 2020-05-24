@@ -18,7 +18,7 @@ class ItemElementCoordinatorActionsTests : XCTestCase
         
         var callbackCount = 0
 
-        let actions = ItemElementCoordinatorActions(current: { item }, update: { new in
+        let actions = ItemElementCoordinatorActions(current: { item }, update: { new, animated in
             item = new
             callbackCount += 1
         })
