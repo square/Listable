@@ -164,6 +164,9 @@ public final class ListView : UIView
         // Scroll View
         
         self.updateCollectionViewBounce()
+        
+        self.collectionView.showsHorizontalScrollIndicator = self.appearance.showsScrollIndicators
+        self.collectionView.showsVerticalScrollIndicator = self.appearance.showsScrollIndicators
     }
     
     //

@@ -53,7 +53,9 @@ public struct ListItemElement : ItemElement
         self.listDescription = ListDescription(
             animatesChanges: true,
             layoutType: .list,
-            appearance: .init(),
+            appearance: .init {
+                $0.showsScrollIndicators = false
+            },
             behavior: .init(),
             autoScrollAction: .none,
             scrollInsets: .init(),
