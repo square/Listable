@@ -27,7 +27,7 @@ public final class DemosRootViewController : UIViewController
         
         self.view = self.listView
         
-        self.listView.appearance = demoAppearance
+        self.listView.appearance = .demoAppearance
         
         self.listView.setContent { list in
 

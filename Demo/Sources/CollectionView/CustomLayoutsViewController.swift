@@ -26,7 +26,7 @@ final class CustomLayoutsViewController : UIViewController
         
         self.listView.setContent { list in
             
-            list.appearance = demoAppearance
+            list.appearance = .demoAppearance
             
             list.appearance.grid.sizing.itemSize = .fixed(CGSize(width: 80.0, height: 80.0))
 

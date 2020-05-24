@@ -58,7 +58,7 @@ final class AutoScrollingViewController : UIViewController
 
     private func updateItems(autoScrollIfVisible lastItem : AnyIdentifier? = nil) {
         self.list.setContent { list in
-            list.appearance = demoAppearance
+            list.appearance = .demoAppearance
 
             let items = self.items.map { Item($0) }
             list += Section(identifier: "items", items: items)

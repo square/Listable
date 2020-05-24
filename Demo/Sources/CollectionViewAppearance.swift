@@ -12,19 +12,23 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 
-let demoAppearance = Appearance {
-    $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
-                
-    $0.list.layout = .init(
-        padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
-        width: .atMost(600.0),
-        interSectionSpacingWithNoFooter: 20.0,
-        interSectionSpacingWithFooter: 20.0,
-        sectionHeaderBottomSpacing: 10.0,
-        itemSpacing: 6.0,
-        itemToSectionFooterSpacing: 10.0
-    )
+extension Appearance
+{
+    static var demoAppearance = Appearance {
+        $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+                    
+        $0.list.layout = .init(
+            padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+            width: .atMost(600.0),
+            interSectionSpacingWithNoFooter: 20.0,
+            interSectionSpacingWithFooter: 20.0,
+            sectionHeaderBottomSpacing: 15.0,
+            itemSpacing: 10.0,
+            itemToSectionFooterSpacing: 10.0
+        )
+    }
 }
+
 
 extension UIColor
 {
@@ -41,13 +45,13 @@ struct DemoHeader : BlueprintHeaderFooterElement, Equatable
     
     var element: Element {
         Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
         }
-        .inset(uniform: 10.0)
+        .inset(horizontal: 15.0, vertical: 10.0)
         .box(
             background: .white,
             corners: .rounded(radius: 10.0),
-            borders: .solid(color: .white(0.85), width: 2.0)
+            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
     }
 }
@@ -58,13 +62,13 @@ struct DemoHeader2 : BlueprintHeaderFooterElement, Equatable
     
     var element: Element {
         Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
         }
-        .inset(top: 30.0, bottom: 30.0, left: 10.0, right: 10.0)
+        .inset(horizontal: 15.0, vertical: 30.0)
         .box(
-            background: .init(white: 0.95, alpha: 1.0),
+            background: .white,
             corners: .rounded(radius: 10.0),
-            borders: .solid(color: .white(0.85), width: 2.0)
+            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
     }
 }
@@ -82,16 +86,19 @@ struct DemoItem : BlueprintItemElement, Equatable
     
     func element(with info : ApplyItemElementInfo) -> Element
     {
-        Label(text: self.text)
-            .inset(uniform: 10.0)
+        Label(text: self.text) {
+            $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+            $0.color = .darkGray
+        }
+        .inset(horizontal: 15.0, vertical: 10.0)
     }
     
     func backgroundElement(with info: ApplyItemElementInfo) -> Element?
     {
         Box(
             backgroundColor: .white,
-            cornerStyle: .rounded(radius: 6.0),
-            borderStyle: .solid(color: .white(0.9), width: 2.0)
+            cornerStyle: .rounded(radius: 8.0),
+            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
     }
     
@@ -99,8 +106,8 @@ struct DemoItem : BlueprintItemElement, Equatable
     {
         Box(
             backgroundColor: info.state.isSelected ? .white(0.9) : .white(0.95),
-            cornerStyle: .rounded(radius: 6.0),
-            borderStyle: .solid(color: .white(0.7), width: 2.0)
+            cornerStyle: .rounded(radius: 8.0),
+            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
     }
 }

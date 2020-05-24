@@ -24,7 +24,7 @@ final class ReorderingViewController : UIViewController
         
         self.list.setContent { list in
             
-            list.appearance = demoAppearance
+            list.appearance = .demoAppearance
             
             list += Section(identifier: "first") { section in
                 section.header = HeaderFooter(DemoHeader(title: "First Section"))
