@@ -121,7 +121,7 @@ public struct Item<Element:ItemElement> : AnyItem
         } else if let selectionStyle = element.defaultItemProperties.selectionStyle {
             self.selectionStyle = selectionStyle
         } else {
-            self.selectionStyle = .none
+            self.selectionStyle = .notSelectable
         }
         
         if let swipeActions = swipeActions {
@@ -296,7 +296,7 @@ public struct ItemState : Equatable
 public enum ItemSelectionStyle : Equatable
 {
     /// The item is not selectable at all.
-    case none
+    case notSelectable
     
     /// The item is temporarily selectable. Once the user lifts their finger, the item is deselected.
     case tappable
@@ -306,7 +306,7 @@ public enum ItemSelectionStyle : Equatable
     
     var isSelected : Bool {
         switch self {
-        case .none: return false
+        case .notSelectable: return false
         case .tappable: return false
         case .selectable(let selected): return selected
         }
@@ -314,7 +314,7 @@ public enum ItemSelectionStyle : Equatable
     
     var isSelectable : Bool {
         switch self {
-        case .none: return false
+        case .notSelectable: return false
         case .tappable: return true
         case .selectable(_): return true
         }
