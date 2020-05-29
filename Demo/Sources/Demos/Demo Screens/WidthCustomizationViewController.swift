@@ -105,7 +105,7 @@ final class WidthCustomizationViewController : UIViewController
 }
 
 
-fileprivate struct CardElement : BlueprintItemElement, Equatable
+fileprivate struct CardElement : BlueprintItemContent, Equatable
 {
     var title : String
     var color : UIColor
@@ -118,7 +118,7 @@ fileprivate struct CardElement : BlueprintItemElement, Equatable
         return .init(self.title)
     }
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         return Box(
             backgroundColor: self.color,

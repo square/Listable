@@ -255,7 +255,7 @@ fileprivate struct ViewData : Equatable
 }
 
 
-fileprivate struct ToggleRow : BlueprintItemElement
+fileprivate struct ToggleRow : BlueprintItemContent
 {
     var content : Content
     var onToggle : (Bool) -> ()
@@ -268,7 +268,7 @@ fileprivate struct ToggleRow : BlueprintItemElement
     
     // MARK: BlueprintItemElement
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         return Inset(top: 10.0, bottom: 10.0, left: 0.0, right: 0.0, wrapping: Row { row in
             
@@ -289,29 +289,29 @@ fileprivate struct ToggleRow : BlueprintItemElement
     }
 }
 
-fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable
+fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable
 {
     var text : String
     
     // MARK: BlueprintHeaderFooterElement
     
-    var element: Element {
+    var elementRepresentation: Element {
         return Label(text: self.text)
     }
 }
 
-fileprivate struct SectionFooter : BlueprintHeaderFooterElement, Equatable
+fileprivate struct SectionFooter : BlueprintHeaderFooterContent, Equatable
 {
     var text : String
     
     // MARK: BlueprintHeaderFooterElement
     
-    var element: Element {
+    var elementRepresentation: Element {
         return Label(text: self.text)
     }
 }
 
-fileprivate struct SegmentedControlRow : BlueprintItemElement
+fileprivate struct SegmentedControlRow : BlueprintItemContent
 {
     var id : String
     var control : SegmentedControl
@@ -326,7 +326,7 @@ fileprivate struct SegmentedControlRow : BlueprintItemElement
     
     // MARK: BlueprintItemElement
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         return self.control
     }
@@ -341,7 +341,7 @@ fileprivate struct SegmentedControlRow : BlueprintItemElement
     }
 }
 
-fileprivate struct AmountRow : BlueprintItemElement
+fileprivate struct AmountRow : BlueprintItemContent
 {
     var content : Content
     
@@ -360,7 +360,7 @@ fileprivate struct AmountRow : BlueprintItemElement
     
     // MARK: BlueprintItemElement
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         var box = Box(wrapping: Row { row in
             
@@ -407,12 +407,12 @@ fileprivate struct AmountRow : BlueprintItemElement
     
 }
 
-fileprivate struct ButtonRow : BlueprintItemElement
+fileprivate struct ButtonRow : BlueprintItemContent
 {
     var text : String
     var onTap : () -> ()
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         fatalError()
     }

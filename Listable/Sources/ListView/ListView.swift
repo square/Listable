@@ -279,7 +279,7 @@ public final class ListView : UIView
     /// If the item is contained in the list, true is returned. If it is not, false is returned.
     ///
     @discardableResult
-    public func scrollTo<Element:ItemElement>(item : Identifier<Element>, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    public func scrollTo<Content:ItemContent>(item : Identifier<Content>, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
         return self.scrollTo(item: item.toAny, position: position, animated: animated)
     }
@@ -807,7 +807,7 @@ public final class ListView : UIView
 }
 
 
-extension ListView : ItemElementCoordinatorDelegate
+extension ListView : ItemContentCoordinatorDelegate
 {
     func coordinatorUpdated(for : AnyItem, animated : Bool)
     {

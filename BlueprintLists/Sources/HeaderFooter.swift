@@ -6,33 +6,28 @@
 //
 
 import BlueprintUI
-
 import Listable
 
-//
-// MARK: Blueprint Elements
-//
 
-public protocol BlueprintHeaderFooterElement : HeaderFooterElement where ContentView == BlueprintView
+public protocol BlueprintHeaderFooterContent : HeaderFooterContent where ContentView == BlueprintView
 {
     //
     // MARK: Creating Blueprint Element Representations
     //
     
-    var element : BlueprintUI.Element { get }
+    var elementRepresentation : Element { get }
 }
 
 
-//
-// MARK: Applying Blueprint Elements
-//
-
-
-public extension BlueprintHeaderFooterElement
+public extension BlueprintHeaderFooterContent
 {
+    //
+    // MARK: HeaderFooterContent
+    //
+    
     func apply(to view: ContentView, reason: ApplyReason)
     {
-        view.element = self.element
+        view.element = self.elementRepresentation
     }
     
     static func createReusableHeaderFooterView(frame: CGRect) -> ContentView

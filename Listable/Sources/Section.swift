@@ -105,9 +105,14 @@ public struct Section
         lhs.add(rhs)
     }
     
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : Item<Element>)
+    public static func += <Content:ItemContent>(lhs : inout Section, rhs : Item<Content>)
     {
         lhs.add(rhs)
+    }
+    
+    public static func += <Content:ItemContent>(lhs : inout Section, rhs : Content)
+    {
+        lhs += Item(rhs)
     }
     
     //
@@ -119,9 +124,14 @@ public struct Section
         lhs.items += rhs
     }
     
-    public static func += <Element:ItemElement>(lhs : inout Section, rhs : [Item<Element>])
+    public static func += <Content:ItemContent>(lhs : inout Section, rhs : [Item<Content>])
     {
         lhs.items += rhs
+    }
+    
+    public static func += <Content:ItemContent>(lhs : inout Section, rhs : [Content])
+    {
+        lhs.items += rhs.map { Item($0) }
     }
     
     //

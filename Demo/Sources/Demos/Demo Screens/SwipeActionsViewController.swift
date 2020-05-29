@@ -124,14 +124,14 @@ final class SwipeActionsViewController: UIViewController  {
 
     }
 
-    struct SwipeActionsDemoItem: BlueprintItemElement, Equatable {
+    struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
         var item: SwipeActionItem
 
         var identifier: Identifier<SwipeActionsDemoItem> {
             return .init(item.identifier)
         }
 
-        func element(with info : ApplyItemElementInfo) -> Element {
+        func element(with info : ApplyItemContentInfo) -> Element {
             return Column { column in
 
                 column.horizontalAlignment = .fill

@@ -1,5 +1,5 @@
 //
-//  ItemElementCell.swift
+//  ItemCell.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 9/22/19.
@@ -14,12 +14,12 @@ import UIKit
 /// Information on how cell selection appearance customization works:
 /// https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/changing_the_appearance_of_selected_and_highlighted_cells
 ///
-final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
+final class ItemCell<Content:ItemContent> : UICollectionViewCell
 {
     let contentContainer : ContentContainerView
 
-    let background : Element.BackgroundView
-    let selectedBackground : Element.SelectedBackgroundView
+    let background : Content.BackgroundView
+    let selectedBackground : Content.SelectedBackgroundView
 
     override init(frame: CGRect)
     {
@@ -27,8 +27,8 @@ final class ItemElementCell<Element:ItemElement> : UICollectionViewCell
         
         self.contentContainer = ContentContainerView(frame: bounds)
         
-        self.background = Element.createReusableBackgroundView(frame: bounds)
-        self.selectedBackground = Element.createReusableSelectedBackgroundView(frame: bounds)
+        self.background = Content.createReusableBackgroundView(frame: bounds)
+        self.selectedBackground = Content.createReusableSelectedBackgroundView(frame: bounds)
         
         super.init(frame: frame)
         

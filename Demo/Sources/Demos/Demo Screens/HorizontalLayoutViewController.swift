@@ -112,12 +112,12 @@ final class HorizontalLayoutViewController : UIViewController
 }
 
 
-fileprivate struct HorizontalHeader : BlueprintHeaderFooterElement, Equatable
+fileprivate struct HorizontalHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
     var color : UIColor
     
-    var element: Element {
+    var elementRepresentation: Element {
         return Box(
             backgroundColor: self.color,
             cornerStyle: .rounded(radius: 15.0),
@@ -128,13 +128,13 @@ fileprivate struct HorizontalHeader : BlueprintHeaderFooterElement, Equatable
     }
 }
 
-fileprivate struct CardElement : BlueprintItemElement, Equatable
+fileprivate struct CardElement : BlueprintItemContent, Equatable
 {
     var title : String
     var detail : String
     var color : UIColor
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         return Box(
             backgroundColor: self.color,

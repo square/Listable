@@ -133,7 +133,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     }
 }
 
-fileprivate struct SearchBarElement : ItemElement
+fileprivate struct SearchBarElement : ItemContent
 {
     var text : String
     
@@ -145,7 +145,7 @@ fileprivate struct SearchBarElement : ItemElement
         return .init("search")
     }
     
-    func apply(to views : ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
     {
         views.content.onStateChanged = self.onChange
         views.content.text = self.text
@@ -162,16 +162,16 @@ fileprivate struct SearchBarElement : ItemElement
         return SearchBar(frame: frame)
     }
     
-    func apply(to views : ItemElementViews<Self>, with info: ApplyItemElementInfo) {}
+    func apply(to views : ItemContentViews<Self>, with info: ApplyItemContentInfo) {}
 }
 
-fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable
+fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
     
     // MARK: BlueprintItemElement
     
-    var element: Element {
+    var elementRepresentation: Element {
         return Box(
             backgroundColor: UIColor(white: 0.85, alpha: 1.0),
             cornerStyle: .rounded(radius: 10.0),
@@ -192,14 +192,14 @@ fileprivate struct SectionHeader : BlueprintHeaderFooterElement, Equatable
 }
 
 
-fileprivate struct WordRow : BlueprintItemElement, Equatable
+fileprivate struct WordRow : BlueprintItemContent, Equatable
 {
     var title : String
     var detail : String
     
     // MARK: BlueprintItemElement
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         return Box(
             backgroundColor: .init(white: 0.96, alpha: 1.0),

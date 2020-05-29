@@ -14,7 +14,7 @@ class SupplementaryContainerViewTests: XCTestCase
 {
     func newHeaderFooter() -> AnyPresentationHeaderFooterState
     {
-        let headerFooter = HeaderFooter(TestHeaderFooterElement())
+        let headerFooter = HeaderFooter(TestHeaderFooterContent())
         return PresentationState.HeaderFooterState(headerFooter)
     }
     
@@ -58,7 +58,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         let content = view.content!
         
-        XCTAssertTrue(type(of: content) === TestHeaderFooterElement.View.self)
+        XCTAssertTrue(type(of: content) === TestHeaderFooterContent.View.self)
         XCTAssertEqual(view.frame.size, CGSize(width: 100, height: 100))
         
         // Unset the header footer, make sure the view is pushed back into the cache.
@@ -67,13 +67,13 @@ class SupplementaryContainerViewTests: XCTestCase
         
         XCTAssertNil(view.content)
         
-        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterElement.self)), 1)
+        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterContent.self)), 1)
         
         // And now, let's set the header one more time to make sure it pulls from the cache.
         
         view.headerFooter = self.newHeaderFooter()
         
-        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterElement.self)), 0)
+        XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterContent.self)), 0)
     }
     
     func test_prepareForReuse()
@@ -90,9 +90,9 @@ class SupplementaryContainerViewTests: XCTestCase
     }
 }
 
-fileprivate struct TestHeaderFooterElement : HeaderFooterElement, Equatable
+fileprivate struct TestHeaderFooterContent : HeaderFooterContent, Equatable
 {
-    // MARK: HeaderFooterElement
+    // MARK: HeaderFooterContent
     
     func apply(to view: View, reason: ApplyReason) {}
         

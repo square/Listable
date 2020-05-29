@@ -14,11 +14,11 @@ class ItemElementCoordinatorActionsTests : XCTestCase
 {
     func test_update()
     {
-        var item = Item(TestElement(value: "first"))
+        var item = Item(TestContent(value: "first"))
         
         var callbackCount = 0
 
-        let actions = ItemElementCoordinatorActions(current: { item }, update: { new, animated in
+        let actions = ItemContentCoordinatorActions(current: { item }, update: { new, animated in
             item = new
             callbackCount += 1
         })
@@ -26,20 +26,20 @@ class ItemElementCoordinatorActionsTests : XCTestCase
         self.testcase("Setter based update") {
         
             var updated = item
-            updated.element.value = "update1"
+            updated.content.value = "update1"
             actions.update(updated)
             
-            XCTAssertEqual(item.element.value, "update1")
+            XCTAssertEqual(item.content.value, "update1")
             XCTAssertEqual(callbackCount, 1)
         }
         
         self.testcase("Closure based update") {
                         
             actions.update {
-                $0.element.value = "update2"
+                $0.content.value = "update2"
             }
             
-            XCTAssertEqual(item.element.value, "update2")
+            XCTAssertEqual(item.content.value, "update2")
             XCTAssertEqual(callbackCount, 2)
         }
     }
@@ -50,30 +50,30 @@ class ItemElementCoordinatorInfoTests : XCTestCase
 {
     func test()
     {
-        let original = Item(TestElement(value: "original"))
+        let original = Item(TestContent(value: "original"))
         var current = original
         
-        let info = ItemElementCoordinatorInfo(original: original, current: { current })
+        let info = ItemContentCoordinatorInfo(original: original, current: { current })
         
-        current.element.value = "current"
+        current.content.value = "current"
         
-        XCTAssertEqual(info.original.element.value, "original")
-        XCTAssertEqual(info.current.element.value, "current")
+        XCTAssertEqual(info.original.content.value, "original")
+        XCTAssertEqual(info.current.content.value, "current")
     }
 }
 
 
-fileprivate struct TestElement : ItemElement, Equatable
+fileprivate struct TestContent : ItemContent, Equatable
 {
     var value : String
     
     typealias ContentView = UIView
     
-    var identifier: Identifier<TestElement> {
+    var identifier: Identifier<TestContent> {
         .init(self.value)
     }
     
-    func apply(to views: ItemElementViews<TestElement>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
     
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)

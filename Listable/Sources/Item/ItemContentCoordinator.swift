@@ -1,5 +1,5 @@
 //
-//  ItemElementCoordinator.swift
+//  ItemContentCoordinator.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 5/19/20.
@@ -7,29 +7,29 @@
 
 
 ///
-/// A type which lets you interactively manage the contents of an `Item` or `ItemElement`
+/// A type which lets you interactively manage the contents of an `Item` or `ItemContent`
 /// within a list.
 ///
-/// Eg, you might create a `ItemElementCoordinator` which listens to a
-/// notification, and then updates a field on the `Item` or `ItemElement` in response
+/// Eg, you might create a `ItemContentCoordinator` which listens to a
+/// notification, and then updates a field on the `Item` or `ItemContent` in response
 /// to this notification.
 ///
-/// `ItemElementCoordinator` is created when an item is being prepared to be presented
+/// `ItemContentCoordinator` is created when an item is being prepared to be presented
 /// on screen for the first time, and lives for as long as the item is present in the list. If you need
 /// to pull in any changes to the item due to time passing, you can update the item within the
 /// `wasCreated`callback.
 ///
-/// There are default implementations of all `ItemElementCoordinator` methods. You only
+/// There are default implementations of all `ItemContentCoordinator` methods. You only
 /// need to provide implementations for the methods relevant to you.
 ///
 /// Example
 /// -------
-/// A simple `ItemElementCoordinator` might look like this:
+/// A simple `ItemContentCoordinator` might look like this:
 ///
 /// ```
-/// final class MyCoordinator : ItemElementCoordinator
+/// final class MyCoordinator : ItemContentCoordinator
 /// {
-///     typealias ItemElementType = MyElementType
+///     typealias ItemContentType = MyContentType
 ///
 ///     let actions: CoordinatorActions
 ///     let info: CoordinatorInfo
@@ -46,24 +46,24 @@
 ///     @objc func downloadUpdated(notification : Notification)
 ///     {
 ///         self.actions.update {
-///             $0.element.downloadProgress = notification.userInfo["download_progress"] as! CGFloat
+///             $0.content.downloadProgress = notification.userInfo["download_progress"] as! CGFloat
 ///         }
 ///     }
 /// }
 /// ```
 ///
-public protocol ItemElementCoordinator : AnyObject
+public protocol ItemContentCoordinator : AnyObject
 {
-    /// The type of `ItemElement` associated with this coordinator.
-    associatedtype ItemElementType : ItemElement
+    /// The type of `ItemContent` associated with this coordinator.
+    associatedtype ItemContentType : ItemContent
     
     // MARK: Actions & Info
     
     /// The available actions you can perform on the coordinated `Item`. Eg, updating it to a new value.
-    var actions : ItemElementType.CoordinatorActions { get }
+    var actions : ItemContentType.CoordinatorActions { get }
     
     /// Info about the coordinated `Item`, such as its original and current value.
-    var info : ItemElementType.CoordinatorInfo { get }
+    var info : ItemContentType.CoordinatorInfo { get }
     
     // MARK: Instance Lifecycle
     
@@ -73,7 +73,7 @@ public protocol ItemElementCoordinator : AnyObject
     /// Invoked on the coordinator when an external update is pushed onto the owned `Item`.
     /// This happens when the developer updates the content of the list, and the item is
     /// reported as changed via its `isEquivalent(to:)` method.
-    func wasUpdated(old : Item<ItemElementType>, new : Item<ItemElementType>)
+    func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>)
     
     /// Invoked on the coordinator when its owned item is removed from the list due to
     /// the item, or its entire section, being removed from the list.
@@ -83,7 +83,7 @@ public protocol ItemElementCoordinator : AnyObject
     // MARK: Visibility & View Lifecycle
     
     /// The view type associated with the item.
-    typealias View = ItemElementType.ContentView
+    typealias View = ItemContentType.ContentView
     
     /// The view, if any, currently used to display the item.
     var view : View? { get set }
@@ -104,12 +104,12 @@ public protocol ItemElementCoordinator : AnyObject
 }
 
 
-public extension ItemElementCoordinator
+public extension ItemContentCoordinator
 {
     // MARK: Instance Lifecycle
     
     func wasCreated() {}
-    func wasUpdated(old : Item<ItemElementType>, new : Item<ItemElementType>) {}
+    func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>) {}
     func wasRemoved() {}
     
     // MARK: Visibility Lifecycle
@@ -127,25 +127,25 @@ public extension ItemElementCoordinator
 
 
 /// The available actions you can perform as a coordinator, which are reported back to the list to manage the item.
-public final class ItemElementCoordinatorActions<Element:ItemElement>
+public final class ItemContentCoordinatorActions<Content:ItemContent>
 {
-    private let currentProvider : () -> Item<Element>
-    var updateCallback : (Item<Element>, Bool) -> ()
+    private let currentProvider : () -> Item<Content>
+    var updateCallback : (Item<Content>, Bool) -> ()
     
-    init(current : @escaping () -> Item<Element>, update : @escaping (Item<Element>, Bool) -> ())
+    init(current : @escaping () -> Item<Content>, update : @escaping (Item<Content>, Bool) -> ())
     {
         self.currentProvider = current
         self.updateCallback = update
     }
     
     /// Updates the item to the provided item.
-    public func update(animated: Bool = false, _ new : Item<Element>)
+    public func update(animated: Bool = false, _ new : Item<Content>)
     {
         self.updateCallback(new, animated)
     }
     
     /// Allows you to update the item passed into the update closure.
-    public func update(animated: Bool = false, _ update : (inout Item<Element>) -> ())
+    public func update(animated: Bool = false, _ update : (inout Item<Content>) -> ())
     {
         var new = self.currentProvider()
         
@@ -157,22 +157,22 @@ public final class ItemElementCoordinatorActions<Element:ItemElement>
 
 
 /// Information about the current and original state of the item.
-public final class ItemElementCoordinatorInfo<Element:ItemElement>
+public final class ItemContentCoordinatorInfo<Content:ItemContent>
 {
     /// The original state of the item, as passed to the list.
     /// This is property is updated when the list is updated, and the
     /// `isEquivalent(to:)` reports a change to the item.
-    public internal(set) var original : Item<Element>
+    public internal(set) var original : Item<Content>
     
     /// The current value of the item, including changes made
     /// by the coordinator itself.
-    public var current : Item<Element> {
+    public var current : Item<Content> {
         self.currentProvider()
     }
     
-    private let currentProvider : () -> Item<Element>
+    private let currentProvider : () -> Item<Content>
     
-    init(original : Item<Element>, current : @escaping () -> Item<Element>)
+    init(original : Item<Content>, current : @escaping () -> Item<Content>)
     {
         self.original = original
         
@@ -181,18 +181,18 @@ public final class ItemElementCoordinatorInfo<Element:ItemElement>
 }
 
 
-/// The default `ItemElementCoordinator`, which performs no actions.
-public final class DefaultItemElementCoordinator<Element:ItemElement> : ItemElementCoordinator
+/// The default `ItemContentCoordinator`, which performs no actions.
+public final class DefaultItemContentCoordinator<Content:ItemContent> : ItemContentCoordinator
 {
-    public let actions : Element.CoordinatorActions
-    public let info : Element.CoordinatorInfo
+    public let actions : Content.CoordinatorActions
+    public let info : Content.CoordinatorInfo
     
-    public var view : Element.ContentView?
+    public var view : Content.ContentView?
     
     internal init(
-        actions: Element.CoordinatorActions,
-        info: Element.CoordinatorInfo,
-        view: DefaultItemElementCoordinator<Element>.View?
+        actions: Content.CoordinatorActions,
+        info: Content.CoordinatorInfo,
+        view: DefaultItemContentCoordinator<Content>.View?
     ) {
         self.actions = actions
         self.info = info

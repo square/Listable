@@ -43,7 +43,7 @@ protocol AnyPresentationItemState : AnyObject
 }
 
 
-protocol ItemElementCoordinatorDelegate : AnyObject
+protocol ItemContentCoordinatorDelegate : AnyObject
 {
     func coordinatorUpdated(for item : AnyItem, animated : Bool)
 }
@@ -52,7 +52,7 @@ protocol ItemElementCoordinatorDelegate : AnyObject
 public struct ItemStateDependencies
 {
     internal var reorderingDelegate : ReorderingActionsDelegate
-    internal var coordinatorDelegate : ItemElementCoordinatorDelegate
+    internal var coordinatorDelegate : ItemContentCoordinatorDelegate
 }
 
 
@@ -66,19 +66,19 @@ extension PresentationState
         case noChange
     }
     
-    final class ItemState<Element:ItemElement> : AnyPresentationItemState
+    final class ItemState<Content:ItemContent> : AnyPresentationItemState
     {
-        var model : Item<Element> {
+        var model : Item<Content> {
             self.storage.model
         }
         
         private(set) var coordination : Coordination
         
         struct Coordination {
-            var coordinator : Element.Coordinator
+            var coordinator : Content.Coordinator
             
-            let actions : ItemElementCoordinatorActions<Element>
-            let info : ItemElementCoordinatorInfo<Element>
+            let actions : ItemContentCoordinatorActions<Content>
+            let info : ItemContentCoordinatorInfo<Content>
         }
         
         let reorderingActions: ReorderingActions
@@ -87,17 +87,17 @@ extension PresentationState
         
         let storage : Storage
                 
-        init(with model : Item<Element>, dependencies : ItemStateDependencies)
+        init(with model : Item<Content>, dependencies : ItemStateDependencies)
         {
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
         
-            self.cellRegistrationInfo = (ItemElementCell<Element>.self, model.reuseIdentifier.stringValue)
+            self.cellRegistrationInfo = (ItemCell<Content>.self, model.reuseIdentifier.stringValue)
                         
             let storage = Storage(model)
             self.storage = storage
                         
-            let actions = ItemElementCoordinatorActions(
+            let actions = ItemContentCoordinatorActions(
                 current: { storage.model },
                 update: { new, _ in
                     
@@ -108,12 +108,12 @@ extension PresentationState
                 }
             )
 
-            let info = ItemElementCoordinatorInfo(
+            let info = ItemContentCoordinatorInfo(
                 original: storage.model,
                 current: { storage.model }
             )
             
-            let coordinator = model.element.makeCoordinator(actions: actions, info: info)
+            let coordinator = model.content.makeCoordinator(actions: actions, info: info)
             
             self.coordination = Coordination(
                 coordinator: coordinator,
@@ -161,9 +161,9 @@ extension PresentationState
             self.isDisplayed = isDisplayed
             
             if self.isDisplayed {
-                self.model.onDisplay?(self.model.element)
+                self.model.onDisplay?(self.model.content)
             } else {
-                self.model.onEndDisplay?(self.model.element)
+                self.model.onEndDisplay?(self.model.content)
             }
         }
                 
@@ -177,7 +177,7 @@ extension PresentationState
         {
             let anyCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellRegistrationInfo.reuseIdentifier, for: indexPath)
             
-            let cell = anyCell as! ItemElementCell<Element>
+            let cell = anyCell as! ItemCell<Content>
             
             // Theme cell & apply content.
             
@@ -194,9 +194,9 @@ extension PresentationState
         
         func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState, reason : ApplyReason)
         {
-            let cell = anyCell as! ItemElementCell<Element>
+            let cell = anyCell as! ItemCell<Content>
             
-            let applyInfo = ApplyItemElementInfo(
+            let applyInfo = ApplyItemContentInfo(
                 state: itemState,
                 position: self.itemPosition,
                 reordering: self.reorderingActions
@@ -204,8 +204,8 @@ extension PresentationState
             
             // Apply Model State
             
-            self.model.element.apply(
-                to: ItemElementViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+            self.model.content.apply(
+                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
                 for: reason,
                 with: applyInfo
             )
@@ -234,7 +234,7 @@ extension PresentationState
         func setNew(item anyItem: AnyItem, reason: ItemUpdateReason)
         {
             let old = self.model
-            let new = anyItem as! Item<Element>
+            let new = anyItem as! Item<Content>
             
             self.storage.model = new
             
@@ -254,7 +254,7 @@ extension PresentationState
         
         func willDisplay(cell anyCell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
         {
-            let cell = (anyCell as! ItemElementCell<Element>)
+            let cell = (anyCell as! ItemCell<Content>)
             
             self.storage.state.visibleCell = cell
         }
@@ -278,9 +278,9 @@ extension PresentationState
             self.storage.state.isSelected = isSelected
             
             if isSelected {
-                self.model.onSelect?(self.model.element)
+                self.model.onSelect?(self.model.content)
             } else {
-                self.model.onDeselect?(self.model.element)
+                self.model.onDeselect?(self.model.content)
             }
             
             self.applyToVisibleCell()
@@ -335,12 +335,12 @@ extension PresentationState
             if let size = self.cachedSizes[key] {
                 return size
             } else {
-                SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemElement", for: self.model)
+                SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return ItemElementCell<Element>()
+                        return ItemCell<Content>()
                 }, { cell in
                     let itemState = Listable.ItemState(isSelected: false, isHighlighted: false)
                     
@@ -351,7 +351,7 @@ extension PresentationState
                 
                 self.cachedSizes[key] = size
                 
-                SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemElement", for: self.model)
+                SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
                 return size
             }
@@ -371,7 +371,7 @@ extension PresentationState.ItemState
         
         var didSetState : (State, State) -> () = { _, _ in }
         
-        var model : Item<Element> {
+        var model : Item<Content> {
             willSet {
                 guard self.model.identifier == newValue.identifier else {
                     fatalError("Cannot change the identifier of an item while updating it. Changed from '\(self.model.identifier)' to '\(newValue.identifier)'.")
@@ -389,7 +389,7 @@ extension PresentationState.ItemState
             }
         }
         
-        init(_ model : Item<Element>)
+        init(_ model : Item<Content>)
         {
             self.model = model
             
@@ -400,6 +400,6 @@ extension PresentationState.ItemState
     internal struct State : Equatable
     {
         var isSelected : Bool
-        var visibleCell : ItemElementCell<Element>?
+        var visibleCell : ItemCell<Content>?
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-public final class DefaultSwipeActionsView: UIView, ItemElementSwipeActionsView {
+public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView {
 
     private var actionButtons: [DefaultSwipeActionButton] = []
     private var calculatedNaturalWidth: CGFloat = 0

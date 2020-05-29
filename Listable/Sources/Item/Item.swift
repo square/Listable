@@ -38,11 +38,11 @@ public protocol AnyItem_Internal
 }
 
 
-public struct Item<Element:ItemElement> : AnyItem
+public struct Item<Content:ItemContent> : AnyItem
 {
     public var identifier : AnyIdentifier
     
-    public var element : Element
+    public var content : Content
     
     public var sizing : Sizing
     public var layout : ItemLayout
@@ -53,19 +53,19 @@ public struct Item<Element:ItemElement> : AnyItem
 
     public var reordering : Reordering?
         
-    public typealias OnSelect = (Element) -> ()
+    public typealias OnSelect = (Content) -> ()
     public var onSelect : OnSelect?
     
-    public typealias OnDeselect = (Element) -> ()
+    public typealias OnDeselect = (Content) -> ()
     public var onDeselect : OnDeselect?
     
-    public typealias OnDisplay = (Element) -> ()
+    public typealias OnDisplay = (Content) -> ()
     public var onDisplay : OnDisplay?
     
-    public typealias OnEndDisplay = (Element) -> ()
+    public typealias OnEndDisplay = (Content) -> ()
     public var onEndDisplay : OnEndDisplay?
     
-    internal let reuseIdentifier : ReuseIdentifier<Element>
+    internal let reuseIdentifier : ReuseIdentifier<Content>
     
     public var debuggingIdentifier : String? = nil
     
@@ -76,17 +76,17 @@ public struct Item<Element:ItemElement> : AnyItem
     public typealias Build = (inout Item) -> ()
     
     public init(
-        _ element : Element,
+        _ content : Content,
         build : Build
         )
     {
-        self.init(element)
+        self.init(content)
         
         build(&self)
     }
     
     public init(
-        _ element : Element,
+        _ content : Content,
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
@@ -98,11 +98,11 @@ public struct Item<Element:ItemElement> : AnyItem
         onDeselect : OnDeselect? = nil
         )
     {
-        self.element = element
+        self.content = content
                 
         if let sizing = sizing {
             self.sizing = sizing
-        } else if let sizing = element.defaultItemProperties.sizing {
+        } else if let sizing = content.defaultItemProperties.sizing {
             self.sizing = sizing
         } else {
             self.sizing = .thatFitsWith(.init(.atLeast(.default)))
@@ -110,7 +110,7 @@ public struct Item<Element:ItemElement> : AnyItem
         
         if let layout = layout {
             self.layout = layout
-        } else if let layout = element.defaultItemProperties.layout {
+        } else if let layout = content.defaultItemProperties.layout {
             self.layout = layout
         } else {
             self.layout = ItemLayout()
@@ -118,7 +118,7 @@ public struct Item<Element:ItemElement> : AnyItem
         
         if let selectionStyle = selectionStyle {
             self.selectionStyle = selectionStyle
-        } else if let selectionStyle = element.defaultItemProperties.selectionStyle {
+        } else if let selectionStyle = content.defaultItemProperties.selectionStyle {
             self.selectionStyle = selectionStyle
         } else {
             self.selectionStyle = .notSelectable
@@ -126,7 +126,7 @@ public struct Item<Element:ItemElement> : AnyItem
         
         if let swipeActions = swipeActions {
             self.swipeActions = swipeActions
-        } else if let swipeActions = element.defaultItemProperties.swipeActions {
+        } else if let swipeActions = content.defaultItemProperties.swipeActions {
             self.swipeActions = swipeActions
         } else {
             self.swipeActions = nil
@@ -140,29 +140,29 @@ public struct Item<Element:ItemElement> : AnyItem
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
         
-        self.identifier = self.element.identifier.toAny
+        self.identifier = self.content.identifier.toAny
     }
     
     // MARK: AnyItem_Internal
     
     public func anyIsEquivalent(to other : AnyItem) -> Bool
     {
-        guard let other = other as? Item<Element> else {
+        guard let other = other as? Item<Content> else {
             return false
         }
         
-        return self.element.isEquivalent(to: other.element)
+        return self.content.isEquivalent(to: other.content)
     }
     
     public func anyWasMoved(comparedTo other : AnyItem) -> Bool
     {
-        guard let other = other as? Item<Element> else {
+        guard let other = other as? Item<Content> else {
             return true
         }
         
-        return self.element.wasMoved(comparedTo: other.element)
+        return self.content.wasMoved(comparedTo: other.content)
     }
     
     public func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
@@ -179,10 +179,10 @@ public struct Item<Element:ItemElement> : AnyItem
 ///
 /// The order of precedence used when assigning values is:
 /// 1) The value passed to the initializer.
-/// 2) The value from `ItemProperties` on the contained `ItemElement`, if non-nil.
+/// 2) The value from `defaultItemProperties` on the contained `ItemContent`, if non-nil.
 /// 3) A standard, default value.
 ///
-public struct DefaultItemProperties<Element:ItemElement>
+public struct DefaultItemProperties<Content:ItemContent>
 {
     public var sizing : Sizing?
     public var layout : ItemLayout?

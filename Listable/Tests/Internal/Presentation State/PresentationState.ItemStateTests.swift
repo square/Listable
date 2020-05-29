@@ -13,14 +13,14 @@ class PresentationState_ItemStateTests : XCTestCase
 {
     func test_init()
     {
-        let coordinatorDelegate = ItemElementCoordinatorDelegateMock()
+        let coordinatorDelegate = ItemContentCoordinatorDelegateMock()
         
         let dependencies = ItemStateDependencies(
             reorderingDelegate: ReorderingActionsDelegateMock(),
             coordinatorDelegate: coordinatorDelegate
         )
         
-        let initial = Item(TestElement(value: "initial"))
+        let initial = Item(TestContent(value: "initial"))
         
         let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
         
@@ -30,7 +30,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
         
-        XCTAssertEqual(state.model.element.updates, [
+        XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init"
         ])
         
@@ -42,7 +42,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
         
-        XCTAssertEqual(state.model.element.updates, [
+        XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init",
             "first update"
         ])
@@ -53,7 +53,7 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
         
-        XCTAssertEqual(state.model.element.updates, [
+        XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init",
             "first update",
             "second update"
@@ -65,11 +65,11 @@ class PresentationState_ItemStateTests : XCTestCase
         self.testcase("Only update isSelected if the selectionStyle changes") {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: ReorderingActionsDelegateMock(),
-                coordinatorDelegate: ItemElementCoordinatorDelegateMock()
+                coordinatorDelegate: ItemContentCoordinatorDelegateMock()
             )
                 
             let initial = Item(
-                TestElement(value: "initial"),
+                TestContent(value: "initial"),
                 selectionStyle: .selectable(isSelected: false)
             )
             
@@ -92,7 +92,7 @@ class PresentationState_ItemStateTests : XCTestCase
             state.storage.state.isSelected = false
             
             let updated = Item(
-                TestElement(value: "updated"),
+                TestContent(value: "updated"),
                 selectionStyle: .selectable(isSelected: true)
             )
                         
@@ -104,16 +104,16 @@ class PresentationState_ItemStateTests : XCTestCase
         self.testcase("Testing Different ItemUpdateReasons") {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: ReorderingActionsDelegateMock(),
-                coordinatorDelegate: ItemElementCoordinatorDelegateMock()
+                coordinatorDelegate: ItemContentCoordinatorDelegateMock()
             )
                 
             let initial = Item(
-                TestElement(value: "initial"),
+                TestContent(value: "initial"),
                 selectionStyle: .selectable(isSelected: false)
             )
             
             let updated = Item(
-                TestElement(value: "updated"),
+                TestContent(value: "updated"),
                 selectionStyle: .selectable(isSelected: true)
             )
         
@@ -122,16 +122,16 @@ class PresentationState_ItemStateTests : XCTestCase
                 case .move:
                     let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
                     
-                    XCTAssertEqual(state.model.element.value, "initial")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
                     state.setNew(item: updated, reason: .move)
                     
-                    XCTAssertEqual(state.model.element.value, "updated")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "updated")
+                    XCTAssertEqual(state.model.content.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "updated")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
@@ -139,16 +139,16 @@ class PresentationState_ItemStateTests : XCTestCase
                 case .updateFromList:
                     let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
                     
-                    XCTAssertEqual(state.model.element.value, "initial")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
                     state.setNew(item: updated, reason: .updateFromList)
                     
-                    XCTAssertEqual(state.model.element.value, "updated")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "updated")
+                    XCTAssertEqual(state.model.content.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "updated")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
@@ -156,16 +156,16 @@ class PresentationState_ItemStateTests : XCTestCase
                 case .updateFromItemCoordinator:
                     let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
                     
-                    XCTAssertEqual(state.model.element.value, "initial")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
                     state.setNew(item: updated, reason: .updateFromItemCoordinator)
                     
-                    XCTAssertEqual(state.model.element.value, "updated")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
@@ -173,16 +173,16 @@ class PresentationState_ItemStateTests : XCTestCase
                 case .noChange:
                     let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
                     
-                    XCTAssertEqual(state.model.element.value, "initial")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "initial")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
                     state.setNew(item: updated, reason: .noChange)
                     
-                    XCTAssertEqual(state.model.element.value, "updated")
-                    XCTAssertEqual(state.coordination.info.original.element.value, "initial")
+                    XCTAssertEqual(state.model.content.value, "updated")
+                    XCTAssertEqual(state.coordination.info.original.content.value, "initial")
                     XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
@@ -195,10 +195,10 @@ class PresentationState_ItemStateTests : XCTestCase
     {
         let dependencies = ItemStateDependencies(
             reorderingDelegate: ReorderingActionsDelegateMock(),
-            coordinatorDelegate: ItemElementCoordinatorDelegateMock()
+            coordinatorDelegate: ItemContentCoordinatorDelegateMock()
         )
         
-        let item = Item(TestElement(value: "initial"))
+        let item = Item(TestContent(value: "initial"))
         
         let state = PresentationState.ItemState(with: item, dependencies: dependencies)
         
@@ -247,7 +247,7 @@ class PresentationState_ItemStateTests : XCTestCase
                 visibleCell: nil
             ), new: .init(
                 isSelected: false,
-                visibleCell: ItemElementCell()
+                visibleCell: ItemCell()
             )
         )
         
@@ -259,7 +259,7 @@ class PresentationState_ItemStateTests : XCTestCase
         state.updateCoordinatorWithStateChange(
             old: .init(
                 isSelected: false,
-                visibleCell: ItemElementCell()
+                visibleCell: ItemCell()
             ), new: .init(
                 isSelected: false,
                 visibleCell: nil
@@ -278,7 +278,7 @@ class PresentationState_ItemState_StorageTests : XCTestCase
 {
     func test_init()
     {
-        let item = Item(TestElement(value: "initial"), selectionStyle: .selectable(isSelected: true))
+        let item = Item(TestContent(value: "initial"), selectionStyle: .selectable(isSelected: true))
         
         let storage = PresentationState.ItemState.Storage(item)
         
@@ -288,16 +288,16 @@ class PresentationState_ItemState_StorageTests : XCTestCase
 }
 
 
-fileprivate struct TestElement : ItemElement, Equatable
+fileprivate struct TestContent : ItemContent, Equatable
 {
     typealias ContentView = UIView
     
     var value : String
     var updates : [String] = []
     
-    var identifier: Identifier<TestElement> = .init("")
+    var identifier: Identifier<TestContent> = .init("")
     
-    func apply(to views: ItemElementViews<TestElement>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
     
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
@@ -308,9 +308,9 @@ fileprivate struct TestElement : ItemElement, Equatable
         Coordinator(actions: actions, info: info)
     }
     
-    final class Coordinator : ItemElementCoordinator
+    final class Coordinator : ItemContentCoordinator
     {
-        init(actions : TestElement.CoordinatorActions, info : TestElement.CoordinatorInfo)
+        init(actions : TestContent.CoordinatorActions, info : TestContent.CoordinatorInfo)
         {
             self.actions = actions
             self.info = info
@@ -321,13 +321,13 @@ fileprivate struct TestElement : ItemElement, Equatable
         func triggerUpdate(with newContent : String)
         {
             self.actions.update {
-                $0.element.updates.append(newContent)
+                $0.content.updates.append(newContent)
             }
         }
         
         // MARK: ItemElementCoordinator
         
-        typealias ItemElementType = TestElement
+        typealias ItemContentType = TestContent
         
         var actions: CoordinatorActions
         var info: CoordinatorInfo
@@ -341,9 +341,9 @@ fileprivate struct TestElement : ItemElement, Equatable
             self.wasCreated_calls.append(())
         }
         
-        var wasUpdated_calls = [(old : Item<ItemElementType>, new : Item<ItemElementType>)]()
+        var wasUpdated_calls = [(old : Item<ItemContentType>, new : Item<ItemContentType>)]()
         
-        func wasUpdated(old : Item<ItemElementType>, new : Item<ItemElementType>)
+        func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>)
         {
             self.wasUpdated_calls.append((old, new))
         }
@@ -357,7 +357,7 @@ fileprivate struct TestElement : ItemElement, Equatable
         
         // MARK: ItemElementCoordinator - Visibility & View Lifecycle
         
-        typealias View = ItemElementType.ContentView
+        typealias View = ItemContentType.ContentView
         
         var view_didSet_calls = [View?]()
         
@@ -401,7 +401,7 @@ fileprivate struct TestElement : ItemElement, Equatable
 }
 
 
-fileprivate class ItemElementCoordinatorDelegateMock : ItemElementCoordinatorDelegate
+fileprivate class ItemContentCoordinatorDelegateMock : ItemContentCoordinatorDelegate
 {
     var coordinatorUpdated_calls = [AnyItem]()
     
