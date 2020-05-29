@@ -39,11 +39,11 @@ extension UIColor
 }
 
 
-struct DemoHeader : BlueprintHeaderFooterElement, Equatable
+struct DemoHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
     
-    var element: Element {
+    var elementRepresentation: Element {
         Label(text: self.title) {
             $0.font = .systemFont(ofSize: 20.0, weight: .bold)
         }
@@ -56,11 +56,11 @@ struct DemoHeader : BlueprintHeaderFooterElement, Equatable
     }
 }
 
-struct DemoHeader2 : BlueprintHeaderFooterElement, Equatable
+struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
     
-    var element: Element {
+    var elementRepresentation: Element {
         Label(text: self.title) {
             $0.font = .systemFont(ofSize: 20.0, weight: .bold)
         }
@@ -74,7 +74,7 @@ struct DemoHeader2 : BlueprintHeaderFooterElement, Equatable
 }
 
 
-struct DemoItem : BlueprintItemElement, Equatable
+struct DemoItem : BlueprintItemContent, Equatable
 {
     var text : String
     
@@ -84,7 +84,7 @@ struct DemoItem : BlueprintItemElement, Equatable
 
     typealias SwipeActionsView = DefaultSwipeActionsView
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         Label(text: self.text) {
             $0.font = .systemFont(ofSize: 16.0, weight: .medium)
@@ -93,7 +93,7 @@ struct DemoItem : BlueprintItemElement, Equatable
         .inset(horizontal: 15.0, vertical: 10.0)
     }
     
-    func backgroundElement(with info: ApplyItemElementInfo) -> Element?
+    func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
             backgroundColor: .white,
@@ -102,7 +102,7 @@ struct DemoItem : BlueprintItemElement, Equatable
         )
     }
     
-    func selectedBackgroundElement(with info: ApplyItemElementInfo) -> Element?
+    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
             backgroundColor: info.state.isSelected ? .white(0.9) : .white(0.95),
@@ -113,11 +113,11 @@ struct DemoItem : BlueprintItemElement, Equatable
 }
 
 
-struct DemoFooter : BlueprintHeaderFooterElement, Equatable
+struct DemoFooter : BlueprintHeaderFooterContent, Equatable
 {
     var text : String
     
-    var element: Element {
+    var elementRepresentation: Element {
         return Centered(Label(text: self.text))
     }
 }

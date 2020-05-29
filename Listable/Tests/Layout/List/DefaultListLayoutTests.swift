@@ -81,20 +81,20 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .vertical
             
-            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
                 
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
             }
         }
         
@@ -144,20 +144,20 @@ class DefaultListLayoutTests : XCTestCase
             
             list.appearance.direction = .horizontal
             
-            list.content.header = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(TestingHeaderFooterElement(color: .blue), sizing: .fixed(height: 70.0))
+            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
+            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
                 
-                section.header = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(TestingHeaderFooterElement(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
                 
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(TestingItemElement(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
             }
         }
         
@@ -197,7 +197,7 @@ class DefaultListLayoutTests : XCTestCase
 }
 
 
-fileprivate struct TestingHeaderFooterElement : HeaderFooterElement {
+fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     
     var color : UIColor
     
@@ -205,7 +205,7 @@ fileprivate struct TestingHeaderFooterElement : HeaderFooterElement {
         view.backgroundColor = self.color
     }
     
-    func isEquivalent(to other: TestingHeaderFooterElement) -> Bool {
+    func isEquivalent(to other: TestingHeaderFooterContent) -> Bool {
         false
     }
     
@@ -217,20 +217,20 @@ fileprivate struct TestingHeaderFooterElement : HeaderFooterElement {
 }
 
 
-fileprivate struct TestingItemElement : ItemElement {
+fileprivate struct TestingItemContent : ItemContent {
     
     var color : UIColor
     
-    var identifier: Identifier<TestingItemElement> {
+    var identifier: Identifier<TestingItemContent> {
         .init("testing")
     }
     
-    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
     {
         views.content.backgroundColor = self.color
     }
     
-    func isEquivalent(to other: TestingItemElement) -> Bool {
+    func isEquivalent(to other: TestingItemContent) -> Bool {
         false
     }
     

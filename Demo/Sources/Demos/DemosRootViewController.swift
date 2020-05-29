@@ -126,7 +126,7 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    DemoItem(text: "Item Element Coordinator"),
+                    DemoItem(text: "Item Content Coordinator"),
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CoordinatorViewController())

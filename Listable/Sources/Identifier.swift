@@ -14,7 +14,7 @@ public final class AnyIdentifier : Hashable
     
     private let hash : Int
     
-    public init<Element>(_ value : Identifier<Element>)
+    public init<Represented>(_ value : Identifier<Represented>)
     {
         self.value = AnyHashable(value)
         
@@ -39,15 +39,15 @@ public final class AnyIdentifier : Hashable
 }
 
 
-public final class Identifier<Element> : Hashable
+public final class Identifier<Represented> : Hashable
 {
     private let type : ObjectIdentifier
     private let value : AnyHashable?
     
     private let hash : Int
     
-    /// Identifier which identifies by the type of `Element` only.
-    /// If you have multiple of `Element` within a list, it is recommended that
+    /// Identifier which identifies by the type of `Represented` only.
+    /// If you have multiple of `Represented` within a list, it is recommended that
     /// you use `init(_ value:)` to provide a unique inner value.
     public convenience init()
     {
@@ -57,7 +57,7 @@ public final class Identifier<Element> : Hashable
     public init<Value:Hashable>(_ value : Value)
     {
         self.value = AnyHashable(value)
-        self.type = ObjectIdentifier(Element.self)
+        self.type = ObjectIdentifier(Represented.self)
         
         var hasher = Hasher()
         hasher.combine(self.type)
@@ -71,7 +71,7 @@ public final class Identifier<Element> : Hashable
     
     // MARK: Equatable
     
-    public static func == (lhs: Identifier<Element>, rhs: Identifier<Element>) -> Bool
+    public static func == (lhs: Identifier<Represented>, rhs: Identifier<Represented>) -> Bool
     {
         return lhs.hash == rhs.hash && lhs.type == rhs.type && lhs.value == rhs.value
     }

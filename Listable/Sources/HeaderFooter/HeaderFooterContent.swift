@@ -1,12 +1,12 @@
 //
-//  HeaderFooterElement.swift
+//  HeaderFooterContent.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
 
-public protocol HeaderFooterElement
+public protocol HeaderFooterContent
 {    
     //
     // MARK: Applying To Displayed View
@@ -31,10 +31,10 @@ public protocol HeaderFooterElement
 
 
 ///
-/// If your `HeaderFooterElement` is `Equatable`, you do not need to provide an `isEquivalent` method.
+/// If your `HeaderFooterContent` is `Equatable`, you do not need to provide an `isEquivalent` method.
 /// This default implementation will be provided for you.
 ///
-public extension HeaderFooterElement where Self:Equatable
+public extension HeaderFooterContent where Self:Equatable
 {    
     func isEquivalent(to other : Self) -> Bool
     {

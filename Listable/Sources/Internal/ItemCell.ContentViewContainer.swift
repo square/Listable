@@ -1,5 +1,5 @@
 //
-//  ItemCellView.swift
+//  ItemCell.ContentContainerView.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 3/23/20.
@@ -8,11 +8,11 @@
 import UIKit
 
 
-extension ItemElementCell {
+extension ItemCell {
 
     final class ContentContainerView : UIView {
 
-        let contentView : Element.ContentView
+        let contentView : Content.ContentView
 
         private var swipeConfiguration: SwipeConfiguration?
         private var swipeState: SwipeActionState = .closed {
@@ -26,7 +26,7 @@ extension ItemElementCell {
         override init(frame : CGRect) {
             let bounds = CGRect(origin: .zero, size: frame.size)
 
-            self.contentView = Element.createReusableContentView(frame: bounds)
+            self.contentView = Content.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
 
@@ -108,7 +108,7 @@ extension ItemElementCell {
         public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, reason: ApplyReason) {
             if swipeConfiguration == nil {
 
-                let swipeView = Element.SwipeActionsView(didPerformAction: self.didPerformAction)
+                let swipeView = Content.SwipeActionsView(didPerformAction: self.didPerformAction)
 
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true
@@ -234,7 +234,7 @@ extension ItemElementCell {
 
     struct SwipeConfiguration {
         let panGestureRecognizer: UIPanGestureRecognizer
-        let swipeView: Element.SwipeActionsView
+        let swipeView: Content.SwipeActionsView
         var numberOfActions: Int
     }
 }

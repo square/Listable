@@ -64,11 +64,11 @@ extension PresentationState
         }
     }
     
-    final class HeaderFooterState<Element:HeaderFooterElement> : AnyPresentationHeaderFooterState
+    final class HeaderFooterState<Content:HeaderFooterContent> : AnyPresentationHeaderFooterState
     {
-        var model : HeaderFooter<Element>
+        var model : HeaderFooter<Content>
                 
-        init(_ model : HeaderFooter<Element>)
+        init(_ model : HeaderFooter<Content>)
         {
             self.model = model
         }
@@ -82,7 +82,7 @@ extension PresentationState
         func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
-                return Element.createReusableHeaderFooterView(frame: frame)
+                return Content.createReusableHeaderFooterView(frame: frame)
             }
             
             self.applyTo(view: view, reason: .willDisplay)
@@ -97,21 +97,21 @@ extension PresentationState
         
         func createReusableHeaderFooterView(frame : CGRect) -> UIView
         {
-            return Element.createReusableHeaderFooterView(frame: frame)
+            return Content.createReusableHeaderFooterView(frame: frame)
         }
         
         func applyTo(view : UIView, reason : ApplyReason)
         {
-            let view = view as! Element.ContentView
+            let view = view as! Content.ContentView
             
-            self.model.element.apply(to: view, reason: reason)
+            self.model.content.apply(to: view, reason: reason)
         }
         
         func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
         {
             let oldModel = self.model
             
-            self.model = anyHeaderFooter as! HeaderFooter<Element>
+            self.model = anyHeaderFooter as! HeaderFooter<Content>
             
             let isEquivalent = self.model.anyIsEquivalent(to: oldModel)
             
@@ -148,9 +148,9 @@ extension PresentationState
                 let size : CGSize = measurementCache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return Element.createReusableHeaderFooterView(frame: .zero)
+                        return Content.createReusableHeaderFooterView(frame: .zero)
                 }, { view in
-                    self.model.element.apply(to: view, reason: .willDisplay)
+                    self.model.content.apply(to: view, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
                 })

@@ -55,15 +55,15 @@ class ListViewTests: XCTestCase
 }
 
 
-fileprivate struct TestElement : ItemElement, Equatable
+fileprivate struct TestContent : ItemContent, Equatable
 {
     var title : String
     
-    var identifier: Identifier<TestElement> {
+    var identifier: Identifier<TestContent> {
         return .init(self.title)
     }
     
-    func apply(to views: ItemElementViews<Self>, for reason: ApplyReason, with info: ApplyItemElementInfo) {}
+    func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
     
     typealias ContentView = UIView
     
@@ -74,7 +74,7 @@ fileprivate struct TestElement : ItemElement, Equatable
 }
 
 
-fileprivate struct TestSupplementary : HeaderFooterElement, Equatable
+fileprivate struct TestSupplementary : HeaderFooterContent, Equatable
 {
     func apply(to view: UIView, reason: ApplyReason) {}
     

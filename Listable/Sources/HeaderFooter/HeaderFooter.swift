@@ -22,16 +22,16 @@ public protocol AnyHeaderFooter_Internal
 }
 
 
-public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
+public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 {
-    public var element : Element
+    public var content : Content
     
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
     
     public var debuggingIdentifier : String? = nil
     
-    internal let reuseIdentifier : ReuseIdentifier<Element>
+    internal let reuseIdentifier : ReuseIdentifier<Content>
     
     //
     // MARK: Initialization
@@ -40,45 +40,45 @@ public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
     public typealias Build = (inout HeaderFooter) -> ()
     
     public init(
-        _ element : Element,
+        _ content : Content,
         build : Build
         )
     {
-        self.init(element)
+        self.init(content)
         
         build(&self)
     }
     
     public init(
-        _ element : Element,
+        _ content : Content,
         sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : HeaderFooterLayout = HeaderFooterLayout()
     )
     {
-        self.element = element
+        self.content = content
         
         self.sizing = sizing
         self.layout = layout
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Element.self)
+        self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
     }
     
     // MARK: AnyHeaderFooter_Internal
     
     public func apply(to anyView : UIView, reason: ApplyReason)
     {
-        let view = anyView as! Element.ContentView
+        let view = anyView as! Content.ContentView
         
-        self.element.apply(to: view, reason: reason)
+        self.content.apply(to: view, reason: reason)
     }
         
     public func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     {
-        guard let other = other as? HeaderFooter<Element> else {
+        guard let other = other as? HeaderFooter<Content> else {
             return false
         }
         
-        return self.element.isEquivalent(to: other.element)
+        return self.content.isEquivalent(to: other.content)
     }
     
     public func newPresentationHeaderFooterState() -> Any

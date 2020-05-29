@@ -87,7 +87,7 @@ final class AutoScrollingViewController : UIViewController
 }
 
 
-struct BottomPinnedItem : BlueprintItemElement, Equatable
+struct BottomPinnedItem : BlueprintItemContent, Equatable
 {
     var text : String
 
@@ -95,7 +95,7 @@ struct BottomPinnedItem : BlueprintItemElement, Equatable
         return .init(self.text)
     }
 
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         var box = Box(
             backgroundColor: .white,

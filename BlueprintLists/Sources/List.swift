@@ -10,7 +10,7 @@ import BlueprintUI
 import Listable
 
 
-public struct List : BlueprintUI.Element
+public struct List : Element
 {
     public var listDescription : ListDescription
     
@@ -34,7 +34,7 @@ public struct List : BlueprintUI.Element
     }
     
     //
-    // MARK: BlueprintUI.Element
+    // MARK: Element
     //
     
     public var content : ElementContent {

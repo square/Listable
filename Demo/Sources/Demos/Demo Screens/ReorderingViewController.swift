@@ -78,7 +78,7 @@ final class ReorderingViewController : UIViewController
 }
 
 
-struct ReorderItem : BlueprintItemElement, Equatable
+struct ReorderItem : BlueprintItemContent, Equatable
 {
     var text : String
     
@@ -86,7 +86,7 @@ struct ReorderItem : BlueprintItemElement, Equatable
         return .init(self.text)
     }
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         var box = Box(
             backgroundColor: .white,

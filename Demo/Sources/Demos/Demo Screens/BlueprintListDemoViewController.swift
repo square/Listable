@@ -65,7 +65,7 @@ final class BlueprintListDemoViewController : UIViewController
     }
 }
 
-struct PodcastRow : BlueprintItemElement, Equatable
+struct PodcastRow : BlueprintItemContent, Equatable
 {
     var podcast : Podcast
     
@@ -73,7 +73,7 @@ struct PodcastRow : BlueprintItemElement, Equatable
         return .init(self.podcast.name)
     }
 
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         
         Row { row in

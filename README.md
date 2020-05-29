@@ -196,7 +196,7 @@ In this example, we see how to declare a `List` within a Blueprint element hiera
 ```swift
 var elementRepresentation : Element {
     List { list in
-        list += Section(identifier: "section") { section in
+        list += Section(identifier: "podcasts") { section in
             
             section += self.podcasts.map {
                 PodcastRow(podcast: $0)
@@ -206,22 +206,22 @@ var elementRepresentation : Element {
 }
 ```
 
-And in this example, we see how to create a simple `BlueprintItemElement` that uses Blueprint to render its content.
+And in this example, we see how to create a simple `BlueprintItemContent` that uses Blueprint to render its content.
 
 ```swift
-struct DemoItem : BlueprintItemElement, Equatable
+struct DemoItem : BlueprintItemContent, Equatable
 {
     var text : String
     
-    // ItemElement
+    // ItemContent
     
     var identifier: Identifier<DemoItem> {
         return .init(self.text)
     }
     
-    // BlueprintItemElement    
+    // BlueprintItemContent
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         var box = Box(
             backgroundColor: .white,
@@ -283,16 +283,16 @@ This allows you to configure the list view however needed within the `setContent
 
 
 ### Item
-You can think of `Item` as the wrapper for the content _you_ provide to the list – similar to how a `UITableViewCell` wraps a content view and provides other configuration options. 
+You can think of `Item` as the wrapper for the content _you_ provide to the list – similar to how a `UITableViewCell` or `UICollectionViewCell` wraps a content view and provides other configuration options. 
 
-An `Item` is what you add to a section to represent a row in a list. It contains your provided content (`ItemElement`), alongside things like sizing, layout customization, selection behavior, reordering behavior, and callbacks which are performed when an item is selected, displayed, etc.
+An `Item` is what you add to a section to represent a row in a list. It contains your provided content (`ItemContent`), alongside things like sizing, layout customization, selection behavior, reordering behavior, and callbacks which are performed when an item is selected, displayed, etc.
 
 ```swift
-public struct Item<Element:ItemElement> : AnyItem
+public struct Item<Content:ItemContent> : AnyItem
 {
     public var identifier : AnyIdentifier
     
-    public var element : Element
+    public var content : Content
     
     public var sizing : Sizing
     public var layout : ItemLayout
@@ -303,16 +303,16 @@ public struct Item<Element:ItemElement> : AnyItem
     
     public var reordering : Reordering?
         
-    public typealias OnSelect = (Element) -> ()
+    public typealias OnSelect = (Content) -> ()
     public var onSelect : OnSelect?
     
-    public typealias OnDeselect = (Element) -> ()
+    public typealias OnDeselect = (Content) -> ()
     public var onDeselect : OnDeselect?
     
-    public typealias OnDisplay = (Element) -> ()
+    public typealias OnDisplay = (Content) -> ()
     public var onDisplay : OnDisplay?
     
-    public typealias OnEndDisplay = (Element) -> ()
+    public typealias OnEndDisplay = (Content) -> ()
     public var onEndDisplay : OnEndDisplay?
 }
 ```
@@ -320,38 +320,38 @@ You can add an item to a section via either the `add` function, or via the `+=` 
 
 ```swift
 section += Item(
-    AnElement(title: "Hello, World!"),
+    YourContent(title: "Hello, World!"),
     
     sizing: .default,
     selection: .notSelectable
 )
 ```
 
-However, if you want to use all default values from the `Item` initializer, you can skip a step and simply add your `ItemElement` to the section directly.
+However, if you want to use all default values from the `Item` initializer, you can skip a step and simply add your `ItemContent` to the section directly.
 
 ```swift
-section += AnElement(title: "Hello, World!")
+section += YourContent(title: "Hello, World!")
 ```
 
 
-### ItemElement
+### ItemContent
 The core value type which represents an item's content.
 
-This view model describes the content of a given row / item, via the `identifier`, plua the `wasMoved` and `isEquivalent` methods.
+This view model describes the content of a given row / item, via the `identifier`, plus the `wasMoved` and `isEquivalent` methods.
 
-To convert an `ItemElement` into views for display, the  `createReusableContentView(:)` method is called to create a reusable view to use when displaying the element (the same happens for background views as well).
+To convert an `ItemContent` into views for display, the  `createReusableContentView(:)` method is called to create a reusable view to use when displaying the content (the same happens for background views as well).
 
-To prepare the views for display, the `apply(to:for:with:)` method is called, which is where you push the content from your `ItemElement` onto the provided views.
+To prepare the views for display, the `apply(to:for:with:)` method is called, which is where you push the content from your `ItemContent` onto the provided views.
 
 ```swift
-public protocol ItemElement
+public protocol ItemContent
 {
     var identifier : Identifier<Self> { get }
 
     func apply(
-        to views : ItemElementViews<Self>,
+        to views : ItemContentViews<Self>,
         for reason: ApplyReason,
-        with info : ApplyItemElementInfo
+        with info : ApplyItemContentInfo
     )
 
     func wasMoved(comparedTo other : Self) -> Bool
@@ -368,10 +368,10 @@ public protocol ItemElement
 }
 ```
 
-Note however, you usually do not need to implement all these methods! For example, if your `ItemElement` is `Equatable`, you get `isEquivalent` for free – and by default, `wasMoved` is the same was `isEquivalent(other:) == false`.
+Note however, you usually do not need to implement all these methods! For example, if your `ItemContent` is `Equatable`, you get `isEquivalent` for free – and by default, `wasMoved` is the same was `isEquivalent(other:) == false`.
 
 ```swift
-public extension ItemElement
+public extension ItemContent
 {
     func wasMoved(comparedTo other : Self) -> Bool
     {
@@ -380,7 +380,7 @@ public extension ItemElement
 }
 
 
-public extension ItemElement where Self:Equatable
+public extension ItemContent where Self:Equatable
 {
     func isEquivalent(to other : Self) -> Bool
     {
@@ -392,7 +392,7 @@ public extension ItemElement where Self:Equatable
 The `BackgroundView` and `SelectedBackgroundView` views also default to a plain `UIView` which do not display any content of their own. You only need to provide these background views if you wish to support customization of the appearance of the item during highlighting and selection.
 
 ```swift
-public extension ItemElement where BackgroundView == UIView
+public extension ItemContent where BackgroundView == UIView
 {
     static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
     {
@@ -404,7 +404,7 @@ public extension ItemElement where BackgroundView == UIView
 The `SelectedBackgroundView` also defaults to the type of `BackgroundView` unless you explicitly want two different view types.
 
 ```swift
-public extension ItemElement where BackgroundView == SelectedBackgroundView
+public extension ItemContent where BackgroundView == SelectedBackgroundView
 {
     static func createReusableSelectedBackgroundView(frame : CGRect) -> BackgroundView
     {
@@ -414,17 +414,17 @@ public extension ItemElement where BackgroundView == SelectedBackgroundView
 ```
 
 
-This is all a bit abstract, so consider the following example: An `ItemElement` which provides a title and detail label.
+This is all a bit abstract, so consider the following example: An `ItemContent` which provides a title and detail label.
 
 ```swift
-struct SubtitleItem : ItemElement, Equatable
+struct SubtitleItem : ItemContent, Equatable
 {
     var title : String
     var detail : String
     
-    // ItemElement
+    // ItemContent
 
-    func apply(to views : ItemElementViews<Self>, for reason: ApplyReason, with info : ApplyItemElementInfo)
+    func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
         views.content.titleLabel.text = self.title
         views.content.detailLabel.text = self.detail        
@@ -448,12 +448,12 @@ struct SubtitleItem : ItemElement, Equatable
 ```
 
 ### HeaderFooter
-How to describe a header or footer within a list. Very similar API to `ItemElement`, but with less stuff, as headers and footers are display-only.
+How to describe a header or footer within a list. Very similar API to `Item`, but with less stuff, as headers and footers are display-only.
 
 ```swift
-public struct HeaderFooter<Element:HeaderFooterElement> : AnyHeaderFooter
+public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 {
-    public var element : Element
+    public var content : Content
     
     public var sizing : Sizing
     public var layout : HeaderFooterLayout
@@ -471,11 +471,11 @@ self.listView.setContent { list in
 }
 ```
 
-#### HeaderFooterElement
-Again, a similar API to  `ItemElement`, but with a reduced surface area, given the reduced concerns of header and footers.
+#### HeaderFooterContent
+Again, a similar API to  `ItemContent`, but with a reduced surface area, given the reduced concerns of header and footers.
 
 ```swift
-public protocol HeaderFooterElement
+public protocol HeaderFooterContent
 {
     func apply(to view : Appearance.ContentView, reason : ApplyReason)
 
@@ -486,10 +486,10 @@ public protocol HeaderFooterElement
 }
 ```
 
-As usual, if your `HeaderFooterElement` is `Equatable`, you get `isEquivalent` for free.
+As is with `Item`, if your `HeaderFooterContent` is `Equatable`, you get `isEquivalent` for free.
 
 ```swift
-public extension HeaderFooterElement where Self:Equatable
+public extension HeaderFooterContent where Self:Equatable
 {    
     func isEquivalent(to other : Self) -> Bool
     {
@@ -501,7 +501,7 @@ public extension HeaderFooterElement where Self:Equatable
 A standard implementation may look like this:
 
 ```swift
-struct Header : HeaderFooterElement, Equatable
+struct Header : HeaderFooterContent, Equatable
 {
     var title : String
 
@@ -574,32 +574,32 @@ var elementRepresentation : Element {
 }
 ````
 
-### BlueprintItemElement
-`BlueprintItemElement` simplifies the `ItemElement` creation process, asking you for an `Element` description, instead of view types and view instances. 
+### BlueprintItemContent
+`BlueprintItemContent` simplifies the `ItemContent` creation process, asking you for a Blueprint `Element` description, instead of view types and view instances. 
 
-Unless you are supporting highlighting and selection of your `ItemElement`, you do not need to provide implementations of `backgroundElement(:)` and `selectedBackgroundElement(:)` – they default to returning nil. Similar to `ItemElement`, `wasMoved(:)` and `isEquivalent(:)` are also provided based on `Equatable` conformance.
+Unless you are supporting highlighting and selection of your `ItemContent`, you do not need to provide implementations of `backgroundElement(:)` and `selectedBackgroundElement(:)` – they default to returning nil. Similar to `ItemContent`, `wasMoved(:)` and `isEquivalent(:)` are also provided based on `Equatable` conformance.
 
 ```swift
-public protocol BlueprintItemElement : ItemElement
+public protocol BlueprintItemContent : ItemContent
 {
     var identifier : Identifier<Self> { get }
 
     func wasMoved(comparedTo other : Self) -> Bool
     func isEquivalent(to other : Self) -> Bool
 
-    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element
+    func element(with info : ApplyItemContentInfo) -> Element
     
-    func backgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
+    func backgroundElement(with info : ApplyItemContentInfo) -> Element?
 
-    func selectedBackgroundElement(with info : ApplyItemElementInfo) -> BlueprintUI.Element?
+    func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
 }
 ```
 
-A standard `BlueprintItemElement` may look something like this:
+A standard `BlueprintItemContent` may look something like this:
 
 ```swift
 
-struct PersonElement : BlueprintItemElement, Equatable
+struct MyPerson : BlueprintItemContent, Equatable
 {
     var name : String
     var phoneNumber : String
@@ -608,7 +608,7 @@ struct PersonElement : BlueprintItemElement, Equatable
         .init(name)
     }
     
-    func element(with info : ApplyItemElementInfo) -> BlueprintUI.Element {
+    func element(with info : ApplyItemContentInfo) -> Element {
         Row {
             $0.add(child: Label(text: name))
             $0.add(child: Spacer())
@@ -619,28 +619,28 @@ struct PersonElement : BlueprintItemElement, Equatable
 }
 ```
 
-### BlueprintHeaderFooterElement
-Similarly, `BlueprintHeaderFooterElement` makes creating a header or footer easy – just implement `element`, which provides the content element for your header or footer.
+### BlueprintHeaderFooterContent
+Similarly, `BlueprintHeaderFooterContent` makes creating a header or footer easy – just implement `elementRepresentation`, which provides the content element for your header or footer. As usual, `isEquivalent(to:)` is provided if your type is `Equatable`.
 
 ```swift
-public protocol BlueprintHeaderFooterElement
+public protocol BlueprintHeaderFooterContent : HeaderFooterElement
 {
     func isEquivalent(to other : Self) -> Bool
 
-    var element : BlueprintUI.Element { get }
+    var elementRepresentation : Element { get }
 }
 ```
 
-A standard `BlueprintHeaderFooterElement` may look something like this:
+A standard `BlueprintHeaderFooterContent` may look something like this:
 
 ```swift
 
-struct HeaderElement : BlueprintItemElement, Equatable
+struct MyHeader : BlueprintHeaderFooterContent, Equatable
 {
     var name : String
     var itemCount : String
     
-    var element : BlueprintUI.Element {
+    var elementRepresentation : Element {
         Row {
             $0.add(child: Label(text: name))
             $0.add(child: Spacer())

@@ -173,22 +173,22 @@ final class ItemizationEditorViewController : UIViewController
     }
 }
 
-struct Header : BlueprintHeaderFooterElement, Equatable
+struct Header : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
     
-    var element : Element {
+    var elementRepresentation : Element {
         return Inset(insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0), wrapping: Label(text: self.title) { label in
             label.font = .systemFont(ofSize: 30.0, weight: .bold)
         })
     }
 }
 
-struct Footer : BlueprintHeaderFooterElement, Equatable
+struct Footer : BlueprintHeaderFooterContent, Equatable
 {
     var text : String
     
-    var element : Element {
+    var elementRepresentation : Element {
         return Label(text: self.text) { label in
             label.font = .systemFont(ofSize: 14.0, weight: .regular)
             label.alignment = .center
@@ -196,14 +196,14 @@ struct Footer : BlueprintHeaderFooterElement, Equatable
     }
 }
 
-struct ChoiceItem : BlueprintItemElement, Equatable
+struct ChoiceItem : BlueprintItemContent, Equatable
 {
     var title : String
     var detail : String
     
     // MARK: BlueprintItemElement
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),
@@ -238,7 +238,7 @@ struct ChoiceItem : BlueprintItemElement, Equatable
     }
 }
 
-struct ToggleItem : BlueprintItemElement
+struct ToggleItem : BlueprintItemContent
 {
     var content : Content
     
@@ -261,7 +261,7 @@ struct ToggleItem : BlueprintItemElement
         return .init(self.content.title)
     }
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         var box = Box(
             cornerStyle: .rounded(radius: 8.0),

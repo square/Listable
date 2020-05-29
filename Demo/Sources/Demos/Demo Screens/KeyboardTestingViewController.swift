@@ -55,7 +55,7 @@ final class KeyboardTestingViewController : UIViewController
     }
 }
 
-struct TextFieldElement : BlueprintItemElement, Equatable
+struct TextFieldElement : BlueprintItemContent, Equatable
 {
     var content : String
     
@@ -65,7 +65,7 @@ struct TextFieldElement : BlueprintItemElement, Equatable
         return .init(self.content)
     }
     
-    func element(with info : ApplyItemElementInfo) -> Element
+    func element(with info : ApplyItemContentInfo) -> Element
     {
         let textField = TextField(text: self.content)
         

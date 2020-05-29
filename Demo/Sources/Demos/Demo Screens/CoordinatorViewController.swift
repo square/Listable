@@ -32,7 +32,7 @@ final class CoordinatorViewController : UIViewController
 }
 
 
-fileprivate struct PodcastElement : BlueprintItemElement, Equatable
+fileprivate struct PodcastElement : BlueprintItemContent, Equatable
 {
     var podcast : Podcast
     
@@ -42,7 +42,7 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
         .init(podcast.name)
     }
     
-    func element(with info: ApplyItemElementInfo) -> Element
+    func element(with info: ApplyItemContentInfo) -> Element
     {
         Column { col in
             col.horizontalAlignment = .fill
@@ -101,7 +101,7 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
         }
     }
     
-    func selectedBackgroundElement(with info: ApplyItemElementInfo) -> Element? {
+    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
         Box(backgroundColor: .init(white: 0.9, alpha: 1.0))
     }
     
@@ -110,9 +110,9 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
         Coordinator(actions: actions, info: info)
     }
     
-    final class Coordinator : ItemElementCoordinator
+    final class Coordinator : ItemContentCoordinator
     {
-        typealias ItemElementType = PodcastElement
+        typealias ItemContentType = PodcastElement
         
         let actions: CoordinatorActions
         let info: CoordinatorInfo
@@ -127,7 +127,7 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
         
         func wasSelected() {
             self.actions.update(animated: true) {
-                $0.element.showBottomBar = true
+                $0.content.showBottomBar = true
             }
             
             Timer.scheduledTimer(withTimeInterval: TimeInterval.random(in: 0.3...0.5), repeats: true) { [weak self] timer in
@@ -137,17 +137,17 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
                 }
                                 
                 self.actions.update {
-                    switch $0.element.podcast.downloadState {
+                    switch $0.content.podcast.downloadState {
                     case .notDownloaded:
-                        $0.element.podcast.downloadState = .downloading(0.0)
+                        $0.content.podcast.downloadState = .downloading(0.0)
                     case .downloading(let progress):
                         let newProgress = progress + Double.random(in: 0...0.05)
                         
                         if newProgress >= 1.0 {
                             timer.invalidate()
-                            $0.element.podcast.downloadState = .downloaded
+                            $0.content.podcast.downloadState = .downloaded
                         } else {
-                            $0.element.podcast.downloadState = .downloading(newProgress)
+                            $0.content.podcast.downloadState = .downloading(newProgress)
                         }
                     case .downloaded: break
                     case .error: break
@@ -158,7 +158,7 @@ fileprivate struct PodcastElement : BlueprintItemElement, Equatable
         
         func wasDeselected() {
             self.actions.update(animated: true) {
-                $0.element.showBottomBar = false
+                $0.content.showBottomBar = false
             }
         }
     }

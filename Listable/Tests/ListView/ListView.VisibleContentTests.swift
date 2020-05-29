@@ -47,12 +47,12 @@ class ListView_VisibleContentTests : XCTestCase
                 )
                 
                 section += Item(
-                    TestElement(color: .init(white: 1.0, alpha: 1)),
+                    TestContent(color: .init(white: 1.0, alpha: 1)),
                     sizing: .fixed(height: 100.0)
                 )
                 
                 section += Item(
-                    TestElement(color: .init(white: 0.9, alpha: 1)),
+                    TestContent(color: .init(white: 0.9, alpha: 1)),
                     sizing: .fixed(height: 100.0)
                 )
             }
@@ -71,7 +71,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -89,7 +89,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -106,8 +106,8 @@ class ListView_VisibleContentTests : XCTestCase
             ListView.VisibleContent.Info(
                 headerFooters: [],
                 items: [
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 0, section: 0)),
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0)),
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -126,7 +126,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -145,7 +145,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .listFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestElement>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -170,17 +170,17 @@ class ListView_VisibleContentTests : XCTestCase
     }
 }
 
-fileprivate struct TestElement : ItemElement, Equatable
+fileprivate struct TestContent : ItemContent, Equatable
 {
     var color : UIColor
     
     typealias ContentView = UIView
     
-    var identifier: Identifier<TestElement> {
+    var identifier: Identifier<TestContent> {
         .init()
     }
     
-    func apply(to views: ItemElementViews<TestElement>, for reason: ApplyReason, with info: ApplyItemElementInfo)
+    func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo)
     {
         views.content.backgroundColor = self.color
     }
@@ -190,7 +190,7 @@ fileprivate struct TestElement : ItemElement, Equatable
     }
 }
 
-fileprivate struct TestHeaderFooter : HeaderFooterElement, Equatable
+fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable
 {
     var color : UIColor
     
