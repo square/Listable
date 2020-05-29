@@ -42,16 +42,6 @@ public struct Section
         build(&self)
     }
     
-    public init<Info:SectionInfo>(
-        info: Info,
-        build : Build
-        )
-    {
-        self.init(info: info)
-        
-        build(&self)
-    }
-    
     public init<Identifier:Hashable>(
         identifier : Identifier,
         layout : Layout = Layout(),

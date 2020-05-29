@@ -54,6 +54,15 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(BlueprintListDemoViewController())
                 })
+                
+                if #available(iOS 13.0, *) {
+                    section += Item(
+                        DemoItem(text: "SwiftUI Integration"),
+                        selectionStyle: .tappable,
+                        onSelect : { _ in
+                            self.push(SwiftUIListViewController())
+                    })
+                }
 
                 section += Item(
                     DemoItem(text: "Auto Scrolling (Bottom Pin)"),

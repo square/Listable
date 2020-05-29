@@ -6,7 +6,7 @@
 //
 
 
-public protocol ItemContent where Coordinator.ItemContentType == Self
+public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -196,6 +196,16 @@ public struct ApplyItemContentInfo
     
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reordering : ReorderingActions
+}
+
+
+/// Provides a default implementation of `AnyItemConvertible`.
+public extension ItemContent
+{
+    func toAnyItem() -> AnyItem
+    {
+        Item(self)
+    }
 }
 
 
