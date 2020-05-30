@@ -31,9 +31,13 @@ final class SwiftUIListViewController : UIViewController
     
     override func loadView()
     {
+        ViewDebuggerStuff.swizzledTestingMethods()
+        
         super.loadView()
         
         self.view.addSubview(self.hosting.view)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Test Me", style: .plain, target: self, action: #selector(tappedTest))
     }
     
     override func viewDidLayoutSubviews()
@@ -47,6 +51,11 @@ final class SwiftUIListViewController : UIViewController
     
     var listContent : some View {
         ListableList { _ in }
+    }
+    
+    @objc private func tappedTest()
+    {
+
     }
 }
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
+		0A8163952482088A0086C698 /* ViewDebuggerStuff.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8163942482088A0086C698 /* ViewDebuggerStuff.m */; };
 		0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A87BA642463567B0047C3B5 /* CHANGELOG.md */; };
 		0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */; };
 		0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */; };
@@ -39,6 +40,9 @@
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		0A8163922482088A0086C698 /* Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Demo-Bridging-Header.h"; sourceTree = "<group>"; };
+		0A8163932482088A0086C698 /* ViewDebuggerStuff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewDebuggerStuff.h; sourceTree = "<group>"; };
+		0A8163942482088A0086C698 /* ViewDebuggerStuff.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewDebuggerStuff.m; sourceTree = "<group>"; };
 		0A87BA642463567B0047C3B5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
 		0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +127,9 @@
 				0AF20A652481C397005A3E16 /* SwiftUIListViewController.swift */,
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
+				0A8163932482088A0086C698 /* ViewDebuggerStuff.h */,
+				0A8163942482088A0086C698 /* ViewDebuggerStuff.m */,
+				0A8163922482088A0086C698 /* Demo-Bridging-Header.h */,
 			);
 			path = "Demo Screens";
 			sourceTree = "<group>";
@@ -263,6 +270,7 @@
 					};
 					0AEB96AD22FBCBA500341DFF = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1150;
 					};
 				};
 			};
@@ -398,6 +406,7 @@
 				0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,
+				0A8163952482088A0086C698 /* ViewDebuggerStuff.m in Sources */,
 				0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0AA4D9C4248064A300CF95A5 /* ItemizationEditorViewController.swift in Sources */,
@@ -577,6 +586,7 @@
 			baseConfigurationReference = C9EC890C0D683F6A704AB9ED /* Pods-Demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -585,6 +595,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kve.listable.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Demos/Demo Screens/Demo-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -595,6 +607,7 @@
 			baseConfigurationReference = 06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -603,6 +616,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kve.listable.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Demos/Demo Screens/Demo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
