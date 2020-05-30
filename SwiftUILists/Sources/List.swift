@@ -11,7 +11,7 @@ import SwiftUI
 
 
 @available(iOS 13.0, *)
-public struct ListableView : UIViewControllerRepresentable
+public struct ListableList : UIViewControllerRepresentable
 {
     public var listDescription : ListDescription
 
@@ -54,7 +54,7 @@ public struct ListableView : UIViewControllerRepresentable
 
 public final class ListableViewController : UIViewController
 {
-    var listView : ListView? = nil
+    var listView : UIView? = nil
         
     init(_ description : ListDescription)
     {

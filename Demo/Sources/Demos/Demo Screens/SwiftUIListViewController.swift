@@ -45,7 +45,7 @@ final class SwiftUIListViewController : UIViewController
     required init?(coder: NSCoder) { fatalError() }
     
     var body : some View {
-        ListableView { list in
+        ListableList { list in
 //            list += Listable.Section(identifier: "section") { section in
 //                section += SwiftUIDemoItem()
 //                section += SwiftUIDemoItem()
@@ -73,3 +73,4 @@ fileprivate struct SwiftUIDemoItem : SwiftUIItemContent, Equatable
             .border(Color.green, width: 4)
     }
 }
+
