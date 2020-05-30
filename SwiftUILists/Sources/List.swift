@@ -11,7 +11,7 @@ import SwiftUI
 
 
 @available(iOS 13.0, *)
-public struct ListableList : UIViewControllerRepresentable
+public struct ListableList : UIViewRepresentable
 {
     public var listDescription : ListDescription
 
@@ -38,56 +38,13 @@ public struct ListableList : UIViewControllerRepresentable
     // MARK: UIViewRepresentable
     //
     
-    public typealias UIViewControllerType = ListableViewController
+    public typealias UIViewType = ListView
     
-    public func makeUIViewController(context: Context) -> ListableViewController
-    {
-        ListableViewController(self.listDescription)
+    public func makeUIView(context: Context) -> ListView {
+        ListView(frame: .zero, appearance: self.listDescription.appearance)
     }
     
-    public func updateUIViewController(_ viewController: ListableViewController, context: Context)
-    {
-        //viewController.listView.setProperties(with: self.listDescription)
-    }
-}
-
-
-public final class ListableViewController : UIViewController
-{
-    var listView : UIView? = nil
-        
-    init(_ description : ListDescription)
-    {
-        self.listView = ListView(frame: .zero, appearance: description.appearance)
-        
-        super.init(nibName: nil, bundle: nil)
-        
-        //self.listView.hostingViewController = self
-    }
-    
-    required init?(coder: NSCoder) { fatalError() }
-    
-    public override func loadView()
-    {
-        self.view = UIView()
-    }
-}
-
-
-internal extension UIView
-{
-    func findParentListableViewController() -> UIViewController?
-    {
-        var view : UIView? = self
-        
-        while view != nil {
-            if let view = view as? ListView {
-                return view.hostingViewController
-            }
-            
-            view = view?.superview
-        }
-        
-        return nil
+    public func updateUIView(_ listView: ListView, context: Context) {
+        listView.setProperties(with: self.listDescription)
     }
 }

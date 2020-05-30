@@ -7,6 +7,7 @@
 //
 
 import SwiftUILists
+import SwiftUI
 
 
 @available(iOS 13.0, *)
@@ -23,7 +24,7 @@ final class SwiftUIListViewController : UIViewController
         self.addChild(self.hosting)
         self.hosting.didMove(toParent: self)
         
-        self.hosting.rootView = AnyView(self.body)
+        self.hosting.rootView = AnyView(self.listContent)
         
         self.title = "SwiftUI Integration"
     }
@@ -44,33 +45,8 @@ final class SwiftUIListViewController : UIViewController
     
     required init?(coder: NSCoder) { fatalError() }
     
-    var body : some View {
-        ListableList { list in
-//            list += Listable.Section(identifier: "section") { section in
-//                section += SwiftUIDemoItem()
-//                section += SwiftUIDemoItem()
-//                section += SwiftUIDemoItem()
-//                section += SwiftUIDemoItem()
-//            }
-        }
-    }
-}
-
-@available(iOS 13.0, *)
-fileprivate struct SwiftUIDemoItem : SwiftUIItemContent, Equatable
-{
-    var identifier: Identifier<SwiftUIDemoItem> {
-        .init()
-    }
-    
-    func content(with info: ApplyItemContentInfo) -> some View {
-        Text("Hello, World!")
-            .font(.system(.headline))
-            .frame(maxWidth: .infinity)
-            .padding(4)
-            .border(Color.red, width: 4)
-            .padding(4)
-            .border(Color.green, width: 4)
+    var listContent : some View {
+        ListableList { _ in }
     }
 }
 
