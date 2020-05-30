@@ -84,6 +84,15 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
     
     // MARK: UIView
     
+    override func willMove(toSuperview newSuperview: UIView?)
+    {
+        super.willMove(toSuperview: newSuperview)
+        
+        if let contained = self.contentContainer.contentView as? CollectionViewContainedView {
+            contained.containerViewWillMove(toSuperview: newSuperview)
+        }
+    }
+    
     override func sizeThatFits(_ size: CGSize) -> CGSize
     {
         return self.contentContainer.contentView.sizeThatFits(size)
@@ -97,3 +106,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
     }
 }
 
+
+public protocol CollectionViewContainedView
+{
+    func containerViewWillMove(toSuperview newSuperview: UIView?)
+}

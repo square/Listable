@@ -21,9 +21,9 @@ import SwiftUI
 @available(iOS 13.0, *)
 public protocol SwiftUIItemContent : ItemContent
     where
-    ContentView == SwiftUIContentView<Self.ContentType>,
-    BackgroundView == SwiftUIContentView<Self.BackgroundType>,
-    SelectedBackgroundView == SwiftUIContentView<Self.SelectedBackgroundType>
+    ContentView == SwiftUIContentView,
+    BackgroundView == SwiftUIContentView,
+    SelectedBackgroundView == SwiftUIContentView
 {
     //
     // MARK: Creating SwiftUI View Representations
@@ -100,15 +100,15 @@ public extension SwiftUIItemContent
     /// Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.content = self.content(with: info)
-        views.background.content = self.background(with: info)
-        views.selectedBackground.content = self.selectedBackground(with: info)
+        views.content.rootView = AnyView(self.content(with: info))
+        views.background.rootView = AnyView(self.background(with: info))
+        views.selectedBackground.rootView = AnyView(self.selectedBackground(with: info))
     }
 
     /// Creates the view used to render the content of the item.
     static func createReusableContentView(frame: CGRect) -> ContentView
     {
-        let view = SwiftUIContentView<ContentType>(frame: frame)
+        let view = SwiftUIContentView(frame: frame)
         view.backgroundColor = .clear
 
         return view
@@ -117,7 +117,7 @@ public extension SwiftUIItemContent
     /// Creates the view used to render the background of the item.
     static func createReusableBackgroundView(frame: CGRect) -> BackgroundView
     {
-        let view = SwiftUIContentView<BackgroundType>(frame: frame)
+        let view = SwiftUIContentView(frame: frame)
         view.backgroundColor = .clear
 
         return view
@@ -126,7 +126,7 @@ public extension SwiftUIItemContent
     /// Creates the view used to render the background of the item.
     static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView
     {
-        let view = SwiftUIContentView<SelectedBackgroundType>(frame: frame)
+        let view = SwiftUIContentView(frame: frame)
         view.backgroundColor = .clear
 
         return view
@@ -135,46 +135,54 @@ public extension SwiftUIItemContent
 
 
 @available(iOS 13.0, *)
-public final class SwiftUIContentView<Content:SwiftUI.View> : UIView
+public final class SwiftUIContentView : UIView, CollectionViewContainedView
 {
-    var content : Content? {
+    var rootView : AnyView {
         get {
-            self.controller?.rootView
+            self.controller.rootView
         }
         set {
-            if let controller = self.controller {
-                if let new = newValue {
-                    controller.rootView = new
-                } else {
-                    self.controller = nil
-                }
-            } else {
-                if let new = newValue {
-                    self.controller = UIHostingController(rootView: new)
-                }
-            }
+            self.controller.rootView = newValue
         }
     }
     
-    private var controller : UIHostingController<Content>? = nil {
-        didSet {
-            guard self.controller != oldValue else {
-                return
-            }
+    private let controller : UIHostingController<AnyView>
+    
+    public func containerViewWillMove(toSuperview newSuperview: UIView?)
+    {
+        if let superview = newSuperview {
+            let parent = superview.findParentListableViewController()!
             
-            if let old = oldValue {
-                old.view.removeFromSuperview()
-            }
-        
-            if let controller = self.controller {
-                self.addSubview(controller.view)
-            }
+            parent.addChild(self.controller)
+            self.controller.didMove(toParent: parent)
+            self.addSubview(self.controller.view)
+            print("")
+        } else {
+            self.controller.willMove(toParent: nil)
+            self.controller.removeFromParent()
         }
     }
     
-    public override func layoutSubviews() {
+    public override init(frame: CGRect)
+    {
+        self.controller = UIHostingController(rootView: AnyView(EmptyView()))
+
+        super.init(frame: frame)
+        
+        
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    public override func layoutSubviews()
+    {
         super.layoutSubviews()
         
-        self.controller?.view.frame = self.bounds
+        self.controller.view.frame = self.bounds
+    }
+    
+    public override func sizeThatFits(_ size: CGSize) -> CGSize
+    {
+        return self.controller.view.sizeThatFits(size)
     }
 }

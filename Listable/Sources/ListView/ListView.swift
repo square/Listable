@@ -119,6 +119,8 @@ public final class ListView : UIView
     //
     // MARK: Private Properties
     //
+    
+    public weak var hostingViewController : UIViewController? = nil
         
     private let layoutManager : LayoutManager
     
