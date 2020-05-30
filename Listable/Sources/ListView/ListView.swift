@@ -221,9 +221,8 @@ public final class ListView : UIView
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
-        // Scroll View
-        
         self.updateCollectionViewBounce()
+        self.updateCollectionViewSelectionMode()
     }
     
     private func updateCollectionViewBounce()
@@ -232,6 +231,25 @@ public final class ListView : UIView
             self.behavior.underflow.alwaysBounce,
             direction: self.appearance.direction
         )
+    }
+    
+    private func updateCollectionViewSelectionMode()
+    {
+        let view = self.collectionView
+        
+        switch self.behavior.selectionMode {
+        case .none:
+            view.allowsSelection = false
+            view.allowsMultipleSelection = false
+            
+        case .single:
+            view.allowsSelection = true
+            view.allowsMultipleSelection = false
+            
+        case .multiple:
+            view.allowsSelection = true
+            view.allowsMultipleSelection = true
+        }
     }
     
     //
@@ -517,25 +535,6 @@ public final class ListView : UIView
         }
     }
     
-    private func updateCollectionViewConfiguration()
-    {
-        let view = self.collectionView
-        
-        switch self.content.selectionMode {
-        case .none:
-            view.allowsSelection = false
-            view.allowsMultipleSelection = false
-            
-        case .single:
-            view.allowsSelection = true
-            view.allowsMultipleSelection = false
-            
-        case .multiple:
-            view.allowsSelection = true
-            view.allowsMultipleSelection = true
-        }
-    }
-    
     private func updateCollectionViewSelections(animated : Bool)
     {
         let oldSelected : Set<IndexPath> = Set(self.collectionView.indexPathsForSelectedItems ?? [])
@@ -592,7 +591,6 @@ public final class ListView : UIView
             }
             
         case .contentChanged:
-            self.updateCollectionViewConfiguration()
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
 
         case .didEndDecelerating:

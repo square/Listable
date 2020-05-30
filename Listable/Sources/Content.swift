@@ -14,13 +14,6 @@ public struct Content
     //
     
     public var identifier : AnyHashable?
-    
-    public var selectionMode : SelectionMode
-    
-    public enum SelectionMode : Equatable
-    {
-        case none, single, multiple
-    }
 
     public var refreshControl : RefreshControl?
     
@@ -58,7 +51,6 @@ public struct Content
     
     public init(
         identifier : AnyHashable? = nil,
-        selectionMode : SelectionMode = .single,
         refreshControl : RefreshControl? = nil,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
@@ -68,7 +60,6 @@ public struct Content
     {
         self.identifier = identifier
         
-        self.selectionMode = selectionMode
         
         self.refreshControl = refreshControl
         

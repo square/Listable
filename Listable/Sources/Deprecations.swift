@@ -71,3 +71,10 @@ public extension HeaderFooter {
         self.content
     }
 }
+
+public extension Content {
+    @available(*, unavailable, message: "'Content.selectionMode' has moved to 'Behavior.selectionMode'.")
+    var selectionMode : Behavior.SelectionMode {
+        fatalError()
+    }
+}

@@ -8,23 +8,49 @@
 import Foundation
 
 
+/// Controls various behaviors of the list view, such as keyboard dismissal, selection mode, and behavior
+/// when the list content underflows the available space in the list view.
 public struct Behavior : Equatable
 {
+    /// How the keyboard should be dismissed (if at all) based on scrolling of the list view.
     public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
     
+    /// How the list should respond to selection attempts.
+    public var selectionMode : SelectionMode
+    
+    /// How the list should behave when its content takes up less space than is available in the list view.
     public var underflow : Underflow
     
+    /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
+        selectionMode : SelectionMode = .single,
         underflow : Underflow = Underflow()
     ) {
         self.keyboardDismissMode = keyboardDismissMode
+        self.selectionMode = selectionMode
         self.underflow = underflow
     }
 }
 
 public extension Behavior
 {
+    /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
+    enum SelectionMode : Equatable
+    {
+        /// The list view does not allow any selections.
+        case none
+        
+        /// The list view allows single selections. When an item is selected, the previously selected item (if any)
+        /// will be deselected by the list. If you provide multiple selected items in your content description,
+        /// the last selected item in the content will be selected.
+        case single
+        
+        /// The list view allows multiple selections. It is your responsibility to update the content
+        /// of the list to select and deselect items based on the selection of other items.
+        case multiple
+    }
+    
     struct Underflow : Equatable
     {
         public var alwaysBounce : Bool
