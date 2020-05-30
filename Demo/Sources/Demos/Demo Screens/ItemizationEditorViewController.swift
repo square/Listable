@@ -48,10 +48,10 @@ final class ItemizationEditorViewController : UIViewController
     var list : List
     {
         return List { list in
-            
-            list.content.selectionMode = .multiple
-            
+                        
             list.appearance = self.listAppearance
+            
+            list.behavior.selectionMode = .multiple
             
             list.behavior.underflow = .init(
                 alwaysBounce: true,
