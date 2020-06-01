@@ -89,6 +89,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
         super.willMove(toSuperview: newSuperview)
         
         if let contained = self.contentContainer.contentView as? CollectionViewContainedView {
+            
+            if let listView = newSuperview?.findParentListView() {
+                contained.containingViewController = listView.containingViewController
+            }
+            
             contained.containerViewWillMove(toSuperview: newSuperview)
         }
     }
@@ -107,7 +112,28 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
 }
 
 
-public protocol CollectionViewContainedView
+private extension UIView
 {
+    func findParentListView() -> ListView?
+    {
+        var view : UIView? = self
+        
+        while view != nil {
+            if let view = view as? ListView {
+                return view
+            }
+            
+            view = view?.superview
+        }
+        
+        return nil
+    }
+}
+
+
+public protocol CollectionViewContainedView : AnyObject
+{
+    var containingViewController : UIViewController? { get set }
+    
     func containerViewWillMove(toSuperview newSuperview: UIView?)
 }

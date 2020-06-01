@@ -47,14 +47,14 @@ public struct ListableList : UIViewControllerRepresentable
     
     public func updateUIViewController(_ viewController: ListableViewController, context: Context)
     {
-        //viewController.listView.setProperties(with: self.listDescription)
+        viewController.listView.setProperties(with: self.listDescription)
     }
 }
 
 
 public final class ListableViewController : UIViewController
 {
-    var listView : UIView? = nil
+    var listView : ListView
         
     init(_ description : ListDescription)
     {
@@ -62,32 +62,13 @@ public final class ListableViewController : UIViewController
         
         super.init(nibName: nil, bundle: nil)
         
-        //self.listView.hostingViewController = self
+        self.listView.containingViewController = self
     }
     
     required init?(coder: NSCoder) { fatalError() }
     
     public override func loadView()
     {
-        self.view = UIView()
-    }
-}
-
-
-internal extension UIView
-{
-    func findParentListableViewController() -> UIViewController?
-    {
-        var view : UIView? = self
-        
-        while view != nil {
-            if let view = view as? ListView {
-                return view.hostingViewController
-            }
-            
-            view = view?.superview
-        }
-        
-        return nil
+        self.view = self.listView
     }
 }

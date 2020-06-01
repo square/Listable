@@ -119,8 +119,6 @@ public final class ListView : UIView
     //
     // MARK: Private Properties
     //
-    
-    public weak var hostingViewController : UIViewController? = nil
         
     private let layoutManager : LayoutManager
     
@@ -131,6 +129,19 @@ public final class ListView : UIView
     private let dataSource : DataSource
     
     private let keyboardObserver : KeyboardObserver
+    
+    //
+    // MARK: SwiftUI Support
+    //
+    
+    ///
+    /// When hosting a `ListView` in a SwiftUI tree, you should set this property to the
+    /// `UIViewController` instance which contains the `ListView`. This allows
+    /// Listable to properly set up the view controller hierarchy for contained SwiftUI-backed cells.
+    ///
+    /// You do not need to set this property if you are not using SwiftUI.
+    ///
+    public weak var containingViewController : UIViewController? = nil
     
     //
     // MARK: Debugging

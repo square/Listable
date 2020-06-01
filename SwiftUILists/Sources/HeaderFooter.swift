@@ -9,33 +9,34 @@ import Listable
 import SwiftUI
 
 
-//public protocol BlueprintHeaderFooterContent : HeaderFooterContent where ContentView == BlueprintView
-//{
-//    //
-//    // MARK: Creating Blueprint Element Representations
-//    //
-//    
-//    var elementRepresentation : Element { get }
-//}
-//
-//
-//public extension BlueprintHeaderFooterContent
-//{
-//    //
-//    // MARK: HeaderFooterContent
-//    //
-//    
-//    func apply(to view: ContentView, reason: ApplyReason)
-//    {
-//        view.element = self.elementRepresentation
-//    }
-//    
-//    static func createReusableHeaderFooterView(frame: CGRect) -> ContentView
-//    {
-//        let view = BlueprintView(frame: frame)
-//        view.backgroundColor = .clear
-//        
-//        return view
-//    }
-//}
+@available(iOS 13.0, *)
+public protocol SwiftUIHeaderFooterContent : HeaderFooterContent where ContentView == SwiftUIContentView
+{
+    //
+    // MARK: Creating SwiftUI View Representations
+    //
+    
+    associatedtype ContentType : SwiftUI.View
+    
+    var body : ContentType { get }
+}
+
+
+@available(iOS 13.0, *)
+public extension SwiftUIHeaderFooterContent
+{
+    //
+    // MARK: HeaderFooterContent
+    //
+    
+    func apply(to view: ContentView, reason: ApplyReason)
+    {
+        view.rootView = AnyView(self.body)
+    }
+    
+    static func createReusableHeaderFooterView(frame: CGRect) -> ContentView
+    {
+        SwiftUIContentView(frame: frame)
+    }
+}
 

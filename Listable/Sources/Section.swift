@@ -42,16 +42,6 @@ public struct Section
         build(&self)
     }
     
-    public init<Info:SectionInfo>(
-        info: Info,
-        build : Build
-        )
-    {
-        self.init(info: info)
-        
-        build(&self)
-    }
-    
     public init<Identifier:Hashable>(
         identifier : Identifier,
         layout : Layout = Layout(),
@@ -132,6 +122,15 @@ public struct Section
     public static func += <Content:ItemContent>(lhs : inout Section, rhs : [Content])
     {
         lhs.items += rhs.map { Item($0) }
+    }
+    
+    //
+    // MARK: Function Builders
+    //
+    
+    public mutating func set(@SectionItemsBuilder _ items : () -> [SectionItemsBuilder.Output])
+    {
+        self.items = items().toItems()
     }
     
     //
@@ -239,5 +238,84 @@ private struct HashableSectionInfo<Value:Hashable> : SectionInfo
     func wasMoved(comparedTo other : HashableSectionInfo) -> Bool
     {
         return self.value != other.value
+    }
+}
+
+
+@_functionBuilder
+public struct SectionItemsBuilder
+{
+    public static func buildBlock() -> [Output]
+    {
+        [.none]
+    }
+    
+    public static func buildBlock(_ item : AnyItemConvertible) -> [Output]
+    {
+        [.some(item)]
+    }
+    
+    public static func buildBlock(_ item : AnyItemConvertible?) -> [Output]
+    {
+        if let item = item {
+            return [.some(item)]
+        } else {
+            return [.none]
+        }
+    }
+    
+    public static func buildIf(_ item: AnyItemConvertible?) -> [Output]
+    {
+        if let item = item {
+            return [.some(item)]
+        } else {
+            return [.none]
+        }
+    }
+    
+    public static func buildEither(first: AnyItemConvertible) -> [Output]
+    {
+        [.some(first)]
+    }
+
+    public static func buildEither(second: AnyItemConvertible) -> [Output]
+    {
+        [.some(second)]
+    }
+
+    public static func buildArray(_ items : [AnyItemConvertible]) -> [Output]
+    {
+        items.map {
+            .some($0)
+        }
+    }
+    
+    public static func buildBlock(_ items : AnyItemConvertible...) -> [Output]
+    {
+        items.map {
+            .some($0)
+        }
+    }
+    
+    public enum Output
+    {
+        case none
+        case some(AnyItemConvertible)
+    }
+}
+
+
+internal extension Array where Element == SectionItemsBuilder.Output
+{
+    func toItems() -> [AnyItem]
+    {
+        let list : [AnyItemConvertible] = self.compactMap {
+            switch $0 {
+            case .none: return nil
+            case .some(let item): return item
+            }
+        }
+        
+        return list.compactMap { $0.toAnyItem() }
     }
 }

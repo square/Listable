@@ -16,7 +16,7 @@ public enum ItemPosition
 }
 
 
-public protocol AnyItem : AnyItem_Internal
+public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
 {
     var identifier : AnyIdentifier { get }
     
@@ -26,6 +26,12 @@ public protocol AnyItem : AnyItem_Internal
     var swipeActions : SwipeActionsConfiguration? { get set }
     
     var reordering : Reordering? { get set }
+}
+
+
+public protocol AnyItemConvertible
+{
+    func toAnyItem() -> AnyItem
 }
 
 
@@ -143,6 +149,13 @@ public struct Item<Content:ItemContent> : AnyItem
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
         
         self.identifier = self.content.identifier.toAny
+    }
+    
+    // MARK: AnyItemConvertible
+    
+    public func toAnyItem() -> AnyItem
+    {
+        return self
     }
     
     // MARK: AnyItem_Internal
