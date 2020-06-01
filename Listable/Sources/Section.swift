@@ -250,6 +250,9 @@ public struct SectionItemsBuilder
         [.none]
     }
     
+    // TODO: Convert these all to use <Content:ItemContent> to see if the compiler
+    // is getting confused by the protocols... or something
+    
     public static func buildBlock(_ item : AnyItemConvertible) -> [Output]
     {
         [.some(item)]
