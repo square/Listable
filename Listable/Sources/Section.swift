@@ -255,6 +255,11 @@ public struct SectionItemsBuilder
         [.some(item)]
     }
     
+    public static func buildBlock(_ item : [Output]) -> [Output]
+    {
+        item
+    }
+    
     public static func buildBlock(_ item : AnyItemConvertible?) -> [Output]
     {
         if let item = item {
@@ -263,7 +268,7 @@ public struct SectionItemsBuilder
             return [.none]
         }
     }
-    
+
     public static func buildIf(_ item: AnyItemConvertible?) -> [Output]
     {
         if let item = item {
@@ -273,15 +278,15 @@ public struct SectionItemsBuilder
         }
     }
     
-    public static func buildEither(first: AnyItemConvertible) -> [Output]
-    {
-        [.some(first)]
-    }
-
-    public static func buildEither(second: AnyItemConvertible) -> [Output]
-    {
-        [.some(second)]
-    }
+//    public static func buildEither(first: AnyItemConvertible) -> [Output]
+//    {
+//        [.some(first)]
+//    }
+//
+//    public static func buildEither(second: AnyItemConvertible) -> [Output]
+//    {
+//        [.some(second)]
+//    }
 
     public static func buildArray(_ items : [AnyItemConvertible]) -> [Output]
     {
