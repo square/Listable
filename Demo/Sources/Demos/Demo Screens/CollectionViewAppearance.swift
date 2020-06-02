@@ -88,7 +88,7 @@ struct DemoItem : BlueprintItemContent, Equatable
     {
         Label(text: self.text) {
             $0.font = .systemFont(ofSize: 16.0, weight: .medium)
-            $0.color = .darkGray
+            $0.color = info.state.isActive ? .white : .darkGray
         }
         .inset(horizontal: 15.0, vertical: 10.0)
     }
@@ -105,7 +105,7 @@ struct DemoItem : BlueprintItemContent, Equatable
     func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
-            backgroundColor: info.state.isSelected ? .white(0.9) : .white(0.95),
+            backgroundColor: .white(0.2),
             cornerStyle: .rounded(radius: 8.0),
             shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
