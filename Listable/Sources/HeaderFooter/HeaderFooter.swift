@@ -22,6 +22,9 @@ public protocol AnyHeaderFooter_Internal
 }
 
 
+public typealias Header<Content:HeaderFooterContent> = HeaderFooter<Content>
+public typealias Footer<Content:HeaderFooterContent> = HeaderFooter<Content>
+
 public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 {
     public var content : Content

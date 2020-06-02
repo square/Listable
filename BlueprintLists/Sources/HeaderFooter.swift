@@ -9,6 +9,10 @@ import BlueprintUI
 import Listable
 
 
+public typealias BlueprintHeaderContent = BlueprintHeaderFooterContent
+public typealias BlueprintFooterContent = BlueprintHeaderFooterContent
+
+
 public protocol BlueprintHeaderFooterContent : HeaderFooterContent where ContentView == BlueprintView
 {
     //
