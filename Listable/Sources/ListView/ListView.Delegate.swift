@@ -22,7 +22,9 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool
         {
-            return true
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.selectionStyle.isSelectable
         }
         
         func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath)
@@ -56,9 +58,12 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: true)
+            item.applyToVisibleCell()
             
             if item.anyModel.selectionStyle == .tappable {
+                item.performUserDidSelectItem(isSelected: false)
                 collectionView.deselectItem(at: indexPath, animated: true)
+                item.applyToVisibleCell()
             }
         }
         
@@ -67,6 +72,7 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.performUserDidSelectItem(isSelected: false)
+            item.applyToVisibleCell()
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]

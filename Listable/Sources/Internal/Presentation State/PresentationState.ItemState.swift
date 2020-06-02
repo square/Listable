@@ -282,8 +282,6 @@ extension PresentationState
             } else {
                 self.model.onDeselect?(self.model.content)
             }
-            
-            self.applyToVisibleCell()
         }
         
         func updateCoordinatorWithStateChange(old : State, new : State)

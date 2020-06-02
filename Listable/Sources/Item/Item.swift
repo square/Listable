@@ -287,8 +287,16 @@ public struct ItemState : Equatable
         self.isHighlighted = cell.isHighlighted
     }
     
+    /// If the item is currently selected.
     public var isSelected : Bool
+    
+    /// If the item is currently highlighted.
     public var isHighlighted : Bool
+    
+    /// If the item is either selected or highlighted.
+    public var isActive : Bool {
+        self.isSelected || self.isHighlighted
+    }
 }
 
 

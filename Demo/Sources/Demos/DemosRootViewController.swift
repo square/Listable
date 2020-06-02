@@ -133,6 +133,18 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
+            list += Section(identifier: "selection-state") { section in
+                
+                section.header = HeaderFooter(
+                    DemoHeader(title: "List View Selection")
+                )
+
+                section += Item(
+                    DemoItem(text: "Tappable Row"),
+                    selectionStyle: .tappable
+                )
+            }
+            
             list += Section(identifier: "collection-view") { section in
                 
                 section.header = HeaderFooter(
