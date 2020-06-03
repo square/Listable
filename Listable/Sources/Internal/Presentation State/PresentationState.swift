@@ -18,6 +18,9 @@ final class PresentationState
     
     var header : HeaderFooterViewStatePair = .init()
     var footer : HeaderFooterViewStatePair = .init()
+    
+    var inputAccessory : ViewProvider.State? = nil
+    
     var overscrollFooter : HeaderFooterViewStatePair = .init()
     
     var sections : [PresentationState.SectionState]
@@ -33,6 +36,7 @@ final class PresentationState
     init()
     {
         self.refreshControl = nil
+                
         self.sections = []
         
         self.containsAllItems = true
@@ -204,6 +208,7 @@ final class PresentationState
         
         self.header.state = SectionState.headerFooterState(with: self.header.state, new: slice.content.header)
         self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: slice.content.footer)
+        self.inputAccessory = ViewProvider.State.state(with: self.inputAccessory, new: slice.content.inputAccessory)
         self.overscrollFooter.state = SectionState.headerFooterState(with: self.overscrollFooter.state, new: slice.content.overscrollFooter)
         
         self.sections = diff.changes.transform(

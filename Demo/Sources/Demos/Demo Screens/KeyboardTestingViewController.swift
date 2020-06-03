@@ -44,6 +44,10 @@ final class KeyboardTestingViewController : UIViewController
                 section += Item(TextFieldElement(content: "Item 13"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 14"), sizing: .fixed(height: 100.0))
             }
+            
+            list.content.inputAccessory = ViewProvider {
+                InputAccessory()
+            }
         }
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard))
@@ -52,6 +56,13 @@ final class KeyboardTestingViewController : UIViewController
     @objc func dismissKeyboard()
     {
         self.view.endEditing(true)
+    }
+}
+
+struct InputAccessory : ProxyElement
+{
+    var elementRepresentation: Element {
+        Label(text: "Hello, World!")
     }
 }
 

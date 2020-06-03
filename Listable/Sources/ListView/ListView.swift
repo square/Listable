@@ -505,6 +505,7 @@ public final class ListView : UIView
         
         if self.window != nil {
             self.setContentInsetWithKeyboardFrame()
+            self.becomeFirstResponderIfNeeded()
         }
     }
     
@@ -514,6 +515,26 @@ public final class ListView : UIView
         
         if self.superview != nil {
             self.setContentInsetWithKeyboardFrame()
+            self.becomeFirstResponderIfNeeded()
+        }
+    }
+    
+    @discardableResult
+    private func becomeFirstResponderIfNeeded() -> Bool
+    {
+        if self.inputAccessoryView != nil {
+            return self.becomeFirstResponder()
+        } else {
+            return false
+        }
+        
+    }
+    
+    public override var canBecomeFirstResponder: Bool {
+        if self.inputAccessoryView != nil {
+            return true
+        } else {
+            return super.canBecomeFirstResponder
         }
     }
     
@@ -522,6 +543,10 @@ public final class ListView : UIView
         super.layoutSubviews()
         
         self.collectionView.frame = self.bounds
+    }
+    
+    public override var inputAccessoryView: UIView? {
+        self.storage.presentationState.inputAccessory?.view
     }
     
     //
