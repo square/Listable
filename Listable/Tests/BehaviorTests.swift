@@ -17,6 +17,7 @@ class BehaviorTests: XCTestCase
         let behavior = Behavior()
         
         XCTAssertEqual(behavior.keyboardDismissMode, .interactive)
+        XCTAssertEqual(behavior.keyboardAdjustmentMode, .adjustsWhenVisible)
         
         XCTAssertEqual(behavior.underflow, Behavior.Underflow())
     }
