@@ -19,6 +19,11 @@ extension OSLog {
         subsystem: "com.kve.Listable",
         category: "ListView ScrollView"
     )
+    
+    static let listInteraction = OSLog(
+        subsystem: "com.kve.Listable",
+        category: "ListView Interaction"
+    )
 }
 
 

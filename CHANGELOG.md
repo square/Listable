@@ -12,6 +12,13 @@
 
 # Past Releases
 
+## 0.6.1
+
+### Changed
+
+- Change `Item`'s `onSelect` and `onDeselect` [to be performed asynchronously](https://github.com/kyleve/Listable/pull/155) after a single runloop spin, to give `UICollectionView` time to schedule animations if these callbacks are slow.
+- Add improved signpost logging for selection and deselection, to more easily identify slow callbacks.
+
 ## 0.6.0
 
 ### Fixed

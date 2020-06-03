@@ -8,7 +8,7 @@
 import Foundation
 
 
-public final class AnyIdentifier : Hashable
+public final class AnyIdentifier : Hashable, CustomDebugStringConvertible
 {
     private let value : AnyHashable
     
@@ -36,13 +36,19 @@ public final class AnyIdentifier : Hashable
     {
         hasher.combine(self.hash)
     }
+    
+    // MARK: CustomDebugStringConvertible
+    
+    public var debugDescription: String {
+        self.value.identifierContentString
+    }
 }
 
 
-public final class Identifier<Represented> : Hashable
+public final class Identifier<Represented> : Hashable, CustomDebugStringConvertible
 {
     private let type : ObjectIdentifier
-    private let value : AnyHashable?
+    private let value : AnyHashable
     
     private let hash : Int
     
@@ -81,5 +87,25 @@ public final class Identifier<Represented> : Hashable
     public func hash(into hasher: inout Hasher)
     {
         hasher.combine(self.hash)
+    }
+    
+    // MARK: CustomDebugStringConvertible
+    
+    public var debugDescription: String {
+        "Identifier<\(String(describing: Represented.self))>: \(self.value.identifierContentString)"
+    }
+}
+
+
+fileprivate extension AnyHashable
+{
+    var identifierContentString : String {
+        if let base = self.base as? CustomDebugStringConvertible {
+            return base.debugDescription
+        } else if let base = self.base as? CustomStringConvertible {
+            return base.description
+        } else {
+            return self.debugDescription
+        }
     }
 }
