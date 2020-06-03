@@ -223,6 +223,8 @@ public final class ListView : UIView
         
         self.updateCollectionViewBounce()
         self.updateCollectionViewSelectionMode()
+        
+        self.setContentInsetWithKeyboardFrame()
     }
     
     private func updateCollectionViewBounce()
@@ -899,19 +901,30 @@ extension ListView : KeyboardObserverDelegate
         
         let inset : CGFloat
         
-        switch frame {
-        case .notVisible:
+        switch self.behavior.keyboardAdjustmentMode {
+        case .none:
             inset = 0.0
-        case .visible(let frame):
-            if #available(iOS 11, *) {
-                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-            } else {
-                inset = (self.bounds.size.height - frame.origin.y)
-            }
+            
+        case .adjustsWhenVisible:
+            switch frame {
+                   case .notVisible:
+                       inset = 0.0
+                   case .visible(let frame):
+                       if #available(iOS 11, *) {
+                           inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+                       } else {
+                           inset = (self.bounds.size.height - frame.origin.y)
+                       }
+                   }
         }
         
-        self.collectionView.contentInset.bottom = inset
-        self.collectionView.scrollIndicatorInsets.bottom = inset
+        if self.collectionView.contentInset.bottom != inset {
+            self.collectionView.contentInset.bottom = inset
+        }
+        
+        if self.collectionView.scrollIndicatorInsets.bottom != inset {
+            self.collectionView.scrollIndicatorInsets.bottom = inset
+        }
     }
     
     //
