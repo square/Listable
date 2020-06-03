@@ -1,5 +1,5 @@
 //
-//  ItemElementCoordinatorTests.swift
+//  ItemContentCoordinatorTests.swift
 //  Listable-Unit-Tests
 //
 //  Created by Kyle Van Essen on 5/22/20.
@@ -10,7 +10,7 @@ import XCTest
 @testable import Listable
 
 
-class ItemElementCoordinatorActionsTests : XCTestCase
+class ItemContentCoordinatorActionsTests : XCTestCase
 {
     func test_update()
     {
@@ -46,7 +46,7 @@ class ItemElementCoordinatorActionsTests : XCTestCase
 }
 
 
-class ItemElementCoordinatorInfoTests : XCTestCase
+class ItemContentCoordinatorInfoTests : XCTestCase
 {
     func test()
     {
