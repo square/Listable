@@ -210,7 +210,7 @@ extension Item : SignpostLoggable
     var signpostInfo : SignpostLoggingInfo {
         SignpostLoggingInfo(
             identifier: self.debuggingIdentifier,
-            instanceIdentifier: nil
+            instanceIdentifier: self.identifier.debugDescription
         )
     }
 }

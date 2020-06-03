@@ -89,7 +89,7 @@ public struct ListScrollPositionInfo : Equatable {
     private let scrollViewState : ScrollViewState
     
     /// Creates a `ListScrollPositionInfo` for the provided scroll view.
-    init(
+    public init(
         scrollView : UIScrollView,
         visibleItems : Set<AnyIdentifier>,
         isFirstItemVisible : Bool,

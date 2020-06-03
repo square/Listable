@@ -7,7 +7,7 @@
 //
 
 import UIKit
-@testable import Listable
+import Listable
 
 
 final class ScrollViewEdgesPlaygroundViewController : UIViewController, UIScrollViewDelegate
