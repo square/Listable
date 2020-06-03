@@ -148,7 +148,7 @@ public final class DemosRootViewController : UIViewController
                     DemoItem(text: "Tappable Row (Slow Is Selected)"),
                     selectionStyle: .tappable,
                     onSelect: { _ in
-                        Thread.sleep(forTimeInterval: 0.5)
+                        Thread.sleep(forTimeInterval: 0.55)
                     }
                 )
             }

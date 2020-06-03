@@ -4,6 +4,8 @@
 
 ### Added
 
+- Add support for debug logging to diagnose issues such as [slow `onSelect` callbacks](https://github.com/kyleve/Listable/pull/157/files).
+
 ### Removed
 
 ### Changed

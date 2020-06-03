@@ -288,13 +288,31 @@ extension PresentationState
                 if isSelected {
                     if let onSelect = self.model.onSelect {
                         SignpostLogger.log(log: .listInteraction, name: "Item onSelect", for: self.model) {
-                            onSelect(self.model.content)
+                            ListDebugging.debugging.measure(
+                                if: \.logsSlowUserCallbacks,
+                                max: 0.5,
+                                action: {
+                                    onSelect(self.model.content)
+                                },
+                                log: { info in
+                                    "Selecting Item (\(self.model.identifier.debugDescription)) took a long time. Max: \(info.max), actual: \(info.duration). Taking too long to perform actions in `onSelect` will have implications on application responsiveness."
+                                }
+                            )
                         }
                     }
                 } else {
                     if let onDeselect = self.model.onDeselect {
                         SignpostLogger.log(log: .listInteraction, name: "Item onDeselect", for: self.model) {
-                            onDeselect(self.model.content)
+                            ListDebugging.debugging.measure(
+                                if: \.logsSlowUserCallbacks,
+                                max: 0.5,
+                                action: {
+                                    onDeselect(self.model.content)
+                                },
+                                log: { info in
+                                    "Deselecting Item (\(self.model.identifier.debugDescription)) took a long time. Max: \(info.max), actual: \(info.duration). Taking too long to perform actions in `onDeselect` will have implications on application responsiveness."
+                                }
+                            )
                         }
                     }
                 }
