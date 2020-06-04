@@ -46,7 +46,8 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewBasicDemoViewController())
-                })
+                    }
+                )
                 
                 section += Item(
                     DemoItem(text: "Blueprint Integration"),
