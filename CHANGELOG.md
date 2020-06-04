@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Update `Item` callbacks to [allow for providing more info to the callback parameters](https://github.com/kyleve/Listable/pull/160).
+
 ### Misc
 
 # Past Releases

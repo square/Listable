@@ -53,17 +53,10 @@ public struct Item<Content:ItemContent> : AnyItem
 
     public var reordering : Reordering?
         
-    public typealias OnSelect = (Content) -> ()
-    public var onSelect : OnSelect?
-    
-    public typealias OnDeselect = (Content) -> ()
-    public var onDeselect : OnDeselect?
-    
-    public typealias OnDisplay = (Content) -> ()
-    public var onDisplay : OnDisplay?
-    
-    public typealias OnEndDisplay = (Content) -> ()
-    public var onEndDisplay : OnEndDisplay?
+    public var onSelect : OnSelect.Callback?
+    public var onDeselect : OnDeselect.Callback?
+    public var onDisplay : OnDisplay.Callback?
+    public var onEndDisplay : OnEndDisplay.Callback?
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
     
@@ -92,10 +85,10 @@ public struct Item<Content:ItemContent> : AnyItem
         selectionStyle : ItemSelectionStyle? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
-        onDisplay : OnDisplay? = nil,
-        onEndDisplay : OnEndDisplay? = nil,
-        onSelect : OnSelect? = nil,
-        onDeselect : OnDeselect? = nil
+        onDisplay : OnDisplay.Callback? = nil,
+        onEndDisplay : OnEndDisplay.Callback? = nil,
+        onSelect : OnSelect.Callback? = nil,
+        onDeselect : OnDeselect.Callback? = nil
         )
     {
         self.content = content
@@ -168,6 +161,46 @@ public struct Item<Content:ItemContent> : AnyItem
     public func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
     {
         PresentationState.ItemState(with: self, dependencies: dependencies)
+    }
+}
+
+
+public extension Item
+{
+    /// Value passed to the `onSelect` callback for `Item`.
+    struct OnSelect
+    {
+        public typealias Callback = (OnSelect) -> ()
+        
+        public var item : Item
+    }
+    
+    /// Value passed to the `onDeselect` callback for `Item`.
+    struct OnDeselect
+    {
+        public typealias Callback = (OnDeselect) -> ()
+
+        public var item : Item
+    }
+    
+    /// Value passed to the `onDisplay` callback for `Item`.
+    struct OnDisplay
+    {
+        public typealias Callback = (OnDisplay) -> ()
+
+        public var item : Item
+        
+        public var isFirstDisplay : Bool
+    }
+    
+    /// Value passed to the `onEndDisplay` callback for `Item`.
+    struct OnEndDisplay
+    {
+        public typealias Callback = (OnEndDisplay) -> ()
+
+        public var item : Item
+        
+        public var isFirstEndDisplay : Bool
     }
 }
 
