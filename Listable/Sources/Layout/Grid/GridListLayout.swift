@@ -130,13 +130,22 @@ final class GridListLayout : ListLayout
     //
     // MARK: Public Properties
     //
-    
-    var contentSize : CGSize
-    
+        
     let appearance : Appearance
     let behavior : Behavior
     
     let content : ListLayoutContent
+            
+    var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: false,
+            contentInsetAdjustmentBehavior: .automatic,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: true,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: true
+        )
+    }
     
     //
     // MARK: Initialization
@@ -144,8 +153,6 @@ final class GridListLayout : ListLayout
     
     init()
     {
-        self.contentSize = .zero
-                
         self.appearance = Appearance()
         self.behavior = Behavior()
         
@@ -159,8 +166,6 @@ final class GridListLayout : ListLayout
         in collectionView : UICollectionView
         )
     {
-        self.contentSize = .zero
-                
         self.appearance = appearance
         self.behavior = behavior
         
@@ -442,7 +447,7 @@ final class GridListLayout : ListLayout
         // Remaining Calculations
         //
         
-        self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
+        self.content.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
         
         return true
     }

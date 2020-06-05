@@ -64,13 +64,6 @@ public final class DemosRootViewController : UIViewController
                 })
                 
                 section += Item(
-                    DemoItem(text: "Custom Layouts"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(CustomLayoutsViewController())
-                })
-                
-                section += Item(
                     DemoItem(text: "Itemization Editor"),
                     selectionStyle: .tappable,
                     onSelect : { _ in
@@ -89,20 +82,6 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
-                })
-                
-                section += Item(
-                    DemoItem(text: "Horizontal Layout"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(HorizontalLayoutViewController())
-                })
-                
-                section += Item(
-                    DemoItem(text: "Width Customization"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(WidthCustomizationViewController())
                 })
                 
                 section += Item(
@@ -131,6 +110,41 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CoordinatorViewController())
+                })
+            }
+            
+            list += Section(identifier: "layouts") { section in
+                
+                section.header = HeaderFooter(
+                    DemoHeader(title: "Other Layouts")
+                )
+                
+                section += Item(
+                    DemoItem(text: "Grid Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(CustomLayoutsViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Paged Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(PagedViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Horizontal Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(HorizontalLayoutViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Width Customization"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(WidthCustomizationViewController())
                 })
             }
             

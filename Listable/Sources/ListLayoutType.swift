@@ -12,6 +12,7 @@ public enum ListLayoutType : Equatable
 {
     case list
     case grid
+    case paged
     
     case custom(Custom)
     
@@ -19,6 +20,7 @@ public enum ListLayoutType : Equatable
         switch self {
         case .list: return DefaultListLayout.self
         case .grid: return GridListLayout.self
+        case .paged: return PagedListLayout.self
         case .custom(let custom): return custom.layoutType
         }
     }

@@ -104,6 +104,7 @@ class DefaultListLayoutTests : XCTestCase
         let attributes = layout.content.layoutAttributes
         
         let expectedAttributes = ListLayoutAttributes(
+            contentSize: CGSize(width: 200.0, height: 340.0),
             header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 50.0)),
             footer: .init(frame: CGRect(x: 0.0, y: 270.0, width: 200.0, height: 70.0)),
             overscrollFooter: nil,
@@ -112,18 +113,18 @@ class DefaultListLayoutTests : XCTestCase
                     frame: CGRect(x: 0.0, y: 50.0, width: 200.0, height: 120.0),
                     header: .init(frame: CGRect(x: 0.0, y: 50.0, width: 200.0, height: 55.0)),
                     footer: .init(frame: CGRect(x: 0.0, y: 125.0, width: 200.0, height: 45.0)),
-                items: [
-                    .init(frame: CGRect(x: 0.0, y: 105.0, width: 200.0, height: 20.0))
+                    items: [
+                        .init(frame: CGRect(x: 0.0, y: 105.0, width: 200.0, height: 20.0))
                     ]
                 ),
 
                 .init(
                     frame: CGRect(x: 0.0, y: 170.0, width: 200.0, height: 100.0),
-                header: nil,
-                footer: nil,
-                items: [
-                    .init(frame: CGRect(x: 0.0, y: 170.0, width: 200.0, height: 40.0)),
-                    .init(frame: CGRect(x: 0.0, y: 210.0, width: 200.0, height: 60.0)),
+                    header: nil,
+                    footer: nil,
+                    items: [
+                        .init(frame: CGRect(x: 0.0, y: 170.0, width: 200.0, height: 40.0)),
+                        .init(frame: CGRect(x: 0.0, y: 210.0, width: 200.0, height: 60.0)),
                     ]
                 ),
             
@@ -167,6 +168,7 @@ class DefaultListLayoutTests : XCTestCase
         let attributes = layout.content.layoutAttributes
         
         let expectedAttributes = ListLayoutAttributes(
+            contentSize: CGSize(width: 340.0, height: 200.0),
             header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 50.0, height: 200.0)),
             footer: .init(frame: CGRect(x: 270.0, y: 0.0, width: 70.0, height: 200.0)),
             overscrollFooter: nil,

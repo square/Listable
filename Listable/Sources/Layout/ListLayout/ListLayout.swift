@@ -13,13 +13,13 @@ public protocol ListLayout : AnyObject
     //
     // MARK: Public Properties
     //
-    
-    var contentSize : CGSize { get }
-    
+        
     var appearance : Appearance { get }
     var behavior : Behavior { get }
     
     var content : ListLayoutContent { get }
+            
+    var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
     //
     // MARK: Initialization
@@ -107,7 +107,7 @@ public extension ListLayout
         
         let direction = self.appearance.direction
         
-        let contentHeight = direction.height(for: self.contentSize)
+        let contentHeight = direction.height(for: self.content.contentSize)
         let viewHeight = direction.height(for: collectionView.contentFrame.size)
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
@@ -160,6 +160,8 @@ public extension ListLayout
 
 public final class ListLayoutContent
 {
+    var contentSize : CGSize
+    
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
     
@@ -169,6 +171,8 @@ public final class ListLayoutContent
     
     init(with appearance : Appearance)
     {
+        self.contentSize = .zero
+        
         self.header = SupplementaryItemInfo.empty(.listHeader, direction: appearance.direction)
         self.footer = SupplementaryItemInfo.empty(.listFooter, direction: appearance.direction)
         self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter, direction: appearance.direction)
@@ -182,6 +186,8 @@ public final class ListLayoutContent
         in collectionView : UICollectionView
         )
     {
+        self.contentSize = .zero
+        
         self.header = {
             guard delegate.hasListHeader(in: collectionView) else {
                 return .empty(.listHeader, direction: appearance.direction)
@@ -418,6 +424,7 @@ public final class ListLayoutContent
     
     var layoutAttributes : ListLayoutAttributes {
         ListLayoutAttributes(
+            contentSize: self.contentSize,
             header: self.header.isPopulated ? .init(frame: self.header.defaultFrame) : nil,
             footer: self.footer.isPopulated ? .init(frame: self.footer.defaultFrame) : nil,
             overscrollFooter: self.overscrollFooter.isPopulated ? .init(frame: self.overscrollFooter.defaultFrame) : nil,
@@ -432,217 +439,5 @@ public final class ListLayoutContent
                 )
             }
         )
-    }
-}
-
-
-//
-// MARK: Layout Information
-//
-
-
-public struct ListLayoutAttributes : Equatable {
-    
-    var header : Supplementary?
-    var footer : Supplementary?
-    var overscrollFooter : Supplementary?
-    
-    var sections : [Section]
-    
-    public struct Section : Equatable {
-        var frame : CGRect
-        
-        var header : Supplementary?
-        var footer : Supplementary?
-        var items : [Item]
-    }
-    
-    public struct Supplementary : Equatable {
-        var frame : CGRect
-    }
-    
-    public struct Item : Equatable {
-        var frame : CGRect
-    }
-}
-
-
-public extension ListLayoutContent
-{
-    final class SectionInfo
-    {
-        let direction : LayoutDirection
-        let layout : Section.Layout
-        
-        let header : SupplementaryItemInfo
-        let footer : SupplementaryItemInfo
-        
-        let columns : Section.Columns
-        
-        var items : [ItemInfo]
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        
-        var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-                
-        init(
-            direction : LayoutDirection,
-            layout : Section.Layout,
-            header : SupplementaryItemInfo,
-            footer : SupplementaryItemInfo,
-            columns : Section.Columns,
-            items : [ItemInfo]
-            )
-        {
-            self.direction = direction
-            self.layout = layout
-            
-            self.header = header
-            self.footer = footer
-            
-            self.columns = columns
-            
-            self.items = items
-        }
-        
-        func setContentsFrameWithContent() {
-//            let allFrames : [CGRect] = [[
-//                    self.header.defaultFrame,
-//                    self.footer.defaultFrame
-//                ],
-//                self.items.map { $0.frame }
-//                ].flatMap { $0 }
-//
-//            self.contentsFrame = .from(unioned: allFrames)
-        }
-    }
-    
-
-    final class SupplementaryItemInfo
-    {
-        static func empty(_ kind : SupplementaryKind, direction: LayoutDirection) -> SupplementaryItemInfo
-        {
-            return SupplementaryItemInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false)
-        }
-        
-        let kind : SupplementaryKind
-        let direction : LayoutDirection
-        let layout : HeaderFooterLayout
-        
-        let isPopulated : Bool
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        var pinnedY : CGFloat? = nil
-        
-        var defaultFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-        
-        var visibleFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.pinnedY ?? self.y),
-                size: self.size
-            )
-        }
-        
-        init(kind : SupplementaryKind, direction : LayoutDirection, layout : HeaderFooterLayout, isPopulated: Bool)
-        {
-            self.kind = kind
-            self.direction = direction
-            self.layout = layout
-            self.isPopulated = isPopulated
-        }
-        
-        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-        {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: self.kind.rawValue, with: indexPath)
-            
-            attributes.frame = self.visibleFrame
-            attributes.zIndex = self.kind.zIndex
-            
-            return attributes
-        }
-    }
-    
-
-    final class ItemInfo
-    {
-        var delegateProvidedIndexPath : IndexPath
-        var liveIndexPath : IndexPath
-        
-        let direction : LayoutDirection
-        let layout : ItemLayout
-        
-        var position : ItemPosition = .single
-        
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        
-        var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
-        }
-        
-        init(
-            delegateProvidedIndexPath : IndexPath,
-            liveIndexPath : IndexPath,
-            direction : LayoutDirection,
-            layout : ItemLayout
-            )
-        {
-            self.delegateProvidedIndexPath = delegateProvidedIndexPath
-            self.liveIndexPath = liveIndexPath
-            
-            self.direction = direction
-            self.layout = layout
-        }
-        
-        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
-        {
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            
-            attributes.frame = self.frame
-            attributes.zIndex = 0
-            
-            return attributes
-        }
-    }
-}
-
-
-extension CGRect {
-    static func from(unioned rects : [CGRect]) -> CGRect {
-        
-        // Only include non-empty frames.
-        var rects = rects.filter {
-            $0.isEmpty == false
-        }
-        
-        guard let last = rects.popLast() else {
-            return .zero
-        }
-        
-        var frame = last
-        
-        for rect in rects {
-            frame = frame.union(rect)
-        }
-        
-        return frame
     }
 }
