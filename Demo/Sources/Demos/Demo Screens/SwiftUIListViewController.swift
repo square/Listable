@@ -46,17 +46,13 @@ final class SwiftUIListViewController : UIViewController
     
     var body : some View {
         ListableList { list in
-            list += Listable.Section(identifier: "section") { (section:inout Listable.Section) in
+            list += Listable.Section(identifier: "section") { section in
                 
-                section.set {
-                    if 10 == 10 {
-                        SwiftUIDemoItem()
-                    }
-                    
-                    SwiftUIDemoItem()
-                    SwiftUIDemoItem()
-                    SwiftUIDemoItem()
-                }
+                section += SwiftUIDemoItem()
+                section += SwiftUIDemoItem()
+                section += SwiftUIDemoItem()
+                section += SwiftUIDemoItem()
+                section += SwiftUIDemoItem()
             }
         }
     }
