@@ -163,10 +163,7 @@ public final class ListView : UIView
         
         // Scroll View
         
-        self.updateCollectionViewBounce()
-        
-        self.collectionView.showsHorizontalScrollIndicator = self.appearance.showsScrollIndicators
-        self.collectionView.showsVerticalScrollIndicator = self.appearance.showsScrollIndicators
+        self.updateCollectionViewWithCurrentLayoutProperties()
     }
     
     //
@@ -221,15 +218,19 @@ public final class ListView : UIView
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
-        self.updateCollectionViewBounce()
+        self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
+        self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
+        
+        self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
     }
     
-    private func updateCollectionViewBounce()
+    private func updateCollectionViewWithCurrentLayoutProperties()
     {
-        self.collectionView.setAlwaysBounce(
-            self.behavior.underflow.alwaysBounce,
-            direction: self.appearance.direction
+        self.layoutManager.current.layout.scrollViewProperties.apply(
+            to: self.collectionView,
+            behavior: self.behavior,
+            appearance: self.appearance
         )
     }
     
@@ -933,17 +934,5 @@ fileprivate extension UIScrollView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
-    }
-    
-    func setAlwaysBounce(_ bounce : Bool, direction : LayoutDirection)
-    {
-        switch direction {
-        case .vertical:
-            self.alwaysBounceVertical = bounce
-            self.alwaysBounceHorizontal = false
-        case .horizontal:
-            self.alwaysBounceVertical = false
-            self.alwaysBounceHorizontal = bounce
-        }
     }
 }

@@ -36,6 +36,12 @@ extension ListView
                 behavior: self.current.behavior
             )
             
+            self.current.layout.scrollViewProperties.apply(
+                to: self.collectionView,
+                behavior: self.current.behavior,
+                appearance: self.current.appearance
+            )
+            
             self.collectionView.setCollectionViewLayout(self.current, animated: animated) { _ in
                 completion()
             }

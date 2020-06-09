@@ -110,11 +110,10 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private var layout : ListLayout
+    private(set) internal var layout : ListLayout
+    
     private var previousLayout : ListLayout
-    
     private var changesDuringCurrentUpdate : UpdateItems
-    
     private var viewProperties : CollectionViewLayoutProperties
     
     //
@@ -318,7 +317,10 @@ final class CollectionViewLayout : UICollectionViewLayout
             
             let viewHeight = self.appearance.direction.height(for: view.bounds.size)
         
-            self.layout.adjustPositionsForLayoutUnderflow(contentHeight: self.layout.contentSize.height, viewHeight: viewHeight, in: view)
+            self.layout.adjustPositionsForLayoutUnderflow(
+                contentHeight: self.layout.content.contentSize.height,
+                viewHeight: viewHeight, in: view
+            )
         
             self.layout.updateLayout(in: view)
             
@@ -348,7 +350,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     override var collectionViewContentSize : CGSize
     {
-        return self.layout.contentSize
+        return self.layout.content.contentSize
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?

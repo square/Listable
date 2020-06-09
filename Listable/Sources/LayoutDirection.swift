@@ -11,6 +11,20 @@ public enum LayoutDirection : Hashable
     case vertical
     case horizontal
     
+    public func `switch`<Value>(vertical : () -> Value, horizontal : () -> Value) -> Value {
+        switch self {
+        case .vertical: return vertical()
+        case .horizontal: return horizontal()
+        }
+    }
+    
+    public func `switch`<Value>(vertical : @autoclosure () -> Value, horizontal : @autoclosure () -> Value) -> Value {
+        switch self {
+        case .vertical: return vertical()
+        case .horizontal: return horizontal()
+        }
+    }
+    
     //
     // MARK: Creating & Reading Values
     //

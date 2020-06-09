@@ -26,6 +26,7 @@
 		0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9B6248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift */; };
 		0AA4D9C8248064A300CF95A5 /* ReorderingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9B7248064A300CF95A5 /* ReorderingViewController.swift */; };
 		0AA4D9C9248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9B8248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift */; };
+		0AC2A1962489F93E00779459 /* PagedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC2A1952489F93E00779459 /* PagedViewController.swift */; };
 		0AE855512390933100F2E245 /* Test_Targets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE855502390933100F2E245 /* Test_Targets.swift */; };
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
@@ -56,6 +57,7 @@
 		0AA4D9B6248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDictionaryDemoViewController.swift; sourceTree = "<group>"; };
 		0AA4D9B7248064A300CF95A5 /* ReorderingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderingViewController.swift; sourceTree = "<group>"; };
 		0AA4D9B8248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewBasicDemoViewController.swift; sourceTree = "<group>"; };
+		0AC2A1952489F93E00779459 /* PagedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagedViewController.swift; sourceTree = "<group>"; };
 		0AE8554E2390933100F2E245 /* Test Targets.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Test Targets.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AE855502390933100F2E245 /* Test_Targets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test_Targets.swift; sourceTree = "<group>"; };
 		0AE855522390933100F2E245 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				0AA4D9AF248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0AA4D9B3248064A300CF95A5 /* ItemizationEditorViewController.swift */,
 				0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */,
+				0AC2A1952489F93E00779459 /* PagedViewController.swift */,
 				0AA4D9B7248064A300CF95A5 /* ReorderingViewController.swift */,
 				0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */,
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
@@ -398,6 +401,7 @@
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0AA4D9C4248064A300CF95A5 /* ItemizationEditorViewController.swift in Sources */,
 				0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */,
+				0AC2A1962489F93E00779459 /* PagedViewController.swift in Sources */,
 				0AA4D9C5248064A300CF95A5 /* AutoScrollingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
