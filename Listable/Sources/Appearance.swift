@@ -80,7 +80,6 @@ extension Appearance
         }
     }
 
-
     fileprivate struct AnyEquatable : Equatable
     {
         let base : Any

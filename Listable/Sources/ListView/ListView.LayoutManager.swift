@@ -36,21 +36,11 @@ extension ListView
                 behavior: self.current.behavior
             )
             
-            self.applyCurrentScrollViewProperties()
+            self.current.applyLayoutScrollViewProperties()
             
             self.collectionView.setCollectionViewLayout(self.current, animated: animated) { _ in
                 completion()
             }
-        }
-        
-        func applyCurrentScrollViewProperties()
-        {
-            self.current.layout.scrollViewProperties.apply(
-                to: self.collectionView,
-                behavior: self.current.behavior,
-                appearance: self.current.appearance,
-                direction: self.current.layout.content.direction
-            )
         }
     }
 }

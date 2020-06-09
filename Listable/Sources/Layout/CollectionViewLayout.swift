@@ -58,6 +58,20 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.invalidateLayout()
     }
     
+    func applyLayoutScrollViewProperties()
+    {
+        guard let collectionView = self.collectionView else {
+            return
+        }
+        
+        self.layout.scrollViewProperties.apply(
+            to: collectionView,
+            behavior: self.behavior,
+            appearance: self.appearance,
+            direction: self.layout.content.direction
+        )
+    }
+    
     //
     // MARK: Initialization
     //
@@ -82,6 +96,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
         self.viewProperties = CollectionViewLayoutProperties()
+        
+        self.neededLayoutType = .rebuild
         
         super.init()
         
@@ -260,7 +276,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         }
     }
     
-    private var neededLayoutType : NeededLayoutType = .rebuild
+    private var neededLayoutType : NeededLayoutType
         
     override func prepare()
     {
@@ -340,6 +356,8 @@ final class CollectionViewLayout : UICollectionViewLayout
             behavior: self.behavior,
             in: self.collectionView!
         )
+        
+        self.applyLayoutScrollViewProperties()
         
         return self.performRelayout()
     }

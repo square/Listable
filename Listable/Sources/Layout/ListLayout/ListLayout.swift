@@ -162,7 +162,7 @@ public final class ListLayoutContent
 {
     var contentSize : CGSize
     
-    var direction : LayoutDirection
+    let direction : LayoutDirection
     
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo

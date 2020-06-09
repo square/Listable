@@ -163,7 +163,7 @@ public final class ListView : UIView
         
         // Scroll View
         
-        self.updateCollectionViewWithCurrentLayoutProperties()
+        self.layout.applyLayoutScrollViewProperties()
     }
     
     //
@@ -221,13 +221,8 @@ public final class ListView : UIView
         self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
         self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
         
-        self.updateCollectionViewWithCurrentLayoutProperties()
+        self.layout.applyLayoutScrollViewProperties()
         self.updateCollectionViewSelectionMode()
-    }
-    
-    private func updateCollectionViewWithCurrentLayoutProperties()
-    {
-        self.layoutManager.applyCurrentScrollViewProperties()
     }
     
     private func updateCollectionViewSelectionMode()
