@@ -69,9 +69,7 @@ class ListAppearance_LayoutTests : XCTestCase
 
 
 class DefaultListLayoutTests : XCTestCase
-{
-    // Note: This test is temporary to allow for further refactoring of the layout system. Will be replaced.
-    
+{    
     func test_layout_vertical()
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 700.0)))

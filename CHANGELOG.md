@@ -4,6 +4,36 @@
 
 ### Added
 
+- [Add support for snapshot testing `Item`s](https://github.com/kyleve/Listable/pull/171) via the `ItemPreviewView` class. This is a view type which takes in some configuration options, and an `Item`, which you can then use in snapshot tests to verify the appearance of your `Item` and `ItemContent` .
+
+  ```
+  let view = ItemPreviewView()
+          
+  view.update(
+      with: 300.0,
+      state: .init(isSelected: false, isHighlighted: false),
+      item: Item(MyItemContent(...))
+  )
+
+  self.takeSnapshot(of: view)
+  ```
+
+- [Add support for Xcode previews](https://github.com/kyleve/Listable/pull/171) via the `ItemPreview` type. This allows easy previewing your `ItemContent` during development like so:
+
+  ```
+  struct ElementPreview : PreviewProvider {
+      static var previews: some View {
+          ItemPreview.withAllItemStates(
+              for: Item(XcodePreviewDemoContent(
+                  text: "Lorem ipsum dolor sit amet (...)"
+              ))
+          )
+      }
+  }
+  ```
+  
+  There are included options like `withAllItemStates` which allow seeing previews across the various possible selection and highlight states.
+
 ### Removed
 
 ### Changed

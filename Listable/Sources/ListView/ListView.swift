@@ -198,6 +198,10 @@ public final class ListView : UIView
         self.layoutManager.set(layoutType: layoutType, animated: animated, completion: completion)
     }
     
+    public var contentSize : CGSize {
+        return self.layoutManager.current.layout.content.contentSize
+    }
+    
     //
     // MARK: Behavior
     //

@@ -5,6 +5,9 @@ platform :ios, '10.0'
 project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
 
+use_frameworks!
+
+install! 'cocoapods', :disable_input_output_paths => true
 
 target 'Demo' do
 	# Local Pods
