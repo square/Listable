@@ -315,7 +315,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         if didLayout {
             self.layout.content.setSectionContentsFrames()
             
-            let viewHeight = self.appearance.direction.height(for: view.bounds.size)
+            let viewHeight = self.layout.content.direction.height(for: view.bounds.size)
         
             self.layout.adjustPositionsForLayoutUnderflow(
                 contentHeight: self.layout.content.contentSize.height,

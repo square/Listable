@@ -227,11 +227,7 @@ public final class ListView : UIView
     
     private func updateCollectionViewWithCurrentLayoutProperties()
     {
-        self.layoutManager.current.layout.scrollViewProperties.apply(
-            to: self.collectionView,
-            behavior: self.behavior,
-            appearance: self.appearance
-        )
+        self.layoutManager.applyCurrentScrollViewProperties()
     }
     
     private func updateCollectionViewSelectionMode()
@@ -271,7 +267,7 @@ public final class ListView : UIView
     {
         let insets = self.scrollInsets.insets(
             with: self.collectionView.contentInset,
-            layoutDirection: self.appearance.direction
+            layoutDirection: self.layout.layout.content.direction
         )
 
         self.collectionView.contentInset = insets

@@ -27,7 +27,10 @@ public struct GridAppearance : Equatable
     public var sizing : Sizing
     public var layout : Layout
     
-    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
+    public init(
+        sizing : Sizing = Sizing(),
+        layout : Layout = Layout()
+    )
     {
         self.sizing = sizing
         self.layout = layout
@@ -156,7 +159,7 @@ final class GridListLayout : ListLayout
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.content = ListLayoutContent()
     }
     
     init(
@@ -171,7 +174,7 @@ final class GridListLayout : ListLayout
         
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: .vertical,
             in: collectionView
         )
     }
@@ -202,17 +205,16 @@ final class GridListLayout : ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
         let layout = self.appearance.grid.layout
         let sizing = self.appearance.grid.sizing
         
         let viewSize = collectionView.bounds.size
         
-        let viewWidth = direction.width(for: collectionView.bounds.size)
+        let viewWidth = collectionView.bounds.size.width
         
         let rootWidth = ListAppearance.Layout.width(
-            with: direction.width(for: viewSize),
-            padding: direction.horizontalPadding(with: layout.padding),
+            with: viewSize.width,
+            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
             constraint: layout.width
         )
         
@@ -230,7 +232,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: .vertical)
             
             let height : CGFloat
             
@@ -239,30 +241,23 @@ final class GridListLayout : ListLayout
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                     defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
-                    layoutDirection: direction
+                    layoutDirection: .vertical
                 ).height
             } else {
                 height = 0.0
             }
             
             header.x = position.origin
-            header.size = direction.size(width: position.width, height: height)
+            header.size = CGSize(width: position.width, height: height)
             header.y = lastContentMaxY
             
             if hasListHeader {
-                lastContentMaxY = direction.maxY(for: header.defaultFrame)
+                lastContentMaxY = header.defaultFrame.maxY
             }
         }
         
-        switch direction {
-        case .vertical:
-            lastSectionMaxY += layout.padding.top
-            lastContentMaxY += layout.padding.top
-            
-        case .horizontal:
-            lastSectionMaxY += layout.padding.left
-            lastContentMaxY += layout.padding.left
-        }
+        lastSectionMaxY += layout.padding.top
+        lastContentMaxY += layout.padding.top
         
         //
         // Sections
@@ -270,7 +265,7 @@ final class GridListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: .vertical)
             
             section.x = sectionPosition.origin
             
@@ -283,7 +278,7 @@ final class GridListLayout : ListLayout
             
             performLayout(for: section.header) { header in
                 let width = header.layout.width.merge(with: section.layout.width)
-                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
+                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: .vertical)
                 let height : CGFloat
                 
                 if hasSectionHeader {
@@ -292,18 +287,18 @@ final class GridListLayout : ListLayout
                         in: collectionView,
                         measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                         defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight),
-                        layoutDirection: direction
+                        layoutDirection: .vertical
                     ).height
                 } else {
                     height = 0.0
                 }
                 
                 header.x = position.origin
-                header.size = direction.size(width: position.width, height: height)
+                header.size = CGSize(width: position.width, height: height)
                 header.y = lastContentMaxY
                 
                 if hasSectionHeader {
-                    lastContentMaxY = direction.maxY(for: section.header.defaultFrame)
+                    lastContentMaxY = section.header.defaultFrame.maxY
                     lastContentMaxY += layout.sectionHeaderBottomSpacing
                 }
             }
@@ -336,7 +331,7 @@ final class GridListLayout : ListLayout
             
             performLayout(for: section.footer) { footer in
                 let width = footer.layout.width.merge(with: section.layout.width)
-                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
+                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: .vertical)
                 
                 let height : CGFloat
                 
@@ -346,18 +341,18 @@ final class GridListLayout : ListLayout
                         in: collectionView,
                         measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                         defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight),
-                        layoutDirection: direction
+                        layoutDirection: .vertical
                     ).height
                 } else {
                     height = 0.0
                 }
                 
-                footer.size = direction.size(width: position.width, height: height)
+                footer.size = CGSize(width: position.width, height: height)
                 footer.x = position.origin
                 footer.y = lastContentMaxY
                 
                 if hasSectionFooter {
-                    lastContentMaxY = direction.maxY(for: footer.defaultFrame)
+                    lastContentMaxY = footer.defaultFrame.maxY
                 }
             }
             
@@ -365,10 +360,10 @@ final class GridListLayout : ListLayout
             // Size The Section
             //
             
-            section.size = direction.size(width: viewWidth, height: lastContentMaxY - lastSectionMaxY)
+            section.size = CGSize(width: viewWidth, height: lastContentMaxY - lastSectionMaxY)
             section.y = lastSectionMaxY
             
-            lastSectionMaxY = direction.maxY(for: section.frame)
+            lastSectionMaxY = section.frame.maxY
             
             // Add additional padding from config.
             
@@ -380,10 +375,7 @@ final class GridListLayout : ListLayout
             }
         }
         
-        switch direction {
-        case .vertical: lastContentMaxY += layout.padding.bottom
-        case .horizontal: lastContentMaxY += layout.padding.right
-        }
+        lastContentMaxY += layout.padding.bottom
         
         //
         // Footer
@@ -392,7 +384,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
             
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: .vertical)
             
             let height : CGFloat
             
@@ -401,18 +393,18 @@ final class GridListLayout : ListLayout
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                     defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight),
-                    layoutDirection: direction
+                    layoutDirection: .vertical
                 ).height
             } else {
                 height = 0.0
             }
             
-            footer.size = direction.size(width: position.width, height: height)
+            footer.size = CGSize(width: position.width, height: height)
             footer.x = position.origin
             footer.y = lastContentMaxY
             
             if hasFooter {
-                lastContentMaxY = direction.maxY(for: footer.defaultFrame)
+                lastContentMaxY = footer.defaultFrame.maxY
                 lastContentMaxY += layout.sectionHeaderBottomSpacing
             }
         }
@@ -424,7 +416,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.overscrollFooter) { footer in
             let hasFooter = footer.isPopulated
 
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: .vertical)
             
             let height : CGFloat
             
@@ -433,21 +425,21 @@ final class GridListLayout : ListLayout
                     in: collectionView,
                     measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                     defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight),
-                    layoutDirection: direction
+                    layoutDirection: .vertical
                 ).height
             } else {
                 height = 0.0
             }
             
             footer.x = position.origin
-            footer.size = direction.size(width: position.width, height: height)
+            footer.size = CGSize(width: position.width, height: height)
         }
         
         //
         // Remaining Calculations
         //
         
-        self.content.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
+        self.content.contentSize = CGSize(width: viewWidth, height: lastContentMaxY)
         
         return true
     }

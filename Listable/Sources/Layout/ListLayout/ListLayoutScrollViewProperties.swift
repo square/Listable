@@ -41,7 +41,8 @@ public struct ListLayoutScrollViewProperties
     func apply(
         to view : UIScrollView,
         behavior : Behavior,
-        appearance : Appearance
+        appearance : Appearance,
+        direction : LayoutDirection
     ) {
         if view.isPagingEnabled != self.isPagingEnabled {
             view.isPagingEnabled = self.isPagingEnabled
@@ -51,8 +52,8 @@ public struct ListLayoutScrollViewProperties
             view.contentInsetAdjustmentBehavior = self.contentInsetAdjustmentBehavior.toUIScrollViewValue
         }
         
-        let alwaysBounceVertical = self.allowsBounceVertical && behavior.underflow.alwaysBounce && appearance.direction == .vertical
-        let alwaysBounceHorizontal = self.allowsBounceHorizontal && behavior.underflow.alwaysBounce && appearance.direction == .horizontal
+        let alwaysBounceVertical = self.allowsBounceVertical && behavior.underflow.alwaysBounce && direction == .vertical
+        let alwaysBounceHorizontal = self.allowsBounceHorizontal && behavior.underflow.alwaysBounce && direction == .horizontal
         
         if view.alwaysBounceVertical != alwaysBounceVertical {
             view.alwaysBounceVertical = alwaysBounceVertical

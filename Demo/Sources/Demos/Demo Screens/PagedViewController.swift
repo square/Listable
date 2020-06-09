@@ -25,7 +25,6 @@ final class PagedViewController : UIViewController
     {
         self.blueprintView.element = List { list in
             
-            list.appearance.direction = .vertical
             list.layoutType = .paged
             
             list += Section(identifier: "first") { section in

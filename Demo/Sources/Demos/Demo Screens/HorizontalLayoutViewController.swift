@@ -39,7 +39,7 @@ final class HorizontalLayoutViewController : UIViewController
                 
                 section += Item.list(identifier: "carousel", sizing: .fixed(height: 400)) { horizontal in
 
-                    horizontal.appearance.direction = .horizontal
+                    horizontal.appearance.list.direction = .horizontal
 
                     horizontal.appearance.list.layout.set {
                         $0.itemSpacing = 20.0

@@ -11,15 +11,12 @@ public struct Appearance : Equatable
     public var backgroundColor : UIColor
     
     public var showsScrollIndicators : Bool
-    
-    public var direction : LayoutDirection
-    
+        
     public var stickySectionHeaders : Bool
 
     public init(
         backgroundColor : UIColor = .white,
         showsScrollIndicators : Bool = true,
-        direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
         configure : (inout Self) -> () = { _ in }
     )
@@ -27,9 +24,7 @@ public struct Appearance : Equatable
         self.backgroundColor = backgroundColor
         
         self.showsScrollIndicators = showsScrollIndicators
-        
-        self.direction = direction
-        
+                
         self.stickySectionHeaders = stickySectionHeaders
         
         configure(&self)

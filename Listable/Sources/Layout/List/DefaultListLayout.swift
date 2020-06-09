@@ -24,11 +24,18 @@ public extension Appearance
 
 public struct ListAppearance : Equatable
 {
+    public var direction : LayoutDirection
     public var sizing : Sizing
     public var layout : Layout
     
-    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
+    public init(
+        direction : LayoutDirection = .vertical,
+        sizing : Sizing = Sizing(),
+        layout : Layout = Layout()
+    )
     {
+        self.direction = direction
+        
         self.sizing = sizing
         self.layout = layout
     }
@@ -159,7 +166,7 @@ final class DefaultListLayout : ListLayout
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.content = ListLayoutContent()
     }
     
     init(
@@ -174,7 +181,7 @@ final class DefaultListLayout : ListLayout
         
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: appearance.list.direction,
             in: collectionView
         )
     }
@@ -205,7 +212,7 @@ final class DefaultListLayout : ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
+        let direction = self.appearance.list.direction
         let layout = self.appearance.list.layout
         let sizing = self.appearance.list.sizing
         

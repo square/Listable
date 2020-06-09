@@ -51,7 +51,7 @@ final class PagedListLayout : ListLayout
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.content = ListLayoutContent()
     }
     
     init(
@@ -61,14 +61,12 @@ final class PagedListLayout : ListLayout
         in collectionView : UICollectionView
         )
     {
-        listablePrecondition(appearance.direction == .vertical, "Only the default layout is currently supported.")
-        
         self.appearance = appearance
         self.behavior = behavior
         
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: .vertical,
             in: collectionView
         )
     }
