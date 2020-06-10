@@ -85,7 +85,8 @@ class DefaultListLayoutTests : XCTestCase
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
-                
+                section.layout = Section.Layout(customInterSectionSpacing: 88)
+
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
                 
@@ -104,9 +105,9 @@ class DefaultListLayoutTests : XCTestCase
         let attributes = layout.content.layoutAttributes
         
         let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 200.0, height: 340.0),
+            contentSize: CGSize(width: 200.0, height: 428.0),
             header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 50.0)),
-            footer: .init(frame: CGRect(x: 0.0, y: 270.0, width: 200.0, height: 70.0)),
+            footer: .init(frame: CGRect(x: 0.0, y: 358.0, width: 200.0, height: 70.0)),
             overscrollFooter: nil,
             sections: [
                 .init(
@@ -119,12 +120,12 @@ class DefaultListLayoutTests : XCTestCase
                 ),
 
                 .init(
-                    frame: CGRect(x: 0.0, y: 170.0, width: 200.0, height: 100.0),
+                    frame: CGRect(x: 0.0, y: 258.0, width: 200.0, height: 100.0),
                     header: nil,
                     footer: nil,
                     items: [
-                        .init(frame: CGRect(x: 0.0, y: 170.0, width: 200.0, height: 40.0)),
-                        .init(frame: CGRect(x: 0.0, y: 210.0, width: 200.0, height: 60.0)),
+                        .init(frame: CGRect(x: 0.0, y: 258.0, width: 200.0, height: 40.0)),
+                        .init(frame: CGRect(x: 0.0, y: 298.0, width: 200.0, height: 60.0)),
                     ]
                 ),
             
@@ -149,7 +150,8 @@ class DefaultListLayoutTests : XCTestCase
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
-                
+                section.layout = Section.Layout(customInterSectionSpacing: 88)
+
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
                 
@@ -168,9 +170,9 @@ class DefaultListLayoutTests : XCTestCase
         let attributes = layout.content.layoutAttributes
         
         let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 340.0, height: 200.0),
+            contentSize: CGSize(width: 428.0, height: 200.0),
             header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 50.0, height: 200.0)),
-            footer: .init(frame: CGRect(x: 270.0, y: 0.0, width: 70.0, height: 200.0)),
+            footer: .init(frame: CGRect(x: 358.0, y: 0.0, width: 70.0, height: 200.0)),
             overscrollFooter: nil,
             sections: [
                 .init(
@@ -183,12 +185,12 @@ class DefaultListLayoutTests : XCTestCase
                 ),
 
                 .init(
-                    frame: CGRect(x: 170.0, y: 0.0, width: 100.0, height: 200.0),
+                    frame: CGRect(x: 258.0, y: 0.0, width: 100.0, height: 200.0),
                 header: nil,
                 footer: nil,
                 items: [
-                    .init(frame: CGRect(x: 170.0, y: 0.0, width: 40.0, height: 200.0)),
-                    .init(frame: CGRect(x: 210.0, y: 0.0, width: 60.0, height: 200.0)),
+                    .init(frame: CGRect(x: 258.0, y: 0.0, width: 40.0, height: 200.0)),
+                    .init(frame: CGRect(x: 298.0, y: 0.0, width: 60.0, height: 200.0)),
                     ]
                 )
             ]

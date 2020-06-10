@@ -152,10 +152,14 @@ public extension Section
     struct Layout : Equatable
     {
         public var width : CustomWidth
+
+        /// Overrides the calculated spacing after this section
+        public var customInterSectionSpacing : CGFloat?
         
-        public init(width : CustomWidth = .default)
+        public init(width : CustomWidth = .default, customInterSectionSpacing : CGFloat? = nil)
         {
             self.width = width
+            self.customInterSectionSpacing = customInterSectionSpacing
         }
     }
     
