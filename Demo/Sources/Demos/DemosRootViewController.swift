@@ -146,6 +146,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(WidthCustomizationViewController())
                 })
+
+                section += Item(
+                    DemoItem(text: "Spacing Customization"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(SpacingCustomizationViewController())
+                })
             }
             
             list += Section(identifier: "selection-state") { section in

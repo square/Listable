@@ -4,6 +4,8 @@
 
 ### Added
 
+- Add `customInterSectionSpacing` property to `Section.Layout` which allows the user to specify [custom spacing after a section](https://github.com/kyleve/Listable/pull/172), overriding the calculated spacing.
+
 ### Removed
 
 ### Changed

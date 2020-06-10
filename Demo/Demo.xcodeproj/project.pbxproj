@@ -32,6 +32,7 @@
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
 		27B4DCE9244F88BE001BA9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */; };
+		2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8804642490844A003BB351 /* SpacingCustomizationViewController.swift */; };
 		42180BB244DD1F51618E1B34 /* libPods-Test Targets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */; };
 		C16C0AC6F56D2268011EDFF2 /* libPods-Demo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		0AEB96BD22FBCBA600341DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2B8804642490844A003BB351 /* SpacingCustomizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacingCustomizationViewController.swift; sourceTree = "<group>"; };
 		32A40D3FB90881FFA78ACE27 /* libPods-Demo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Demo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C37B21704ABC58A2C22883DB /* libPods-Test Targets.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Test Targets.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55FB4CC847A4E4F271441F7 /* Pods-Test Targets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test Targets.debug.xcconfig"; path = "Target Support Files/Pods-Test Targets/Pods-Test Targets.debug.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */,
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
+				2B8804642490844A003BB351 /* SpacingCustomizationViewController.swift */,
 			);
 			path = "Demo Screens";
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */,
 				0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
+				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,
 				0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
