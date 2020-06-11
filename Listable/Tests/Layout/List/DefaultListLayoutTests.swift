@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Snapshot
 
 @testable import Listable
 
@@ -70,8 +71,6 @@ class ListAppearance_LayoutTests : XCTestCase
 
 class DefaultListLayoutTests : XCTestCase
 {
-    // Note: This test is temporary to allow for further refactoring of the layout system. Will be replaced.
-    
     func test_layout_vertical()
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 700.0)))
@@ -80,59 +79,65 @@ class DefaultListLayoutTests : XCTestCase
         listView.setContent { list in
             
             list.appearance.direction = .vertical
+            list.layoutType = .list
+            
+            list.appearance.list.layout = .init(
+                padding: UIEdgeInsets(top: 5.0, left: 10.0, bottom: 20.0, right: 15.0),
+                width: .noConstraint,
+                headerToFirstSectionSpacing: 10.0,
+                interSectionSpacingWithNoFooter: 15.0,
+                interSectionSpacingWithFooter: 20.0,
+                sectionHeaderBottomSpacing: 10.0,
+                itemSpacing: 5.0,
+                itemToSectionFooterSpacing: 10.0,
+                lastSectionToFooterSpacing: 20.0
+            )
             
             list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section(identifier: "first") { section in
-                section.layout = Section.Layout(customInterSectionSpacing: 88)
+                section.layout = Section.Layout(customInterSectionSpacing: 30)
 
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.3)), sizing: .fixed(height: 20.0))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 30.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 40.0))
+            }
+            
+            list += Section(identifier: "third") { section in
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
+            }
+            
+            list += Section(identifier: "fourth") { section in
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
             }
         }
         
-        let layout = DefaultListLayout(delegate: listView.delegate, appearance: listView.appearance, behavior: listView.behavior, in: listView.collectionView)
-        _ = layout.layout(delegate: listView.delegate, in: listView.collectionView)
+        listView.collectionView.layoutIfNeeded()
         
-        let attributes = layout.content.layoutAttributes
+        let contentSize = listView.layout.layout.content.contentSize
         
-        let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 200.0, height: 428.0),
-            header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 50.0)),
-            footer: .init(frame: CGRect(x: 0.0, y: 358.0, width: 200.0, height: 70.0)),
-            overscrollFooter: nil,
-            sections: [
-                .init(
-                    frame: CGRect(x: 0.0, y: 50.0, width: 200.0, height: 120.0),
-                    header: .init(frame: CGRect(x: 0.0, y: 50.0, width: 200.0, height: 55.0)),
-                    footer: .init(frame: CGRect(x: 0.0, y: 125.0, width: 200.0, height: 45.0)),
-                    items: [
-                        .init(frame: CGRect(x: 0.0, y: 105.0, width: 200.0, height: 20.0))
-                    ]
-                ),
-
-                .init(
-                    frame: CGRect(x: 0.0, y: 258.0, width: 200.0, height: 100.0),
-                    header: nil,
-                    footer: nil,
-                    items: [
-                        .init(frame: CGRect(x: 0.0, y: 258.0, width: 200.0, height: 40.0)),
-                        .init(frame: CGRect(x: 0.0, y: 298.0, width: 200.0, height: 60.0)),
-                    ]
-                ),
-            
-            ]
-        )
-                
-        XCTAssertEqual(attributes, expectedAttributes)
+        listView.frame.size.height = contentSize.height
+        
+        let snapshot = Snapshot(iterations: [SizedViewIteration<ListView>(size: contentSize)], input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
     // Note: This test is temporary to allow for further refactoring of the layout system. Will be replaced.

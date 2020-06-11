@@ -17,6 +17,11 @@ public struct Snapshot<Iteration:SnapshotIteration>
     internal typealias OnFail = (_ message : String, _ file : StaticString, _ line : UInt) -> ()
     internal var onFail : OnFail = XCTFail
     
+    public init(iterations: [Iteration] , input : Iteration.RenderingFormat)
+    {
+        self.init(iterations: iterations) { _ in input }
+    }
+    
     public init(iterations : [Iteration], test : @escaping Test)
     {
         let hasIterations = iterations.isEmpty == false
@@ -133,8 +138,16 @@ public protocol SnapshotOutputFormat
 
 public struct SnapshotOutputInfo : Equatable
 {
-    var directoryName : String
-    var fileExtension : String
+    public var directoryName : String
+    public var fileExtension : String
+    
+    public init(
+        directoryName : String,
+        fileExtension : String
+    ) {
+        self.directoryName = directoryName
+        self.fileExtension = fileExtension
+    }
 }
 
 

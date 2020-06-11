@@ -34,3 +34,13 @@ public struct ListLayoutAttributes : Equatable {
         var frame : CGRect
     }
 }
+
+
+extension ListLayoutAttributes {
+    var stringRepresentation : String {
+        var output = ""
+        dump(self, to: &output)
+        
+        return output
+    }
+}

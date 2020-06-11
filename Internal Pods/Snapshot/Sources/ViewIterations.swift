@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct ViewIteration : SnapshotIteration
+public struct ViewIteration<ViewType:UIView> : SnapshotIteration
 {
     public init(name: String)
     {
@@ -17,18 +17,18 @@ public struct ViewIteration : SnapshotIteration
     
     // MARK: SnapshotIteration
     
-    public typealias RenderingFormat = UIView
+    public typealias RenderingFormat = ViewType
     
     public var name : String
     
-    public func prepare(render : UIView) -> UIView
+    public func prepare(render : ViewType) -> ViewType
     {
         return render
     }
 }
 
 
-public struct SizedViewIteration : SnapshotIteration
+public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
 {
     public let size : CGSize
     
@@ -39,13 +39,13 @@ public struct SizedViewIteration : SnapshotIteration
     
     // MARK: SnapshotIteration
     
-    public typealias RenderingFormat = UIView
+    public typealias RenderingFormat = ViewType
     
     public var name : String {
         return "\(self.size.width) x \(self.size.height)"
     }
     
-    public func prepare(render : UIView) -> UIView
+    public func prepare(render : ViewType) -> ViewType
     {
         render.frame.origin = .zero
         render.frame.size = self.size

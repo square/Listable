@@ -8,13 +8,13 @@
 import UIKit
 
 
-public struct ViewImageSnapshot : SnapshotOutputFormat
+public struct ViewImageSnapshot<ViewType:UIView> : SnapshotOutputFormat
 {
     // MARK: SnapshotOutputFormat
     
-    public typealias RenderingFormat = UIView
+    public typealias RenderingFormat = ViewType
     
-    public static func snapshotData(with renderingFormat : UIView) throws -> Data
+    public static func snapshotData(with renderingFormat : ViewType) throws -> Data
     {
         return renderingFormat.toImage.pngData()!
     }
@@ -26,7 +26,7 @@ public struct ViewImageSnapshot : SnapshotOutputFormat
         )
     }
     
-    public static func validate(render newView : UIView, existingData: Data) throws
+    public static func validate(render newView : ViewType, existingData: Data) throws
     {
         let existing = try ViewImageSnapshot.image(with: existingData)
         let new = newView.toImage
