@@ -1,4 +1,4 @@
-# Master
+# Main
 
 ### Fixed
 
@@ -33,6 +33,8 @@
   ```
   
   There are included options like `withAllItemStates` which allow seeing previews across the various possible selection and highlight states.
+
+- Add `customInterSectionSpacing` property to `Section.Layout` which allows the user to specify [custom spacing after a section](https://github.com/kyleve/Listable/pull/172), overriding the calculated spacing.
 
 ### Removed
 
