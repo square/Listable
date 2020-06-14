@@ -23,9 +23,7 @@ Pod::Spec.new do |s|
 
     test_spec.framework = 'XCTest'
     
-    test_spec.library = 'swiftUIKit'
-    test_spec.library = 'swiftsimd'
-    test_spec.library = 'swiftCoreGraphics'
+    test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
 
     test_spec.requires_app_host = true
   end

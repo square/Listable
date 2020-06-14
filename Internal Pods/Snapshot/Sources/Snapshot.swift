@@ -62,11 +62,16 @@ public struct Snapshot<Iteration:SnapshotIteration>
                 let data = try OutputFormat.snapshotData(with: rendering)
                 
                 let existingData = try self.existingData(at: url)
-               
-                try data.write(to: url)
                 
                 if let existingData = existingData {
-                    try OutputFormat.validate(render: rendering, existingData: existingData)
+                    do {
+                        try OutputFormat.validate(render: rendering, existingData: existingData)
+                    } catch {
+                        try data.write(to: url)
+                        throw error
+                    }
+                } else {
+                    try data.write(to: url)
                 }
             } catch {
                 self.onFail("Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed with error: \(error).", testFilePath, line)

@@ -7,8 +7,6 @@ workspace 'Demo/Demo.xcworkspace'
 
 use_frameworks!
 
-install! 'cocoapods', :disable_input_output_paths => true
-
 target 'Demo' do
 	# Local Pods
 	pod 'Listable', :path => 'Listable.podspec', :testspecs => ['Tests']
