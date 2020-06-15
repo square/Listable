@@ -22,9 +22,11 @@ final class HorizontalLayoutViewController : UIViewController
         self.view = self.listView
         
         self.listView.setContent { list in
-                        
-            list.appearance.list.layout.itemSpacing = 20.0
-            list.appearance.list.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+            
+            list.layout = .list {
+                $0.layout.itemSpacing = 20.0
+                $0.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+            }
             
             list.content.overscrollFooter = HeaderFooter(
                 HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
@@ -38,19 +40,17 @@ final class HorizontalLayoutViewController : UIViewController
                 )
                 
                 section += Item.list(identifier: "carousel", sizing: .fixed(height: 400)) { horizontal in
-
-                    horizontal.appearance.direction = .horizontal
-
-                    horizontal.appearance.list.layout.set {
-                        $0.itemSpacing = 20.0
-                        $0.sectionHeaderBottomSpacing = 20.0
+                    
+                    horizontal.layout = .list {
+                        $0.direction = .horizontal
+                        
+                        $0.layout.set {
+                            $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
+                            $0.itemSpacing = 20.0
+                            $0.sectionHeaderBottomSpacing = 20.0
+                        }
                     }
-
-                    horizontal.scrollInsets = .init(
-                        top: list.appearance.list.layout.padding.left,
-                        bottom: list.appearance.list.layout.padding.right
-                    )
-
+                    
                     horizontal.content.overscrollFooter = HeaderFooter(
                         HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
                         sizing: .fixed(height: 100.0)

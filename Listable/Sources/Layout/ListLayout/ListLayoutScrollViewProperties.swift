@@ -41,18 +41,21 @@ public struct ListLayoutScrollViewProperties
     func apply(
         to view : UIScrollView,
         behavior : Behavior,
-        appearance : Appearance
+        direction : LayoutDirection,
+        showsScrollIndicators : Bool
     ) {
-        if view.isPagingEnabled != self.isPagingEnabled {
-            view.isPagingEnabled = self.isPagingEnabled
+        let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
+        
+        if view.isPagingEnabled != isPagingEnabled {
+            view.isPagingEnabled = isPagingEnabled
         }
         
         if #available(iOS 11.0, *), view.contentInsetAdjustmentBehavior != self.contentInsetAdjustmentBehavior.toUIScrollViewValue {
             view.contentInsetAdjustmentBehavior = self.contentInsetAdjustmentBehavior.toUIScrollViewValue
         }
         
-        let alwaysBounceVertical = self.allowsBounceVertical && behavior.underflow.alwaysBounce && appearance.direction == .vertical
-        let alwaysBounceHorizontal = self.allowsBounceHorizontal && behavior.underflow.alwaysBounce && appearance.direction == .horizontal
+        let alwaysBounceVertical = self.allowsBounceVertical && behavior.underflow.alwaysBounce && direction == .vertical
+        let alwaysBounceHorizontal = self.allowsBounceHorizontal && behavior.underflow.alwaysBounce && direction == .horizontal
         
         if view.alwaysBounceVertical != alwaysBounceVertical {
             view.alwaysBounceVertical = alwaysBounceVertical
@@ -62,8 +65,8 @@ public struct ListLayoutScrollViewProperties
             view.alwaysBounceHorizontal = alwaysBounceHorizontal
         }
         
-        let showsVerticalScrollIndicator = self.allowsVerticalScrollIndicator && appearance.showsScrollIndicators
-        let showsHorizontalScrollIndicator = self.allowsHorizontalScrollIndicator && appearance.showsScrollIndicators
+        let showsVerticalScrollIndicator = self.allowsVerticalScrollIndicator && showsScrollIndicators
+        let showsHorizontalScrollIndicator = self.allowsHorizontalScrollIndicator && showsScrollIndicators
         
         if view.showsVerticalScrollIndicator != showsVerticalScrollIndicator {
             view.showsVerticalScrollIndicator = showsVerticalScrollIndicator

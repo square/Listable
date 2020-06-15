@@ -77,7 +77,7 @@ public final class ItemPreviewView : UIView {
         self.layoutIfNeeded()
         
         self.listView.setContent { list in
-            appearance.configure(listAppearance: &list.appearance)
+            appearance.configure(list: &list)
             
             list += Section(identifier: "section") { section in
                 section += item

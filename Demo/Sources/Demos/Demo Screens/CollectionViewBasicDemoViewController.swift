@@ -42,7 +42,10 @@ final class CollectionViewBasicDemoViewController : UIViewController
         ]
         
         self.view = self.listView
+        
         self.listView.appearance = .demoAppearance
+        self.listView.layout = .demoLayout
+        
         self.updateTable(animated: false)
     }
     

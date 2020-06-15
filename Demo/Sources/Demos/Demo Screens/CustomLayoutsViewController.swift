@@ -27,8 +27,7 @@ final class CustomLayoutsViewController : UIViewController
         self.listView.setContent { list in
             
             list.appearance = .demoAppearance
-            
-            list.appearance.grid.sizing.itemSize = .fixed(CGSize(width: 80.0, height: 80.0))
+            list.layout = .demoLayout
 
             list += Section(identifier: "default") { section in
                 
@@ -74,9 +73,9 @@ final class CustomLayoutsViewController : UIViewController
         self.gridOn.toggle()
         
         if self.gridOn {
-            self.listView.set(layoutType: .grid, animated: true)
+            self.listView.set(layout: .grid(), animated: true)
         } else {
-            self.listView.set(layoutType: .list, animated: true)
+            self.listView.set(layout: .demoLayout, animated: true)
         }
     }
     

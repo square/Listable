@@ -15,7 +15,7 @@ struct LayoutAttributesSnapshot : SnapshotOutputFormat
     typealias RenderingFormat = ListView
     
     static func snapshotData(with renderingFormat: ListView) throws -> Data {
-        renderingFormat.layout.layout.content.layoutAttributes.stringRepresentation.data(using: .utf8)!
+        renderingFormat.collectionViewLayout.layout.content.layoutAttributes.stringRepresentation.data(using: .utf8)!
     }
     
     static var outputInfo: SnapshotOutputInfo {

@@ -5,28 +5,39 @@
 //  Created by Kyle Van Essen on 6/4/20.
 //
 
-public extension Appearance
+
+public extension LayoutDescription
 {
-    var paged : PagedAppearance {
-        get {
-            self[PagedAppearance.self, default: PagedAppearance()]
-        }
-        
-        set {
-            self[PagedAppearance.self] = newValue
-        }
+    static func paged(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
+    {
+        PagedListLayout.describe(appearance: configure)
     }
 }
 
-
-public struct PagedAppearance : Equatable
+public struct PagedAppearance : ListLayoutAppearance
 {
-    var showsScrollIndicators : Bool = false
+    public static var `default`: PagedAppearance {
+        Self.init()
+    }
+    
+    public var showsScrollIndicators : Bool = false
+    
+    public var direction: LayoutDirection {
+        .vertical
+    }
+    
+    public var stickySectionHeaders : Bool {
+        false
+    }
 }
 
 
 final class PagedListLayout : ListLayout
 {
+    public typealias LayoutAppearance = PagedAppearance
+    
+    var layoutAppearance: PagedAppearance
+    
     let appearance: Appearance
     let behavior: Behavior
     let content: ListLayoutContent
@@ -48,27 +59,29 @@ final class PagedListLayout : ListLayout
     
     init()
     {
+        self.layoutAppearance = LayoutAppearance()
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.content = ListLayoutContent(with: self.layoutAppearance.direction)
     }
     
     init(
-        delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
-        behavior : Behavior,
-        in collectionView : UICollectionView
-        )
-    {
-        listablePrecondition(appearance.direction == .vertical, "Only the default layout is currently supported.")
+        layoutAppearance: PagedAppearance,
+        appearance: Appearance,
+        behavior: Behavior,
+        delegate: CollectionViewLayoutDelegate,
+        in collectionView: UICollectionView
+    ) {
+        listablePrecondition(layoutAppearance.direction == .vertical, "Only the default layout is currently supported.")
         
+        self.layoutAppearance = layoutAppearance
         self.appearance = appearance
         self.behavior = behavior
         
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: layoutAppearance.direction,
             in: collectionView
         )
     }

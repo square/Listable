@@ -94,24 +94,24 @@ class DefaultListLayoutTests : XCTestCase
     func listFor(direction : LayoutDirection) -> ListView
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
-        listView.layoutType = .list
         
         listView.setContent { list in
             
-            list.appearance.direction = direction
-            list.layoutType = .list
-            
-            list.appearance.list.layout = .init(
-                padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
-                width: .noConstraint,
-                headerToFirstSectionSpacing: 10.0,
-                interSectionSpacingWithNoFooter: 15.0,
-                interSectionSpacingWithFooter: 20.0,
-                sectionHeaderBottomSpacing: 10.0,
-                itemSpacing: 5.0,
-                itemToSectionFooterSpacing: 10.0,
-                lastSectionToFooterSpacing: 20.0
-            )
+            list.layout = .list {
+                $0.direction = direction
+                
+                $0.layout = .init(
+                    padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
+                    width: .noConstraint,
+                    headerToFirstSectionSpacing: 10.0,
+                    interSectionSpacingWithNoFooter: 15.0,
+                    interSectionSpacingWithFooter: 20.0,
+                    sectionHeaderBottomSpacing: 10.0,
+                    itemSpacing: 5.0,
+                    itemToSectionFooterSpacing: 10.0,
+                    lastSectionToFooterSpacing: 20.0
+                )
+            }
             
             list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))

@@ -11,7 +11,7 @@ public extension Item where Content == EmbeddedList
     static func list<Identifier:Hashable>(
         identifier : Identifier,
         sizing : EmbeddedList.Sizing,
-        build : ListDescription.Build
+        build : ListProperties.Build
     ) -> Item<EmbeddedList>
     {
         return Item(
@@ -29,20 +29,20 @@ public struct EmbeddedList : ItemContent
     // MARK: Public Properties
     //
     
-    public var listDescription : ListDescription
+    public var properties : ListProperties
     public var contentIdentifier : AnyHashable
     
     //
     // MARK: Initialization
     //
     
-    public init<Identifier:Hashable>(identifier : Identifier, build : ListDescription.Build)
+    public init<Identifier:Hashable>(identifier : Identifier, build : ListProperties.Build)
     {
         self.contentIdentifier = AnyHashable(identifier)
         
-        self.listDescription = ListDescription(
+        self.properties = ListProperties(
             animatesChanges: true,
-            layoutType: .list,
+            layout: .list(),
             appearance: .init {
                 $0.showsScrollIndicators = false
             },
@@ -67,7 +67,7 @@ public struct EmbeddedList : ItemContent
     
     public func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.setProperties(with: self.listDescription)
+        views.content.setProperties(with: self.properties)
     }
     
     public func isEquivalent(to other: EmbeddedList) -> Bool

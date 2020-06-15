@@ -66,7 +66,7 @@ extension ListView
         {
             let visibleFrame = view.collectionView.bounds
             
-            let visibleAttributes = view.layout.visibleLayoutAttributesForElements(in: visibleFrame) ?? []
+            let visibleAttributes = view.collectionViewLayout.visibleLayoutAttributesForElements(in: visibleFrame) ?? []
             
             var items : Set<Item> = []
             var headerFooters : Set<HeaderFooter> = []

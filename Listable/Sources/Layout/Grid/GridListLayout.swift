@@ -7,28 +7,35 @@
 
 import Foundation
 
-
-public extension Appearance
+public extension LayoutDescription
 {
-    var grid : GridAppearance {
-        get {
-            self[GridAppearance.self, default: GridAppearance()]
-        }
-        
-        set {
-            self[GridAppearance.self] = newValue
-        }
+    static func grid(_ configure : @escaping (inout GridAppearance) -> () = { _ in }) -> Self
+    {
+        GridListLayout.describe(appearance: configure)
     }
 }
 
-
-public struct GridAppearance : Equatable
+public struct GridAppearance : ListLayoutAppearance
 {
     public var sizing : Sizing
     public var layout : Layout
     
-    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
-    {
+    public var direction: LayoutDirection {
+        .vertical
+    }
+    
+    public var stickySectionHeaders : Bool
+    
+    public static var `default`: GridAppearance {
+        return self.init()
+    }
+    
+    public init(
+        stickySectionHeaders : Bool = true,
+        sizing : Sizing = Sizing(),
+        layout : Layout = Layout()
+    ) {
+        self.stickySectionHeaders = stickySectionHeaders
         self.sizing = sizing
         self.layout = layout
     }
@@ -127,6 +134,10 @@ public struct GridAppearance : Equatable
 
 final class GridListLayout : ListLayout
 {
+    typealias LayoutAppearance = GridAppearance
+    
+    var layoutAppearance: GridAppearance
+    
     //
     // MARK: Public Properties
     //
@@ -153,29 +164,31 @@ final class GridListLayout : ListLayout
     
     init()
     {
+        self.layoutAppearance = LayoutAppearance()
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.content = ListLayoutContent(with: self.layoutAppearance.direction)
     }
     
     init(
-        delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
-        behavior : Behavior,
-        in collectionView : UICollectionView
-        )
-    {
+        layoutAppearance: GridAppearance,
+        appearance: Appearance,
+        behavior: Behavior,
+        delegate: CollectionViewLayoutDelegate,
+        in collectionView: UICollectionView
+    ) {
+        self.layoutAppearance = layoutAppearance
         self.appearance = appearance
         self.behavior = behavior
         
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: layoutAppearance.direction,
             in: collectionView
         )
     }
-    
+
     //
     // MARK: Performing Layouts
     //
@@ -202,9 +215,9 @@ final class GridListLayout : ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
-        let layout = self.appearance.grid.layout
-        let sizing = self.appearance.grid.sizing
+        let direction = self.layoutAppearance.direction
+        let layout = self.layoutAppearance.layout
+        let sizing = self.layoutAppearance.sizing
         
         let viewSize = collectionView.bounds.size
         
