@@ -14,7 +14,7 @@ class SnapshotTests : XCTestCase
 {
     fileprivate func newSnapshot(with test : @escaping Snapshot<TestIteration>.Test) -> Snapshot<TestIteration>
     {
-        return Snapshot(iterations: [TestIteration(name: "Test")], test: test)
+        return Snapshot(for: [TestIteration(name: "Test")], test: test)
     }
     
     func test_no_asset_writes_and_passes()
@@ -106,7 +106,7 @@ class SnapshotTests : XCTestCase
             SizedViewIteration(size: CGSize(width: 300.0, height: 300.0)),
         ]
         
-        let snapshot = Snapshot(iterations: iterations) { iteration in
+        let snapshot = Snapshot(for: iterations) { iteration in
             let root = ViewType1(frame: .init(origin: .zero, size: .init(width: 150.0, height: 150.0)))
             root.backgroundColor = .init(white: 0.8, alpha: 1.0)
 

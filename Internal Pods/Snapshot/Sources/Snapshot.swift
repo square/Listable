@@ -19,7 +19,23 @@ public struct Snapshot<Iteration:SnapshotIteration>
     internal var onFail : OnFail = XCTFail
     
     public init(
-        iterations : [Iteration],
+        for iteration: Iteration ,
+        settings : SnapshotSettings = .init(),
+        input : Iteration.RenderingFormat
+    ) {
+        self.init(for: [iteration], settings : settings) { _ in input }
+    }
+    
+    public init(
+        for iterations: [Iteration] ,
+        settings : SnapshotSettings = .init(),
+        input : Iteration.RenderingFormat
+    ) {
+        self.init(for: iterations, settings : settings) { _ in input }
+    }
+    
+    public init(
+        for iterations : [Iteration],
         settings : SnapshotSettings = .init(),
         test : @escaping Test
     ) {
@@ -56,10 +72,13 @@ public struct Snapshot<Iteration:SnapshotIteration>
                 functionName: functionName.description,
                 iteration: iteration.name
             )
+            
+            var onFailData : Data? = nil
                         
             do {
                 let rendering = iteration.prepare(render: try self.test(iteration))
                 let data = try OutputFormat.snapshotData(with: rendering)
+                onFailData = data
                 
                 let existingData = try self.existingData(at: url)
                 
@@ -74,7 +93,29 @@ public struct Snapshot<Iteration:SnapshotIteration>
                     try data.write(to: url)
                 }
             } catch {
-                self.onFail("Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed with error: \(error).", testFilePath, line)
+                let data : String = {
+                    if let onFailData = onFailData {
+                        return onFailData.base64EncodedString()
+                    } else {
+                        return "Error generating snapshotData."
+                    }
+                }()
+                
+                self.onFail(
+                    """
+                    Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed.
+                    
+                    Error: \(error).
+                    
+                    File extension: '.\(output.outputInfo.fileExtension)'.
+                    
+                    Base64 Data (pass this to `Data.saveBase64(toPath: "~/Development/etc ...", content: "...")` to inspect locally):
+                    
+                    '\(data)'.
+                    
+                    """,
+                    testFilePath, line
+                )
             }            
         }
     }
@@ -124,6 +165,29 @@ public struct Snapshot<Iteration:SnapshotIteration>
 }
 
 
+public extension Data
+{
+    static func saveBase64(toPath path : String, content : String) -> Bool
+    {
+        let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+        
+        guard let data = Data(base64Encoded: content) else {
+            print("Could not create data from base64 string.")
+            return false
+        }
+        
+        do {
+            try data.write(to: url)
+        } catch {
+            print("Could not write data to disk. Error: \(error)")
+            return false
+        }
+        
+        return true
+    }
+}
+
+
 public enum SnapshotValidationError : Error
 {
     case notMatching
@@ -144,8 +208,16 @@ public protocol SnapshotOutputFormat
 
 public struct SnapshotOutputInfo : Equatable
 {
-    var directoryName : String
-    var fileExtension : String
+    public var directoryName : String
+    public var fileExtension : String
+    
+    public init(
+        directoryName : String,
+        fileExtension : String
+    ) {
+        self.directoryName = directoryName
+        self.fileExtension = fileExtension
+    }
 }
 
 
