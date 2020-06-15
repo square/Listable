@@ -72,10 +72,13 @@ public struct Snapshot<Iteration:SnapshotIteration>
                 functionName: functionName.description,
                 iteration: iteration.name
             )
+            
+            var onFailData : Data? = nil
                         
             do {
                 let rendering = iteration.prepare(render: try self.test(iteration))
                 let data = try OutputFormat.snapshotData(with: rendering)
+                onFailData = data
                 
                 let existingData = try self.existingData(at: url)
                 
@@ -90,7 +93,29 @@ public struct Snapshot<Iteration:SnapshotIteration>
                     try data.write(to: url)
                 }
             } catch {
-                self.onFail("Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed with error: \(error).", testFilePath, line)
+                let data : String = {
+                    if let onFailData = onFailData {
+                        return onFailData.base64EncodedString()
+                    } else {
+                        return "Error generating snapshotData."
+                    }
+                }()
+                
+                self.onFail(
+                    """
+                    Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed.
+                    
+                    Error: \(error).
+                    
+                    File extension: '.\(output.outputInfo.fileExtension)'.
+                    
+                    Base64 Data (pass this to `Data.saveBase64(toPath: "~/Development/etc ...", content: "...")` to inspect locally):
+                    
+                    '\(data)'.
+                    
+                    """,
+                    testFilePath, line
+                )
             }            
         }
     }
@@ -136,6 +161,29 @@ public struct Snapshot<Iteration:SnapshotIteration>
         return snapshotsDirectory
             .appendingPathComponent(iteration)
             .appendingPathExtension(OutputFormat.outputInfo.fileExtension)
+    }
+}
+
+
+public extension Data
+{
+    static func saveBase64(toPath path : String, content : String) -> Bool
+    {
+        let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+        
+        guard let data = Data(base64Encoded: content) else {
+            print("Could not create data from base64 string.")
+            return false
+        }
+        
+        do {
+            try data.write(to: url)
+        } catch {
+            print("Could not write data to disk. Error: \(error)")
+            return false
+        }
+        
+        return true
     }
 }
 
