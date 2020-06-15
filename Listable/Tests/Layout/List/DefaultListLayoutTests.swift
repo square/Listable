@@ -73,16 +73,36 @@ class DefaultListLayoutTests : XCTestCase
 {
     func test_layout_vertical()
     {
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 700.0)))
+        let listView = self.listFor(direction: .vertical)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+        
+    func test_layout_horizontal()
+    {
+        let listView = self.listFor(direction: .horizontal)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    func listFor(direction : LayoutDirection) -> ListView
+    {
+        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         listView.layoutType = .list
         
         listView.setContent { list in
             
-            list.appearance.direction = .vertical
+            list.appearance.direction = direction
             list.layoutType = .list
             
             list.appearance.list.layout = .init(
-                padding: UIEdgeInsets(top: 5.0, left: 10.0, bottom: 20.0, right: 15.0),
+                padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
                 width: .noConstraint,
                 headerToFirstSectionSpacing: 10.0,
                 interSectionSpacingWithNoFooter: 15.0,
@@ -130,79 +150,9 @@ class DefaultListLayoutTests : XCTestCase
         
         listView.collectionView.layoutIfNeeded()
         
-        let contentSize = listView.layout.layout.content.contentSize
-        
-        listView.frame.size.height = contentSize.height
-        
-        let snapshot = Snapshot(for: SizedViewIteration<ListView>(size: contentSize), input: listView)
-        
-        snapshot.test(output: ViewImageSnapshot.self)
-        snapshot.test(output: LayoutAttributesSnapshot.self)
+        return listView
     }
     
-    // Note: This test is temporary to allow for further refactoring of the layout system. Will be replaced.
-    
-    func test_layout_horizontal()
-    {
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 700.0, height: 200.0)))
-        listView.layoutType = .list
-        
-        listView.setContent { list in
-            
-            list.appearance.direction = .horizontal
-            
-            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
-            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
-            
-            list += Section(identifier: "first") { section in
-                section.layout = Section.Layout(customInterSectionSpacing: 88)
-
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 55.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 45.0))
-                
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
-            }
-            
-            list += Section(identifier: "second") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 40.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 60.0))
-            }
-        }
-        
-        let layout = DefaultListLayout(delegate: listView.delegate, appearance: listView.appearance, behavior: listView.behavior, in: listView.collectionView)
-        _ = layout.layout(delegate: listView.delegate, in: listView.collectionView)
-        
-        let attributes = layout.content.layoutAttributes
-        
-        let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 428.0, height: 200.0),
-            header: .init(frame: CGRect(x: 0.0, y: 0.0, width: 50.0, height: 200.0)),
-            footer: .init(frame: CGRect(x: 358.0, y: 0.0, width: 70.0, height: 200.0)),
-            overscrollFooter: nil,
-            sections: [
-                .init(
-                    frame: CGRect(x: 50.0, y: 0.0, width: 120.0, height: 200.0),
-                    header: .init(frame: CGRect(x: 50.0, y: 0.0, width: 55.0, height: 200.0)),
-                    footer: .init(frame: CGRect(x: 125.0, y: 0.0, width: 45.0, height: 200.0)),
-                items: [
-                    .init(frame: CGRect(x: 105.0, y: 0.0, width: 20.0, height: 200.0))
-                    ]
-                ),
-
-                .init(
-                    frame: CGRect(x: 258.0, y: 0.0, width: 100.0, height: 200.0),
-                header: nil,
-                footer: nil,
-                items: [
-                    .init(frame: CGRect(x: 258.0, y: 0.0, width: 40.0, height: 200.0)),
-                    .init(frame: CGRect(x: 298.0, y: 0.0, width: 60.0, height: 200.0)),
-                    ]
-                )
-            ]
-        )
-                
-        XCTAssertEqual(attributes, expectedAttributes)
-    }
 }
 
 

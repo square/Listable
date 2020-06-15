@@ -47,9 +47,19 @@ public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
     
     public func prepare(render : ViewType) -> ViewType
     {
-        render.frame.origin = .zero
-        render.frame.size = self.size
+        render.frame = CGRect(origin: .zero, size: self.size)
+        render.layoutIfNeeded()
+        
+        // Some views, like UICollectionView, do not lay out properly
+        // without spinning the runloop once, in order to update the onscreen cells.
+        self.waitForOneRunloop()
         
         return render
+    }
+    
+    private func waitForOneRunloop()
+    {
+        let runloop = RunLoop.main
+        runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
     }
 }
