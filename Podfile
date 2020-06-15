@@ -5,6 +5,7 @@ platform :ios, '10.0'
 project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
 
+use_frameworks!
 
 target 'Demo' do
 	# Local Pods

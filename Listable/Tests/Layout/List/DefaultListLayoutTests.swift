@@ -134,7 +134,7 @@ class DefaultListLayoutTests : XCTestCase
         
         listView.frame.size.height = contentSize.height
         
-        let snapshot = Snapshot(iterations: [SizedViewIteration<ListView>(size: contentSize)], input: listView)
+        let snapshot = Snapshot(for: SizedViewIteration<ListView>(size: contentSize), input: listView)
         
         snapshot.test(output: ViewImageSnapshot.self)
         snapshot.test(output: LayoutAttributesSnapshot.self)

@@ -5,7 +5,7 @@
 //  Created by Kyle Van Essen on 12/1/19.
 //
 
-import Foundation
+import UIKit
 
 
 public struct ViewIteration<ViewType:UIView> : SnapshotIteration

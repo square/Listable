@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
     test_spec.resources = 'BlueprintLists/Tests/Resources/**/*'
 
     test_spec.framework = 'XCTest'
+    
+    test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
 
     test_spec.requires_app_host = true
   end
