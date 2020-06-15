@@ -28,6 +28,7 @@ class SnapshotTests : XCTestCase
         }
         
         let url = Snapshot<TestIteration>.outputUrl(
+            with: .init(),
             output: TestOutputFormat.self,
             testCase: nil,
             testFilePath: #file,
@@ -57,6 +58,7 @@ class SnapshotTests : XCTestCase
         }
         
         let url = Snapshot<TestIteration>.outputUrl(
+            with: .init(),
             output: TestOutputFormat.self,
             testCase: nil,
             testFilePath: #file,
@@ -82,6 +84,7 @@ class SnapshotTests : XCTestCase
         }
         
         let url = Snapshot<TestIteration>.outputUrl(
+            with: .init(),
             output: TestOutputFormat.self,
             testCase: nil,
             testFilePath: #file,
@@ -97,8 +100,13 @@ class SnapshotTests : XCTestCase
     }
     
     func test_image_and_text_output()
-    {        
-        let snapshot = Snapshot(iterations: iOSDevice.allAvailable.toSnapshotIterations()) { iteration in
+    {
+        let iterations = [
+            SizedViewIteration(size: CGSize(width: 200.0, height: 200.0)),
+            SizedViewIteration(size: CGSize(width: 300.0, height: 300.0)),
+        ]
+        
+        let snapshot = Snapshot(iterations: iterations) { iteration in
             let root = ViewType1(frame: .init(origin: .zero, size: .init(width: 150.0, height: 150.0)))
             root.backgroundColor = .init(white: 0.8, alpha: 1.0)
 

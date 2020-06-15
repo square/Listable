@@ -14,6 +14,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Listable/Sources/**/*.{swift}'
 
+  s.weak_framework = 'SwiftUI'
+
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Listable/Tests/**/*.{swift}'
     test_spec.ios.resource_bundle = { 'ListableTestsResources' => 'Listable/Tests/Resources/**/*.*' }

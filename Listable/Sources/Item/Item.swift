@@ -90,7 +90,7 @@ public struct Item<Content:ItemContent> : AnyItem
         onSelect : OnSelect.Callback? = nil,
         onDeselect : OnDeselect.Callback? = nil
         )
-    {
+    {        
         self.content = content
                 
         if let sizing = sizing {
@@ -306,7 +306,7 @@ public struct ItemLayout : Equatable
 }
 
 
-public struct ItemState : Equatable
+public struct ItemState : Hashable
 {
     public init(isSelected : Bool, isHighlighted : Bool)
     {

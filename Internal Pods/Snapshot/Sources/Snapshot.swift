@@ -11,14 +11,18 @@ public struct Snapshot<Iteration:SnapshotIteration>
 {    
     public typealias Test = (Iteration) throws -> Iteration.RenderingFormat
     
+    public let settings : SnapshotSettings
     public let iterations : [Iteration]
     public let test : Test
     
     internal typealias OnFail = (_ message : String, _ file : StaticString, _ line : UInt) -> ()
     internal var onFail : OnFail = XCTFail
     
-    public init(iterations : [Iteration], test : @escaping Test)
-    {
+    public init(
+        iterations : [Iteration],
+        settings : SnapshotSettings = .init(),
+        test : @escaping Test
+    ) {
         let hasIterations = iterations.isEmpty == false
         precondition(hasIterations, "Must provide at least one iteration.")
         
@@ -31,6 +35,7 @@ public struct Snapshot<Iteration:SnapshotIteration>
         precondition(allNamesNonEmpty, "Cannot provide an empty iteration name.")
         
         self.iterations = iterations.sorted { $0.name < $1.name }
+        self.settings = settings
         self.test = test
     }
     
@@ -44,6 +49,7 @@ public struct Snapshot<Iteration:SnapshotIteration>
     {
         for iteration in self.iterations {
             let url = Snapshot.outputUrl(
+                with: self.settings,
                 output: OutputFormat.self,
                 testCase: testCase,
                 testFilePath: testFilePath.description,
@@ -56,11 +62,16 @@ public struct Snapshot<Iteration:SnapshotIteration>
                 let data = try OutputFormat.snapshotData(with: rendering)
                 
                 let existingData = try self.existingData(at: url)
-               
-                try data.write(to: url)
                 
                 if let existingData = existingData {
-                    try OutputFormat.validate(render: rendering, existingData: existingData)
+                    do {
+                        try OutputFormat.validate(render: rendering, existingData: existingData)
+                    } catch {
+                        try data.write(to: url)
+                        throw error
+                    }
+                } else {
+                    try data.write(to: url)
                 }
             } catch {
                 self.onFail("Snapshot test '\(iteration.name)' with format '\(OutputFormat.self)' failed with error: \(error).", testFilePath, line)
@@ -78,9 +89,9 @@ public struct Snapshot<Iteration:SnapshotIteration>
     }
     
     static func outputUrl<OutputFormat:SnapshotOutputFormat>(
+        with settings : SnapshotSettings,
         output: OutputFormat.Type,
         testCase : String?,
-        systemVersion: String = UIDevice.current.systemVersion,
         testFilePath : String,
         functionName : String,
         iteration : String
@@ -91,12 +102,12 @@ public struct Snapshot<Iteration:SnapshotIteration>
         let testDirectory = testFileURL.deletingLastPathComponent()
         
         // For:        ~/Development/Project/Tests/Tests.swift
-        // We Provide: ~/Development/Project/Tests/Snapshot Results/Tests.swift/testFunctionName()/outputFormat/testCase/modifierName.extension
+        // We Provide: ~/Development/Project/Tests/Snapshot Results/Tests.swift/OSVersion/testFunctionName()/outputFormat/testCase/modifierName.extension
         
         var snapshotsDirectory = testDirectory
             .appendingPathComponent("Snapshot Results", isDirectory: true)
             .appendingPathComponent(testFileName, isDirectory: true)
-            .appendingPathComponent(systemVersion, isDirectory: true)
+            .appendingPathComponent(settings.savesBySystemVersion.systemVersionDirectory(), isDirectory: true)
             .appendingPathComponent(functionName, isDirectory: true)
             .appendingPathComponent(OutputFormat.outputInfo.directoryName, isDirectory: true)
         
