@@ -59,7 +59,10 @@ public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
     
     private func waitForOneRunloop()
     {
-        let runloop = RunLoop.main
-        runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
+        let finalDate = Date(timeIntervalSinceNow: 1.0)
+        
+        repeat {
+            RunLoop.main.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
+        } while Date() < finalDate
     }
 }

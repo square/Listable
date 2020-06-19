@@ -781,6 +781,8 @@ public final class ListView : UIView
                 view.performBatchUpdates(batchUpdates, completion: completion)
             }
         }
+        
+        self.setNeedsLayout()
     }
     
     private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
