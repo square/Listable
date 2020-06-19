@@ -50,16 +50,16 @@ public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
         render.frame = CGRect(origin: .zero, size: self.size)
         render.layoutIfNeeded()
         
-        // Some views, like UICollectionView, do not lay out properly
-        // without spinning the runloop once, in order to update the onscreen cells.
-        self.waitForOneRunloop()
+        self.spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow()
         
         return render
     }
     
-    private func waitForOneRunloop()
+    private func spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow()
     {
-        let finalDate = Date(timeIntervalSinceNow: 1.0)
+        /// I don't know why this is the only way I can make UICollectionView call `_updateVisibleCellsNow:`.
+        
+        let finalDate = Date(timeIntervalSinceNow: 0.1)
         
         repeat {
             RunLoop.main.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
