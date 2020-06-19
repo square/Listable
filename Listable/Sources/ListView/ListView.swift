@@ -32,7 +32,7 @@ public final class ListView : UIView
         
         let initialLayout = CollectionViewLayout(
             delegate: self.delegate,
-            layoutType: .list,
+            layoutDescription: .list(),
             appearance: self.appearance,
             behavior: self.behavior
         )
@@ -109,9 +109,10 @@ public final class ListView : UIView
     let storage : Storage
     let collectionView : CollectionView
     let delegate : Delegate
+    let layoutManager : LayoutManager
     
-    var layout : CollectionViewLayout {
-        self.layoutManager.current
+    var collectionViewLayout : CollectionViewLayout {
+        self.layoutManager.collectionViewLayout
     }
     
     private(set) var visibleContent : VisibleContent
@@ -119,9 +120,7 @@ public final class ListView : UIView
     //
     // MARK: Private Properties
     //
-        
-    private let layoutManager : LayoutManager
-    
+            
     private var sourcePresenter : AnySourcePresenter
 
     private var autoScrollAction : AutoScrollAction
@@ -154,7 +153,7 @@ public final class ListView : UIView
     {
         // Appearance
         
-        self.layout.appearance = self.appearance
+        self.collectionViewLayout.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
         
         // Row Sizing
@@ -183,23 +182,18 @@ public final class ListView : UIView
         )
     }
     
-    public var layoutType : ListLayoutType {
-        get {
-            self.layout.layoutType
-        }
-        
-        set {
-            self.set(layoutType: newValue)
-        }
+    public var layout : LayoutDescription {
+        get { self.collectionViewLayout.layoutDescription }
+        set { self.set(layout: newValue, animated: false) }
     }
-    
-    public func set(layoutType : ListLayoutType, animated : Bool = false, completion : @escaping () -> () = {})
+
+    public func set(layout : LayoutDescription, animated : Bool = false, completion : @escaping () -> () = {})
     {
-        self.layoutManager.set(layoutType: layoutType, animated: animated, completion: completion)
+        self.layoutManager.set(layout: layout, animated: animated, completion: completion)
     }
     
     public var contentSize : CGSize {
-        return self.layoutManager.current.layout.content.contentSize
+        return self.collectionViewLayout.layout.content.contentSize
     }
     
     //
@@ -218,7 +212,7 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
-        self.layout.behavior = self.behavior
+        self.collectionViewLayout.behavior = self.behavior
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
@@ -231,10 +225,11 @@ public final class ListView : UIView
     
     private func updateCollectionViewWithCurrentLayoutProperties()
     {
-        self.layoutManager.current.layout.scrollViewProperties.apply(
+        self.collectionViewLayout.layout.scrollViewProperties.apply(
             to: self.collectionView,
             behavior: self.behavior,
-            appearance: self.appearance
+            direction: self.collectionViewLayout.layout.direction,
+            showsScrollIndicators: self.appearance.showsScrollIndicators
         )
     }
     
@@ -275,7 +270,7 @@ public final class ListView : UIView
     {
         let insets = self.scrollInsets.insets(
             with: self.collectionView.contentInset,
-            layoutDirection: self.appearance.direction
+            layoutDirection: self.collectionViewLayout.layout.direction
         )
 
         self.collectionView.contentInset = insets
@@ -324,7 +319,7 @@ public final class ListView : UIView
         return self.preparePresentationStateForScroll(to: toIndexPath) {
                         
             let isAlreadyVisible: Bool = {
-                let frame = self.layout.frameForItem(at: toIndexPath)
+                let frame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
                 return self.collectionView.contentFrame.contains(frame)
             }()
@@ -364,7 +359,7 @@ public final class ListView : UIView
         // Perform scrolling.
 
         return self.preparePresentationStateForScroll(to: toIndexPath)  {
-            let contentHeight = self.layout.collectionViewContentSize.height
+            let contentHeight = self.collectionViewLayout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
             guard contentHeight > contentFrameHeight else {
@@ -387,11 +382,11 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(with builder : ListDescription.Build)
+    public func setContent(with builder : ListProperties.Build)
     {
-        let description = ListDescription(
+        let description = ListProperties(
             animatesChanges: true,
-            layoutType: self.layoutType,
+            layout: self.layout,
             appearance: self.appearance,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
@@ -441,7 +436,7 @@ public final class ListView : UIView
         })
     }
     
-    public func setProperties(with description : ListDescription)
+    public func setProperties(with description : ListProperties)
     {
         let animated = description.animatesChanges
         
@@ -452,7 +447,7 @@ public final class ListView : UIView
         self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
         self.debuggingIdentifier = description.debuggingIdentifier
 
-        self.set(layoutType: description.layoutType, animated: animated)
+        self.set(layout: description.layout, animated: animated)
         
         self.setContent(animated: animated, description.content)
     }
@@ -536,7 +531,7 @@ public final class ListView : UIView
     internal func setPresentationStateItemPositions()
     {
         self.storage.presentationState.forEachItem { indexPath, item in
-            item.itemPosition = self.layout.positionForItem(at: indexPath)
+            item.itemPosition = self.collectionViewLayout.positionForItem(at: indexPath)
         }
     }
     
@@ -777,7 +772,7 @@ public final class ListView : UIView
             self.cancelInteractiveMovement()
         }
         
-        self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
+        self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
             view.performBatchUpdates(batchUpdates, completion: completion)
@@ -786,6 +781,8 @@ public final class ListView : UIView
                 view.performBatchUpdates(batchUpdates, completion: completion)
             }
         }
+        
+        self.setNeedsLayout()
     }
     
     private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
@@ -816,11 +813,11 @@ extension ListView : ItemContentCoordinatorDelegate
     {
         if animated {
             UIView.animate(withDuration: 0.25) {
-                self.layoutManager.current.setNeedsRelayout()
+                self.collectionViewLayout.setNeedsRelayout()
                 self.collectionView.layoutIfNeeded()
             }
         } else {
-            self.layoutManager.current.setNeedsRelayout()
+            self.collectionViewLayout.setNeedsRelayout()
         }
     }
 }

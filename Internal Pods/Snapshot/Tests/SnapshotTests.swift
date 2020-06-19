@@ -17,6 +17,19 @@ class SnapshotTests : XCTestCase
         return Snapshot(for: [TestIteration(name: "Test")], test: test)
     }
     
+    func test_use_this_to_write_out_data()
+    {
+        let path = ""
+        
+        let string = ""
+        
+        if path.isEmpty || string.isEmpty {
+            return
+        }
+        
+        _ = Data.saveBase64(toPath: path, content: string)
+    }
+    
     func test_no_asset_writes_and_passes()
     {
         var snapshot = self.newSnapshot(with: { _ in

@@ -17,7 +17,10 @@ class ListView_VisibleContentTests : XCTestCase
         listView.setContent { list in
             
             list.appearance.backgroundColor = .black
-            list.appearance.stickySectionHeaders = false
+
+            list.layout = .list {
+                $0.stickySectionHeaders = false
+            }
             
             list.content.header = HeaderFooter(
                 TestHeaderFooter(color: .blue),

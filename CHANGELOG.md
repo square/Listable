@@ -46,6 +46,31 @@
 
 - [`ListAppearance.Layout.padding` is now applied around all content in the list](https://github.com/kyleve/Listable/pull/173/), not only around sections. To regain the previous behavior, use `headerToFirstSectionSpacing` and `lastSectionToFooterSpacing`.
 
+- Significantly change how [layout configuration is done](https://github.com/kyleve/Listable/pull/174) to make it clearer which type of layout is currently in use, and which options are available on which layouts.
+
+  Previously, to configure a layout, you would write code like this:
+
+  ```
+  list.appearance.layoutType = .list
+  list.appearance.list.layout.padding = UIEdgeInsets(...)
+  ```
+
+  Now, you configure the layout like this:
+
+  ```
+  list.layout = .list {
+    $0.layout.padding = UIEdgeInsets(...)
+  }
+  ```
+
+  Or, for your custom layouts, like this:
+
+  ```
+  list.layout = MyCustomLayout.describe {
+    $0.myLayoutsProperty = .foo
+  }
+  ```
+
 ### Misc
 
 # Past Releases

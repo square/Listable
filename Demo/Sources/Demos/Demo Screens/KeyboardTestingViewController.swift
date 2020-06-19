@@ -21,7 +21,9 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.appearance.list.layout.itemSpacing = 10.0
+        self.listView.layout = .list {
+            $0.layout.itemSpacing = 10.0
+        }
         
         self.listView.setContent { list in
             list.content.overscrollFooter = HeaderFooter(

@@ -16,7 +16,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     unowned let delegate : CollectionViewLayoutDelegate
     
-    let layoutType : ListLayoutType
+    var layoutDescription : LayoutDescription
     
     var appearance : Appearance {
         didSet {
@@ -34,8 +34,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             return
         }
         
-        self.neededLayoutType.merge(with: .rebuild)
-        self.invalidateLayout()
+        self.setNeedsRebuild()
     }
     
     var behavior : Behavior {
@@ -54,8 +53,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             return
         }
         
-        self.neededLayoutType.merge(with: .rebuild)
-        self.invalidateLayout()
+        self.setNeedsRebuild()
     }
     
     //
@@ -64,19 +62,17 @@ final class CollectionViewLayout : UICollectionViewLayout
     
     init(
         delegate : CollectionViewLayoutDelegate,
-        layoutType : ListLayoutType,
+        layoutDescription : LayoutDescription,
         appearance : Appearance,
         behavior : Behavior
-    )
-    {
+    ) {
         self.delegate = delegate
-        
-        self.layoutType = layoutType
-        
+        self.layoutDescription = layoutDescription
         self.appearance = appearance
         self.behavior = behavior
         
-        self.layout = self.layoutType.layoutType.init()
+        self.layout = self.layoutDescription.configuration.createEmptyLayout()
+        
         self.previousLayout = self.layout
         
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
@@ -110,9 +106,9 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    private(set) internal var layout : ListLayout
+    var layout : AnyListLayout
     
-    private var previousLayout : ListLayout
+    private var previousLayout : AnyListLayout
     private var changesDuringCurrentUpdate : UpdateItems
     private var viewProperties : CollectionViewLayoutProperties
     
@@ -123,6 +119,13 @@ final class CollectionViewLayout : UICollectionViewLayout
     func setNeedsRelayout()
     {
         self.neededLayoutType.merge(with: .relayout)
+        
+        self.invalidateLayout()
+    }
+    
+    func setNeedsRebuild()
+    {
+        self.neededLayoutType.merge(with: .rebuild)
         
         self.invalidateLayout()
     }
@@ -315,7 +318,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         if didLayout {
             self.layout.content.setSectionContentsFrames()
             
-            let viewHeight = self.appearance.direction.height(for: view.bounds.size)
+            let viewHeight = self.layout.direction.height(for: view.bounds.size)
         
             self.layout.adjustPositionsForLayoutUnderflow(
                 contentHeight: self.layout.content.contentSize.height,
@@ -334,11 +337,18 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         self.previousLayout = self.layout
         
-        self.layout = self.layoutType.layoutType.init(
-            delegate: self.delegate,
+        self.layout = self.layoutDescription.configuration.createPopulatedLayout(
             appearance: self.appearance,
             behavior: self.behavior,
+            delegate: self.delegate,
             in: self.collectionView!
+        )
+        
+        self.layout.scrollViewProperties.apply(
+            to: self.collectionView!,
+            behavior: self.behavior,
+            direction: self.layout.direction,
+            showsScrollIndicators: self.appearance.showsScrollIndicators
         )
         
         return self.performRelayout()

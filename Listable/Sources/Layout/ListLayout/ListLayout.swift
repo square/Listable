@@ -8,12 +8,42 @@
 import Foundation
 
 
-public protocol ListLayout : AnyObject
+public protocol ListLayout : AnyListLayout
+{
+    associatedtype LayoutAppearance:ListLayoutAppearance
+    
+    var layoutAppearance : LayoutAppearance { get }
+    
+    init()
+    
+    init(
+        layoutAppearance : LayoutAppearance,
+        appearance : Appearance,
+        behavior : Behavior,
+        delegate : CollectionViewLayoutDelegate,
+        in collectionView : UICollectionView
+    )
+}
+
+
+public extension ListLayout
+{
+    var direction: LayoutDirection {
+        self.layoutAppearance.direction
+    }
+    
+    var stickySectionHeaders: Bool {
+        self.layoutAppearance.stickySectionHeaders
+    }
+}
+
+
+public protocol AnyListLayout : AnyObject
 {
     //
     // MARK: Public Properties
     //
-        
+    
     var appearance : Appearance { get }
     var behavior : Behavior { get }
     
@@ -21,18 +51,8 @@ public protocol ListLayout : AnyObject
             
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
-    //
-    // MARK: Initialization
-    //
-    
-    init()
-    
-    init(
-        delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
-        behavior : Behavior,
-        in collectionView : UICollectionView
-    )
+    var direction : LayoutDirection { get }
+    var stickySectionHeaders : Bool { get }
     
     //
     // MARK: Performing Layouts
@@ -48,7 +68,7 @@ public protocol ListLayout : AnyObject
 }
 
 
-public extension ListLayout
+public extension AnyListLayout
 {
     func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
     {
@@ -63,7 +83,7 @@ public extension ListLayout
     @discardableResult
     func updateHeaderPositions(in collectionView : UICollectionView) -> Bool
     {
-        guard self.appearance.stickySectionHeaders else {
+        guard self.stickySectionHeaders else {
             return true
         }
         
@@ -71,7 +91,7 @@ public extension ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
+        let direction = self.direction
 
         let visibleFrame = self.visibleContentFrame(for: collectionView)
         
@@ -105,7 +125,7 @@ public extension ListLayout
         
         let footer = self.content.overscrollFooter
         
-        let direction = self.appearance.direction
+        let direction = self.direction
         
         let contentHeight = direction.height(for: self.content.contentSize)
         let viewHeight = direction.height(for: collectionView.contentFrame.size)
@@ -127,7 +147,7 @@ public extension ListLayout
         // Take into account the safe area, since that pushes content alignment down within our view.
         
         let safeAreaInsets : CGFloat = {
-            switch self.appearance.direction {
+            switch self.direction {
             case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
             case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
             }
@@ -162,6 +182,8 @@ public final class ListLayoutContent
 {
     var contentSize : CGSize
     
+    let direction : LayoutDirection
+    
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
     
@@ -169,33 +191,35 @@ public final class ListLayoutContent
     
     let sections : [SectionInfo]
     
-    init(with appearance : Appearance)
+    init(with direction : LayoutDirection)
     {
         self.contentSize = .zero
+        self.direction = direction
         
-        self.header = SupplementaryItemInfo.empty(.listHeader, direction: appearance.direction)
-        self.footer = SupplementaryItemInfo.empty(.listFooter, direction: appearance.direction)
-        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter, direction: appearance.direction)
+        self.header = SupplementaryItemInfo.empty(.listHeader, direction: direction)
+        self.footer = SupplementaryItemInfo.empty(.listFooter, direction: direction)
+        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter, direction: direction)
         
         self.sections = []
     }
     
     init(
         delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
+        direction : LayoutDirection,
         in collectionView : UICollectionView
         )
     {
         self.contentSize = .zero
+        self.direction = direction
         
         self.header = {
             guard delegate.hasListHeader(in: collectionView) else {
-                return .empty(.listHeader, direction: appearance.direction)
+                return .empty(.listHeader, direction: direction)
             }
             
             return .init(
                 kind: SupplementaryKind.listHeader,
-                direction: appearance.direction,
+                direction: direction,
                 layout: delegate.layoutForListHeader(in: collectionView),
                 isPopulated: true
             )
@@ -203,12 +227,12 @@ public final class ListLayoutContent
         
         self.footer = {
             guard delegate.hasListFooter(in: collectionView) else {
-                return .empty(.listFooter, direction: appearance.direction)
+                return .empty(.listFooter, direction: direction)
             }
             
             return .init(
                 kind: SupplementaryKind.listFooter,
-                direction: appearance.direction,
+                direction: direction,
                 layout: delegate.layoutForListFooter(in: collectionView),
                 isPopulated: true
             )
@@ -216,12 +240,12 @@ public final class ListLayoutContent
         
         self.overscrollFooter = {
             guard delegate.hasOverscrollFooter(in: collectionView) else {
-                return .empty(.overscrollFooter, direction: appearance.direction)
+                return .empty(.overscrollFooter, direction: direction)
             }
             
             return .init(
                 kind: SupplementaryKind.overscrollFooter,
-                direction: appearance.direction,
+                direction: direction,
                 layout: delegate.layoutForOverscrollFooter(in: collectionView),
                 isPopulated: true
             )
@@ -234,18 +258,18 @@ public final class ListLayoutContent
             let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
             
             return .init(
-                direction: appearance.direction,
+                direction: direction,
                 
                 layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
                 
                 header: {
                     guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
-                        return .empty(.sectionHeader, direction: appearance.direction)
+                        return .empty(.sectionHeader, direction: direction)
                     }
                     
                     return .init(
                         kind: SupplementaryKind.sectionHeader,
-                        direction: appearance.direction,
+                        direction: direction,
                         layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
                         isPopulated: true
                     )
@@ -253,12 +277,12 @@ public final class ListLayoutContent
                 
                 footer: {
                     guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
-                        return .empty(.sectionFooter, direction: appearance.direction)
+                        return .empty(.sectionFooter, direction: direction)
                     }
                     
                     return .init(
                         kind: SupplementaryKind.sectionFooter,
-                        direction: appearance.direction,
+                        direction: direction,
                         layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
                         isPopulated: true
                     )
@@ -272,7 +296,7 @@ public final class ListLayoutContent
                     return .init(
                         delegateProvidedIndexPath: indexPath,
                         liveIndexPath: indexPath,
-                        direction: appearance.direction,
+                        direction: direction,
                         layout: delegate.layoutForItem(at: indexPath, in: collectionView)
                     )
                 }

@@ -12,17 +12,19 @@ import Listable
 
 public struct List : Element
 {
-    public var listDescription : ListDescription
+    /// The values which back the on-screen list.
+    public var properties : ListProperties
     
     //
     // MARK: Initialization
     //
         
-    public init(build : ListDescription.Build)
+    /// Create a new list with the provided options.
+    public init(build : ListProperties.Build)
     {
-        self.listDescription = ListDescription(
+        self.properties = ListProperties(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
-            layoutType: .list,
+            layout: .list(),
             appearance: .init(),
             behavior: .init(),
             autoScrollAction: .none,
@@ -47,11 +49,11 @@ public struct List : Element
     {
         ListView.describe { config in
             config.builder = {
-                ListView(frame: bounds, appearance: self.listDescription.appearance)
+                ListView(frame: bounds, appearance: self.properties.appearance)
             }
             
             config.apply { listView in
-                listView.setProperties(with: self.listDescription)
+                listView.setProperties(with: self.properties)
             }
         }
     }

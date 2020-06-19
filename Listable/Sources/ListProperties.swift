@@ -8,12 +8,11 @@
 import Foundation
 
 
-/// TODO: Rename to `ListProperties`.
-public struct ListDescription
+public struct ListProperties
 {
     public var animatesChanges : Bool
 
-    public var layoutType : ListLayoutType
+    public var layout : LayoutDescription
     public var appearance : Appearance
     
     public var behavior : Behavior
@@ -26,11 +25,11 @@ public struct ListDescription
     
     public var content : Content
 
-    public typealias Build = (inout ListDescription) -> ()
+    public typealias Build = (inout ListProperties) -> ()
     
     public init(
         animatesChanges: Bool,
-        layoutType : ListLayoutType,
+        layout : LayoutDescription,
         appearance : Appearance,
         behavior : Behavior,
         autoScrollAction : AutoScrollAction,
@@ -42,7 +41,7 @@ public struct ListDescription
     {
         self.animatesChanges = animatesChanges
         
-        self.layoutType = layoutType
+        self.layout = layout
         self.appearance = appearance
         
         self.behavior = behavior
@@ -62,12 +61,12 @@ public struct ListDescription
         self.content.sections.append(section)
     }
     
-    public static func += (lhs : inout ListDescription, rhs : Section)
+    public static func += (lhs : inout ListProperties, rhs : Section)
     {
         lhs.add(rhs)
     }
     
-    public static func += (lhs : inout ListDescription, rhs : [Section])
+    public static func += (lhs : inout ListProperties, rhs : [Section])
     {
         lhs.content.sections += rhs
     }

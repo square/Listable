@@ -14,12 +14,11 @@ class PagedListLayoutTests : XCTestCase
     func test_layout_vertical()
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 500.0)))
-        listView.layoutType = .paged
         
         listView.setContent { list in
             
-            list.appearance.direction = .vertical
-            
+            list.layout = .paged()
+                        
             list += Section(identifier: "first") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
@@ -31,11 +30,7 @@ class PagedListLayoutTests : XCTestCase
             }
         }
         
-        let layout = PagedListLayout(delegate: listView.delegate, appearance: listView.appearance, behavior: listView.behavior, in: listView.collectionView)
-        
-        _ = layout.layout(delegate: listView.delegate, in: listView.collectionView)
-        
-        let attributes = layout.content.layoutAttributes
+        let attributes = listView.collectionViewLayout.layout.content.layoutAttributes
         
         let expectedAttributes = ListLayoutAttributes(
             contentSize: CGSize(width: 800, height: 500.0),
@@ -70,59 +65,7 @@ class PagedListLayoutTests : XCTestCase
     
     func disabled_test_layout_horizontal()
     {
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 500.0)))
-        listView.layoutType = .paged
-        
-        listView.setContent { list in
-            
-            list.appearance.direction = .horizontal
-            
-            list += Section(identifier: "first") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
-            }
-            
-            list += Section(identifier: "second") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)))
-            }
-        }
-        
-        let layout = PagedListLayout(delegate: listView.delegate, appearance: listView.appearance, behavior: listView.behavior, in: listView.collectionView)
-        
-        _ = layout.layout(delegate: listView.delegate, in: listView.collectionView)
-        
-        let attributes = layout.content.layoutAttributes
-        
-        let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 800, height: 500.0),
-            header: nil,
-            footer: nil,
-            overscrollFooter: nil,
-            sections: [
-                .init(
-                    frame: CGRect(x: 0.0, y: 0.0, width: 400.0, height: 500.0),
-                    header: nil,
-                    footer: nil,
-                    items: [
-                        .init(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 500.0)),
-                        .init(frame: CGRect(x: 200.0, y: 0.0, width: 200.0, height: 500.0)),
-                    ]
-                ),
-
-                .init(
-                    frame: CGRect(x: 400.0, y: 0.0, width: 400.0, height: 500.0),
-                    header: nil,
-                    footer: nil,
-                    items: [
-                        .init(frame: CGRect(x: 400.0, y: 0.0, width: 200.0, height: 500.0)),
-                        .init(frame: CGRect(x: 600.0, y: 0.0, width: 200.0, height: 500.0)),
-                    ]
-                )
-            ]
-        )
-                
-        XCTAssertEqual(attributes, expectedAttributes)
+        // TODO
     }
 }
 

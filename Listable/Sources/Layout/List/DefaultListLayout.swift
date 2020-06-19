@@ -8,13 +8,14 @@
 import Foundation
 
 
-public extension Appearance
+public extension LayoutDescription
 {
-    var list : ListAppearance {
-        get { self[ListAppearance.self, default: ListAppearance()] }
-        set { self[ListAppearance.self] = newValue }
+    static func list(_ configure : @escaping (inout ListAppearance) -> () = { _ in }) -> Self
+    {
+        DefaultListLayout.describe(appearance: configure)
     }
 }
+
 
 ///
 /// `ListAppearance` defines the appearance and layout attribute for list layouts within a Listable list.
@@ -101,17 +102,31 @@ public extension Appearance
 /// │                         padding.bottom                          │
 /// └─────────────────────────────────────────────────────────────────┘
 /// ```
-public struct ListAppearance : Equatable
+public struct ListAppearance : ListLayoutAppearance
 {
+    public var direction : LayoutDirection
+    
+    public var stickySectionHeaders : Bool
+    
     /// Default sizing attributes for content in the list.
     public var sizing : Sizing
     
     /// Layout attributes for content in the list.
     public var layout : Layout
     
+    public static var `default`: ListAppearance {
+        return self.init()
+    }
+        
     /// Creates a new `ListAppearance` object.
-    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
-    {
+    public init(
+        direction : LayoutDirection = .vertical,
+        stickySectionHeaders : Bool = true,
+        sizing : Sizing = Sizing(),
+        layout : Layout = Layout()
+    ) {
+        self.direction = direction
+        self.stickySectionHeaders = stickySectionHeaders
         self.sizing = sizing
         self.layout = layout
     }
@@ -249,10 +264,14 @@ public struct ListAppearance : Equatable
 
 
 final class DefaultListLayout : ListLayout
-{    
+{
+    typealias LayoutAppearance = ListAppearance
+    var layoutAppearance: ListAppearance
+    
     //
     // MARK: Public Properties
     //
+    
             
     let appearance : Appearance
     let behavior : Behavior
@@ -270,31 +289,39 @@ final class DefaultListLayout : ListLayout
         )
     }
     
+    var direction : LayoutDirection
+    
     //
     // MARK: Initialization
     //
     
     init()
     {
+        self.layoutAppearance = LayoutAppearance()
         self.appearance = Appearance()
         self.behavior = Behavior()
         
-        self.content = ListLayoutContent(with: self.appearance)
+        self.direction = .vertical
+        
+        self.content = ListLayoutContent(with: self.direction)
     }
     
     init(
-        delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
-        behavior : Behavior,
-        in collectionView : UICollectionView
-        )
-    {
+        layoutAppearance: ListAppearance,
+        appearance: Appearance,
+        behavior: Behavior,
+        delegate: CollectionViewLayoutDelegate,
+        in collectionView: UICollectionView
+    ) {
+        self.layoutAppearance = layoutAppearance
         self.appearance = appearance
         self.behavior = behavior
         
+        self.direction = layoutAppearance.direction
+        
         self.content = ListLayoutContent(
             delegate: delegate,
-            appearance: appearance,
+            direction: self.direction,
             in: collectionView
         )
     }
@@ -325,9 +352,9 @@ final class DefaultListLayout : ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
-        let layout = self.appearance.list.layout
-        let sizing = self.appearance.list.sizing
+        let direction = self.layoutAppearance.direction
+        let layout = self.layoutAppearance.layout
+        let sizing = self.layoutAppearance.sizing
         
         let viewSize = collectionView.bounds.size
         
@@ -670,7 +697,7 @@ final class DefaultListLayout : ListLayout
     private func setItemPositions()
     {
         self.content.sections.forEach { section in
-            section.setItemPositions(with: self.appearance)
+            section.setItemPositions(with: self.layoutAppearance)
         }
     }
 }
@@ -678,12 +705,12 @@ final class DefaultListLayout : ListLayout
 
 fileprivate extension ListLayoutContent.SectionInfo
 {
-    func setItemPositions(with appearance : Appearance)
+    func setItemPositions(with appearance : ListAppearance)
     {
         if self.columns.count == 1 {
             let groups = ListLayoutContent.SectionInfo.grouped(
                 items: self.items,
-                groupingHeight: appearance.list.sizing.itemPositionGroupingHeight,
+                groupingHeight: appearance.sizing.itemPositionGroupingHeight,
                 appearance: appearance
             )
             
@@ -713,7 +740,7 @@ fileprivate extension ListLayoutContent.SectionInfo
         }
     }
     
-    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : Appearance) -> [[ListLayoutContent.ItemInfo]]
+    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : ListAppearance) -> [[ListLayoutContent.ItemInfo]]
     {
         var all = [[ListLayoutContent.ItemInfo]]()
         var current = [ListLayoutContent.ItemInfo]()
@@ -730,7 +757,7 @@ fileprivate extension ListLayoutContent.SectionInfo
             
             current.append(item)
             
-            lastSpacing = item.layout.itemSpacing ?? appearance.list.layout.itemSpacing
+            lastSpacing = item.layout.itemSpacing ?? appearance.layout.itemSpacing
         }
         
         if current.isEmpty == false {

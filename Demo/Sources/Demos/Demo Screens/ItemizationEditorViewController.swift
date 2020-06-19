@@ -50,6 +50,7 @@ final class ItemizationEditorViewController : UIViewController
         return List { list in
                         
             list.appearance = self.listAppearance
+            list.layout = self.listLayout
             
             list.behavior.selectionMode = .multiple
             
@@ -150,24 +151,29 @@ final class ItemizationEditorViewController : UIViewController
     }
     
     var listAppearance : Appearance {
-        Appearance(backgroundColor: .white, stickySectionHeaders: false) {
-            $0.list = ListAppearance(
-                sizing: .init(
-                    itemHeight: 70.0,
-                    sectionHeaderHeight: 50.0,
-                    sectionFooterHeight: 50.0,
-                    listHeaderHeight: 100.0,
-                    listFooterHeight: 100.0
-                ),
-                layout: .init(
-                    padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                    width: .atMost(600.0),
-                    interSectionSpacingWithNoFooter: 20.0,
-                    interSectionSpacingWithFooter: 20.0,
-                    sectionHeaderBottomSpacing: 0.0,
-                    itemSpacing: 20.0,
-                    itemToSectionFooterSpacing: 20.0
-                )
+        Appearance(backgroundColor: .white)
+    }
+    
+    var listLayout : LayoutDescription {
+        .list {
+            $0.stickySectionHeaders = false
+            
+            $0.sizing = .init(
+                itemHeight: 70.0,
+                sectionHeaderHeight: 50.0,
+                sectionFooterHeight: 50.0,
+                listHeaderHeight: 100.0,
+                listFooterHeight: 100.0
+            )
+            
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
+                width: .atMost(600.0),
+                interSectionSpacingWithNoFooter: 20.0,
+                interSectionSpacingWithFooter: 20.0,
+                sectionHeaderBottomSpacing: 0.0,
+                itemSpacing: 20.0,
+                itemToSectionFooterSpacing: 20.0
             )
         }
     }

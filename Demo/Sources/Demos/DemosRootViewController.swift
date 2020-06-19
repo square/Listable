@@ -28,6 +28,7 @@ public final class DemosRootViewController : UIViewController
         self.view = self.listView
         
         self.listView.appearance = .demoAppearance
+        self.listView.layout = .demoLayout
         
         self.listView.setContent { list in
 
