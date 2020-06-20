@@ -392,10 +392,12 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
-            let attributes = self.layout.content.layoutAttributes(at: itemIndexPath)
+            let item = self.layout.content.item(at: itemIndexPath)
+            let attributes = item.layoutAttributes(with: itemIndexPath)
             
-            attributes.frame.origin.y -= attributes.frame.size.height
-            attributes.alpha = 0.0
+            var properties = ItemInsertAndRemoveAnimations.Attributes(attributes)
+            item.insertAndRemoveAnimations.onInsert(&properties)
+            properties.apply(to: attributes)
 
             return attributes
         } else {
@@ -416,10 +418,12 @@ final class CollectionViewLayout : UICollectionViewLayout
         let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
         
         if wasItemDeleted {
-            let attributes = self.previousLayout.content.layoutAttributes(at: itemIndexPath)
-
-            attributes.frame.origin.y -= attributes.frame.size.height
-            attributes.alpha = 0.0
+            let item = self.previousLayout.content.item(at: itemIndexPath)
+            let attributes = item.layoutAttributes(with: itemIndexPath)
+            
+            var properties = ItemInsertAndRemoveAnimations.Attributes(attributes)
+            item.insertAndRemoveAnimations.onRemoval(&properties)
+            properties.apply(to: attributes)
 
             return attributes
         } else {
@@ -530,6 +534,7 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     
     func sizeForItem(at indexPath : IndexPath, in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize
     func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
+    func insertAndRemoveAnimationsForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemInsertAndRemoveAnimations?
     
     func hasListHeader(in collectionView : UICollectionView) -> Bool
     func sizeForListHeader(in collectionView : UICollectionView, measuredIn sizeConstraint : CGSize, defaultSize : CGSize, layoutDirection : LayoutDirection) -> CGSize

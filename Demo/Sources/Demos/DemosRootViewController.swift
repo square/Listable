@@ -112,6 +112,13 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(CoordinatorViewController())
                 })
+                
+                section += Item(
+                    DemoItem(text: "Item Insert & Remove Animations"),
+                    selectionStyle: .tappable,
+                    onSelect: { _ in
+                        self.push(ItemInsertAndRemoveAnimationsViewController())
+                })
             }
             
             list += Section(identifier: "layouts") { section in

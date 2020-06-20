@@ -27,6 +27,20 @@ public struct ListProperties
 
     public typealias Build = (inout ListProperties) -> ()
     
+    public static func `default`(with builder : Build) -> Self {
+        Self(
+            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+            layout: .list(),
+            appearance: .init(),
+            behavior: .init(),
+            autoScrollAction: .none,
+            scrollInsets: .init(),
+            accessibilityIdentifier: nil,
+            debuggingIdentifier: nil,
+            build: builder
+        )
+    }
+    
     public init(
         animatesChanges: Bool,
         layout : LayoutDescription,

@@ -23,6 +23,7 @@ public protocol AnyItem : AnyItem_Internal
     var sizing : Sizing { get set }
     var layout : ItemLayout { get set }
     var selectionStyle : ItemSelectionStyle { get set }
+    var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }
     var swipeActions : SwipeActionsConfiguration? { get set }
     
     var reordering : Reordering? { get set }
@@ -48,6 +49,8 @@ public struct Item<Content:ItemContent> : AnyItem
     public var layout : ItemLayout
     
     public var selectionStyle : ItemSelectionStyle
+    
+    public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
     
     public var swipeActions : SwipeActionsConfiguration?
 
@@ -83,6 +86,7 @@ public struct Item<Content:ItemContent> : AnyItem
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
         onDisplay : OnDisplay.Callback? = nil,
@@ -115,6 +119,12 @@ public struct Item<Content:ItemContent> : AnyItem
             self.selectionStyle = selectionStyle
         } else {
             self.selectionStyle = .notSelectable
+        }
+        
+        if let insertAndRemoveAnimations = insertAndRemoveAnimations {
+            self.insertAndRemoveAnimations = insertAndRemoveAnimations
+        } else if let insertAndRemoveAnimations = content.defaultItemProperties.insertAndRemoveAnimations {
+            self.insertAndRemoveAnimations = insertAndRemoveAnimations
         }
         
         if let swipeActions = swipeActions {
@@ -222,17 +232,21 @@ public struct DefaultItemProperties<Content:ItemContent>
     
     public var selectionStyle : ItemSelectionStyle?
     
+    public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
+    
     public var swipeActions : SwipeActionsConfiguration?
     
     public init(
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil
     ) {
         self.sizing = sizing
         self.layout = layout
         self.selectionStyle = selectionStyle
+        self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.swipeActions = swipeActions
     }
 }

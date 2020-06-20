@@ -124,7 +124,13 @@ private final class TestLayout : ListLayout
         
         self.appearance = appearance
         self.behavior = behavior
-        self.content = ListLayoutContent(delegate: delegate, direction: layoutAppearance.direction, in: collectionView)
+        
+        self.content = ListLayoutContent(
+            delegate: delegate,
+            direction: layoutAppearance.direction,
+            defaults: .init(itemInsertAndRemoveAnimations: .top),
+            in: collectionView
+        )
     }
     
     func updateLayout(in collectionView: UICollectionView) -> Bool { true }

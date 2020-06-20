@@ -185,6 +185,7 @@ final class GridListLayout : ListLayout
         self.content = ListLayoutContent(
             delegate: delegate,
             direction: layoutAppearance.direction,
+            defaults: .init(itemInsertAndRemoveAnimations: .scaleUp),
             in: collectionView
         )
     }
