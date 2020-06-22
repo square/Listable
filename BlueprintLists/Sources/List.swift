@@ -22,17 +22,7 @@ public struct List : Element
     /// Create a new list with the provided options.
     public init(build : ListProperties.Build)
     {
-        self.properties = ListProperties(
-            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
-            layout: .list(),
-            appearance: .init(),
-            behavior: .init(),
-            autoScrollAction: .none,
-            scrollInsets: .init(),
-            accessibilityIdentifier: nil,
-            debuggingIdentifier: nil,
-            build: build
-        )
+        self.properties = .default(with: build)
     }
     
     //

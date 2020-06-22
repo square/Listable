@@ -82,6 +82,7 @@ final class PagedListLayout : ListLayout
         self.content = ListLayoutContent(
             delegate: delegate,
             direction: layoutAppearance.direction,
+            defaults: .init(itemInsertAndRemoveAnimations: .fade),
             in: collectionView
         )
     }

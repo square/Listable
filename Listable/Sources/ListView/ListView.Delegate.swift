@@ -199,6 +199,13 @@ extension ListView
             return item.anyModel.layout
         }
         
+        func insertAndRemoveAnimationsForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemInsertAndRemoveAnimations?
+        {
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.insertAndRemoveAnimations
+        }
+        
         func hasListHeader(in collectionView : UICollectionView) -> Bool
         {
             return self.presentationState.header.state != nil

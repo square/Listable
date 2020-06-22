@@ -322,6 +322,7 @@ final class DefaultListLayout : ListLayout
         self.content = ListLayoutContent(
             delegate: delegate,
             direction: self.direction,
+            defaults: .init(itemInsertAndRemoveAnimations: .top),
             in: collectionView
         )
     }

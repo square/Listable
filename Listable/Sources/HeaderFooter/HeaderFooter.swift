@@ -8,6 +8,8 @@
 
 public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
 {
+    var sizing : Sizing { get set }
+    var layout : HeaderFooterLayout { get set }
 }
 
 public protocol AnyHeaderFooter_Internal
@@ -56,8 +58,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         _ content : Content,
         sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
         layout : HeaderFooterLayout = HeaderFooterLayout()
-    )
-    {
+    ) {
         self.content = content
         
         self.sizing = sizing

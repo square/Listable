@@ -18,7 +18,7 @@ protocol AnyPresentationItemState : AnyObject
     var anyModel : AnyItem { get }
     
     var reorderingActions : ReorderingActions { get }
-    
+        
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
     
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
@@ -51,8 +51,8 @@ protocol ItemContentCoordinatorDelegate : AnyObject
 
 public struct ItemStateDependencies
 {
-    internal var reorderingDelegate : ReorderingActionsDelegate
-    internal var coordinatorDelegate : ItemContentCoordinatorDelegate
+    var reorderingDelegate : ReorderingActionsDelegate
+    var coordinatorDelegate : ItemContentCoordinatorDelegate
 }
 
 
@@ -88,7 +88,7 @@ extension PresentationState
         let storage : Storage
                 
         init(with model : Item<Content>, dependencies : ItemStateDependencies)
-        {
+        {            
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
         
@@ -224,7 +224,7 @@ extension PresentationState
                 for: reason,
                 with: applyInfo
             )
-            
+                        
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
                 cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, reason: reason)

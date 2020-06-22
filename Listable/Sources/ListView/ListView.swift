@@ -436,6 +436,11 @@ public final class ListView : UIView
         })
     }
     
+    public func setProperties(with builder : ListProperties.Build)
+    {
+        self.setProperties(with: .default(with: builder))
+    }
+    
     public func setProperties(with description : ListProperties)
     {
         let animated = description.animatesChanges
@@ -634,7 +639,10 @@ public final class ListView : UIView
         }
 
         let updateBackingData = {
-            let dependencies = ItemStateDependencies(reorderingDelegate: self, coordinatorDelegate: self)
+            let dependencies = ItemStateDependencies(
+                reorderingDelegate: self,
+                coordinatorDelegate: self
+            )
             
             presentationState.update(with: diff, slice: visibleSlice, dependencies: dependencies, loggable: self)
         }
