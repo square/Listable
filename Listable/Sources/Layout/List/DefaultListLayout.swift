@@ -350,7 +350,7 @@ final class DefaultListLayout : ListLayout
         
         let rootWidth = ListAppearance.Layout.width(
             with: direction.width_new(for: viewSize),
-            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
+            padding: direction.horizontalPadding_new(with: layout.padding),
             constraint: layout.width
         )
                 
@@ -390,7 +390,7 @@ final class DefaultListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let position = header.layout.width.position(with: direction.width_new(for: viewSize), defaultWidth: rootWidth, layoutDirection: direction)
             
             let measureInfo = ListLayoutContent.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -400,12 +400,12 @@ final class DefaultListLayout : ListLayout
             let height = header.measurer(measureInfo).height
             
             header.x = position.origin
-            header.size = direction.size(width: position.width, height: height)
+            header.size = direction.size_new(width: position.width, height: height)
             header.y = lastContentMaxY
             
             if hasListHeader {
-                lastSectionMaxY += direction.maxY(for: header.defaultFrame)
-                lastContentMaxY += direction.maxY(for: header.defaultFrame)
+                lastSectionMaxY += direction.maxY_new(for: header.defaultFrame)
+                lastContentMaxY += direction.maxY_new(for: header.defaultFrame)
             }
             
             if self.content.sections.isEmpty == false {
@@ -420,7 +420,7 @@ final class DefaultListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
+            let sectionPosition = section.layout.width.position(with: direction.width_new(for: viewSize), defaultWidth: rootWidth, layoutDirection: direction)
             
             section.x = sectionPosition.origin
             
@@ -433,7 +433,7 @@ final class DefaultListLayout : ListLayout
             
             performLayout(for: section.header) { header in
                 let width = header.layout.width.merge(with: section.layout.width)
-                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
+                let position = width.position(with: direction.width_new(for: viewSize), defaultWidth: sectionPosition.width, layoutDirection: direction)
                 
                 let measureInfo = ListLayoutContent.MeasureInfo(
                     sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -443,11 +443,11 @@ final class DefaultListLayout : ListLayout
                 let height = header.measurer(measureInfo).height
                 
                 header.x = position.origin
-                header.size = direction.size(width: position.width, height: height)
+                header.size = direction.size_new(width: position.width, height: height)
                 header.y = lastContentMaxY
                 
                 if hasSectionHeader {
-                    lastContentMaxY = direction.maxY(for: section.header.defaultFrame)
+                    lastContentMaxY = direction.maxY_new(for: section.header.defaultFrame)
                     
                     if section.items.isEmpty == false {
                         lastContentMaxY += layout.sectionHeaderBottomSpacing
@@ -462,7 +462,7 @@ final class DefaultListLayout : ListLayout
             if section.columns.count == 1 {
                 section.items.forEachWithIndex { itemIndex, isLast, item in
                     let width = item.layout.width.merge(with: section.layout.width)
-                    let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
+                    let itemPosition = width.position(with: direction.width_new(for: viewSize), defaultWidth: sectionPosition.width, layoutDirection: direction)
                     
                     let measureInfo = ListLayoutContent.MeasureInfo(
                         sizeConstraint: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
@@ -473,7 +473,7 @@ final class DefaultListLayout : ListLayout
                     
                     item.x = itemPosition.origin
                     item.y = lastContentMaxY
-                    item.size = direction.size(width: itemPosition.width, height: height)
+                    item.size = direction.size_new(width: itemPosition.width, height: height)
                     
                     lastContentMaxY += height
 

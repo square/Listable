@@ -211,11 +211,11 @@ final class GridListLayout : ListLayout
         
         let viewSize = collectionView.bounds.size
         
-        let viewWidth = direction.width(for: collectionView.bounds.size)
+        let viewWidth = direction.width_new(for: collectionView.bounds.size)
         
         let rootWidth = ListAppearance.Layout.width(
-            with: direction.width(for: viewSize),
-            padding: direction.horizontalPadding(with: layout.padding),
+            with: direction.width_new(for: viewSize),
+            padding: direction.horizontalPadding_new(with: layout.padding),
             constraint: layout.width
         )
         
