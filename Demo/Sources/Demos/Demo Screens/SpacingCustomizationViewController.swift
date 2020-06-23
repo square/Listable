@@ -22,7 +22,7 @@ final class SpacingCustomizationViewController : UIViewController
     {
         self.view = self.listView
 
-        self.listView.setContent { list in
+        self.listView.setProperties { list in
             
             list.layout = .list {
                 $0.layout.set {

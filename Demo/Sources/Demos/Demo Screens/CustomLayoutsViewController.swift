@@ -24,7 +24,7 @@ final class CustomLayoutsViewController : UIViewController
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Swap Layout", style: .plain, target: self, action: #selector(swapLayout))
         
-        self.listView.setContent { list in
+        self.listView.setProperties { list in
             
             list.appearance = .demoAppearance
             list.layout = .demoLayout

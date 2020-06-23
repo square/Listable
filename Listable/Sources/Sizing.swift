@@ -68,12 +68,12 @@ public enum Sizing : Hashable
     
     /// Measures the given view with the provided options.
     /// The returned value is `ceil()`'d to round up to the next full integer value.
-    func measure(with view : UIView, in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize) -> CGSize
+    func measure(with view : UIView, info : MeasureInfo) -> CGSize
     {
         let value : CGSize = {
             switch self {
             case .default:
-                return defaultSize
+                return info.defaultSize
                 
             case .fixed(let width, let height):
                 return CGSize(width: width, height: height)
@@ -81,38 +81,31 @@ public enum Sizing : Hashable
             case .thatFits:
                 return Sizing.thatFitsWith(.noConstraint).measure(
                     with: view,
-                    in: sizeConstraint,
-                    layoutDirection: layoutDirection,
-                    defaultSize: defaultSize
+                    info: info
                 )
                 
             case .thatFitsWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                let size = view.sizeThatFits(fittingSize)
+                let size = view.sizeThatFits(info.sizeConstraint)
                 
-                return constraint.clamp(size, with: defaultSize)
+                return constraint.clamp(size, with: info.defaultSize)
                 
             case .autolayout:
                 return Sizing.autolayoutWith(.noConstraint).measure(
                     with: view,
-                    in: sizeConstraint,
-                    layoutDirection: layoutDirection,
-                    defaultSize: defaultSize
+                    info: info
                 )
                 
             case .autolayoutWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                
                 let size : CGSize
                 
-                switch layoutDirection {
+                switch info.direction {
                 case .vertical:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
                 case .horizontal:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
+                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
                 }
                 
-                return constraint.clamp(size, with: defaultSize)
+                return constraint.clamp(size, with: info.defaultSize)
             }
         }()
         
@@ -126,6 +119,23 @@ public enum Sizing : Hashable
 
 public extension Sizing
 {
+    struct MeasureInfo
+    {
+        var sizeConstraint : CGSize
+        var defaultSize : CGSize
+        var direction : LayoutDirection
+        
+        init(
+            sizeConstraint: CGSize,
+            defaultSize: CGSize,
+            direction: LayoutDirection
+        ) {
+            self.sizeConstraint = sizeConstraint
+            self.defaultSize = defaultSize
+            self.direction = direction
+        }
+    }
+    
     struct Constraint : Hashable
     {
         public var width : Axis
@@ -229,12 +239,25 @@ public enum CustomWidth : Equatable
         }
     }
     
-    public func position(with viewSize : CGSize, defaultWidth : CGFloat, layoutDirection : LayoutDirection) -> Position
+    public func position(with viewSize : CGSize, defaultWidth : CGFloat) -> Position
     {
         switch self {
-        case .default: return Position(origin: round((layoutDirection.width(for: viewSize) - defaultWidth) / 2.0), width: defaultWidth)
-        case .fill: return Position(origin: 0.0, width: layoutDirection.width(for: viewSize))
-        case .custom(let custom): return custom.position(with: viewSize, layoutDirection: layoutDirection)
+        case .default:
+            return Position(
+                origin: round((viewSize.width - defaultWidth) / 2.0),
+                width: defaultWidth
+            )
+            
+        case .fill:
+            return Position(
+                origin: 0.0,
+                width: viewSize.width
+            )
+            
+        case .custom(let custom):
+            return custom.position(
+                with: viewSize
+            )
         }
     }
     
@@ -255,20 +278,19 @@ public enum CustomWidth : Equatable
             self.alignment = alignment
         }
         
-        public func position(with viewSize : CGSize, layoutDirection : LayoutDirection) -> Position
+        public func position(with viewSize : CGSize) -> Position
         {
             let width = ListAppearance.Layout.width(
-                with: layoutDirection.width(for: viewSize),
+                with: viewSize.width,
                 padding: self.padding,
                 constraint: self.width
             )
             
             return Position(
                 origin: self.alignment.originWith(
-                    parentWidth: layoutDirection.width(for: viewSize),
+                    parentWidth: viewSize.width,
                     width: width,
-                    padding: self.padding,
-                    layoutDirection: layoutDirection
+                    padding: self.padding
                 ),
                 width: width
             )
@@ -281,7 +303,7 @@ public enum CustomWidth : Equatable
         case center
         case right
         
-        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding, layoutDirection : LayoutDirection) -> CGFloat
+        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding) -> CGFloat
         {
             switch self {
             case .left:

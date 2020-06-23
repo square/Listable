@@ -21,7 +21,7 @@ final class HorizontalLayoutViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.setContent { list in
+        self.listView.setProperties { list in
             
             list.layout = .list {
                 $0.layout.itemSpacing = 20.0
@@ -39,29 +39,14 @@ final class HorizontalLayoutViewController : UIViewController
                     sizing: .fixed(height: 200)
                 )
                 
-                section += Item.list(identifier: "carousel", sizing: .fixed(height: 400)) { horizontal in
+                section += Item.list(identifier: "carousel", sizing: .fixed(height: 200.0)) { horizontal in
                     
-                    horizontal.layout = .list {
+                    horizontal.layout = .paged {
                         $0.direction = .horizontal
-                        
-                        $0.layout.set {
-                            $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
-                            $0.itemSpacing = 20.0
-                            $0.sectionHeaderBottomSpacing = 20.0
-                        }
+                        $0.itemInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
                     }
-                    
-                    horizontal.content.overscrollFooter = HeaderFooter(
-                        HorizontalHeader(title: "Thanks for using Listable!!", color: .white(0.65)),
-                        sizing: .fixed(height: 100.0)
-                    )
 
                     horizontal += Section(identifier: "cards") { section in
-
-                        section.header = HeaderFooter(
-                            HorizontalHeader(title: "Header", color: .white(0.65)),
-                            sizing: .fixed(height: 100.0)
-                        )
 
                         section.columns = .init(count: 2, spacing: 20.0)
 
@@ -136,25 +121,23 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
-        return Box(
-            backgroundColor: self.color,
-            cornerStyle: .rounded(radius: 15.0),
-            wrapping: Inset(uniformInset: 30.0, wrapping: Column { column in
-                
-                column.verticalUnderflow = .growProportionally
-                column.horizontalAlignment = .fill
-                
-                column.add(growPriority: 0.0, child: Label(text: self.title) {
-                    $0.font = .systemFont(ofSize: 24.0, weight: .bold)
-                })
-                
-                column.add(growPriority: 0.0, child: Spacer(size: .init(width: 20.0, height: 20.0)))
-                
-                column.add(growPriority: 0.0, child: Label(text: self.detail) {
-                    $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
-                })
+        Column { column in
+            
+            column.verticalUnderflow = .growProportionally
+            column.horizontalAlignment = .fill
+            
+            column.add(growPriority: 0.0, child: Label(text: self.title) {
+                $0.font = .systemFont(ofSize: 24.0, weight: .bold)
             })
-        )
+            
+            column.add(growPriority: 0.0, child: Spacer(size: .init(width: 20.0, height: 20.0)))
+            
+            column.add(growPriority: 0.0, child: Label(text: self.detail) {
+                $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
+            })
+        }
+        .inset(uniform: 30.0)
+        .box(background: self.color, corners: .rounded(radius: 15.0))
     }
     
     var identifier: Identifier<CardElement> {

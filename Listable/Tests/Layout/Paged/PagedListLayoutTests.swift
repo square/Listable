@@ -6,6 +6,8 @@
 //
 
 import XCTest
+import Snapshot
+
 @testable import Listable
 
 
@@ -13,59 +15,60 @@ class PagedListLayoutTests : XCTestCase
 {
     func test_layout_vertical()
     {
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 500.0)))
+        let listView = self.list(for: .vertical)
         
-        listView.setContent { list in
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    func test_layout_horizontal()
+    {
+        let listView = self.list(for: .horizontal)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    func list(for direction : LayoutDirection) -> ListView
+    {
+        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
+
+        listView.setProperties { list in
             
-            list.layout = .paged_experimental()
-                        
+            list.layout = .paged {
+                $0.direction = direction
+                $0.pagingSize = .fixed(50.0)
+                $0.itemInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+            }
+            
+            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue))
+            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .green))
+            
             list += Section(identifier: "first") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
+                
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))
+                
+                section += TestingItemContent(color: .init(white: 0.0, alpha: 0.3))
+                section += TestingItemContent(color: .init(white: 0.0, alpha: 0.4))
+                section += TestingItemContent(color: .init(white: 0.0, alpha: 0.5))
             }
             
             list += Section(identifier: "second") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)))
+                
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))
+                
+                section += TestingItemContent(color: .init(white: 0.0, alpha: 0.6))
+                section += TestingItemContent(color: .init(white: 0.0, alpha: 0.7))
             }
         }
         
-        let attributes = listView.collectionViewLayout.layout.content.layoutAttributes
-        
-        let expectedAttributes = ListLayoutAttributes(
-            contentSize: CGSize(width: 800, height: 500.0),
-            header: nil,
-            footer: nil,
-            overscrollFooter: nil,
-            sections: [
-                .init(
-                    frame: CGRect(x: 0.0, y: 0.0, width: 400.0, height: 500.0),
-                    header: nil,
-                    footer: nil,
-                    items: [
-                        .init(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 500.0)),
-                        .init(frame: CGRect(x: 200.0, y: 0.0, width: 200.0, height: 500.0)),
-                    ]
-                ),
-
-                .init(
-                    frame: CGRect(x: 400.0, y: 0.0, width: 400.0, height: 500.0),
-                    header: nil,
-                    footer: nil,
-                    items: [
-                        .init(frame: CGRect(x: 400.0, y: 0.0, width: 200.0, height: 500.0)),
-                        .init(frame: CGRect(x: 600.0, y: 0.0, width: 200.0, height: 500.0)),
-                    ]
-                )
-            ]
-        )
-                
-        XCTAssertEqual(attributes, expectedAttributes)
-    }
-    
-    func disabled_test_layout_horizontal()
-    {
-        // TODO
+        return listView
     }
 }
 

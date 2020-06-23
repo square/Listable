@@ -46,6 +46,8 @@ public struct ListLayoutScrollViewProperties
     ) {
         let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
         
+        view.isDirectionalLockEnabled = true
+        
         if view.isPagingEnabled != isPagingEnabled {
             view.isPagingEnabled = isPagingEnabled
         }

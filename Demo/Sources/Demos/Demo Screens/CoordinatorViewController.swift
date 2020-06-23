@@ -17,7 +17,7 @@ final class CoordinatorViewController : UIViewController
     override func loadView() {
         self.view = self.listView
         
-        self.listView.setContent { list in
+        self.listView.setProperties { list in
             
             list += Section(identifier: "section") { section in
                 section += Podcast.podcasts.map {

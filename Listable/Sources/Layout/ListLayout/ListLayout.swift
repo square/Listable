@@ -30,10 +30,6 @@ public extension ListLayout
     var direction: LayoutDirection {
         self.layoutAppearance.direction
     }
-    
-    var stickySectionHeaders: Bool {
-        self.layoutAppearance.stickySectionHeaders
-    }
 }
 
 
@@ -51,19 +47,17 @@ public protocol AnyListLayout : AnyObject
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
     var direction : LayoutDirection { get }
-    var stickySectionHeaders : Bool { get }
     
     //
     // MARK: Performing Layouts
     //
     
-    @discardableResult
-    func updateLayout(in collectionView : UICollectionView) -> Bool
+    func updateLayout(in collectionView : UICollectionView)
     
     func layout(
         delegate : CollectionViewLayoutDelegate,
         in collectionView : UICollectionView
-    ) -> Bool
+    )
 }
 
 
@@ -78,70 +72,52 @@ public extension AnyListLayout
             height: collectionView.bounds.size.height
         )
     }
-    
-    @discardableResult
-    func updateHeaderPositions(in collectionView : UICollectionView) -> Bool
-    {
-        guard self.stickySectionHeaders else {
-            return true
-        }
-        
-        guard collectionView.frame.size.isEmpty == false else {
-            return false
-        }
-        
-        let direction = self.direction
+}
 
+
+public extension AnyListLayout
+{
+    func applyStickySectionHeaders(in collectionView : UICollectionView)
+    {
         let visibleFrame = self.visibleContentFrame(for: collectionView)
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            let sectionMaxY = direction.maxY(for: section.frame)
+            let sectionMaxY = section.contentsFrame.maxY
             
             let header = section.header
             
-            if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleFrame.origin) {
+            if header.defaultFrame.origin.y < visibleFrame.origin.y {
                 
                 // Make sure the pinned origin stays within the section's frame.
                 
                 header.pinnedY = min(
-                    direction.y(for: visibleFrame.origin),
-                    sectionMaxY - direction.height(for: header.size)
+                    visibleFrame.origin.y,
+                    sectionMaxY - header.size.height
                 )
             } else {
                 header.pinnedY = nil
             }
         }
-        
-        return true
     }
     
-    @discardableResult
-    func updateOverscrollFooterPosition(in collectionView : UICollectionView) -> Bool
+    func updateOverscrollFooterPosition(in collectionView : UICollectionView)
     {
-        guard collectionView.frame.size.isEmpty == false else {
-            return false
-        }
-        
         let footer = self.content.overscrollFooter
-        
-        let direction = self.direction
-        
-        let contentHeight = direction.height(for: self.content.contentSize)
-        let viewHeight = direction.height(for: collectionView.contentFrame.size)
+                
+        let contentHeight = self.content.contentSize.height
+        let viewHeight = collectionView.contentFrame.size.height
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
         if contentHeight >= viewHeight {
-            footer.y = contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
+            footer.y = contentHeight + collectionView.contentInset.bottom + collectionView.lst_safeAreaInsets.bottom
         } else {
-            footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
+            footer.y = viewHeight - collectionView.contentInset.top - collectionView.lst_safeAreaInsets.top
         }
-        
-        return true
     }
     
-    func adjustPositionsForLayoutUnderflow(contentHeight : CGFloat, viewHeight: CGFloat, in collectionView : UICollectionView)
+    func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
     {
         // Take into account the safe area, since that pushes content alignment down within our view.
         
@@ -151,6 +127,9 @@ public extension AnyListLayout
             case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
             }
         }()
+        
+        let contentHeight = self.content.contentSize.height
+        let viewHeight = collectionView.bounds.height
         
         let additionalOffset = self.behavior.underflow.alignment.offsetFor(
             contentHeight: contentHeight,
@@ -175,4 +154,3 @@ public extension AnyListLayout
         }
     }
 }
-

@@ -8,7 +8,7 @@
 
 public extension LayoutDescription
 {
-    static func paged_experimental(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
+    static func paged(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
     {
         PagedListLayout.describe(appearance: configure)
     }
@@ -20,14 +20,40 @@ public struct PagedAppearance : ListLayoutAppearance
         Self.init()
     }
     
-    public var showsScrollIndicators : Bool = false
+    public var direction: LayoutDirection
     
-    public var direction: LayoutDirection {
-        .vertical
+    public var showsScrollIndicators : Bool
+    
+    public var itemInsets : UIEdgeInsets
+    
+    public var pagingSize : PagingSize
+    
+    public init(
+        direction: LayoutDirection = .vertical,
+        showsScrollIndicators : Bool = false,
+        itemInsets : UIEdgeInsets = .zero
+    ) {
+        self.pagingSize = .view
+        
+        self.direction = direction
+        self.showsScrollIndicators = showsScrollIndicators
+        self.itemInsets = itemInsets
     }
     
-    public var stickySectionHeaders : Bool {
-        false
+    public enum PagingSize : Equatable {
+        case view
+        case fixed(CGFloat)
+        
+        func size(for view : UIView, direction : LayoutDirection) -> CGSize {
+            switch self {
+            case .view: return view.bounds.size
+            case .fixed(let fixed):
+                switch direction {
+                case .vertical: return CGSize(width: view.bounds.width, height: fixed)
+                case .horizontal: return CGSize(width: fixed, height: view.bounds.height)
+                }
+            }
+        }
     }
 }
 
@@ -48,12 +74,12 @@ final class PagedListLayout : ListLayout
             
     var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            isPagingEnabled: true,
+            isPagingEnabled: self.layoutAppearance.pagingSize == .view,
             contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: false,
             allowsBounceHorizontal: false,
-            allowsVerticalScrollIndicator: false,
-            allowsHorizontalScrollIndicator: false
+            allowsVerticalScrollIndicator: self.layoutAppearance.showsScrollIndicators,
+            allowsHorizontalScrollIndicator: self.layoutAppearance.showsScrollIndicators
         )
     }
     
@@ -78,47 +104,40 @@ final class PagedListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    @discardableResult
-    func updateLayout(in collectionView : UICollectionView) -> Bool
+    func updateLayout(in collectionView : UICollectionView)
     {
-        true
+        // Nothing needed.
     }
     
     func layout(
         delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
-        ) -> Bool
-    {
-        guard collectionView.frame.size.isEmpty == false else {
-            return false
-        }
+        in collectionView : UICollectionView  
+    ) {
+        let viewSize = self.layoutAppearance.pagingSize.size(for: collectionView, direction: self.direction)
         
-        let viewSize = CGSize(
-            width: collectionView.bounds.size.width,
-            height: collectionView.bounds.size.height
-        )
-                
-        var lastMaxX : CGFloat = 0.0
-        var lastSectionMaxX : CGFloat = 0.0
+        var lastMaxY : CGFloat = 0.0
         
-        for section in self.content.sections {
-            for item in section.items {
-                item.x = lastMaxX
-                item.y = 0.0
-                item.size = viewSize
-                
-                lastMaxX = item.frame.maxX
+        for item in content.all {
+            
+            let containerFrame : CGRect
+                            
+            switch direction {
+            case .vertical: containerFrame = CGRect(x: 0.0, y: lastMaxY, width: viewSize.width, height: viewSize.height)
+            case .horizontal: containerFrame = CGRect(x: lastMaxY, y: 0.0, width: viewSize.width, height: viewSize.height)
             }
             
-            section.size = CGSize(width: lastMaxX - lastSectionMaxX, height: viewSize.height)
+            let viewFrame = containerFrame.inset(by: self.layoutAppearance.itemInsets)
             
-            section.x = lastSectionMaxX
+            item.x = viewFrame.origin.x
+            item.y = viewFrame.origin.y
+            item.size = viewFrame.size
             
-            lastSectionMaxX = section.frame.maxX
+            lastMaxY = direction.maxY(for: containerFrame)
         }
         
-        self.content.contentSize = CGSize(width: lastMaxX, height: viewSize.height)
-        
-        return true
+        self.content.contentSize = direction.switch(
+            vertical: CGSize(width: viewSize.width, height: lastMaxY),
+            horizontal: CGSize(width: lastMaxY, height: viewSize.height)
+        )
     }
 }

@@ -40,7 +40,19 @@ import Foundation
 ///
 
 //
-// MARK: Deprecated May 29, 2019
+// MARK: Deprecated Jul 15, 2020
+//
+
+public extension ListView {
+    
+    @available(*, deprecated, renamed: "setProperties(with:)")
+    func setContent(_ builder : ListProperties.Build) {
+        self.setProperties(with: builder)
+    }
+}
+
+//
+// MARK: Deprecated May 29, 2020
 //
 
 @available(*, deprecated, renamed: "ItemContent")

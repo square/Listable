@@ -23,12 +23,12 @@
   - overscrollFooter: nil
   ▿ sections: 4 elements
     ▿ Listable.ListLayoutAttributes.Section
-      ▿ frame: (30.0, 80.0, 200.0, 160.0)
+      ▿ frame: (30.0, 80.0, 140.0, 160.0)
         ▿ origin: (30.0, 80.0)
           - x: 30.0
           - y: 80.0
-        ▿ size: (200.0, 160.0)
-          - width: 200.0
+        ▿ size: (140.0, 160.0)
+          - width: 140.0
           - height: 160.0
       ▿ header: Optional(Listable.ListLayoutAttributes.Supplementary(frame: (30.0, 80.0, 140.0, 30.0)))
         ▿ some: Listable.ListLayoutAttributes.Supplementary
@@ -74,12 +74,12 @@
               - width: 140.0
               - height: 20.0
     ▿ Listable.ListLayoutAttributes.Section
-      ▿ frame: (30.0, 270.0, 200.0, 165.0)
+      ▿ frame: (30.0, 270.0, 140.0, 165.0)
         ▿ origin: (30.0, 270.0)
           - x: 30.0
           - y: 270.0
-        ▿ size: (200.0, 165.0)
-          - width: 200.0
+        ▿ size: (140.0, 165.0)
+          - width: 140.0
           - height: 165.0
       ▿ header: Optional(Listable.ListLayoutAttributes.Supplementary(frame: (30.0, 270.0, 140.0, 30.0)))
         ▿ some: Listable.ListLayoutAttributes.Supplementary
@@ -117,12 +117,12 @@
               - width: 140.0
               - height: 40.0
     ▿ Listable.ListLayoutAttributes.Section
-      ▿ frame: (30.0, 455.0, 200.0, 75.0)
+      ▿ frame: (30.0, 455.0, 140.0, 75.0)
         ▿ origin: (30.0, 455.0)
           - x: 30.0
           - y: 455.0
-        ▿ size: (200.0, 75.0)
-          - width: 200.0
+        ▿ size: (140.0, 75.0)
+          - width: 140.0
           - height: 75.0
       ▿ header: Optional(Listable.ListLayoutAttributes.Supplementary(frame: (30.0, 455.0, 140.0, 30.0)))
         ▿ some: Listable.ListLayoutAttributes.Supplementary
@@ -152,12 +152,12 @@
               - width: 140.0
               - height: 20.0
     ▿ Listable.ListLayoutAttributes.Section
-      ▿ frame: (30.0, 545.0, 200.0, 35.0)
+      ▿ frame: (30.0, 545.0, 140.0, 35.0)
         ▿ origin: (30.0, 545.0)
           - x: 30.0
           - y: 545.0
-        ▿ size: (200.0, 35.0)
-          - width: 200.0
+        ▿ size: (140.0, 35.0)
+          - width: 140.0
           - height: 35.0
       - header: nil
       - footer: nil

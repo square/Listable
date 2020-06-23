@@ -382,23 +382,6 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(with builder : ListProperties.Build)
-    {
-        let description = ListProperties(
-            animatesChanges: true,
-            layout: self.layout,
-            appearance: self.appearance,
-            behavior: self.behavior,
-            autoScrollAction: self.autoScrollAction,
-            scrollInsets: self.scrollInsets,
-            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
-            debuggingIdentifier: self.debuggingIdentifier,
-            build: builder
-        )
-        
-        self.setProperties(with: description)
-    }
-    
     public func setContent(animated : Bool = false, _ content : Content)
     {
         self.set(
@@ -438,7 +421,19 @@ public final class ListView : UIView
     
     public func setProperties(with builder : ListProperties.Build)
     {
-        self.setProperties(with: .default(with: builder))
+        let description = ListProperties(
+            animatesChanges: true,
+            layout: self.layout,
+            appearance: self.appearance,
+            behavior: self.behavior,
+            autoScrollAction: self.autoScrollAction,
+            scrollInsets: self.scrollInsets,
+            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
+            debuggingIdentifier: self.debuggingIdentifier,
+            build: builder
+        )
+        
+        self.setProperties(with: description)
     }
     
     public func setProperties(with description : ListProperties)

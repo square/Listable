@@ -11,9 +11,7 @@ import Foundation
 public final class ListLayoutContent
 {
     var contentSize : CGSize
-    
-    let direction : LayoutDirection
-    
+        
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
     
@@ -21,31 +19,44 @@ public final class ListLayoutContent
     
     let sections : [SectionInfo]
     
-    init(with direction : LayoutDirection)
+    var all : [ListLayoutContentItem] {
+        var all : [ListLayoutContentItem] = []
+        
+        if header.isPopulated {
+            all.append(header)
+        }
+        
+        all += sections.flatMap { $0.all }
+        
+        if footer.isPopulated {
+            all.append(footer)
+        }
+        
+        return all
+    }
+    
+    init()
     {
         self.contentSize = .zero
-        self.direction = direction
         
-        self.header = SupplementaryItemInfo.empty(.listHeader, direction: direction)
-        self.footer = SupplementaryItemInfo.empty(.listFooter, direction: direction)
-        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter, direction: direction)
+        self.header = SupplementaryItemInfo.empty(.listHeader)
+        self.footer = SupplementaryItemInfo.empty(.listFooter)
+        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter)
         
         self.sections = []
     }
     
     init(
-        direction : LayoutDirection,
         header : SupplementaryItemInfo?,
         footer : SupplementaryItemInfo?,
         overscrollFooter : SupplementaryItemInfo?,
         sections : [SectionInfo]
     ) {
         self.contentSize = .zero
-        self.direction = direction
         
-        self.header = header ?? .empty(.listHeader, direction: direction)
-        self.footer = footer ?? .empty(.listFooter, direction: direction)
-        self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter, direction: direction)
+        self.header = header ?? .empty(.listHeader)
+        self.footer = footer ?? .empty(.listFooter)
+        self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter)
         self.sections = sections
     }
     
@@ -105,7 +116,7 @@ public final class ListLayoutContent
         
         for (sectionIndex, section) in self.sections.enumerated() {
             
-            guard rect.intersects(section.frame) else {
+            guard rect.intersects(section.contentsFrame) else {
                 continue
             }
             
@@ -199,7 +210,7 @@ public final class ListLayoutContent
             overscrollFooter: self.overscrollFooter.isPopulated ? .init(frame: self.overscrollFooter.defaultFrame) : nil,
             sections: self.sections.map { section in
                 .init(
-                    frame: section.frame,
+                    frame: section.contentsFrame,
                     header: section.header.isPopulated ? .init(frame: section.header.defaultFrame) : nil,
                     footer: section.footer.isPopulated ? .init(frame: section.footer.defaultFrame) : nil,
                     items: section.items.map { item in
@@ -212,11 +223,18 @@ public final class ListLayoutContent
 }
 
 
+protocol ListLayoutContentItem : AnyObject
+{
+    var size : CGSize { get set }
+    var x : CGFloat { get set }
+    var y : CGFloat { get set }
+}
+
+
 public extension ListLayoutContent
 {
     final class SectionInfo
     {
-        let direction : LayoutDirection
         let layout : Section.Layout
         
         let header : SupplementaryItemInfo
@@ -226,31 +244,37 @@ public extension ListLayoutContent
         
         var items : [ItemInfo]
         
-        var size : CGSize = .zero
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
-        
-        var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
-                size: self.size
-            )
+        var all : [ListLayoutContentItem] {
+            var all : [ListLayoutContentItem] = []
+            
+            if header.isPopulated {
+                all.append(header)
+            }
+            
+            all += self.items
+            
+            if footer.isPopulated {
+                all.append(footer)
+            }
+            
+            return all
         }
+        
+        private(set) var contentsFrame : CGRect
                 
         init(
-            direction : LayoutDirection,
             layout : Section.Layout,
             header : SupplementaryItemInfo?,
             footer : SupplementaryItemInfo?,
             columns : Section.Columns,
             items : [ItemInfo]
-            )
-        {
-            self.direction = direction
+        ) {
+            self.contentsFrame = .zero
+            
             self.layout = layout
             
-            self.header = header ?? .empty(.sectionHeader, direction: direction)
-            self.footer = footer ?? .empty(.sectionFooter, direction: direction)
+            self.header = header ?? .empty(.sectionHeader)
+            self.footer = footer ?? .empty(.sectionFooter)
             
             self.columns = columns
             
@@ -258,65 +282,68 @@ public extension ListLayoutContent
         }
         
         func setContentsFrameWithContent() {
-//            let allFrames : [CGRect] = [[
-//                    self.header.defaultFrame,
-//                    self.footer.defaultFrame
-//                ],
-//                self.items.map { $0.frame }
-//                ].flatMap { $0 }
-//
-//            self.contentsFrame = .from(unioned: allFrames)
+            
+            var allFrames : [CGRect] = []
+            
+            if header.isPopulated {
+                allFrames.append(header.defaultFrame)
+            }
+            
+            allFrames += items.map { $0.frame }
+            
+            if footer.isPopulated {
+                allFrames.append(footer.defaultFrame)
+            }
+
+            self.contentsFrame = .unioned(from: allFrames)
         }
     }
-    
-    struct MeasureInfo
-    {
-        var sizeConstraint : CGSize
-        var defaultSize : CGSize
-    }
 
-    final class SupplementaryItemInfo
+    final class SupplementaryItemInfo : ListLayoutContentItem
     {
-        static func empty(_ kind : SupplementaryKind, direction: LayoutDirection) -> SupplementaryItemInfo
+        static func empty(_ kind : SupplementaryKind) -> SupplementaryItemInfo
         {
-            SupplementaryItemInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false, measurer: { _ in .zero })
+            SupplementaryItemInfo(kind: kind, layout: .init(), isPopulated: false, measurer: { _ in .zero })
         }
         
         let kind : SupplementaryKind
-        let direction : LayoutDirection
         let layout : HeaderFooterLayout
-        let measurer : (MeasureInfo) -> CGSize
+        let measurer : (Sizing.MeasureInfo) -> CGSize
                 
         let isPopulated : Bool
                 
         var size : CGSize = .zero
+        
         var x : CGFloat = .zero
+        var pinnedX : CGFloat? = nil
+        
         var y : CGFloat = .zero
         var pinnedY : CGFloat? = nil
         
         var defaultFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
+            CGRect(
+                origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
         
         var visibleFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.pinnedY ?? self.y),
+            CGRect(
+                origin: CGPoint(
+                    x: self.pinnedX ?? self.x,
+                    y: self.pinnedY ?? self.y
+                ),
                 size: self.size
             )
         }
         
         init(
             kind : SupplementaryKind,
-            direction : LayoutDirection,
             layout : HeaderFooterLayout,
             isPopulated: Bool,
-            measurer : @escaping (MeasureInfo) -> CGSize
+            measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.kind = kind
-            self.direction = direction
             self.layout = layout
             self.isPopulated = isPopulated
             self.measurer = measurer
@@ -334,15 +361,14 @@ public extension ListLayoutContent
     }
     
 
-    final class ItemInfo
+    final class ItemInfo : ListLayoutContentItem
     {
         var delegateProvidedIndexPath : IndexPath
         var liveIndexPath : IndexPath
         
-        let direction : LayoutDirection
         let layout : ItemLayout
         let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
-        let measurer : (MeasureInfo) -> CGSize
+        let measurer : (Sizing.MeasureInfo) -> CGSize
         
         var position : ItemPosition = .single
         
@@ -351,8 +377,8 @@ public extension ListLayoutContent
         var y : CGFloat = .zero
         
         var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
+            CGRect(
+                origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
@@ -360,15 +386,13 @@ public extension ListLayoutContent
         init(
             delegateProvidedIndexPath : IndexPath,
             liveIndexPath : IndexPath,
-            direction : LayoutDirection,
             layout : ItemLayout,
             insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
-            measurer : @escaping (MeasureInfo) -> CGSize
+            measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.delegateProvidedIndexPath = delegateProvidedIndexPath
             self.liveIndexPath = liveIndexPath
             
-            self.direction = direction
             self.layout = layout
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
             
@@ -389,18 +413,17 @@ public extension ListLayoutContent
 
 
 extension CGRect {
-    static func from(unioned rects : [CGRect]) -> CGRect {
+    static func unioned(from rects : [CGRect]) -> CGRect {
         
-        // Only include non-empty frames.
-        var rects = rects.filter {
+        let rects = rects.filter {
             $0.isEmpty == false
         }
         
-        guard let last = rects.popLast() else {
+        guard let first = rects.first else {
             return .zero
         }
-        
-        var frame = last
+
+        var frame = first
         
         for rect in rects {
             frame = frame.union(rect)
