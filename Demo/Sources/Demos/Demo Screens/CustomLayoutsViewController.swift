@@ -73,7 +73,7 @@ final class CustomLayoutsViewController : UIViewController
         self.gridOn.toggle()
         
         if self.gridOn {
-            self.listView.set(layout: .grid(), animated: true)
+            self.listView.set(layout: .grid_experimental(), animated: true)
         } else {
             self.listView.set(layout: .demoLayout, animated: true)
         }

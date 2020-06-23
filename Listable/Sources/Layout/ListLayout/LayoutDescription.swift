@@ -80,25 +80,30 @@ extension LayoutDescription
         
         public func createEmptyLayout() -> AnyListLayout
         {
-            LayoutType()
+            let layoutAppearance = LayoutType.LayoutAppearance.default
+            
+            return LayoutType(
+                layoutAppearance: layoutAppearance,
+                appearance: .init(),
+                behavior: .init(),
+                content: .init(with: layoutAppearance.direction)
+            )
         }
         
         public func createPopulatedLayout(
             appearance : Appearance,
             behavior: Behavior,
-            delegate : CollectionViewLayoutDelegate,
-            in collectionView : UICollectionView
+            delegate : CollectionViewLayoutDelegate
         ) -> AnyListLayout
         {
             var layoutAppearance = LayoutType.LayoutAppearance.default
             self.configure(&layoutAppearance)
-
+            
             return LayoutType(
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
-                delegate: delegate,
-                in: collectionView
+                content: delegate.listLayoutContent(direction: layoutAppearance.direction, defaults: LayoutType.defaults)
             )
         }
         
@@ -133,8 +138,7 @@ public protocol AnyLayoutDescriptionConfiguration
     func createPopulatedLayout(
         appearance : Appearance,
         behavior: Behavior,
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
+        delegate : CollectionViewLayoutDelegate
     ) -> AnyListLayout
     
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool

@@ -25,8 +25,7 @@ final class LayoutDescriptionTests : XCTest
         let populated = description.configuration.createPopulatedLayout(
             appearance: listView.appearance,
             behavior: listView.behavior,
-            delegate: listView.delegate,
-            in: listView.collectionView
+            delegate: listView.delegate
         )
         
         XCTAssertEqual(describeCallCount, 1)
@@ -35,14 +34,11 @@ final class LayoutDescriptionTests : XCTest
     
     func test_shouldRebuild()
     {
-        let listView = ListView()
-        
         let layout = TestLayout(
             layoutAppearance: TestLayoutAppearance(anotherValue: "Hello 1"),
             appearance: Appearance(),
             behavior: Behavior(),
-            delegate: listView.delegate,
-            in: listView.collectionView
+            content: .init(with: .vertical)
         )
         
         let description1 = TestLayout.describe {
@@ -85,6 +81,10 @@ private final class TestLayout : ListLayout
 {
     typealias LayoutAppearance = TestLayoutAppearance
     
+    static var defaults: ListLayoutDefaults {
+        .init(itemInsertAndRemoveAnimations: .fade)
+    }
+    
     var layoutAppearance: TestLayoutAppearance
         
     var appearance: Appearance
@@ -103,34 +103,19 @@ private final class TestLayout : ListLayout
             allowsHorizontalScrollIndicator: true
         )
     }
-    
-    init()
-    {
-        self.layoutAppearance = .default
-        
-        self.appearance = Appearance()
-        self.behavior = Behavior()
-        self.content = ListLayoutContent(with: .vertical)
-    }
-    
+
     init(
         layoutAppearance: TestLayoutAppearance,
         appearance: Appearance,
         behavior: Behavior,
-        delegate: CollectionViewLayoutDelegate,
-        in collectionView: UICollectionView
+        content: ListLayoutContent
     ) {
         self.layoutAppearance = layoutAppearance
         
         self.appearance = appearance
         self.behavior = behavior
         
-        self.content = ListLayoutContent(
-            delegate: delegate,
-            direction: layoutAppearance.direction,
-            defaults: .init(itemInsertAndRemoveAnimations: .top),
-            in: collectionView
-        )
+        self.content = content
     }
     
     func updateLayout(in collectionView: UICollectionView) -> Bool { true }

@@ -17,7 +17,7 @@ class PagedListLayoutTests : XCTestCase
         
         listView.setContent { list in
             
-            list.layout = .paged()
+            list.layout = .paged_experimental()
                         
             list += Section(identifier: "first") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))

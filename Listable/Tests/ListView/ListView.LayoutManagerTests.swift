@@ -46,7 +46,7 @@ class LayoutManagerTests : XCTestCase
         
         /// Changing the layout type should change both objects
         
-        let newLayout2 : LayoutDescription = .paged()
+        let newLayout2 : LayoutDescription = .paged_experimental()
         
         manager.set(layout: newLayout2, animated: false, completion: {})
         listView.layoutIfNeeded()

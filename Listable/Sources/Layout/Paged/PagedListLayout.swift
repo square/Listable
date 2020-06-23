@@ -8,7 +8,7 @@
 
 public extension LayoutDescription
 {
-    static func paged(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
+    static func paged_experimental(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
     {
         PagedListLayout.describe(appearance: configure)
     }
@@ -36,6 +36,10 @@ final class PagedListLayout : ListLayout
 {
     public typealias LayoutAppearance = PagedAppearance
     
+    static var defaults: ListLayoutDefaults {
+        .init(itemInsertAndRemoveAnimations: .scaleDown)
+    }
+    
     var layoutAppearance: PagedAppearance
     
     let appearance: Appearance
@@ -57,34 +61,17 @@ final class PagedListLayout : ListLayout
     // MARK: Initialization
     //
     
-    init()
-    {
-        self.layoutAppearance = LayoutAppearance()
-        self.appearance = Appearance()
-        self.behavior = Behavior()
-        
-        self.content = ListLayoutContent(with: self.layoutAppearance.direction)
-    }
-    
     init(
         layoutAppearance: PagedAppearance,
         appearance: Appearance,
         behavior: Behavior,
-        delegate: CollectionViewLayoutDelegate,
-        in collectionView: UICollectionView
-    ) {
-        listablePrecondition(layoutAppearance.direction == .vertical, "Only the default layout is currently supported.")
-        
+        content: ListLayoutContent
+    ) {        
         self.layoutAppearance = layoutAppearance
         self.appearance = appearance
         self.behavior = behavior
         
-        self.content = ListLayoutContent(
-            delegate: delegate,
-            direction: layoutAppearance.direction,
-            defaults: .init(itemInsertAndRemoveAnimations: .fade),
-            in: collectionView
-        )
+        self.content = content
     }
     
     //
