@@ -87,8 +87,7 @@ public enum Sizing : Hashable
                 )
                 
             case .thatFitsWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                let size = view.sizeThatFits(fittingSize)
+                let size = view.sizeThatFits(sizeConstraint)
                 
                 return constraint.clamp(size, with: defaultSize)
                 
@@ -101,16 +100,14 @@ public enum Sizing : Hashable
                 )
                 
             case .autolayoutWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                
-                let size : CGSize
-                
-                switch layoutDirection {
-                case .vertical:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-                case .horizontal:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
-                }
+                let size : CGSize = {
+                    switch layoutDirection {
+                    case .vertical:
+                        return view.systemLayoutSizeFitting(sizeConstraint, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+                    case .horizontal:
+                        return view.systemLayoutSizeFitting(sizeConstraint, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
+                    }
+                }()
                 
                 return constraint.clamp(size, with: defaultSize)
             }
@@ -229,12 +226,12 @@ public enum CustomWidth : Equatable
         }
     }
     
-    public func position(with viewSize : CGSize, defaultWidth : CGFloat, layoutDirection : LayoutDirection) -> Position
+    public func position(with viewWidth : CGFloat, defaultWidth : CGFloat, layoutDirection : LayoutDirection) -> Position
     {
         switch self {
-        case .default: return Position(origin: round((layoutDirection.width(for: viewSize) - defaultWidth) / 2.0), width: defaultWidth)
-        case .fill: return Position(origin: 0.0, width: layoutDirection.width(for: viewSize))
-        case .custom(let custom): return custom.position(with: viewSize, layoutDirection: layoutDirection)
+        case .default: return Position(origin: round((viewWidth - defaultWidth) / 2.0), width: defaultWidth)
+        case .fill: return Position(origin: 0.0, width: viewWidth)
+        case .custom(let custom): return custom.position(with: viewWidth)
         }
     }
     
@@ -255,20 +252,19 @@ public enum CustomWidth : Equatable
             self.alignment = alignment
         }
         
-        public func position(with viewSize : CGSize, layoutDirection : LayoutDirection) -> Position
+        public func position(with viewWidth : CGFloat) -> Position
         {
             let width = ListAppearance.Layout.width(
-                with: layoutDirection.width(for: viewSize),
+                with: viewWidth,
                 padding: self.padding,
                 constraint: self.width
             )
             
             return Position(
                 origin: self.alignment.originWith(
-                    parentWidth: layoutDirection.width(for: viewSize),
+                    parentWidth: viewWidth,
                     width: width,
-                    padding: self.padding,
-                    layoutDirection: layoutDirection
+                    padding: self.padding
                 ),
                 width: width
             )
@@ -281,7 +277,7 @@ public enum CustomWidth : Equatable
         case center
         case right
         
-        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding, layoutDirection : LayoutDirection) -> CGFloat
+        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding) -> CGFloat
         {
             switch self {
             case .left:

@@ -29,7 +29,7 @@ public enum LayoutDirection : Hashable
     // MARK: Creating & Reading Values
     //
     
-    public func height(for size : CGSize) -> CGFloat
+    public func height_new(for size : CGSize) -> CGFloat
     {
         switch self {
         case .vertical: return size.height
@@ -37,7 +37,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func width(for size : CGSize) -> CGFloat
+    public func width_new(for size : CGSize) -> CGFloat
     {
         switch self {
         case .vertical: return size.width
@@ -45,7 +45,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func point(x : CGFloat, y : CGFloat) -> CGPoint
+    public func point_new(x : CGFloat, y : CGFloat) -> CGPoint
     {
         switch self {
         case .vertical: return CGPoint(x: x, y: y)
@@ -53,7 +53,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func size(for size : CGSize) -> CGSize
+    public func size_new(for size : CGSize) -> CGSize
     {
         switch self {
         case .vertical: return CGSize(width: size.width, height: size.height)
@@ -61,7 +61,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func size(width : CGFloat, height : CGFloat) -> CGSize
+    public func size_new(width : CGFloat, height : CGFloat) -> CGSize
     {
         switch self {
         case .vertical: return CGSize(width: width, height: height)
@@ -69,7 +69,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func maxY(for frame : CGRect) -> CGFloat
+    public func maxY_new(for frame : CGRect) -> CGFloat
     {
         switch self {
         case .vertical: return frame.maxY
@@ -77,7 +77,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func maxX(for frame : CGRect) -> CGFloat
+    public func maxX_new(for frame : CGRect) -> CGFloat
     {
         switch self {
         case .vertical: return frame.maxX
@@ -85,7 +85,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func x(for point : CGPoint) -> CGFloat
+    public func x_new(for point : CGPoint) -> CGFloat
     {
         switch self {
         case .vertical: return point.x
@@ -93,7 +93,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func y(for point : CGPoint) -> CGFloat
+    public func y_new(for point : CGPoint) -> CGFloat
     {
         switch self {
         case .vertical: return point.y
@@ -101,7 +101,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func horizontalPadding(with insets : UIEdgeInsets) -> HorizontalPadding
+    public func horizontalPadding_new(with insets : UIEdgeInsets) -> HorizontalPadding
     {
         switch self {
         case .vertical: return HorizontalPadding(left: insets.left, right: insets.right)
@@ -109,7 +109,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func top(with insets : UIEdgeInsets) -> CGFloat
+    public func top_new(with insets : UIEdgeInsets) -> CGFloat
     {
         switch self {
         case .vertical: return insets.top
@@ -117,7 +117,7 @@ public enum LayoutDirection : Hashable
         }
     }
     
-    public func bottom(with insets : UIEdgeInsets) -> CGFloat
+    public func bottom_new(with insets : UIEdgeInsets) -> CGFloat
     {
         switch self {
         case .vertical: return insets.bottom

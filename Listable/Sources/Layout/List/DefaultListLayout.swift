@@ -346,11 +346,11 @@ final class DefaultListLayout : ListLayout
         
         let viewSize = collectionView.bounds.size
         
-        let viewWidth = direction.width(for: collectionView.bounds.size)
+        let viewWidth = direction.width_new(for: collectionView.bounds.size)
         
         let rootWidth = ListAppearance.Layout.width(
-            with: direction.width(for: viewSize),
-            padding: direction.horizontalPadding(with: layout.padding),
+            with: direction.width_new(for: viewSize),
+            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
             constraint: layout.width
         )
                 

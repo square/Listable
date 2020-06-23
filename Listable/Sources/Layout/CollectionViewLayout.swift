@@ -318,11 +318,12 @@ final class CollectionViewLayout : UICollectionViewLayout
         if didLayout {
             self.layout.content.setSectionContentsFrames()
             
-            let viewHeight = self.layout.direction.height(for: view.bounds.size)
+            let viewHeight = self.layout.direction.height_new(for: view.bounds.size)
         
             self.layout.adjustPositionsForLayoutUnderflow(
-                contentHeight: self.layout.content.contentSize.height,
-                viewHeight: viewHeight, in: view
+                contentHeight: self.layout.direction.height_new(for: self.layout.content.contentSize),
+                viewHeight: viewHeight,
+                in: view
             )
         
             self.layout.updateLayout(in: view)

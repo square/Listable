@@ -95,17 +95,17 @@ public extension AnyListLayout
         let visibleFrame = self.visibleContentFrame(for: collectionView)
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            let sectionMaxY = direction.maxY(for: section.frame)
+            let sectionMaxY = direction.maxY_new(for: section.frame)
             
             let header = section.header
             
-            if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleFrame.origin) {
+            if direction.y_new(for: header.defaultFrame.origin) < direction.y_new(for: visibleFrame.origin) {
                 
                 // Make sure the pinned origin stays within the section's frame.
                 
                 header.pinnedY = min(
-                    direction.y(for: visibleFrame.origin),
-                    sectionMaxY - direction.height(for: header.size)
+                    direction.y_new(for: visibleFrame.origin),
+                    sectionMaxY - direction.height_new(for: header.size)
                 )
             } else {
                 header.pinnedY = nil
@@ -126,16 +126,16 @@ public extension AnyListLayout
         
         let direction = self.direction
         
-        let contentHeight = direction.height(for: self.content.contentSize)
-        let viewHeight = direction.height(for: collectionView.contentFrame.size)
+        let contentHeight = direction.height_new(for: self.content.contentSize)
+        let viewHeight = direction.height_new(for: collectionView.contentFrame.size)
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
         if contentHeight >= viewHeight {
-            footer.y = contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
+            footer.y = contentHeight + direction.bottom_new(with: collectionView.contentInset) + direction.bottom_new(with: collectionView.lst_safeAreaInsets)
         } else {
-            footer.y = viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
+            footer.y = viewHeight - direction.top_new(with: collectionView.contentInset) - direction.top_new(with: collectionView.lst_safeAreaInsets)
         }
         
         return true

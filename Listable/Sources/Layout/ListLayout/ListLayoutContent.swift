@@ -232,7 +232,7 @@ public extension ListLayoutContent
         
         var frame : CGRect {
             return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
+                origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
@@ -290,20 +290,27 @@ public extension ListLayoutContent
         let isPopulated : Bool
                 
         var size : CGSize = .zero
+        
         var x : CGFloat = .zero
+        var pinnedX : CGFloat? = nil
+        
         var y : CGFloat = .zero
         var pinnedY : CGFloat? = nil
         
         var defaultFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
+            CGRect(
+                origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
         
         var visibleFrame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.pinnedY ?? self.y),
+            CGRect(
+                origin: CGPoint(
+                    x: self.pinnedX ?? self.x,
+                    y: self.pinnedY ?? self.y
+                ),
+                
                 size: self.size
             )
         }
@@ -351,8 +358,8 @@ public extension ListLayoutContent
         var y : CGFloat = .zero
         
         var frame : CGRect {
-            return CGRect(
-                origin: self.direction.point(x: self.x, y: self.y),
+            CGRect(
+                origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
