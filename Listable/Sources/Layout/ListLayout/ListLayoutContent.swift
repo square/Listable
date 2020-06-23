@@ -34,106 +34,19 @@ public final class ListLayoutContent
     }
     
     init(
-        delegate : CollectionViewLayoutDelegate,
         direction : LayoutDirection,
-        defaults: Defaults,
-        in collectionView : UICollectionView
-        )
-    {
+        header : SupplementaryItemInfo?,
+        footer : SupplementaryItemInfo?,
+        overscrollFooter : SupplementaryItemInfo?,
+        sections : [SectionInfo]
+    ) {
         self.contentSize = .zero
         self.direction = direction
         
-        self.header = {
-            guard delegate.hasListHeader(in: collectionView) else {
-                return .empty(.listHeader, direction: direction)
-            }
-            
-            return .init(
-                kind: SupplementaryKind.listHeader,
-                direction: direction,
-                layout: delegate.layoutForListHeader(in: collectionView),
-                isPopulated: true
-            )
-        }()
-        
-        self.footer = {
-            guard delegate.hasListFooter(in: collectionView) else {
-                return .empty(.listFooter, direction: direction)
-            }
-            
-            return .init(
-                kind: SupplementaryKind.listFooter,
-                direction: direction,
-                layout: delegate.layoutForListFooter(in: collectionView),
-                isPopulated: true
-            )
-        }()
-        
-        self.overscrollFooter = {
-            guard delegate.hasOverscrollFooter(in: collectionView) else {
-                return .empty(.overscrollFooter, direction: direction)
-            }
-            
-            return .init(
-                kind: SupplementaryKind.overscrollFooter,
-                direction: direction,
-                layout: delegate.layoutForOverscrollFooter(in: collectionView),
-                isPopulated: true
-            )
-        }()
-        
-        let sectionCount = collectionView.numberOfSections
-        
-        self.sections = (0..<sectionCount).map { sectionIndex in
-            
-            let itemCount = collectionView.numberOfItems(inSection: sectionIndex)
-            
-            return .init(
-                direction: direction,
-                
-                layout : delegate.layoutFor(section: sectionIndex, in: collectionView),
-                
-                header: {
-                    guard delegate.hasHeader(in: sectionIndex, in: collectionView) else {
-                        return .empty(.sectionHeader, direction: direction)
-                    }
-                    
-                    return .init(
-                        kind: SupplementaryKind.sectionHeader,
-                        direction: direction,
-                        layout: delegate.layoutForHeader(in: sectionIndex, in: collectionView),
-                        isPopulated: true
-                    )
-                }(),
-                
-                footer: {
-                    guard delegate.hasFooter(in: sectionIndex, in: collectionView) else {
-                        return .empty(.sectionFooter, direction: direction)
-                    }
-                    
-                    return .init(
-                        kind: SupplementaryKind.sectionFooter,
-                        direction: direction,
-                        layout: delegate.layoutForFooter(in: sectionIndex, in: collectionView),
-                        isPopulated: true
-                    )
-                }(),
-                
-                columns: delegate.columnLayout(for: sectionIndex, in: collectionView),
-                
-                items: (0..<itemCount).map { itemIndex in
-                    let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                    
-                    return .init(
-                        delegateProvidedIndexPath: indexPath,
-                        liveIndexPath: indexPath,
-                        direction: direction,
-                        layout: delegate.layoutForItem(at: indexPath, in: collectionView),
-                        insertAndRemoveAnimations: delegate.insertAndRemoveAnimationsForItem(at: indexPath, in: collectionView) ?? defaults.itemInsertAndRemoveAnimations
-                    )
-                }
-            )
-        }
+        self.header = header ?? .empty(.listHeader, direction: direction)
+        self.footer = footer ?? .empty(.listFooter, direction: direction)
+        self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter, direction: direction)
+        self.sections = sections
     }
     
     //
@@ -301,19 +214,6 @@ public final class ListLayoutContent
 
 public extension ListLayoutContent
 {
-    struct Defaults
-    {
-        public var itemInsertAndRemoveAnimations : ItemInsertAndRemoveAnimations
-        
-        public init(itemInsertAndRemoveAnimations : ItemInsertAndRemoveAnimations)
-        {
-            self.itemInsertAndRemoveAnimations = itemInsertAndRemoveAnimations
-        }
-    }
-}
-
-public extension ListLayoutContent
-{
     final class SectionInfo
     {
         let direction : LayoutDirection
@@ -340,8 +240,8 @@ public extension ListLayoutContent
         init(
             direction : LayoutDirection,
             layout : Section.Layout,
-            header : SupplementaryItemInfo,
-            footer : SupplementaryItemInfo,
+            header : SupplementaryItemInfo?,
+            footer : SupplementaryItemInfo?,
             columns : Section.Columns,
             items : [ItemInfo]
             )
@@ -349,8 +249,8 @@ public extension ListLayoutContent
             self.direction = direction
             self.layout = layout
             
-            self.header = header
-            self.footer = footer
+            self.header = header ?? .empty(.sectionHeader, direction: direction)
+            self.footer = footer ?? .empty(.sectionFooter, direction: direction)
             
             self.columns = columns
             
@@ -369,17 +269,23 @@ public extension ListLayoutContent
         }
     }
     
+    struct MeasureInfo
+    {
+        var sizeConstraint : CGSize
+        var defaultSize : CGSize
+    }
 
     final class SupplementaryItemInfo
     {
         static func empty(_ kind : SupplementaryKind, direction: LayoutDirection) -> SupplementaryItemInfo
         {
-            SupplementaryItemInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false)
+            SupplementaryItemInfo(kind: kind, direction: direction, layout: .init(), isPopulated: false, measurer: { _ in .zero })
         }
         
         let kind : SupplementaryKind
         let direction : LayoutDirection
         let layout : HeaderFooterLayout
+        let measurer : (MeasureInfo) -> CGSize
                 
         let isPopulated : Bool
                 
@@ -406,12 +312,14 @@ public extension ListLayoutContent
             kind : SupplementaryKind,
             direction : LayoutDirection,
             layout : HeaderFooterLayout,
-            isPopulated: Bool
+            isPopulated: Bool,
+            measurer : @escaping (MeasureInfo) -> CGSize
         ) {
             self.kind = kind
             self.direction = direction
             self.layout = layout
             self.isPopulated = isPopulated
+            self.measurer = measurer
         }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
@@ -434,6 +342,7 @@ public extension ListLayoutContent
         let direction : LayoutDirection
         let layout : ItemLayout
         let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
+        let measurer : (MeasureInfo) -> CGSize
         
         var position : ItemPosition = .single
         
@@ -453,15 +362,17 @@ public extension ListLayoutContent
             liveIndexPath : IndexPath,
             direction : LayoutDirection,
             layout : ItemLayout,
-            insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
-            )
-        {
+            insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
+            measurer : @escaping (MeasureInfo) -> CGSize
+        ) {
             self.delegateProvidedIndexPath = delegateProvidedIndexPath
             self.liveIndexPath = liveIndexPath
             
             self.direction = direction
             self.layout = layout
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
+            
+            self.measurer = measurer
         }
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes

@@ -25,7 +25,7 @@ final class PagedViewController : UIViewController
     {
         self.blueprintView.element = List { list in
                         
-            list.layout = .paged()
+            list.layout = .paged_experimental()
             
             list += Section(identifier: "first") { section in
                 section += DemoElement(color: .black)

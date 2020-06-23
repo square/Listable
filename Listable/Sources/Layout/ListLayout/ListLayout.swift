@@ -12,16 +12,15 @@ public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
     
-    var layoutAppearance : LayoutAppearance { get }
-        
-    init()
+    static var defaults : ListLayoutDefaults { get }
     
+    var layoutAppearance : LayoutAppearance { get }
+            
     init(
         layoutAppearance : LayoutAppearance,
         appearance : Appearance,
         behavior : Behavior,
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
+        content : ListLayoutContent
     )
 }
 

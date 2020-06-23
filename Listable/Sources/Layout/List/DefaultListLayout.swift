@@ -266,13 +266,17 @@ public struct ListAppearance : ListLayoutAppearance
 final class DefaultListLayout : ListLayout
 {
     typealias LayoutAppearance = ListAppearance
+    
+    static var defaults: ListLayoutDefaults {
+        .init(itemInsertAndRemoveAnimations: .top)
+    }
+    
     var layoutAppearance: ListAppearance
     
     //
     // MARK: Public Properties
     //
     
-            
     let appearance : Appearance
     let behavior : Behavior
     
@@ -295,23 +299,11 @@ final class DefaultListLayout : ListLayout
     // MARK: Initialization
     //
     
-    init()
-    {
-        self.layoutAppearance = LayoutAppearance()
-        self.appearance = Appearance()
-        self.behavior = Behavior()
-        
-        self.direction = .vertical
-        
-        self.content = ListLayoutContent(with: self.direction)
-    }
-    
     init(
-        layoutAppearance: ListAppearance,
-        appearance: Appearance,
-        behavior: Behavior,
-        delegate: CollectionViewLayoutDelegate,
-        in collectionView: UICollectionView
+        layoutAppearance : LayoutAppearance,
+        appearance : Appearance,
+        behavior : Behavior,
+        content : ListLayoutContent
     ) {
         self.layoutAppearance = layoutAppearance
         self.appearance = appearance
@@ -319,12 +311,7 @@ final class DefaultListLayout : ListLayout
         
         self.direction = layoutAppearance.direction
         
-        self.content = ListLayoutContent(
-            delegate: delegate,
-            direction: self.direction,
-            defaults: .init(itemInsertAndRemoveAnimations: .top),
-            in: collectionView
-        )
+        self.content = content
     }
     
     //
@@ -405,18 +392,12 @@ final class DefaultListLayout : ListLayout
             
             let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight)
+            )
             
-            if hasListHeader {
-                height = delegate.sizeForListHeader(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = header.measurer(measureInfo).height
             
             header.x = position.origin
             header.size = direction.size(width: position.width, height: height)
@@ -453,19 +434,13 @@ final class DefaultListLayout : ListLayout
             performLayout(for: section.header) { header in
                 let width = header.layout.width.merge(with: section.layout.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
-                let height : CGFloat
                 
-                if hasSectionHeader {
-                    height = delegate.sizeForHeader(
-                        in: sectionIndex,
-                        in: collectionView,
-                        measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight),
-                        layoutDirection: direction
-                    ).height
-                } else {
-                    height = 0.0
-                }
+                let measureInfo = ListLayoutContent.MeasureInfo(
+                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight)
+                )
+                
+                let height = header.measurer(measureInfo).height
                 
                 header.x = position.origin
                 header.size = direction.size(width: position.width, height: height)
@@ -486,18 +461,15 @@ final class DefaultListLayout : ListLayout
             
             if section.columns.count == 1 {
                 section.items.forEachWithIndex { itemIndex, isLast, item in
-                    let indexPath = item.liveIndexPath
-                    
                     let width = item.layout.width.merge(with: section.layout.width)
                     let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
                     
-                    let height = delegate.sizeForItem(
-                        at: indexPath,
-                        in: collectionView,
-                        measuredIn: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
-                        layoutDirection: direction
-                    ).height
+                    let measureInfo = ListLayoutContent.MeasureInfo(
+                        sizeConstraint: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
+                        defaultSize: CGSize(width: 0.0, height: sizing.itemHeight)
+                    )
+                    
+                    let height = item.measurer(measureInfo).height
                     
                     item.x = itemPosition.origin
                     item.y = lastContentMaxY
@@ -527,16 +499,13 @@ final class DefaultListLayout : ListLayout
                     row.forEachWithIndex { columnIndex, isLast, item in
                         item.x = columnXOrigin
                         item.y = lastContentMaxY
-                        
-                        let indexPath = item.liveIndexPath
                                                 
-                        let height = delegate.sizeForItem(
-                            at: indexPath,
-                            in: collectionView,
-                            measuredIn: CGSize(width: itemWidth, height: .greatestFiniteMagnitude),
-                            defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
-                            layoutDirection: direction
-                        ).height
+                        let measureInfo = ListLayoutContent.MeasureInfo(
+                            sizeConstraint: CGSize(width: itemWidth, height: .greatestFiniteMagnitude),
+                            defaultSize: CGSize(width: 0.0, height: sizing.itemHeight)
+                        )
+                                                
+                        let height = item.measurer(measureInfo).height
                         
                         let itemSpacing = item.layout.itemSpacing ?? layout.itemSpacing
                         let itemToSectionFooterSpacing = item.layout.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
@@ -570,19 +539,12 @@ final class DefaultListLayout : ListLayout
                 let width = footer.layout.width.merge(with: section.layout.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
                 
-                let height : CGFloat
+                let measureInfo = ListLayoutContent.MeasureInfo(
+                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight)
+                )
                 
-                if hasSectionFooter {
-                    height = delegate.sizeForFooter(
-                        in: sectionIndex,
-                        in: collectionView,
-                        measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight),
-                        layoutDirection: direction
-                    ).height
-                } else {
-                    height = 0.0
-                }
+                let height = footer.measurer(measureInfo).height
                 
                 footer.size = direction.size(width: position.width, height: height)
                 footer.x = position.origin
@@ -633,18 +595,12 @@ final class DefaultListLayout : ListLayout
             
             let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight)
+            )
             
-            if hasFooter {
-                height = delegate.sizeForListFooter(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = footer.measurer(measureInfo).height
             
             footer.size = direction.size(width: position.width, height: height)
             footer.x = position.origin
@@ -665,22 +621,14 @@ final class DefaultListLayout : ListLayout
         //
                     
         performLayout(for: self.content.overscrollFooter) { footer in
-            let hasFooter = footer.isPopulated
-
             let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight)
+            )
             
-            if hasFooter {
-                height = delegate.sizeForOverscrollFooter(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = footer.measurer(measureInfo).height
             
             footer.x = position.origin
             footer.size = direction.size(width: position.width, height: height)
