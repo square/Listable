@@ -13,7 +13,7 @@ import EnglishDictionary
 
 class ArrayDiffTests: XCTestCase
 {
-    func transformed<Element>(with old : [Element], diff : ArrayDiff<Element>) -> [Element]
+    func transformed<Element, Identifier:Hashable>(with old : [Element], diff : ArrayDiff<Element, Identifier>) -> [Element]
     {
         return diff.transform(
             old: old,
@@ -25,17 +25,74 @@ class ArrayDiffTests: XCTestCase
         )
     }
     
+    func test_fast_path()
+    {
+        self.testcase("No Changes") {
+            let old = ["a", "b", "c", "d"]
+            let new = old
+            
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0.lowercased() }, movedHint: { _, _ in false }, updated: { $0 != $1 })
+            
+            XCTAssertEqual(new, self.transformed(with: old, diff: diff))
+            
+            XCTAssertEqual(diff.changeCount, 0)
+            XCTAssertEqual(diff.usedFastPath, true)
+            
+            XCTAssertEqual(diff.added, [])
+            XCTAssertEqual(diff.removed, [])
+            
+            XCTAssertEqual(diff.moved, [])
+            
+            XCTAssertEqual(diff.updated, [])
+            
+            XCTAssertEqual(diff.noChange, [
+                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(oldIndex: 1, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 3, old: "d", new: "d"),
+            ])
+        }
+        
+        self.testcase("Update items") {
+            let old = ["a", "b", "c", "d"]
+            let new = ["A", "b", "c", "d"]
+            
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0.lowercased() }, movedHint: { _, _ in false }, updated: { $0 != $1 })
+            
+            XCTAssertEqual(new, self.transformed(with: old, diff: diff))
+            
+            XCTAssertEqual(diff.changeCount, 1)
+            XCTAssertEqual(diff.usedFastPath, true)
+            
+            XCTAssertEqual(diff.added, [])
+            XCTAssertEqual(diff.removed, [])
+            
+            XCTAssertEqual(diff.moved, [])
+            
+            XCTAssertEqual(diff.updated, [
+                ArrayDiff.Updated(oldIndex: 0, newIndex: 0, old: "a", new: "A")
+            ])
+            
+            XCTAssertEqual(diff.noChange, [
+                ArrayDiff.NoChange(oldIndex: 1, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 3, old: "d", new: "d"),
+            ])
+        }
+    }
+    
     func test_insert_and_remove()
     {
         self.testcase("Empty to filled") {
             let old = [String]()
             let new = ["a", "b", "c", "d"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 4)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
                 ArrayDiff.Added(newIndex: 0, new: "a"),
@@ -54,11 +111,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = [String]()
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 4)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [])
             
@@ -78,11 +136,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a2", "b", "c", "c2", "d", "d2"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 3)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
                 ArrayDiff.Added(newIndex: 1, new: "a2"),
@@ -95,10 +154,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 5, old: "d", new: "d"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 3, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
                 ArrayDiff.NoChange(oldIndex: 1, newIndex: 2, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a")
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 3, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 5, old: "d", new: "d"),
             ])
         }
         
@@ -111,6 +170,7 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 3)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [])
             
@@ -124,10 +184,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 5, newIndex: 3, old: "d", new: "d"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
                 ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a")
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 5, newIndex: 3, old: "d", new: "d"),
             ])
         }
         
@@ -135,11 +195,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a2", "c", "c2", "d2"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 5)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
                 ArrayDiff.Added(newIndex: 1, new: "a2"),
@@ -156,8 +217,8 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
                 ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
             ])
         }
     }
@@ -168,11 +229,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = ["b", "c", "d", "a"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 1)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [])
             XCTAssertEqual(diff.removed, [])
@@ -187,35 +249,9 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d"),
+                ArrayDiff.NoChange(oldIndex: 1, newIndex: 0, old: "b", new: "b"),
                 ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 0, old: "b", new: "b")
-            ])
-        }
-        
-        self.testcase("Update items") {
-            let old = ["a", "b", "c", "d"]
-            let new = ["A", "b", "c", "d"]
-            
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0.lowercased()) }, movedHint: { _, _ in false }, updated: { $0 != $1 })
-            
-            XCTAssertEqual(new, self.transformed(with: old, diff: diff))
-            
-            XCTAssertEqual(diff.changeCount, 1)
-            
-            XCTAssertEqual(diff.added, [])
-            XCTAssertEqual(diff.removed, [])
-            
-            XCTAssertEqual(diff.moved, [])
-            
-            XCTAssertEqual(diff.updated, [
-                ArrayDiff.Updated(oldIndex: 0, newIndex: 0, old: "a", new: "A")
-            ])
-            
-            XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 3, old: "d", new: "d"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 1, old: "b", new: "b")
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d"),
             ])
         }
         
@@ -223,11 +259,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = ["A", "c", "d", "B"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0.lowercased()) }, movedHint: { _, _ in false }, updated: { $0 != $1 })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0.lowercased() }, movedHint: { _, _ in false }, updated: { $0 != $1 })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 2)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [])
             XCTAssertEqual(diff.removed, [])
@@ -244,8 +281,8 @@ class ArrayDiffTests: XCTestCase
             ])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d"),
                 ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d")
             ])
         }
     }
@@ -256,11 +293,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "b", "c", "d"]
             let new = ["a", "a", "b", "b", "c", "c", "d", "d"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 4)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
                 ArrayDiff.Added(newIndex: 1, new: "a"),
@@ -274,10 +312,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 6, old: "d", new: "d"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 4, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 2, old: "b", new: "b"),
                 ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(oldIndex: 1, newIndex: 2, old: "b", new: "b"),
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 4, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 3, newIndex: 6, old: "d", new: "d"),
             ])
         }
         
@@ -285,11 +323,12 @@ class ArrayDiffTests: XCTestCase
             let old = ["a", "a", "b", "b", "c", "c", "d", "d"]
             let new = ["a", "b", "c", "d"]
             
-            let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+            let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
             
             XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             
             XCTAssertEqual(diff.changeCount, 4)
+            XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [])
             
@@ -304,17 +343,17 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 6, newIndex: 3, old: "d", new: "d"),
-                ArrayDiff.NoChange(oldIndex: 4, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "b", new: "b"),
                 ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(oldIndex: 4, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(oldIndex: 6, newIndex: 3, old: "d", new: "d"),
             ])
         }
     }
     
     func test_transform_with_random_mutations()
     {
-        let iterations : Int = 100
+        let iterations : Int = 500
         
         var rng = StableRNG()
         
@@ -330,7 +369,7 @@ class ArrayDiffTests: XCTestCase
                 new.removeRandom(using: &rng)
                 new.removeRandom(using: &rng)
                 
-                let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+                let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
                 
                 XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             }
@@ -348,7 +387,7 @@ class ArrayDiffTests: XCTestCase
                 new.insert(atRandom: "D", using: &rng)
                 new.insert(atRandom: "E", using: &rng)
                 
-                let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+                let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
                 
                 XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             }
@@ -360,7 +399,7 @@ class ArrayDiffTests: XCTestCase
                 let old = numbers
                 let new = numbers.shuffled(using: &rng)
                 
-                let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+                let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
                 
                 XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             }
@@ -386,7 +425,7 @@ class ArrayDiffTests: XCTestCase
                 
                 new.shuffle(using: &rng)
                 
-                let diff = ArrayDiff(old: old, new: new, identifierProvider: { AnyHashable($0) }, movedHint: { _, _ in false }, updated: { _, _ in false })
+                let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
                 
                 XCTAssertEqual(new, self.transformed(with: old, diff: diff))
             }
@@ -394,7 +433,8 @@ class ArrayDiffTests: XCTestCase
     }
 }
 
-fileprivate extension Array
+
+extension Array
 {
     @discardableResult
     mutating func removeRandom<RNG:RandomNumberGenerator>(using rng : inout RNG) -> Element

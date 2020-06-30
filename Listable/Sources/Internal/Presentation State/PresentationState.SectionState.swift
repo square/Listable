@@ -46,7 +46,7 @@ extension PresentationState
         func update(
             with oldSection : Section,
             new newSection : Section,
-            changes : SectionedDiff<Section, AnyItem>.ItemChanges,
+            changes : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges,
             dependencies : ItemStateDependencies
             )
         {

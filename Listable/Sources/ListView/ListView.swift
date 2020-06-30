@@ -299,7 +299,7 @@ public final class ListView : UIView
     @discardableResult
     public func scrollTo<Content:ItemContent>(item : Identifier<Content>, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
-        return self.scrollTo(item: item.toAny, position: position, animated: animated)
+        return self.scrollTo(item: item, position: position, animated: animated)
     }
     
     ///
@@ -736,7 +736,7 @@ public final class ListView : UIView
     }
 
     private func performBatchUpdates(
-        with diff : SectionedDiff<Section,AnyItem>,
+        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
         completion callerCompletion : @escaping (Bool) -> ()
@@ -752,9 +752,10 @@ public final class ListView : UIView
         let view = self.collectionView
         
         let changes = CollectionViewChanges(sectionChanges: diff.changes)
-                
+            
         let batchUpdates = {
             updateBackingData()
+            
             // Sections
 
             view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
@@ -791,7 +792,7 @@ public final class ListView : UIView
         }
     }
     
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
     {
         return SectionedDiff(
             old: old,
