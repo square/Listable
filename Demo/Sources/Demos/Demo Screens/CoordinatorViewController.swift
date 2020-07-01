@@ -19,7 +19,7 @@ final class CoordinatorViewController : UIViewController
         
         self.listView.setContent { list in
             
-            list += Section(identifier: "section") { section in
+            list += Section("section") { section in
                 section += Podcast.podcasts.map {
                     Item(
                         PodcastElement(podcast: $0),

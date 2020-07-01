@@ -27,7 +27,7 @@ final class PagedViewController : UIViewController
                         
             list.layout = .paged_experimental()
             
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 section += DemoElement(color: .black)
                 section += DemoElement(color: .white)
                 section += DemoElement(color: .black)

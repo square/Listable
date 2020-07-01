@@ -33,14 +33,14 @@ final class SpacingCustomizationViewController : UIViewController
                 }
             }
 
-            list += Section(identifier: "default") { section in
+            list += Section("default") { section in
                 section += Item(
                     CardElement(title: "Default Row In Default Section", color: .white(0.95)),
                     sizing: .thatFits
                 )
             }
 
-            list += Section(identifier: "custom-50") { section in
+            list += Section("custom-50") { section in
 
                 section.layout = Section.Layout(customInterSectionSpacing: 50)
 
@@ -50,7 +50,7 @@ final class SpacingCustomizationViewController : UIViewController
                 )
             }
 
-            list += Section(identifier: "custom-100") { section in
+            list += Section("custom-100") { section in
 
                 section.layout = Section.Layout(customInterSectionSpacing: 100)
 
@@ -60,7 +60,7 @@ final class SpacingCustomizationViewController : UIViewController
                 )
             }
 
-            list += Section(identifier: "default-2") { section in
+            list += Section("default-2") { section in
                 section += Item(
                     CardElement(title: "Default Row In another Default Section", color: .white(0.95)),
                     sizing: .thatFits

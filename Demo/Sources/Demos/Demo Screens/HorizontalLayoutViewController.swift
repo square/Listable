@@ -33,7 +33,7 @@ final class HorizontalLayoutViewController : UIViewController
                 sizing: .fixed(height: 100.0)
             )
             
-            list += Section(identifier: "Cards") { section in
+            list += Section("Cards") { section in
                 section += Item(
                     CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
@@ -56,7 +56,7 @@ final class HorizontalLayoutViewController : UIViewController
                         sizing: .fixed(height: 100.0)
                     )
 
-                    horizontal += Section(identifier: "cards") { section in
+                    horizontal += Section("cards") { section in
 
                         section.header = HeaderFooter(
                             HorizontalHeader(title: "Header", color: .white(0.65)),

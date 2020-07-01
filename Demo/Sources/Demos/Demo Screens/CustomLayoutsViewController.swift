@@ -29,7 +29,7 @@ final class CustomLayoutsViewController : UIViewController
             list.appearance = .demoAppearance
             list.layout = .demoLayout
 
-            list += Section(identifier: "default") { section in
+            list += Section("default") { section in
                 
                 section.header = HeaderFooter(DemoHeader(title: "Some Rows"))
                 

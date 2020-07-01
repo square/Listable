@@ -116,7 +116,7 @@ class DefaultListLayoutTests : XCTestCase
             list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 section.layout = Section.Layout(customInterSectionSpacing: 30)
 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
@@ -127,7 +127,7 @@ class DefaultListLayoutTests : XCTestCase
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.3)), sizing: .fixed(height: 20.0))
             }
             
-            list += Section(identifier: "second") { section in
+            list += Section("second") { section in
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))
                 
@@ -135,14 +135,14 @@ class DefaultListLayoutTests : XCTestCase
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 40.0))
             }
             
-            list += Section(identifier: "third") { section in
+            list += Section("third") { section in
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
             }
             
-            list += Section(identifier: "fourth") { section in
+            list += Section("fourth") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
             }

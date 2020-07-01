@@ -40,33 +40,50 @@ import Foundation
 ///
 
 //
-// MARK: Deprecated May 29, 2019
+// MARK: Deprecated Jul 1, 2020
 //
 
-@available(*, deprecated, renamed: "ItemContent")
+public extension Section {
+
+    @available(*, deprecated, renamed: "Section.init(_:build:)")
+    init<Identifier:Hashable>(
+        identifier : Identifier,
+        build : Build = { _ in }
+    )
+    {
+        self.init(identifier, build: build)
+    }
+}
+
+
+//
+// MARK: Deprecated May 29, 2020
+//
+
+@available(*, unavailable, renamed: "ItemContent")
 public typealias ItemElement = ItemContent
 
-@available(*, deprecated, renamed: "ApplyItemContentInfo")
+@available(*, unavailable, renamed: "ApplyItemContentInfo")
 public typealias ApplyItemElementInfo = ApplyItemContentInfo
 
-@available(*, deprecated, renamed: "ItemContentViews")
+@available(*, unavailable, renamed: "ItemContentViews")
 public typealias ItemElementViews = ItemContentViews
 
-@available(*, deprecated, renamed: "ItemContentSwipeActionsView")
+@available(*, unavailable, renamed: "ItemContentSwipeActionsView")
 public typealias ItemElementSwipeActionsView = ItemContentSwipeActionsView
 
 public extension Item {
-    @available(*, deprecated, renamed: "content")
+    @available(*, unavailable, renamed: "content")
     var element : Content {
         self.content
     }
 }
 
-@available(*, deprecated, renamed: "HeaderFooterContent")
+@available(*, unavailable, renamed: "HeaderFooterContent")
 public typealias HeaderFooterElement = HeaderFooterContent
 
 public extension HeaderFooter {
-    @available(*, deprecated, renamed: "content")
+    @available(*, unavailable, renamed: "content")
     var element : Content {
         self.content
     }
