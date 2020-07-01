@@ -351,6 +351,10 @@ class ArrayDiffTests: XCTestCase
         }
     }
     
+    static let numbers : [String] = (1...100).map {
+        String($0)
+    }
+    
     func test_transform_with_random_mutations()
     {
         let iterations : Int = 500
@@ -360,8 +364,8 @@ class ArrayDiffTests: XCTestCase
         self.testcase("Removing elements") {
             
             for _ in 1...iterations {
-                let old = numbers
-                var new = numbers
+                let old = Self.numbers
+                var new = Self.numbers
                 
                 new.removeRandom(using: &rng)
                 new.removeRandom(using: &rng)
@@ -378,8 +382,8 @@ class ArrayDiffTests: XCTestCase
         self.testcase("Inserting elements") {
 
             for _ in 1...iterations {
-                let old = numbers
-                var new = numbers
+                let old = Self.numbers
+                var new = Self.numbers
                 
                 new.insert(atRandom: "A", using: &rng)
                 new.insert(atRandom: "B", using: &rng)
@@ -396,8 +400,8 @@ class ArrayDiffTests: XCTestCase
         self.testcase("Shuffling elements") {
             
             for _ in 1...iterations {
-                let old = numbers
-                let new = numbers.shuffled(using: &rng)
+                let old = Self.numbers
+                let new = Self.numbers.shuffled(using: &rng)
                 
                 let diff = ArrayDiff(old: old, new: new, identifierProvider: { $0 }, movedHint: { _, _ in false }, updated: { _, _ in false })
                 
@@ -408,8 +412,8 @@ class ArrayDiffTests: XCTestCase
         self.testcase("Shuffling, Removing, and Inserting elements") {
             
             for _ in 1...iterations {
-                let old = numbers
-                var new = numbers
+                let old = Self.numbers
+                var new = Self.numbers
                 
                 new.removeRandom(using: &rng)
                 new.removeRandom(using: &rng)
@@ -462,63 +466,4 @@ fileprivate extension Int
         return mapped
     }
 }
-
-
-private let numbers : [String] = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18",
-    "19",
-
-    "20",
-    "21",
-    "22",
-    "23",
-    "24",
-    "25",
-    "26",
-    "27",
-    "28",
-    "29",
-
-    "30",
-    "31",
-    "32",
-    "33",
-    "34",
-    "35",
-    "36",
-    "37",
-    "38",
-    "39",
-
-    "40",
-    "41",
-    "42",
-    "43",
-    "44",
-    "45",
-    "46",
-    "47",
-    "48",
-    "49",
-    "50"
-]
 
