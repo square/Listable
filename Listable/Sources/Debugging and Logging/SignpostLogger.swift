@@ -49,13 +49,29 @@ struct SignpostLoggingInfo {
 ///
 /// Resources
 /// ---------
-///  WWDC: https://developer.apple.com/videos/play/wwdc2018/405/
+///  WWDC 2018: https://developer.apple.com/videos/play/wwdc2018/405/
+///  WWDC 2019: https://developer.apple.com/wwdc20/10168
 ///  Swift By Sundell: https://www.swiftbysundell.com/wwdc2018/getting-started-with-signposts/
 ///
 struct SignpostLogger {
-         
+    
+    #if DEBUG
+    /// You may temporarily set this param to `false` to disable os_signpost logging,
+    /// for example if debugging performance in Instruments.app.
+    ///
+    /// Note that tests will fail while this is set to `false` in `DEBUG`, to ensure
+    /// this is not accidentally commited as `false`.
+    static let isLoggingEnabled = true
+    #else
+    static let isLoggingEnabled = false
+    #endif
+    
     static func log<Output>(log : OSLog, name: StaticString, for loggable : SignpostLoggable? = nil, _ output : () -> Output) -> Output
     {
+        guard self.isLoggingEnabled else {
+            return output()
+        }
+        
         self.log(.begin, log: log, name: name, for: loggable)
         
         let output = output()
@@ -67,6 +83,10 @@ struct SignpostLogger {
     
     static func log(_ type : EventType, log : OSLog, name: StaticString, for loggable : SignpostLoggable? = nil)
     {
+        guard self.isLoggingEnabled else {
+            return
+        }
+        
         if #available(iOS 12.0, *) {
             if let loggable = loggable {
                 os_signpost(

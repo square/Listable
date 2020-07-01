@@ -41,7 +41,7 @@ final class AutoScrollingViewController : UIViewController
 
     @objc private func addItem()
     {
-        let last = items.last?.identifier.toAny
+        let last = items.last?.identifier
         
         items.append(BottomPinnedItem(text: "Item \(items.count)"))
         

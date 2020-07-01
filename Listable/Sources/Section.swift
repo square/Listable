@@ -211,7 +211,7 @@ public protocol AnySectionInfo
 public extension SectionInfo
 {
     var anyIdentifier : AnyIdentifier {
-        return AnyIdentifier(self.identifier)
+        self.identifier
     }
     
     func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool
