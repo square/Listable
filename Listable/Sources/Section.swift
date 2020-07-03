@@ -33,27 +33,27 @@ public struct Section
     public typealias Build = (inout Section) -> ()
     
     public init<Identifier:Hashable>(
-        identifier : Identifier,
+        _ identifier : Identifier,
         build : Build
         )
     {
-        self.init(identifier: identifier)
+        self.init(identifier)
         
         build(&self)
     }
     
     public init<Info:SectionInfo>(
-        info: Info,
+        _ info: Info,
         build : Build
         )
     {
-        self.init(info: info)
+        self.init(info)
         
         build(&self)
     }
     
     public init<Identifier:Hashable>(
-        identifier : Identifier,
+        _ identifier : Identifier,
         layout : Layout = Layout(),
         columns : Columns = .one,
         header : AnyHeaderFooter? = nil,
@@ -62,7 +62,7 @@ public struct Section
         )
     {
         self.init(
-            info: HashableSectionInfo(identifier),
+            HashableSectionInfo(identifier),
             layout: layout,
             columns: columns,
             header: header,
@@ -72,7 +72,7 @@ public struct Section
     }
     
     public init<Info:SectionInfo>(
-        info: Info,
+        _ info: Info,
         layout : Layout = Layout(),
         columns : Columns = .one,
         header : AnyHeaderFooter? = nil,

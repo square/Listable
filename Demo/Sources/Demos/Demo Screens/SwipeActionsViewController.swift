@@ -45,7 +45,7 @@ final class SwipeActionsViewController: UIViewController  {
                 }
             }
 
-            list += Section(identifier: "items") { section in
+            list += Section("items") { section in
                 section += self.items.map { item in
                     Item(
                         SwipeActionsDemoItem(item: item),

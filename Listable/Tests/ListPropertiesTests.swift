@@ -1,5 +1,5 @@
 //
-//  ListDescriptionTests.swift
+//  ListPropertiesTests.swift
 //  Listable-Unit-Tests
 //
 //  Created by Kyle Van Essen on 11/27/19.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-class ListDescriptionTests: XCTestCase
+class ListPropertiesTests : XCTestCase
 {
 
 }

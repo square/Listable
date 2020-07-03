@@ -62,7 +62,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             list.animatesChanges = animated
             
             list += self.rows.map { sectionRows in
-                Section(identifier: "Demo Section") { section in
+                Section("Demo Section") { section in
                     
                     section.columns = .init(count: 2, spacing: 10.0)
                      

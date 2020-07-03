@@ -75,7 +75,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }()
             
-            list += Section(identifier: SectionIdentifier.variations) { section in
+            list += Section(SectionIdentifier.variations) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits)
@@ -95,7 +95,7 @@ final class ItemizationEditorViewController : UIViewController
             }
 
             list += itemization.modifiers.map { set in
-                Section(identifier: SectionIdentifier.modifier(set.name)) { section in
+                Section(SectionIdentifier.modifier(set.name)) { section in
                     
                     section.columns = .init(count: 2, spacing: 20.0)
                     
@@ -116,7 +116,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: SectionIdentifier.discounts) { section in
+            list += Section(SectionIdentifier.discounts) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits)
@@ -132,7 +132,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: SectionIdentifier.taxes) { section in
+            list += Section(SectionIdentifier.taxes) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits)

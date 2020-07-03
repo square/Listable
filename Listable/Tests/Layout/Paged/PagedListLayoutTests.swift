@@ -19,12 +19,12 @@ class PagedListLayoutTests : XCTestCase
             
             list.layout = .paged_experimental()
                         
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
             }
             
-            list += Section(identifier: "second") { section in
+            list += Section("second") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)))
             }

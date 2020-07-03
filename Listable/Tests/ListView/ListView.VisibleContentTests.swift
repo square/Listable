@@ -37,7 +37,7 @@ class ListView_VisibleContentTests : XCTestCase
                 sizing: .fixed(height: 50.0)
             )
             
-            list += Section(identifier: "section-1") { section in
+            list += Section("section-1") { section in
                 
                 section.header = HeaderFooter(
                     TestHeaderFooter(color: .red),

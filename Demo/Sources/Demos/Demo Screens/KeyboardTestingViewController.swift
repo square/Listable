@@ -30,7 +30,7 @@ final class KeyboardTestingViewController : UIViewController
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "section") { section in
+            list += Section("section") { section in
                 section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))

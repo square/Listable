@@ -62,7 +62,7 @@ final class AutoScrollingViewController : UIViewController
             list.layout = .demoLayout
 
             let items = self.items.map { Item($0) }
-            list += Section(identifier: "items", items: items)
+            list += Section("items", items: items)
 
             if let last = items.last {
                 
@@ -82,7 +82,7 @@ final class AutoScrollingViewController : UIViewController
                 BottomPinnedItem(text: "Total $10.00"),
             ]
 
-            list += Section(identifier: "itemization", items: itemization.map { Item($0) })
+            list += Section("itemization", items: itemization.map { Item($0) })
         }
     }
 }

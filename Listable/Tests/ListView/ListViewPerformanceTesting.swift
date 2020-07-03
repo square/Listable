@@ -30,7 +30,7 @@ class ListViewPerformanceTesting : XCTestCase {
                 list.animatesChanges = false
                 
                 list += dictionary.wordsByLetter.map { letter in
-                    Section(identifier: letter.letter) { section in
+                    Section(letter.letter) { section in
                         section += letter.words.compactMap { word in
                             Item(
                                 TestContent(title: word.word),
@@ -52,7 +52,7 @@ class ListViewPerformanceTesting : XCTestCase {
         let listView = ListView(frame: CGRect(x: 0.0, y: 0.0, width: 300.0, height: 500.0))
         
         let sections = dictionary.wordsByLetter.map { letter in
-            Section(identifier: letter.letter) { section in
+            Section(letter.letter) { section in
                 section += letter.words.compactMap { word in
                     Item(
                         TestContent(title: word.word),
