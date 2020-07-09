@@ -1,23 +1,16 @@
-//
-//  KeyboardObserverTests.swift
-//  Listable-Unit-Tests
-//
-//  Created by Kyle Van Essen on 11/22/19.
-//
-
 import XCTest
-import UIKit.UIResponder
+import UIKit
 
 @testable import Listable
 
 
-class KeyboardObserverTests: XCTestCase
-{
-    func test_notifications()
-    {
+class KeyboardObserverTests: XCTestCase {
+    
+    func test_notifications() {
         let center = NotificationCenter()
-                
-        self.testcase("Will Change Frame") {
+        
+        // Will Change Frame
+        do {
             let observer = KeyboardObserver(center: center)
 
             let delegate = Delegate()
@@ -34,7 +27,8 @@ class KeyboardObserverTests: XCTestCase
             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
         }
         
-        self.testcase("Did Change Frame") {
+        // Did Change Frame
+        do {
             let observer = KeyboardObserver(center: center)
 
             let delegate = Delegate()
@@ -51,53 +45,53 @@ class KeyboardObserverTests: XCTestCase
             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
         }
         
-        self.testcase("Only calls delegate for changed frame") {
+        // Only calls delegate for changed frame
+        do {
             let observer = KeyboardObserver(center: center)
 
-            let delegate = Delegate()
-            observer.delegate = delegate
-            
-            let userInfo : [AnyHashable:Any] = [
-                UIResponder.keyboardFrameEndUserInfoKey : NSValue(cgRect: CGRect(x: 10.0, y: 10.0, width: 100.0, height: 200.0)),
-                UIResponder.keyboardAnimationDurationUserInfoKey : NSNumber(value: 2.5),
-                UIResponder.keyboardAnimationCurveUserInfoKey : NSNumber(value: 123)
-            ]
-            
-            XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 0)
-            center.post(Notification(name: UIWindow.keyboardDidChangeFrameNotification, object: nil, userInfo: userInfo))
-            XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
-            
-            XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
-            center.post(Notification(name: UIWindow.keyboardDidChangeFrameNotification, object: nil, userInfo: userInfo))
-            XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
+             let delegate = Delegate()
+             observer.delegate = delegate
+             
+             let userInfo : [AnyHashable:Any] = [
+                 UIResponder.keyboardFrameEndUserInfoKey : NSValue(cgRect: CGRect(x: 10.0, y: 10.0, width: 100.0, height: 200.0)),
+                 UIResponder.keyboardAnimationDurationUserInfoKey : NSNumber(value: 2.5),
+                 UIResponder.keyboardAnimationCurveUserInfoKey : NSNumber(value: 123)
+             ]
+             
+             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 0)
+             center.post(Notification(name: UIWindow.keyboardDidChangeFrameNotification, object: nil, userInfo: userInfo))
+             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
+             
+             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
+             center.post(Notification(name: UIWindow.keyboardDidChangeFrameNotification, object: nil, userInfo: userInfo))
+             XCTAssertEqual(delegate.keyboardFrameWillChange_callCount, 1)
         }
     }
     
-    final class Delegate : KeyboardObserverDelegate
-    {
+    final class Delegate : KeyboardObserverDelegate {
+        
         var keyboardFrameWillChange_callCount : Int = 0
         
-        func keyboardFrameWillChange(observer: KeyboardObserver)
-        {
-            self.keyboardFrameWillChange_callCount += 1
+        func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
             
-            XCTAssertTrue(UIView.inheritedAnimationDuration > 0.0)
+            self.keyboardFrameWillChange_callCount += 1
         }
     }
 }
 
 
-class KeyboardObserver_NotificationInfo_Tests : XCTestCase
-{
-    func test_init()
-    {
+class KeyboardObserver_NotificationInfo_Tests : XCTestCase {
+    
+    func test_init() {
+        
         let defaultUserInfo : [AnyHashable:Any] = [
             UIResponder.keyboardFrameEndUserInfoKey : NSValue(cgRect: CGRect(x: 10.0, y: 10.0, width: 100.0, height: 200.0)),
             UIResponder.keyboardAnimationDurationUserInfoKey : NSNumber(value: 2.5),
             UIResponder.keyboardAnimationCurveUserInfoKey : NSNumber(value: 123)
         ]
         
-        self.testcase("Successful Init") {
+        // Successful Init
+        do {
             let info = try! KeyboardObserver.NotificationInfo(
                 with: Notification(name: UIResponder.keyboardDidShowNotification, object: nil, userInfo: defaultUserInfo)
             )
@@ -107,60 +101,60 @@ class KeyboardObserver_NotificationInfo_Tests : XCTestCase
             XCTAssertEqual(info.animationCurve, 123)
         }
         
-        self.testcase("Failed Inits") {
-            
-            self.testcase("No userInfo") {
-                self.assertThrowsError(test: {
+        // Failed Inits
+        do {
+            // No userInfo
+            do {
+                XCTAssertThrowsError(
                     try _ = KeyboardObserver.NotificationInfo(
                         with: Notification(name: UIResponder.keyboardDidShowNotification, object: nil, userInfo: nil)
                     )
-                }, verify: { error in
+                ) { error in
                     XCTAssertEqual(error as? KeyboardObserver.NotificationInfo.ParseError, .missingUserInfo)
-                })
+                }
             }
             
-            self.testcase("No end frame") {
-                
+            // No end frame
+            do {
                 var userInfo = defaultUserInfo
                 userInfo.removeValue(forKey: UIResponder.keyboardFrameEndUserInfoKey)
                 
-                self.assertThrowsError(test: {
+                XCTAssertThrowsError(
                     try _ = KeyboardObserver.NotificationInfo(
                         with: Notification(name: UIResponder.keyboardDidShowNotification, object: nil, userInfo: userInfo)
                     )
-                }, verify: { error in
+                ) { error in
                     XCTAssertEqual(error as? KeyboardObserver.NotificationInfo.ParseError, .missingEndingFrame)
-                })
+                }
             }
             
-            self.testcase("No animation duration") {
-                
+            // No animation duration
+            do {
                 var userInfo = defaultUserInfo
                 userInfo.removeValue(forKey: UIResponder.keyboardAnimationDurationUserInfoKey)
                 
-                self.assertThrowsError(test: {
+                XCTAssertThrowsError(
                     try _ = KeyboardObserver.NotificationInfo(
                         with: Notification(name: UIResponder.keyboardDidShowNotification, object: nil, userInfo: userInfo)
                     )
-                }, verify: { error in
+                ) { error in
                     XCTAssertEqual(error as? KeyboardObserver.NotificationInfo.ParseError, .missingAnimationDuration)
-                })
+                }
             }
             
-            self.testcase("No animation curve") {
-                
+            // No animation curve
+            do {
                 var userInfo = defaultUserInfo
                 userInfo.removeValue(forKey: UIResponder.keyboardAnimationCurveUserInfoKey)
                 
-                self.assertThrowsError(test: {
-                    try _ = KeyboardObserver.NotificationInfo(
+                XCTAssertThrowsError(
+                    try KeyboardObserver.NotificationInfo(
                         with: Notification(name: UIResponder.keyboardDidShowNotification, object: nil, userInfo: userInfo)
                     )
-                }, verify: { error in
+                ) { error in
                     XCTAssertEqual(error as? KeyboardObserver.NotificationInfo.ParseError, .missingAnimationCurve)
-                })
+                }
             }
-            
         }
     }
 }

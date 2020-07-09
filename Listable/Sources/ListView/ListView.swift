@@ -909,9 +909,9 @@ extension ListView : KeyboardObserverDelegate
         let inset : CGFloat
         
         switch frame {
-        case .notVisible:
+        case .nonOverlapping:
             inset = 0.0
-        case .visible(let frame):
+        case .overlapping(let frame):
             if #available(iOS 11, *) {
                 inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
             } else {
@@ -927,9 +927,10 @@ extension ListView : KeyboardObserverDelegate
     // MARK: KeyboardObserverDelegate
     //
     
-    func keyboardFrameWillChange(observer : KeyboardObserver)
-    {
-        self.setContentInsetWithKeyboardFrame()
+    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.setContentInsetWithKeyboardFrame()
+        })
     }
 }
 
