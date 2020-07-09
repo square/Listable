@@ -932,11 +932,6 @@ extension ListView : KeyboardObserverDelegate
             self.setContentInsetWithKeyboardFrame()
         })
     }
-    
-    func keyboardFrameWillChange(observer : KeyboardObserver)
-    {
-        self.setContentInsetWithKeyboardFrame()
-    }
 }
 
 fileprivate extension UIScrollView

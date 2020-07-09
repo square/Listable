@@ -1,6 +1,6 @@
 //
 //  KeyboardObserver.swift
-//  BlueprintUICommonControls
+//  Listable
 //
 //  Created by Kyle Van Essen on 2/16/20.
 //
@@ -37,9 +37,6 @@ protocol KeyboardObserverDelegate : AnyObject {
  
  Notes
  -----
- Implementation borrowed from Listable:
- https://github.com/kyleve/Listable/blob/master/Listable/Sources/Internal/KeyboardObserver.swift
- 
  iOS Docs for keyboard management:
  https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
  */

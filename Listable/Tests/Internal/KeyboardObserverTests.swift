@@ -1,7 +1,7 @@
 import XCTest
 import UIKit
 
-@testable import BlueprintUICommonControls
+@testable import Listable
 
 
 class KeyboardObserverTests: XCTestCase {
