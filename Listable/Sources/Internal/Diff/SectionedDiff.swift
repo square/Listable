@@ -91,6 +91,14 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         let sectionsChangeCount : Int
         let itemsChangeCount : Int
         
+        var totalChangeCount : Int {
+            self.sectionsChangeCount + self.itemsChangeCount
+        }
+        
+        var isEmpty : Bool {
+            self.totalChangeCount == 0
+        }
+        
         private let diff : ArrayDiff<Section, SectionIdentifier>
         
         init(old : [Section], new : [Section], configuration : Configuration)

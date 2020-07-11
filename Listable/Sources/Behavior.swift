@@ -33,7 +33,7 @@ public struct Behavior : Equatable
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
-        selectionMode : SelectionMode = .single,
+        selectionMode : SelectionMode = .single(),
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
@@ -60,7 +60,18 @@ public extension Behavior
         /// The list view allows single selections. When an item is selected, the previously selected item (if any)
         /// will be deselected by the list. If you provide multiple selected items in your content description,
         /// the last selected item in the content will be selected.
-        case single
+        ///
+        /// The default value for `clearsSelectionOnViewWillAppear` is true.
+        /// This parameter allows mirroring the `clearsSelectionOnViewWillAppear`
+        /// as available from `UITableViewController` or `UICollectionViewController`.
+        ///
+        /// Note
+        /// ----
+        /// This behaviour is implemented in `ListViewController`.
+        /// If your list is not managed by a `ListViewController`, this parameter has no effect unless
+        /// you manually call `clearSelectionDuringViewWillAppear` on `ListView` within
+        /// your view controller's `viewWillAppear`.
+        case single(clearsSelectionOnViewWillAppear : Bool = true)
         
         /// The list view allows multiple selections. It is your responsibility to update the content
         /// of the list to select and deselect items based on the selection of other items.

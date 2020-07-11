@@ -22,6 +22,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -43,6 +45,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -57,11 +61,11 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: true)
+            item.set(isSelected: true, performCallbacks: true)
             item.applyToVisibleCell()
             
             if item.anyModel.selectionStyle == .tappable {
-                item.performUserDidSelectItem(isSelected: false)
+                item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
                 item.applyToVisibleCell()
             }
@@ -71,7 +75,7 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: false)
+            item.set(isSelected: false, performCallbacks: true)
             item.applyToVisibleCell()
         }
         
@@ -200,6 +204,8 @@ extension ListView
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .scrolledToTop)
+            
+            self.performDidScroll(type: .scrollToTop)
         }
         
         private var lastPosition : CGFloat = 0.0
@@ -222,6 +228,19 @@ extension ListView
             
             if scrollingDown {
                 self.view.updatePresentationState(for: .scrolledDown)
+            }
+            
+            self.performDidScroll(type: .didScroll)
+        }
+        
+        private func performDidScroll(type : ListStateObserver.DidScroll.ScrollType)
+        {
+            ListStateObserver.perform(self.view.stateObserver.onDidScroll, "Did Scroll", with: self.view) {
+                ListStateObserver.DidScroll(
+                    actions: $0,
+                    positionInfo: self.view.scrollPositionInfo,
+                    scrollType: type
+                )
             }
         }
     }

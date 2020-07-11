@@ -48,6 +48,8 @@ public final class ListView : UIView
 
         self.keyboardObserver = KeyboardObserver()
         
+        self.stateObserver = ListStateObserver()
+        
         self.collectionView.isPrefetchingEnabled = false
                 
         self.collectionView.dataSource = self.dataSource
@@ -278,6 +280,28 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: List State Observation
+    //
+    
+    /// A state observer allows you to recieve callbacks when varying types
+    /// of changes occur within the list's state, such as scroll events,
+    /// content change events, frame change events, or item visibility changes.
+    ///
+    /// See the `ListStateObserver` for more info.
+    public var stateObserver : ListStateObserver
+    
+    /// Allows registering a `ListActions` object associated
+    /// with the list view that allows you to perform actions such as scrolling to
+    /// items, or controlling view appearance transitions.
+    private var actions : ListActions? {
+        didSet {
+            oldValue?.listView = nil
+            
+            self.actions?.listView = self
+        }
+    }
+    
+    //
     // MARK: Public - Scrolling To Sections & Items
     //
     
@@ -289,17 +313,6 @@ public final class ListView : UIView
     public func scrollTo(item : AnyItem, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
         return self.scrollTo(item: item.identifier, position: position, animated: animated)
-    }
-    
-    ///
-    /// Scrolls to the item with the provided identifier, with the provided positioning.
-    /// If there is more than one item with the same identifier, the list scrolls to the first.
-    /// If the item is contained in the list, true is returned. If it is not, false is returned.
-    ///
-    @discardableResult
-    public func scrollTo<Content:ItemContent>(item : Identifier<Content>, position : ItemScrollPosition, animated : Bool = false) -> Bool
-    {
-        return self.scrollTo(item: item, position: position, animated: animated)
     }
     
     ///
@@ -341,8 +354,12 @@ public final class ListView : UIView
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
     public func scrollToTop(animated : Bool = false) -> Bool {
-        self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
-            self.collectionView.scrollRectToVisible(.zero, animated: animated)
+        
+        // The rect we scroll to must have an area – an empty rect will result in no scrolling.
+        let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
+        
+        return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
+            self.collectionView.scrollRectToVisible(rect, animated: animated)
         }
     }
 
@@ -388,9 +405,9 @@ public final class ListView : UIView
             animatesChanges: true,
             layout: self.layout,
             appearance: self.appearance,
+            scrollInsets: self.scrollInsets,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
-            scrollInsets: self.scrollInsets,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             debuggingIdentifier: self.debuggingIdentifier,
             build: builder
@@ -441,20 +458,23 @@ public final class ListView : UIView
         self.setProperties(with: .default(with: builder))
     }
     
-    public func setProperties(with description : ListProperties)
+    public func setProperties(with properties : ListProperties)
     {
-        let animated = description.animatesChanges
+        let animated = properties.animatesChanges
         
-        self.appearance = description.appearance
-        self.behavior = description.behavior
-        self.autoScrollAction = description.autoScrollAction
-        self.scrollInsets = description.scrollInsets
-        self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
-        self.debuggingIdentifier = description.debuggingIdentifier
+        self.appearance = properties.appearance
+        self.behavior = properties.behavior
+        self.autoScrollAction = properties.autoScrollAction
+        self.scrollInsets = properties.scrollInsets
+        self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
+        self.debuggingIdentifier = properties.debuggingIdentifier
+        self.actions = properties.actions
 
-        self.set(layout: description.layout, animated: animated)
+        self.stateObserver = properties.stateObserver
         
-        self.setContent(animated: animated, description.content)
+        self.set(layout: properties.layout, animated: animated)
+        
+        self.setContent(animated: animated, properties.content)
     }
     
     private func setContentFromSource(animated : Bool = false)
@@ -494,6 +514,16 @@ public final class ListView : UIView
                 self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
             } else if toEmpty {
                 self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
+            }
+            
+            if oldValue != self.frame {
+                ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) {
+                    ListStateObserver.FrameChanged(
+                        actions: $0,
+                        old: oldValue,
+                        new: self.frame
+                    )
+                }
             }
         }
     }
@@ -671,6 +701,14 @@ public final class ListView : UIView
         // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
+        
+        // Notify state reader the content changed.
+        
+        if diff.changes.isEmpty == false {
+            ListStateObserver.perform(self.stateObserver.onContentChanged, "Content Changed", with: self) { actions in
+                ListStateObserver.ContentChanged(actions: actions)
+            }
+        }
     }
     
     private func newVisibleSlice(to indexPath : IndexPath) -> Content.Slice

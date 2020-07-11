@@ -17,7 +17,7 @@ class BehaviorTests: XCTestCase
         let behavior = Behavior()
         
         XCTAssertEqual(behavior.keyboardDismissMode, .interactive)
-        XCTAssertEqual(behavior.selectionMode, .single)
+        XCTAssertEqual(behavior.selectionMode, .single())
         XCTAssertEqual(behavior.underflow, Behavior.Underflow())
         
         let listView = ListView()

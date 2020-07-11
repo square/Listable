@@ -164,6 +164,11 @@ public struct Content
         lhs.sections += rhs
     }
     
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    {
+        self += Section(identifier, build: build)
+    }
+    
     internal mutating func remove(at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.remove(at: indexPath.item)
