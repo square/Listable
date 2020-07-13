@@ -221,6 +221,8 @@ public final class ListView : UIView
         
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
+        
+        self.setContentInsetWithKeyboardFrame()
     }
     
     private func updateCollectionViewWithCurrentLayoutProperties()
@@ -908,19 +910,25 @@ extension ListView : KeyboardObserverDelegate
         
         let inset : CGFloat
         
-        switch frame {
-        case .nonOverlapping:
-            inset = 0.0
-        case .overlapping(let frame):
-            if #available(iOS 11, *) {
-                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-            } else {
-                inset = (self.bounds.size.height - frame.origin.y)
+        switch self.behavior.keyboardAdjustmentMode {
+        case .none: inset = 0.0
+            
+        case .adjustsWhenVisible:
+            switch frame {
+            case .nonOverlapping: inset = 0.0
+                
+            case .overlapping(let frame):
+                inset = (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
             }
         }
         
-        self.collectionView.contentInset.bottom = inset
-        self.collectionView.scrollIndicatorInsets.bottom = inset
+        if self.collectionView.contentInset.bottom != inset {
+            self.collectionView.contentInset.bottom = inset
+        }
+        
+        if self.collectionView.scrollIndicatorInsets.bottom != inset {
+            self.collectionView.scrollIndicatorInsets.bottom = inset
+        }
     }
     
     //
