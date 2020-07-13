@@ -17,7 +17,10 @@ class ListView_VisibleContentTests : XCTestCase
         listView.setContent { list in
             
             list.appearance.backgroundColor = .black
-            list.appearance.stickySectionHeaders = false
+
+            list.layout = .list {
+                $0.stickySectionHeaders = false
+            }
             
             list.content.header = HeaderFooter(
                 TestHeaderFooter(color: .blue),
@@ -34,7 +37,7 @@ class ListView_VisibleContentTests : XCTestCase
                 sizing: .fixed(height: 50.0)
             )
             
-            list += Section(identifier: "section-1") { section in
+            list += Section("section-1") { section in
                 
                 section.header = HeaderFooter(
                     TestHeaderFooter(color: .red),
@@ -71,7 +74,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -89,7 +92,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -106,8 +109,8 @@ class ListView_VisibleContentTests : XCTestCase
             ListView.VisibleContent.Info(
                 headerFooters: [],
                 items: [
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 0, section: 0)),
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0)),
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -126,7 +129,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -145,7 +148,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .listFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>().toAny, indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )

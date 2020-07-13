@@ -18,7 +18,7 @@ protocol AnyPresentationItemState : AnyObject
     var anyModel : AnyItem { get }
     
     var reorderingActions : ReorderingActions { get }
-    
+        
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
     
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
@@ -51,8 +51,8 @@ protocol ItemContentCoordinatorDelegate : AnyObject
 
 public struct ItemStateDependencies
 {
-    internal var reorderingDelegate : ReorderingActionsDelegate
-    internal var coordinatorDelegate : ItemContentCoordinatorDelegate
+    var reorderingDelegate : ReorderingActionsDelegate
+    var coordinatorDelegate : ItemContentCoordinatorDelegate
 }
 
 
@@ -88,7 +88,7 @@ extension PresentationState
         let storage : Storage
                 
         init(with model : Item<Content>, dependencies : ItemStateDependencies)
-        {
+        {            
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
         
@@ -153,6 +153,9 @@ extension PresentationState
         
         private(set) var isDisplayed : Bool = false
         
+        private var hasDisplayed : Bool = false
+        private var hasEndedDisplay : Bool = false
+        
         func setAndPerform(isDisplayed: Bool) {
             guard self.isDisplayed != isDisplayed else {
                 return
@@ -161,9 +164,21 @@ extension PresentationState
             self.isDisplayed = isDisplayed
             
             if self.isDisplayed {
-                self.model.onDisplay?(self.model.content)
+                self.model.onDisplay?(.init(
+                    item: self.model,
+                    isFirstDisplay: self.hasDisplayed == false
+                    )
+                )
+                
+                self.hasDisplayed = true
             } else {
-                self.model.onEndDisplay?(self.model.content)
+                self.model.onEndDisplay?(.init(
+                    item: self.model,
+                    isFirstEndDisplay: self.hasEndedDisplay == false
+                    )
+                )
+                
+                self.hasEndedDisplay = true
             }
         }
                 
@@ -209,7 +224,7 @@ extension PresentationState
                 for: reason,
                 with: applyInfo
             )
-            
+                        
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
                 cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, reason: reason)
@@ -288,13 +303,13 @@ extension PresentationState
                 if isSelected {
                     if let onSelect = self.model.onSelect {
                         SignpostLogger.log(log: .listInteraction, name: "Item onSelect", for: self.model) {
-                            onSelect(self.model.content)
+                            onSelect(.init(item: self.model))
                         }
                     }
                 } else {
                     if let onDeselect = self.model.onDeselect {
                         SignpostLogger.log(log: .listInteraction, name: "Item onDeselect", for: self.model) {
-                            onDeselect(self.model.content)
+                            onDeselect(.init(item: self.model))
                         }
                     }
                 }

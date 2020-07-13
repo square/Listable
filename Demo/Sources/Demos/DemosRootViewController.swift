@@ -28,6 +28,7 @@ public final class DemosRootViewController : UIViewController
         self.view = self.listView
         
         self.listView.appearance = .demoAppearance
+        self.listView.layout = .demoLayout
         
         self.listView.setContent { list in
 
@@ -35,7 +36,7 @@ public final class DemosRootViewController : UIViewController
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "list-view") { section in
+            list("list-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "List Views")
@@ -46,7 +47,8 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(CollectionViewBasicDemoViewController())
-                })
+                    }
+                )
                 
                 section += Item(
                     DemoItem(text: "Blueprint Integration"),
@@ -60,13 +62,6 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(AutoScrollingViewController())
-                })
-                
-                section += Item(
-                    DemoItem(text: "Custom Layouts"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(CustomLayoutsViewController())
                 })
                 
                 section += Item(
@@ -88,20 +83,6 @@ public final class DemosRootViewController : UIViewController
                     selectionStyle: .tappable,
                     onSelect : { _ in
                         self.push(KeyboardTestingViewController())
-                })
-                
-                section += Item(
-                    DemoItem(text: "Horizontal Layout"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(HorizontalLayoutViewController())
-                })
-                
-                section += Item(
-                    DemoItem(text: "Width Customization"),
-                    selectionStyle: .tappable,
-                    onSelect : { _ in
-                        self.push(WidthCustomizationViewController())
                 })
                 
                 section += Item(
@@ -131,9 +112,58 @@ public final class DemosRootViewController : UIViewController
                     onSelect : { _ in
                         self.push(CoordinatorViewController())
                 })
+                
+                section += Item(
+                    DemoItem(text: "Item Insert & Remove Animations"),
+                    selectionStyle: .tappable,
+                    onSelect: { _ in
+                        self.push(ItemInsertAndRemoveAnimationsViewController())
+                })
             }
             
-            list += Section(identifier: "selection-state") { section in
+            list("layouts") { section in
+                
+                section.header = HeaderFooter(
+                    DemoHeader(title: "Other Layouts")
+                )
+                
+                section += Item(
+                    DemoItem(text: "Grid Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(CustomLayoutsViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Paged Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(PagedViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Horizontal Layout"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(HorizontalLayoutViewController())
+                })
+                
+                section += Item(
+                    DemoItem(text: "Width Customization"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(WidthCustomizationViewController())
+                })
+
+                section += Item(
+                    DemoItem(text: "Spacing Customization"),
+                    selectionStyle: .tappable,
+                    onSelect : { _ in
+                        self.push(SpacingCustomizationViewController())
+                })
+            }
+            
+            list("selection-state") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "List View Selection")
@@ -153,7 +183,7 @@ public final class DemosRootViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "collection-view") { section in
+            list("collection-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "UICollectionViews")
@@ -167,7 +197,7 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "scroll-view") { section in
+            list("scroll-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "UIScrollViews")

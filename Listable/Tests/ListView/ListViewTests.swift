@@ -25,7 +25,7 @@ class ListViewTests: XCTestCase
         listView.setContent { list in
             list.animatesChanges = false
             
-            list += Section(identifier: "a-section")
+            list += Section("a-section")
             list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         
@@ -35,7 +35,7 @@ class ListViewTests: XCTestCase
         listView.setContent { list in
             list.animatesChanges = false
             
-            list += Section(identifier: "a-section")
+            list += Section("a-section")
             list.content.overscrollFooter = nil
         }
         
@@ -45,7 +45,7 @@ class ListViewTests: XCTestCase
         listView.setContent { list in
             list.animatesChanges = false
             
-            list += Section(identifier: "a-section")
+            list += Section("a-section")
             list.content.overscrollFooter = HeaderFooter(TestSupplementary())
         }
         

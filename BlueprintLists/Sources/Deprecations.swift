@@ -44,14 +44,14 @@ import BlueprintUI
 // MARK: Deprecated May 29, 2019
 //
 
-@available(*, deprecated, renamed: "BlueprintItemContent")
+@available(*, unavailable, renamed: "BlueprintItemContent")
 public typealias BlueprintItemElement = BlueprintItemContent
 
-@available(*, deprecated, renamed: "BlueprintHeaderFooterContent")
+@available(*, unavailable, renamed: "BlueprintHeaderFooterContent")
 public typealias BlueprintHeaderFooterElement = BlueprintHeaderFooterContent
 
 public extension BlueprintHeaderFooterContent {
-    @available(*, deprecated, renamed: "elementRepresentation")
+    @available(*, unavailable, renamed: "elementRepresentation")
     var element : Element {
         self.elementRepresentation
     }

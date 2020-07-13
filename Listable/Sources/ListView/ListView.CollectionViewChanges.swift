@@ -12,8 +12,8 @@ internal extension ListView
 {
     struct CollectionViewChanges
     {
-        typealias SectionChanges = SectionedDiff<Section, AnyItem>.SectionChanges
-        typealias ItemChanges = SectionedDiff<Section, AnyItem>.ItemChanges
+        typealias SectionChanges = SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.SectionChanges
+        typealias ItemChanges = SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges
         
         var deletedSections : [SectionChanges.Removed] = []
         var insertedSections : [SectionChanges.Added] = []

@@ -37,12 +37,14 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func setAppearance()
     {
-        self.list.appearance.list.layout.set {
-            $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
-            $0.interSectionSpacingWithFooter = 30.0
-            $0.interSectionSpacingWithNoFooter = 30.0
-            $0.sectionHeaderBottomSpacing = 5.0
-            $0.itemToSectionFooterSpacing = 20.0
+        self.list.layout = .list {
+            $0.layout.set {
+                $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
+                $0.interSectionSpacingWithFooter = 30.0
+                $0.interSectionSpacingWithNoFooter = 30.0
+                $0.sectionHeaderBottomSpacing = 5.0
+                $0.itemToSectionFooterSpacing = 20.0
+            }
         }
     }
     
@@ -52,7 +54,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             
             list.animatesChanges = animated
                    
-            list += Section(identifier: SectionIdentifier.toggles) { section in
+            list += Section(SectionIdentifier.toggles) { section in
                 
                 section += Item(
                     ToggleRow(
@@ -74,7 +76,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             }
         
             if self.data.requestsInitialDeposit {
-                list += Section(identifier: SectionIdentifier.deposits) { section in
+                list += Section(SectionIdentifier.deposits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Deposit Request"),
@@ -115,7 +117,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             }
             
             if self.data.splitsIntoMilestones {
-                list += Section(identifier: SectionIdentifier.splits) { section in
+                list += Section(SectionIdentifier.splits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Balance Split"),

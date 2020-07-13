@@ -13,8 +13,9 @@ extension ItemCell {
     final class ContentContainerView : UIView {
 
         let contentView : Content.ContentView
-
+        
         private var swipeConfiguration: SwipeConfiguration?
+        
         private var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
@@ -194,6 +195,7 @@ extension ItemCell {
         }
 
         private func didPerformAction(expandActions: Bool) {
+            
             if expandActions {
                 self.set(state: .expandActions, animated: true)
             } else {

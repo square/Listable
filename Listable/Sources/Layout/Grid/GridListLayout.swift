@@ -7,28 +7,35 @@
 
 import Foundation
 
-
-public extension Appearance
+public extension LayoutDescription
 {
-    var grid : GridAppearance {
-        get {
-            self[GridAppearance.self, default: GridAppearance()]
-        }
-        
-        set {
-            self[GridAppearance.self] = newValue
-        }
+    static func grid_experimental(_ configure : @escaping (inout GridAppearance) -> () = { _ in }) -> Self
+    {
+        GridListLayout.describe(appearance: configure)
     }
 }
 
-
-public struct GridAppearance : Equatable
+public struct GridAppearance : ListLayoutAppearance
 {
     public var sizing : Sizing
     public var layout : Layout
     
-    public init(sizing : Sizing = Sizing(), layout : Layout = Layout())
-    {
+    public var direction: LayoutDirection {
+        .vertical
+    }
+    
+    public var stickySectionHeaders : Bool
+    
+    public static var `default`: GridAppearance {
+        return self.init()
+    }
+    
+    public init(
+        stickySectionHeaders : Bool = true,
+        sizing : Sizing = Sizing(),
+        layout : Layout = Layout()
+    ) {
+        self.stickySectionHeaders = stickySectionHeaders
         self.sizing = sizing
         self.layout = layout
     }
@@ -127,50 +134,51 @@ public struct GridAppearance : Equatable
 
 final class GridListLayout : ListLayout
 {
+    typealias LayoutAppearance = GridAppearance
+    
+    static var defaults: ListLayoutDefaults {
+        .init(itemInsertAndRemoveAnimations: .scaleDown)
+    }
+    
+    var layoutAppearance: GridAppearance
+    
     //
     // MARK: Public Properties
     //
-    
-    var contentSize : CGSize
-    
+        
     let appearance : Appearance
     let behavior : Behavior
     
     let content : ListLayoutContent
+            
+    var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: false,
+            contentInsetAdjustmentBehavior: .automatic,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: true,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: true
+        )
+    }
     
     //
     // MARK: Initialization
     //
     
-    init()
-    {
-        self.contentSize = .zero
-                
-        self.appearance = Appearance()
-        self.behavior = Behavior()
-        
-        self.content = ListLayoutContent(with: self.appearance)
-    }
-    
     init(
-        delegate : CollectionViewLayoutDelegate,
-        appearance : Appearance,
-        behavior : Behavior,
-        in collectionView : UICollectionView
-        )
-    {
-        self.contentSize = .zero
-                
+        layoutAppearance: GridAppearance,
+        appearance: Appearance,
+        behavior: Behavior,
+        content: ListLayoutContent
+    ) {
+        self.layoutAppearance = layoutAppearance
         self.appearance = appearance
         self.behavior = behavior
         
-        self.content = ListLayoutContent(
-            delegate: delegate,
-            appearance: appearance,
-            in: collectionView
-        )
+        self.content = content
     }
-    
+
     //
     // MARK: Performing Layouts
     //
@@ -197,9 +205,9 @@ final class GridListLayout : ListLayout
             return false
         }
         
-        let direction = self.appearance.direction
-        let layout = self.appearance.grid.layout
-        let sizing = self.appearance.grid.sizing
+        let direction = self.layoutAppearance.direction
+        let layout = self.layoutAppearance.layout
+        let sizing = self.layoutAppearance.sizing
         
         let viewSize = collectionView.bounds.size
         
@@ -227,18 +235,12 @@ final class GridListLayout : ListLayout
             
             let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight)
+            )
             
-            if hasListHeader {
-                height = delegate.sizeForListHeader(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = header.measurer(measureInfo).height
             
             header.x = position.origin
             header.size = direction.size(width: position.width, height: height)
@@ -279,19 +281,13 @@ final class GridListLayout : ListLayout
             performLayout(for: section.header) { header in
                 let width = header.layout.width.merge(with: section.layout.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
-                let height : CGFloat
                 
-                if hasSectionHeader {
-                    height = delegate.sizeForHeader(
-                        in: sectionIndex,
-                        in: collectionView,
-                        measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight),
-                        layoutDirection: direction
-                    ).height
-                } else {
-                    height = 0.0
-                }
+                let measureInfo = ListLayoutContent.MeasureInfo(
+                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight)
+                )
+                
+                let height = header.measurer(measureInfo).height
                 
                 header.x = position.origin
                 header.size = direction.size(width: position.width, height: height)
@@ -333,19 +329,12 @@ final class GridListLayout : ListLayout
                 let width = footer.layout.width.merge(with: section.layout.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width, layoutDirection: direction)
                 
-                let height : CGFloat
+                let measureInfo = ListLayoutContent.MeasureInfo(
+                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight)
+                )
                 
-                if hasSectionFooter {
-                    height = delegate.sizeForFooter(
-                        in: sectionIndex,
-                        in: collectionView,
-                        measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                        defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight),
-                        layoutDirection: direction
-                    ).height
-                } else {
-                    height = 0.0
-                }
+                let height = footer.measurer(measureInfo).height
                 
                 footer.size = direction.size(width: position.width, height: height)
                 footer.x = position.origin
@@ -389,18 +378,12 @@ final class GridListLayout : ListLayout
             
             let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight)
+            )
             
-            if hasFooter {
-                height = delegate.sizeForListFooter(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = footer.measurer(measureInfo).height
             
             footer.size = direction.size(width: position.width, height: height)
             footer.x = position.origin
@@ -417,22 +400,15 @@ final class GridListLayout : ListLayout
         //
                     
         performLayout(for: self.content.overscrollFooter) { footer in
-            let hasFooter = footer.isPopulated
 
             let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth, layoutDirection: direction)
             
-            let height : CGFloat
+            let measureInfo = ListLayoutContent.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight)
+            )
             
-            if hasFooter {
-                height = delegate.sizeForOverscrollFooter(
-                    in: collectionView,
-                    measuredIn: CGSize(width: position.width, height: .greatestFiniteMagnitude),
-                    defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight),
-                    layoutDirection: direction
-                ).height
-            } else {
-                height = 0.0
-            }
+            let height = footer.measurer(measureInfo).height
             
             footer.x = position.origin
             footer.size = direction.size(width: position.width, height: height)
@@ -442,7 +418,7 @@ final class GridListLayout : ListLayout
         // Remaining Calculations
         //
         
-        self.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
+        self.content.contentSize = direction.size(width: viewWidth, height: lastContentMaxY)
         
         return true
     }

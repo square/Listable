@@ -21,14 +21,16 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.appearance.list.layout.itemSpacing = 10.0
+        self.listView.layout = .list {
+            $0.layout.itemSpacing = 10.0
+        }
         
         self.listView.setContent { list in
             list.content.overscrollFooter = HeaderFooter(
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "section") { section in
+            list += Section("section") { section in
                 section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))

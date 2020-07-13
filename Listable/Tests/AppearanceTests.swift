@@ -17,10 +17,7 @@ class AppearanceTests: XCTestCase
         let appearance = Appearance()
         
         XCTAssertEqual(appearance.backgroundColor, .white)
-        
-        XCTAssertEqual(appearance.direction, .vertical)
-        
-        XCTAssertEqual(appearance.stickySectionHeaders, true)
+        XCTAssertEqual(appearance.showsScrollIndicators, true)
     }
 }
 
