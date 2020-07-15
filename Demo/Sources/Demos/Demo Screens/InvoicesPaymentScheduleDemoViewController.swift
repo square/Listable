@@ -54,7 +54,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             
             list.animatesChanges = animated
                    
-            list += Section(identifier: SectionIdentifier.toggles) { section in
+            list += Section(SectionIdentifier.toggles) { section in
                 
                 section += Item(
                     ToggleRow(
@@ -76,7 +76,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             }
         
             if self.data.requestsInitialDeposit {
-                list += Section(identifier: SectionIdentifier.deposits) { section in
+                list += Section(SectionIdentifier.deposits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Deposit Request"),
@@ -117,7 +117,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             }
             
             if self.data.splitsIntoMilestones {
-                list += Section(identifier: SectionIdentifier.splits) { section in
+                list += Section(SectionIdentifier.splits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Balance Split"),

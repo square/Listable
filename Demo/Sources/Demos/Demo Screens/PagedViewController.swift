@@ -29,7 +29,7 @@ final class PagedViewController : UIViewController
                 $0.direction = .vertical
             }
             
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 section += DemoElement(color: .black)
                 section += DemoElement(color: .white)
                 section += DemoElement(color: .black)

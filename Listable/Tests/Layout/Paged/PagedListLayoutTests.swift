@@ -48,7 +48,7 @@ class PagedListLayoutTests : XCTestCase
             list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue))
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .green))
             
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))
@@ -58,7 +58,7 @@ class PagedListLayoutTests : XCTestCase
                 section += TestingItemContent(color: .init(white: 0.0, alpha: 0.5))
             }
             
-            list += Section(identifier: "second") { section in
+            list += Section("second") { section in
                 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))

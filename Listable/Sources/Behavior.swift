@@ -14,7 +14,10 @@ public struct Behavior : Equatable
 {
     /// How the keyboard should be dismissed (if at all) based on scrolling of the list view.
     public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
-        
+    
+    /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
+    public var keyboardAdjustmentMode : KeyboardAdjustmentMode
+    
     /// How the list should respond to selection attempts.
     public var selectionMode : SelectionMode
         
@@ -34,6 +37,7 @@ public struct Behavior : Equatable
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
+        keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
         selectionMode : SelectionMode = .single,
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
@@ -41,6 +45,8 @@ public struct Behavior : Equatable
         isPagingEnabled : Bool = false
     ) {
         self.keyboardDismissMode = keyboardDismissMode
+        self.keyboardAdjustmentMode = keyboardAdjustmentMode
+        
         self.selectionMode = selectionMode
         self.underflow = underflow
         
@@ -52,6 +58,16 @@ public struct Behavior : Equatable
 
 public extension Behavior
 {
+    /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
+    enum KeyboardAdjustmentMode : Equatable
+    {
+        /// The `contentInset` of the list is not adjusted when the keyboard appears or disappears.
+        case none
+        
+        /// The `contentInset` of the list is adjusted when the keyboard appears or disappears.
+        case adjustsWhenVisible
+    }
+    
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
     enum SelectionMode : Equatable
     {

@@ -1,5 +1,5 @@
 //
-//  ListDescription.swift
+//  ListProperties.swift
 //  Listable
 //
 //  Created by Kyle Van Essen on 11/9/19.
@@ -85,6 +85,11 @@ public struct ListProperties
     public static func += (lhs : inout ListProperties, rhs : [Section])
     {
         lhs.content.sections += rhs
+    }
+    
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    {
+        self += Section(identifier, build: build)
     }
 }
 

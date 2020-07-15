@@ -193,8 +193,12 @@ final class PresentationState
     // MARK: Updating Content & State
     //
     
-    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice, dependencies: ItemStateDependencies, loggable : SignpostLoggable?)
-    {
+    func update(
+        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
+        slice : Content.Slice,
+        dependencies: ItemStateDependencies,
+        loggable : SignpostLoggable?
+    ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update Presentation State", for: loggable)
         
         defer {

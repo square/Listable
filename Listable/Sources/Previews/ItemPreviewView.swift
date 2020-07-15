@@ -79,7 +79,7 @@ public final class ItemPreviewView : UIView {
         self.listView.setProperties { list in
             appearance.configure(list: &list)
             
-            list += Section(identifier: "section") { section in
+            list += Section("section") { section in
                 section += item
             }
         }

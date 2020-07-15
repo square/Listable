@@ -4,6 +4,45 @@
 
 ### Added
 
+- Add support for [Behavior.KeyboardAdjustmentMode](https://github.com/kyleve/Listable/pull/166), which allows for disabling automatic keyboard adjustment behavior. This is useful if your container view is managing the size of or insets on a `ListView` itself.
+
+- [Introduced `callAsFunction` support](https://github.com/kyleve/Listable/pull/181) when building with Xcode 11.4 or later. This allows you to replace code like this:
+
+  ```
+  List { list in
+      list += Section("first") { section in ... }
+  }
+  ```
+  
+  With this:
+  
+  ```
+  List { list in
+      list("first") { section in ... }
+  }
+  ```
+  
+  Improving terseness when building sections in a list.
+  
+
+### Removed
+
+### Changed
+
+- [Changed `Section` initialization APIs](https://github.com/kyleve/Listable/pull/181) from `Section(identifier: "my-id") { ... }` to `Section("my-id") { ... }` – it's clear from the API what the first param is for, so the param name just made callsites longer.
+
+### Misc
+
+# Past Releases
+
+## 0.7.0
+
+### Fixed
+
+- [Significant performance improvements](https://github.com/kyleve/Listable/pull/179) for list updates which contain either no changes, or only in-place updates to existing items and sections. In many cases, these updates will now be 80% faster. This change also improves performance for other types of changes such as insertions, removals, or moves, but not to the same degree.
+
+### Added
+
 - [Added additional layout configuration options](https://github.com/kyleve/Listable/pull/173/): `headerToFirstSectionSpacing` and `lastSectionToFooterSpacing` now let you control the spacing between the list header and content, and the content and the list footer.
 
 - [Add support for snapshot testing `Item`s](https://github.com/kyleve/Listable/pull/171) via the `ItemPreviewView` class. This is a view type which takes in some configuration options, and an `Item`, which you can then use in snapshot tests to verify the appearance of your `Item` and `ItemContent` .
@@ -76,8 +115,6 @@
   ```
 
 ### Misc
-
-# Past Releases
 
 ## 0.6.1
 

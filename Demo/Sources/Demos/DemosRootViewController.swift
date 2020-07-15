@@ -36,7 +36,7 @@ public final class DemosRootViewController : UIViewController
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "list-view") { section in
+            list("list-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "List Views")
@@ -121,7 +121,7 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "layouts") { section in
+            list("layouts") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "Other Layouts")
@@ -163,7 +163,7 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "selection-state") { section in
+            list("selection-state") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "List View Selection")
@@ -183,7 +183,7 @@ public final class DemosRootViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "collection-view") { section in
+            list("collection-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "UICollectionViews")
@@ -197,7 +197,7 @@ public final class DemosRootViewController : UIViewController
                 })
             }
             
-            list += Section(identifier: "scroll-view") { section in
+            list("scroll-view") { section in
                 
                 section.header = HeaderFooter(
                     DemoHeader(title: "UIScrollViews")

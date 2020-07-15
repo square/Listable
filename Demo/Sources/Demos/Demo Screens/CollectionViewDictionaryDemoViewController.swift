@@ -84,7 +84,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         {
             // Add the search bar section.
             
-            content += Section(identifier: "search") { rows in
+            content += Section("search") { rows in
                 // When the search bar's text changes, update the filter.
                 let search = SearchBarElement(text: state.value.filter) { string in
                     state.value.filter = string
@@ -98,7 +98,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             // Add a section for each letter in the dictionary.
             
             content += self.dictionary.wordsByLetter.map { letter in
-                return Section(identifier: letter.letter) { section in
+                return Section(letter.letter) { section in
                     
                     // Set the header.
                     section.header = HeaderFooter(SectionHeader(title: letter.letter))
@@ -124,7 +124,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
             
             // If there's no content, show an empty state.
             if hasContent == false {
-                content += Section(identifier: "empty") { section in
+                content += Section("empty") { section in
                     section += WordRow(
                         title: "No Results For '\(state.value.filter)'",
                         detail: "Please enter a different search."

@@ -33,7 +33,7 @@ final class WidthCustomizationViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: "default") { section in
+            list += Section("default") { section in
                 
                 section.layout = Section.Layout(width: .default)
                 
@@ -43,7 +43,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "fill") { section in
+            list += Section("fill") { section in
                 
                 section.layout = Section.Layout(width: .fill)
                 
@@ -53,7 +53,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "custom-1") { section in
+            list += Section("custom-1") { section in
 
                 section.layout = Section.Layout(width: .custom(.init(
                         padding: HorizontalPadding(uniform: 10.0),

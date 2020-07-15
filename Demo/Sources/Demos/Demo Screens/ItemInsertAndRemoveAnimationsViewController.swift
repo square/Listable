@@ -61,7 +61,7 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
         list.appearance = .demoAppearance
         list.layout = .demoLayout
         
-        list += Section(identifier: "animations") { section in
+        list += Section("animations") { section in
             
             section.header = HeaderFooter(DemoHeader(title: "Item Animations"))
             

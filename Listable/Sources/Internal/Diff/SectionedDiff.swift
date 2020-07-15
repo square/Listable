@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct SectionedDiff<Section, Item>
+struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:Hashable>
 {
     let old : [Section]
     let new : [Section]
@@ -27,14 +27,6 @@ struct SectionedDiff<Section, Item>
         )
     }
     
-    static func calculate(on queue : DispatchQueue, old : [Section], new: [Section], configuration : Configuration, completion : @escaping (SectionedDiff) -> ())
-    {
-        queue.async {
-            let diff = SectionedDiff(old: old, new: new, configuration: configuration)
-            completion(diff)
-        }
-    }
-    
     struct Configuration
     {
         var section : SectionProviders
@@ -48,14 +40,14 @@ struct SectionedDiff<Section, Item>
         
         struct SectionProviders
         {
-            var identifier : (Section) -> AnyIdentifier
+            var identifier : (Section) -> SectionIdentifier
             
             var items : (Section) -> [Item]
             
             var movedHint : (Section, Section) -> Bool
             
             init(
-                identifier : @escaping (Section) -> AnyIdentifier,
+                identifier : @escaping (Section) -> SectionIdentifier,
                 items : @escaping (Section) -> [Item],
                 movedHint : @escaping (Section, Section) -> Bool
                 )
@@ -68,13 +60,13 @@ struct SectionedDiff<Section, Item>
         
         struct ItemProviders
         {
-            var identifier : (Item) -> AnyIdentifier
+            var identifier : (Item) -> ItemIdentifier
             
             var updated : (Item, Item) -> Bool
             var movedHint : (Item, Item) -> Bool
             
             init(
-                identifier : @escaping (Item) -> AnyIdentifier,
+                identifier : @escaping (Item) -> ItemIdentifier,
                 updated : @escaping (Item, Item) -> Bool,
                 movedHint : @escaping (Item, Item) -> Bool
                 )
@@ -94,12 +86,12 @@ struct SectionedDiff<Section, Item>
         let moved : [Moved]
         let noChange : [NoChange]
         
-        let addedItemIdentifiers : Set<AnyIdentifier>
+        let addedItemIdentifiers : Set<ItemIdentifier>
         
         let sectionsChangeCount : Int
         let itemsChangeCount : Int
         
-        private let diff : ArrayDiff<Section>
+        private let diff : ArrayDiff<Section, SectionIdentifier>
         
         init(old : [Section], new : [Section], configuration : Configuration)
         {
@@ -159,17 +151,17 @@ struct SectionedDiff<Section, Item>
                 )
             }
             
-            let addedIDs : [[AnyIdentifier]] = self.added.map {
+            let addedIDs : [[ItemIdentifier]] = self.added.map {
                 let items = configuration.section.items($0.newValue)
                 return items.map { configuration.item.identifier($0) }
             }
             
-            let movedIDs : [[AnyIdentifier]] = self.moved.map {
+            let movedIDs : [[ItemIdentifier]] = self.moved.map {
                 let items = $0.itemChanges.added
                 return items.map { configuration.item.identifier($0.newValue) }
             }
             
-            let noChangeIDs : [[AnyIdentifier]] = self.noChange.map {
+            let noChangeIDs : [[ItemIdentifier]] = self.noChange.map {
                 let items = $0.itemChanges.added
                 return items.map { configuration.item.identifier($0.newValue) }
             }
@@ -238,7 +230,7 @@ struct SectionedDiff<Section, Item>
         
         let changeCount : Int
         
-        let diff : ArrayDiff<Item>
+        let diff : ArrayDiff<Item, ItemIdentifier>
         
         init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
         {

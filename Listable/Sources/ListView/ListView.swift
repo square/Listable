@@ -221,6 +221,8 @@ public final class ListView : UIView
         
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
+        
+        self.setContentInsetWithKeyboardFrame()
     }
     
     private func updateCollectionViewWithCurrentLayoutProperties()
@@ -299,7 +301,7 @@ public final class ListView : UIView
     @discardableResult
     public func scrollTo<Content:ItemContent>(item : Identifier<Content>, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
-        return self.scrollTo(item: item.toAny, position: position, animated: animated)
+        return self.scrollTo(item: item, position: position, animated: animated)
     }
     
     ///
@@ -731,7 +733,7 @@ public final class ListView : UIView
     }
 
     private func performBatchUpdates(
-        with diff : SectionedDiff<Section,AnyItem>,
+        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
         completion callerCompletion : @escaping (Bool) -> ()
@@ -747,9 +749,10 @@ public final class ListView : UIView
         let view = self.collectionView
         
         let changes = CollectionViewChanges(sectionChanges: diff.changes)
-                
+            
         let batchUpdates = {
             updateBackingData()
+            
             // Sections
 
             view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
@@ -786,7 +789,7 @@ public final class ListView : UIView
         }
     }
     
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
     {
         return SectionedDiff(
             old: old,
@@ -902,28 +905,35 @@ extension ListView : KeyboardObserverDelegate
         
         let inset : CGFloat
         
-        switch frame {
-        case .notVisible:
-            inset = 0.0
-        case .visible(let frame):
-            if #available(iOS 11, *) {
-                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-            } else {
-                inset = (self.bounds.size.height - frame.origin.y)
+        switch self.behavior.keyboardAdjustmentMode {
+        case .none: inset = 0.0
+            
+        case .adjustsWhenVisible:
+            switch frame {
+            case .nonOverlapping: inset = 0.0
+                
+            case .overlapping(let frame):
+                inset = (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
             }
         }
         
-        self.collectionView.contentInset.bottom = inset
-        self.collectionView.scrollIndicatorInsets.bottom = inset
+        if self.collectionView.contentInset.bottom != inset {
+            self.collectionView.contentInset.bottom = inset
+        }
+        
+        if self.collectionView.scrollIndicatorInsets.bottom != inset {
+            self.collectionView.scrollIndicatorInsets.bottom = inset
+        }
     }
     
     //
     // MARK: KeyboardObserverDelegate
     //
     
-    func keyboardFrameWillChange(observer : KeyboardObserver)
-    {
-        self.setContentInsetWithKeyboardFrame()
+    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.setContentInsetWithKeyboardFrame()
+        })
     }
 }
 

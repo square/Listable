@@ -41,7 +41,7 @@ final class AutoScrollingViewController : UIViewController
 
     @objc private func addItem()
     {
-        let last = items.last?.identifier.toAny
+        let last = items.last?.identifier
         
         items.append(BottomPinnedItem(text: "Item \(items.count)"))
         
@@ -62,7 +62,7 @@ final class AutoScrollingViewController : UIViewController
             list.layout = .demoLayout
 
             let items = self.items.map { Item($0) }
-            list += Section(identifier: "items", items: items)
+            list += Section("items", items: items)
 
             if let last = items.last {
                 
@@ -82,7 +82,7 @@ final class AutoScrollingViewController : UIViewController
                 BottomPinnedItem(text: "Total $10.00"),
             ]
 
-            list += Section(identifier: "itemization", items: itemization.map { Item($0) })
+            list += Section("itemization", items: itemization.map { Item($0) })
         }
     }
 }
