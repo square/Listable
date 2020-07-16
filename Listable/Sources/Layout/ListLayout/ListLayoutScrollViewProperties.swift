@@ -44,10 +44,12 @@ public struct ListLayoutScrollViewProperties
         direction : LayoutDirection,
         showsScrollIndicators : Bool
     ) {
+        /// **Note**: Properties are only set if they are different (hence all the `if` statements below)
+        /// because some UIScrollView properties, even when set to the same value, can affect or stop scrolling if it
+        /// is in progress. Hard to tell which across iOS versions, so just always be defensive.
+        
         let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
-        
-        view.isDirectionalLockEnabled = true
-        
+                
         if view.isPagingEnabled != isPagingEnabled {
             view.isPagingEnabled = isPagingEnabled
         }

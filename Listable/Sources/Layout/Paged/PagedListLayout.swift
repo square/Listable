@@ -14,19 +14,58 @@ public extension LayoutDescription
     }
 }
 
+/// Describes the available appearance configuration options for a paged list layout.
+/// Paged list layouts lay out the headers, footers, and items in a list in a paged layout,
+/// similar to how UIPageViewController works.
+///
+/// You can control the direction via the `direction` property, and you can control
+/// the inset on each page via the `itemInsets` property. You may also optionally show
+/// the scroll indicators with the `showsScrollIndicators` property.
+///
+/// Note
+/// ----
+/// Do not edit this ASCII diagram directly.
+/// Edit the `PagedAppearance.monopic` file in this directory using Monodraw.
+/// ```
+/// ┌─────────────────────────────────┐
+/// │          itemInsets.top         │
+/// │   ┌─────────────────────────┐ i │
+/// │ i │                         │ t │
+/// │ t │                         │ e │
+/// │ e │                         │ m │
+/// │ m │                         │ I │
+/// │ I │                         │ n │
+/// │ n │                         │ s │
+/// │ s │                         │ e │
+/// │ e │                         │ t │
+/// │ t │                         │ s │
+/// │ s │                         │ . │
+/// │ . │                         │ r │
+/// │ l │                         │ i │
+/// │ e │                         │ g │
+/// │ f │                         │ h │
+/// │ t │                         │ t │
+/// │   └─────────────────────────┘   │
+/// │        itemInsets.bottom        │
+/// └─────────────────────────────────┘
+/// ```
 public struct PagedAppearance : ListLayoutAppearance
 {
     public static var `default`: PagedAppearance {
         Self.init()
     }
     
+    /// The direction the paging layout should occur in. Defaults to `vertical`.
     public var direction: LayoutDirection
     
+    /// If scroll indicators should be visible along the scrollable axis.
     public var showsScrollIndicators : Bool
     
+    /// How far each item in the list should be inset from the edges of the view.
     public var itemInsets : UIEdgeInsets
     
-    public var pagingSize : PagingSize
+    /// Internal property for test harness only.
+    internal var pagingSize : PagingSize
     
     public init(
         direction: LayoutDirection = .vertical,
@@ -40,7 +79,7 @@ public struct PagedAppearance : ListLayoutAppearance
         self.itemInsets = itemInsets
     }
     
-    public enum PagingSize : Equatable {
+    enum PagingSize : Equatable {
         case view
         case fixed(CGFloat)
         

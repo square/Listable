@@ -73,6 +73,34 @@ class PagedListLayoutTests : XCTestCase
 }
 
 
+class PagedAppearanceTests : XCTestCase
+{
+    func test_init()
+    {
+        let appearance = PagedAppearance()
+        
+        XCTAssertEqual(appearance.direction, .vertical)
+        XCTAssertEqual(appearance.showsScrollIndicators, false)
+        XCTAssertEqual(appearance.itemInsets, .zero)
+    }
+}
+
+
+class PagedAppearance_PagingSize_Tests : XCTestCase
+{
+    func test_size()
+    {
+        let view = UIView(frame: CGRect(x: 10.0, y: 10.0, width: 30.0, height: 50.0))
+        
+        XCTAssertEqual(PagedAppearance.PagingSize.view.size(for: view, direction: .vertical), CGSize(width: 30.0, height: 50.0))
+        XCTAssertEqual(PagedAppearance.PagingSize.view.size(for: view, direction: .horizontal), CGSize(width: 30.0, height: 50.0))
+        
+        XCTAssertEqual(PagedAppearance.PagingSize.fixed(100).size(for: view, direction: .vertical), CGSize(width: 30.0, height: 100.0))
+        XCTAssertEqual(PagedAppearance.PagingSize.fixed(100).size(for: view, direction: .horizontal), CGSize(width: 100.0, height: 50.0))
+    }
+}
+
+
 fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     
     var color : UIColor

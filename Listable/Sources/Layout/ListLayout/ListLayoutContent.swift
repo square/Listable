@@ -164,7 +164,7 @@ public final class ListLayoutContent
     
     func setSectionContentsFrames() {
         self.sections.forEach {
-            $0.setContentsFrameWithContent()
+            $0.setContentsFrame()
         }
     }
     
@@ -281,7 +281,7 @@ public extension ListLayoutContent
             self.items = items
         }
         
-        func setContentsFrameWithContent() {
+        func setContentsFrame() {
             
             var allFrames : [CGRect] = []
             
