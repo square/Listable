@@ -279,7 +279,7 @@ public struct ListProperties
 }
 ```
 
-This allows you to configure the list view however needed within the `setContent` update.
+This allows you to configure the list view however needed within the `configure` update.
 
 
 ### Item
@@ -463,7 +463,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 You set headers and footers on sections via the `header` and `footer` parameter.
 
 ```swift
-self.listView.setContent { list in
+self.listView.configure { list in
     list += Section("section-1") { section in
         section.header = HeaderFooter(DemoHeader(title: "This Is A Header"))
         section.footer = HeaderFooter(DemoFooter(text: "And this is a footer. Please check the EULA for details."))
@@ -557,9 +557,9 @@ public struct Section
 If you're using Blueprint integration via the  `BlueprintLists` module, you will also interact with the following types.
 
 ### List
-When using `ListView` directly, you'd use `list.setContent { list in ... }` to set the content of a list.
+When using `ListView` directly, you'd use `list.configure { list in ... }` to set the content of a list.
 
-However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListProperties`) that is passed to  `list.setContent { list in ... }`.
+However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListProperties`) that is passed to  `list.configure { list in ... }`.
 
 ```swift
 var elementRepresentation : Element {

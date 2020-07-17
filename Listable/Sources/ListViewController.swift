@@ -77,7 +77,7 @@ open class ListViewController : UIViewController
             return
         }
 
-        listView.setProperties { list in
+        listView.configure { list in
             list.animatesChanges = animated
             self.configure(list: &list)
         }

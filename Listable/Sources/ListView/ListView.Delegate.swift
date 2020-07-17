@@ -179,11 +179,10 @@ extension ListView
         }
         
         func listLayoutContent(
-            direction : LayoutDirection,
             defaults: ListLayoutDefaults
         ) -> ListLayoutContent
         {
-            self.presentationState.toListLayoutContent(direction: direction, defaults: defaults)
+            self.presentationState.toListLayoutContent(defaults: defaults)
         }
         
         // MARK: UIScrollViewDelegate

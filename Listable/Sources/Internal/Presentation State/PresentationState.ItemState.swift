@@ -37,7 +37,7 @@ protocol AnyPresentationItemState : AnyObject
     func set(isSelected: Bool, performCallbacks: Bool)
     
     func resetCachedSizes()
-    func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+    func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
     
     func moved(with result : Reordering.Result)
 }
@@ -351,16 +351,16 @@ extension PresentationState
             self.cachedSizes.removeAll()
         }
         
-        func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+        func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
         {
-            guard sizeConstraint.isEmpty == false else {
+            guard info.sizeConstraint.isEmpty == false else {
                 return .zero
             }
             
             let key = SizeKey(
-                width: sizeConstraint.width,
-                height: sizeConstraint.height,
-                layoutDirection: layoutDirection,
+                width: info.sizeConstraint.width,
+                height: info.sizeConstraint.height,
+                layoutDirection: info.direction,
                 sizing: self.model.sizing
             )
             
@@ -369,7 +369,7 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
-                let size : CGSize = measurementCache.use(
+                let size : CGSize = cache.use(
                     with: self.model.reuseIdentifier,
                     create: {
                         return ItemCell<Content>()
@@ -378,7 +378,7 @@ extension PresentationState
                     
                     self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
                     
-                    return self.model.sizing.measure(with: cell, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
+                    return self.model.sizing.measure(with: cell, info: info)
                 })
                 
                 self.cachedSizes[key] = size

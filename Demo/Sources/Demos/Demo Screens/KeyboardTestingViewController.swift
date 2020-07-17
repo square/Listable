@@ -25,7 +25,7 @@ final class KeyboardTestingViewController : UIViewController
             $0.layout.itemSpacing = 10.0
         }
         
-        self.listView.setContent { list in
+        self.listView.configure { list in
             list.content.overscrollFooter = HeaderFooter(
                 DemoHeader(title: "Thanks for using Listable!!")
             )
@@ -48,12 +48,25 @@ final class KeyboardTestingViewController : UIViewController
             }
         }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard))
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard)),
+            UIBarButtonItem(title: "Toggle Mode", style: .plain, target: self, action: #selector(toggleMode)),
+        ]
     }
     
     @objc func dismissKeyboard()
     {
         self.view.endEditing(true)
+    }
+    
+    @objc func toggleMode()
+    {
+        switch self.listView.behavior.keyboardAdjustmentMode {
+        case .none:
+            self.listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
+        case .adjustsWhenVisible:
+            self.listView.behavior.keyboardAdjustmentMode = .none
+        }
     }
 }
 

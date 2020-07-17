@@ -40,6 +40,28 @@ import Foundation
 ///
 
 //
+// MARK: Deprecated Jul 15, 2020
+//
+
+public extension ListView {
+    
+    @available(*, deprecated, renamed: "configure(with:)")
+    func setContent(_ builder : ListProperties.Build) {
+        self.setProperties(with: builder)
+    }
+    
+    @available(*, deprecated, renamed: "configure(with:)")
+    func setProperties(with builder : ListProperties.Build) {
+        self.configure(with: builder)
+    }
+    
+    @available(*, deprecated, renamed: "configure(with:)")
+    func setProperties(with properties : ListProperties) {
+        self.configure(with: properties)
+    }
+}
+
+//
 // MARK: Deprecated Jul 1, 2020
 //
 

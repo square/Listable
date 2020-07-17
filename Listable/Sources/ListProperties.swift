@@ -158,6 +158,7 @@ public struct ListProperties
     }
     
     /// Create a new instance of `ListProperties` with the provided values.
+    /// TODO: Remove `build`; make this init take in all properties?
     public init(
         animatesChanges: Bool,
         layout : LayoutDescription,

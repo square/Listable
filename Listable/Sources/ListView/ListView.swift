@@ -223,6 +223,8 @@ public final class ListView : UIView
         
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
+        
+        self.setContentInsetWithKeyboardFrame()
     }
     
     private func updateCollectionViewWithCurrentLayoutProperties()
@@ -399,23 +401,6 @@ public final class ListView : UIView
         set { self.setContent(animated: false, newValue) }
     }
     
-    public func setContent(with builder : ListProperties.Build)
-    {
-        let description = ListProperties(
-            animatesChanges: true,
-            layout: self.layout,
-            appearance: self.appearance,
-            scrollInsets: self.scrollInsets,
-            behavior: self.behavior,
-            autoScrollAction: self.autoScrollAction,
-            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
-            debuggingIdentifier: self.debuggingIdentifier,
-            build: builder
-        )
-        
-        self.setProperties(with: description)
-    }
-    
     public func setContent(animated : Bool = false, _ content : Content)
     {
         self.set(
@@ -453,12 +438,24 @@ public final class ListView : UIView
         })
     }
     
-    public func setProperties(with builder : ListProperties.Build)
+    public func configure(with builder : ListProperties.Build)
     {
-        self.setProperties(with: .default(with: builder))
+        let description = ListProperties(
+            animatesChanges: true,
+            layout: self.layout,
+            appearance: self.appearance,
+            scrollInsets: self.scrollInsets,
+            behavior: self.behavior,
+            autoScrollAction: self.autoScrollAction,
+            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
+            debuggingIdentifier: self.debuggingIdentifier,
+            build: builder
+        )
+        
+        self.configure(with: description)
     }
     
-    public func setProperties(with properties : ListProperties)
+    public func configure(with properties : ListProperties)
     {
         let animated = properties.animatesChanges
         
@@ -946,19 +943,25 @@ extension ListView : KeyboardObserverDelegate
         
         let inset : CGFloat
         
-        switch frame {
-        case .nonOverlapping:
-            inset = 0.0
-        case .overlapping(let frame):
-            if #available(iOS 11, *) {
-                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-            } else {
-                inset = (self.bounds.size.height - frame.origin.y)
+        switch self.behavior.keyboardAdjustmentMode {
+        case .none: inset = 0.0
+            
+        case .adjustsWhenVisible:
+            switch frame {
+            case .nonOverlapping: inset = 0.0
+                
+            case .overlapping(let frame):
+                inset = (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
             }
         }
         
-        self.collectionView.contentInset.bottom = inset
-        self.collectionView.scrollIndicatorInsets.bottom = inset
+        if self.collectionView.contentInset.bottom != inset {
+            self.collectionView.contentInset.bottom = inset
+        }
+        
+        if self.collectionView.scrollIndicatorInsets.bottom != inset {
+            self.collectionView.scrollIndicatorInsets.bottom = inset
+        }
     }
     
     //

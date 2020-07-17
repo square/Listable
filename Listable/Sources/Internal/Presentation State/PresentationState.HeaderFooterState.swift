@@ -20,7 +20,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
     
     func resetCachedSizes()
-    func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+    func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
 }
 
 
@@ -127,16 +127,16 @@ extension PresentationState
             self.cachedSizes.removeAll()
         }
         
-        func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+        func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
         {
-            guard sizeConstraint.isEmpty == false else {
+            guard info.sizeConstraint.isEmpty == false else {
                 return .zero
             }
             
             let key = SizeKey(
-                width: sizeConstraint.width,
-                height: sizeConstraint.height,
-                layoutDirection: layoutDirection,
+                width: info.sizeConstraint.width,
+                height: info.sizeConstraint.height,
+                layoutDirection: info.direction,
                 sizing: self.model.sizing
             )
             
@@ -145,14 +145,14 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                 
-                let size : CGSize = measurementCache.use(
+                let size : CGSize = cache.use(
                     with: self.model.reuseIdentifier,
                     create: {
                         return Content.createReusableHeaderFooterView(frame: .zero)
                 }, { view in
                     self.model.content.apply(to: view, reason: .willDisplay)
                     
-                    return self.model.sizing.measure(with: view, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
+                    return self.model.sizing.measure(with: view, info: info)
                 })
                 
                 self.cachedSizes[key] = size
