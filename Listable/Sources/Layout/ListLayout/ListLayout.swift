@@ -102,6 +102,11 @@ public extension AnyListLayout
     
     func updateOverscrollFooterPosition(in collectionView : UICollectionView)
     {
+        guard self.direction == .vertical else {
+            // Currently only supported for vertical layouts.
+            return
+        }
+        
         let footer = self.content.overscrollFooter
                 
         let contentHeight = self.content.contentSize.height
@@ -119,6 +124,11 @@ public extension AnyListLayout
     
     func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
     {
+        guard self.direction == .vertical else {
+            // Currently only supported for vertical layouts.
+            return
+        }
+        
         // Take into account the safe area, since that pushes content alignment down within our view.
         
         let safeAreaInsets : CGFloat = {
