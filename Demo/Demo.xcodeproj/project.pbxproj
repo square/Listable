@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A87BA642463567B0047C3B5 /* CHANGELOG.md */; };
-		0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */; };
+		0AA4D9B9248064A300CF95A5 /* GridLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A8248064A200CF95A5 /* GridLayoutViewController.swift */; };
 		0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */; };
 		0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */; };
 		0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */; };
@@ -43,7 +43,7 @@
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A87BA642463567B0047C3B5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
-		0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
+		0AA4D9A8248064A200CF95A5 /* GridLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutViewController.swift; sourceTree = "<group>"; };
 		0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewEdgesPlaygroundViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 				0AA4D9B8248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift */,
 				0AA4D9B6248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift */,
 				0AA4D9B0248064A300CF95A5 /* CoordinatorViewController.swift */,
-				0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */,
+				0AA4D9A8248064A200CF95A5 /* GridLayoutViewController.swift */,
 				0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */,
 				0AA4D9B1248064A300CF95A5 /* HorizontalLayoutViewController.swift */,
 				0AA4D9AF248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift */,
@@ -421,7 +421,7 @@
 				0AA4D9C9248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift in Sources */,
 				0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */,
 				0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */,
-				0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */,
+				0AA4D9B9248064A300CF95A5 /* GridLayoutViewController.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
 				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,

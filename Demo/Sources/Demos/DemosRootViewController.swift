@@ -131,7 +131,7 @@ public final class DemosRootViewController : UIViewController
                     DemoItem(text: "Grid Layout"),
                     selectionStyle: .tappable,
                     onSelect : { _ in
-                        self.push(CustomLayoutsViewController())
+                        self.push(GridLayoutViewController())
                 })
                 
                 section += Item(
