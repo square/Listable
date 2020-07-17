@@ -14,7 +14,7 @@ class ListView_VisibleContentTests : XCTestCase
     {
         let listView = ListView(frame: CGRect(x: 0.0, y: 0.0, width: 100.0, height: 150.0))
         
-        listView.setProperties { list in
+        listView.configure { list in
             
             list.appearance.backgroundColor = .black
 

@@ -421,7 +421,7 @@ public final class ListView : UIView
         })
     }
     
-    public func setProperties(with builder : ListProperties.Build)
+    public func configure(with builder : ListProperties.Build)
     {
         let description = ListProperties(
             animatesChanges: true,
@@ -435,10 +435,10 @@ public final class ListView : UIView
             build: builder
         )
         
-        self.setProperties(with: description)
+        self.configure(with: description)
     }
     
-    public func setProperties(with description : ListProperties)
+    public func configure(with description : ListProperties)
     {
         let animated = description.animatesChanges
         

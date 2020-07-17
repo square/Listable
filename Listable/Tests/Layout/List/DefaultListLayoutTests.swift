@@ -85,7 +85,7 @@ class DefaultListLayoutTests : XCTestCase
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
-        listView.setProperties { list in
+        listView.configure { list in
             
             list.layout = .list {
                 $0.layout = .init(

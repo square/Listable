@@ -14,6 +14,8 @@
   }
   ```
   
+  - [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.
+  
   With this:
   
   ```
@@ -27,9 +29,15 @@
 
 ### Removed
 
+- [Removed support for .`horiztonal` layouts](https://github.com/kyleve/Listable/pull/178) on `.list()` layouts. Now only `.vertical` is supported (this could return at a later date if needed).
+
 ### Changed
 
 - [Changed `Section` initialization APIs](https://github.com/kyleve/Listable/pull/181) from `Section(identifier: "my-id") { ... }` to `Section("my-id") { ... }` – it's clear from the API what the first param is for, so the param name just made callsites longer.
+
+- [Renamed `setContent` and `setProperties`](https://github.com/kyleve/Listable/pull/178) methods on `ListView` to `configure`.
+
+- [Significant refactors to how the custom layout APIs work.](https://github.com/kyleve/Listable/pull/178) While this is mostly an internal concern, it continues to refine these APIs to set them up for public exposure and usage at a later date to customize layouts.
 
 ### Misc
 

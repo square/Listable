@@ -76,7 +76,7 @@ public final class ItemPreviewView : UIView {
         self.frame.size.height = 100.0
         self.layoutIfNeeded()
         
-        self.listView.setProperties { list in
+        self.listView.configure { list in
             appearance.configure(list: &list)
             
             list += Section("section") { section in

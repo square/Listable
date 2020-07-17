@@ -43,7 +43,7 @@ public struct List : Element
             }
             
             config.apply { listView in
-                listView.setProperties(with: self.properties)
+                listView.configure(with: self.properties)
             }
         }
     }

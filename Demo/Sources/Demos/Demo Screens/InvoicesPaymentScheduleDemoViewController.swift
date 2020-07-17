@@ -50,7 +50,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func reloadData(animated : Bool)
     {
-        self.list.setProperties { list in
+        self.list.configure { list in
             
             list.animatesChanges = animated
                    

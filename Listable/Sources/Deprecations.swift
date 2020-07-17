@@ -45,9 +45,19 @@ import Foundation
 
 public extension ListView {
     
-    @available(*, deprecated, renamed: "setProperties(with:)")
+    @available(*, deprecated, renamed: "configure(with:)")
     func setContent(_ builder : ListProperties.Build) {
         self.setProperties(with: builder)
+    }
+    
+    @available(*, deprecated, renamed: "configure(with:)")
+    func setProperties(with builder : ListProperties.Build) {
+        self.configure(with: builder)
+    }
+    
+    @available(*, deprecated, renamed: "configure(with:)")
+    func setProperties(with properties : ListProperties) {
+        self.configure(with: properties)
     }
 }
 

@@ -22,7 +22,7 @@ final class WidthCustomizationViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.setProperties { list in
+        self.listView.configure { list in
             
             list.layout = .list {
                 $0.layout.set {

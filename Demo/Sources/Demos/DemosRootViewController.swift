@@ -30,7 +30,7 @@ public final class DemosRootViewController : UIViewController
         self.listView.appearance = .demoAppearance
         self.listView.layout = .demoLayout
         
-        self.listView.setProperties { list in
+        self.listView.configure { list in
 
             list.content.overscrollFooter = HeaderFooter(
                 DemoHeader(title: "Thanks for using Listable!!")
