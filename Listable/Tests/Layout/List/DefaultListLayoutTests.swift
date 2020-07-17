@@ -73,17 +73,7 @@ class DefaultListLayoutTests : XCTestCase
 {
     func test_layout_vertical()
     {
-        let listView = self.listFor(direction: .vertical)
-        
-        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
-        
-        snapshot.test(output: ViewImageSnapshot.self)
-        snapshot.test(output: LayoutAttributesSnapshot.self)
-    }
-        
-    func test_layout_horizontal()
-    {
-        let listView = self.listFor(direction: .horizontal)
+        let listView = self.list()
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
@@ -91,15 +81,13 @@ class DefaultListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func listFor(direction : LayoutDirection) -> ListView
+    func list() -> ListView
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
-        listView.setContent { list in
+        listView.configure { list in
             
             list.layout = .list {
-                $0.direction = direction
-                
                 $0.layout = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
                     width: .noConstraint,

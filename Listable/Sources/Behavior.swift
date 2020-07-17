@@ -22,6 +22,7 @@ public struct Behavior : Equatable
     public var selectionMode : SelectionMode
         
     /// How the list should behave when its content takes up less space than is available in the list view.
+    /// TODO: This should move to individual layout types.
     public var underflow : Underflow
     
     /// A Boolean value that controls whether touches in the content view always lead to tracking.

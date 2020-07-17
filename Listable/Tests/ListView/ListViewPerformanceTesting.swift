@@ -26,7 +26,7 @@ class ListViewPerformanceTesting : XCTestCase {
         let listView = ListView(frame: CGRect(x: 0.0, y: 0.0, width: 300.0, height: 500.0))
         
         self.determineAverage(for: 10.0) {
-            listView.setContent { list in
+            listView.configure { list in
                 list.animatesChanges = false
                 
                 list += dictionary.wordsByLetter.map { letter in
@@ -63,7 +63,7 @@ class ListViewPerformanceTesting : XCTestCase {
         }
         
         self.determineAverage(for: 10.0) {
-            listView.setContent { list in
+            listView.configure { list in
                 list.animatesChanges = false
                 
                 list += sections

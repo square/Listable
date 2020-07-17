@@ -274,22 +274,19 @@ extension PresentationState
 extension PresentationState
 {
     func toListLayoutContent(
-        direction : LayoutDirection,
         defaults: ListLayoutDefaults
     ) -> ListLayoutContent
     {
         ListLayoutContent(
-            direction: direction,
             header: {
                 guard let header = self.header.state else { return nil }
                 
                 return .init(
                     kind: .listHeader,
-                    direction: direction,
                     layout: header.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        header.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.headerFooterMeasurementCache)
+                        header.size(for: info, cache: self.headerFooterMeasurementCache)
                     }
                 )
             }(),
@@ -298,11 +295,10 @@ extension PresentationState
                 
                 return .init(
                     kind: .listFooter,
-                    direction: direction,
                     layout: footer.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.headerFooterMeasurementCache)
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
                     }
                 )
             }(),
@@ -311,28 +307,25 @@ extension PresentationState
                 
                 return .init(
                     kind: .overscrollFooter,
-                    direction: direction,
                     layout: footer.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.headerFooterMeasurementCache)
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
                     }
                 )
             }(),
             sections: self.sections.mapWithIndex { sectionIndex, _, section in
                 .init(
-                    direction: direction,
                     layout: section.model.layout,
                     header: {
                         guard let header = section.header.state else { return nil }
                         
                         return .init(
                             kind: .sectionHeader,
-                            direction: direction,
                             layout: header.anyModel.layout,
                             isPopulated: true,
                             measurer: { info in
-                                header.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.headerFooterMeasurementCache)
+                                header.size(for: info, cache: self.headerFooterMeasurementCache)
                             }
                         )
                     }(),
@@ -341,11 +334,10 @@ extension PresentationState
                         
                         return .init(
                             kind: .sectionFooter,
-                            direction: direction,
                             layout: footer.anyModel.layout,
                             isPopulated: true,
                             measurer: { info in
-                                footer.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.headerFooterMeasurementCache)
+                                footer.size(for: info, cache: self.headerFooterMeasurementCache)
                             }
                         )
                     }(),
@@ -354,11 +346,10 @@ extension PresentationState
                         .init(
                             delegateProvidedIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
                             liveIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
-                            direction: direction,
                             layout: item.anyModel.layout,
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
                             measurer: { info in
-                                item.size(in: info.sizeConstraint, layoutDirection: direction, defaultSize: info.defaultSize, measurementCache: self.itemMeasurementCache)
+                                item.size(for: info, cache: self.itemMeasurementCache)
                             }
                         )
                     }

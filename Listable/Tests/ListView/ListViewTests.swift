@@ -22,7 +22,7 @@ class ListViewTests: XCTestCase
         
         let listView = ListView(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
                 
-        listView.setContent { list in
+        listView.configure { list in
             list.animatesChanges = false
             
             list += Section("a-section")
@@ -32,7 +32,7 @@ class ListViewTests: XCTestCase
         listView.collectionView.contentOffset.y = 100
         self.waitForOneRunloop()
         
-        listView.setContent { list in
+        listView.configure { list in
             list.animatesChanges = false
             
             list += Section("a-section")
@@ -42,7 +42,7 @@ class ListViewTests: XCTestCase
         listView.collectionView.contentOffset.y = 100
         self.waitForOneRunloop()
         
-        listView.setContent { list in
+        listView.configure { list in
             list.animatesChanges = false
             
             list += Section("a-section")

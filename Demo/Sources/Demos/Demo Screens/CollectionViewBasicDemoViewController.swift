@@ -51,7 +51,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     func updateTable(animated : Bool)
     {
-        listView.setContent { list in
+        listView.configure { list in
             
             if self.showsOverscrollFooter {
                 list.content.overscrollFooter = HeaderFooter(

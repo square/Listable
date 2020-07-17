@@ -15,7 +15,7 @@ class LayoutManagerTests : XCTestCase
     {
         let startingLayout : LayoutDescription = .list()
         
-        let listView = ListView()
+        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)))
         listView.layout = startingLayout
         listView.layoutIfNeeded()
         
@@ -46,7 +46,7 @@ class LayoutManagerTests : XCTestCase
         
         /// Changing the layout type should change both objects
         
-        let newLayout2 : LayoutDescription = .paged_experimental()
+        let newLayout2 : LayoutDescription = .paged()
         
         manager.set(layout: newLayout2, animated: false, completion: {})
         listView.layoutIfNeeded()

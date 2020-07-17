@@ -22,7 +22,7 @@ final class ReorderingViewController : UIViewController
     {
         self.view = self.list
         
-        self.list.setContent { list in
+        self.list.configure { list in
             
             list.appearance = .demoAppearance
             list.layout = .demoLayout

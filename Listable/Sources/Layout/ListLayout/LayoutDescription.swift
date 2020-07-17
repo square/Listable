@@ -86,7 +86,7 @@ extension LayoutDescription
                 layoutAppearance: layoutAppearance,
                 appearance: .init(),
                 behavior: .init(),
-                content: .init(with: layoutAppearance.direction)
+                content: .init()
             )
         }
         
@@ -103,7 +103,7 @@ extension LayoutDescription
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
-                content: delegate.listLayoutContent(direction: layoutAppearance.direction, defaults: LayoutType.defaults)
+                content: delegate.listLayoutContent(defaults: LayoutType.defaults)
             )
         }
         

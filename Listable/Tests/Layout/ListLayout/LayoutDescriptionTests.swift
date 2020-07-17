@@ -38,7 +38,7 @@ final class LayoutDescriptionTests : XCTest
             layoutAppearance: TestLayoutAppearance(anotherValue: "Hello 1"),
             appearance: Appearance(),
             behavior: Behavior(),
-            content: .init(with: .vertical)
+            content: .init()
         )
         
         let description1 = TestLayout.describe {
@@ -118,7 +118,7 @@ private final class TestLayout : ListLayout
         self.content = content
     }
     
-    func updateLayout(in collectionView: UICollectionView) -> Bool { true }
+    func updateLayout(in collectionView: UICollectionView) { }
     
-    func layout(delegate: CollectionViewLayoutDelegate, in collectionView: UICollectionView) -> Bool { true }
+    func layout(delegate: CollectionViewLayoutDelegate, in collectionView: UICollectionView) { }
 }

@@ -271,12 +271,22 @@ final class CollectionViewLayout : UICollectionViewLayout
 
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
         
+        let size = self.collectionView?.bounds.size ?? .zero
+                
         self.neededLayoutType.update(with: {
+            
+            // Layouts with zero size are generally undefined, so skip them until the view has a size.
+            guard size.isEmpty == false else {
+                return false
+            }
+            
             switch self.neededLayoutType {
             case .none: return true
-            case .relayout: return self.performRelayout()
-            case .rebuild: return self.performRebuild()
+            case .relayout: self.performLayout()
+            case .rebuild: self.performRebuild()
             }
+            
+            return true
         }())
         
         self.layout.updateLayout(in: self.collectionView!)
@@ -304,36 +314,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
     
-    private func performRelayout() -> Bool
-    {
-        let view = self.collectionView!
-        
-        self.delegate.listViewLayoutUpdatedItemPositions(view)
-        
-        let didLayout = self.layout.layout(
-            delegate: self.delegate,
-            in: view
-        )
-        
-        if didLayout {
-            self.layout.content.setSectionContentsFrames()
-            
-            let viewHeight = self.layout.direction.height(for: view.bounds.size)
-        
-            self.layout.adjustPositionsForLayoutUnderflow(
-                contentHeight: self.layout.content.contentSize.height,
-                viewHeight: viewHeight, in: view
-            )
-        
-            self.layout.updateLayout(in: view)
-            
-            self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
-        }
-                
-        return didLayout
-    }
-    
-    private func performRebuild() -> Bool
+    private func performRebuild()
     {
         self.previousLayout = self.layout
         
@@ -350,7 +331,26 @@ final class CollectionViewLayout : UICollectionViewLayout
             showsScrollIndicators: self.appearance.showsScrollIndicators
         )
         
-        return self.performRelayout()
+        self.performLayout()
+    }
+    
+    private func performLayout()
+    {
+        let view = self.collectionView!
+                
+        self.layout.layout(
+            delegate: self.delegate,
+            in: view
+        )
+        
+        self.layout.content.setSectionContentsFrames()
+            
+        self.layout.updateLayout(in: view)
+        
+        self.layout.updateOverscrollFooterPosition(in: view)
+        self.layout.adjustPositionsForLayoutUnderflow(in: view)
+        
+        self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
     }
     
     //
@@ -532,7 +532,6 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
     
     func listLayoutContent(
-        direction : LayoutDirection,
         defaults: ListLayoutDefaults
     ) -> ListLayoutContent
 }

@@ -67,7 +67,7 @@ public struct EmbeddedList : ItemContent
     
     public func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.setProperties(with: self.properties)
+        views.content.configure(with: self.properties)
     }
     
     public func isEquivalent(to other: EmbeddedList) -> Bool
