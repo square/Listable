@@ -11,6 +11,8 @@ public struct ScrollInsets : Equatable
     public var top: CGFloat?
     public var bottom: CGFloat?
     
+    // TODO: Support left and right as well.
+    
     public init(top: CGFloat? = nil, bottom: CGFloat? = nil)
     {
         self.top = top
