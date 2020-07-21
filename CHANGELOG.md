@@ -30,8 +30,6 @@
   }
   ```
   
-  - [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.
-  
   With this:
   
   ```
@@ -41,6 +39,8 @@
   ```
   
   Improving terseness when building sections in a list.
+
+- [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.  
   
 
 ### Removed
