@@ -164,6 +164,17 @@ public struct Content
         lhs.sections += rhs
     }
     
+    /// Allows streamlined creation of sections when building a list.
+    ///
+    /// Example
+    /// -------
+    /// ```
+    /// listView.configure { list in
+    ///     list("section-id") { section in
+    ///         ...
+    ///     }
+    /// }
+    /// ```
     public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
     {
         self += Section(identifier, build: build)

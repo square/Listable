@@ -69,7 +69,7 @@ public final class ListView : UIView
         self.delegate.presentationState = self.storage.presentationState
         
         self.keyboardObserver.delegate = self
-        
+                
         // Register supplementary views.
         
         SupplementaryKind.allCases.forEach {

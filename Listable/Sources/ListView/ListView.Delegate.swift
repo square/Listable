@@ -189,22 +189,27 @@ extension ListView
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
-            // Notify swipe actions to close
+            // Notify swipe actions to close.
 
-            let notification = Notification(name: .closeSwipeActions, object: self)
-            NotificationCenter.default.post(notification)
+            NotificationCenter.default.post(Notification(name: .closeSwipeActions, object: self))
         }
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
         }
+                
+        func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool
+        {
+            switch view.behavior.scrollsToTop {
+            case .disabled: return false
+            case .enabled: return true
+            }
+        }
         
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .scrolledToTop)
-            
-            self.performDidScroll(type: .scrollToTop)
         }
         
         private var lastPosition : CGFloat = 0.0
@@ -212,7 +217,7 @@ extension ListView
         func scrollViewDidScroll(_ scrollView: UIScrollView)
         {
             guard scrollView.bounds.size.height > 0 else { return }
-            
+                        
             SignpostLogger.log(.begin, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
             
             defer {
@@ -229,16 +234,10 @@ extension ListView
                 self.view.updatePresentationState(for: .scrolledDown)
             }
             
-            self.performDidScroll(type: .didScroll)
-        }
-        
-        private func performDidScroll(type : ListStateObserver.DidScroll.ScrollType)
-        {
             ListStateObserver.perform(self.view.stateObserver.onDidScroll, "Did Scroll", with: self.view) {
                 ListStateObserver.DidScroll(
                     actions: $0,
-                    positionInfo: self.view.scrollPositionInfo,
-                    scrollType: type
+                    positionInfo: self.view.scrollPositionInfo
                 )
             }
         }

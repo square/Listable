@@ -66,17 +66,6 @@ public struct ListStateObserver {
     public struct DidScroll {
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
-        
-        public let scrollType : ScrollType
-        
-        /// The type of scroll event which occured.
-        public enum ScrollType : Equatable {
-            /// A normal `scrollViewDidScroll` occured.
-            case didScroll
-            
-            /// The list view was scrolled to the top via the user tapping on the status bar.
-            case scrollToTop
-        }
     }
     
     private(set) var onDidScroll : [OnDidScroll] = []

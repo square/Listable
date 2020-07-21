@@ -33,7 +33,7 @@ import Foundation
 /// instance (eg in your own `UIViewController`).
 ///
 /// In these cases, you can apply `ListProperties` to a `ListView` by calling one of the
-/// available `func setProperties(with:)` methods. Having a separate method which describes and provides
+/// available `func configure(with:)` methods. Having a separate method which describes and provides
 /// all the properties to configure your `ListView` allows for a more singular flow of data through your application,
 /// and eases in testibility.
 public struct ListProperties
@@ -118,6 +118,11 @@ public struct ListProperties
     /// The actions instance to use to control the list, eg to scroll to a given
     /// row or enable interactive view transitions. See the `ListActions` type
     /// for more information.
+    ///
+    /// Note that you can only associate one `ListActions` with a list at a given time.
+    /// When a new instance is provided, the old one becomes a no-op instance; calling
+    /// methods on it will have no effect.
+    ///
     public var actions : ListActions?
     
     /// The auto scroll action to apply to the list. This allows you to
@@ -207,7 +212,17 @@ public struct ListProperties
         lhs.content.sections += rhs
     }
     
-    /// Adds a new section to the `content`.
+    /// Allows streamlined creation of sections when building a list.
+    ///
+    /// Example
+    /// -------
+    /// ```
+    /// listView.configure { list in
+    ///     list("section-id") { section in
+    ///         ...
+    ///     }
+    /// }
+    /// ```
     public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
     {
         self += Section(identifier, build: build)

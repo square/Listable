@@ -33,7 +33,7 @@ final class ListStateViewController : ListViewController
         
         list.stateObserver = ListStateObserver { observer in
             observer.onDidScroll { info in
-                print("Did Scroll: Scroll Type: \(info.scrollType)")
+                print("Did Scroll")
             }
             
             observer.onVisibilityChanged { info in

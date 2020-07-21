@@ -18,6 +18,10 @@ public struct Behavior : Equatable
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
     public var keyboardAdjustmentMode : KeyboardAdjustmentMode
     
+    /// How the list should react when the user taps the application status bar.
+    /// The default value of this enables scrolling to top.
+    public var scrollsToTop : ScrollsToTop
+    
     /// How the list should respond to selection attempts.
     public var selectionMode : SelectionMode
         
@@ -38,6 +42,7 @@ public struct Behavior : Equatable
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
+        scrollsToTop : ScrollsToTop = .enabled,
         selectionMode : SelectionMode = .single(),
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
@@ -46,6 +51,8 @@ public struct Behavior : Equatable
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
+        
+        self.scrollsToTop = scrollsToTop
         
         self.selectionMode = selectionMode
         self.underflow = underflow
@@ -66,6 +73,16 @@ public extension Behavior
         
         /// The `contentInset` of the list is adjusted when the keyboard appears or disappears.
         case adjustsWhenVisible
+    }
+    
+    /// How to react when the user taps on the status bar of the application.
+    enum ScrollsToTop : Equatable
+    {
+        /// No action is performed when the user taps on the status bar.
+        case disabled
+        
+        /// When the user taps on the status bar, scroll to the top of the list.
+        case enabled
     }
     
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.

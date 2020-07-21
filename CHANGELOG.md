@@ -4,6 +4,10 @@
 
 ### Added
 
+- [Add support for `ListStateObserver`](https://github.com/kyleve/Listable/pull/183) so that you can observe changes made to the list such as insertions, removals, scroll events, etc.
+
+- [Add support for `ListActions`](https://github.com/kyleve/Listable/pull/183) which allows performing actions on the underlying list view when used in a declarative environment, or when you otherwise do not have access to the underlying view instance (`ListStateViewController`).
+
 - Add support for [Behavior.KeyboardAdjustmentMode](https://github.com/kyleve/Listable/pull/166), which allows for disabling automatic keyboard adjustment behavior. This is useful if your container view is managing the size of or insets on a `ListView` itself.
 
 - [Introduced `callAsFunction` support](https://github.com/kyleve/Listable/pull/181) when building with Xcode 11.4 or later. This allows you to replace code like this:
