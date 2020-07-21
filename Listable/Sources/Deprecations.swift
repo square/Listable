@@ -45,19 +45,19 @@ import Foundation
 
 public extension ListView {
     
-    @available(*, deprecated, renamed: "configure(with:)")
+    @available(*, unavailable, renamed: "configure(with:)")
     func setContent(_ builder : ListProperties.Build) {
-        self.setProperties(with: builder)
+        fatalError()
     }
     
-    @available(*, deprecated, renamed: "configure(with:)")
+    @available(*, unavailable, renamed: "configure(with:)")
     func setProperties(with builder : ListProperties.Build) {
-        self.configure(with: builder)
+        fatalError()
     }
     
-    @available(*, deprecated, renamed: "configure(with:)")
+    @available(*, unavailable, renamed: "configure(with:)")
     func setProperties(with properties : ListProperties) {
-        self.configure(with: properties)
+        fatalError()
     }
 }
 
@@ -67,13 +67,12 @@ public extension ListView {
 
 public extension Section {
 
-    @available(*, deprecated, renamed: "Section.init(_:build:)")
+    @available(*, unavailable, renamed: "Section.init(_:build:)")
     init<Identifier:Hashable>(
         identifier : Identifier,
         build : Build = { _ in }
-    )
-    {
-        self.init(identifier, build: build)
+    ) {
+        fatalError()
     }
 }
 
