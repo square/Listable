@@ -85,8 +85,16 @@ struct DemoItem : BlueprintItemContent, Equatable
 {
     var text : String
     
+    var identifierContents : AnyHashable
+    
+    internal init(text: String, identifier: AnyHashable? = nil)
+    {
+        self.text = text
+        self.identifierContents = identifier ?? AnyHashable(text)
+    }
+    
     var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+        return .init(self.identifierContents)
     }
 
     typealias SwipeActionsView = DefaultSwipeActionsView

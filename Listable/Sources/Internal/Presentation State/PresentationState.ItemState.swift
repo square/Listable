@@ -219,12 +219,22 @@ extension PresentationState
             
             // Apply Model State
             
-            self.model.content.apply(
-                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
-                for: reason,
-                with: applyInfo
+            self.model.updateStyle.apply(
+                to: cell,
+                shouldAnimate: reason == .wasUpdated,
+                updates: {
+                    self.model.content.apply(
+                        to: ItemContentViews(
+                            content: cell.contentContainer.contentView,
+                            background: cell.background,
+                            selectedBackground: cell.selectedBackground
+                        ),
+                        for: reason,
+                        with: applyInfo
+                    )
+                }
             )
-                        
+        
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
                 cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, reason: reason)

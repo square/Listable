@@ -53,6 +53,8 @@ public struct Item<Content:ItemContent> : AnyItem
     public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
     
     public var swipeActions : SwipeActionsConfiguration?
+    
+    public var updateStyle : ItemUpdateStyle
 
     public var reordering : Reordering?
         
@@ -88,6 +90,7 @@ public struct Item<Content:ItemContent> : AnyItem
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
+        updateStyle : ItemUpdateStyle? = nil,
         reordering : Reordering? = nil,
         onDisplay : OnDisplay.Callback? = nil,
         onEndDisplay : OnEndDisplay.Callback? = nil,
@@ -133,6 +136,14 @@ public struct Item<Content:ItemContent> : AnyItem
             self.swipeActions = swipeActions
         } else {
             self.swipeActions = nil
+        }
+        
+        if let updateStyle = updateStyle {
+            self.updateStyle = updateStyle
+        } else if let updateStyle = content.defaultItemProperties.updateStyle {
+            self.updateStyle = updateStyle
+        } else {
+            self.updateStyle = .none
         }
                 
         self.reordering = reordering
@@ -236,18 +247,22 @@ public struct DefaultItemProperties<Content:ItemContent>
     
     public var swipeActions : SwipeActionsConfiguration?
     
+    public var updateStyle : ItemUpdateStyle?
+    
     public init(
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil
+        swipeActions : SwipeActionsConfiguration? = nil,
+        updateStyle : ItemUpdateStyle? = nil
     ) {
         self.sizing = sizing
         self.layout = layout
         self.selectionStyle = selectionStyle
         self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.swipeActions = swipeActions
+        self.updateStyle = updateStyle
     }
 }
 
@@ -372,6 +387,60 @@ public enum ItemSelectionStyle : Equatable
         case .notSelectable: return false
         case .tappable: return true
         case .selectable(_): return true
+        }
+    }
+}
+
+
+public enum ItemUpdateStyle : Equatable {
+    
+    case none
+    case transition(TimeInterval, TransitionType)
+    
+    public enum TransitionType : Equatable {
+        case flipFromLeft
+        case flipFromRight
+        case curlUp
+        case curlDown
+        case crossDissolve
+        case flipFromTop
+        case flipFromBottom
+        
+        var toAnimationOptions : UIView.AnimationOptions {
+            switch self {
+            case .flipFromLeft: return .transitionFlipFromLeft
+            case .flipFromRight: return .transitionFlipFromRight
+            case .curlUp: return .transitionCurlUp
+            case .curlDown: return .transitionCurlDown
+            case .crossDissolve: return .transitionCrossDissolve
+            case .flipFromTop: return .transitionFlipFromTop
+            case .flipFromBottom: return .transitionFlipFromBottom
+            }
+        }
+    }
+    
+    func apply(to view : UIView, shouldAnimate: Bool, updates : @escaping () -> (), completion : @escaping (Bool) -> () = { _ in })
+    {
+        guard shouldAnimate else {
+            updates()
+            completion(true)
+            
+            return
+        }
+        
+        switch self {
+        case .none:
+            updates()
+            completion(true)
+            
+        case .transition(let duration, let type):
+            UIView.transition(
+                with: view,
+                duration: duration,
+                options: type.toAnimationOptions,
+                animations: updates,
+                completion: completion
+            )
         }
     }
 }

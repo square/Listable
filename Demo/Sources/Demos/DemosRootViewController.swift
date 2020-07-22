@@ -123,6 +123,13 @@ public final class DemosRootViewController : ListViewController
                 onSelect: { _ in
                     self.push(ItemInsertAndRemoveAnimationsViewController())
             })
+                        
+            section += Item(
+                DemoItem(text: "Item Update Styles"),
+                selectionStyle: .tappable,
+                onSelect: { _ in
+                    self.push(ItemUpdateStyleViewController())
+            })
         }
         
         list("layouts") { section in
