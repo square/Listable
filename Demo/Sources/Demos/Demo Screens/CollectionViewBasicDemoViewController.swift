@@ -74,7 +74,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.footer = HeaderFooter(
                         DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += sectionRows

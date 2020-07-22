@@ -62,7 +62,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.requestsInitialDeposit = isOn
                     }),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                                 
                 section += Item(
@@ -71,7 +71,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.splitsIntoMilestones = isOn
                     }),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
         
@@ -80,12 +80,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Deposit Request"),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section.footer = HeaderFooter(
                         SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -98,7 +98,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits,
+                        sizing: .thatFits(),
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -111,7 +111,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                 }
             }
@@ -121,12 +121,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Balance Split"),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section.footer = HeaderFooter(
                         SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -139,7 +139,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits,
+                        sizing: .thatFits(),
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -152,7 +152,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -164,7 +164,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                 }
             }

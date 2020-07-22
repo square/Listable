@@ -102,7 +102,7 @@ public struct Item<Content:ItemContent> : AnyItem
         } else if let sizing = content.defaultItemProperties.sizing {
             self.sizing = sizing
         } else {
-            self.sizing = .thatFitsWith(.init(.atLeast(.default)))
+            self.sizing = .thatFits(.init(.atLeast(.default)))
         }
         
         if let layout = layout {
