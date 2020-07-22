@@ -56,7 +56,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     public init(
         _ content : Content,
-        sizing : Sizing = .thatFitsWith(.init(.atLeast(.default))),
+        sizing : Sizing = .thatFits(.init(.atLeast(.default))),
         layout : HeaderFooterLayout = HeaderFooterLayout()
     ) {
         self.content = content

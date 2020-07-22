@@ -36,7 +36,7 @@ final class SpacingCustomizationViewController : UIViewController
             list += Section("default") { section in
                 section += Item(
                     CardElement(title: "Default Row In Default Section", color: .white(0.95)),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
 
@@ -46,7 +46,7 @@ final class SpacingCustomizationViewController : UIViewController
 
                 section += Item(
                     CardElement(title: "Default Row In 50 Spacing Section", color: .white(0.95)),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
 
@@ -56,14 +56,14 @@ final class SpacingCustomizationViewController : UIViewController
 
                 section += Item(
                     CardElement(title: "Default Row In 100 Spacing Section", color: .white(0.95)),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
 
             list += Section("default-2") { section in
                 section += Item(
                     CardElement(title: "Default Row In another Default Section", color: .white(0.95)),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
         }
