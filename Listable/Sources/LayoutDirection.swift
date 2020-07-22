@@ -11,6 +11,20 @@ public enum LayoutDirection : Hashable
     case vertical
     case horizontal
     
+    public func `switch`<Value>(vertical : () -> Value, horizontal : () -> Value) -> Value {
+        switch self {
+        case .vertical: return vertical()
+        case .horizontal: return horizontal()
+        }
+    }
+    
+    public func `switch`<Value>(vertical : @autoclosure () -> Value, horizontal : @autoclosure () -> Value) -> Value {
+        switch self {
+        case .vertical: return vertical()
+        case .horizontal: return horizontal()
+        }
+    }
+    
     //
     // MARK: Creating & Reading Values
     //
@@ -84,14 +98,6 @@ public enum LayoutDirection : Hashable
         switch self {
         case .vertical: return point.y
         case .horizontal: return point.x
-        }
-    }
-    
-    public func horizontalPadding(with insets : UIEdgeInsets) -> HorizontalPadding
-    {
-        switch self {
-        case .vertical: return HorizontalPadding(left: insets.left, right: insets.right)
-        case .horizontal: return HorizontalPadding(left: insets.bottom, right: insets.top)
         }
     }
     

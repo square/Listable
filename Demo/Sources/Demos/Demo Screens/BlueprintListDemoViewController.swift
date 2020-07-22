@@ -51,7 +51,7 @@ final class BlueprintListDemoViewController : UIViewController
         self.blueprintView.element = List { list in
             let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
             
-            list += Section(identifier: "podcasts") { section in
+            list += Section("podcasts") { section in
                 
                 guard self.showingData else {
                     return

@@ -6,7 +6,7 @@ Listable is a declarative list framework for iOS, which allows you to concisely 
 
 ```swift
 self.listView.setContent { list in
-    list += Section(identifier: "section-1") { section in
+    list += Section("section-1") { section in
         
         section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
         
@@ -23,7 +23,7 @@ self.listView.setContent { list in
         }
     }
 
-    list += Section(identifier: "section-2") { section in
+    list += Section("section-2") { section in
         
         section.header = HeaderFooter(with: DemoHeader(title: "Another Header"))
         
@@ -50,7 +50,7 @@ And then push in new content, so there  is one row with one section:
 
 ```swift
 self.listView.setContent { list in
-    list += Section(identifier: "section-1") { section in
+    list += Section("section-1") { section in
         section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
         
         section += DemoItem(text: "And here is a row")
@@ -62,7 +62,7 @@ This new section will be animated into place. If you then insert another row:
 
 ```swift
 self.listView.setContent { list in
-    list += Section(identifier: "section-1") { section in
+    list += Section("section-1") { section in
         section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
         
         section += DemoItem(text: "And here is a row")
@@ -196,7 +196,7 @@ In this example, we see how to declare a `List` within a Blueprint element hiera
 ```swift
 var elementRepresentation : Element {
     List { list in
-        list += Section(identifier: "podcasts") { section in
+        list += Section("podcasts") { section in
             
             section += self.podcasts.map {
                 PodcastRow(podcast: $0)
@@ -258,11 +258,11 @@ self.listView.setContent { list in
 
 What is that `list` parameter, you ask...?
 
-### ListDescription
-`ListDescription` is a struct which contains all the information required to render a list update.
+### ListProperties
+`ListProperties` is a struct which contains all the information required to render a list update.
 
 ```swift
-public struct ListDescription
+public struct ListProperties
 {
     public var animatesChanges : Bool
 
@@ -279,7 +279,7 @@ public struct ListDescription
 }
 ```
 
-This allows you to configure the list view however needed within the `setContent` update.
+This allows you to configure the list view however needed within the `configure` update.
 
 
 ### Item
@@ -463,8 +463,8 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 You set headers and footers on sections via the `header` and `footer` parameter.
 
 ```swift
-self.listView.setContent { list in
-    list += Section(identifier: "section-1") { section in
+self.listView.configure { list in
+    list += Section("section-1") { section in
         section.header = HeaderFooter(DemoHeader(title: "This Is A Header"))
         section.footer = HeaderFooter(DemoFooter(text: "And this is a footer. Please check the EULA for details."))
     } 
@@ -530,7 +530,7 @@ struct Header : HeaderFooterContent, Equatable
 `Section` – surprise – represents a given section in a list. Most of your interaction with `Section` will be through the init & builder API, as shown above.
 
 ```swift
-Section(identifier: "section") { section in
+Section("section") { section in
     section += self.podcasts.map {
         PodcastRow(podcast: $0)
     }
@@ -557,14 +557,14 @@ public struct Section
 If you're using Blueprint integration via the  `BlueprintLists` module, you will also interact with the following types.
 
 ### List
-When using `ListView` directly, you'd use `list.setContent { list in ... }` to set the content of a list.
+When using `ListView` directly, you'd use `list.configure { list in ... }` to set the content of a list.
 
-However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListDescription`) that is passed to  `list.setContent { list in ... }`.
+However, Blueprint element trees are just descriptions of UI – as such, `List` is just a Blueprint `Element` which describes a list. The parameter passed to `List { list in ... }` is the same type (`ListProperties`) that is passed to  `list.configure { list in ... }`.
 
 ```swift
 var elementRepresentation : Element {
     List { list in
-        list += Section(identifier: "section") { section in
+        list += Section("section") { section in
             
             section += self.podcasts.map {
                 PodcastRow(podcast: $0)

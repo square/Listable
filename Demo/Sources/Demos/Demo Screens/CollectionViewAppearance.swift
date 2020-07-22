@@ -16,16 +16,23 @@ extension Appearance
 {
     static var demoAppearance = Appearance {
         $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-                    
-        $0.list.layout = .init(
-            padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
-            width: .atMost(600.0),
-            interSectionSpacingWithNoFooter: 20.0,
-            interSectionSpacingWithFooter: 20.0,
-            sectionHeaderBottomSpacing: 15.0,
-            itemSpacing: 10.0,
-            itemToSectionFooterSpacing: 10.0
-        )
+    }
+}
+
+extension LayoutDescription
+{
+    static var demoLayout : Self {
+        .list {
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                width: .atMost(600.0),
+                interSectionSpacingWithNoFooter: 20.0,
+                interSectionSpacingWithFooter: 20.0,
+                sectionHeaderBottomSpacing: 15.0,
+                itemSpacing: 10.0,
+                itemToSectionFooterSpacing: 10.0
+            )
+        }
     }
 }
 

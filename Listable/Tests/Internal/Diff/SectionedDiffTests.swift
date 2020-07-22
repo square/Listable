@@ -31,10 +31,9 @@ class SectionedDiffTests: XCTestCase {
 
             let diff = makeDiff(old: old, new: new)
 
-            let addedIndentifier = Identifier<Int>(2)
-            let addedAnyIdentifier = AnyIdentifier(addedIndentifier)
+            let addedIdentifier = 2
 
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedAnyIdentifier))
+            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedIdentifier))
             XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 1)
         }
 
@@ -50,14 +49,11 @@ class SectionedDiffTests: XCTestCase {
 
             let diff = makeDiff(old: old, new: new)
 
-            let firstAddedIndentifier = Identifier<Int>(2)
-            let firstAddedAnyIdentifier = AnyIdentifier(firstAddedIndentifier)
+            let firstAddedIndentifier = 2
+            let secondAddedIndentifier = 3
 
-            let secondAddedIndentifier = Identifier<Int>(3)
-            let secondAddedAnyIdentifier = AnyIdentifier(secondAddedIndentifier)
-
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(firstAddedAnyIdentifier))
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(secondAddedAnyIdentifier))
+            XCTAssert(diff.changes.addedItemIdentifiers.contains(firstAddedIndentifier))
+            XCTAssert(diff.changes.addedItemIdentifiers.contains(secondAddedIndentifier))
 
             XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 2)
         }
@@ -75,10 +71,9 @@ class SectionedDiffTests: XCTestCase {
             ]
             let diff = makeDiff(old: old, new: new)
 
-            let addedIndentifier = Identifier<Int>(4)
-            let addedAnyIdentifier = AnyIdentifier(addedIndentifier)
+            let addedIdentifier = 4
 
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedAnyIdentifier))
+            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedIdentifier))
             XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 1)
         }
 
@@ -97,24 +92,20 @@ class SectionedDiffTests: XCTestCase {
             XCTAssert(diff.changes.addedItemIdentifiers.isEmpty)
         }
 
-        func makeDiff(old: [Section], new: [Section]) -> SectionedDiff<Section, Int> {
-            return SectionedDiff<Section, Int>.init(
+        func makeDiff(old: [Section], new: [Section]) -> SectionedDiff<Section, Int, Int, Int> {
+            return SectionedDiff<Section, Int, Int, Int>.init(
                 old: old,
                 new: new,
                 configuration: .init(
                     section: .init(
                         identifier: {
-                            let identifier = Identifier<Int>($0.identifier)
-                            return AnyIdentifier(identifier)
+                            $0.identifier
                         },
                         items: { $0.items },
                         movedHint: { _, _ in false }
                     ),
                     item: .init(
-                        identifier: {
-                            let identifier = Identifier<Int>($0)
-                            return AnyIdentifier(identifier)
-                        },
+                        identifier: { $0 },
                         updated: { _, _ in false },
                         movedHint: { $0 == $1 }
                     )

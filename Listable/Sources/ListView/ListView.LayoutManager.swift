@@ -14,30 +14,35 @@ extension ListView
     {
         unowned let collectionView : UICollectionView
                 
-        private(set) var current : CollectionViewLayout
+        private(set) var collectionViewLayout : CollectionViewLayout
         
-        init(layout : CollectionViewLayout, collectionView : UICollectionView)
+        init(layout collectionViewLayout : CollectionViewLayout, collectionView : UICollectionView)
         {
-            self.current = layout
+            self.collectionViewLayout = collectionViewLayout
             self.collectionView = collectionView
         }
         
-        func set(layoutType : ListLayoutType, animated : Bool, completion : @escaping () -> ())
+        func set(layout : LayoutDescription, animated : Bool, completion : @escaping () -> ())
         {
-            guard self.current.layoutType != layoutType else {
-                completion()
-                return
-            }
-            
-            self.current = CollectionViewLayout(
-                delegate: self.current.delegate,
-                layoutType: layoutType,
-                appearance: self.current.appearance,
-                behavior: self.current.behavior
-            )
-            
-            self.collectionView.setCollectionViewLayout(self.current, animated: animated) { _ in
-                completion()
+            if self.collectionViewLayout.layoutDescription.configuration.isSameLayoutType(as: layout.configuration) {
+                self.collectionViewLayout.layoutDescription = layout
+                
+                let shouldRebuild = self.collectionViewLayout.layoutDescription.configuration.shouldRebuild(layout: self.collectionViewLayout.layout)
+                
+                if shouldRebuild {
+                    self.collectionViewLayout.setNeedsRebuild()
+                }
+            } else {
+                self.collectionViewLayout = CollectionViewLayout(
+                    delegate: self.collectionViewLayout.delegate,
+                    layoutDescription: layout,
+                    appearance: self.collectionViewLayout.appearance,
+                    behavior: self.collectionViewLayout.behavior
+                )
+                
+                self.collectionView.setCollectionViewLayout(self.collectionViewLayout, animated: animated) { _ in
+                    completion()
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ protocol AnyPresentationItemState : AnyObject
     var anyModel : AnyItem { get }
     
     var reorderingActions : ReorderingActions { get }
-    
+        
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
     
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
@@ -34,10 +34,10 @@ protocol AnyPresentationItemState : AnyObject
     func wasRemoved()
     
     var isSelected : Bool { get }
-    func performUserDidSelectItem(isSelected: Bool)
+    func set(isSelected: Bool, performCallbacks: Bool)
     
     func resetCachedSizes()
-    func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+    func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
     
     func moved(with result : Reordering.Result)
 }
@@ -51,8 +51,8 @@ protocol ItemContentCoordinatorDelegate : AnyObject
 
 public struct ItemStateDependencies
 {
-    internal var reorderingDelegate : ReorderingActionsDelegate
-    internal var coordinatorDelegate : ItemContentCoordinatorDelegate
+    var reorderingDelegate : ReorderingActionsDelegate
+    var coordinatorDelegate : ItemContentCoordinatorDelegate
 }
 
 
@@ -88,7 +88,7 @@ extension PresentationState
         let storage : Storage
                 
         init(with model : Item<Content>, dependencies : ItemStateDependencies)
-        {
+        {            
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
         
@@ -153,6 +153,9 @@ extension PresentationState
         
         private(set) var isDisplayed : Bool = false
         
+        private var hasDisplayed : Bool = false
+        private var hasEndedDisplay : Bool = false
+        
         func setAndPerform(isDisplayed: Bool) {
             guard self.isDisplayed != isDisplayed else {
                 return
@@ -161,9 +164,21 @@ extension PresentationState
             self.isDisplayed = isDisplayed
             
             if self.isDisplayed {
-                self.model.onDisplay?(self.model.content)
+                self.model.onDisplay?(.init(
+                    item: self.model,
+                    isFirstDisplay: self.hasDisplayed == false
+                    )
+                )
+                
+                self.hasDisplayed = true
             } else {
-                self.model.onEndDisplay?(self.model.content)
+                self.model.onEndDisplay?(.init(
+                    item: self.model,
+                    isFirstEndDisplay: self.hasEndedDisplay == false
+                    )
+                )
+                
+                self.hasEndedDisplay = true
             }
         }
                 
@@ -209,7 +224,7 @@ extension PresentationState
                 for: reason,
                 with: applyInfo
             )
-            
+                        
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
                 cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, reason: reason)
@@ -273,28 +288,30 @@ extension PresentationState
             self.storage.state.isSelected
         }
                 
-        func performUserDidSelectItem(isSelected: Bool)
+        func set(isSelected: Bool, performCallbacks: Bool)
         {
             self.storage.state.isSelected = isSelected
             
-            /// Schedule the caller-provided callbacks to happen after one runloop. Why?
-            ///
-            /// Because this method is called from within `UICollectionViewDelegate` callbacks,
-            /// This delay gives the `UICollectionView` time to schedule any necessary animations
-            /// for changes to the highlight and selection state – otherwise, these animations get
-            /// stuck behind the call to the `onSelect` or `onDeselect` blocks, which creates the appearance
-            /// of a laggy UI if these callbacks are slow.
-            DispatchQueue.main.async {
-                if isSelected {
-                    if let onSelect = self.model.onSelect {
-                        SignpostLogger.log(log: .listInteraction, name: "Item onSelect", for: self.model) {
-                            onSelect(self.model.content)
+            if performCallbacks {
+                /// Schedule the caller-provided callbacks to happen after one runloop. Why?
+                ///
+                /// Because this method is called from within `UICollectionViewDelegate` callbacks,
+                /// This delay gives the `UICollectionView` time to schedule any necessary animations
+                /// for changes to the highlight and selection state – otherwise, these animations get
+                /// stuck behind the call to the `onSelect` or `onDeselect` blocks, which creates the appearance
+                /// of a laggy UI if these callbacks are slow.
+                DispatchQueue.main.async {
+                    if isSelected {
+                        if let onSelect = self.model.onSelect {
+                            SignpostLogger.log(log: .listInteraction, name: "Item onSelect", for: self.model) {
+                                onSelect(.init(item: self.model))
+                            }
                         }
-                    }
-                } else {
-                    if let onDeselect = self.model.onDeselect {
-                        SignpostLogger.log(log: .listInteraction, name: "Item onDeselect", for: self.model) {
-                            onDeselect(self.model.content)
+                    } else {
+                        if let onDeselect = self.model.onDeselect {
+                            SignpostLogger.log(log: .listInteraction, name: "Item onDeselect", for: self.model) {
+                                onDeselect(.init(item: self.model))
+                            }
                         }
                     }
                 }
@@ -334,16 +351,16 @@ extension PresentationState
             self.cachedSizes.removeAll()
         }
         
-        func size(in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize, measurementCache : ReusableViewCache) -> CGSize
+        func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
         {
-            guard sizeConstraint.isEmpty == false else {
+            guard info.sizeConstraint.isEmpty == false else {
                 return .zero
             }
             
             let key = SizeKey(
-                width: sizeConstraint.width,
-                height: sizeConstraint.height,
-                layoutDirection: layoutDirection,
+                width: info.sizeConstraint.width,
+                height: info.sizeConstraint.height,
+                layoutDirection: info.direction,
                 sizing: self.model.sizing
             )
             
@@ -352,7 +369,7 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
-                let size : CGSize = measurementCache.use(
+                let size : CGSize = cache.use(
                     with: self.model.reuseIdentifier,
                     create: {
                         return ItemCell<Content>()
@@ -361,7 +378,7 @@ extension PresentationState
                     
                     self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
                     
-                    return self.model.sizing.measure(with: cell, in: sizeConstraint, layoutDirection: layoutDirection, defaultSize: defaultSize)
+                    return self.model.sizing.measure(with: cell, info: info)
                 })
                 
                 self.cachedSizes[key] = size

@@ -22,6 +22,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -43,6 +45,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -57,11 +61,11 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: true)
+            item.set(isSelected: true, performCallbacks: true)
             item.applyToVisibleCell()
             
             if item.anyModel.selectionStyle == .tappable {
-                item.performUserDidSelectItem(isSelected: false)
+                item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
                 item.applyToVisibleCell()
             }
@@ -71,7 +75,7 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: false)
+            item.set(isSelected: false, performCallbacks: true)
             item.applyToVisibleCell()
         }
         
@@ -173,214 +177,34 @@ extension ListView
         {
             self.view.setPresentationStateItemPositions()
         }
-                
-        func sizeForItem(
-            at indexPath : IndexPath,
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-        ) -> CGSize
-        {
-            let item = self.presentationState.item(at: indexPath)
-            
-            return item.size(
-                in: sizeConstraint,
-                layoutDirection: layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.itemMeasurementCache
-            )
-        }
         
-        func layoutForItem(at indexPath : IndexPath, in collectionView : UICollectionView) -> ItemLayout
+        func listLayoutContent(
+            defaults: ListLayoutDefaults
+        ) -> ListLayoutContent
         {
-            let item = self.presentationState.item(at: indexPath)
-            
-            return item.anyModel.layout
-        }
-        
-        func hasListHeader(in collectionView : UICollectionView) -> Bool
-        {
-            return self.presentationState.header.state != nil
-        }
-        
-        func sizeForListHeader(
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-            ) -> CGSize
-        {
-            let header = self.presentationState.header.state!
-                        
-            return header.size(
-                in: sizeConstraint,
-                layoutDirection : layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.headerFooterMeasurementCache
-            )
-        }
-        
-        func layoutForListHeader(in collectionView : UICollectionView) -> HeaderFooterLayout
-        {
-            let header = self.presentationState.header.state!
-            
-            return header.anyModel.layout
-        }
-        
-        func hasListFooter(in collectionView : UICollectionView) -> Bool
-        {
-            return self.presentationState.footer.state != nil
-        }
-        
-        func sizeForListFooter(
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-            ) -> CGSize
-        {
-            let footer = self.presentationState.footer.state!
-            
-            return footer.size(
-                in: sizeConstraint,
-                layoutDirection: layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.headerFooterMeasurementCache
-            )
-        }
-        
-        func layoutForListFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
-        {
-            let footer = self.presentationState.footer.state!
-            
-            return footer.anyModel.layout
-        }
-        
-        func hasOverscrollFooter(in collectionView : UICollectionView) -> Bool
-        {
-            return self.presentationState.overscrollFooter.state != nil
-        }
-        
-        func sizeForOverscrollFooter(
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-            ) -> CGSize
-        {
-            let footer = self.presentationState.overscrollFooter.state!
-            
-            return footer.size(
-                in: sizeConstraint,
-                layoutDirection: layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.headerFooterMeasurementCache
-            )
-        }
-        
-        func layoutForOverscrollFooter(in collectionView : UICollectionView) -> HeaderFooterLayout
-        {
-            let footer = self.presentationState.overscrollFooter.state!
-            
-            return footer.anyModel.layout
-        }
-        
-        func layoutFor(section sectionIndex : Int, in collectionView : UICollectionView) -> Section.Layout
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            
-            return section.model.layout
-        }
-        
-        func hasHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            
-            return section.header.state != nil
-        }
-                
-        func sizeForHeader(
-            in sectionIndex : Int,
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-            ) -> CGSize
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            let header = section.header.state!
-            
-            return header.size(
-                in: sizeConstraint,
-                layoutDirection: layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.headerFooterMeasurementCache
-            )
-        }
-        
-        func layoutForHeader(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            let header = section.header.state!
-            
-            return header.anyModel.layout
-        }
-        
-        func hasFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> Bool
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            
-            return section.footer.state != nil
-        }
-                
-        func sizeForFooter(
-            in sectionIndex : Int,
-            in collectionView : UICollectionView,
-            measuredIn sizeConstraint : CGSize,
-            defaultSize : CGSize,
-            layoutDirection : LayoutDirection
-            ) -> CGSize
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            let footer = section.footer.state!
-            
-            return footer.size(
-                in: sizeConstraint,
-                layoutDirection: layoutDirection,
-                defaultSize: defaultSize,
-                measurementCache: self.headerFooterMeasurementCache
-            )
-        }
-        
-        func layoutForFooter(in sectionIndex : Int, in collectionView : UICollectionView) -> HeaderFooterLayout
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            let footer = section.footer.state!
-            
-            return footer.anyModel.layout
-        }
-        
-        func columnLayout(for sectionIndex : Int, in collectionView : UICollectionView) -> Section.Columns
-        {
-            let section = self.presentationState.sections[sectionIndex]
-            
-            return section.model.columns
+            self.presentationState.toListLayoutContent(defaults: defaults)
         }
         
         // MARK: UIScrollViewDelegate
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
-            // Notify swipe actions to close
+            // Notify swipe actions to close.
 
-            let notification = Notification(name: .closeSwipeActions, object: self)
-            NotificationCenter.default.post(notification)
+            NotificationCenter.default.post(Notification(name: .closeSwipeActions, object: self))
         }
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
+        }
+                
+        func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool
+        {
+            switch view.behavior.scrollsToTop {
+            case .disabled: return false
+            case .enabled: return true
+            }
         }
         
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
@@ -393,7 +217,7 @@ extension ListView
         func scrollViewDidScroll(_ scrollView: UIScrollView)
         {
             guard scrollView.bounds.size.height > 0 else { return }
-            
+                        
             SignpostLogger.log(.begin, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
             
             defer {
@@ -408,6 +232,13 @@ extension ListView
             
             if scrollingDown {
                 self.view.updatePresentationState(for: .scrolledDown)
+            }
+            
+            ListStateObserver.perform(self.view.stateObserver.onDidScroll, "Did Scroll", with: self.view) {
+                ListStateObserver.DidScroll(
+                    actions: $0,
+                    positionInfo: self.view.scrollPositionInfo
+                )
             }
         }
     }

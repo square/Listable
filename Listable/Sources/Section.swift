@@ -33,27 +33,27 @@ public struct Section
     public typealias Build = (inout Section) -> ()
     
     public init<Identifier:Hashable>(
-        identifier : Identifier,
+        _ identifier : Identifier,
         build : Build
         )
     {
-        self.init(identifier: identifier)
+        self.init(identifier)
         
         build(&self)
     }
     
     public init<Info:SectionInfo>(
-        info: Info,
+        _ info: Info,
         build : Build
         )
     {
-        self.init(info: info)
+        self.init(info)
         
         build(&self)
     }
     
     public init<Identifier:Hashable>(
-        identifier : Identifier,
+        _ identifier : Identifier,
         layout : Layout = Layout(),
         columns : Columns = .one,
         header : AnyHeaderFooter? = nil,
@@ -62,7 +62,7 @@ public struct Section
         )
     {
         self.init(
-            info: HashableSectionInfo(identifier),
+            HashableSectionInfo(identifier),
             layout: layout,
             columns: columns,
             header: header,
@@ -72,7 +72,7 @@ public struct Section
     }
     
     public init<Info:SectionInfo>(
-        info: Info,
+        _ info: Info,
         layout : Layout = Layout(),
         columns : Columns = .one,
         header : AnyHeaderFooter? = nil,
@@ -152,10 +152,14 @@ public extension Section
     struct Layout : Equatable
     {
         public var width : CustomWidth
+
+        /// Overrides the calculated spacing after this section
+        public var customInterSectionSpacing : CGFloat?
         
-        public init(width : CustomWidth = .default)
+        public init(width : CustomWidth = .default, customInterSectionSpacing : CGFloat? = nil)
         {
             self.width = width
+            self.customInterSectionSpacing = customInterSectionSpacing
         }
     }
     
@@ -207,7 +211,7 @@ public protocol AnySectionInfo
 public extension SectionInfo
 {
     var anyIdentifier : AnyIdentifier {
-        return AnyIdentifier(self.identifier)
+        self.identifier
     }
     
     func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool

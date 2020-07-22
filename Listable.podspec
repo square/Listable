@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'Listable'
-  s.version      = '0.6.1'
+  s.version      = '0.8.0'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 10.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = { type: 'Proprietary', text: "© 2020 Square, Inc." }
@@ -13,6 +13,8 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.0']
 
   s.source_files = 'Listable/Sources/**/*.{swift}'
+
+  s.weak_framework = 'SwiftUI'
 
   s.test_spec 'Tests' do |test_spec|
     test_spec.source_files = 'Listable/Tests/**/*.{swift}'

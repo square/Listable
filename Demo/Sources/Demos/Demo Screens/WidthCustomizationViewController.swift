@@ -22,16 +22,18 @@ final class WidthCustomizationViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.setContent { list in
+        self.listView.configure { list in
             
-            list.appearance.list.layout.set {
-                $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
-                $0.itemSpacing = 20.0
-                $0.interSectionSpacingWithFooter = 20.0
-                $0.interSectionSpacingWithNoFooter = 20.0
+            list.layout = .list {
+                $0.layout.set {
+                    $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+                    $0.itemSpacing = 20.0
+                    $0.interSectionSpacingWithFooter = 20.0
+                    $0.interSectionSpacingWithNoFooter = 20.0
+                }
             }
             
-            list += Section(identifier: "default") { section in
+            list += Section("default") { section in
                 
                 section.layout = Section.Layout(width: .default)
                 
@@ -41,7 +43,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "fill") { section in
+            list += Section("fill") { section in
                 
                 section.layout = Section.Layout(width: .fill)
                 
@@ -51,7 +53,7 @@ final class WidthCustomizationViewController : UIViewController
                 )
             }
             
-            list += Section(identifier: "custom-1") { section in
+            list += Section("custom-1") { section in
 
                 section.layout = Section.Layout(width: .custom(.init(
                         padding: HorizontalPadding(uniform: 10.0),

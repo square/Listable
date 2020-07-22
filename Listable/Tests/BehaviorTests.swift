@@ -17,8 +17,17 @@ class BehaviorTests: XCTestCase
         let behavior = Behavior()
         
         XCTAssertEqual(behavior.keyboardDismissMode, .interactive)
+        XCTAssertEqual(behavior.keyboardAdjustmentMode, .adjustsWhenVisible)
+        
+        XCTAssertEqual(behavior.selectionMode, .single())
         
         XCTAssertEqual(behavior.underflow, Behavior.Underflow())
+        
+        let listView = ListView()
+        
+        // These values should match the default values from the collection view.
+        XCTAssertEqual(behavior.canCancelContentTouches, listView.collectionView.canCancelContentTouches)
+        XCTAssertEqual(behavior.delaysContentTouches, listView.collectionView.delaysContentTouches)
     }
 }
 
@@ -33,6 +42,7 @@ class Behavior_Underflow_Tests : XCTestCase
         XCTAssertEqual(underflow.alignment, .top)
     }
 }
+
 
 class Behavior_Underflow_Alignment_Tests : XCTestCase
 {

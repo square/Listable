@@ -8,13 +8,13 @@
 import UIKit
 
 
-public struct ViewHierarchySnapshot : SnapshotOutputFormat
+public struct ViewHierarchySnapshot<ViewType:UIView> : SnapshotOutputFormat
 {
     // MARK: SnapshotOutputFormat
     
-    public typealias RenderingFormat = UIView
+    public typealias RenderingFormat = ViewType
     
-    public static func snapshotData(with renderingFormat : UIView) throws -> Data
+    public static func snapshotData(with renderingFormat : ViewType) throws -> Data
     {
         let hierarchy = renderingFormat.textHierarchy
         let string = hierarchy.stringValue
@@ -29,7 +29,7 @@ public struct ViewHierarchySnapshot : SnapshotOutputFormat
         )
     }
     
-    public static func validate(render view: UIView, existingData : Data) throws
+    public static func validate(render view: ViewType, existingData : Data) throws
     {
         let textHierarchy = try ViewHierarchySnapshot.snapshotData(with: view)
         

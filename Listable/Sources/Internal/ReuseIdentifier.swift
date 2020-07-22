@@ -31,6 +31,8 @@ final class ReuseIdentifier<Element> : Hashable
     let stringValue : String
     let identifier : ObjectIdentifier
     
+    let hash : Int
+    
     //
     // MARK: Private Methods
     //
@@ -40,6 +42,10 @@ final class ReuseIdentifier<Element> : Hashable
         self.identifier = ObjectIdentifier(Element.self)
         
         self.stringValue = "\(self.identifier)"
+        
+        var hasher = Hasher()
+        hasher.combine(self.identifier)
+        self.hash = hasher.finalize()
     }
     
     //
@@ -57,6 +63,6 @@ final class ReuseIdentifier<Element> : Hashable
     
     func hash(into hasher: inout Hasher)
     {
-        hasher.combine(self.identifier)
+        hasher.combine(self.hash)
     }
 }

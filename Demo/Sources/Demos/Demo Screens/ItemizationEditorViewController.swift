@@ -50,6 +50,7 @@ final class ItemizationEditorViewController : UIViewController
         return List { list in
                         
             list.appearance = self.listAppearance
+            list.layout = self.listLayout
             
             list.behavior.selectionMode = .multiple
             
@@ -74,7 +75,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }()
             
-            list += Section(identifier: SectionIdentifier.variations) { section in
+            list += Section(SectionIdentifier.variations) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits)
@@ -94,7 +95,7 @@ final class ItemizationEditorViewController : UIViewController
             }
 
             list += itemization.modifiers.map { set in
-                Section(identifier: SectionIdentifier.modifier(set.name)) { section in
+                Section(SectionIdentifier.modifier(set.name)) { section in
                     
                     section.columns = .init(count: 2, spacing: 20.0)
                     
@@ -115,7 +116,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: SectionIdentifier.discounts) { section in
+            list += Section(SectionIdentifier.discounts) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits)
@@ -131,7 +132,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: SectionIdentifier.taxes) { section in
+            list += Section(SectionIdentifier.taxes) { section in
                 
                 section.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits)
@@ -150,24 +151,29 @@ final class ItemizationEditorViewController : UIViewController
     }
     
     var listAppearance : Appearance {
-        Appearance(backgroundColor: .white, stickySectionHeaders: false) {
-            $0.list = ListAppearance(
-                sizing: .init(
-                    itemHeight: 70.0,
-                    sectionHeaderHeight: 50.0,
-                    sectionFooterHeight: 50.0,
-                    listHeaderHeight: 100.0,
-                    listFooterHeight: 100.0
-                ),
-                layout: .init(
-                    padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                    width: .atMost(600.0),
-                    interSectionSpacingWithNoFooter: 20.0,
-                    interSectionSpacingWithFooter: 20.0,
-                    sectionHeaderBottomSpacing: 0.0,
-                    itemSpacing: 20.0,
-                    itemToSectionFooterSpacing: 20.0
-                )
+        Appearance(backgroundColor: .white)
+    }
+    
+    var listLayout : LayoutDescription {
+        .list {
+            $0.stickySectionHeaders = false
+            
+            $0.sizing = .init(
+                itemHeight: 70.0,
+                sectionHeaderHeight: 50.0,
+                sectionFooterHeight: 50.0,
+                listHeaderHeight: 100.0,
+                listFooterHeight: 100.0
+            )
+            
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
+                width: .atMost(600.0),
+                interSectionSpacingWithNoFooter: 20.0,
+                interSectionSpacingWithFooter: 20.0,
+                sectionHeaderBottomSpacing: 0.0,
+                itemSpacing: 20.0,
+                itemToSectionFooterSpacing: 20.0
             )
         }
     }

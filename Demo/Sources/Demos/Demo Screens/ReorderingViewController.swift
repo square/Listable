@@ -22,11 +22,12 @@ final class ReorderingViewController : UIViewController
     {
         self.view = self.list
         
-        self.list.setContent { list in
+        self.list.configure { list in
             
             list.appearance = .demoAppearance
+            list.layout = .demoLayout
             
-            list += Section(identifier: "first") { section in
+            list += Section("first") { section in
                 section.header = HeaderFooter(DemoHeader(title: "First Section"))
                 
                 section += Item(ReorderItem(text: "0,0 Row")) { item in
@@ -54,7 +55,7 @@ final class ReorderingViewController : UIViewController
                 }
             }
             
-            list += Section(identifier: "second") { section in
+            list += Section("second") { section in
                 section.header = HeaderFooter(DemoHeader(title: "Second Section"))
                 
                 section += Item(ReorderItem(text: "1,0  Row")) { item in

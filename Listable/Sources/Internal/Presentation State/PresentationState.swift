@@ -11,7 +11,7 @@
 final class PresentationState
 {
     //
-    // MARK: Public Properties
+    // MARK: Properties
     //
         
     var refreshControl : RefreshControl.PresentationState?
@@ -28,6 +28,9 @@ final class PresentationState
     private(set) var containsAllItems : Bool
     
     private(set) var contentIdentifier : AnyHashable?
+    
+    private let itemMeasurementCache = ReusableViewCache()
+    private let headerFooterMeasurementCache = ReusableViewCache()
     
     //
     // MARK: Initialization
@@ -194,8 +197,12 @@ final class PresentationState
     // MARK: Updating Content & State
     //
     
-    func update(with diff : SectionedDiff<Section, AnyItem>, slice : Content.Slice, dependencies: ItemStateDependencies, loggable : SignpostLoggable?)
-    {
+    func update(
+        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
+        slice : Content.Slice,
+        dependencies: ItemStateDependencies,
+        loggable : SignpostLoggable?
+    ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update Presentation State", for: loggable)
         
         defer {
@@ -265,5 +272,94 @@ extension PresentationState
         var height : CGFloat
         var layoutDirection : LayoutDirection
         var sizing : Sizing
+    }
+}
+
+
+extension PresentationState
+{
+    func toListLayoutContent(
+        defaults: ListLayoutDefaults
+    ) -> ListLayoutContent
+    {
+        ListLayoutContent(
+            header: {
+                guard let header = self.header.state else { return nil }
+                
+                return .init(
+                    kind: .listHeader,
+                    layout: header.anyModel.layout,
+                    isPopulated: true,
+                    measurer: { info in
+                        header.size(for: info, cache: self.headerFooterMeasurementCache)
+                    }
+                )
+            }(),
+            footer: {
+                guard let footer = self.footer.state else { return nil }
+                
+                return .init(
+                    kind: .listFooter,
+                    layout: footer.anyModel.layout,
+                    isPopulated: true,
+                    measurer: { info in
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                    }
+                )
+            }(),
+            overscrollFooter: {
+                guard let footer = self.overscrollFooter.state else { return nil }
+                
+                return .init(
+                    kind: .overscrollFooter,
+                    layout: footer.anyModel.layout,
+                    isPopulated: true,
+                    measurer: { info in
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                    }
+                )
+            }(),
+            sections: self.sections.mapWithIndex { sectionIndex, _, section in
+                .init(
+                    layout: section.model.layout,
+                    header: {
+                        guard let header = section.header.state else { return nil }
+                        
+                        return .init(
+                            kind: .sectionHeader,
+                            layout: header.anyModel.layout,
+                            isPopulated: true,
+                            measurer: { info in
+                                header.size(for: info, cache: self.headerFooterMeasurementCache)
+                            }
+                        )
+                    }(),
+                    footer: {
+                        guard let footer = section.footer.state else { return nil }
+                        
+                        return .init(
+                            kind: .sectionFooter,
+                            layout: footer.anyModel.layout,
+                            isPopulated: true,
+                            measurer: { info in
+                                footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                            }
+                        )
+                    }(),
+                    columns: section.model.columns,
+                    items: section.items.mapWithIndex { itemIndex, _, item in
+                        .init(
+                            delegateProvidedIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
+                            liveIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
+                            layout: item.anyModel.layout,
+                            insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
+                            measurer: { info in
+                                item.size(for: info, cache: self.itemMeasurementCache)
+                            }
+                        )
+                    }
+                )
+            }
+        )
     }
 }

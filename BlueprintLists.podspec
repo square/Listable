@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'BlueprintLists'
-  s.version      = '0.6.1'
+  s.version      = '0.8.0'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 10.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = { type: 'Proprietary', text: "© 2020 Square, Inc." }
@@ -22,6 +22,8 @@ Pod::Spec.new do |s|
     test_spec.resources = 'BlueprintLists/Tests/Resources/**/*'
 
     test_spec.framework = 'XCTest'
+    
+    test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
 
     test_spec.requires_app_host = true
   end

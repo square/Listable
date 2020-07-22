@@ -31,26 +31,21 @@ final class SwipeActionsViewController: UIViewController  {
         self.reloadData()
     }
 
-    @available(iOS 11, *)
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        reloadData(animated: false)
-    }
-
     func reloadData(animated: Bool = false) {
-
-        let appearance = Appearance {
-            if #available(iOS 11, *) {
-                $0.list.layout = .init(padding: view.safeAreaInsets)
-            }
-        }
 
         self.blueprintView.element = List { list in
 
             list.animatesChanges = animated
-            list.appearance = appearance
+            
+            list.layout = .list { [weak self] in
+                guard let self = self else { return }
+                
+                if #available(iOS 11, *) {
+                    $0.layout.padding = UIEdgeInsets(top: 0.0, left: self.view.safeAreaInsets.left, bottom: 0.0, right: self.view.safeAreaInsets.right)
+                }
+            }
 
-            list += Section(identifier: "items") { section in
+            list += Section("items") { section in
                 section += self.items.map { item in
                     Item(
                         SwipeActionsDemoItem(item: item),
@@ -70,8 +65,8 @@ final class SwipeActionsViewController: UIViewController  {
                     title: "Delete",
                     backgroundColor: .systemRed,
                     image: nil,
-                    handler: { expandActions in
-                        self.confirmDelete(item: item, expandActions: expandActions)
+                    handler: { [weak self] expandActions in
+                        self?.confirmDelete(item: item, expandActions: expandActions)
                 })
             )
         }
@@ -81,8 +76,8 @@ final class SwipeActionsViewController: UIViewController  {
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
                 image: nil,
-                handler: { expandActions in
-                    self.toggleSave(item: item)
+                handler: { [weak self] expandActions in
+                    self?.toggleSave(item: item)
                     expandActions(false)
             })
         )
