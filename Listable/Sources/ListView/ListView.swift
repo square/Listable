@@ -581,13 +581,13 @@ public final class ListView : UIView
         removed.forEach {
             let item = state.item(at: $0)
             view.deselectItem(at: $0, animated: animated)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .selectionStateChanged(.init(animated: animated, fromUserInteraction: false)))
         }
         
         added.forEach {
             let item = state.item(at: $0)
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .selectionStateChanged(.init(animated: animated, fromUserInteraction: false)))
         }
     }
     
@@ -809,7 +809,7 @@ public final class ListView : UIView
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            self.visibleContent.updateVisibleViews()
+            self.visibleContent.updateVisibleViews(reason: .wasUpdated(.init(animated: animated)))
         }
         
         if changes.hasIndexAffectingChanges {

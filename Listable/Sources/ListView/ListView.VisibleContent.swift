@@ -61,18 +61,18 @@ extension ListView
             )
         }
         
-        func updateVisibleViews()
+        func updateVisibleViews(reason: ApplyReason)
         {
             // Perform Updates Of Visible Headers & Footers
             
             self.headerFooters.forEach {
-                $0.headerFooter.applyToVisibleView()
+                $0.headerFooter.applyToVisibleView(reason: reason)
             }
             
             // Perform Updates Of Visible Items
             
             self.items.forEach {
-                $0.item.applyToVisibleCell()
+                $0.item.applyToVisibleCell(reason: reason)
             }
         }
         

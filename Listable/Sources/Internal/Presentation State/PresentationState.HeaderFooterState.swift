@@ -54,13 +54,13 @@ extension PresentationState
             self.visibleContainer = nil
         }
         
-        func applyToVisibleView()
+        func applyToVisibleView(reason : ApplyReason)
         {
             guard let view = visibleContainer?.content, let state = self.state else {
                 return
             }
             
-            state.applyTo(view: view, reason: .wasUpdated)
+            state.applyTo(view: view, reason: reason)
         }
     }
     

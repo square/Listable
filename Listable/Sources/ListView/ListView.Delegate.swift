@@ -33,14 +33,14 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .highlightStateChanged(.init(animated: true, fromUserInteraction: true)))
         }
         
         func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath)
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .highlightStateChanged(.init(animated: true, fromUserInteraction: true)))
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
@@ -62,12 +62,12 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: true, performCallbacks: true)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .selectionStateChanged(.init(animated: true, fromUserInteraction: true)))
             
             if item.anyModel.selectionStyle == .tappable {
                 item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
-                item.applyToVisibleCell()
+                item.applyToVisibleCell(reason: .selectionStateChanged(.init(animated: true, fromUserInteraction: true)))
             }
         }
         
@@ -76,7 +76,7 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: false, performCallbacks: true)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(reason: .selectionStateChanged(.init(animated: true, fromUserInteraction: true)))
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]

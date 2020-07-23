@@ -419,9 +419,9 @@ public enum ItemUpdateStyle : Equatable {
         }
     }
     
-    func apply(to view : UIView, shouldAnimate: Bool, updates : @escaping () -> (), completion : @escaping (Bool) -> () = { _ in })
+    func apply(to view : UIView, animated: Bool, updates : @escaping () -> (), completion : @escaping (Bool) -> () = { _ in })
     {
-        guard shouldAnimate else {
+        guard animated else {
             updates()
             completion(true)
             

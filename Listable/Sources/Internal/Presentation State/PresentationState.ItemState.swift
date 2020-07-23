@@ -24,7 +24,7 @@ protocol AnyPresentationItemState : AnyObject
     func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> UICollectionViewCell
     
     func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState, reason : ApplyReason)
-    func applyToVisibleCell()
+    func applyToVisibleCell(reason : ApplyReason)
         
     func setNew(item anyItem : AnyItem, reason : PresentationState.ItemUpdateReason)
     
@@ -139,7 +139,7 @@ extension PresentationState
                 
                 delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
                 
-                self.applyToVisibleCell()
+                self.applyToVisibleCell(reason: .wasUpdated(.init(animated: true)))
             }
             
             self.storage.didSetState = { [weak self] old, new in
@@ -219,21 +219,17 @@ extension PresentationState
             
             // Apply Model State
             
-            self.model.updateStyle.apply(
-                to: cell,
-                shouldAnimate: reason == .wasUpdated,
-                updates: {
-                    self.model.content.apply(
-                        to: ItemContentViews(
-                            content: cell.contentContainer.contentView,
-                            background: cell.background,
-                            selectedBackground: cell.selectedBackground
-                        ),
-                        for: reason,
-                        with: applyInfo
-                    )
-                }
-            )
+            self.model.updateStyle.apply(to: cell, animated: reason.animated, updates: {
+                self.model.content.apply(
+                    to: ItemContentViews(
+                        content: cell.contentContainer.contentView,
+                        background: cell.background,
+                        selectedBackground: cell.selectedBackground
+                    ),
+                    for: reason,
+                    with: applyInfo
+                )
+            })
         
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
@@ -243,7 +239,7 @@ extension PresentationState
             }
         }
         
-        func applyToVisibleCell()
+        func applyToVisibleCell(reason : ApplyReason)
         {
             guard let cell = self.storage.state.visibleCell else {
                 return
@@ -252,7 +248,7 @@ extension PresentationState
             self.applyTo(
                 cell: cell,
                 itemState: .init(cell: cell),
-                reason: .wasUpdated
+                reason: reason
             )
         }
         
