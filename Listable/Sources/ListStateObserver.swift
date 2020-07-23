@@ -86,6 +86,7 @@ public struct ListStateObserver {
     /// Parameters available for `OnContentChanged` callbacks.
     public struct ContentChanged {
         public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
     }
     
     private(set) var onContentChanged : [OnContentChanged] = []
@@ -106,6 +107,7 @@ public struct ListStateObserver {
     /// Parameters available for `OnVisibilityChanged` callbacks.
     public struct VisibilityChanged {
         public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
         
         public let displayed : [AnyItem]
         public let endedDisplay : [AnyItem]
@@ -128,6 +130,8 @@ public struct ListStateObserver {
     /// Parameters available for `OnFrameChanged` callbacks.
     public struct FrameChanged {
         public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+
         public let old : CGRect
         public let new : CGRect
     }

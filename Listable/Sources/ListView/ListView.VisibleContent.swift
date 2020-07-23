@@ -40,9 +40,10 @@ extension ListView
             let callStateReader = removed.isEmpty == false || added.isEmpty == false
             
             if callStateReader {
-                ListStateObserver.perform(view.stateObserver.onVisibilityChanged, "Visibility Changed", with: view) {
+                ListStateObserver.perform(view.stateObserver.onVisibilityChanged, "Visibility Changed", with: view) { actions in
                     ListStateObserver.VisibilityChanged(
-                        actions: $0,
+                        actions: actions,
+                        positionInfo: view.scrollPositionInfo,
                         displayed: added.map { $0.item.anyModel },
                         endedDisplay: removed.map { $0.item.anyModel }
                     )

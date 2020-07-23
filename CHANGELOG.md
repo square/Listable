@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Add `ListScrollPositionInfo` to all `ListStateObserver` callbacks](https://github.com/kyleve/Listable/pull/191).
+
 ### Removed
 
 ### Changed
