@@ -514,9 +514,10 @@ public final class ListView : UIView
             }
             
             if oldValue != self.frame {
-                ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) {
+                ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
                     ListStateObserver.FrameChanged(
-                        actions: $0,
+                        actions: actions,
+                        positionInfo: self.scrollPositionInfo,
                         old: oldValue,
                         new: self.frame
                     )
@@ -703,7 +704,10 @@ public final class ListView : UIView
         
         if diff.changes.isEmpty == false {
             ListStateObserver.perform(self.stateObserver.onContentChanged, "Content Changed", with: self) { actions in
-                ListStateObserver.ContentChanged(actions: actions)
+                ListStateObserver.ContentChanged(
+                    actions: actions,
+                    positionInfo: self.scrollPositionInfo
+                )
             }
         }
     }
