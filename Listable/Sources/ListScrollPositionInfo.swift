@@ -23,6 +23,9 @@ public struct ListScrollPositionInfo : Equatable {
     /// Which items within the list are currently visible.
     public var visibleItems : Set<AnyIdentifier>
     
+    /// Which items within the list are currently visible, sorted first to last.
+    public var sortedVisibleItems : [AnyIdentifier]
+    
     /// If the first item list is partially visible.
     public var isFirstItemVisible : Bool
     
@@ -92,6 +95,7 @@ public struct ListScrollPositionInfo : Equatable {
     public init(
         scrollView : UIScrollView,
         visibleItems : Set<AnyIdentifier>,
+        sortedVisibleItems : [AnyIdentifier],
         isFirstItemVisible : Bool,
         isLastItemVisible : Bool
     ) {
@@ -102,6 +106,7 @@ public struct ListScrollPositionInfo : Equatable {
         )
         
         self.visibleItems = visibleItems
+        self.sortedVisibleItems = sortedVisibleItems
         
         self.isFirstItemVisible = isFirstItemVisible
         self.isLastItemVisible = isLastItemVisible

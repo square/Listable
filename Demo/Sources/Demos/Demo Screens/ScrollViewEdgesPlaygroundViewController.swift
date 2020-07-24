@@ -49,6 +49,7 @@ final class ScrollViewEdgesPlaygroundViewController : UIViewController, UIScroll
         let info = ListScrollPositionInfo(
             scrollView: scrollView,
             visibleItems: Set(),
+            sortedVisibleItems: [],
             isFirstItemVisible: false,
             isLastItemVisible: false
         )

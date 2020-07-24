@@ -31,6 +31,7 @@ protocol AnyPresentationItemState : AnyObject
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
     
+    var wasRemovedFromContent : Bool { get }
     func wasRemoved()
     
     var isSelected : Bool { get }
@@ -279,8 +280,12 @@ extension PresentationState
             self.storage.state.visibleCell = nil
         }
         
+        private(set) var wasRemovedFromContent: Bool = false
+        
         func wasRemoved()
         {
+            self.wasRemovedFromContent = true
+            
             self.coordination.coordinator.wasRemoved()
         }
         

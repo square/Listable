@@ -38,6 +38,8 @@ public struct Behavior : Equatable
     /// Is paging enabled on the underlying scroll view.
     public var isPagingEnabled : Bool
     
+    public var contentChangedScrollPinning : ContentChangedScrollPinning
+    
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
@@ -47,7 +49,8 @@ public struct Behavior : Equatable
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
-        isPagingEnabled : Bool = false
+        isPagingEnabled : Bool = false,
+        contentChangedScrollPinning : ContentChangedScrollPinning = .none
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
@@ -60,6 +63,8 @@ public struct Behavior : Equatable
         self.canCancelContentTouches = canCancelContentTouches
         self.delaysContentTouches = delaysContentTouches
         self.isPagingEnabled = false
+        
+        self.contentChangedScrollPinning = contentChangedScrollPinning
     }
 }
 
@@ -140,6 +145,21 @@ public extension Behavior
                 case .center: return round((viewHeight - contentHeight) / 2.0)
                 case .bottom: return viewHeight - contentHeight
                 }
+            }
+        }
+    }
+    
+    enum ContentChangedScrollPinning : Equatable {
+        case none
+        case keepFirstVisibleItemPinned
+        case keepLastVisibleItemPinned
+        
+        func itemToPin(_ items : [AnyPresentationItemState]) -> AnyPresentationItemState?
+        {
+            switch self {
+            case .none: return nil
+            case .keepFirstVisibleItemPinned: return items.first
+            case .keepLastVisibleItemPinned: return items.last
             }
         }
     }

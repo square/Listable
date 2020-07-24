@@ -13,11 +13,17 @@ extension ListView
     struct VisibleContent
     {
         private(set) var headerFooters : Set<HeaderFooter> = Set()
+        private(set) var sortedHeaderFooters : [HeaderFooter] = []
+        
         private(set) var items : Set<Item> = Set()
+        private(set) var sortedItems : [Item] = []
         
         mutating func update(with view : ListView)
         {
-            let (newItems, newHeaderFooters) = self.calculateVisibleContent(in: view)
+            let (sortedNewItems, sortedNewHeaderFooters) = self.calculateVisibleContent(in: view)
+            
+            let newItems = Set(sortedNewItems)
+            let newHeaderFooters = Set(sortedNewHeaderFooters)
             
             // Find which items are newly visible (or are no longer visible).
             
@@ -34,6 +40,9 @@ extension ListView
                         
             self.items = newItems
             self.headerFooters = newHeaderFooters
+            
+            self.sortedItems = sortedNewItems
+            self.sortedHeaderFooters = sortedNewHeaderFooters
             
             // Inform any state reader callbacks of the changes.
             
@@ -77,19 +86,19 @@ extension ListView
             }
         }
         
-        private func calculateVisibleContent(in view : ListView) -> (Set<Item>, Set<HeaderFooter>)
+        private func calculateVisibleContent(in view : ListView) -> ([Item], [HeaderFooter])
         {
             let visibleFrame = view.collectionView.bounds
             
             let visibleAttributes = view.collectionViewLayout.visibleLayoutAttributesForElements(in: visibleFrame) ?? []
             
-            var items : Set<Item> = []
-            var headerFooters : Set<HeaderFooter> = []
+            var items : [Item] = []
+            var headerFooters : [HeaderFooter] = []
             
             for item in visibleAttributes {
                 switch item.representedElementCategory {
                 case .cell:
-                    items.insert(Item(
+                    items.append(Item(
                         indexPath: item.indexPath,
                         item: view.storage.presentationState.item(at: item.indexPath)
                     ))
@@ -97,7 +106,7 @@ extension ListView
                 case .supplementaryView:
                     let kind = SupplementaryKind(rawValue: item.representedElementKind!)!
                     
-                    headerFooters.insert(HeaderFooter(
+                    headerFooters.append(HeaderFooter(
                         kind: kind,
                         indexPath: item.indexPath,
                         headerFooter: view.storage.presentationState.headerFooter(of: kind, in: item.indexPath.section)

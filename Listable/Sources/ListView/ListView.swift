@@ -172,13 +172,17 @@ public final class ListView : UIView
     //
     
     public var scrollPositionInfo : ListScrollPositionInfo {
-        let visibleItems = Set(self.visibleContent.items.map { item in
+        
+        let sortedVisibleItems = self.visibleContent.sortedItems.map { item in
             item.item.anyModel.identifier
-        })
+        }
+        
+        let visibleItems = Set(sortedVisibleItems)
         
         return ListScrollPositionInfo(
             scrollView: self.collectionView,
             visibleItems: visibleItems,
+            sortedVisibleItems: sortedVisibleItems,
             isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
             isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
         )
@@ -658,6 +662,8 @@ public final class ListView : UIView
         
         let presentationState = self.storage.presentationState
         
+        let oldVisibleItems = self.visibleContent.sortedItems.map { $0.item }
+        
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
         let visibleSlice = self.newVisibleSlice(to: indexPath)
@@ -694,7 +700,17 @@ public final class ListView : UIView
         self.visibleContent.update(with: self)
         
         // Perform any needed auto scroll actions.
-        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+        let performedAutoscroll = self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+        
+        if performedAutoscroll == false {
+            let remainingOldVisibleItems = oldVisibleItems.filter { $0.wasRemovedFromContent == false }
+            
+            let itemToPin = self.behavior.contentChangedScrollPinning.itemToPin(remainingOldVisibleItems)
+            
+            if let itemToPin = itemToPin {
+                // TODO: Maintain the scroll position.
+            }
+        }
 
         // Update info for new contents.
         
@@ -733,11 +749,11 @@ public final class ListView : UIView
         }
     }
     
-    private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool)
+    private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool) -> Bool
     {
         switch self.autoScrollAction {
         case .none:
-            return
+            return false
             
         case .scrollToItem(let info):
             let wasInserted = addedItems.contains(info.insertedIdentifier)
@@ -748,8 +764,11 @@ public final class ListView : UIView
                 
                 if let destination = info.destination.destination(with: self.content) {
                     self.scrollTo(item: destination, position: info.position, animated: bothAnimate)
+                    return true
                 }
             }
+            
+            return false
         }
     }
 
