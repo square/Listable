@@ -154,7 +154,7 @@ public extension Behavior
         case keepFirstVisibleItemPinned
         case keepLastVisibleItemPinned
         
-        func itemToPin(_ items : [AnyPresentationItemState]) -> AnyPresentationItemState?
+        func itemToPin(_ items : [ListView.VisibleContent.Item]) -> ListView.VisibleContent.Item?
         {
             switch self {
             case .none: return nil

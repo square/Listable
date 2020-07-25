@@ -112,6 +112,11 @@ public struct ListScrollPositionInfo : Equatable {
         self.isLastItemVisible = isLastItemVisible
     }
     
+    public struct Item : Equatable {
+        var identifier : AnyIdentifier
+        var frame : CGRect
+    }
+    
     struct ScrollViewState : Equatable
     {
         var bounds : CGRect

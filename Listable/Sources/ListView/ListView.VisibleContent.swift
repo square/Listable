@@ -100,7 +100,8 @@ extension ListView
                 case .cell:
                     items.append(Item(
                         indexPath: item.indexPath,
-                        item: view.storage.presentationState.item(at: item.indexPath)
+                        item: view.storage.presentationState.item(at: item.indexPath),
+                        frame: item.frame
                     ))
                     
                 case .supplementaryView:
@@ -149,6 +150,7 @@ extension ListView.VisibleContent
     {
         let indexPath : IndexPath
         let item : AnyPresentationItemState
+        let frame : CGRect
         
         static func == (lhs : Self, rhs : Self) -> Bool
         {

@@ -662,7 +662,7 @@ public final class ListView : UIView
         
         let presentationState = self.storage.presentationState
         
-        let oldVisibleItems = self.visibleContent.sortedItems.map { $0.item }
+        let oldVisibleItems = self.visibleContent.sortedItems
         
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
@@ -703,11 +703,13 @@ public final class ListView : UIView
         let performedAutoscroll = self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
         
         if performedAutoscroll == false {
-            let remainingOldVisibleItems = oldVisibleItems.filter { $0.wasRemovedFromContent == false }
+            let remainingOldVisibleItems = oldVisibleItems.filter { $0.item.wasRemovedFromContent == false }
             
             let itemToPin = self.behavior.contentChangedScrollPinning.itemToPin(remainingOldVisibleItems)
             
             if let itemToPin = itemToPin {
+                collectionView.setContentOffset(<#T##contentOffset: CGPoint##CGPoint#>, animated: true)
+                
                 // TODO: Maintain the scroll position.
             }
         }
