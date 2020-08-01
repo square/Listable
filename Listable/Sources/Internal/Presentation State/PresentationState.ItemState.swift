@@ -135,11 +135,13 @@ extension PresentationState
                     return
                 }
                 
+                let isEquivalent = self.model.content.isEquivalent(to: new.content)
+                                
                 self.setNew(item: new, reason: .updateFromItemCoordinator)
                 
                 delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
                 
-                self.applyToVisibleCell(reason: .wasUpdated(.init(animated: true)))
+                self.applyToVisibleCell(reason: .wasUpdated(.init(animated: isEquivalent == false)))
             }
             
             self.storage.didSetState = { [weak self] old, new in

@@ -395,6 +395,7 @@ public enum ItemSelectionStyle : Equatable
 public enum ItemUpdateStyle : Equatable {
     
     case none
+    case fade(TimeInterval)
     case transition(TimeInterval, TransitionType)
     
     public enum TransitionType : Equatable {
@@ -432,6 +433,14 @@ public enum ItemUpdateStyle : Equatable {
         case .none:
             updates()
             completion(true)
+            
+        case .fade(let duration):
+            Self.transition(duration, .crossDissolve).apply(
+                to: view,
+                animated: animated,
+                updates: updates,
+                completion: completion
+            )
             
         case .transition(let duration, let type):
             UIView.transition(

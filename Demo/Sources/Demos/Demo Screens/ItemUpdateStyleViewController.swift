@@ -26,6 +26,10 @@ final class ItemUpdateStyleViewController : ListViewController {
         list.layout = .demoLayout
         
         list("section") { section in
+            section += Item(DemoItem(text: "\(count)", identifier: "row"), updateStyle: .transition(0.3, .flipFromBottom))
+            section += Item(DemoItem(text: "\(count)", identifier: "row"), updateStyle: .transition(0.2, .crossDissolve))
+            section += Item(DemoItem(text: "\(count)", identifier: "row"), updateStyle: .transition(0.2, .crossDissolve))
+            section += Item(DemoItem(text: "\(count)", identifier: "row"), updateStyle: .transition(0.2, .crossDissolve))
             section += Item(DemoItem(text: "\(count)", identifier: "row"), updateStyle: .transition(0.2, .crossDissolve))
         }
     }
