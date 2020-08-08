@@ -148,7 +148,7 @@ public struct ListProperties
     public typealias Build = (inout ListProperties) -> ()
     
     /// An instance of `ListProperties` with sensible default values.
-    public static func `default`(with builder : Build) -> Self {
+    public static func `default`(with builder : Build = { _ in }) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             layout: .list(),
