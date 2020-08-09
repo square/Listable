@@ -16,16 +16,23 @@ extension Appearance
 {
     static var demoAppearance = Appearance {
         $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-                    
-        $0.list.layout = .init(
-            padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
-            width: .atMost(600.0),
-            interSectionSpacingWithNoFooter: 20.0,
-            interSectionSpacingWithFooter: 20.0,
-            sectionHeaderBottomSpacing: 15.0,
-            itemSpacing: 10.0,
-            itemToSectionFooterSpacing: 10.0
-        )
+    }
+}
+
+extension LayoutDescription
+{
+    static var demoLayout : Self {
+        .list {
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                width: .atMost(600.0),
+                interSectionSpacingWithNoFooter: 20.0,
+                interSectionSpacingWithFooter: 20.0,
+                sectionHeaderBottomSpacing: 15.0,
+                itemSpacing: 10.0,
+                itemToSectionFooterSpacing: 10.0
+            )
+        }
     }
 }
 
@@ -88,7 +95,7 @@ struct DemoItem : BlueprintItemContent, Equatable
     {
         Label(text: self.text) {
             $0.font = .systemFont(ofSize: 16.0, weight: .medium)
-            $0.color = .darkGray
+            $0.color = info.state.isActive ? .white : .darkGray
         }
         .inset(horizontal: 15.0, vertical: 10.0)
     }
@@ -108,6 +115,7 @@ struct DemoItem : BlueprintItemContent, Equatable
             /// The `isHighlighted` check allows us to differentiate between highlighted and selected appearance.
             /// If you do not want to differ the appearance of highlighted vs. selected, you can omit this check.
             backgroundColor: info.state.isHighlighted ? .white(0.95) : .white(0.90),
+            
             cornerStyle: .rounded(radius: 8.0),
             shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )

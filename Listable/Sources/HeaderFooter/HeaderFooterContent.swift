@@ -6,6 +6,10 @@
 //
 
 
+public typealias HeaderContent = HeaderFooterContent
+public typealias FooterContent = HeaderFooterContent
+
+
 public protocol HeaderFooterContent
 {    
     //

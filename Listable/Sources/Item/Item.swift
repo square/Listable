@@ -23,6 +23,7 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
     var sizing : Sizing { get set }
     var layout : ItemLayout { get set }
     var selectionStyle : ItemSelectionStyle { get set }
+    var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }
     var swipeActions : SwipeActionsConfiguration? { get set }
     
     var reordering : Reordering? { get set }
@@ -55,21 +56,16 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var selectionStyle : ItemSelectionStyle
     
+    public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
+    
     public var swipeActions : SwipeActionsConfiguration?
 
     public var reordering : Reordering?
         
-    public typealias OnSelect = (Content) -> ()
-    public var onSelect : OnSelect?
-    
-    public typealias OnDeselect = (Content) -> ()
-    public var onDeselect : OnDeselect?
-    
-    public typealias OnDisplay = (Content) -> ()
-    public var onDisplay : OnDisplay?
-    
-    public typealias OnEndDisplay = (Content) -> ()
-    public var onEndDisplay : OnEndDisplay?
+    public var onSelect : OnSelect.Callback?
+    public var onDeselect : OnDeselect.Callback?
+    public var onDisplay : OnDisplay.Callback?
+    public var onEndDisplay : OnEndDisplay.Callback?
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
     
@@ -96,14 +92,15 @@ public struct Item<Content:ItemContent> : AnyItem
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
         reordering : Reordering? = nil,
-        onDisplay : OnDisplay? = nil,
-        onEndDisplay : OnEndDisplay? = nil,
-        onSelect : OnSelect? = nil,
-        onDeselect : OnDeselect? = nil
+        onDisplay : OnDisplay.Callback? = nil,
+        onEndDisplay : OnEndDisplay.Callback? = nil,
+        onSelect : OnSelect.Callback? = nil,
+        onDeselect : OnDeselect.Callback? = nil
         )
-    {
+    {        
         self.content = content
                 
         if let sizing = sizing {
@@ -111,7 +108,7 @@ public struct Item<Content:ItemContent> : AnyItem
         } else if let sizing = content.defaultItemProperties.sizing {
             self.sizing = sizing
         } else {
-            self.sizing = .thatFitsWith(.init(.atLeast(.default)))
+            self.sizing = .thatFits(.init(.atLeast(.default)))
         }
         
         if let layout = layout {
@@ -128,6 +125,12 @@ public struct Item<Content:ItemContent> : AnyItem
             self.selectionStyle = selectionStyle
         } else {
             self.selectionStyle = .notSelectable
+        }
+        
+        if let insertAndRemoveAnimations = insertAndRemoveAnimations {
+            self.insertAndRemoveAnimations = insertAndRemoveAnimations
+        } else if let insertAndRemoveAnimations = content.defaultItemProperties.insertAndRemoveAnimations {
+            self.insertAndRemoveAnimations = insertAndRemoveAnimations
         }
         
         if let swipeActions = swipeActions {
@@ -148,7 +151,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
         
-        self.identifier = self.content.identifier.toAny
+        self.identifier = self.content.identifier
     }
     
     // MARK: AnyItemConvertible
@@ -185,6 +188,46 @@ public struct Item<Content:ItemContent> : AnyItem
 }
 
 
+public extension Item
+{
+    /// Value passed to the `onSelect` callback for `Item`.
+    struct OnSelect
+    {
+        public typealias Callback = (OnSelect) -> ()
+        
+        public var item : Item
+    }
+    
+    /// Value passed to the `onDeselect` callback for `Item`.
+    struct OnDeselect
+    {
+        public typealias Callback = (OnDeselect) -> ()
+
+        public var item : Item
+    }
+    
+    /// Value passed to the `onDisplay` callback for `Item`.
+    struct OnDisplay
+    {
+        public typealias Callback = (OnDisplay) -> ()
+
+        public var item : Item
+        
+        public var isFirstDisplay : Bool
+    }
+    
+    /// Value passed to the `onEndDisplay` callback for `Item`.
+    struct OnEndDisplay
+    {
+        public typealias Callback = (OnEndDisplay) -> ()
+
+        public var item : Item
+        
+        public var isFirstEndDisplay : Bool
+    }
+}
+
+
 /// Allows specifying default properties to apply to an item when it is initialized,
 /// if those values are not provided to the initializer.
 /// Only non-nil values are used – if you do not want to provide a default value,
@@ -202,17 +245,21 @@ public struct DefaultItemProperties<Content:ItemContent>
     
     public var selectionStyle : ItemSelectionStyle?
     
+    public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
+    
     public var swipeActions : SwipeActionsConfiguration?
     
     public init(
         sizing : Sizing? = nil,
         layout : ItemLayout? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil
     ) {
         self.sizing = sizing
         self.layout = layout
         self.selectionStyle = selectionStyle
+        self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.swipeActions = swipeActions
     }
 }
@@ -223,7 +270,7 @@ extension Item : SignpostLoggable
     var signpostInfo : SignpostLoggingInfo {
         SignpostLoggingInfo(
             identifier: self.debuggingIdentifier,
-            instanceIdentifier: nil
+            instanceIdentifier: self.identifier.debugDescription
         )
     }
 }
@@ -286,7 +333,7 @@ public struct ItemLayout : Equatable
 }
 
 
-public struct ItemState : Equatable
+public struct ItemState : Hashable
 {
     public init(isSelected : Bool, isHighlighted : Bool)
     {
@@ -300,8 +347,16 @@ public struct ItemState : Equatable
         self.isHighlighted = cell.isHighlighted
     }
     
+    /// If the item is currently selected.
     public var isSelected : Bool
+    
+    /// If the item is currently highlighted.
     public var isHighlighted : Bool
+    
+    /// If the item is either selected or highlighted.
+    public var isActive : Bool {
+        self.isSelected || self.isHighlighted
+    }
 }
 
 
@@ -315,7 +370,7 @@ public enum ItemSelectionStyle : Equatable
     case tappable
     
     /// The item is persistently selectable. Once the user lifts their finger, the item is maintained.
-    case selectable(isSelected : Bool)
+    case selectable(isSelected : Bool = false)
     
     var isSelected : Bool {
         switch self {

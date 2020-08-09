@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct ArrayDiff<Element>
+struct ArrayDiff<Element, Identifier:Hashable>
 {
     var added : [Added]
     var removed : [Removed]
@@ -18,6 +18,8 @@ struct ArrayDiff<Element>
     var noChange : [NoChange]
     
     var changeCount : Int
+    
+    let usedFastPath : Bool
     
     struct Added
     {
@@ -60,11 +62,36 @@ struct ArrayDiff<Element>
     init(
         old : [Element],
         new : [Element],
-        identifierProvider : (Element) -> AnyHashable,
+        identifierProvider : (Element) -> Identifier,
         movedHint : (Element, Element) -> Bool,
         updated : (Element, Element) -> Bool
         )
     {
+        //
+        // Fast Path: If the only changes were updates, bail.
+        // This allows us to save ~90% of the time of an entire diff in many cases.
+        //
+        
+        if let (updated, noChange) = Self.fastPastDiff(old: old, new: new, identifierProvider: identifierProvider, updated: updated) {
+            
+            self.added = []
+            self.removed = []
+            self.moved = []
+            self.updated = updated
+            self.noChange = noChange
+            
+            self.changeCount = updated.count
+            self.usedFastPath = true
+            
+            return
+        }
+        
+        //
+        // Normal Path: There are inserts, removals, or moves.
+        //
+        
+        self.usedFastPath = false
+        
         // Create diffable collections for fast lookup.
         
         let old = DiffableCollection(elements: old, identifierProvider)
@@ -144,8 +171,8 @@ struct ArrayDiff<Element>
         self.removed.sort { $0.oldIndex > $1.oldIndex }
         
         self.moved.sort { $0.new.newIndex > $1.new.newIndex }
-        self.updated.sort { $0.newIndex > $1.newIndex }
-        self.noChange.sort { $0.newIndex > $1.newIndex }
+        self.updated.sort { $0.newIndex < $1.newIndex }
+        self.noChange.sort { $0.newIndex < $1.newIndex }
         
         self.changeCount = self.added.count
             + self.removed.count
@@ -153,12 +180,45 @@ struct ArrayDiff<Element>
             + self.updated.count
     }
     
+    static func fastPastDiff(
+        old : [Element],
+        new : [Element],
+        identifierProvider : (Element) -> Identifier,
+        updated : (Element, Element) -> Bool
+    ) -> ([Updated], [NoChange])?
+    {
+        guard old.count == new.count else {
+            return nil
+        }
+        
+        var updates = [Updated]()
+        
+        var notChanged = [NoChange]()
+        
+        for index in 0..<new.count {
+            let old = old[index]
+            let new = new[index]
+            
+            guard identifierProvider(old) == identifierProvider(new) else {
+                return nil
+            }
+            
+            if updated(old, new) {
+                updates.append(Updated(oldIndex: index, newIndex: index, old: old, new: new))
+            } else {
+                notChanged.append(NoChange(oldIndex: index, newIndex: index, old: old, new: new))
+            }
+        }
+        
+        return (updates, notChanged)
+    }
+    
     private final class Pair
     {
-        let new : DiffContainer<Element>
-        let old : DiffContainer<Element>
+        let new : DiffContainer<Element, Identifier>
+        let old : DiffContainer<Element, Identifier>
         
-        let identifier : UniqueIdentifier<Element>
+        let identifier : UniqueIdentifier<Element, Identifier>
         
         let distance : Int
         
@@ -166,9 +226,9 @@ struct ArrayDiff<Element>
         let updated : Bool
         
         init(
-            new : DiffContainer<Element>,
-            old : DiffContainer<Element>,
-            identifier : UniqueIdentifier<Element>,
+            new : DiffContainer<Element, Identifier>,
+            old : DiffContainer<Element, Identifier>,
+            identifier : UniqueIdentifier<Element, Identifier>,
             distance : Int,
             moveHinted : Bool,
             updated : Bool
@@ -186,8 +246,8 @@ struct ArrayDiff<Element>
         }
         
         static func pairs(
-            withNew new : DiffableCollection<Element>,
-            old : DiffableCollection<Element>,
+            withNew new : DiffableCollection<Element, Identifier>,
+            old : DiffableCollection<Element, Identifier>,
             movedHint : (Element, Element) -> Bool,
             updated : (Element, Element) -> Bool
             ) -> [Pair]
@@ -325,17 +385,17 @@ extension ArrayDiff
 }
 
 
-private class DiffContainer<Value>
+private class DiffContainer<Value, Identifier:Hashable>
 {
-    let identifier : UniqueIdentifier<Value>
+    let identifier : UniqueIdentifier<Value, Identifier>
     let value : Value
     let index : Int
     
     init(
         value : Value,
         index : Int,
-        identifierProvider : (Value) -> AnyHashable,
-        identifierFactory : UniqueIdentifier<Value>.Factory
+        identifierProvider : (Value) -> Identifier,
+        identifierFactory : UniqueIdentifier<Value, Identifier>.Factory
         )
     {
         self.value = value
@@ -344,9 +404,9 @@ private class DiffContainer<Value>
         self.identifier = identifierFactory.identifier(for: identifierProvider(self.value))
     }
     
-    static func containers(with elements : [Value], identifierProvider : (Value) -> AnyHashable) -> [DiffContainer]
+    static func containers(with elements : [Value], identifierProvider : (Value) -> Identifier) -> [DiffContainer]
     {
-        let identifierFactory = UniqueIdentifier<Value>.Factory()
+        let identifierFactory = UniqueIdentifier<Value, Identifier>.Factory()
         identifierFactory.reserveCapacity(elements.count)
         
         return elements.mapWithIndex { index, _, value in
@@ -361,14 +421,14 @@ private class DiffContainer<Value>
 }
 
 
-private final class UniqueIdentifier<Type> : Hashable
+private struct UniqueIdentifier<Type, Identifier:Hashable> : Hashable
 {
-    private let base : AnyHashable
+    private let base : Identifier
     private let modifier : Int
     
     private let hash : Int
     
-    init(base : AnyHashable, modifier : Int)
+    init(base : Identifier, modifier : Int)
     {
         self.base = base
         self.modifier = modifier
@@ -391,14 +451,14 @@ private final class UniqueIdentifier<Type> : Hashable
     
     final class Factory
     {
-        private var counts : [AnyHashable:Int] = [:]
+        private var counts : [Identifier:Int] = [:]
         
         func reserveCapacity(_ minimumCapacity : Int)
         {
             self.counts.reserveCapacity(minimumCapacity)
         }
         
-        func identifier(for base : AnyHashable) -> UniqueIdentifier
+        func identifier(for base : Identifier) -> UniqueIdentifier
         {
             let count = self.counts[base, default:1]
             
@@ -409,12 +469,12 @@ private final class UniqueIdentifier<Type> : Hashable
     }
 }
 
-private final class DiffableCollection<Value>
+private final class DiffableCollection<Value, Identifier:Hashable>
 {
-    private(set) var containers : [DiffContainer<Value>]
-    private var containersByIdentifier : [UniqueIdentifier<Value>:DiffContainer<Value>]
+    private(set) var containers : [DiffContainer<Value, Identifier>]
+    private var containersByIdentifier : [UniqueIdentifier<Value, Identifier>:DiffContainer<Value, Identifier>]
     
-    init(elements : [Value], _ identifierProvider : (Value) -> AnyHashable)
+    init(elements : [Value], _ identifierProvider : (Value) -> Identifier)
     {
         self.uniqueIdentifierIndexes.reserveCapacity(elements.count)
         
@@ -427,24 +487,24 @@ private final class DiffableCollection<Value>
     
     // MARK: Querying The Collection
     
-    func index(of identifier : UniqueIdentifier<Value>) -> Int
+    func index(of identifier : UniqueIdentifier<Value, Identifier>) -> Int
     {
         self.generateIndexLookupsIfNeeded()
         
         return self.uniqueIdentifierIndexes[identifier]!
     }
     
-    func contains(identifier : UniqueIdentifier<Value>) -> Bool
+    func contains(identifier : UniqueIdentifier<Value, Identifier>) -> Bool
     {
         return self.containersByIdentifier[identifier] != nil
     }
     
-    func container(for identifier : UniqueIdentifier<Value>) -> DiffContainer<Value>
+    func container(for identifier : UniqueIdentifier<Value, Identifier>) -> DiffContainer<Value, Identifier>
     {
         return self.containersByIdentifier[identifier]!
     }
     
-    func difference(from other : DiffableCollection) -> [DiffContainer<Value>]
+    func difference(from other : DiffableCollection) -> [DiffContainer<Value, Identifier>]
     {
         return self.containers.compactMap { element in
             if other.contains(identifier: element.identifier) == false {
@@ -455,7 +515,7 @@ private final class DiffableCollection<Value>
         }
     }
     
-    func subtractDifference(from other : DiffableCollection) -> [DiffContainer<Value>]
+    func subtractDifference(from other : DiffableCollection) -> [DiffContainer<Value, Identifier>]
     {
         let difference = self.difference(from: other)
         
@@ -480,7 +540,7 @@ private final class DiffableCollection<Value>
         self.resetIndexLookups()
     }
     
-    func remove(containers : [DiffContainer<Value>])
+    func remove(containers : [DiffContainer<Value, Identifier>])
     {
         containers.forEach {
             self.containersByIdentifier.removeValue(forKey: $0.identifier)
@@ -499,7 +559,7 @@ private final class DiffableCollection<Value>
     
     // MARK: Private Methods
     
-    private var uniqueIdentifierIndexes : [UniqueIdentifier<Value>:Int] = [:]
+    private var uniqueIdentifierIndexes : [UniqueIdentifier<Value, Identifier>:Int] = [:]
     
     private func resetIndexLookups()
     {

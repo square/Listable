@@ -45,8 +45,8 @@ final class SwiftUIListViewController : UIViewController
     required init?(coder: NSCoder) { fatalError() }
     
     var body : some View {
-        ListableList { list in
-            list += Listable.Section(identifier: "section") { section in
+        ListableView { list in
+            list("section") { section in
                 
                 section += SwiftUIDemoItem()
                 section += SwiftUIDemoItem()

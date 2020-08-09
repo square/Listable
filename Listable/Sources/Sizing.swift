@@ -27,10 +27,8 @@ public enum Sizing : Hashable
     case fixed(width : CGFloat = 0.0, height : CGFloat = 0.0)
     
     /// Sizes the item by calling `sizeThatFits` on its underlying view type.
-    case thatFits
-    
-    /// Sizes the item by calling `sizeThatFits` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
     ///
     /// Example
     /// -------
@@ -39,18 +37,16 @@ public enum Sizing : Hashable
     ///
     /// ```
     /// // Enforces that the size is at least the default size of the list.
-    /// .thatFitsWith(.init(.atLeast(.default)))
+    /// .thatFits(.init(.atLeast(.default)))
     ///
     ///  // Enforces that the size is at least 50 points.
-    /// .thatFitsWith(.init(.atLeast(.fixed(50))))
+    /// .thatFits(.init(.atLeast(.fixed(50))))
     /// ```
-    case thatFitsWith(Constraint)
-    
-    /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
-    case autolayout
+    case thatFits(Constraint = .noConstraint)
     
     /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
     ///
     /// Example
     /// -------
@@ -59,60 +55,41 @@ public enum Sizing : Hashable
     ///
     /// ```
     /// // Enforces that the size is at least the default size of the list.
-    /// .autolayoutWith(.init(.atLeast(.default)))
+    /// .autolayout(.init(.atLeast(.default)))
     ///
     ///  // Enforces that the size is at least 50 points.
-    /// .autolayoutWith(.init(.atLeast(.fixed(50))))
+    /// .autolayout(.init(.atLeast(.fixed(50))))
     /// ```
-    case autolayoutWith(Constraint)
+    case autolayout(Constraint = .noConstraint)
     
     /// Measures the given view with the provided options.
     /// The returned value is `ceil()`'d to round up to the next full integer value.
-    func measure(with view : UIView, in sizeConstraint : CGSize, layoutDirection : LayoutDirection, defaultSize : CGSize) -> CGSize
+    func measure(with view : UIView, info : MeasureInfo) -> CGSize
     {
         let value : CGSize = {
             switch self {
             case .default:
-                return defaultSize
+                return info.defaultSize
                 
             case .fixed(let width, let height):
                 return CGSize(width: width, height: height)
                 
-            case .thatFits:
-                return Sizing.thatFitsWith(.noConstraint).measure(
-                    with: view,
-                    in: sizeConstraint,
-                    layoutDirection: layoutDirection,
-                    defaultSize: defaultSize
-                )
+            case .thatFits(let constraint):
+                let size = view.sizeThatFits(info.sizeConstraint)
                 
-            case .thatFitsWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                let size = view.sizeThatFits(fittingSize)
+                return constraint.clamp(size, with: info.defaultSize)
                 
-                return constraint.clamp(size, with: defaultSize)
-                
-            case .autolayout:
-                return Sizing.autolayoutWith(.noConstraint).measure(
-                    with: view,
-                    in: sizeConstraint,
-                    layoutDirection: layoutDirection,
-                    defaultSize: defaultSize
-                )
-                
-            case .autolayoutWith(let constraint):
-                let fittingSize = layoutDirection.size(for: sizeConstraint)
-                
+            case .autolayout(let constraint):
                 let size : CGSize
                 
-                switch layoutDirection {
+                switch info.direction {
                 case .vertical:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
                 case .horizontal:
-                    size = view.systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
+                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
                 }
                 
-                return constraint.clamp(size, with: defaultSize)
+                return constraint.clamp(size, with: info.defaultSize)
             }
         }()
         
@@ -126,6 +103,23 @@ public enum Sizing : Hashable
 
 public extension Sizing
 {
+    struct MeasureInfo
+    {
+        var sizeConstraint : CGSize
+        var defaultSize : CGSize
+        var direction : LayoutDirection
+        
+        init(
+            sizeConstraint: CGSize,
+            defaultSize: CGSize,
+            direction: LayoutDirection
+        ) {
+            self.sizeConstraint = sizeConstraint
+            self.defaultSize = defaultSize
+            self.direction = direction
+        }
+    }
+    
     struct Constraint : Hashable
     {
         public var width : Axis
@@ -229,12 +223,25 @@ public enum CustomWidth : Equatable
         }
     }
     
-    public func position(with viewSize : CGSize, defaultWidth : CGFloat, layoutDirection : LayoutDirection) -> Position
+    public func position(with viewSize : CGSize, defaultWidth : CGFloat) -> Position
     {
         switch self {
-        case .default: return Position(origin: round((layoutDirection.width(for: viewSize) - defaultWidth) / 2.0), width: defaultWidth)
-        case .fill: return Position(origin: 0.0, width: layoutDirection.width(for: viewSize))
-        case .custom(let custom): return custom.position(with: viewSize, layoutDirection: layoutDirection)
+        case .default:
+            return Position(
+                origin: round((viewSize.width - defaultWidth) / 2.0),
+                width: defaultWidth
+            )
+            
+        case .fill:
+            return Position(
+                origin: 0.0,
+                width: viewSize.width
+            )
+            
+        case .custom(let custom):
+            return custom.position(
+                with: viewSize
+            )
         }
     }
     
@@ -255,20 +262,19 @@ public enum CustomWidth : Equatable
             self.alignment = alignment
         }
         
-        public func position(with viewSize : CGSize, layoutDirection : LayoutDirection) -> Position
+        public func position(with viewSize : CGSize) -> Position
         {
             let width = ListAppearance.Layout.width(
-                with: layoutDirection.width(for: viewSize),
+                with: viewSize.width,
                 padding: self.padding,
                 constraint: self.width
             )
             
             return Position(
                 origin: self.alignment.originWith(
-                    parentWidth: layoutDirection.width(for: viewSize),
+                    parentWidth: viewSize.width,
                     width: width,
-                    padding: self.padding,
-                    layoutDirection: layoutDirection
+                    padding: self.padding
                 ),
                 width: width
             )
@@ -281,7 +287,7 @@ public enum CustomWidth : Equatable
         case center
         case right
         
-        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding, layoutDirection : LayoutDirection) -> CGFloat
+        public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding) -> CGFloat
         {
             switch self {
             case .left:

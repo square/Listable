@@ -21,14 +21,16 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.appearance.list.layout.itemSpacing = 10.0
+        self.listView.layout = .list {
+            $0.layout.itemSpacing = 10.0
+        }
         
-        self.listView.setContent { list in
+        self.listView.configure { list in
             list.content.overscrollFooter = HeaderFooter(
                 DemoHeader(title: "Thanks for using Listable!!")
             )
             
-            list += Section(identifier: "section") { section in
+            list += Section("section") { section in
                 section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
                 section += Item(TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))
@@ -46,12 +48,25 @@ final class KeyboardTestingViewController : UIViewController
             }
         }
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard))
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard)),
+            UIBarButtonItem(title: "Toggle Mode", style: .plain, target: self, action: #selector(toggleMode)),
+        ]
     }
     
     @objc func dismissKeyboard()
     {
         self.view.endEditing(true)
+    }
+    
+    @objc func toggleMode()
+    {
+        switch self.listView.behavior.keyboardAdjustmentMode {
+        case .none:
+            self.listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
+        case .adjustsWhenVisible:
+            self.listView.behavior.keyboardAdjustmentMode = .none
+        }
     }
 }
 

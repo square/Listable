@@ -32,7 +32,7 @@ public final class ListView : UIView
         
         let initialLayout = CollectionViewLayout(
             delegate: self.delegate,
-            layoutType: .list,
+            layoutDescription: .list(),
             appearance: self.appearance,
             behavior: self.behavior
         )
@@ -47,6 +47,8 @@ public final class ListView : UIView
         self.visibleContent = VisibleContent()
 
         self.keyboardObserver = KeyboardObserver()
+        
+        self.stateObserver = ListStateObserver()
         
         self.collectionView.isPrefetchingEnabled = false
                 
@@ -67,7 +69,7 @@ public final class ListView : UIView
         self.delegate.presentationState = self.storage.presentationState
         
         self.keyboardObserver.delegate = self
-        
+                
         // Register supplementary views.
         
         SupplementaryKind.allCases.forEach {
@@ -109,9 +111,10 @@ public final class ListView : UIView
     let storage : Storage
     let collectionView : CollectionView
     let delegate : Delegate
+    let layoutManager : LayoutManager
     
-    var layout : CollectionViewLayout {
-        self.layoutManager.current
+    var collectionViewLayout : CollectionViewLayout {
+        self.layoutManager.collectionViewLayout
     }
     
     private(set) var visibleContent : VisibleContent
@@ -119,9 +122,7 @@ public final class ListView : UIView
     //
     // MARK: Private Properties
     //
-        
-    private let layoutManager : LayoutManager
-    
+            
     private var sourcePresenter : AnySourcePresenter
 
     private var autoScrollAction : AutoScrollAction
@@ -167,7 +168,7 @@ public final class ListView : UIView
     {
         // Appearance
         
-        self.layout.appearance = self.appearance
+        self.collectionViewLayout.appearance = self.appearance
         self.backgroundColor = self.appearance.backgroundColor
         
         // Row Sizing
@@ -176,10 +177,7 @@ public final class ListView : UIView
         
         // Scroll View
         
-        self.updateCollectionViewBounce()
-        
-        self.collectionView.showsHorizontalScrollIndicator = self.appearance.showsScrollIndicators
-        self.collectionView.showsVerticalScrollIndicator = self.appearance.showsScrollIndicators
+        self.updateCollectionViewWithCurrentLayoutProperties()
     }
     
     //
@@ -199,19 +197,18 @@ public final class ListView : UIView
         )
     }
     
-    public var layoutType : ListLayoutType {
-        get {
-            self.layout.layoutType
-        }
-        
-        set {
-            self.set(layoutType: newValue)
-        }
+    public var layout : LayoutDescription {
+        get { self.collectionViewLayout.layoutDescription }
+        set { self.set(layout: newValue, animated: false) }
+    }
+
+    public func set(layout : LayoutDescription, animated : Bool = false, completion : @escaping () -> () = {})
+    {
+        self.layoutManager.set(layout: layout, animated: animated, completion: completion)
     }
     
-    public func set(layoutType : ListLayoutType, animated : Bool = false, completion : @escaping () -> () = {})
-    {
-        self.layoutManager.set(layoutType: layoutType, animated: animated, completion: completion)
+    public var contentSize : CGSize {
+        return self.collectionViewLayout.layout.content.contentSize
     }
     
     //
@@ -230,21 +227,46 @@ public final class ListView : UIView
     
     private func applyBehavior()
     {
-        self.layout.behavior = self.behavior
+        self.collectionViewLayout.behavior = self.behavior
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
-        // Scroll View
+        self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
+        self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
         
-        self.updateCollectionViewBounce()
+        self.updateCollectionViewWithCurrentLayoutProperties()
+        self.updateCollectionViewSelectionMode()
+        
+        self.setContentInsetWithKeyboardFrame()
     }
     
-    private func updateCollectionViewBounce()
+    private func updateCollectionViewWithCurrentLayoutProperties()
     {
-        self.collectionView.setAlwaysBounce(
-            self.behavior.underflow.alwaysBounce,
-            direction: self.appearance.direction
+        self.collectionViewLayout.layout.scrollViewProperties.apply(
+            to: self.collectionView,
+            behavior: self.behavior,
+            direction: self.collectionViewLayout.layout.direction,
+            showsScrollIndicators: self.appearance.showsScrollIndicators
         )
+    }
+    
+    private func updateCollectionViewSelectionMode()
+    {
+        let view = self.collectionView
+        
+        switch self.behavior.selectionMode {
+        case .none:
+            view.allowsSelection = false
+            view.allowsMultipleSelection = false
+            
+        case .single:
+            view.allowsSelection = true
+            view.allowsMultipleSelection = false
+            
+        case .multiple:
+            view.allowsSelection = true
+            view.allowsMultipleSelection = true
+        }
     }
     
     //
@@ -265,11 +287,33 @@ public final class ListView : UIView
     {
         let insets = self.scrollInsets.insets(
             with: self.collectionView.contentInset,
-            layoutDirection: self.appearance.direction
+            layoutDirection: self.collectionViewLayout.layout.direction
         )
 
         self.collectionView.contentInset = insets
         self.collectionView.scrollIndicatorInsets = insets
+    }
+    
+    //
+    // MARK: List State Observation
+    //
+    
+    /// A state observer allows you to recieve callbacks when varying types
+    /// of changes occur within the list's state, such as scroll events,
+    /// content change events, frame change events, or item visibility changes.
+    ///
+    /// See the `ListStateObserver` for more info.
+    public var stateObserver : ListStateObserver
+    
+    /// Allows registering a `ListActions` object associated
+    /// with the list view that allows you to perform actions such as scrolling to
+    /// items, or controlling view appearance transitions.
+    private var actions : ListActions? {
+        didSet {
+            oldValue?.listView = nil
+            
+            self.actions?.listView = self
+        }
     }
     
     //
@@ -292,17 +336,6 @@ public final class ListView : UIView
     /// If the item is contained in the list, true is returned. If it is not, false is returned.
     ///
     @discardableResult
-    public func scrollTo<Content:ItemContent>(item : Identifier<Content>, position : ItemScrollPosition, animated : Bool = false) -> Bool
-    {
-        return self.scrollTo(item: item.toAny, position: position, animated: animated)
-    }
-    
-    ///
-    /// Scrolls to the item with the provided identifier, with the provided positioning.
-    /// If there is more than one item with the same identifier, the list scrolls to the first.
-    /// If the item is contained in the list, true is returned. If it is not, false is returned.
-    ///
-    @discardableResult
     public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
     {
         // Make sure the item identifier is valid.
@@ -314,7 +347,7 @@ public final class ListView : UIView
         return self.preparePresentationStateForScroll(to: toIndexPath) {
                         
             let isAlreadyVisible: Bool = {
-                let frame = self.layout.frameForItem(at: toIndexPath)
+                let frame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
                 return self.collectionView.contentFrame.contains(frame)
             }()
@@ -336,8 +369,12 @@ public final class ListView : UIView
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
     public func scrollToTop(animated : Bool = false) -> Bool {
-        self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
-            self.collectionView.scrollRectToVisible(.zero, animated: animated)
+        
+        // The rect we scroll to must have an area – an empty rect will result in no scrolling.
+        let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
+        
+        return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
+            self.collectionView.scrollRectToVisible(rect, animated: animated)
         }
     }
 
@@ -354,7 +391,7 @@ public final class ListView : UIView
         // Perform scrolling.
 
         return self.preparePresentationStateForScroll(to: toIndexPath)  {
-            let contentHeight = self.layout.collectionViewContentSize.height
+            let contentHeight = self.collectionViewLayout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.contentFrame.height
 
             guard contentHeight > contentFrameHeight else {
@@ -375,23 +412,6 @@ public final class ListView : UIView
     public var content : Content {
         get { return self.storage.allContent }
         set { self.setContent(animated: false, newValue) }
-    }
-    
-    public func setContent(with builder : ListDescription.Build)
-    {
-        let description = ListDescription(
-            animatesChanges: true,
-            layoutType: self.layoutType,
-            appearance: self.appearance,
-            behavior: self.behavior,
-            autoScrollAction: self.autoScrollAction,
-            scrollInsets: self.scrollInsets,
-            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
-            debuggingIdentifier: self.debuggingIdentifier,
-            build: builder
-        )
-        
-        self.setProperties(with: description)
     }
     
     public func setContent(animated : Bool = false, _ content : Content)
@@ -431,20 +451,40 @@ public final class ListView : UIView
         })
     }
     
-    public func setProperties(with description : ListDescription)
+    public func configure(with builder : ListProperties.Build)
     {
-        let animated = description.animatesChanges
+        let description = ListProperties(
+            animatesChanges: true,
+            layout: self.layout,
+            appearance: self.appearance,
+            scrollInsets: self.scrollInsets,
+            behavior: self.behavior,
+            autoScrollAction: self.autoScrollAction,
+            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
+            debuggingIdentifier: self.debuggingIdentifier,
+            build: builder
+        )
         
-        self.appearance = description.appearance
-        self.behavior = description.behavior
-        self.autoScrollAction = description.autoScrollAction
-        self.scrollInsets = description.scrollInsets
-        self.collectionView.accessibilityIdentifier = description.accessibilityIdentifier
-        self.debuggingIdentifier = description.debuggingIdentifier
+        self.configure(with: description)
+    }
+    
+    public func configure(with properties : ListProperties)
+    {
+        let animated = properties.animatesChanges
+        
+        self.appearance = properties.appearance
+        self.behavior = properties.behavior
+        self.autoScrollAction = properties.autoScrollAction
+        self.scrollInsets = properties.scrollInsets
+        self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
+        self.debuggingIdentifier = properties.debuggingIdentifier
+        self.actions = properties.actions
 
-        self.set(layoutType: description.layoutType, animated: animated)
+        self.stateObserver = properties.stateObserver
         
-        self.setContent(animated: animated, description.content)
+        self.set(layout: properties.layout, animated: animated)
+        
+        self.setContent(animated: animated, properties.content)
     }
     
     private func setContentFromSource(animated : Bool = false)
@@ -484,6 +524,17 @@ public final class ListView : UIView
                 self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
             } else if toEmpty {
                 self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
+            }
+            
+            if oldValue != self.frame {
+                ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
+                    ListStateObserver.FrameChanged(
+                        actions: actions,
+                        positionInfo: self.scrollPositionInfo,
+                        old: oldValue,
+                        new: self.frame
+                    )
+                }
             }
         }
     }
@@ -526,26 +577,7 @@ public final class ListView : UIView
     internal func setPresentationStateItemPositions()
     {
         self.storage.presentationState.forEachItem { indexPath, item in
-            item.itemPosition = self.layout.positionForItem(at: indexPath)
-        }
-    }
-    
-    private func updateCollectionViewConfiguration()
-    {
-        let view = self.collectionView
-        
-        switch self.content.selectionMode {
-        case .none:
-            view.allowsSelection = false
-            view.allowsMultipleSelection = false
-            
-        case .single:
-            view.allowsSelection = true
-            view.allowsMultipleSelection = false
-            
-        case .multiple:
-            view.allowsSelection = true
-            view.allowsMultipleSelection = true
+            item.itemPosition = self.collectionViewLayout.positionForItem(at: indexPath)
         }
     }
     
@@ -605,7 +637,6 @@ public final class ListView : UIView
             }
             
         case .contentChanged:
-            self.updateCollectionViewConfiguration()
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
 
         case .didEndDecelerating:
@@ -649,7 +680,10 @@ public final class ListView : UIView
         }
 
         let updateBackingData = {
-            let dependencies = ItemStateDependencies(reorderingDelegate: self, coordinatorDelegate: self)
+            let dependencies = ItemStateDependencies(
+                reorderingDelegate: self,
+                coordinatorDelegate: self
+            )
             
             presentationState.update(with: diff, slice: visibleSlice, dependencies: dependencies, loggable: self)
         }
@@ -678,6 +712,17 @@ public final class ListView : UIView
         // Update info for new contents.
         
         self.updateCollectionViewSelections(animated: reason.animated)
+        
+        // Notify state reader the content changed.
+        
+        if diff.changes.isEmpty == false {
+            ListStateObserver.perform(self.stateObserver.onContentChanged, "Content Changed", with: self) { actions in
+                ListStateObserver.ContentChanged(
+                    actions: actions,
+                    positionInfo: self.scrollPositionInfo
+                )
+            }
+        }
     }
     
     private func newVisibleSlice(to indexPath : IndexPath) -> Content.Slice
@@ -743,7 +788,7 @@ public final class ListView : UIView
     }
 
     private func performBatchUpdates(
-        with diff : SectionedDiff<Section,AnyItem>,
+        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
         completion callerCompletion : @escaping (Bool) -> ()
@@ -759,9 +804,10 @@ public final class ListView : UIView
         let view = self.collectionView
         
         let changes = CollectionViewChanges(sectionChanges: diff.changes)
-                
+            
         let batchUpdates = {
             updateBackingData()
+            
             // Sections
 
             view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
@@ -787,7 +833,7 @@ public final class ListView : UIView
             self.cancelInteractiveMovement()
         }
         
-        self.layout.setShouldAskForItemSizesDuringLayoutInvalidation()
+        self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
             view.performBatchUpdates(batchUpdates, completion: completion)
@@ -798,7 +844,7 @@ public final class ListView : UIView
         }
     }
     
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyItem>
+    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
     {
         return SectionedDiff(
             old: old,
@@ -826,11 +872,11 @@ extension ListView : ItemContentCoordinatorDelegate
     {
         if animated {
             UIView.animate(withDuration: 0.25) {
-                self.layoutManager.current.setNeedsRelayout()
+                self.collectionViewLayout.setNeedsRelayout()
                 self.collectionView.layoutIfNeeded()
             }
         } else {
-            self.layoutManager.current.setNeedsRelayout()
+            self.collectionViewLayout.setNeedsRelayout()
         }
     }
 }
@@ -914,28 +960,35 @@ extension ListView : KeyboardObserverDelegate
         
         let inset : CGFloat
         
-        switch frame {
-        case .notVisible:
-            inset = 0.0
-        case .visible(let frame):
-            if #available(iOS 11, *) {
-                inset = (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-            } else {
-                inset = (self.bounds.size.height - frame.origin.y)
+        switch self.behavior.keyboardAdjustmentMode {
+        case .none: inset = 0.0
+            
+        case .adjustsWhenVisible:
+            switch frame {
+            case .nonOverlapping: inset = 0.0
+                
+            case .overlapping(let frame):
+                inset = (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
             }
         }
         
-        self.collectionView.contentInset.bottom = inset
-        self.collectionView.scrollIndicatorInsets.bottom = inset
+        if self.collectionView.contentInset.bottom != inset {
+            self.collectionView.contentInset.bottom = inset
+        }
+        
+        if self.collectionView.scrollIndicatorInsets.bottom != inset {
+            self.collectionView.scrollIndicatorInsets.bottom = inset
+        }
     }
     
     //
     // MARK: KeyboardObserverDelegate
     //
     
-    func keyboardFrameWillChange(observer : KeyboardObserver)
-    {
-        self.setContentInsetWithKeyboardFrame()
+    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.setContentInsetWithKeyboardFrame()
+        })
     }
 }
 
@@ -948,17 +1001,5 @@ fileprivate extension UIScrollView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
-    }
-    
-    func setAlwaysBounce(_ bounce : Bool, direction : LayoutDirection)
-    {
-        switch direction {
-        case .vertical:
-            self.alwaysBounceVertical = bounce
-            self.alwaysBounceHorizontal = false
-        case .horizontal:
-            self.alwaysBounceVertical = false
-            self.alwaysBounceHorizontal = bounce
-        }
     }
 }

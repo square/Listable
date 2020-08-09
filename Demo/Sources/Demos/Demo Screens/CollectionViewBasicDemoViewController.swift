@@ -42,13 +42,16 @@ final class CollectionViewBasicDemoViewController : UIViewController
         ]
         
         self.view = self.listView
+        
         self.listView.appearance = .demoAppearance
+        self.listView.layout = .demoLayout
+        
         self.updateTable(animated: false)
     }
     
     func updateTable(animated : Bool)
     {
-        listView.setContent { list in
+        listView.configure { list in
             
             if self.showsOverscrollFooter {
                 list.content.overscrollFooter = HeaderFooter(
@@ -59,7 +62,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             list.animatesChanges = animated
             
             list += self.rows.map { sectionRows in
-                Section(identifier: "Demo Section") { section in
+                Section("Demo Section") { section in
                     
                     section.columns = .init(count: 2, spacing: 10.0)
                      
@@ -71,7 +74,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.footer = HeaderFooter(
                         DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += sectionRows

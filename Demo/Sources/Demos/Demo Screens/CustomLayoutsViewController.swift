@@ -24,44 +24,43 @@ final class CustomLayoutsViewController : UIViewController
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Swap Layout", style: .plain, target: self, action: #selector(swapLayout))
         
-        self.listView.setContent { list in
+        self.listView.configure { list in
             
             list.appearance = .demoAppearance
-            
-            list.appearance.grid.sizing.itemSize = .fixed(CGSize(width: 80.0, height: 80.0))
+            list.layout = .demoLayout
 
-            list += Section(identifier: "default") { section in
+            list += Section("default") { section in
                 
                 section.header = HeaderFooter(DemoHeader(title: "Some Rows"))
                 
                 section += Item(
                     DemoItem(text: "Row 1"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                 
                 section += Item(
                     DemoItem(text: "Row 2"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                 
                 section += Item(
                     DemoItem(text: "Row 3"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                 
                 section += Item(
                     DemoItem(text: "Row 4"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                 
                 section += Item(
                     DemoItem(text: "Row 5"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                 
                 section += Item(
                     DemoItem(text: "Row 6"),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
         }
@@ -74,9 +73,9 @@ final class CustomLayoutsViewController : UIViewController
         self.gridOn.toggle()
         
         if self.gridOn {
-            self.listView.set(layoutType: .grid, animated: true)
+            self.listView.set(layout: .grid_experimental(), animated: true)
         } else {
-            self.listView.set(layoutType: .list, animated: true)
+            self.listView.set(layout: .demoLayout, animated: true)
         }
     }
     

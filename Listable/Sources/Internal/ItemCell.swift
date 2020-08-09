@@ -31,7 +31,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
         self.selectedBackground = Content.createReusableSelectedBackgroundView(frame: bounds)
         
         super.init(frame: frame)
-        
+                
         self.backgroundView = self.background
         self.selectedBackgroundView = self.selectedBackground
         

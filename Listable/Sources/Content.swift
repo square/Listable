@@ -14,13 +14,6 @@ public struct Content
     //
     
     public var identifier : AnyHashable?
-    
-    public var selectionMode : SelectionMode
-    
-    public enum SelectionMode : Equatable
-    {
-        case none, single, multiple
-    }
 
     public var refreshControl : RefreshControl?
     
@@ -58,7 +51,6 @@ public struct Content
     
     public init(
         identifier : AnyHashable? = nil,
-        selectionMode : SelectionMode = .single,
         refreshControl : RefreshControl? = nil,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
@@ -68,7 +60,6 @@ public struct Content
     {
         self.identifier = identifier
         
-        self.selectionMode = selectionMode
         
         self.refreshControl = refreshControl
         
@@ -171,6 +162,22 @@ public struct Content
     public static func += (lhs : inout Content, rhs : [Section])
     {
         lhs.sections += rhs
+    }
+    
+    /// Allows streamlined creation of sections when building a list.
+    ///
+    /// Example
+    /// -------
+    /// ```
+    /// listView.configure { list in
+    ///     list("section-id") { section in
+    ///         ...
+    ///     }
+    /// }
+    /// ```
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    {
+        self += Section(identifier, build: build)
     }
     
     internal mutating func remove(at indexPath : IndexPath)

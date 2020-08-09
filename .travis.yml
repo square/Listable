@@ -3,7 +3,7 @@ git:
 
 language: swift
 os: osx
-osx_image: xcode11.2
+osx_image: xcode11.5
 
 # https://docs.travis-ci.com/user/caching/
 cache:

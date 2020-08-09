@@ -8,17 +8,21 @@
 import Foundation
 
 
-public final class AnyIdentifier : Hashable
+public class AnyIdentifier : Hashable, CustomDebugStringConvertible
 {
-    private let value : AnyHashable
+    private let representedType : ObjectIdentifier
+    
+    fileprivate let value : AnyHashable
     
     private let hash : Int
     
-    public init<Represented>(_ value : Identifier<Represented>)
+    fileprivate init(type : ObjectIdentifier, value : AnyHashable)
     {
-        self.value = AnyHashable(value)
+        self.representedType = type
+        self.value = value
         
         var hasher = Hasher()
+        hasher.combine(self.representedType)
         hasher.combine(self.value)
         self.hash = hasher.finalize()
     }
@@ -27,7 +31,7 @@ public final class AnyIdentifier : Hashable
     
     public static func == (lhs: AnyIdentifier, rhs: AnyIdentifier) -> Bool
     {
-        return lhs.hash == rhs.hash && lhs.value == rhs.value
+        return lhs.hash == rhs.hash && lhs.representedType == rhs.representedType && lhs.value == rhs.value
     }
     
     // MARK: Hashable
@@ -36,16 +40,17 @@ public final class AnyIdentifier : Hashable
     {
         hasher.combine(self.hash)
     }
+    
+    // MARK: CustomDebugStringConvertible
+    
+    public var debugDescription : String {
+        fatalError()
+    }
 }
 
 
-public final class Identifier<Represented> : Hashable
+public final class Identifier<Represented> : AnyIdentifier
 {
-    private let type : ObjectIdentifier
-    private let value : AnyHashable?
-    
-    private let hash : Int
-    
     /// Identifier which identifies by the type of `Represented` only.
     /// If you have multiple of `Represented` within a list, it is recommended that
     /// you use `init(_ value:)` to provide a unique inner value.
@@ -56,30 +61,29 @@ public final class Identifier<Represented> : Hashable
     
     public init<Value:Hashable>(_ value : Value)
     {
-        self.value = AnyHashable(value)
-        self.type = ObjectIdentifier(Represented.self)
-        
-        var hasher = Hasher()
-        hasher.combine(self.type)
-        hasher.combine(self.value)
-        self.hash = hasher.finalize()
+        super.init(
+            type: ObjectIdentifier(Represented.self),
+            value: AnyHashable(value)
+        )
     }
     
-    public var toAny : AnyIdentifier {
-        AnyIdentifier(self)
+    // MARK: CustomDebugStringConvertible
+    
+    public override var debugDescription : String {
+        "Identifier<\(String(describing: Represented.self))>: \(self.value.identifierContentString)"
     }
-    
-    // MARK: Equatable
-    
-    public static func == (lhs: Identifier<Represented>, rhs: Identifier<Represented>) -> Bool
-    {
-        return lhs.hash == rhs.hash && lhs.type == rhs.type && lhs.value == rhs.value
-    }
-    
-    // MARK: Hashable
-    
-    public func hash(into hasher: inout Hasher)
-    {
-        hasher.combine(self.hash)
+}
+
+
+fileprivate extension AnyHashable
+{
+    var identifierContentString : String {
+        if let base = self.base as? CustomDebugStringConvertible {
+            return base.debugDescription
+        } else if let base = self.base as? CustomStringConvertible {
+            return base.description
+        } else {
+            return self.debugDescription
+        }
     }
 }

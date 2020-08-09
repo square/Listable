@@ -37,22 +37,24 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func setAppearance()
     {
-        self.list.appearance.list.layout.set {
-            $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
-            $0.interSectionSpacingWithFooter = 30.0
-            $0.interSectionSpacingWithNoFooter = 30.0
-            $0.sectionHeaderBottomSpacing = 5.0
-            $0.itemToSectionFooterSpacing = 20.0
+        self.list.layout = .list {
+            $0.layout.set {
+                $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
+                $0.interSectionSpacingWithFooter = 30.0
+                $0.interSectionSpacingWithNoFooter = 30.0
+                $0.sectionHeaderBottomSpacing = 5.0
+                $0.itemToSectionFooterSpacing = 20.0
+            }
         }
     }
     
     func reloadData(animated : Bool)
     {
-        self.list.setContent { list in
+        self.list.configure { list in
             
             list.animatesChanges = animated
                    
-            list += Section(identifier: SectionIdentifier.toggles) { section in
+            list += Section(SectionIdentifier.toggles) { section in
                 
                 section += Item(
                     ToggleRow(
@@ -60,7 +62,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.requestsInitialDeposit = isOn
                     }),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
                                 
                 section += Item(
@@ -69,21 +71,21 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         onToggle: { isOn in
                             self.data.splitsIntoMilestones = isOn
                     }),
-                    sizing: .thatFits
+                    sizing: .thatFits()
                 )
             }
         
             if self.data.requestsInitialDeposit {
-                list += Section(identifier: SectionIdentifier.deposits) { section in
+                list += Section(SectionIdentifier.deposits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Deposit Request"),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section.footer = HeaderFooter(
                         SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -96,7 +98,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits,
+                        sizing: .thatFits(),
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -109,22 +111,22 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                 }
             }
             
             if self.data.splitsIntoMilestones {
-                list += Section(identifier: SectionIdentifier.splits) { section in
+                list += Section(SectionIdentifier.splits) { section in
                     
                     section.header = HeaderFooter(
                         SectionHeader(text: "Balance Split"),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section.footer = HeaderFooter(
                         SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -137,7 +139,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits,
+                        sizing: .thatFits(),
                         layout: ItemLayout(itemSpacing: 20.0)
                     )
                     
@@ -150,7 +152,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                     
                     section += Item(
@@ -162,7 +164,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             onEdit: { _ in
                                 
                         }),
-                        sizing: .thatFits
+                        sizing: .thatFits()
                     )
                 }
             }
