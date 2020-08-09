@@ -32,7 +32,7 @@ class ItemPreviewViewTests : XCTestCase
         )
         
         XCTAssertEqual(view.frame, CGRect(x: 0.0, y: 0.0, width: 300.0, height: 90.0))
-        Snapshot(iterations: [ViewIteration(name: "false,false")]) { _ in view }.test(output: ViewImageSnapshot.self)
+        Snapshot(for: [ViewIteration(name: "false,false")]) { _ in view }.test(output: ViewImageSnapshot.self)
         
         view.update(
             with: 300.0,
@@ -41,7 +41,7 @@ class ItemPreviewViewTests : XCTestCase
         )
         
         XCTAssertEqual(view.frame, CGRect(x: 0.0, y: 0.0, width: 300.0, height: 90.0))
-        Snapshot(iterations: [ViewIteration(name: "false,true")]) { _ in view }.test(output: ViewImageSnapshot.self)
+        Snapshot(for: [ViewIteration(name: "false,true")]) { _ in view }.test(output: ViewImageSnapshot.self)
         
         view.update(
             with: 300.0,
@@ -50,7 +50,7 @@ class ItemPreviewViewTests : XCTestCase
         )
         
         XCTAssertEqual(view.frame, CGRect(x: 0.0, y: 0.0, width: 300.0, height: 90.0))
-        Snapshot(iterations: [ViewIteration(name: "true,false")]) { _ in view }.test(output: ViewImageSnapshot.self)
+        Snapshot(for: [ViewIteration(name: "true,false")]) { _ in view }.test(output: ViewImageSnapshot.self)
         
         view.update(
             with: 300.0,
@@ -59,7 +59,7 @@ class ItemPreviewViewTests : XCTestCase
         )
         
         XCTAssertEqual(view.frame, CGRect(x: 0.0, y: 0.0, width: 300.0, height: 90.0))
-        Snapshot(iterations: [ViewIteration(name: "true,true")]) { _ in view }.test(output: ViewImageSnapshot.self)
+        Snapshot(for: [ViewIteration(name: "true,true")]) { _ in view }.test(output: ViewImageSnapshot.self)
     }
 }
 
