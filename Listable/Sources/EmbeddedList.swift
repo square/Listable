@@ -46,9 +46,9 @@ public struct EmbeddedList : ItemContent
             appearance: .init {
                 $0.showsScrollIndicators = false
             },
+            scrollInsets: .init(),
             behavior: .init(),
             autoScrollAction: .none,
-            scrollInsets: .init(),
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
             build: build

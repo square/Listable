@@ -34,6 +34,21 @@ extension ListView
                         
             self.items = newItems
             self.headerFooters = newHeaderFooters
+            
+            // Inform any state reader callbacks of the changes.
+            
+            let callStateReader = removed.isEmpty == false || added.isEmpty == false
+            
+            if callStateReader {
+                ListStateObserver.perform(view.stateObserver.onVisibilityChanged, "Visibility Changed", with: view) { actions in
+                    ListStateObserver.VisibilityChanged(
+                        actions: actions,
+                        positionInfo: view.scrollPositionInfo,
+                        displayed: added.map { $0.item.anyModel },
+                        endedDisplay: removed.map { $0.item.anyModel }
+                    )
+                }
+            }
         }
         
         var info : Info {

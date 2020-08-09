@@ -24,6 +24,11 @@ extension OSLog {
         subsystem: "com.kve.Listable",
         category: "ListView Interaction"
     )
+    
+    static let stateObserver = OSLog(
+        subsystem: "com.kve.Listable",
+        category: "ListView ListStateObserver"
+    )
 }
 
 

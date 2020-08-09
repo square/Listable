@@ -18,6 +18,10 @@ public struct Behavior : Equatable
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
     public var keyboardAdjustmentMode : KeyboardAdjustmentMode
     
+    /// How the list should react when the user taps the application status bar.
+    /// The default value of this enables scrolling to top.
+    public var scrollsToTop : ScrollsToTop
+    
     /// How the list should respond to selection attempts.
     public var selectionMode : SelectionMode
         
@@ -38,7 +42,8 @@ public struct Behavior : Equatable
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
-        selectionMode : SelectionMode = .single,
+        scrollsToTop : ScrollsToTop = .enabled,
+        selectionMode : SelectionMode = .single(),
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
@@ -46,6 +51,8 @@ public struct Behavior : Equatable
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
+        
+        self.scrollsToTop = scrollsToTop
         
         self.selectionMode = selectionMode
         self.underflow = underflow
@@ -68,6 +75,16 @@ public extension Behavior
         case adjustsWhenVisible
     }
     
+    /// How to react when the user taps on the status bar of the application.
+    enum ScrollsToTop : Equatable
+    {
+        /// No action is performed when the user taps on the status bar.
+        case disabled
+        
+        /// When the user taps on the status bar, scroll to the top of the list.
+        case enabled
+    }
+    
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
     enum SelectionMode : Equatable
     {
@@ -77,7 +94,18 @@ public extension Behavior
         /// The list view allows single selections. When an item is selected, the previously selected item (if any)
         /// will be deselected by the list. If you provide multiple selected items in your content description,
         /// the last selected item in the content will be selected.
-        case single
+        ///
+        /// The default value for `clearsSelectionOnViewWillAppear` is true.
+        /// This parameter allows mirroring the `clearsSelectionOnViewWillAppear`
+        /// as available from `UITableViewController` or `UICollectionViewController`.
+        ///
+        /// Note
+        /// ----
+        /// This behaviour is implemented in `ListViewController`.
+        /// If your list is not managed by a `ListViewController`, this parameter has no effect unless
+        /// you manually call `clearSelectionDuringViewWillAppear` on `ListView` within
+        /// your view controller's `viewWillAppear`.
+        case single(clearsSelectionOnViewWillAppear : Bool = true)
         
         /// The list view allows multiple selections. It is your responsibility to update the content
         /// of the list to select and deselect items based on the selection of other items.

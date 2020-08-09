@@ -22,6 +22,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -43,6 +45,8 @@ extension ListView
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
         {
+            guard view.behavior.selectionMode != .none else { return false }
+            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.selectionStyle.isSelectable
@@ -57,11 +61,11 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: true)
+            item.set(isSelected: true, performCallbacks: true)
             item.applyToVisibleCell()
             
             if item.anyModel.selectionStyle == .tappable {
-                item.performUserDidSelectItem(isSelected: false)
+                item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
                 item.applyToVisibleCell()
             }
@@ -71,7 +75,7 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.performUserDidSelectItem(isSelected: false)
+            item.set(isSelected: false, performCallbacks: true)
             item.applyToVisibleCell()
         }
         
@@ -185,15 +189,22 @@ extension ListView
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
-            // Notify swipe actions to close
+            // Notify swipe actions to close.
 
-            let notification = Notification(name: .closeSwipeActions, object: self)
-            NotificationCenter.default.post(notification)
+            NotificationCenter.default.post(Notification(name: .closeSwipeActions, object: self))
         }
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
+        }
+                
+        func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool
+        {
+            switch view.behavior.scrollsToTop {
+            case .disabled: return false
+            case .enabled: return true
+            }
         }
         
         func scrollViewDidScrollToTop(_ scrollView: UIScrollView)
@@ -206,7 +217,7 @@ extension ListView
         func scrollViewDidScroll(_ scrollView: UIScrollView)
         {
             guard scrollView.bounds.size.height > 0 else { return }
-            
+                        
             SignpostLogger.log(.begin, log: .scrollView, name: "scrollViewDidScroll", for: self.view)
             
             defer {
@@ -221,6 +232,13 @@ extension ListView
             
             if scrollingDown {
                 self.view.updatePresentationState(for: .scrolledDown)
+            }
+            
+            ListStateObserver.perform(self.view.stateObserver.onDidScroll, "Did Scroll", with: self.view) {
+                ListStateObserver.DidScroll(
+                    actions: $0,
+                    positionInfo: self.view.scrollPositionInfo
+                )
             }
         }
     }

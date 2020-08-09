@@ -177,11 +177,9 @@ public enum Sizing : Equatable
     
     case fixed(CGFloat)
     
-    case thatFits
-    case thatFitsWith(Constraint)
+    case thatFits(Constraint = .noConstraint)
     
-    case autolayout
-    case autolayoutWith(Constraint)
+    case autolayout(Constraint = .noConstraint)
 }
 ```
 

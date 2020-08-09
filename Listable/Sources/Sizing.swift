@@ -27,10 +27,8 @@ public enum Sizing : Hashable
     case fixed(width : CGFloat = 0.0, height : CGFloat = 0.0)
     
     /// Sizes the item by calling `sizeThatFits` on its underlying view type.
-    case thatFits
-    
-    /// Sizes the item by calling `sizeThatFits` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
     ///
     /// Example
     /// -------
@@ -39,18 +37,16 @@ public enum Sizing : Hashable
     ///
     /// ```
     /// // Enforces that the size is at least the default size of the list.
-    /// .thatFitsWith(.init(.atLeast(.default)))
+    /// .thatFits(.init(.atLeast(.default)))
     ///
     ///  // Enforces that the size is at least 50 points.
-    /// .thatFitsWith(.init(.atLeast(.fixed(50))))
+    /// .thatFits(.init(.atLeast(.fixed(50))))
     /// ```
-    case thatFitsWith(Constraint)
-    
-    /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
-    case autolayout
+    case thatFits(Constraint = .noConstraint)
     
     /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
     ///
     /// Example
     /// -------
@@ -59,12 +55,12 @@ public enum Sizing : Hashable
     ///
     /// ```
     /// // Enforces that the size is at least the default size of the list.
-    /// .autolayoutWith(.init(.atLeast(.default)))
+    /// .autolayout(.init(.atLeast(.default)))
     ///
     ///  // Enforces that the size is at least 50 points.
-    /// .autolayoutWith(.init(.atLeast(.fixed(50))))
+    /// .autolayout(.init(.atLeast(.fixed(50))))
     /// ```
-    case autolayoutWith(Constraint)
+    case autolayout(Constraint = .noConstraint)
     
     /// Measures the given view with the provided options.
     /// The returned value is `ceil()`'d to round up to the next full integer value.
@@ -78,24 +74,12 @@ public enum Sizing : Hashable
             case .fixed(let width, let height):
                 return CGSize(width: width, height: height)
                 
-            case .thatFits:
-                return Sizing.thatFitsWith(.noConstraint).measure(
-                    with: view,
-                    info: info
-                )
-                
-            case .thatFitsWith(let constraint):
+            case .thatFits(let constraint):
                 let size = view.sizeThatFits(info.sizeConstraint)
                 
                 return constraint.clamp(size, with: info.defaultSize)
                 
-            case .autolayout:
-                return Sizing.autolayoutWith(.noConstraint).measure(
-                    with: view,
-                    info: info
-                )
-                
-            case .autolayoutWith(let constraint):
+            case .autolayout(let constraint):
                 let size : CGSize
                 
                 switch info.direction {
