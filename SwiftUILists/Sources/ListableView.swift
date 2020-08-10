@@ -20,7 +20,7 @@ public struct ListableView : UIViewControllerRepresentable
         
     public init(build : ListProperties.Build)
     {
-        self.properties = ListProperties.default(with: build)
+        self.properties = .default(with: build)
     }
     
     //

@@ -46,33 +46,49 @@ final class SwiftUIListViewController : UIViewController
     
     var body : some View {
         ListableView { list in
+            
+            list.layout = .demoLayout
+            list.appearance = .demoAppearance
+            
             list("section") { section in
                 
-                section += SwiftUIDemoItem()
-                section += SwiftUIDemoItem()
-                section += SwiftUIDemoItem()
-                section += SwiftUIDemoItem()
-                section += SwiftUIDemoItem()
+                section += (1...1000).map {
+                    SwiftUIDemoItem(text: "\($0)")
+                }
             }
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
 @available(iOS 13.0, *)
 fileprivate struct SwiftUIDemoItem : SwiftUIItemContent, Equatable
 {
+    var text : String
+    
     var identifier: Identifier<SwiftUIDemoItem> {
         .init()
     }
     
     func content(with info: ApplyItemContentInfo) -> some View {
-        Text("Hello, World!")
-            .font(.system(.headline))
-            .frame(maxWidth: .infinity)
-            .padding(4)
-            .border(Color.red, width: 4)
-            .padding(4)
-            .border(Color.green, width: 4)
+        Text(self.text)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.system(size: 16.0, weight: .medium, design: .default))
+            .foregroundColor(info.state.isActive ? .white : .black)
+            .padding(EdgeInsets(top: 10.0, leading: 15.0, bottom: 10.0, trailing: 15.0))
+    }
+    
+    func background(with info: ApplyItemContentInfo) -> some View {
+        Rectangle()
+            .foregroundColor(.white)
+            .cornerRadius(8.0)
+            .shadow(color: Color.black.opacity(0.15), radius: 2.0, x: 0.0, y: 1.0)
+    }
+    
+    func selectedBackground(with info: ApplyItemContentInfo) -> some View {
+        Rectangle()
+            .foregroundColor(.gray)
+            .cornerRadius(8.0)
+            .shadow(color: Color.black.opacity(0.15), radius: 2.0, x: 0.0, y: 1.0)
     }
 }
 

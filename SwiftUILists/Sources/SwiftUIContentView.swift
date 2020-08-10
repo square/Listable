@@ -9,7 +9,7 @@ import SwiftUI
 
 
 @available(iOS 13.0, *)
-public final class SwiftUIContentView : UIView, CollectionViewContainedView
+public final class SwiftUIContentView : UIView, ItemCellContentView
 {
     var rootView : AnyView {
         get {
@@ -28,10 +28,13 @@ public final class SwiftUIContentView : UIView, CollectionViewContainedView
 
         super.init(frame: frame)
         
+        self.addSubview(self.controller.view)
+        
         self.backgroundColor = .clear
         self.isOpaque = false
         
-        self.addSubview(self.controller.view)
+        self.controller.view.backgroundColor = .clear
+        self.controller.view.isOpaque = false
     }
     
     @available(*, unavailable)
@@ -51,22 +54,31 @@ public final class SwiftUIContentView : UIView, CollectionViewContainedView
         return self.controller.view.sizeThatFits(size)
     }
     
-    // MARK: CollectionViewContainedView
+    // MARK: ItemCellContentView
     
-    public weak var containingViewController : UIViewController? = nil
-    
-    public func containerViewWillMove(toSuperview newSuperview: UIView?)
-    {
-        if newSuperview != nil {
+    public weak var containingViewController : UIViewController? = nil {
+        didSet {
+            if oldValue === self.containingViewController {
+                return
+            }
+            
             if let parent = self.containingViewController {
                 parent.addChild(self.controller)
                 self.controller.didMove(toParent: parent)
             } else {
-                fatalError("The `containingViewController` was not set on `SwiftUIContentView` before it was about to be presented. This will break embedded view controllers in SwiftUI view trees. This property is normally set automatically by Listable. If you are allocating this view manually, set the `containingViewController` property manually.")
+                self.controller.willMove(toParent: nil)
+                self.controller.removeFromParent()
+
             }
-        } else {
-            self.controller.willMove(toParent: nil)
-            self.controller.removeFromParent()
         }
+    }
+    
+    public func willDisplay()
+    {
+        if self.containingViewController != nil {
+            return
+        }
+        
+        fatalError("The `containingViewController` was not set on `SwiftUIContentView` before it was about to be presented. This will break embedded view controllers in SwiftUI view trees. This property is normally set automatically by Listable. If you are allocating this view manually, set the `containingViewController` property manually.")
     }
 }

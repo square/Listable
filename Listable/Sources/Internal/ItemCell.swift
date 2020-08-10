@@ -8,13 +8,20 @@
 import UIKit
 
 
+protocol AnyItemCell : UICollectionViewCell
+{
+    func willBeProvided(to listView : ListView)
+    
+    func willDisplay()
+}
+
 ///
 /// An internal cell type used to render items in the list.
 ///
 /// Information on how cell selection appearance customization works:
 /// https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/changing_the_appearance_of_selected_and_highlighted_cells
 ///
-final class ItemCell<Content:ItemContent> : UICollectionViewCell
+final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
     let contentContainer : ContentContainerView
 
@@ -84,20 +91,6 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
     
     // MARK: UIView
     
-    override func willMove(toSuperview newSuperview: UIView?)
-    {
-        super.willMove(toSuperview: newSuperview)
-        
-        if let contained = self.contentContainer.contentView as? CollectionViewContainedView {
-            
-            if let listView = newSuperview?.findParentListView() {
-                contained.containingViewController = listView.containingViewController
-            }
-            
-            contained.containerViewWillMove(toSuperview: newSuperview)
-        }
-    }
-    
     override func sizeThatFits(_ size: CGSize) -> CGSize
     {
         return self.contentContainer.contentView.sizeThatFits(size)
@@ -109,31 +102,32 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
                 
         self.contentContainer.frame = self.contentView.bounds
     }
-}
-
-
-private extension UIView
-{
-    func findParentListView() -> ListView?
+    
+    // MARK: AnyItemCell
+    
+    func willBeProvided(to listView : ListView)
     {
-        var view : UIView? = self
-        
-        while view != nil {
-            if let view = view as? ListView {
-                return view
-            }
-            
-            view = view?.superview
+        guard let contentView = self.contentContainer.contentView as? ItemCellContentView else {
+            return
         }
         
-        return nil
+        contentView.containingViewController = listView.containingViewController
+    }
+    
+    func willDisplay()
+    {
+        guard let contentView = self.contentContainer.contentView as? ItemCellContentView else {
+            return
+        }
+        
+        contentView.willDisplay()
     }
 }
 
 
-public protocol CollectionViewContainedView : AnyObject
+public protocol ItemCellContentView : AnyObject
 {
     var containingViewController : UIViewController? { get set }
     
-    func containerViewWillMove(toSuperview newSuperview: UIView?)
+    func willDisplay()
 }

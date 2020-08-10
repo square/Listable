@@ -63,6 +63,7 @@ public final class ListView : UIView
 
         self.collectionView.view = self
 
+        self.dataSource.view = self
         self.dataSource.presentationState = self.storage.presentationState
         
         self.delegate.view = self
@@ -142,7 +143,7 @@ public final class ListView : UIView
     ///
     /// You do not need to set this property if you are not using SwiftUI.
     ///
-    public weak var containingViewController : UIViewController? = nil
+    weak var containingViewController : UIViewController? = nil
     
     //
     // MARK: Debugging

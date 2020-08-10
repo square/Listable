@@ -49,9 +49,9 @@ public protocol SwiftUIItemContent : ItemContent
     ///
     /// Note
     /// ----
-    /// The default implementation of this method returns nil, and provides no background.
+    /// The default implementation of this method returns an `EmptyView`.
     ///
-    func background(with info : ApplyItemContentInfo) -> BackgroundType?
+    func background(with info : ApplyItemContentInfo) -> BackgroundType
     
     associatedtype SelectedBackgroundType : SwiftUI.View = BackgroundType
 
@@ -63,29 +63,38 @@ public protocol SwiftUIItemContent : ItemContent
     ///
     /// Note
     /// ----
-    /// The default implementation of this method returns nil, and provides no selected background.
+    /// The default implementation of this method returns an `EmptyView`.
     ///
-    func selectedBackground(with info : ApplyItemContentInfo) -> SelectedBackgroundType?
+    func selectedBackground(with info : ApplyItemContentInfo) -> SelectedBackgroundType
 }
 
 
 @available(iOS 13.0, *)
-public extension SwiftUIItemContent
+public extension SwiftUIItemContent where BackgroundType == EmptyView
 {
     //
     // MARK: Default Implementations
     //
 
     /// By default, content has no background.
-    func background(with info : ApplyItemContentInfo) -> BackgroundType?
+    func background(with info : ApplyItemContentInfo) -> BackgroundType
     {
-        nil
+        EmptyView()
     }
+}
+
+
+@available(iOS 13.0, *)
+public extension SwiftUIItemContent where SelectedBackgroundType == EmptyView
+{
+    //
+    // MARK: Default Implementations
+    //
 
     /// By default, content has no selected background.
-    func selectedBackground(with info : ApplyItemContentInfo) -> SelectedBackgroundType?
+    func selectedBackground(with info : ApplyItemContentInfo) -> SelectedBackgroundType
     {
-        nil
+        EmptyView()
     }
 }
 
@@ -100,9 +109,16 @@ public extension SwiftUIItemContent
     /// Maps the `SwiftUIItemContent` methods into the underlying `SwiftUIContentView` used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.rootView = AnyView(self.content(with: info))
-        views.background.rootView = AnyView(self.background(with: info))
-        views.selectedBackground.rootView = AnyView(self.selectedBackground(with: info))
+        views.content.rootView = self.rootView(wrapping: self.content(with: info))
+        views.background.rootView = self.rootView(wrapping: self.background(with: info))
+        views.selectedBackground.rootView = self.rootView(wrapping: self.selectedBackground(with: info))
+    }
+    
+    private func rootView<ViewType:View>(wrapping view : ViewType) -> AnyView
+    {
+        AnyView(
+            view.edgesIgnoringSafeArea(.all)
+        )
     }
 
     /// Creates the view used to render the content of the item.
