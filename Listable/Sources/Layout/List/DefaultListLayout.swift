@@ -316,9 +316,7 @@ final class DefaultListLayout : ListLayout
     
     func updateLayout(in collectionView : UICollectionView)
     {
-        if self.layoutAppearance.stickySectionHeaders {
-            self.applyStickySectionHeaders(in: collectionView)
-        }
+        
     }
     
     func layout(

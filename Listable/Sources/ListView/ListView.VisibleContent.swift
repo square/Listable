@@ -10,12 +10,12 @@ import Foundation
 
 extension ListView
 {
-    struct VisibleContent
+    final class VisibleContent
     {
         private(set) var headerFooters : Set<HeaderFooter> = Set()
         private(set) var items : Set<Item> = Set()
         
-        mutating func update(with view : ListView)
+        func update(with view : ListView)
         {
             let (newItems, newHeaderFooters) = self.calculateVisibleContent(in: view)
             

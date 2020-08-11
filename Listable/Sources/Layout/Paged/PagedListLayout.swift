@@ -58,6 +58,8 @@ public struct PagedAppearance : ListLayoutAppearance
     /// The direction the paging layout should occur in. Defaults to `vertical`.
     public var direction: LayoutDirection
     
+    public let stickySectionHeaders: Bool = false
+    
     /// If scroll indicators should be visible along the scrollable axis.
     public var showsScrollIndicators : Bool
     

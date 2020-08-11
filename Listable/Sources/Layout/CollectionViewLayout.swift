@@ -289,7 +289,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             return true
         }())
         
-        self.layout.updateLayout(in: self.collectionView!)
+        self.performLayoutUpdate()
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem])
@@ -330,7 +330,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             direction: self.layout.direction,
             showsScrollIndicators: self.appearance.showsScrollIndicators
         )
-        
+                
         self.performLayout()
     }
     
@@ -347,10 +347,21 @@ final class CollectionViewLayout : UICollectionViewLayout
             
         self.layout.updateLayout(in: view)
         
+        self.layout.setZIndexes()
+        
         self.layout.updateOverscrollFooterPosition(in: view)
         self.layout.adjustPositionsForLayoutUnderflow(in: view)
-        
+                
         self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
+    }
+    
+    private func performLayoutUpdate()
+    {
+        let view = self.collectionView!
+        
+        self.layout.positionStickySectionHeadersIfNeeded(in: view)
+        
+        self.layout.updateLayout(in: view)
     }
     
     //

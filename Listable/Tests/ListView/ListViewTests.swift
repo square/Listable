@@ -76,11 +76,11 @@ fileprivate struct TestContent : ItemContent, Equatable
 
 fileprivate struct TestSupplementary : HeaderFooterContent, Equatable
 {
-    func apply(to view: UIView, reason: ApplyReason) {}
+    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {}
     
     typealias ContentView = UIView
 
-    static func createReusableHeaderFooterView(frame: CGRect) -> UIView
+    static func createReusableContentView(frame: CGRect) -> UIView
     {
         return UIView(frame: frame)
     }

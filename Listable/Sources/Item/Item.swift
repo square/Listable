@@ -306,15 +306,15 @@ public struct ItemLayout : Equatable
     public var itemToSectionFooterSpacing : CGFloat?
     
     public var width : CustomWidth
-    
+        
     public init(
         itemSpacing : CGFloat? = nil,
         itemToSectionFooterSpacing : CGFloat? = nil,
         width : CustomWidth = .default
-    )
-    {
+    ) {
         self.itemSpacing = itemSpacing
         self.itemSpacing = itemSpacing
+        
         self.width = width
     }
 }

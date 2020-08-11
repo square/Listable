@@ -228,6 +228,8 @@ protocol ListLayoutContentItem : AnyObject
     var size : CGSize { get set }
     var x : CGFloat { get set }
     var y : CGFloat { get set }
+    
+    var zIndex : Int { get set }
 }
 
 
@@ -303,7 +305,11 @@ public extension ListLayoutContent
     {
         static func empty(_ kind : SupplementaryKind) -> SupplementaryItemInfo
         {
-            SupplementaryItemInfo(kind: kind, layout: .init(), isPopulated: false, measurer: { _ in .zero })
+            SupplementaryItemInfo(
+                kind: kind,
+                layout: .init(),
+                isPopulated: false, measurer: { _ in .zero }
+            )
         }
         
         let kind : SupplementaryKind
@@ -311,7 +317,7 @@ public extension ListLayoutContent
         let measurer : (Sizing.MeasureInfo) -> CGSize
                 
         let isPopulated : Bool
-                
+                        
         var size : CGSize = .zero
         
         var x : CGFloat = .zero
@@ -319,6 +325,8 @@ public extension ListLayoutContent
         
         var y : CGFloat = .zero
         var pinnedY : CGFloat? = nil
+        
+        var zIndex : Int = 0
         
         var defaultFrame : CGRect {
             CGRect(
@@ -344,6 +352,7 @@ public extension ListLayoutContent
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.kind = kind
+            
             self.layout = layout
             self.isPopulated = isPopulated
             self.measurer = measurer
@@ -354,7 +363,7 @@ public extension ListLayoutContent
             let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: self.kind.rawValue, with: indexPath)
             
             attributes.frame = self.visibleFrame
-            attributes.zIndex = self.kind.zIndex
+            attributes.zIndex = self.zIndex
             
             return attributes
         }
@@ -371,10 +380,13 @@ public extension ListLayoutContent
         let measurer : (Sizing.MeasureInfo) -> CGSize
         
         var position : ItemPosition = .single
-        
+                
         var size : CGSize = .zero
+                
         var x : CGFloat = .zero
         var y : CGFloat = .zero
+        
+        var zIndex : Int = 0
         
         var frame : CGRect {
             CGRect(
@@ -392,7 +404,7 @@ public extension ListLayoutContent
         ) {
             self.delegateProvidedIndexPath = delegateProvidedIndexPath
             self.liveIndexPath = liveIndexPath
-            
+                        
             self.layout = layout
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
             
@@ -404,7 +416,7 @@ public extension ListLayoutContent
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
             attributes.frame = self.frame
-            attributes.zIndex = 0
+            attributes.zIndex = self.zIndex
             
             return attributes
         }

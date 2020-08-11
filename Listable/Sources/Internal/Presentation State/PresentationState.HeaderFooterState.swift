@@ -82,7 +82,7 @@ extension PresentationState
         func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
-                return Content.createReusableHeaderFooterView(frame: frame)
+                HeaderFooterContentView<Content>(frame: frame)
             }
             
             self.applyTo(view: view, reason: .willDisplay)
@@ -95,16 +95,24 @@ extension PresentationState
             cache.push(view, with: self.model.reuseIdentifier)
         }
         
-        func createReusableHeaderFooterView(frame : CGRect) -> UIView
-        {
-            return Content.createReusableHeaderFooterView(frame: frame)
-        }
-        
         func applyTo(view : UIView, reason : ApplyReason)
         {
-            let view = view as! Content.ContentView
+            let view = view as! HeaderFooterContentView<Content>
             
-            self.model.content.apply(to: view, reason: reason)
+            let views = HeaderFooterContentViews<Content>(
+                content: view.content,
+                background: view.background,
+                pressed: view.pressedBackground
+            )
+            
+            view.onTap = self.model.onTap.map { onTap in { [weak self] in
+                    guard let self = self else { return }
+                    
+                    onTap(self.model.content)
+                }
+            }
+            
+            self.model.content.apply(to: views, reason: reason)
         }
         
         func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
@@ -148,9 +156,15 @@ extension PresentationState
                 let size : CGSize = cache.use(
                     with: self.model.reuseIdentifier,
                     create: {
-                        return Content.createReusableHeaderFooterView(frame: .zero)
+                        return HeaderFooterContentView<Content>(frame: .zero)
                 }, { view in
-                    self.model.content.apply(to: view, reason: .willDisplay)
+                    let views = HeaderFooterContentViews<Content>(
+                        content: view.content,
+                        background: view.background,
+                        pressed: view.pressedBackground
+                    )
+                    
+                    self.model.content.apply(to: views, reason: .willDisplay)
                     
                     return self.model.sizing.measure(with: view, info: info)
                 })

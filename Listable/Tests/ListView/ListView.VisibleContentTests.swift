@@ -199,12 +199,12 @@ fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable
     
     typealias ContentView = UIView
     
-    func apply(to view: UIView, reason: ApplyReason)
+    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason)
     {
-        view.backgroundColor = self.color
+        views.content.backgroundColor = self.color
     }
     
-    static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
+    static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
 }

@@ -9,7 +9,7 @@ import XCTest
 @testable import Listable
 
 
-final class LayoutDescriptionTests : XCTest
+final class LayoutDescriptionTests : XCTestCase
 {
     func test_createPopulatedLayout()
     {
