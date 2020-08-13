@@ -81,14 +81,14 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         self.removeGestureRecognizer(self.pressRecognizer)
         
         if self.onTap != nil {
-            self.accessibilityTraits = [.button]
+            self.accessibilityTraits = [.header, .button]
             
             self.pressedBackground.isHidden = false
             self.pressedBackground.alpha = 0.0
             
             self.addGestureRecognizer(self.pressRecognizer)
         } else {
-            self.accessibilityTraits = []
+            self.accessibilityTraits = [.header]
             
             self.pressedBackground.isHidden = true
         }
