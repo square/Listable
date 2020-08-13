@@ -105,8 +105,8 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     
     var color : UIColor
     
-    func apply(to view: UIView, reason: ApplyReason) {
-        view.backgroundColor = self.color
+    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {
+        views.content.backgroundColor = self.color
     }
     
     func isEquivalent(to other: TestingHeaderFooterContent) -> Bool {
@@ -115,7 +115,7 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     
     typealias ContentView = UIView
     
-    static func createReusableHeaderFooterView(frame: CGRect) -> UIView {
+    static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
 }

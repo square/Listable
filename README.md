@@ -480,7 +480,13 @@ public protocol HeaderFooterContent
     func isEquivalent(to other : Self) -> Bool
     
     associatedtype ContentView:UIView
-    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
+    static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    associatedtype BackgroundView:UIView
+    static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
+    
+    associatedtype PressedBackgroundView:UIView
+    static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
 }
 ```
 

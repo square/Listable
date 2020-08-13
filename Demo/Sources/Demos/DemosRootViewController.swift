@@ -123,7 +123,7 @@ public final class DemosRootViewController : ListViewController
                 onSelect: { _ in
                     self.push(ItemInsertAndRemoveAnimationsViewController())
             })
-            
+
             section += Item(
                 DemoItem(text: "Manual Selection Management"),
                 selectionStyle: .selectable(),
@@ -131,6 +131,13 @@ public final class DemosRootViewController : ListViewController
                     self.push(ManualSelectionManagementViewController())
                 }
             )
+            
+            section += Item(
+                DemoItem(text: "Accordion View"),
+                selectionStyle: .tappable,
+                onSelect: { _ in
+                    self.push(AccordionViewController())
+            })
         }
         
         list("layouts") { section in

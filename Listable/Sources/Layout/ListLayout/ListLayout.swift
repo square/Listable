@@ -30,6 +30,10 @@ public extension ListLayout
     var direction: LayoutDirection {
         self.layoutAppearance.direction
     }
+    
+    var stickySectionHeaders: Bool {
+        self.layoutAppearance.stickySectionHeaders
+    }
 }
 
 
@@ -48,6 +52,8 @@ public protocol AnyListLayout : AnyObject
     
     var direction : LayoutDirection { get }
     
+    var stickySectionHeaders : Bool { get }
+    
     //
     // MARK: Performing Layouts
     //
@@ -58,6 +64,30 @@ public protocol AnyListLayout : AnyObject
         delegate : CollectionViewLayoutDelegate,
         in collectionView : UICollectionView
     )
+    
+    func setZIndexes()
+}
+
+
+public extension AnyListLayout
+{
+    func setZIndexes()
+    {
+        self.content.header.zIndex = 5
+        
+        self.content.sections.forEachWithIndex { sectionIndex, _, section in
+            section.header.zIndex = 4
+            
+            section.items.forEach { item in
+                item.zIndex = 3
+            }
+            
+            section.footer.zIndex = 2
+        }
+        
+        self.content.footer.zIndex = 1
+        self.content.overscrollFooter.zIndex = 0
+    }
 }
 
 
@@ -77,21 +107,25 @@ public extension AnyListLayout
 
 public extension AnyListLayout
 {
-    func applyStickySectionHeaders(in collectionView : UICollectionView)
+    func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
     {
-        let visibleFrame = self.visibleContentFrame(for: collectionView)
+        guard self.stickySectionHeaders else {
+            return
+        }
+        
+        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             let sectionMaxY = section.contentsFrame.maxY
             
             let header = section.header
             
-            if header.defaultFrame.origin.y < visibleFrame.origin.y {
+            if header.defaultFrame.origin.y < visibleContentFrame.origin.y {
                 
                 // Make sure the pinned origin stays within the section's frame.
                 
                 header.pinnedY = min(
-                    visibleFrame.origin.y,
+                    visibleContentFrame.origin.y,
                     sectionMaxY - header.size.height
                 )
             } else {

@@ -13,4 +13,6 @@ public protocol ListLayoutAppearance : Equatable
     static var `default` : Self { get }
     
     var direction : LayoutDirection { get }
+    
+    var stickySectionHeaders : Bool { get }
 }

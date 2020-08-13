@@ -17,18 +17,6 @@ enum SupplementaryKind : String, CaseIterable
     case sectionFooter = "Listable.SectionFooter"
     
     case overscrollFooter = "Listable.OverscrollFooter"
-        
-    var zIndex : Int {
-        switch self {
-        case .listHeader: return 1
-        case .listFooter: return 1
-            
-        case .sectionHeader: return 2
-        case .sectionFooter: return 1
-            
-        case .overscrollFooter: return 1
-        }
-    }
     
     func indexPath(in section : Int) -> IndexPath
     {

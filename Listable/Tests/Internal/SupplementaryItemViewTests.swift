@@ -58,7 +58,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         let content = view.content!
         
-        XCTAssertTrue(type(of: content) === TestHeaderFooterContent.View.self)
+        XCTAssertTrue(type(of: content) === HeaderFooterContentView<TestHeaderFooterContent>.self)
         XCTAssertEqual(view.frame.size, CGSize(width: 100, height: 100))
         
         // Unset the header footer, make sure the view is pushed back into the cache.
@@ -94,11 +94,11 @@ fileprivate struct TestHeaderFooterContent : HeaderFooterContent, Equatable
 {
     // MARK: HeaderFooterContent
     
-    func apply(to view: View, reason: ApplyReason) {}
+    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {}
         
     typealias ContentView = View
     
-    static func createReusableHeaderFooterView(frame: CGRect) -> View
+    static func createReusableContentView(frame: CGRect) -> View
     {
         return View(frame: frame)
     }
