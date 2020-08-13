@@ -100,7 +100,10 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         
         switch state {
 
-        case .possible, .began, .changed:
+        case .possible:
+            break
+        
+        case .began, .changed:
             self.pressedBackground.alpha = 1.0
             
         case .ended, .cancelled, .failed:
