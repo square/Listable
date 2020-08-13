@@ -46,14 +46,14 @@ public final class DemosRootViewController : ListViewController
             
             section += Item(
                 DemoItem(text: "Blueprint Integration"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(BlueprintListDemoViewController())
             })
 
             section += Item(
                 DemoItem(text: "Auto Scrolling (Bottom Pin)"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(AutoScrollingViewController())
             })
@@ -61,7 +61,7 @@ public final class DemosRootViewController : ListViewController
             if #available(iOS 13.0, *) {
                 section += Item(
                     DemoItem(text: "List State & State Reader"),
-                    selectionStyle: .tappable,
+                    selectionStyle: .selectable(),
                     onSelect: { _ in
                         self.push(ListStateViewController())
                     }
@@ -70,59 +70,67 @@ public final class DemosRootViewController : ListViewController
 
             section += Item(
                 DemoItem(text: "Itemization Editor"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ItemizationEditorViewController())
             })
             
             section += Item(
                 DemoItem(text: "English Dictionary Search"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CollectionViewDictionaryDemoViewController())
             })
             
             section += Item(
                 DemoItem(text: "Keyboard Testing"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(KeyboardTestingViewController())
             })
             
             section += Item(
                 DemoItem(text: "Reordering (Experimental)"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ReorderingViewController())
             })
             
             section += Item(
                 DemoItem(text: "Invoices Payment Schedule"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(InvoicesPaymentScheduleDemoViewController())
             })
             
             section += Item(
                 DemoItem(text: "Swipe Actions"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(SwipeActionsViewController())
             })
             
             section += Item(
                 DemoItem(text: "Item Content Coordinator"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CoordinatorViewController())
             })
             
             section += Item(
                 DemoItem(text: "Item Insert & Remove Animations"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect: { _ in
                     self.push(ItemInsertAndRemoveAnimationsViewController())
             })
+            
+            section += Item(
+                DemoItem(text: "Manual Selection Management"),
+                selectionStyle: .selectable(),
+                onSelect: { _ in
+                    self.push(ManualSelectionManagementViewController())
+                }
+            )
         }
         
         list("layouts") { section in
@@ -133,35 +141,35 @@ public final class DemosRootViewController : ListViewController
             
             section += Item(
                 DemoItem(text: "Grid Layout"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CustomLayoutsViewController())
             })
             
             section += Item(
                 DemoItem(text: "Paged Layout"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(PagedViewController())
             })
             
             section += Item(
                 DemoItem(text: "Horizontal Layout"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(HorizontalLayoutViewController())
             })
             
             section += Item(
                 DemoItem(text: "Width Customization"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(WidthCustomizationViewController())
             })
 
             section += Item(
                 DemoItem(text: "Spacing Customization"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(SpacingCustomizationViewController())
             })
@@ -175,12 +183,12 @@ public final class DemosRootViewController : ListViewController
 
             section += Item(
                 DemoItem(text: "Tappable Row"),
-                selectionStyle: .tappable
+                selectionStyle: .selectable()
             )
             
             section += Item(
                 DemoItem(text: "Tappable Row (Slow Is Selected)"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect: { _ in
                     Thread.sleep(forTimeInterval: 0.5)
                 }
@@ -195,7 +203,7 @@ public final class DemosRootViewController : ListViewController
 
             section += Item(
                 DemoItem(text: "Flow Layout"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(FlowLayoutViewController())
             })
@@ -209,7 +217,7 @@ public final class DemosRootViewController : ListViewController
             
             section += Item(
                 DemoItem(text: "Edges Playground"),
-                selectionStyle: .tappable,
+                selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ScrollViewEdgesPlaygroundViewController())
             })

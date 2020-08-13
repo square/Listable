@@ -17,7 +17,7 @@ public class EnglishDictionary
     public let wordsByLetter : [Letter]
     public let allWords : [Word]
     
-    init()
+    public init()
     {
         let main = Bundle(for: EnglishDictionary.self)
         let bundle = Bundle(url: main.url(forResource: "EnglishDictionaryResources", withExtension: "bundle")!)!
