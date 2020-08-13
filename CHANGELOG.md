@@ -4,19 +4,25 @@
 
 ### Added
 
-- [Add `ListScrollPositionInfo` to all `ListStateObserver` callbacks](https://github.com/kyleve/Listable/pull/191).
-
 ### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# 0.9.0
+
+### Added
+
+- [Add `ListScrollPositionInfo` to all `ListStateObserver` callbacks](https://github.com/kyleve/Listable/pull/191).
 
 ### Changed
 
 - [Simplify `Sizing` now that enums support default associated values.](https://github.com/kyleve/Listable/pull/189). Now instead of separate `.thatFits` and `.thatFitsWith(Constraint)` enums, there is a single `.thatFits(Constraint = .noConstraint)` case (the same applies for `autolayout`).
 
 - Changed [how `zIndexes` are assigned to header and items, and support tapping headers / footers](https://github.com/kyleve/Listable/pull/193). This allows registering an `onTap` handler for any HeaderFooter, and providing a background to display while the tap's press is active.
-
-### Misc
-
-# Past Releases
 
 ## 0.8.0
 
