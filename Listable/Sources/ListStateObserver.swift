@@ -71,25 +71,30 @@ public struct ListStateObserver {
     private(set) var onDidScroll : [OnDidScroll] = []
     
     //
-    // MARK: Responding To Content Changes
+    // MARK: Responding To Content Updates
     //
     
-    public typealias OnContentChanged = (ContentChanged) -> ()
+    public typealias OnContentUpdated = (ContentUpdated) -> ()
     
-    /// Registers a callback which will be called when the list view's content is changed – eg through
-    /// inserted, removed, updated, moved items or sections.
-    public mutating func onContentChanged( _ callback : @escaping OnContentChanged)
+    /// Registers a callback which will be called when the list view's content is updated
+    /// due to a call to `setContent`.
+    ///
+    /// **Note**: This method is called even if there were no actual changes made during the `setContent`
+    /// call. To see if there were changes, check the `hadChanges` property on `ContentUpdated`.
+    public mutating func onContentUpdated( _ callback : @escaping OnContentUpdated)
     {
-        self.onContentChanged.append(callback)
+        self.onContentUpdated.append(callback)
     }
     
-    /// Parameters available for `OnContentChanged` callbacks.
-    public struct ContentChanged {
+    /// Parameters available for `OnContentUpdated` callbacks.
+    public struct ContentUpdated {
+        public let hadChanges : Bool
+        
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
     }
     
-    private(set) var onContentChanged : [OnContentChanged] = []
+    private(set) var onContentUpdated : [OnContentUpdated] = []
     
     //
     // MARK: Responding To Visibility Changes

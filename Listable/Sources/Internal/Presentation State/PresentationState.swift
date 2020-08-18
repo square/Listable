@@ -197,6 +197,7 @@ final class PresentationState
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         slice : Content.Slice,
         dependencies: ItemStateDependencies,
+        updateCallbacks : UpdateCallbacks,
         loggable : SignpostLoggable?
     ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update Presentation State", for: loggable)
@@ -215,10 +216,28 @@ final class PresentationState
         
         self.sections = diff.changes.transform(
             old: self.sections,
-            removed: { _, section in section.wasRemoved() },
-            added: { section in SectionState(with: section, dependencies: dependencies) },
-            moved: { old, new, changes, section in section.update(with: old, new: new, changes: changes, dependencies: dependencies) },
-            noChange: { old, new, changes, section in section.update(with: old, new: new, changes: changes, dependencies: dependencies) }
+            removed: { _, section in
+                section.wasRemoved(updateCallbacks: updateCallbacks)
+            },
+            added: { section in
+                SectionState(with: section, dependencies: dependencies, updateCallbacks: updateCallbacks)
+            },
+            moved: { old, new, changes, section in
+                section.update(
+                    with: old, new:new,
+                    changes: changes,
+                    dependencies: dependencies,
+                    updateCallbacks: updateCallbacks
+                )
+            },
+            noChange: { old, new, changes, section in
+                section.update(
+                    with: old, new: new,
+                    changes: changes,
+                    dependencies: dependencies,
+                    updateCallbacks: updateCallbacks
+                )
+            }
         )
     }
     
@@ -255,6 +274,38 @@ final class PresentationState
         self.registeredCellObjectIdentifiers.insert(identifier)
         
         view.register(info.class, forCellWithReuseIdentifier: info.reuseIdentifier)
+    }
+}
+
+
+extension PresentationState
+{    
+    enum UpdateReason : Equatable
+    {
+        case scrolledDown
+        case didEndDecelerating
+        
+        case scrolledToTop
+        
+        case contentChanged(animated : Bool, identifierChanged : Bool)
+        
+        case transitionedToBounds(isEmpty : Bool)
+        
+        case programaticScrollDownTo(IndexPath)
+    
+        var animated : Bool {
+            switch self {
+            case .scrolledDown: return false
+            case .didEndDecelerating: return false
+            case .scrolledToTop: return false
+                
+            case .contentChanged(let animated, let identifierChanged): return animated && identifierChanged == false
+                
+            case .transitionedToBounds(_): return false
+                
+            case .programaticScrollDownTo(_): return false
+            }
+        }
     }
 }
 

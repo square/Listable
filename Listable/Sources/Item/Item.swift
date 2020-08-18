@@ -35,7 +35,7 @@ public protocol AnyItem_Internal
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyIsEquivalent(to other : AnyItem) -> Bool
     
-    func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
+    func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
 }
 
 
@@ -56,10 +56,16 @@ public struct Item<Content:ItemContent> : AnyItem
 
     public var reordering : Reordering?
         
-    public var onSelect : OnSelect.Callback?
-    public var onDeselect : OnDeselect.Callback?
     public var onDisplay : OnDisplay.Callback?
     public var onEndDisplay : OnEndDisplay.Callback?
+    
+    public var onSelect : OnSelect.Callback?
+    public var onDeselect : OnDeselect.Callback?
+    
+    public var onInsert : OnInsert.Callback?
+    public var onRemove : OnRemove.Callback?
+    public var onMove : OnMove.Callback?
+    public var onUpdate : OnUpdate.Callback?
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
     
@@ -74,8 +80,7 @@ public struct Item<Content:ItemContent> : AnyItem
     public init(
         _ content : Content,
         build : Build
-        )
-    {
+    ) {
         self.init(content)
         
         build(&self)
@@ -92,9 +97,12 @@ public struct Item<Content:ItemContent> : AnyItem
         onDisplay : OnDisplay.Callback? = nil,
         onEndDisplay : OnEndDisplay.Callback? = nil,
         onSelect : OnSelect.Callback? = nil,
-        onDeselect : OnDeselect.Callback? = nil
-        )
-    {        
+        onDeselect : OnDeselect.Callback? = nil,
+        onInsert : OnInsert.Callback? = nil,
+        onRemove : OnRemove.Callback? = nil,
+        onMove : OnMove.Callback? = nil,
+        onUpdate : OnUpdate.Callback? = nil
+    ) {
         self.content = content
                 
         if let sizing = sizing {
@@ -143,7 +151,12 @@ public struct Item<Content:ItemContent> : AnyItem
         self.onSelect = onSelect
         self.onDeselect = onDeselect
         
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
+        self.onInsert = onInsert
+        self.onRemove = onRemove
+        self.onMove = onMove
+        self.onUpdate = onUpdate
+        
+        self.reuseIdentifier = .identifier(for: Content.self)
         
         self.identifier = self.content.identifier
     }
@@ -168,31 +181,15 @@ public struct Item<Content:ItemContent> : AnyItem
         return self.content.wasMoved(comparedTo: other.content)
     }
     
-    public func newPresentationItemState(with dependencies : ItemStateDependencies) -> Any
+    public func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
     {
-        PresentationState.ItemState(with: self, dependencies: dependencies)
+        PresentationState.ItemState(with: self, dependencies: dependencies, updateCallbacks: updateCallbacks)
     }
 }
 
 
 public extension Item
 {
-    /// Value passed to the `onSelect` callback for `Item`.
-    struct OnSelect
-    {
-        public typealias Callback = (OnSelect) -> ()
-        
-        public var item : Item
-    }
-    
-    /// Value passed to the `onDeselect` callback for `Item`.
-    struct OnDeselect
-    {
-        public typealias Callback = (OnDeselect) -> ()
-
-        public var item : Item
-    }
-    
     /// Value passed to the `onDisplay` callback for `Item`.
     struct OnDisplay
     {
@@ -212,6 +209,52 @@ public extension Item
         
         public var isFirstEndDisplay : Bool
     }
+    
+    /// Value passed to the `onSelect` callback for `Item`.
+    struct OnSelect
+    {
+        public typealias Callback = (OnSelect) -> ()
+        
+        public var item : Item
+    }
+    
+    /// Value passed to the `onDeselect` callback for `Item`.
+    struct OnDeselect
+    {
+        public typealias Callback = (OnDeselect) -> ()
+
+        public var item : Item
+    }
+    
+    struct OnInsert
+    {
+        public typealias Callback = (OnInsert) -> ()
+        
+        public var item : Item
+    }
+    
+    struct OnRemove
+    {
+        public typealias Callback = (OnRemove) -> ()
+        
+        public var item : Item
+    }
+    
+    struct OnMove
+    {
+        public typealias Callback = (OnMove) -> ()
+        
+        public var old : Item
+        public var new : Item
+    }
+    
+    struct OnUpdate
+    {
+        public typealias Callback = (OnUpdate) -> ()
+        
+        public var old : Item
+        public var new : Item
+    }
 }
 
 
@@ -224,7 +267,6 @@ public extension Item
 /// 1) The value passed to the initializer.
 /// 2) The value from `defaultItemProperties` on the contained `ItemContent`, if non-nil.
 /// 3) A standard, default value.
-///
 public struct DefaultItemProperties<Content:ItemContent>
 {
     public var sizing : Sizing?
@@ -277,8 +319,7 @@ public struct Reordering
         sections : Sections = .same,
         canReorder : CanReorder? = nil,
         didReorder : @escaping DidReorder
-    )
-    {
+    ) {
         self.sections = sections
         self.canReorder = canReorder
         self.didReorder = didReorder

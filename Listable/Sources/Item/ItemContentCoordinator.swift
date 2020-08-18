@@ -68,17 +68,24 @@ public protocol ItemContentCoordinator : AnyObject
     // MARK: Instance Lifecycle
     
     /// Invoked on the coordinator when it is first created and configured.
-    func wasCreated()
+    func wasInserted(_ info : Item<ItemContentType>.OnInsert)
+    
+    /// Invoked on the coordinator when its owned item is removed from the list due to
+    /// the item, or its entire section, being removed from the list.
+    ///
+    /// Not invoked during deallocation of a list.
+    func wasRemoved(_ info : Item<ItemContentType>.OnRemove)
+    
+    /// Invoked on the coordinator when its owned item is moved inside a list due to its
+    /// order changing.
+    ///
+    /// Not invoked when an item is manually re-ordered by a user.
+    func wasMoved(_ info : Item<ItemContentType>.OnMove)
     
     /// Invoked on the coordinator when an external update is pushed onto the owned `Item`.
     /// This happens when the developer updates the content of the list, and the item is
     /// reported as changed via its `isEquivalent(to:)` method.
-    func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>)
-    
-    /// Invoked on the coordinator when its owned item is removed from the list due to
-    /// the item, or its entire section, being removed from the list.
-    /// Note invoked during deallocation of a list.
-    func wasRemoved()
+    func wasUpdated(_ info : Item<ItemContentType>.OnUpdate)
     
     // MARK: Visibility & View Lifecycle
     
@@ -108,9 +115,13 @@ public extension ItemContentCoordinator
 {
     // MARK: Instance Lifecycle
     
-    func wasCreated() {}
-    func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>) {}
-    func wasRemoved() {}
+    func wasInserted(_ info : Item<ItemContentType>.OnInsert) {}
+    
+    func wasRemoved(_ info : Item<ItemContentType>.OnRemove) {}
+    
+    func wasMoved(_ info : Item<ItemContentType>.OnMove) {}
+    
+    func wasUpdated(_ info : Item<ItemContentType>.OnUpdate) {}
     
     // MARK: Visibility Lifecycle
         

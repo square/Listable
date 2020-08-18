@@ -19,15 +19,18 @@ extension PresentationState
         
         var items : [AnyPresentationItemState]
         
-        init(with model : Section, dependencies : ItemStateDependencies)
-        {
+        init(
+            with model : Section,
+            dependencies : ItemStateDependencies,
+            updateCallbacks : UpdateCallbacks
+        ) {
             self.model = model
             
             self.header.state = SectionState.headerFooterState(with: self.header.state, new: model.header)
             self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: model.footer)
             
             self.items = self.model.items.map {
-                $0.newPresentationItemState(with: dependencies) as! AnyPresentationItemState
+                $0.newPresentationItemState(with: dependencies, updateCallbacks: updateCallbacks) as! AnyPresentationItemState
             }
         }
         
@@ -47,9 +50,9 @@ extension PresentationState
             with oldSection : Section,
             new newSection : Section,
             changes : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges,
-            dependencies : ItemStateDependencies
-            )
-        {
+            dependencies : ItemStateDependencies,
+            updateCallbacks : UpdateCallbacks
+        ) {
             self.model = newSection
             
             self.header.state = SectionState.headerFooterState(with: self.header.state, new: self.model.header)
@@ -57,18 +60,28 @@ extension PresentationState
             
             self.items = changes.transform(
                 old: self.items,
-                removed: { _, item in item.wasRemoved() },
-                added: { $0.newPresentationItemState(with: dependencies) as! AnyPresentationItemState },
-                moved: { old, new, item in item.setNew(item: new, reason: .move) },
-                updated: { old, new, item in item.setNew(item: new, reason: .updateFromList) },
-                noChange: { old, new, item in item.setNew(item: new, reason: .noChange) }
+                removed: {
+                    _, item in item.wasRemoved(updateCallbacks: updateCallbacks)
+                },
+                added: {
+                    $0.newPresentationItemState(with: dependencies, updateCallbacks: updateCallbacks) as! AnyPresentationItemState
+                },
+                moved: { old, new, item in
+                    item.setNew(item: new, reason: .moveFromList, updateCallbacks: updateCallbacks)
+                },
+                updated: { old, new, item in
+                    item.setNew(item: new, reason: .updateFromList, updateCallbacks: updateCallbacks)
+                },
+                noChange: { old, new, item in
+                    item.setNew(item: new, reason: .noChange, updateCallbacks: updateCallbacks)
+                }
             )
         }
         
-        func wasRemoved()
+        func wasRemoved(updateCallbacks : UpdateCallbacks)
         {
             for item in self.items {
-                item.wasRemoved()
+                item.wasRemoved(updateCallbacks: updateCallbacks)
             }
         }
         

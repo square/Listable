@@ -26,12 +26,12 @@ protocol AnyPresentationItemState : AnyObject
     func applyTo(cell anyCell : UICollectionViewCell, itemState : Listable.ItemState, reason : ApplyReason)
     func applyToVisibleCell()
         
-    func setNew(item anyItem : AnyItem, reason : PresentationState.ItemUpdateReason)
+    func setNew(item anyItem : AnyItem, reason : PresentationState.ItemUpdateReason, updateCallbacks : UpdateCallbacks)
     
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
     
-    func wasRemoved()
+    func wasRemoved(updateCallbacks : UpdateCallbacks)
     
     var isSelected : Bool { get }
     func set(isSelected: Bool, performCallbacks: Bool)
@@ -60,7 +60,7 @@ extension PresentationState
 {
     enum ItemUpdateReason : CaseIterable
     {
-        case move
+        case moveFromList
         case updateFromList
         case updateFromItemCoordinator
         case noChange
@@ -87,7 +87,7 @@ extension PresentationState
         
         let storage : Storage
                 
-        init(with model : Item<Content>, dependencies : ItemStateDependencies)
+        init(with model : Item<Content>, dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks)
         {            
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
@@ -135,7 +135,7 @@ extension PresentationState
                     return
                 }
                 
-                self.setNew(item: new, reason: .updateFromItemCoordinator)
+                self.setNew(item: new, reason: .updateFromItemCoordinator, updateCallbacks: UpdateCallbacks(.immediate))
                 
                 delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
                 
@@ -146,7 +146,12 @@ extension PresentationState
                 self?.updateCoordinatorWithStateChange(old: old, new: new)
             }
             
-            self.coordination.coordinator.wasCreated()
+            /// Now that we are set up, notify callbacks.
+            
+            updateCallbacks.add {
+                self.model.onInsert?(.init(item: self.model))
+                self.coordination.coordinator.wasInserted(.init(item: self.model))
+            }
         }
         
         // MARK: AnyPresentationItemState
@@ -246,7 +251,7 @@ extension PresentationState
             )
         }
         
-        func setNew(item anyItem: AnyItem, reason: ItemUpdateReason)
+        func setNew(item anyItem: AnyItem, reason: ItemUpdateReason, updateCallbacks : UpdateCallbacks)
         {
             let old = self.model
             let new = anyItem as! Item<Content>
@@ -257,11 +262,28 @@ extension PresentationState
                 self.storage.state.isSelected = new.selectionStyle.isSelected
             }
             
-            if reason == .updateFromList || reason == .move {
+            switch reason {
+            case .moveFromList:
                 self.coordination.info.original = new
-                self.coordination.coordinator.wasUpdated(old: old, new: new)
+ 
+                updateCallbacks.add {
+                    self.coordination.coordinator.wasMoved(.init(old: old, new: new))
+                    self.model.onMove?(.init(old: old, new: new))
+                }
+            case .updateFromList:
+                self.coordination.info.original = new
+                
+                updateCallbacks.add {
+                    self.coordination.coordinator.wasUpdated(.init(old: old, new: new))
+                    self.model.onUpdate?(.init(old: old, new: new))
+                }
+            case .updateFromItemCoordinator:
+                updateCallbacks.add {
+                    self.model.onUpdate?(.init(old: old, new: new))
+                }
+            case .noChange: break
             }
-            
+
             if reason != .noChange {
                 self.resetCachedSizes()
             }
@@ -279,9 +301,12 @@ extension PresentationState
             self.storage.state.visibleCell = nil
         }
         
-        func wasRemoved()
+        func wasRemoved(updateCallbacks : UpdateCallbacks)
         {
-            self.coordination.coordinator.wasRemoved()
+            updateCallbacks.add {
+                self.model.onRemove?(.init(item: self.model))
+                self.coordination.coordinator.wasRemoved(.init(item: self.model))
+            }
         }
         
         var isSelected: Bool {

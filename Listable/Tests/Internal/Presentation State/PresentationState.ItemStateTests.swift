@@ -22,7 +22,9 @@ class PresentationState_ItemStateTests : XCTestCase
         
         let initial = Item(TestContent(value: "initial"))
         
-        let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+        let callbacks = UpdateCallbacks(.immediate)
+        
+        let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
         
         // Updates within init of the coordinator should not trigger callbacks.
         
@@ -73,7 +75,9 @@ class PresentationState_ItemStateTests : XCTestCase
                 selectionStyle: .selectable(isSelected: false)
             )
             
-            let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+            let callbacks = UpdateCallbacks(.immediate)
+            
+            let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
             
             // Should use the initial isSelected value off of the item.
             
@@ -83,7 +87,7 @@ class PresentationState_ItemStateTests : XCTestCase
             
             state.storage.state.isSelected = true
             
-            state.setNew(item: initial, reason: .updateFromList)
+            state.setNew(item: initial, reason: .updateFromList, updateCallbacks: callbacks)
             
             XCTAssertEqual(state.storage.state.isSelected, true)
             
@@ -96,7 +100,7 @@ class PresentationState_ItemStateTests : XCTestCase
                 selectionStyle: .selectable(isSelected: true)
             )
                         
-            state.setNew(item: updated, reason: .updateFromList)
+            state.setNew(item: updated, reason: .updateFromList, updateCallbacks: callbacks)
             
             XCTAssertEqual(state.storage.state.isSelected, true)
         }
@@ -116,11 +120,13 @@ class PresentationState_ItemStateTests : XCTestCase
                 TestContent(value: "updated"),
                 selectionStyle: .selectable(isSelected: true)
             )
+            
+            let callbacks = UpdateCallbacks(.immediate)
         
             for reason in PresentationState.ItemUpdateReason.allCases {
                 switch reason {
-                case .move:
-                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                case .moveFromList:
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "initial")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -128,7 +134,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                    state.setNew(item: updated, reason: .move)
+                    state.setNew(item: updated, reason: .moveFromList, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "updated")
@@ -137,7 +143,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
                     
                 case .updateFromList:
-                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "initial")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -145,7 +151,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                    state.setNew(item: updated, reason: .updateFromList)
+                    state.setNew(item: updated, reason: .updateFromList, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "updated")
@@ -154,7 +160,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
                     
                 case .updateFromItemCoordinator:
-                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "initial")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -162,7 +168,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                    state.setNew(item: updated, reason: .updateFromItemCoordinator)
+                    state.setNew(item: updated, reason: .updateFromItemCoordinator, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -171,7 +177,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
                     
                 case .noChange:
-                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies)
+                    let state = PresentationState.ItemState(with: initial, dependencies: dependencies, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "initial")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -179,7 +185,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     XCTAssertEqual(state.storage.state.isSelected, false)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 0)
 
-                    state.setNew(item: updated, reason: .noChange)
+                    state.setNew(item: updated, reason: .noChange, updateCallbacks: callbacks)
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "initial")
@@ -200,7 +206,9 @@ class PresentationState_ItemStateTests : XCTestCase
         
         let item = Item(TestContent(value: "initial"))
         
-        let state = PresentationState.ItemState(with: item, dependencies: dependencies)
+        let callbacks = UpdateCallbacks(.immediate)
+        
+        let state = PresentationState.ItemState(with: item, dependencies: dependencies, updateCallbacks: callbacks)
         
         // Was Selected / Deselected
         
