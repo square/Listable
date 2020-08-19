@@ -30,7 +30,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         XCTAssertEqual(coordinatorDelegate.coordinatorUpdated_calls.count, 0)
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-        XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
+        XCTAssertEqual(state.coordination.coordinator.wasInserted_calls.count, 1)
         
         XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init"
@@ -42,7 +42,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         XCTAssertEqual(coordinatorDelegate.coordinatorUpdated_calls.count, 1)
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-        XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
+        XCTAssertEqual(state.coordination.coordinator.wasInserted_calls.count, 1)
         
         XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init",
@@ -53,7 +53,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         XCTAssertEqual(coordinatorDelegate.coordinatorUpdated_calls.count, 2)
         XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 0)
-        XCTAssertEqual(state.coordination.coordinator.wasCreated_calls.count, 1)
+        XCTAssertEqual(state.coordination.coordinator.wasInserted_calls.count, 1)
         
         XCTAssertEqual(state.model.content.updates, [
             "update within coordinator init",
@@ -138,7 +138,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "updated")
-                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
+                    XCTAssertEqual(state.coordination.coordinator.wasInserted_calls.count, 1)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
                     
@@ -155,7 +155,7 @@ class PresentationState_ItemStateTests : XCTestCase
                     
                     XCTAssertEqual(state.model.content.value, "updated")
                     XCTAssertEqual(state.coordination.info.original.content.value, "updated")
-                    XCTAssertEqual(state.coordination.coordinator.wasUpdated_calls.count, 1)
+                    XCTAssertEqual(state.coordination.coordinator.wasInserted_calls.count, 1)
                     XCTAssertEqual(state.storage.state.isSelected, true)
                     XCTAssertEqual(state.coordination.coordinator.wasSelected_calls.count, 1)
                     
@@ -342,23 +342,23 @@ fileprivate struct TestContent : ItemContent, Equatable
                 
         // MARK: ItemElementCoordinator - Instance Lifecycle
         
-        var wasCreated_calls: [Void] = [Void]()
+        var wasInserted_calls: [Void] = [Void]()
         
-        func wasCreated()
+        func wasInserted(_ info : Item<ItemContentType>.OnInsert)
         {
-            self.wasCreated_calls.append(())
+            self.wasInserted_calls.append(())
         }
         
-        var wasUpdated_calls = [(old : Item<ItemContentType>, new : Item<ItemContentType>)]()
+        var wasUpdated_calls = [Item<ItemContentType>.OnUpdate]()
         
-        func wasUpdated(old : Item<ItemContentType>, new : Item<ItemContentType>)
+        func wasUpdated(_ info : Item<ItemContentType>.OnUpdate)
         {
-            self.wasUpdated_calls.append((old, new))
+            self.wasUpdated_calls.append(info)
         }
         
         var wasRemoved_calls: [Void] = [Void]()
         
-        func wasRemoved()
+        func wasRemoved(_ info : Item<ItemContentType>.OnRemove)
         {
             self.wasRemoved_calls.append(())
         }
