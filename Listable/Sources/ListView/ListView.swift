@@ -597,7 +597,7 @@ public final class ListView : UIView
     //
     
     internal func updatePresentationState(
-        for reason : Content.Slice.UpdateReason,
+        for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> () = { _ in }
     ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "List Update", for: self)
@@ -650,10 +650,9 @@ public final class ListView : UIView
         
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
-        for reason : Content.Slice.UpdateReason,
+        for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> ()
-        )
-    {
+    ) {
         // Figure out visible content.
         
         let presentationState = self.storage.presentationState
@@ -666,15 +665,23 @@ public final class ListView : UIView
             ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
         }
 
+        let updateCallbacks = UpdateCallbacks(.queue)
+        
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: self,
                 coordinatorDelegate: self
             )
             
-            presentationState.update(with: diff, slice: visibleSlice, dependencies: dependencies, loggable: self)
+            presentationState.update(
+                with: diff,
+                slice: visibleSlice,
+                dependencies: dependencies,
+                updateCallbacks: updateCallbacks,
+                loggable: self
+            )
         }
-        
+                
         // Update Refresh Control
         
         /**
@@ -700,11 +707,16 @@ public final class ListView : UIView
         
         self.updateCollectionViewSelections(animated: reason.animated)
         
-        // Notify state reader the content changed.
+        // Notify updates.
         
-        if diff.changes.isEmpty == false {
-            ListStateObserver.perform(self.stateObserver.onContentChanged, "Content Changed", with: self) { actions in
-                ListStateObserver.ContentChanged(
+        updateCallbacks.perform()
+        
+        // Notify state reader the content updated.
+        
+        if case .contentChanged(_, _) = reason {
+            ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
+                ListStateObserver.ContentUpdated(
+                    hadChanges: diff.changes.isEmpty == false,
                     actions: actions,
                     positionInfo: self.scrollPositionInfo
                 )

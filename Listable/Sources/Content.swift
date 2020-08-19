@@ -244,33 +244,5 @@ internal extension Content
             self.containsAllItems = true
             self.content = Content()
         }
-        
-        enum UpdateReason : Equatable
-        {
-            case scrolledDown
-            case didEndDecelerating
-            
-            case scrolledToTop
-            
-            case contentChanged(animated : Bool, identifierChanged : Bool)
-            
-            case transitionedToBounds(isEmpty : Bool)
-            
-            case programaticScrollDownTo(IndexPath)
-        
-            var animated : Bool {
-                switch self {
-                case .scrolledDown: return false
-                case .didEndDecelerating: return false
-                case .scrolledToTop: return false
-                    
-                case .contentChanged(let animated, let identifierChanged): return animated && identifierChanged == false
-                    
-                case .transitionedToBounds(_): return false
-                    
-                case .programaticScrollDownTo(_): return false
-                }
-            }
-        }
     }
 }
