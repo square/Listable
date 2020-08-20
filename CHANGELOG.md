@@ -10,6 +10,8 @@
 
 ### Changed
 
+- [`isEmpty` on `Content` and `Section` have been replaced with `contains(any:)`](https://github.com/kyleve/Listable/pull/197), which allows more granular comparison of the content in the whole list and in individual sections, respectively. This allows you to check if the list or sections contain headers, footers, items, all, or some combination of them.
+
 ### Misc
 
 # Past Releases

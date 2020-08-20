@@ -13,27 +13,68 @@ public struct Content
     // MARK: Content Data
     //
     
+    /// The identifier for the content, defaults to nil.
+    /// You don't need to set this value – but if you do, and change it to another value,
+    /// the list will reload without animation.
     public var identifier : AnyHashable?
 
+    /// The refresh control, if any, associated with the list.
     public var refreshControl : RefreshControl?
     
+    /// The header for the list, usually displayed before all other content.
     public var header : AnyHeaderFooter?
+    /// The footer for the list, usually displayed after all other content.
     public var footer : AnyHeaderFooter?
     
+    /// The overscroll footer for the list, which is displayed below the bottom bounds of the visible frame,
+    /// so it is only visible if the user manually scrolls the list up to make it visible.
     public var overscrollFooter : AnyHeaderFooter?
     
+    /// All sections in the list.
     public var sections : [Section]
     
-    public var sectionsWithItems : [Section] {
+    /// Any sections that have a non-zero number of items.
+    public var nonEmptySections : [Section] {
         self.sections.filter { $0.items.isEmpty == false }
     }
     
+    /// The total number of items in all of the sections in the list.
     public var itemCount : Int {
         return self.sections.reduce(0, { $0 + $1.items.count })
     }
     
-    public var isEmpty : Bool {
-        return self.sections.isEmpty || self.sections.allSatisfy { $0.isEmpty }
+    /// Check if the content contains any of the given types, which you specify via the `filters`
+    /// parameter. If you do not specify a `filters` parameter, `[.items]` is used.
+    public func contains(any filters : Set<ContentFilters> = [.items]) -> Bool {
+        
+        for filter in filters {
+            switch filter {
+            case .listHeader:
+                if self.header != nil {
+                    return true
+                }
+            case .listFooter:
+                if self.footer != nil {
+                    return true
+                }
+            case .overscrollFooter:
+                if self.overscrollFooter != nil {
+                    return true
+                }
+                
+            case .sectionHeaders: break
+            case .sectionFooters: break
+            case .items: break
+            }
+        }
+        
+        for section in self.sections {
+            if section.contains(any: filters) {
+                return true
+            }
+        }
+        
+        return false
     }
     
     //
@@ -76,7 +117,7 @@ public struct Content
     //
     
     public var firstItem : AnyItem? {
-        guard let first = self.sectionsWithItems.first?.items.first else {
+        guard let first = self.nonEmptySections.first?.items.first else {
             return nil
         }
         
@@ -84,7 +125,7 @@ public struct Content
     }
     
     public var lastItem : AnyItem? {
-        guard let last = self.sectionsWithItems.last?.items.last else {
+        guard let last = self.nonEmptySections.last?.items.last else {
             return nil
         }
         
