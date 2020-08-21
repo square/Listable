@@ -12,18 +12,53 @@ public struct Section
     // MARK: Public Properties
     //
     
+    /// Data backing the identity and updates to the section – for example
+    /// if the section has been moved, plus the identifier for the section's content.
     public var info : AnySectionInfo
     
+    /// The layout for the section and all its content.
+    /// Only relevant to the `list` layout type.
     public var layout : Layout
+    
+    /// How columns within the section should be distributed.
+    /// Only relevant to the `list` layout type.
     public var columns : Columns
     
+    /// The header, if any, associated with the section.
     public var header : AnyHeaderFooter?
+    
+    /// The footer, if any, associated with the section.
     public var footer : AnyHeaderFooter?
     
+    /// The items, if any, associated with the section.
     public var items : [AnyItem]
     
-    public var isEmpty : Bool {
-        return self.items.isEmpty
+    /// Check if the section contains any of the given types, which you specify via the `filters`
+    /// parameter. If you do not specify a `filters` parameter, `[.items]` is used.
+    public func contains(any filters : Set<ContentFilters> = [.items]) -> Bool {
+        
+        for filter in filters {
+            switch filter {
+            case .listHeader: break
+            case .listFooter: break
+            case .overscrollFooter: break
+                
+            case .sectionHeaders:
+                if self.header != nil {
+                    return true
+                }
+            case .sectionFooters:
+                if self.footer != nil {
+                    return true
+                }
+            case .items:
+                if items.isEmpty == false {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
     
     //

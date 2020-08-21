@@ -6,8 +6,9 @@
 //
 
 import XCTest
+@testable import Listable
+
 
 class ContentTests: XCTestCase
 {
-
 }
