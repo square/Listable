@@ -653,6 +653,8 @@ public final class ListView : UIView
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> ()
     ) {
+        precondition(Thread.isMainThread, "Must only update UIKit views from the main thread. Instead, was on `\(Thread.current)`.")
+        
         // Figure out visible content.
         
         let presentationState = self.storage.presentationState
@@ -664,6 +666,8 @@ public final class ListView : UIView
         let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
             ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
         }
+        
+        self.validateCollectionViewDiff(with: diff)
 
         let updateCallbacks = UpdateCallbacks(.queue)
         
@@ -720,6 +724,61 @@ public final class ListView : UIView
                     actions: actions,
                     positionInfo: self.scrollPositionInfo
                 )
+            }
+        }
+    }
+    
+    private func validateCollectionViewDiff(with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>)
+    {
+        guard ListableDebugging.debugging.options.validatesCollectionViewDiff else {
+            return
+        }
+        
+        let calculatedNew : [Section] = diff.changes.transform(
+            old: diff.old,
+            removed: { _, _ in },
+            added: { $0 },
+            moved: { (old, new, changes, section) in
+                section.items = changes.transform(
+                    old: old.items,
+                    removed: { _, _ in },
+                    added:  { $0 },
+                    moved: { (old, new, item) in
+                        item = new
+                    },
+                    updated: { (old, new, item) in
+                        item = new
+                    },
+                    noChange: { (old, new, item) in
+                        item = new
+                    }
+                )
+            },
+            noChange: { (old, new, changes, section) in
+                section.items = changes.transform(
+                    old: old.items,
+                    removed: { _, _ in },
+                    added:  { $0 },
+                    moved: { (old, new, item) in
+                        item = new
+                    },
+                    updated: { (old, new, item) in
+                        item = new
+                    },
+                    noChange: { (old, new, item) in
+                        item = new
+                    }
+                )
+            }
+        )
+        
+        precondition(diff.new.count == calculatedNew.count)
+        
+        for (actual, calculated) in zip(diff.new, calculatedNew) {
+            precondition(actual.items.count == calculated.items.count)
+            
+            for (actualItem, calculatedItem) in zip(actual.items, calculated.items) {
+                precondition(actualItem.identifier == calculatedItem.identifier)
             }
         }
     }
