@@ -888,10 +888,21 @@ public final class ListView : UIView
             
             // Moved Sections
             
+            @available(iOS, introduced: 10.0, deprecated: 14.0)
+            var moveWorkaroundEnabled : Bool {
+                /// Moves are treated as deletes + insertions, because if they result in no-op
+                /// changes, they can be erroneously removed: https://twitter.com/numist/status/1297273548042416128
+                
+                true
+            }
+                        
             changes.movedSections.forEach {
-                //view.deleteSections(IndexSet([$0.oldIndex]))
-                //view.insertSections(IndexSet([$0.newIndex]))
-                view.moveSection($0.oldIndex, toSection: $0.newIndex)
+                if moveWorkaroundEnabled {
+                    view.deleteSections(IndexSet([$0.oldIndex]))
+                    view.insertSections(IndexSet([$0.newIndex]))
+                } else {
+                    view.moveSection($0.oldIndex, toSection: $0.newIndex)
+                }
             }
 
             //
@@ -907,7 +918,12 @@ public final class ListView : UIView
             view.insertItems(at: insertedItems)
             
             changes.movedItems.forEach {
-                view.moveItem(at: $0.oldIndex, to: $0.newIndex)
+                if moveWorkaroundEnabled {
+                    view.deleteItems(at: [$0.oldIndex])
+                    view.insertItems(at: [$0.newIndex])
+                } else {
+                    view.moveItem(at: $0.oldIndex, to: $0.newIndex)
+                }
             }
             
             self.visibleContent.updateVisibleViews()

@@ -17,13 +17,12 @@ final class SettingsAppletErrorViewController : ListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(nextState))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Toggle", style: .plain, target: self, action: #selector(toggleFilter))
     }
     
     override func configure(list: inout ListProperties) {
         
-        switch self.state {
-        case .first, .third:
+        if self.isFiltered == false {
             list("Checkout") { section in
                 section.header = HeaderFooter(HeaderContent(title: "Checkout"))
             }
@@ -56,8 +55,7 @@ final class SettingsAppletErrorViewController : ListViewController {
                 section += ItemContent(text: "[Add On] Orders", inset: false)
                 section += ItemContent(text: "[Add On] Time tracking", inset: false)
             }
-            
-        case .second:
+        } else {
             list("Checkout") { section in
                 section.header = HeaderFooter(HeaderContent(title: "Checkout"))
                 
@@ -90,21 +88,11 @@ final class SettingsAppletErrorViewController : ListViewController {
         }
     }
     
-    var state : State = .first
+    var isFiltered : Bool = false
     
-    enum State : Int {
-        case first
-        case second
-        case third
-    }
-    
-    @objc private func nextState() {
+    @objc private func toggleFilter() {
         
-        guard let next = State(rawValue: self.state.rawValue + 1) else {
-            return
-        }
-        
-        self.state = next
+        self.isFiltered.toggle()
         
         self.reload(animated: true)
     }

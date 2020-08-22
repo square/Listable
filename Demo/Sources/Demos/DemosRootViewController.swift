@@ -35,14 +35,6 @@ public final class DemosRootViewController : ListViewController
             section.header = HeaderFooter(
                 DemoHeader(title: "List Views")
             )
-                        
-            section += Item(
-                DemoItem(text: "Settings Applet Bug"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(SettingsAppletErrorViewController())
-                }
-            )
             
             section += Item(
                 DemoItem(text: "Basic Demo"),
@@ -206,6 +198,21 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .selectable(),
                 onSelect: { _ in
                     Thread.sleep(forTimeInterval: 0.5)
+                }
+            )
+        }
+        
+        list("bugs") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Bug Examples")
+            )
+            
+            section += Item(
+                DemoItem(text: "Settings Applet Reordering"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(SettingsAppletErrorViewController())
                 }
             )
         }

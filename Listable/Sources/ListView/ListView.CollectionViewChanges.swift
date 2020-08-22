@@ -41,7 +41,6 @@ internal extension ListView
             self.deletedSections = changes.removed
             self.insertedSections = changes.added
             
-            
             // Moved Sections
             
             self.movedSections = changes.moved
