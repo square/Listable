@@ -70,13 +70,13 @@ final class SettingsAppletErrorViewController : ListViewController {
             list("Customers") { section in
                 section.header = HeaderFooter(HeaderContent(title: "Customers"))
                 
-                //section += ItemContent(text: "Configure profiles", inset: true)
+                section += ItemContent(text: "Configure profiles", inset: true)
             }
             
             list("Account") { section in
                 section.header = HeaderFooter(HeaderContent(title: "Account"))
                 
-                //section += ItemContent(text: "Business information", inset: true)
+                section += ItemContent(text: "Business information", inset: true)
             }
             
             list("Separator") { section in

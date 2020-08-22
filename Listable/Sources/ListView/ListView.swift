@@ -889,9 +889,9 @@ public final class ListView : UIView
             // Moved Sections
             
             changes.movedSections.forEach {
-                view.deleteSections(IndexSet([$0.oldIndex]))
-                view.insertSections(IndexSet([$0.newIndex]))
-                //view.moveSection($0.oldIndex, toSection: $0.newIndex)
+                //view.deleteSections(IndexSet([$0.oldIndex]))
+                //view.insertSections(IndexSet([$0.newIndex]))
+                view.moveSection($0.oldIndex, toSection: $0.newIndex)
             }
 
             //
