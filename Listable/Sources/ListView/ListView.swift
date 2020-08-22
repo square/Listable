@@ -874,33 +874,19 @@ public final class ListView : UIView
             // Sections
             //
             
-            let debugging = ListableDebugging.debugging
-            
             // Deleted Sections
             
             let deletedSections = IndexSet(changes.deletedSections.map { $0.oldIndex })
         
-            debugging.perform(if: \.logsCollectionViewDiffOperations) {
-                print("Deleting Sections: \(Array(deletedSections))")
-            }
-            
             view.deleteSections(deletedSections)
             
             // Inserted Sections
             
             let insertedSections = IndexSet(changes.insertedSections.map { $0.newIndex })
-            
-            debugging.perform(if: \.logsCollectionViewDiffOperations) {
-                print("Inserting Sections: \(Array(insertedSections))")
-            }
-            
+
             view.insertSections(insertedSections)
             
             // Moved Sections
-            
-            debugging.perform(if: \.logsCollectionViewDiffOperations) {
-                print("Moving Sections: \(changes.movedSections.map { ($0.oldIndex, $0.newIndex) })")
-            }
             
             changes.movedSections.forEach {
                 view.deleteSections(IndexSet([$0.oldIndex]))
@@ -908,16 +894,59 @@ public final class ListView : UIView
                 //view.moveSection($0.oldIndex, toSection: $0.newIndex)
             }
 
+            //
             // Items
+            //
             
-            view.deleteItems(at: changes.deletedItems.map { $0.oldIndex })
-            view.insertItems(at: changes.insertedItems.map { $0.newIndex })
+            let deletedItems = changes.deletedItems.map { $0.oldIndex }
+   
+            view.deleteItems(at: deletedItems)
+            
+            let insertedItems = changes.insertedItems.map { $0.newIndex }
+
+            view.insertItems(at: insertedItems)
             
             changes.movedItems.forEach {
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
             self.visibleContent.updateVisibleViews()
+            
+            //
+            // Debug Logging
+            //
+            
+            let debugging = ListableDebugging.debugging
+            
+            debugging.perform(if: \.logsCollectionViewDiffOperations) {
+                
+                print("Logging Collection View Diff Operations...")
+                print("------------------------------------------")
+                
+                if deletedSections.isEmpty == false {
+                    print("Deleting Sections : \(Array(deletedSections))")
+                }
+                
+                if insertedSections.isEmpty == false {
+                    print("Inserting Sections: \(Array(insertedSections))")
+                }
+                
+                if changes.movedSections.isEmpty == false {
+                    print("Moving Sections   : \(changes.movedSections.map { ($0.oldIndex, $0.newIndex) })")
+                }
+                
+                if deletedItems.isEmpty == false {
+                    print("Deleting Items    : \(deletedItems)")
+                }
+                
+                if insertedItems.isEmpty == false {
+                    print("Inserting Items   : \(insertedItems)")
+                }
+                
+                if changes.movedItems.isEmpty == false {
+                    print("Moving Items      : \(changes.movedItems)")
+                }
+            }
         }
         
         if changes.hasIndexAffectingChanges {
