@@ -27,6 +27,14 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         )
     }
     
+    init(old : [Section], new: [Section], changes : SectionChanges)
+    {
+        self.old = old
+        self.new = new
+        
+        self.changes = changes
+    }
+    
     struct Configuration
     {
         var section : SectionProviders

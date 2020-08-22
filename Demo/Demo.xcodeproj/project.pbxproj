@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A01CCEC24F0D48B00157D15 /* SettingsAppletErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A01CCEB24F0D48B00157D15 /* SettingsAppletErrorViewController.swift */; };
 		0A07119324BA798400CDF65D /* ListStateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A07119224BA798400CDF65D /* ListStateViewController.swift */; };
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49210324E5E11300D17038 /* AccordionViewController.swift */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		06908B38E59ACD7502B5332F /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
+		0A01CCEB24F0D48B00157D15 /* SettingsAppletErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAppletErrorViewController.swift; sourceTree = "<group>"; };
 		0A07119224BA798400CDF65D /* ListStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateViewController.swift; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A49210324E5E11300D17038 /* AccordionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				0A49210324E5E11300D17038 /* AccordionViewController.swift */,
+				0A01CCEB24F0D48B00157D15 /* SettingsAppletErrorViewController.swift */,
 				0AA4D9B4248064A300CF95A5 /* AutoScrollingViewController.swift */,
 				0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */,
 				0AA4D9B2248064A300CF95A5 /* CollectionViewAppearance.swift */,
@@ -424,6 +427,7 @@
 				0AA4D9C2248064A300CF95A5 /* HorizontalLayoutViewController.swift in Sources */,
 				0AA4D9C6248064A300CF95A5 /* SwipeActionsViewController.swift in Sources */,
 				0AA4D9BF248064A300CF95A5 /* WidthCustomizationViewController.swift in Sources */,
+				0A01CCEC24F0D48B00157D15 /* SettingsAppletErrorViewController.swift in Sources */,
 				0AA4D9C8248064A300CF95A5 /* ReorderingViewController.swift in Sources */,
 				0A07119324BA798400CDF65D /* ListStateViewController.swift in Sources */,
 				0AA4D9C0248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
