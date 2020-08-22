@@ -180,24 +180,6 @@ struct ArrayDiff<Element, Identifier:Hashable>
             + self.updated.count
     }
     
-    init(
-        added : [Added],
-        removed : [Removed],
-        moved : [Moved],
-        updated : [Updated],
-        noChange : [NoChange],
-        changeCount : Int,
-        usedFastPath : Bool
-    ) {
-        self.added = added
-        self.removed = removed
-        self.moved = moved
-        self.updated = updated
-        self.noChange = noChange
-        self.changeCount = changeCount
-        self.usedFastPath = usedFastPath
-    }
-    
     static func fastPastDiff(
         old : [Element],
         new : [Element],

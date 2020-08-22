@@ -730,9 +730,9 @@ public final class ListView : UIView
     
     private func validateCollectionViewDiff(with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>)
     {
-//        guard ListableDebugging.debugging.options.validatesCollectionViewDiff else {
-//            return
-//        }
+        guard ListableDebugging.debugging.options.validatesCollectionViewDiff else {
+            return
+        }
         
         /// Apply the calculated diff to the old content to verify that it indeed turns it into the
         /// new content we were vended by the developer. If these line up, in theory,
