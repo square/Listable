@@ -730,9 +730,9 @@ public final class ListView : UIView
     
     private func validateCollectionViewDiff(with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>)
     {
-        guard ListableDebugging.debugging.options.validatesCollectionViewDiff else {
-            return
-        }
+//        guard ListableDebugging.debugging.options.validatesCollectionViewDiff else {
+//            return
+//        }
         
         /// Apply the calculated diff to the old content to verify that it indeed turns it into the
         /// new content we were vended by the developer. If these line up, in theory,
@@ -876,7 +876,9 @@ public final class ListView : UIView
             view.insertSections(IndexSet(changes.insertedSections.map { $0.newIndex }))
             
             changes.movedSections.forEach {
-                view.moveSection($0.oldIndex, toSection: $0.newIndex)
+                view.deleteSections(IndexSet([$0.oldIndex]))
+                view.insertSections(IndexSet([$0.newIndex]))
+                //view.moveSection($0.oldIndex, toSection: $0.newIndex)
             }
 
             // Items

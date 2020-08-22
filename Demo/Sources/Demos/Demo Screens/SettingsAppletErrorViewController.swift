@@ -65,6 +65,8 @@ final class SettingsAppletErrorViewController : ListViewController {
                 section += ItemContent(text: "Customer management", inset: true)
             }
             
+            /// Customers and Account swap during the update. Removing this swap resolves the issue.
+            
             list("Customers") { section in
                 section.header = HeaderFooter(HeaderContent(title: "Customers"))
                 
