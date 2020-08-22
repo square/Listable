@@ -35,6 +35,14 @@ public final class DemosRootViewController : ListViewController
             section.header = HeaderFooter(
                 DemoHeader(title: "List Views")
             )
+                        
+            section += Item(
+                DemoItem(text: "Settings Applet Bug"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(SettingsAppletErrorViewController())
+                }
+            )
             
             section += Item(
                 DemoItem(text: "Basic Demo"),

@@ -9,6 +9,7 @@
 import UIKit
 import Listable
 import BlueprintLists
+import BlueprintUICommonControls
 
 
 final class SettingsAppletErrorViewController : ListViewController {
@@ -16,25 +17,141 @@ final class SettingsAppletErrorViewController : ListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Swap", style: .plain, target: self, action: #selector(performSwap))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(nextState))
     }
     
     override func configure(list: inout ListProperties) {
         
-        
-        
-        if self.isSwapped {
-            list.content
-        } else {
-            list.content
+        switch self.state {
+        case .first, .third:
+            list("Checkout") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Checkout"))
+            }
+            
+            list("Hardware") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Hardware"))
+            }
+            
+            list("Security") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Security"))
+            }
+            
+            list("Account") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Account"))
+            }
+            
+            list("Customers") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Customers"))
+            }
+            
+            list("Separator") { section in
+                section += Item(SeparatorItem(), sizing: .thatFits())
+            }
+            
+            list("Add Ons") { section in
+                section += ItemContent(text: "[Add On] Cash Management", inset: false)
+                section += ItemContent(text: "[Add On] Gift Cards", inset: false)
+                section += ItemContent(text: "[Add On] Online checkout", inset: false)
+                section += ItemContent(text: "[Add On] Open Tickets", inset: false)
+                section += ItemContent(text: "[Add On] Orders", inset: false)
+                section += ItemContent(text: "[Add On] Time tracking", inset: false)
+            }
+            
+        case .second:
+            list("Checkout") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Checkout"))
+                
+                section += ItemContent(text: "Payment types", inset: true)
+                section += ItemContent(text: "Customer management", inset: true)
+            }
+            
+            list("Customers") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Customers"))
+                
+                section += ItemContent(text: "Configure profiles", inset: true)
+            }
+            
+            list("Account") { section in
+                section.header = HeaderFooter(HeaderContent(title: "Account"))
+                
+                section += ItemContent(text: "Business information", inset: true)
+            }
+            
+            list("Separator") { section in
+                section += Item(SeparatorItem(), sizing: .thatFits())
+            }
+            
+            list("Add Ons") { section in
+                section += ItemContent(text: "[Add On] Gift Cards", inset: false)
+                section += ItemContent(text: "[Add On] Time tracking", inset: false)
+            }
         }
-        
     }
     
-    var isSwapped : Bool = false
+    var state : State = .first
     
-    @objc private func performSwap() {
-        self.isSwapped = true
+    enum State : Int {
+        case first
+        case second
+        case third
+    }
+    
+    @objc private func nextState() {
+        
+        guard let next = State(rawValue: self.state.rawValue + 1) else {
+            return
+        }
+        
+        self.state = next
+        
         self.reload(animated: true)
+    }
+}
+
+
+fileprivate struct HeaderContent : BlueprintHeaderFooterContent, Equatable {
+    
+    var title : String
+    
+    var elementRepresentation: Element {
+        Label(text: self.title)
+            .inset(uniform: 20.0)
+    }
+}
+
+
+fileprivate struct ItemContent : BlueprintItemContent, Equatable {
+    
+    var text : String
+    
+    var inset : Bool
+    
+    var identifier: Identifier<ItemContent> {
+        .init(self.text)
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        Label(text: self.text)
+            .inset(top: 20.0, bottom: 20.0, left: inset ? 40.0 : 20.0, right: 20.0)
+    }
+}
+
+fileprivate struct SeparatorItem : BlueprintItemContent, Equatable {
+    
+    var identifier: Identifier<SeparatorItem> {
+        .init()
+    }
+    
+    static func createReusableContentView(frame: CGRect) -> ContentView
+    {
+        let view = BlueprintView(frame: frame)
+        view.backgroundColor = .clear
+        
+        return view
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        Box(backgroundColor: .lightGray)
+            .constrainedTo(height: .absolute(15.0))
     }
 }
