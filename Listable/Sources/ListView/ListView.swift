@@ -870,10 +870,37 @@ public final class ListView : UIView
         let batchUpdates = {
             updateBackingData()
             
+            //
             // Sections
-
-            view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
-            view.insertSections(IndexSet(changes.insertedSections.map { $0.newIndex }))
+            //
+            
+            let debugging = ListableDebugging.debugging
+            
+            // Deleted Sections
+            
+            let deletedSections = IndexSet(changes.deletedSections.map { $0.oldIndex })
+        
+            debugging.perform(if: \.logsCollectionViewDiffOperations) {
+                print("Deleting Sections: \(Array(deletedSections))")
+            }
+            
+            view.deleteSections(deletedSections)
+            
+            // Inserted Sections
+            
+            let insertedSections = IndexSet(changes.insertedSections.map { $0.newIndex })
+            
+            debugging.perform(if: \.logsCollectionViewDiffOperations) {
+                print("Inserting Sections: \(Array(insertedSections))")
+            }
+            
+            view.insertSections(insertedSections)
+            
+            // Moved Sections
+            
+            debugging.perform(if: \.logsCollectionViewDiffOperations) {
+                print("Moving Sections: \(changes.movedSections.map { ($0.oldIndex, $0.newIndex) })")
+            }
             
             changes.movedSections.forEach {
                 view.deleteSections(IndexSet([$0.oldIndex]))

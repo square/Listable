@@ -17,15 +17,15 @@ public struct ListableDebugging
     public struct Options
     {
         public var validatesCollectionViewDiff = true
+        public var logsCollectionViewDiffOperations = true
     }
     
-    func perform(if keyPath : KeyPath<Options, Bool>, max : TimeInterval, action : () -> Void)
+    func perform(if keyPath : KeyPath<Options, Bool>, _ action : () -> Void)
     {
-        guard self.isEnabled && self.options[keyPath: keyPath] else {
-            return
+        if self.isEnabled && self.options[keyPath: keyPath]
+        {
+            action()
         }
-        
-        action()
     }
     
     func measure<Output>(if keyPath : KeyPath<Options, Bool>, max : TimeInterval, action : () -> Output, log : (MeasureLogInfo) -> String) -> Output
