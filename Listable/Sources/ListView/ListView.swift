@@ -865,104 +865,20 @@ public final class ListView : UIView
         
         let view = self.collectionView
         
-        let changes = CollectionViewChanges(sectionChanges: diff.changes)
+        let changes = CollectionViewChanges(
+            sectionChanges: diff.changes,
+            
+            /// Moves are treated as deletes + insertions, because if they result in no-op
+            /// changes, they can be erroneously removed: https://twitter.com/numist/status/1297273548042416128
+            transformMovesIntoDeletesAndInserts: true
+        )
             
         let batchUpdates = {
             updateBackingData()
             
-            //
-            // Sections
-            //
-            
-            // Deleted Sections
-            
-            let deletedSections = IndexSet(changes.deletedSections.map { $0.oldIndex })
-        
-            view.deleteSections(deletedSections)
-            
-            // Inserted Sections
-            
-            let insertedSections = IndexSet(changes.insertedSections.map { $0.newIndex })
-
-            view.insertSections(insertedSections)
-            
-            // Moved Sections
-            
-            @available(iOS, introduced: 10.0, deprecated: 14.0)
-            var moveWorkaroundEnabled : Bool {
-                /// Moves are treated as deletes + insertions, because if they result in no-op
-                /// changes, they can be erroneously removed: https://twitter.com/numist/status/1297273548042416128
-                
-                true
-            }
-                        
-            changes.movedSections.forEach {
-                if moveWorkaroundEnabled {
-                    view.deleteSections(IndexSet([$0.oldIndex]))
-                    view.insertSections(IndexSet([$0.newIndex]))
-                } else {
-                    view.moveSection($0.oldIndex, toSection: $0.newIndex)
-                }
-            }
-
-            //
-            // Items
-            //
-            
-            let deletedItems = changes.deletedItems.map { $0.oldIndex }
-   
-            view.deleteItems(at: deletedItems)
-            
-            let insertedItems = changes.insertedItems.map { $0.newIndex }
-
-            view.insertItems(at: insertedItems)
-            
-            changes.movedItems.forEach {
-                if moveWorkaroundEnabled {
-                    view.deleteItems(at: [$0.oldIndex])
-                    view.insertItems(at: [$0.newIndex])
-                } else {
-                    view.moveItem(at: $0.oldIndex, to: $0.newIndex)
-                }
-            }
+            changes.apply(to: self.collectionView)
             
             self.visibleContent.updateVisibleViews()
-            
-            //
-            // Debug Logging
-            //
-            
-            let debugging = ListableDebugging.debugging
-            
-            debugging.perform(if: \.logsCollectionViewDiffOperations) {
-                
-                print("Logging Collection View Diff Operations...")
-                print("------------------------------------------")
-                
-                if deletedSections.isEmpty == false {
-                    print("Deleting Sections : \(Array(deletedSections))")
-                }
-                
-                if insertedSections.isEmpty == false {
-                    print("Inserting Sections: \(Array(insertedSections))")
-                }
-                
-                if changes.movedSections.isEmpty == false {
-                    print("Moving Sections   : \(changes.movedSections.map { ($0.oldIndex, $0.newIndex) })")
-                }
-                
-                if deletedItems.isEmpty == false {
-                    print("Deleting Items    : \(deletedItems)")
-                }
-                
-                if insertedItems.isEmpty == false {
-                    print("Inserting Items   : \(insertedItems)")
-                }
-                
-                if changes.movedItems.isEmpty == false {
-                    print("Moving Items      : \(changes.movedItems)")
-                }
-            }
         }
         
         if changes.hasIndexAffectingChanges {
