@@ -16,8 +16,46 @@ import Listable
 
 ///
 /// An `ItemContent` specialized for use with Blueprint. Instead of providing
-/// a custom view from `createReusableContentView`, and then updating it in `apply(to:)`,
-/// you instead provide Blueprint element trees, and `Listable` handles mapping this to an underlying `BlueprintView`.
+/// custom views from `createReusable{...}View`, and then updating them in `apply(to:)`,
+/// you instead provide Blueprint elements, and `Listable` handles mapping this to an underlying `BlueprintView`.
+///
+/// A simple `BlueprintItemContent` instance might look like this:
+/// ```
+/// struct MyItemContent : BlueprintItemContent, Equatable
+/// {
+///     var text : String
+///
+///     var identifier: Identifier<MyItemContent> {
+///         return .init(self.text)
+///     }
+///
+///     func element(with info : ApplyItemContentInfo) -> Element
+///     {
+///         Label(text: self.text) {
+///             $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+///             $0.color = info.state.isActive ? .white : .darkGray
+///         }
+///         .inset(horizontal: 15.0, vertical: 10.0)
+///     }
+///
+///     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
+///     {
+///         Box(backgroundColor: .white)
+///     }
+///
+///     func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?
+///     {
+///         Box(backgroundColor: .white(0.2))
+///     }
+/// }
+/// ```
+/// Which uses the `backgroundElement` and `selectedBackgroundElement` methods
+/// to provide rendering of a background for the item, which will respond to its selection state.
+///
+/// The ordering of the elements by z-index is as follows:
+/// 3) `element`
+/// 2) `selectedBackgroundElement` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
+/// 1) `backgroundElement`
 ///
 public protocol BlueprintItemContent : ItemContent
     where
