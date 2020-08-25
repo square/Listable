@@ -5,7 +5,12 @@
 //  Created by Kyle Van Essen on 11/5/19.
 //
 
-/// Specifies how to position an item in a list when scrolling to it.
+/// Specifies how to position an item in a list when requesting the list scrolls to it.
+///
+/// You can specify a position (top, center, bottom), what to do if the
+/// item is already visible on screen, and any additional custom offset
+/// to apply to the scroll event.
+///
 public struct ItemScrollPosition : Equatable
 {
     /// The position to scroll to within the list.
@@ -17,8 +22,12 @@ public struct ItemScrollPosition : Equatable
     /// The offset to apply when scrolling to the item in the list.
     var offset : CGFloat
     
-    public init(position : Position, ifAlreadyVisible : IfAlreadyVisible = .doNothing, offset : CGFloat = 0.0)
-    {
+    /// Creates a new scroll position with the provided values.
+    public init(
+        position : Position,
+        ifAlreadyVisible : IfAlreadyVisible = .doNothing,
+        offset : CGFloat = 0.0
+    ) {
         self.position = position
         self.ifAlreadyVisible = ifAlreadyVisible
         self.offset = offset
@@ -30,7 +39,7 @@ public struct ItemScrollPosition : Equatable
         /// Scroll the item to the top of the list.
         case top
         
-        /// The scroll the item to the middle of the list.
+        /// Scroll the item to the middle of the list.
         case centered
         
         /// Scroll the item to the bottom of the list.

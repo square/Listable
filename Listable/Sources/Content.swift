@@ -83,6 +83,7 @@ public struct Content
     
     public typealias Build = (inout Content) -> ()
     
+    /// Creates a new instance, configured as needed via the provided builder block.
     public init(with build : Build)
     {
         self.init()
@@ -90,6 +91,8 @@ public struct Content
         build(&self)
     }
     
+    /// Creates a new instance with the provided parameters.
+    /// All parameters are optional, pass only what you need to customize.
     public init(
         identifier : AnyHashable? = nil,
         refreshControl : RefreshControl? = nil,
@@ -97,8 +100,7 @@ public struct Content
         footer : AnyHeaderFooter? = nil,
         overscrollFooter : AnyHeaderFooter? = nil,
         sections : [Section] = []
-        )
-    {
+    ) {
         self.identifier = identifier
         
         
@@ -116,6 +118,7 @@ public struct Content
     // MARK: Finding Content
     //
     
+    /// The first `Item` in the content. Returns nil if there is no content in any section.
     public var firstItem : AnyItem? {
         guard let first = self.nonEmptySections.first?.items.first else {
             return nil
@@ -124,6 +127,7 @@ public struct Content
         return first
     }
     
+    /// The last `Item` in the content. Returns nil if there is no content in any section.
     public var lastItem : AnyItem? {
         guard let last = self.nonEmptySections.last?.items.last else {
             return nil
@@ -132,6 +136,8 @@ public struct Content
         return last
     }
     
+    /// Returns the `Item` at the given `IndexPath`.
+    /// The `IndexPath` must be valid. If it is not, a fatal error will occur,
     public func item(at indexPath : IndexPath) -> AnyItem
     {
         let section = self.sections[indexPath.section]
@@ -140,7 +146,10 @@ public struct Content
         return item
     }
     
-    public func indexPath(for identifier : AnyIdentifier) -> IndexPath?
+    /// Returns the first `IndexPath` for the contained `Item` with the given `AnyIdentifier`,
+    /// if it can be found. If nothing is found, nil is returned.
+    /// If you have multiple `Item`s with the same identifier, the first one will be returned.
+    public func firstIndexPath(for identifier : AnyIdentifier) -> IndexPath?
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (itemIndex, item) in section.items.enumerated() {
@@ -153,8 +162,8 @@ public struct Content
         return nil
     }
 
-    /// Returns the true last index path of the content, while the one in PresentationState
-    /// is the last index of the loaded content.
+    /// Returns the `IndexPath` of the last `Item` in the content.
+    /// Returns nil if there are no `Item`s in the content.
     public func lastIndexPath() -> IndexPath?
     {
         guard let lastSectionIndexWithItems = sections.lastIndex(where: { !$0.items.isEmpty }) else {
@@ -171,6 +180,8 @@ public struct Content
     // MARK: Mutating Content
     //
     
+    /// /// Moves the `Item` at the `from` index path to the `to` index path.
+    /// If the index paths are the same, nothing occurs.
     mutating func moveItem(from : IndexPath, to : IndexPath)
     {
         guard from != to else {
@@ -183,6 +194,7 @@ public struct Content
         self.insert(item: item, at: to)
     }
     
+    /// Removes all `Section`s that do not contain any `Item`s.
     public mutating func removeEmpty()
     {
         self.sections.removeAll {
@@ -190,42 +202,56 @@ public struct Content
         }
     }
     
+    /// Appends a `Section` to the end of the `Content`.
     public mutating func add(_ section : Section)
     {
         self.sections.append(section)
     }
     
+    /// Appends a `Section` to the end of the `Content`.
     public static func += (lhs : inout Content, rhs : Section)
     {
         lhs.add(rhs)
     }
     
+    /// Appends a list of `Section`s to the end of the `Content`.
     public static func += (lhs : inout Content, rhs : [Section])
     {
         lhs.sections += rhs
     }
     
-    /// Allows streamlined creation of sections when building a list.
     ///
-    /// Example
-    /// -------
+    /// Allows streamlined creation of sections when building a list, leveraging Swift's `callAsFunction`
+    /// feature, allowing treating objects as function calls.
+    ///
+    /// In layperson's terms, this allows you to replace code like this:
+    /// ```
+    /// listView.configure { list in
+    ///     list += Section("section-id") { section in
+    ///         ...
+    ///     }
+    /// }
+    /// ```
+    /// With this code, which is functionally identical:
     /// ```
     /// listView.configure { list in
     ///     list("section-id") { section in
     ///         ...
     ///     }
     /// }
-    /// ```
+    ///
     public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
     {
         self += Section(identifier, build: build)
     }
     
+    /// Removes the `Item` at the given `IndexPath`.
     internal mutating func remove(at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.remove(at: indexPath.item)
     }
     
+    /// Inserts the `Item` at the given `IndexPath`.
     internal mutating func insert(item : AnyItem, at indexPath : IndexPath)
     {
         self.sections[indexPath.section].items.insert(item, at: indexPath.item)
@@ -235,6 +261,14 @@ public struct Content
     // MARK: Slicing Content
     //
     
+    /// Creates a `Slice` of `Content` that allows cutting down a large list of `Content` to a more appropriate size
+    /// for display within a list. This is used by the presentation system to avoid needing to expensively measure and
+    /// lay out every item in long lists.
+    ///
+    /// Eg, if you provide 10,000 items to a list, we don't need to put all of those into the list right away. We only need to show
+    /// enough to render the list to its current scroll position, plus some overscroll. This allows pretty significant performance
+    /// optimizations for long lists that are not scrolled to the bottom, by culling most items.
+    ///
     internal func sliceTo(indexPath : IndexPath, plus additionalItems : Int = Content.Slice.defaultCount) -> Slice
     {
         var sliced = self

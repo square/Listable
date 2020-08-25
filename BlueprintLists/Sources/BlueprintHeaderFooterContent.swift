@@ -1,5 +1,5 @@
 //
-//  HeaderFooter.swift
+//  BlueprintHeaderFooterContent.swift
 //  BlueprintLists
 //
 //  Created by Kyle Van Essen on 10/22/19.
@@ -9,10 +9,54 @@ import BlueprintUI
 import Listable
 
 
+/// Alias to allow less verbose creation of headers.
 public typealias BlueprintHeaderContent = BlueprintHeaderFooterContent
+
+/// Alias to allow less verbose creation of footers.
 public typealias BlueprintFooterContent = BlueprintHeaderFooterContent
 
 
+///
+/// A `HeaderFooterContent` specialized for use with Blueprint. Instead of providing
+/// custom views from `createReusable{...}View`, and then updating them in `apply(to:)`,
+/// you instead provide Blueprint elements, and `Listable` handles mapping this to an underlying `BlueprintView`.
+///
+/// You do not need to provide any views; just Blueprint `Elements`. Do not
+/// override the `createReusable{...}View` methods.
+///
+/// A non-tappable header that shows a label might look like this:
+/// ```
+/// struct MyHeaderContent : BlueprintHeaderFooterContent, Equatable
+/// {
+///     var title : String
+///
+///     var elementRepresentation: Element {
+///         Label(text: self.title) {
+///             $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+///         }
+///         .inset(horizontal: 15.0, vertical: 10.0)
+///     }
+/// }
+/// ```
+/// The header is made `Equatable` in order to synthesize automatic conformance to `isEquivalent`,
+/// based on the header's properties.
+///
+/// If you want to add support for rendering a background view and a pressed state, you should provide
+/// both `background` and `pressedBackground` properties:
+/// ```
+/// var background : Element? {
+///     Box(backgroundColor: .white)
+/// }
+///
+/// var pressedBackground : Element? {
+///     Box(backgroundColor: .lightGray)
+/// }
+/// ```
+/// The ordering of the elements by z-index is as follows:
+/// z-Index 3) `elementRepresentation`
+/// z-Index 2) `pressedBackground` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
+/// z-Index 1) `background`
+///
 public protocol BlueprintHeaderFooterContent : HeaderFooterContent
 where
     ContentView == BlueprintView,
@@ -27,8 +71,8 @@ where
     var elementRepresentation : Element { get }
     
     /// Optional. Create and return the Blueprint element used to represent the background of the content.
-    /// You usually provide this method alongside `pressedBackground`, if your content
-    /// supports an `onTap` handler.
+    /// You usually provide this method alongside `pressedBackground`, if your header
+    /// has an `onTap` handler.
     ///
     /// Note
     /// ----
@@ -37,7 +81,7 @@ where
     var background : Element? { get }
     
     /// Optional. Create and return the Blueprint element used to represent the background of the content when it is pressed.
-    /// You usually provide this method alongside `background`, if your content supports an `onTap` handler.
+    /// You usually provide this method alongside `background`, if your header has an `onTap` handler.
     ///
     /// Note
     /// ----
@@ -96,4 +140,3 @@ public extension BlueprintHeaderFooterContent
         return view
     }
 }
-

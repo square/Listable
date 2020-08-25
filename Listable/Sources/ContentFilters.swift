@@ -9,6 +9,11 @@ import Foundation
 
 
 /// A filter enum which allows you to query the types of content contained in a `Content` or `Section` object.
+///
+/// For example, to see if `Content` contains any items or section headers, you could do:
+/// ```
+/// let contains = content.contains(any: [.items, .sectionHeaders])
+/// ```
 public enum ContentFilters : Hashable, CaseIterable {
     
     /// If there is any content in the list at all, including headers and footers.
