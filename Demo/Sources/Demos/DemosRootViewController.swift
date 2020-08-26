@@ -83,10 +83,17 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
-                DemoItem(text: "Keyboard Testing"),
+                DemoItem(text: "Keyboard Inset (Full Screen List)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(KeyboardTestingViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Keyboard Inset (Appears Later)"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(ListAppearsAfterKeyboardViewController())
             })
             
             section += Item(

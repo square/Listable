@@ -500,6 +500,10 @@ public final class ListView : UIView
              */
             self.collectionView.frame = self.bounds
             
+            guard oldValue != self.frame else {
+                return
+            }
+            
             /**
              Once the view actually has a size, we can provide content.
             
@@ -516,15 +520,16 @@ public final class ListView : UIView
                 self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
             }
             
-            if oldValue != self.frame {
-                ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
-                    ListStateObserver.FrameChanged(
-                        actions: actions,
-                        positionInfo: self.scrollPositionInfo,
-                        old: oldValue,
-                        new: self.frame
-                    )
-                }
+            /// Our frame changed, update the keyboard inset in case the inset should now be different.
+            self.setContentInsetWithKeyboardFrame()
+            
+            ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
+                ListStateObserver.FrameChanged(
+                    actions: actions,
+                    positionInfo: self.scrollPositionInfo,
+                    old: oldValue,
+                    new: self.frame
+                )
             }
         }
     }
@@ -558,6 +563,9 @@ public final class ListView : UIView
         super.layoutSubviews()
         
         self.collectionView.frame = self.bounds
+        
+        /// Our layout changed, update the keyboard inset in case the inset should now be different.
+        self.setContentInsetWithKeyboardFrame()
     }
     
     //
@@ -868,6 +876,27 @@ public final class ListView : UIView
 }
 
 
+public extension ListView
+{
+    ///
+    /// Call this method to force an immediate, synchronous re-render of the list
+    /// and its content when writing unit or snapshot tests. This avoids needing to
+    /// spin the runloop or needing to use test expectations to wait for content
+    /// to be rendered asynchronously.
+    ///
+    /// **WARNING**: You must **not** call this method outside of tests. Doing so will cause a fatal error.
+    ///
+    func testing_forceLayoutUpdateNow()
+    {
+        guard NSClassFromString("XCTestCase") != nil else {
+            fatalError("You must not call testing_forceLayoutUpdateNow outside of an XCTest environment.")
+        }
+        
+        self.collectionView.reloadData()
+    }
+}
+
+
 extension ListView : ItemContentCoordinatorDelegate
 {
     func coordinatorUpdated(for : AnyItem, animated : Bool)
@@ -960,19 +989,21 @@ extension ListView : KeyboardObserverDelegate
             return
         }
         
-        let inset : CGFloat
-        
-        switch self.behavior.keyboardAdjustmentMode {
-        case .none: inset = 0.0
-            
-        case .adjustsWhenVisible:
-            switch frame {
-            case .nonOverlapping: inset = 0.0
+        let inset : CGFloat = {
+            switch self.behavior.keyboardAdjustmentMode {
+            case .none:
+                return 0.0
                 
-            case .overlapping(let frame):
-                inset = (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
+            case .adjustsWhenVisible:
+                switch frame {
+                case .nonOverlapping:
+                    return 0.0
+                    
+                case .overlapping(let frame):
+                    return (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
+                }
             }
-        }
+        }()
         
         if self.collectionView.contentInset.bottom != inset {
             self.collectionView.contentInset.bottom = inset
