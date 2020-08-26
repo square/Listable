@@ -1,5 +1,5 @@
 //
-//  ReorderGesture.swift
+//  ListReorderGesture.swift
 //  BlueprintLists
 //
 //  Created by Kyle Van Essen on 11/14/19.
@@ -9,30 +9,56 @@ import BlueprintUI
 import Listable
 
 
-public struct ReorderGesture : Element
+///
+/// An element that you use to wrap other elements,
+/// to provide support for attaching a reorder gesture recognizer,
+/// to be used to support reordering of items in your List.
+/// If you do not support reordering items, you do not need
+/// to add this element anywhere in your hierarchy.
+///
+/// In the below example, we see how to set up the content of a simple item, which contains
+/// a text label and a reorder grabber.
+///
+/// ```
+/// func element(with info : ApplyItemContentInfo) -> Element
+/// {
+///     Row { row in
+///         row.add(child: Label(text: "..."))
+///         row.add(child: MyReorderGrabber().listReorderGesture(with: info.reordering))
+///     }
+/// }
+/// ```
+///
+public struct ListReorderGesture : Element
 {
+    /// The element which is being wrapped by the reorder gesture.
     public var element : Element
+    
+    /// If the gesture is enabled or not.
     public var isEnabled : Bool
     
-    public typealias OnStart = () -> Bool
-    public var onStart : OnStart
+    typealias OnStart = () -> Bool
+    var onStart : OnStart
     
-    public typealias OnMove = (UIPanGestureRecognizer) -> ()
-    public var onMove : OnMove
+    typealias OnMove = (UIPanGestureRecognizer) -> ()
+    var onMove : OnMove
     
-    public typealias OnDone = () -> ()
-    public var onDone : OnDone
+    typealias OnDone = () -> ()
+    var onDone : OnDone
     
+    /// Creates a new re-order gesture with the provided options.
     public init(
         isEnabled : Bool = true,
-        reordering : ReorderingActions,
+        actions : ReorderingActions,
         wrapping element : Element
     )
     {
         self.isEnabled =  isEnabled
-        self.onStart = { reordering.beginMoving() }
-        self.onMove = { reordering.moved(with: $0) }
-        self.onDone = { reordering.end() }
+        
+        self.onStart = { actions.beginMoving() }
+        self.onMove = { actions.moved(with: $0) }
+        self.onDone = { actions.end() }
+        
         self.element = element
     }
 
@@ -60,7 +86,21 @@ public struct ReorderGesture : Element
             }
         }
     }
-    
+}
+
+
+public extension Element
+{
+    /// Wraps the element in a re-order gesture.
+    func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true) -> Element
+    {
+        ListReorderGesture(isEnabled: isEnabled, actions: actions, wrapping: self)
+    }
+}
+
+
+fileprivate extension ListReorderGesture
+{
     private final class GestureRecognizer : UIPanGestureRecognizer
     {
         public var onStart : OnStart? = nil
@@ -92,6 +132,7 @@ public struct ReorderGesture : Element
 
             case .ended: self.onDone?()
             case .cancelled, .failed: self.onDone?()
+                
             @unknown default: listableFatal()
             }
         }
@@ -101,7 +142,7 @@ public struct ReorderGesture : Element
     {
         let recognizer : GestureRecognizer
         
-        init(frame: CGRect, wrapping : ReorderGesture)
+        init(frame: CGRect, wrapping : ListReorderGesture)
         {
             self.recognizer = GestureRecognizer()
             
