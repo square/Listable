@@ -327,7 +327,7 @@ public final class ListView : UIView
     {
         // Make sure the item identifier is valid.
         
-        guard let toIndexPath = self.storage.allContent.indexPath(for: item) else {
+        guard let toIndexPath = self.storage.allContent.firstIndexPath(for: item) else {
             return false
         }
         
@@ -731,7 +731,7 @@ public final class ListView : UIView
         } else {
             switch self.autoScrollAction {
             case .scrollToItem(let insertInfo):
-                guard let autoScrollIndexPath = self.storage.allContent.indexPath(for: insertInfo.insertedIdentifier) else {
+                guard let autoScrollIndexPath = self.storage.allContent.firstIndexPath(for: insertInfo.insertedIdentifier) else {
                     fallthrough
                 }
 
