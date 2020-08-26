@@ -42,21 +42,42 @@ protocol KeyboardObserverDelegate : AnyObject {
  */
 final class KeyboardObserver {
     
+    /// The global shared keyboard observer. Why is it a global shared instance?
+    /// We can only know the keyboard position via the keyboard frame notifications.
+    ///
+    /// If a `ListView` is created while a keyboard is already on-screen, we'd have
+    /// no way to determine the keyboard frame, and thus couldn't provide the correct
+    /// content insets to avoid the visible keyboard.
+    ///
+    /// Thus, the `shared` observer is set up on app startup
+    /// (see `SetupKeyboardObserverOnAppStartup.m`) to avoid this problem.
+    static let shared : KeyboardObserver = KeyboardObserver(center: .default)
+    
+    /// Allow logging to the console if app startup-timed shared instance startup did not
+    /// occur; this could cause bugs for the reasons outlined above.
+    fileprivate static var didSetupSharedInstanceDuringAppStartup = false
+    
     private let center : NotificationCenter
     
-    weak var delegate : KeyboardObserverDelegate?
+    private(set) var delegates : [Delegate] = []
+    
+    struct Delegate {
+        private(set) weak var value : KeyboardObserverDelegate?
+    }
     
     //
     // MARK: Initialization
     //
     
-    init(center : NotificationCenter = .default) {
+    init(center : NotificationCenter) {
         
         self.center = center
         
         /// We need to listen to both `will` and `keyboardDidChangeFrame` notifications. Why?
+        ///
         /// When dealing with an undocked or floating keyboard, moving the keyboard
         /// around the screen does NOT call `willChangeFrame`; only `didChangeFrame` is called.
+        ///
         /// Before calling the delegate, we compare `old.endingFrame != new.endingFrame`,
         /// which ensures that the delegate is notified if the frame really changes, and
         /// prevents duplicate calls.
@@ -66,6 +87,35 @@ final class KeyboardObserver {
     }
     
     private var latestNotification : NotificationInfo?
+    
+    //
+    // MARK: Delegates
+    //
+    
+    func add(delegate : KeyboardObserverDelegate) {
+        
+        if self.delegates.contains(where: { $0.value === delegate}) {
+            return
+        }
+        
+        self.delegates.append(Delegate(value: delegate))
+        
+        self.removeDeallocatedDelegates()
+    }
+    
+    func remove(delegate : KeyboardObserverDelegate) {
+        self.delegates.removeAll {
+            $0.value === delegate
+        }
+        
+        self.removeDeallocatedDelegates()
+    }
+    
+    private func removeDeallocatedDelegates() {
+        self.delegates.removeAll {
+            $0.value == nil
+        }
+    }
     
     //
     // MARK: Handling Changes
@@ -125,11 +175,13 @@ final class KeyboardObserver {
          */
         let animationOptions = UIView.AnimationOptions(rawValue: new.animationCurve << 16)
         
-        self.delegate?.keyboardFrameWillChange(
-            for: self,
-            animationDuration: new.animationDuration,
-            options: animationOptions
-        )
+        self.delegates.forEach {
+            $0.value?.keyboardFrameWillChange(
+                for: self,
+                animationDuration: new.animationDuration,
+                options: animationOptions
+            )
+        }
     }
     
     //
@@ -190,3 +242,38 @@ extension KeyboardObserver
         }
     }
 }
+
+
+extension KeyboardObserver {
+    
+    /// Called by `ListView` on setup, to warn developers
+    /// if something has gone wrong with keyboard setup.
+    static func logKeyboardSetupWarningIfNeeded() {
+        if KeyboardObserver.didSetupSharedInstanceDuringAppStartup {
+            return
+        }
+        
+        print(
+            """
+            LISTABLE WARNING: The shared instance of the `KeyboardObserver` was not instantiated
+            during app startup. While not fatal, this could result in a list being created
+            that does not properly position itself to account for the keyboard, if the list is created
+            while the keyboard is already visible.
+            """
+        )
+    }
+}
+
+
+/// An Objective-C accessible class that lets us set up the shared
+/// observer on app startup, without needing to make `KeyboardObserver` Objective-C
+/// accessible and public. See `SetupKeyboardObserverOnAppStartup.m` for more.
+@objc public final class __LST_KeyboardObserver_ObjCAccess : NSObject
+{
+    @objc public static func __setupSharedInstance() {
+        _ = KeyboardObserver.shared
+        
+        KeyboardObserver.didSetupSharedInstanceDuringAppStartup = true
+    }
+}
+

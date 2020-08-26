@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.0']
 
-  s.source_files = 'Listable/Sources/**/*.{swift}'
+  s.source_files = 'Listable/Sources/**/*.{swift,h,m}'
 
   s.weak_framework = 'SwiftUI'
 

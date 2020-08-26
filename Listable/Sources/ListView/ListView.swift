@@ -46,7 +46,8 @@ public final class ListView : UIView
         
         self.visibleContent = VisibleContent()
 
-        self.keyboardObserver = KeyboardObserver()
+        self.keyboardObserver = KeyboardObserver.shared
+        KeyboardObserver.logKeyboardSetupWarningIfNeeded()
         
         self.stateObserver = ListStateObserver()
         
@@ -68,7 +69,7 @@ public final class ListView : UIView
         self.delegate.view = self
         self.delegate.presentationState = self.storage.presentationState
         
-        self.keyboardObserver.delegate = self
+        self.keyboardObserver.add(delegate: self)
                 
         // Register supplementary views.
         
@@ -87,7 +88,9 @@ public final class ListView : UIView
     }
     
     deinit
-    {        
+    {
+        self.keyboardObserver.remove(delegate: self)
+        
         /**
          Even though these are zeroing weak references in UIKIt as of iOS 9.0,
          
