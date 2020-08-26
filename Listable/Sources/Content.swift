@@ -83,6 +83,7 @@ public struct Content
     
     public typealias Build = (inout Content) -> ()
     
+    /// Creates a new instance, configured as needed via the provided builder block.
     public init(with build : Build)
     {
         self.init()
@@ -90,6 +91,8 @@ public struct Content
         build(&self)
     }
     
+    /// Creates a new instance with the provided parameters.
+    /// All parameters are optional, pass only what you need to customize.
     public init(
         identifier : AnyHashable? = nil,
         refreshControl : RefreshControl? = nil,
