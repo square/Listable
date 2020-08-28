@@ -17,8 +17,12 @@ public struct ItemScrollPosition : Equatable
     /// The offset to apply when scrolling to the item in the list.
     var offset : CGFloat
     
-    public init(position : Position, ifAlreadyVisible : IfAlreadyVisible = .doNothing, offset : CGFloat = 0.0)
-    {
+    /// Creates a new scroll position with the provided values.
+    public init(
+        position : Position,
+        ifAlreadyVisible : IfAlreadyVisible = .doNothing,
+        offset : CGFloat = 0.0
+    ) {
         self.position = position
         self.ifAlreadyVisible = ifAlreadyVisible
         self.offset = offset
@@ -30,7 +34,7 @@ public struct ItemScrollPosition : Equatable
         /// Scroll the item to the top of the list.
         case top
         
-        /// The scroll the item to the middle of the list.
+        /// Scroll the item to the middle of the list.
         case centered
         
         /// Scroll the item to the bottom of the list.
