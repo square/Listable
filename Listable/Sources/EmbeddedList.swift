@@ -46,7 +46,7 @@ public extension EmbeddedList
 {
     /// How you specify sizing for an embedded list. The surface area
     /// of this `Sizing` enum is intentionally reduced from the standard `Sizing`
-    /// enum, because several of those values do not make sense for embedded list.
+    /// enum, because several of those values do not make sense for embedded lists.
     enum Sizing : Equatable
     {
         /// Falls back to the default sizing of `Item`s in the list view.

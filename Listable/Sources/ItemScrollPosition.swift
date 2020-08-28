@@ -5,7 +5,12 @@
 //  Created by Kyle Van Essen on 11/5/19.
 //
 
-/// Specifies how to position an item in a list when scrolling to it.
+/// Specifies how to position an item in a list when requesting the list scrolls to it.
+///
+/// You can specify a position (top, center, bottom), what to do if the
+/// item is already visible on screen, and any additional custom offset
+/// to apply to the scroll event.
+///
 public struct ItemScrollPosition : Equatable
 {
     /// The position to scroll to within the list.

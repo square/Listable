@@ -20,11 +20,11 @@ import Foundation
 /// Identifiers do _not_ have to be unique, but it certainly helps. When applying updates,
 /// Listable will convert duplicate identifiers to unique identifiers by counting upward for
 /// each equal identifier it finds (eg, "MyID.1, MyID.2, MyID.3", etc). However, you should do
-/// your best to ensure identifiers are unique, as this helps generate a logically correct diff with applying updates.
+/// your best to ensure identifiers are unique, as this helps generate a visually correct diff with applying updates.
 ///
 /// Identifiers are strongly typed; alongside their contained value,
 /// they also encode their `Represented` type. This means that these two
-/// identifiers are different:
+/// identifiers are different, despite having the same `value`.
 /// ```
 /// let first = Identifier<MyThing>("value")
 /// let second = Identifier<MyOtherThing>("value")

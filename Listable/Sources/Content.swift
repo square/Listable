@@ -137,7 +137,7 @@ public struct Content
     }
     
     /// Returns the given `Item` as the given `IndexPath`.
-    /// The `IndexPath` must be valid.
+    /// The `IndexPath` must be valid. If it is not, a fatal error will occur,
     public func item(at indexPath : IndexPath) -> AnyItem
     {
         let section = self.sections[indexPath.section]

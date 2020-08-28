@@ -10,11 +10,14 @@ import Listable
 
 
 ///
-/// An element that you use to wrap other elements,
-/// to provide support for attaching a reorder gesture recognizer,
-/// to be used to support reordering of items in your List.
+/// An element that wraps your provided element, to enable support
+/// for user-driven re-ordering in a list view.
+///
 /// If you do not support reordering items, you do not need
 /// to add this element anywhere in your hierarchy.
+///
+/// This element on its own has no visual appearance. Thus, you should
+/// still render your own reorder dragger / handle / etc in the passed in element.
 ///
 /// In the below example, we see how to set up the content of a simple item, which contains
 /// a text label and a reorder grabber.
@@ -24,11 +27,14 @@ import Listable
 /// {
 ///     Row { row in
 ///         row.add(child: Label(text: "..."))
+///
+///         row.add(child: ListReorderGesture(actions: info.actions, wrapping: MyReorderGrabber()))
+///
+///         // Could also be written as:
 ///         row.add(child: MyReorderGrabber().listReorderGesture(with: info.reordering))
 ///     }
 /// }
 /// ```
-///
 public struct ListReorderGesture : Element
 {
     /// The element which is being wrapped by the reorder gesture.
@@ -46,13 +52,15 @@ public struct ListReorderGesture : Element
     typealias OnDone = () -> ()
     var onDone : OnDone
     
-    /// Creates a new re-order gesture with the provided options.
+    /// Creates a new re-order gesture which wraps the provided element.
+    /// 
+    /// This element on its own has no visual appearance. Thus, you should
+    /// still render your own reorder dragger / handle / etc in the passed in element.
     public init(
         isEnabled : Bool = true,
         actions : ReorderingActions,
         wrapping element : Element
-    )
-    {
+    ) {
         self.isEnabled =  isEnabled
         
         self.onStart = { actions.beginMoving() }
