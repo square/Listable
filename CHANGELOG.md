@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [Adjust calculated keyboard inset in both `setFrame` and `layoutSubviews`](https://github.com/kyleve/Listable/pull/200). This resolves issues that can occur if the list frame changes while the keyboard is visible.
+
 ### Added
 
 - [Add support for `onInsert` , `onRemove`, `onMove`, `onUpdate`, on `Item`](https://github.com/kyleve/Listable/pull/196) to track when when items are added, removed, moved, or updated. Changed `onContentChanged` to `onContentUpdated` on `ListStateObserver`; it is always called during updates; you can check the `hadChanges` property.
