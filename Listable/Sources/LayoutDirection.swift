@@ -35,6 +35,10 @@
 /// │└────┘ └────┘ └────┘│
 /// └────────────────────┘
 /// ```
+/// When writing custom list layouts, `LayoutDirection` provides many helper methods
+/// to convert the coordinates of `CGSize`, `CGPoint`, `CGRect`, etc, to horizontal or vertical
+/// layout directions. See the extensions in this file for more details.
+///
 public enum LayoutDirection : Hashable
 {
     /// A list layout which lays out top to bottom.
