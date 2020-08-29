@@ -25,7 +25,7 @@ final class ListStateViewController : ListViewController
         
         list("1") { section in
             (1...100).forEach { count in
-                section += DemoItem(text: "Item #\(count)")
+                section += DemoTextItem(text: "Item #\(count)")
             }
         }
         
@@ -52,7 +52,7 @@ final class ListStateViewController : ListViewController
         
         cancel = $index.sink { [weak self] value in
             self?.actions.scrolling.scrollTo(
-                item: Identifier<DemoItem>("Item #\(value)"),
+                item: Identifier<DemoTextItem>("Item #\(value)"),
                 position: .init(position: .top, ifAlreadyVisible: .scrollToPosition),
                 animated: true
             )

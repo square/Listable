@@ -319,6 +319,8 @@ public extension ListLayoutContent
         let isPopulated : Bool
                         
         var size : CGSize = .zero
+        var pinnedWidth : CGFloat? = nil
+        var pinnedHeight : CGFloat? = nil
         
         var x : CGFloat = .zero
         var pinnedX : CGFloat? = nil
@@ -341,7 +343,10 @@ public extension ListLayoutContent
                     x: self.pinnedX ?? self.x,
                     y: self.pinnedY ?? self.y
                 ),
-                size: self.size
+                size: CGSize(
+                    width: self.pinnedWidth ?? self.size.width,
+                    height: self.pinnedHeight ?? self.size.height
+                )
             )
         }
         

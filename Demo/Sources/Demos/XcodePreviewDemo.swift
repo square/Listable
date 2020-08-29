@@ -12,6 +12,12 @@ import BlueprintLists
 import Listable
 
 
+///
+/// This file contains an example of how to use the `ItemPreview` type
+/// to provide live previews of your Listable `ItemContent`.
+///
+
+
 fileprivate struct XcodePreviewDemoContent : BlueprintItemContent, Equatable
 {
     var text : String

@@ -49,7 +49,7 @@ final class ManualSelectionManagementViewController : ListViewController
         list("content") { section in
             
             section += (1...10).map { index in
-                Item(DemoItem(text: "\(index)")) { item in
+                Item(DemoTextItem(text: "\(index)")) { item in
                     item.selectionStyle = .selectable(isSelected: index == selectedIndex)
                     
                     item.onSelect = { _ in

@@ -34,32 +34,32 @@ final class CustomLayoutsViewController : UIViewController
                 section.header = HeaderFooter(DemoHeader(title: "Some Rows"))
                 
                 section += Item(
-                    DemoItem(text: "Row 1"),
+                    DemoTextItem(text: "Row 1"),
                     sizing: .thatFits()
                 )
                 
                 section += Item(
-                    DemoItem(text: "Row 2"),
+                    DemoTextItem(text: "Row 2"),
                     sizing: .thatFits()
                 )
                 
                 section += Item(
-                    DemoItem(text: "Row 3"),
+                    DemoTextItem(text: "Row 3"),
                     sizing: .thatFits()
                 )
                 
                 section += Item(
-                    DemoItem(text: "Row 4"),
+                    DemoTextItem(text: "Row 4"),
                     sizing: .thatFits()
                 )
                 
                 section += Item(
-                    DemoItem(text: "Row 5"),
+                    DemoTextItem(text: "Row 5"),
                     sizing: .thatFits()
                 )
                 
                 section += Item(
-                    DemoItem(text: "Row 6"),
+                    DemoTextItem(text: "Row 6"),
                     sizing: .thatFits()
                 )
             }

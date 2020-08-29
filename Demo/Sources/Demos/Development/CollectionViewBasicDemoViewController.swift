@@ -9,19 +9,20 @@ import UIKit
 
 import Listable
 import BlueprintLists
+import BlueprintUICommonControls
 
 
 final class CollectionViewBasicDemoViewController : UIViewController
 {
-    var rows : [[DemoItem]] = [
+    var rows : [[DemoTextItem]] = [
         [
-            DemoItem(text: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
-            DemoItem(text: "Row 2"),
+            DemoTextItem(text: "Nam sit amet imperdiet odio. Duis sed risus aliquet, finibus ex in, maximus diam. Mauris dapibus cursus rhoncus. Fusce faucibus velit at leo vestibulum, a pharetra dui interdum."),
+            DemoTextItem(text: "Row 2"),
         ],
         [
-            DemoItem(text: "Row 1"),
-            DemoItem(text: "Row 2"),
-            DemoItem(text: "Row 3"),
+            DemoTextItem(text: "Row 1"),
+            DemoTextItem(text: "Row 2"),
+            DemoTextItem(text: "Row 3"),
         ],
         ]
     
@@ -99,8 +100,8 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     @objc func addItem()
     {
-        self.rows[0].insert(DemoItem(text: Date().description), at: 0)
-        self.rows[1].insert(DemoItem(text: Date().description), at: 0)
+        self.rows[0].insert(DemoTextItem(text: Date().description), at: 0)
+        self.rows[1].insert(DemoTextItem(text: Date().description), at: 0)
         
         self.updateTable(animated: true)
     }
@@ -129,5 +130,23 @@ final class CollectionViewBasicDemoViewController : UIViewController
                 }
             }()
         }
+    }
+}
+
+
+fileprivate struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
+{
+    var title : String
+    
+    var elementRepresentation: Element {
+        Label(text: self.title) {
+            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        }
+        .inset(horizontal: 15.0, vertical: 30.0)
+        .box(
+            background: .white,
+            corners: .rounded(radius: 10.0),
+            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
+        )
     }
 }

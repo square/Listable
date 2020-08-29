@@ -15,21 +15,22 @@ import BlueprintUICommonControls
 extension Appearance
 {
     static var demoAppearance = Appearance {
-        $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
     }
 }
+
 
 extension LayoutDescription
 {
     static var demoLayout : Self {
         .list {
             $0.layout = .init(
-                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
                 width: .atMost(600.0),
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
-                itemSpacing: 10.0,
+                itemSpacing: 20.0,
                 itemToSectionFooterSpacing: 10.0
             )
         }
@@ -39,53 +40,68 @@ extension LayoutDescription
 
 extension UIColor
 {
-    static func white(_ blend : CGFloat) -> UIColor
-    {
-        return UIColor(white: blend, alpha: 1.0)
+    static func white(_ blend : CGFloat) -> UIColor {
+        UIColor(white: blend, alpha: 1.0)
     }
 }
 
 
-struct DemoHeader : BlueprintHeaderFooterContent, Equatable
+struct DemoSearchHeader : BlueprintHeaderContent, Equatable
+{
+    var text : String?
+    
+    var elementRepresentation: Element {
+        fatalError()
+    }
+}
+
+
+struct DemoHeader : BlueprintHeaderFooterContent
 {
     var title : String
     
-    var elementRepresentation: Element {
-        Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
-        }
-        .inset(horizontal: 15.0, vertical: 10.0)
-        .box(
-            background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
-        )
+    var onBack : (() -> ())?
+    
+    func isEquivalent(to other: DemoHeader) -> Bool {
+        title == other.title
     }
-}
-
-struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
-{
-    var title : String
     
     var elementRepresentation: Element {
-        Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        
+        Row { row in
+            row.verticalAlignment = .center
+            row.horizontalUnderflow = .growProportionally
+            row.minimumHorizontalSpacing = 10.0
+            
+            if self.onBack != nil {
+                let image = UIImage(named: "back-button")
+                
+                row.add(
+                    growPriority: 0.0,
+                    shrinkPriority: 0.0,
+                    child: Image(image: image).constrainedTo(width: .absolute(25.0), height: .absolute(25.0)).tappable {
+                        self.onBack?()
+                    }
+                )
+            }
+            
+            row.add(
+                child: Label(text: self.title) {
+                    $0.font = .systemFont(ofSize: 30.0, weight: .bold)
+                }
+                .inset(horizontal: 10.0, vertical: 10.0)
+            )
         }
-        .inset(horizontal: 15.0, vertical: 30.0)
-        .box(
-            background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
-        )
+        .blurredBackground(style: .regular)
     }
 }
 
 
-struct DemoItem : BlueprintItemContent, Equatable
+struct DemoTextItem : BlueprintItemContent, Equatable
 {
     var text : String
     
-    var identifier: Identifier<DemoItem> {
+    var identifier: Identifier<DemoTextItem> {
         return .init(self.text)
     }
 
@@ -104,8 +120,8 @@ struct DemoItem : BlueprintItemContent, Equatable
     {
         Box(
             backgroundColor: .white,
-            cornerStyle: .rounded(radius: 8.0),
-            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
+            cornerStyle: .rounded(radius: 12.0),
+            shadowStyle: .simple(radius: 8.0, opacity: 0.15, offset: .init(width: 0.0, height: 6.0), color: .black)
         )
     }
     
@@ -113,8 +129,56 @@ struct DemoItem : BlueprintItemContent, Equatable
     {
         Box(
             backgroundColor: .white(0.2),
-            cornerStyle: .rounded(radius: 8.0),
-            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
+            cornerStyle: .rounded(radius: 12.0)
+        )
+    }
+}
+
+
+struct DemoTitleDetailItem : BlueprintItemContent, Equatable
+{
+    var title : String
+    var detail : String
+    
+    var identifier: Identifier<DemoTitleDetailItem> {
+        return .init(self.title)
+    }
+
+    typealias SwipeActionsView = DefaultSwipeActionsView
+    
+    func element(with info : ApplyItemContentInfo) -> Element
+    {
+        Column { column in
+            column.minimumVerticalSpacing = 10.0
+            column.horizontalAlignment = .fill
+            
+            column.add(child: Label(text: self.title) {
+                $0.font = .systemFont(ofSize: 24.0, weight: .semibold)
+                $0.color = info.state.isActive ? .white : .black
+            })
+            
+            column.add(child: Label(text: self.detail) {
+                $0.font = .systemFont(ofSize: 16.0, weight: .regular)
+                $0.color = info.state.isActive ? .white : .darkGray
+            })
+        }
+        .inset(horizontal: 15.0, vertical: 15.0)
+    }
+    
+    func backgroundElement(with info: ApplyItemContentInfo) -> Element?
+    {
+        Box(
+            backgroundColor: .white,
+            cornerStyle: .rounded(radius: 12.0),
+            shadowStyle: .simple(radius: 8.0, opacity: 0.15, offset: .init(width: 0.0, height: 6.0), color: .black)
+        )
+    }
+    
+    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?
+    {
+        Box(
+            backgroundColor: .white(0.2),
+            cornerStyle: .rounded(radius: 12.0)
         )
     }
 }

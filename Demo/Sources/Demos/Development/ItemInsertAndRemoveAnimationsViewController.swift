@@ -72,7 +72,7 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
                 }
                 
                 section += Item(
-                    DemoItem(text: animations.id),
+                    DemoTextItem(text: animations.id),
                     selectionStyle: .tappable,
                     insertAndRemoveAnimations: animations.animations,
                     onSelect: { _ in
@@ -92,9 +92,9 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
                 })
             }
             
-            section += DemoItem(text: "Extra Row 1")
-            section += DemoItem(text: "Extra Row 2")
-            section += DemoItem(text: "Extra Row 3")
+            section += DemoTextItem(text: "Extra Row 1")
+            section += DemoTextItem(text: "Extra Row 2")
+            section += DemoTextItem(text: "Extra Row 3")
         }
     }
 }
