@@ -188,36 +188,30 @@ public final class DemosViewController : ListViewController
             )
             
             section += Item(
-                DemoTextItem(text: "Itemization Editor"),
+                DemoTitleDetailItem(
+                    title: "Itemization Editor",
+                    detail: "Create an column-based editor UI similar to the one in Square Point of Sale."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ItemizationEditorViewController())
             })
             
             section += Item(
-                DemoTextItem(text: "English Dictionary Search"),
+                DemoTitleDetailItem(
+                    title: "English Dictionary Search",
+                    detail: "A searchable English dictionary, rendering words and their definitions."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CollectionViewDictionaryDemoViewController())
             })
- 
-            section += Item(
-                DemoTextItem(text: "Invoices Payment Schedule"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(InvoicesPaymentScheduleDemoViewController())
-            })
             
             section += Item(
-                DemoTextItem(text: "Manual Selection Management"),
-                selectionStyle: .selectable(),
-                onSelect: { _ in
-                    self.push(ManualSelectionManagementViewController())
-                }
-            )
-            
-            section += Item(
-                DemoTextItem(text: "Accordion View"),
+                DemoTitleDetailItem(
+                    title: "Accordion View",
+                    detail: "Create an accordian-based UI, where sections expand and collapse their items based on an onTap handler."
+                ),
                 selectionStyle: .tappable,
                 onSelect: { _ in
                     self.push(AccordionViewController())
@@ -282,6 +276,21 @@ public final class DemosViewController : ListViewController
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CollectionViewBasicDemoViewController())
+                }
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Invoices Payment Schedule"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(InvoicesPaymentScheduleDemoViewController())
+            })
+            
+            section += Item(
+                DemoTextItem(text: "Manual Selection Management"),
+                selectionStyle: .selectable(),
+                onSelect: { _ in
+                    self.push(ManualSelectionManagementViewController())
                 }
             )
         }
