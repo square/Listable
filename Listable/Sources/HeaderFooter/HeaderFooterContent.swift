@@ -19,6 +19,14 @@ public protocol HeaderFooterContent
     func apply(to views : HeaderFooterContentViews<Self>, reason : ApplyReason)
     
     //
+    // MARK: Default Header / Footer Properties
+    //
+    
+    /// Default values to assign to various properties on the `Item` which wraps
+    /// this `ItemContent`, if those values are not passed to the `Item` initializer.
+    var defaultProperties : DefaultHeaderFooterProperties<Self> { get }
+    
+    //
     // MARK: Tracking Changes
     //
     
@@ -101,6 +109,16 @@ public struct HeaderFooterContentViews<Content:HeaderFooterContent>
     
     /// The background view of the content that's displayed while a press is active.
     public var pressed : Content.PressedBackgroundView
+}
+
+
+/// Provide a default implementation of `defaultProperties` which returns an
+/// empty instance that does not provide any defaults.
+public extension HeaderFooterContent {
+    
+    var defaultProperties : DefaultHeaderFooterProperties<Self> {
+        .init()
+    }
 }
 
 

@@ -107,7 +107,7 @@ public struct Item<Content:ItemContent> : AnyItem
                 
         if let sizing = sizing {
             self.sizing = sizing
-        } else if let sizing = content.defaultItemProperties.sizing {
+        } else if let sizing = content.defaultProperties.sizing {
             self.sizing = sizing
         } else {
             self.sizing = .thatFits(.init(.atLeast(.default)))
@@ -115,7 +115,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         if let layout = layout {
             self.layout = layout
-        } else if let layout = content.defaultItemProperties.layout {
+        } else if let layout = content.defaultProperties.layout {
             self.layout = layout
         } else {
             self.layout = ItemLayout()
@@ -123,7 +123,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         if let selectionStyle = selectionStyle {
             self.selectionStyle = selectionStyle
-        } else if let selectionStyle = content.defaultItemProperties.selectionStyle {
+        } else if let selectionStyle = content.defaultProperties.selectionStyle {
             self.selectionStyle = selectionStyle
         } else {
             self.selectionStyle = .notSelectable
@@ -131,13 +131,13 @@ public struct Item<Content:ItemContent> : AnyItem
         
         if let insertAndRemoveAnimations = insertAndRemoveAnimations {
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        } else if let insertAndRemoveAnimations = content.defaultItemProperties.insertAndRemoveAnimations {
+        } else if let insertAndRemoveAnimations = content.defaultProperties.insertAndRemoveAnimations {
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
         }
         
         if let swipeActions = swipeActions {
             self.swipeActions = swipeActions
-        } else if let swipeActions = content.defaultItemProperties.swipeActions {
+        } else if let swipeActions = content.defaultProperties.swipeActions {
             self.swipeActions = swipeActions
         } else {
             self.swipeActions = nil
@@ -260,12 +260,13 @@ public extension Item
 
 /// Allows specifying default properties to apply to an item when it is initialized,
 /// if those values are not provided to the initializer.
+/// 
 /// Only non-nil values are used – if you do not want to provide a default value,
 /// simply leave the property nil.
 ///
 /// The order of precedence used when assigning values is:
 /// 1) The value passed to the initializer.
-/// 2) The value from `defaultItemProperties` on the contained `ItemContent`, if non-nil.
+/// 2) The value from `defaultProperties` on the contained `ItemContent`, if non-nil.
 /// 3) A standard, default value.
 public struct DefaultItemProperties<Content:ItemContent>
 {

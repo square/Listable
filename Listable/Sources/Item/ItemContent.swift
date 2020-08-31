@@ -28,7 +28,7 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     
     /// Default values to assign to various properties on the `Item` which wraps
     /// this `ItemContent`, if those values are not passed to the `Item` initializer.
-    var defaultItemProperties : DefaultItemProperties<Self> { get }
+    var defaultProperties : DefaultItemProperties<Self> { get }
     
     //
     // MARK: Applying To Displayed View
@@ -229,11 +229,11 @@ public extension ItemContent
 }
 
 
-/// Provide a default implementation of `defaultItemProperties` which returns an
+/// Provide a default implementation of `defaultProperties` which returns an
 /// empty instance that does not provide any defaults.
 public extension ItemContent
 {
-    var defaultItemProperties : DefaultItemProperties<Self> {
+    var defaultProperties : DefaultItemProperties<Self> {
         .init()
     }
 }

@@ -58,14 +58,27 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     public init(
         _ content : Content,
-        sizing : Sizing = .thatFits(.init(.atLeast(.default))),
-        layout : HeaderFooterLayout = HeaderFooterLayout(),
+        sizing : Sizing? = nil,
+        layout : HeaderFooterLayout? = nil,
         onTap : OnTap? = nil
     ) {
         self.content = content
         
-        self.sizing = sizing
-        self.layout = layout
+        if let sizing = sizing {
+            self.sizing = sizing
+        } else if let sizing = content.defaultProperties.sizing {
+            self.sizing = sizing
+        } else {
+            self.sizing = .thatFits(.init(.atLeast(.default)))
+        }
+        
+        if let layout = layout {
+            self.layout = layout
+        } else if let layout = content.defaultProperties.layout {
+            self.layout = layout
+        } else {
+            self.layout = HeaderFooterLayout()
+        }
         
         self.onTap = onTap
         
@@ -122,5 +135,30 @@ public struct HeaderFooterLayout : Equatable
         width : CustomWidth = .default
     ) {
         self.width = width
+    }
+}
+
+
+/// Allows specifying default properties to apply to a header/footer when it is initialized,
+/// if those values are not provided to the initializer.
+/// 
+/// Only non-nil values are used – if you do not want to provide a default value,
+/// simply leave the property nil.
+///
+/// The order of precedence used when assigning values is:
+/// 1) The value passed to the initializer.
+/// 2) The value from `defaultProperties` on the contained `HeaderFooterContent`, if non-nil.
+/// 3) A standard, default value.
+public struct DefaultHeaderFooterProperties<Content:HeaderFooterContent>
+{
+    public var sizing : Sizing?
+    public var layout : HeaderFooterLayout?
+    
+    public init(
+        sizing : Sizing? = nil,
+        layout : HeaderFooterLayout? = nil
+    ) {
+        self.sizing = sizing
+        self.layout = layout
     }
 }

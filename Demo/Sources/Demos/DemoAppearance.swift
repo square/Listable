@@ -15,7 +15,7 @@ import BlueprintUICommonControls
 extension Appearance
 {
     static var demoAppearance = Appearance {
-        $0.backgroundColor = UIColor(white: 0.97, alpha: 1.0)
+        $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
     }
 }
 
@@ -25,11 +25,11 @@ extension LayoutDescription
     static var demoLayout : Self {
         .list {
             $0.layout = .init(
-                padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
+                padding: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0),
                 width: .atMost(600.0),
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
-                sectionHeaderBottomSpacing: 0.0,
+                sectionHeaderBottomSpacing: 10.0,
                 itemSpacing: 15.0,
                 itemToSectionFooterSpacing: 10.0
             )
@@ -87,8 +87,12 @@ struct DemoHeader : BlueprintHeaderFooterContent, Equatable
                 })
             }
         }
-        .inset(horizontal: 15.0, vertical: 15.0)
+        .inset(horizontal: 30.0, vertical: 15.0)
         .blurredBackground(style: .regular)
+    }
+    
+    var defaultProperties: DefaultHeaderFooterProperties<DemoHeader> {
+        .init(layout: HeaderFooterLayout(width: .fill))
     }
 }
 
@@ -149,12 +153,12 @@ struct DemoTitleDetailItem : BlueprintItemContent, Equatable
             column.horizontalAlignment = .fill
             
             column.add(child: Label(text: self.title) {
-                $0.font = .systemFont(ofSize: 24.0, weight: .semibold)
+                $0.font = .systemFont(ofSize: 22.0, weight: .semibold)
                 $0.color = info.state.isActive ? .white : .black
             })
             
             column.add(child: Label(text: self.detail) {
-                $0.font = .systemFont(ofSize: 16.0, weight: .regular)
+                $0.font = .systemFont(ofSize: 14.0, weight: .regular)
                 $0.color = info.state.isActive ? .white : .darkGray
             })
         }

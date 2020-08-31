@@ -40,22 +40,20 @@ public final class DemosViewController : ListViewController
             )
             
             section += Item(
-                DemoTextItem(text: "Blueprint Integration"),
+                DemoTitleDetailItem(
+                    title: "Blueprint Lists",
+                    detail: "Shows how to create a simple ListView in Blueprint."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(BlueprintListDemoViewController())
             })
             
             section += Item(
-                DemoTextItem(text: "Basic Demo"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(CollectionViewBasicDemoViewController())
-                }
-            )
-            
-            section += Item(
-                DemoTextItem(text: "Auto Scrolling (Bottom Pin)"),
+                DemoTitleDetailItem(
+                    title: "Auto Scrolling (Bottom Pin)",
+                    detail: "Shows how to leverage auto scrolling to keep a specific item visible as content is added or removed from the list."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(AutoScrollingViewController())
@@ -63,7 +61,10 @@ public final class DemosViewController : ListViewController
 
             if #available(iOS 13.0, *) {
                 section += Item(
-                    DemoTextItem(text: "List State & State Reader"),
+                    DemoTitleDetailItem(
+                        title: "List State & State Reader",
+                        detail: "How to listen for changes to a list using ListStateObserver, and how to manage the list using ListActions."
+                    ),
                     selectionStyle: .selectable(),
                     onSelect: { _ in
                         self.push(ListStateViewController())
@@ -72,67 +73,33 @@ public final class DemosViewController : ListViewController
             }
                         
             section += Item(
-                DemoTextItem(text: "Keyboard Testing"),
+                DemoTitleDetailItem(
+                    title: "Keyboard Configuration",
+                    detail: "How to set up a list to respect the positioning of the keyboard (or not)."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(KeyboardTestingViewController())
             })
 
             section += Item(
-                DemoTextItem(text: "Swipe Actions"),
+                DemoTitleDetailItem(
+                    title: "Swipe Actions",
+                    detail: "Set up swipe actions on items in a list, similar to what you would see in a UITableView in Mail.app or other apps."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(SwipeActionsViewController())
             })
 
             section += Item(
-                DemoTextItem(text: "Item Insert & Remove Animations"),
+                DemoTitleDetailItem(
+                    title: "Item Insert & Remove Animations",
+                    detail: "Listable defaults to .top for insert and removal animations. You can customize this animation using any of the options shown in this list, or create your own."
+                ),
                 selectionStyle: .selectable(),
                 onSelect: { _ in
                     self.push(ItemInsertAndRemoveAnimationsViewController())
-            })
-        }
-        
-        list("demo screens") { section in
-            
-            section.header = HeaderFooter(
-                DemoHeader(title: "Demo Screens")
-            )
-            
-            section += Item(
-                DemoTextItem(text: "Itemization Editor"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(ItemizationEditorViewController())
-            })
-            
-            section += Item(
-                DemoTextItem(text: "English Dictionary Search"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(CollectionViewDictionaryDemoViewController())
-            })
- 
-            section += Item(
-                DemoTextItem(text: "Invoices Payment Schedule"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(InvoicesPaymentScheduleDemoViewController())
-            })
-            
-            section += Item(
-                DemoTextItem(text: "Manual Selection Management"),
-                selectionStyle: .selectable(),
-                onSelect: { _ in
-                    self.push(ManualSelectionManagementViewController())
-                }
-            )
-            
-            section += Item(
-                DemoTextItem(text: "Accordion View"),
-                selectionStyle: .tappable,
-                onSelect: { _ in
-                    self.push(AccordionViewController())
             })
         }
         
@@ -199,6 +166,49 @@ public final class DemosViewController : ListViewController
             })
         }
         
+        list("demo screens") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Demo Screens")
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Itemization Editor"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(ItemizationEditorViewController())
+            })
+            
+            section += Item(
+                DemoTextItem(text: "English Dictionary Search"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(CollectionViewDictionaryDemoViewController())
+            })
+ 
+            section += Item(
+                DemoTextItem(text: "Invoices Payment Schedule"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(InvoicesPaymentScheduleDemoViewController())
+            })
+            
+            section += Item(
+                DemoTextItem(text: "Manual Selection Management"),
+                selectionStyle: .selectable(),
+                onSelect: { _ in
+                    self.push(ManualSelectionManagementViewController())
+                }
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Accordion View"),
+                selectionStyle: .tappable,
+                onSelect: { _ in
+                    self.push(AccordionViewController())
+            })
+        }
+        
         list("selection-state") { section in
             
             section.header = HeaderFooter(
@@ -241,6 +251,24 @@ public final class DemosViewController : ListViewController
                 onSelect : { _ in
                     self.push(CoordinatorViewController())
             })
+        }
+        
+        list("internal") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(
+                    title: "Internal Demos",
+                    detail: "Demos mainly meant for developers of Listable, with specific implementations to test for or trigger bugs or specific behaviors."
+                )
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Basic Demo"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(CollectionViewBasicDemoViewController())
+                }
+            )
         }
         
         list("uikit") { section in
