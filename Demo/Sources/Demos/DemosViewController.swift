@@ -1,5 +1,5 @@
 //
-//  InternalDemosViewController.swift
+//  DemosViewController.swift
 //  Demo
 //
 //  Created by Kyle Van Essen on 6/24/19.
@@ -9,16 +9,12 @@ import UIKit
 import Listable
 
 
-public final class InternalDemosViewController : ListViewController
+public final class DemosViewController : ListViewController
 {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Demos"
-        
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
-        }
+        self.title = "Listable"
     }
     
     func push(_ viewController : UIViewController) {
@@ -37,8 +33,25 @@ public final class InternalDemosViewController : ListViewController
         list("list-view") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "List Views")
+                DemoHeader(
+                    title: "Getting Started",
+                    detail: "Examples of general usage of a ListView and its features."
+                )
             )
+            
+            section += Item(
+                DemoTextItem(text: "Blueprint Integration"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(BlueprintListDemoViewController())
+            })
+            
+            section += Item(
+                DemoTextItem(text: "Auto Scrolling (Bottom Pin)"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(AutoScrollingViewController())
+            })
             
             section += Item(
                 DemoTextItem(text: "Basic Demo"),
@@ -49,19 +62,12 @@ public final class InternalDemosViewController : ListViewController
             )
             
             section += Item(
-                DemoTextItem(text: "Blueprint Integration"),
+                DemoTextItem(text: "English Dictionary Search"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(BlueprintListDemoViewController())
+                    self.push(CollectionViewDictionaryDemoViewController())
             })
 
-            section += Item(
-                DemoTextItem(text: "Auto Scrolling (Bottom Pin)"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(AutoScrollingViewController())
-            })
-            
             if #available(iOS 13.0, *) {
                 section += Item(
                     DemoTextItem(text: "List State & State Reader"),
@@ -78,14 +84,7 @@ public final class InternalDemosViewController : ListViewController
                 onSelect : { _ in
                     self.push(ItemizationEditorViewController())
             })
-            
-            section += Item(
-                DemoTextItem(text: "English Dictionary Search"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(CollectionViewDictionaryDemoViewController())
-            })
-            
+                        
             section += Item(
                 DemoTextItem(text: "Keyboard Testing"),
                 selectionStyle: .selectable(),
@@ -93,12 +92,7 @@ public final class InternalDemosViewController : ListViewController
                     self.push(KeyboardTestingViewController())
             })
             
-            section += Item(
-                DemoTextItem(text: "Reordering (Experimental)"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(ReorderingViewController())
-            })
+
             
             section += Item(
                 DemoTextItem(text: "Invoices Payment Schedule"),
@@ -144,32 +138,11 @@ public final class InternalDemosViewController : ListViewController
             })
         }
         
-        list("layouts") { section in
+        list("list layout") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "Other Layouts")
+                DemoHeader(title: "List Layout (Default)")
             )
-            
-            section += Item(
-                DemoTextItem(text: "Grid Layout"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(CustomLayoutsViewController())
-            })
-            
-            section += Item(
-                DemoTextItem(text: "Paged Layout"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(PagedViewController())
-            })
-            
-            section += Item(
-                DemoTextItem(text: "Horizontal Layout"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(HorizontalLayoutViewController())
-            })
             
             section += Item(
                 DemoTextItem(text: "Width Customization"),
@@ -186,6 +159,48 @@ public final class InternalDemosViewController : ListViewController
             })
         }
         
+        list("paged layout") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Paged Layout")
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Paged Layout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(PagedViewController())
+            })
+        }
+        
+        list("grid layout") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Grid Layout")
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Grid Layout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(CustomLayoutsViewController())
+            })
+        }
+        
+        list("nested lists") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Nested Lists")
+            )
+            
+            section += Item(
+                DemoTextItem(text: "Horizontal Layout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(HorizontalLayoutViewController())
+            })
+        }
+        
         list("selection-state") { section in
             
             section.header = HeaderFooter(
@@ -194,22 +209,31 @@ public final class InternalDemosViewController : ListViewController
 
             section += Item(
                 DemoTextItem(text: "Tappable Row"),
-                selectionStyle: .selectable()
+                selectionStyle: .tappable
             )
             
             section += Item(
                 DemoTextItem(text: "Tappable Row (Slow Is Selected)"),
-                selectionStyle: .selectable(),
+                selectionStyle: .tappable,
                 onSelect: { _ in
                     Thread.sleep(forTimeInterval: 0.5)
                 }
             )
         }
         
-        list("collection-view") { section in
+        list("experimental") { section in
+            section += Item(
+                DemoTextItem(text: "Reordering (Experimental)"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(ReorderingViewController())
+            })
+        }
+        
+        list("uikit") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "UICollectionViews")
+                DemoHeader(title: "UIKit Example Screens")
             )
 
             section += Item(
@@ -218,13 +242,6 @@ public final class InternalDemosViewController : ListViewController
                 onSelect : { _ in
                     self.push(FlowLayoutViewController())
             })
-        }
-        
-        list("scroll-view") { section in
-            
-            section.header = HeaderFooter(
-                DemoHeader(title: "UIScrollViews")
-            )
             
             section += Item(
                 DemoTextItem(text: "Edges Playground"),
@@ -235,4 +252,3 @@ public final class InternalDemosViewController : ListViewController
         }
     }
 }
-

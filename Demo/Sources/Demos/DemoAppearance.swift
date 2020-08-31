@@ -30,7 +30,7 @@ extension LayoutDescription
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
-                itemSpacing: 20.0,
+                itemSpacing: 15.0,
                 itemToSectionFooterSpacing: 10.0
             )
         }
@@ -56,42 +56,38 @@ struct DemoSearchHeader : BlueprintHeaderContent, Equatable
 }
 
 
-struct DemoHeader : BlueprintHeaderFooterContent
+struct DemoHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
+    var detail: String?
     
-    var onBack : (() -> ())?
-    
-    func isEquivalent(to other: DemoHeader) -> Bool {
-        title == other.title
+    init(
+        title : String,
+        detail: String? = nil
+    ) {
+        self.title = title
+        self.detail = detail
     }
     
     var elementRepresentation: Element {
         
-        Row { row in
-            row.verticalAlignment = .center
-            row.horizontalUnderflow = .growProportionally
-            row.minimumHorizontalSpacing = 10.0
+        Column { column in
+            column.minimumVerticalSpacing = 10.0
+            column.horizontalAlignment = .fill
             
-            if self.onBack != nil {
-                let image = UIImage(named: "back-button")
-                
-                row.add(
-                    growPriority: 0.0,
-                    shrinkPriority: 0.0,
-                    child: Image(image: image).constrainedTo(width: .absolute(25.0), height: .absolute(25.0)).tappable {
-                        self.onBack?()
-                    }
-                )
+            column.add(child: Label(text: self.title) {
+                $0.font = .systemFont(ofSize: 28.0, weight: .bold)
+                $0.color = .black
+            })
+            
+            self.detail.map { detail in
+                column.add(child: Label(text: detail) {
+                    $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+                    $0.color = .darkGray
+                })
             }
-            
-            row.add(
-                child: Label(text: self.title) {
-                    $0.font = .systemFont(ofSize: 30.0, weight: .bold)
-                }
-                .inset(horizontal: 10.0, vertical: 10.0)
-            )
         }
+        .inset(horizontal: 15.0, vertical: 15.0)
         .blurredBackground(style: .regular)
     }
 }
@@ -121,7 +117,7 @@ struct DemoTextItem : BlueprintItemContent, Equatable
         Box(
             backgroundColor: .white,
             cornerStyle: .rounded(radius: 12.0),
-            shadowStyle: .simple(radius: 8.0, opacity: 0.15, offset: .init(width: 0.0, height: 6.0), color: .black)
+            shadowStyle: .simple(radius: 6.0, opacity: 0.15, offset: .init(width: 0.0, height: 4.0), color: .black)
         )
     }
     

@@ -10,17 +10,15 @@
 		0A07119324BA798400CDF65D /* ListStateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A07119224BA798400CDF65D /* ListStateViewController.swift */; };
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49210324E5E11300D17038 /* AccordionViewController.swift */; };
-		0A5DC1AD24F9BAFA00DC7C14 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5DC1AC24F9BAFA00DC7C14 /* RootViewController.swift */; };
 		0A5DC1AF24F9D80900DC7C14 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5DC1AE24F9D80900DC7C14 /* BlurredBackground.swift */; };
 		0A793B5824E4B53500850139 /* ManualSelectionManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A793B5724E4B53500850139 /* ManualSelectionManagementViewController.swift */; };
 		0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A87BA642463567B0047C3B5 /* CHANGELOG.md */; };
-		0A9F89AA24FAE98C0063B03C /* DemoContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F89A924FAE98C0063B03C /* DemoContent.swift */; };
 		0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */; };
 		0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */; };
 		0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */; };
 		0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */; };
 		0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */; };
-		0AA4D9BE248064A300CF95A5 /* InternalDemosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AD248064A300CF95A5 /* InternalDemosViewController.swift */; };
+		0AA4D9BE248064A300CF95A5 /* DemosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AD248064A300CF95A5 /* DemosViewController.swift */; };
 		0AA4D9BF248064A300CF95A5 /* WidthCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */; };
 		0AA4D9C0248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AF248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift */; };
 		0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9B0248064A300CF95A5 /* CoordinatorViewController.swift */; };
@@ -50,17 +48,15 @@
 		0A07119224BA798400CDF65D /* ListStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateViewController.swift; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A49210324E5E11300D17038 /* AccordionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
-		0A5DC1AC24F9BAFA00DC7C14 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		0A5DC1AE24F9D80900DC7C14 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		0A793B5724E4B53500850139 /* ManualSelectionManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualSelectionManagementViewController.swift; sourceTree = "<group>"; };
 		0A87BA642463567B0047C3B5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
-		0A9F89A924FAE98C0063B03C /* DemoContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoContent.swift; sourceTree = "<group>"; };
 		0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
 		0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewEdgesPlaygroundViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
-		0AA4D9AD248064A300CF95A5 /* InternalDemosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalDemosViewController.swift; sourceTree = "<group>"; };
+		0AA4D9AD248064A300CF95A5 /* DemosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemosViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WidthCustomizationViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AF248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvoicesPaymentScheduleDemoViewController.swift; sourceTree = "<group>"; };
 		0AA4D9B0248064A300CF95A5 /* CoordinatorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorViewController.swift; sourceTree = "<group>"; };
@@ -116,17 +112,15 @@
 			isa = PBXGroup;
 			children = (
 				0ADC3B3424907C80008DF2C0 /* XcodePreviewDemo.swift */,
-				0A5DC1AC24F9BAFA00DC7C14 /* RootViewController.swift */,
-				0AA4D9AD248064A300CF95A5 /* InternalDemosViewController.swift */,
+				0AA4D9AD248064A300CF95A5 /* DemosViewController.swift */,
 				0AA4D9B2248064A300CF95A5 /* DemoAppearance.swift */,
 				0A5DC1AE24F9D80900DC7C14 /* BlurredBackground.swift */,
-				0A9F89A924FAE98C0063B03C /* DemoContent.swift */,
-				0AA4D9CA248064AE00CF95A5 /* Development */,
+				0AA4D9CA248064AE00CF95A5 /* Demos */,
 			);
 			path = Demos;
 			sourceTree = "<group>";
 		};
-		0AA4D9CA248064AE00CF95A5 /* Development */ = {
+		0AA4D9CA248064AE00CF95A5 /* Demos */ = {
 			isa = PBXGroup;
 			children = (
 				0A49210324E5E11300D17038 /* AccordionViewController.swift */,
@@ -151,7 +145,7 @@
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
 			);
-			path = Development;
+			path = Demos;
 			sourceTree = "<group>";
 		};
 		0AE8554F2390933100F2E245 /* Test Targets */ = {
@@ -429,11 +423,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0AA4D9BE248064A300CF95A5 /* InternalDemosViewController.swift in Sources */,
+				0AA4D9BE248064A300CF95A5 /* DemosViewController.swift in Sources */,
 				0AA4D9C2248064A300CF95A5 /* HorizontalLayoutViewController.swift in Sources */,
 				0AA4D9C6248064A300CF95A5 /* SwipeActionsViewController.swift in Sources */,
 				0AA4D9BF248064A300CF95A5 /* WidthCustomizationViewController.swift in Sources */,
-				0A9F89AA24FAE98C0063B03C /* DemoContent.swift in Sources */,
 				0AA4D9C8248064A300CF95A5 /* ReorderingViewController.swift in Sources */,
 				0A07119324BA798400CDF65D /* ListStateViewController.swift in Sources */,
 				0AA4D9C0248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift in Sources */,
@@ -449,7 +442,6 @@
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,
 				0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
 				0ACF96D624A0094D0090EAC4 /* ItemInsertAndRemoveAnimationsViewController.swift in Sources */,
-				0A5DC1AD24F9BAFA00DC7C14 /* RootViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0ADC3B3524907C80008DF2C0 /* XcodePreviewDemo.swift in Sources */,
 				0AA4D9C4248064A300CF95A5 /* ItemizationEditorViewController.swift in Sources */,
