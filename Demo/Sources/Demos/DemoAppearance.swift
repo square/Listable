@@ -29,7 +29,7 @@ extension LayoutDescription
                 width: .atMost(600.0),
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
-                sectionHeaderBottomSpacing: 15.0,
+                sectionHeaderBottomSpacing: 0.0,
                 itemSpacing: 15.0,
                 itemToSectionFooterSpacing: 10.0
             )
@@ -76,7 +76,7 @@ struct DemoHeader : BlueprintHeaderFooterContent, Equatable
             column.horizontalAlignment = .fill
             
             column.add(child: Label(text: self.title) {
-                $0.font = .systemFont(ofSize: 28.0, weight: .bold)
+                $0.font = .systemFont(ofSize: 26.0, weight: .bold)
                 $0.color = .black
             })
             
