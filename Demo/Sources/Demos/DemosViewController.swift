@@ -106,18 +106,24 @@ public final class DemosViewController : ListViewController
         list("list layout") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "List Layout (Default)")
+                DemoHeader(title: "List Layouts")
             )
             
             section += Item(
-                DemoTextItem(text: "Width Customization"),
+                DemoTitleDetailItem(
+                    title: "Layout Customization",
+                    detail: "How to customize the layout of Items in a list, changing their alignment and fill from the default."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(WidthCustomizationViewController())
             })
 
             section += Item(
-                DemoTextItem(text: "Spacing Customization"),
+                DemoTitleDetailItem(
+                    title: "Spacing Customization",
+                    detail: "How to customize the spacing between content in a list, with examples."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(SpacingCustomizationViewController())
@@ -127,11 +133,14 @@ public final class DemosViewController : ListViewController
         list("paged layout") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "Paged Layout")
+                DemoHeader(title: "Paged Layouts")
             )
             
             section += Item(
-                DemoTextItem(text: "Paged Layout"),
+                DemoTitleDetailItem(
+                    title: "Paged Layout",
+                    detail: "Setting up a basic paged layout to represent content, similar to a UIPageViewController."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(PagedViewController())
@@ -141,11 +150,14 @@ public final class DemosViewController : ListViewController
         list("grid layout") { section in
             
             section.header = HeaderFooter(
-                DemoHeader(title: "Grid Layout")
+                DemoHeader(title: "Grid Layouts")
             )
             
             section += Item(
-                DemoTextItem(text: "Grid Layout"),
+                DemoTitleDetailItem(
+                    title: "Grid Layout",
+                    detail: "Setting up a basic grid layout to represent content."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(CustomLayoutsViewController())
@@ -159,7 +171,10 @@ public final class DemosViewController : ListViewController
             )
             
             section += Item(
-                DemoTextItem(text: "Horizontal Layout"),
+                DemoTitleDetailItem(
+                    title: "Horizontal Layout",
+                    detail: "Shows how to nest a horiztonally scrolling list into a vertically scrolling list."
+                ),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(HorizontalLayoutViewController())
