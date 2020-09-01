@@ -52,6 +52,49 @@ class ListViewTests: XCTestCase
         listView.collectionView.contentOffset.y = 100
         self.waitForOneRunloop()
     }
+    
+    func test_contentSize()
+    {
+        self.testcase("vertical") {
+            let properties = ListProperties.default { list in
+                
+                list.layout = .paged {
+                    $0.direction = .vertical
+                    $0.pagingSize = .fixed(100.0)
+                }
+                
+                list("section") { section in
+                    section += TestContent(title: "first item")
+                    section += TestContent(title: "second item")
+                    section += TestContent(title: "third item")
+                }
+            }
+            
+            let size = ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties)
+            
+            XCTAssertEqual(size, CGSize(width: 100.0, height: 300.0))
+        }
+        
+        self.testcase("horizontal") {
+            let properties = ListProperties.default { list in
+                
+                list.layout = .paged {
+                    $0.direction = .horizontal
+                    $0.pagingSize = .fixed(100.0)
+                }
+                
+                list("section") { section in
+                    section += TestContent(title: "first item")
+                    section += TestContent(title: "second item")
+                    section += TestContent(title: "third item")
+                }
+            }
+            
+            let size = ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties)
+            
+            XCTAssertEqual(size, CGSize(width: 300.0, height: 100.0))
+        }
+    }
 }
 
 

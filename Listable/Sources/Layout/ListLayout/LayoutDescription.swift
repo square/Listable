@@ -78,14 +78,18 @@ extension LayoutDescription
         
         // MARK: AnyLayoutDescriptionConfiguration
         
-        public func createEmptyLayout() -> AnyListLayout
+        func createEmptyLayout(
+            appearance : Appearance,
+            behavior: Behavior
+        ) -> AnyListLayout
         {
-            let layoutAppearance = LayoutType.LayoutAppearance.default
+            var layoutAppearance = LayoutType.LayoutAppearance.default
+            self.configure(&layoutAppearance)
             
             return LayoutType(
                 layoutAppearance: layoutAppearance,
-                appearance: .init(),
-                behavior: .init(),
+                appearance: appearance,
+                behavior: behavior,
                 content: .init()
             )
         }
@@ -133,7 +137,10 @@ extension LayoutDescription
 
 public protocol AnyLayoutDescriptionConfiguration
 {
-    func createEmptyLayout() -> AnyListLayout
+    func createEmptyLayout(
+        appearance : Appearance,
+        behavior: Behavior
+    ) -> AnyListLayout
     
     func createPopulatedLayout(
         appearance : Appearance,

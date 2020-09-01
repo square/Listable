@@ -71,7 +71,10 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.appearance = appearance
         self.behavior = behavior
         
-        self.layout = self.layoutDescription.configuration.createEmptyLayout()
+        self.layout = self.layoutDescription.configuration.createEmptyLayout(
+            appearance: appearance,
+            behavior: behavior
+        )
         
         self.previousLayout = self.layout
         
@@ -270,9 +273,9 @@ final class CollectionViewLayout : UICollectionViewLayout
         super.prepare()
 
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
-        
+                        
         let size = self.collectionView?.bounds.size ?? .zero
-                
+        
         self.neededLayoutType.update(with: {
             
             // Layouts with zero size are generally undefined, so skip them until the view has a size.

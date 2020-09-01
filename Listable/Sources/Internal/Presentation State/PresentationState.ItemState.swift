@@ -75,7 +75,7 @@ extension PresentationState
         private(set) var coordination : Coordination
         
         struct Coordination {
-            var coordinator : Content.Coordinator
+            var coordinator : Content.Coordinator?
             
             let actions : ItemContentCoordinatorActions<Content>
             let info : ItemContentCoordinatorInfo<Content>
@@ -113,7 +113,7 @@ extension PresentationState
                 current: { storage.model }
             )
             
-            let coordinator = model.content.makeCoordinator(actions: actions, info: info)
+            let coordinator = model.isListSizingItem ? nil : model.content.makeCoordinator(actions: actions, info: info)
             
             self.coordination = Coordination(
                 coordinator: coordinator,
@@ -150,7 +150,7 @@ extension PresentationState
             
             updateCallbacks.add {
                 self.model.onInsert?(.init(item: self.model))
-                self.coordination.coordinator.wasInserted(.init(item: self.model))
+                self.coordination.coordinator?.wasInserted(.init(item: self.model))
             }
         }
         
@@ -267,14 +267,14 @@ extension PresentationState
                 self.coordination.info.original = new
  
                 updateCallbacks.add {
-                    self.coordination.coordinator.wasMoved(.init(old: old, new: new))
+                    self.coordination.coordinator?.wasMoved(.init(old: old, new: new))
                     self.model.onMove?(.init(old: old, new: new))
                 }
             case .updateFromList:
                 self.coordination.info.original = new
                 
                 updateCallbacks.add {
-                    self.coordination.coordinator.wasUpdated(.init(old: old, new: new))
+                    self.coordination.coordinator?.wasUpdated(.init(old: old, new: new))
                     self.model.onUpdate?(.init(old: old, new: new))
                 }
             case .updateFromItemCoordinator:
@@ -305,7 +305,7 @@ extension PresentationState
         {
             updateCallbacks.add {
                 self.model.onRemove?(.init(item: self.model))
-                self.coordination.coordinator.wasRemoved(.init(item: self.model))
+                self.coordination.coordinator?.wasRemoved(.init(item: self.model))
             }
         }
         
@@ -349,9 +349,9 @@ extension PresentationState
             
             if old.isSelected != new.isSelected {
                 if new.isSelected {
-                    coordinator.wasSelected()
+                    coordinator?.wasSelected()
                 } else {
-                    coordinator.wasDeselected()
+                    coordinator?.wasDeselected()
                 }
             }
             
@@ -359,11 +359,11 @@ extension PresentationState
                 if let cell = new.visibleCell {
                     let contentView = cell.contentContainer.contentView
                     
-                    coordinator.view = contentView
-                    coordinator.willDisplay(with: contentView)
+                    coordinator?.view = contentView
+                    coordinator?.willDisplay(with: contentView)
                 } else {
                     if let view = old.visibleCell?.contentContainer.contentView {
-                        coordinator.didEndDisplay(with: view)
+                        coordinator?.didEndDisplay(with: view)
                     }
                 }
             }
