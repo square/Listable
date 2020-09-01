@@ -10,6 +10,38 @@ public typealias HeaderContent = HeaderFooterContent
 public typealias FooterContent = HeaderFooterContent
 
 
+///
+/// A `HeaderFooterContent` is a type which specifies the content of a header, footer,
+/// or other supplementary view within a listable list.
+///
+/// A non-tappable header that shows a label and icon might look like this (implementation of `MyHeaderView` left up to the reader):
+/// ```
+/// struct MyHeaderContent : HeaderFooterContent, Equatable
+/// {
+///     var title : String
+///
+///     static func createReusableContentView(frame : CGRect) -> MyHeaderView {
+///         MyHeaderView(frame: frame)
+///     }
+///
+///     func apply(to views : HeaderFooterContentViews<Self>, reason : ApplyReason) {
+///         views.content.text = self.title
+///         views.content.leftIcon = UIImage(named: "person_icon")
+///     }
+/// }
+/// ```
+/// The header is made `Equatable` in order to synthesize automatic conformance to `isEquivalent`,
+/// based on the header's properties.
+///
+/// If you want to add support for rendering a background view and a pressed state, you should provide
+/// both `createReusableBackgroundView` and `createReusablePressedBackgroundView` methods,
+/// and apply the desired content in your `apply(to:)` method.
+///
+/// The ordering of the elements by z-index is as follows:
+/// z-Index 3) `ContentView`
+/// z-Index 2) `PressedBackgroundView` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
+/// z-Index 1) `BackgroundView`
+///
 public protocol HeaderFooterContent
 {    
     //

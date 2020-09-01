@@ -5,7 +5,38 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
-
+///
+/// An `ItemContent` is a type used to provide the content of an `Item`
+/// in a listable section.
+///
+/// A `ItemContent` that displays text might look like this:
+/// ```
+/// struct MyItemContent : ItemContent, Equatable
+/// {
+///     var text : String
+///
+///     var identifier: Identifier<MyItemContent> {
+///         return .init(self.text)
+///     }
+///
+///     static func createReusableContentView(frame : CGRect) -> MyContentView {
+///         MyContentView(frame: frame)
+///     }
+///
+///     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo) {
+///         views.content.text = self.text
+///     }
+/// }
+/// ```
+/// If you want to add support for rendering a background view and a selected or highlighted state, you should provide
+/// both `createReusableBackgroundView` and `createReusableSelectedBackgroundView` methods,
+/// and apply the desired content in your `apply(to:)` method.
+///
+/// The ordering of the elements by z-index is as follows:
+/// z-index 3) `ContentView`
+/// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
+/// z-index 1) `BackgroundView`
+///
 public protocol ItemContent where Coordinator.ItemContentType == Self
 {
     //
