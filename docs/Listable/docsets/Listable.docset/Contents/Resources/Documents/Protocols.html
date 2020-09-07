@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Protocols  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Section/Protocols" class="dashAnchor"></a>
+
+    <a title="Protocols  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          Listable
+        </a>
+         (42% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/kyleve/Listable">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">Listable Reference</a>
+      <img class="carat" src="img/carat.png" />
+      Protocols  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/AnyIdentifier.html">AnyIdentifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DefaultItemContentCoordinator.html">DefaultItemContentCoordinator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DefaultSwipeActionsView.html">DefaultSwipeActionsView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DynamicSource.html">DynamicSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Identifier.html">Identifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ItemContentCoordinatorActions.html">ItemContentCoordinatorActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ItemContentCoordinatorInfo.html">ItemContentCoordinatorInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ItemPreviewView.html">ItemPreviewView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListActions.html">ListActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListActions/Scrolling.html">– Scrolling</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListActions/ViewControllerTransitioning.html">– ViewControllerTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListLayoutContent.html">ListLayoutContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC11SectionInfoC">– SectionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC21SupplementaryItemInfoC">– SupplementaryItemInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC8ItemInfoC">– ItemInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListView.html">ListView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ListViewController.html">ListViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/ReorderingActions.html">ReorderingActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/SourceState.html">SourceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/StateAccessor.html">StateAccessor</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/StaticSource.html">StaticSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/StaticSource/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes.html#/s:8Listable15UpdateCallbacksC">UpdateCallbacks</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/__LST_KeyboardObserver_ObjCAccess.html">__LST_KeyboardObserver_ObjCAccess</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ApplyReason.html">ApplyReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/AutoScrollAction.html">AutoScrollAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/AutoScrollAction/OnInsertedItem.html">– OnInsertedItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CustomWidth.html">CustomWidth</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CustomWidth/Custom.html">– Custom</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CustomWidth/Alignment.html">– Alignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CustomWidth.html#/s:8Listable11CustomWidthO8PositionV">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ItemPosition.html">ItemPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ItemSelectionStyle.html">ItemSelectionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sizing.html">Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sizing.html#/s:8Listable6SizingO11MeasureInfoV">– MeasureInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sizing/Constraint.html">– Constraint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/SwipeActionState.html">SwipeActionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/WidthConstraint.html">WidthConstraint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/SectionedDiff.html">SectionedDiff</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/SectionedDiff.html#/SectionChanges">– SectionChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/SectionedDiff.html#/ItemChanges">– ItemChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/UIRectEdge.html">UIRectEdge</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:8Listable13listableFatal_4file4lines5NeverOSSyXK_s12StaticStringVSutF">listableFatal(_:file:line:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:8Listable20listablePrecondition__4file4lineySbyXK_SSyXKs12StaticStringVSutF">listablePrecondition(_:_:file:line:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyHeaderFooter.html">AnyHeaderFooter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyHeaderFooter_Internal.html">AnyHeaderFooter_Internal</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyItem.html">AnyItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyItem_Internal.html">AnyItem_Internal</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyLayoutDescriptionConfiguration.html">AnyLayoutDescriptionConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyListLayout.html">AnyListLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnySectionInfo.html">AnySectionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CollectionViewLayoutDelegate.html">CollectionViewLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/HeaderFooterContent.html">HeaderFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ItemContent.html">ItemContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ItemContentCoordinator.html">ItemContentCoordinator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ListLayout.html">ListLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ListLayoutAppearance.html">ListLayoutAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ListViewSource.html">ListViewSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/SectionInfo.html">SectionInfo</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Appearance.html">Appearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Behavior.html">Behavior</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Behavior/KeyboardAdjustmentMode.html">– KeyboardAdjustmentMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Behavior/ScrollsToTop.html">– ScrollsToTop</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Behavior/SelectionMode.html">– SelectionMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Behavior/Underflow.html">– Underflow</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Content.html">Content</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DefaultItemProperties.html">DefaultItemProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmbeddedList.html">EmbeddedList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/EmbeddedList/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/GridAppearance.html">GridAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/GridAppearance/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/GridAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/HeaderFooter.html">HeaderFooter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/HeaderFooterContentViews.html">HeaderFooterContentViews</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/HeaderFooterLayout.html">HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/HorizontalPadding.html">HorizontalPadding</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item.html">Item</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnDisplay.html">– OnDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnEndDisplay.html">– OnEndDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnSelect.html">– OnSelect</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnDeselect.html">– OnDeselect</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnInsert.html">– OnInsert</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnRemove.html">– OnRemove</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnMove.html">– OnMove</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Item/OnUpdate.html">– OnUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemContentViews.html">ItemContentViews</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemInsertAndRemoveAnimations.html">ItemInsertAndRemoveAnimations</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemInsertAndRemoveAnimations/Attributes.html">– Attributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemLayout.html">ItemLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemPreview.html">ItemPreview</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemPreview/Properties.html">– Properties</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemScrollPosition.html">ItemScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemScrollPosition/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ItemState.html">ItemState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs.html#/s:8Listable21ItemStateDependenciesV">ItemStateDependencies</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/LayoutDescription.html">LayoutDescription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListAppearance.html">ListAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListAppearance/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutAttributes.html">ListLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV7SectionV">– Section</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV13SupplementaryV">– Supplementary</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV4ItemV">– Item</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutPoint.html">ListLayoutPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutSize.html">ListLayoutSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListProperties.html">ListProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver.html">ListStateObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/DidScroll.html">– DidScroll</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/ContentUpdated.html">– ContentUpdated</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/VisibilityChanged.html">– VisibilityChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/FrameChanged.html">– FrameChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/PagedAppearance.html">PagedAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/RefreshControl.html">RefreshControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/RefreshControl/Title.html">– Title</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Reordering.html">Reordering</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Reordering/Sections.html">– Sections</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Reordering/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ScrollInsets.html">ScrollInsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Section.html">Section</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Section/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/Section/Columns.html">– Columns</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/SwipeAction.html">SwipeAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:8Listable6Footera">Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:8Listable13FooterContenta">FooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:8Listable6Headera">Header</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:8Listable13HeaderContenta">HeaderContent</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>Protocols</h1>
+            <p>The following protocols are available globally.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15AnyHeaderFooterP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyHeaderFooter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15AnyHeaderFooterP">AnyHeaderFooter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyHeaderFooter.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyHeaderFooter</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnyHeaderFooter_Internal.html">AnyHeaderFooter_Internal</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable24AnyHeaderFooter_InternalP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyHeaderFooter_Internal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable24AnyHeaderFooter_InternalP">AnyHeaderFooter_Internal</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyHeaderFooter_Internal.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyHeaderFooter_Internal</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable19HeaderFooterContentP"></a>
+                    <a name="//apple_ref/swift/Protocol/HeaderFooterContent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable19HeaderFooterContentP">HeaderFooterContent</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A <code>HeaderFooterContent</code> is a type which specifies the content of a header, footer,
+or other supplementary view within a listable list.</p>
+
+<p>A non-tappable header that shows a label and icon might look like this (implementation of <code>MyHeaderView</code> left up to the reader):</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyHeaderContent</span> <span class="p">:</span> <span class="kt">HeaderFooterContent</span><span class="p">,</span> <span class="kt">Equatable</span>
+<span class="p">{</span>
+    <span class="k">var</span> <span class="nv">title</span> <span class="p">:</span> <span class="kt">String</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span> <span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MyHeaderView</span> <span class="p">{</span>
+        <span class="kt">MyHeaderView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="n">frame</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">HeaderFooterContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">reason</span> <span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">leftIcon</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"person_icon"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The header is made <code>Equatable</code> in order to synthesize automatic conformance to <code>isEquivalent</code>,
+based on the header&rsquo;s properties.</p>
+
+<p>If you want to add support for rendering a background view and a pressed state, you should provide
+both <code>createReusableBackgroundView</code> and <code>createReusablePressedBackgroundView</code> methods,
+and apply the desired content in your <code>apply(to:)</code> method.</p>
+
+<p>The ordering of the elements by z-index is as follows:
+z-Index 3) <code>ContentView</code>
+z-Index 2) <code>PressedBackgroundView</code> (Only if the header/footer is pressed, eg if the wrapping <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code> has an <code>onTap</code> handler.)
+z-Index 1) <code>BackgroundView</code></p>
+
+                        <a href="Protocols/HeaderFooterContent.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">HeaderFooterContent</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable7AnyItemP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyItem" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable7AnyItemP">AnyItem</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyItem.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnyItem_Internal.html">AnyItem_Internal</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable16AnyItem_InternalP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyItem_Internal" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable16AnyItem_InternalP">AnyItem_Internal</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyItem_Internal.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyItem_Internal</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable11ItemContentP"></a>
+                    <a name="//apple_ref/swift/Protocol/ItemContent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable11ItemContentP">ItemContent</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An <code>ItemContent</code> is a type used to provide the content of an <code><a href="Structs/Item.html">Item</a></code>
+in a listable section.</p>
+
+<p>A <code>ItemContent</code> that displays text might look like this:</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span><span class="p">,</span> <span class="kt">Equatable</span>
+<span class="p">{</span>
+    <span class="k">var</span> <span class="nv">text</span> <span class="p">:</span> <span class="kt">String</span>
+
+    <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">MyItemContent</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span> <span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MyContentView</span> <span class="p">{</span>
+        <span class="kt">MyContentView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="n">frame</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span> <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">text</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>If you want to add support for rendering a background view and a selected or highlighted state, you should provide
+both <code>createReusableBackgroundView</code> and <code>createReusableSelectedBackgroundView</code> methods,
+and apply the desired content in your <code>apply(to:)</code> method.</p>
+
+<p>The ordering of the elements by z-index is as follows:
+z-index 3) <code>ContentView</code>
+z-index 2) <code>SelectedBackgroundView</code> (Only if the item supports a <code>selectionStyle</code> and is selected or highlighted.)
+z-index 1) <code>BackgroundView</code></p>
+
+                        <a href="Protocols/ItemContent.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContent</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable27ItemContentSwipeActionsViewP"></a>
+                    <a name="//apple_ref/swift/Protocol/ItemContentSwipeActionsView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable27ItemContentSwipeActionsViewP">ItemContentSwipeActionsView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Conform to this protocol to implement a completely custom swipe action view.</p>
+
+<p>If you do so, you&rsquo;re completely responsible for creating and laying out the actions,
+as well as updating the layout based on the swipe state.</p>
+
+                        <a href="Protocols/ItemContentSwipeActionsView.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContentSwipeActionsView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable22ItemContentCoordinatorP"></a>
+                    <a name="//apple_ref/swift/Protocol/ItemContentCoordinator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable22ItemContentCoordinatorP">ItemContentCoordinator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A type which lets you interactively manage the contents of an <code><a href="Structs/Item.html">Item</a></code> or <code><a href="Protocols/ItemContent.html">ItemContent</a></code>
+within a list.</p>
+
+<p>Eg, you might create a <code>ItemContentCoordinator</code> which listens to a
+notification, and then updates a field on the <code><a href="Structs/Item.html">Item</a></code> or <code><a href="Protocols/ItemContent.html">ItemContent</a></code> in response
+to this notification.</p>
+
+<p><code>ItemContentCoordinator</code> is created when an item is being prepared to be presented
+on screen for the first time, and lives for as long as the item is present in the list. If you need
+to pull in any changes to the item due to time passing, you can update the item within the
+<code>wasCreated</code>callback.</p>
+
+<p>There are default implementations of all <code>ItemContentCoordinator</code> methods. You only
+need to provide implementations for the methods relevant to you.</p>
+<h2 id='example' class='heading'>Example</h2>
+
+<p>A simple <code>ItemContentCoordinator</code> might look like this:</p>
+<pre class="highlight swift"><code><span class="kd">final</span> <span class="kd">class</span> <span class="kt">MyCoordinator</span> <span class="p">:</span> <span class="kt">ItemContentCoordinator</span>
+<span class="p">{</span>
+    <span class="kd">typealias</span> <span class="kt">ItemContentType</span> <span class="o">=</span> <span class="kt">MyContentType</span>
+
+    <span class="k">let</span> <span class="nv">actions</span><span class="p">:</span> <span class="kt">CoordinatorActions</span>
+    <span class="k">let</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">CoordinatorInfo</span>
+    <span class="k">var</span> <span class="nv">view</span> <span class="p">:</span> <span class="kt">View</span><span class="p">?</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">actions</span><span class="p">:</span> <span class="kt">CoordinatorActions</span><span class="p">,</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">CoordinatorInfo</span><span class="p">)</span>
+    <span class="p">{</span>
+       <span class="k">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="n">actions</span>
+       <span class="k">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+
+       <span class="kt">NotificationCenter</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">addObserver</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="nv">selector</span><span class="p">:</span> <span class="kd">#selector(</span><span class="nf">downloadUpdated(:)</span><span class="kd">)</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="o">.</span><span class="kt">DownloadProgressChanged</span><span class="p">,</span> <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">downloadUpdated</span><span class="p">(</span><span class="nv">notification</span> <span class="p">:</span> <span class="kt">Notification</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">update</span> <span class="p">{</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">downloadProgress</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">userInfo</span><span class="p">[</span><span class="s">"download_progress"</span><span class="p">]</span> <span class="k">as!</span> <span class="kt">CGFloat</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Protocols/ItemContentCoordinator.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContentCoordinator</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Delegate%20For%20Layout%20Information"></a>
+                <a name="//apple_ref/swift/Section/Delegate For Layout Information" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Delegate%20For%20Layout%20Information"></a>
+                  <h3 class="section-name"><p>Delegate For Layout Information</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable28CollectionViewLayoutDelegateP"></a>
+                    <a name="//apple_ref/swift/Protocol/CollectionViewLayoutDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable28CollectionViewLayoutDelegateP">CollectionViewLayoutDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/CollectionViewLayoutDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CollectionViewLayoutDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable10ListLayoutP"></a>
+                    <a name="//apple_ref/swift/Protocol/ListLayout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable10ListLayoutP">ListLayout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/ListLayout.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ListLayout</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnyListLayout.html">AnyListLayout</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable33AnyLayoutDescriptionConfigurationP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyLayoutDescriptionConfiguration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable33AnyLayoutDescriptionConfigurationP">AnyLayoutDescriptionConfiguration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyLayoutDescriptionConfiguration.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyLayoutDescriptionConfiguration</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable13AnyListLayoutP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnyListLayout" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable13AnyListLayoutP">AnyListLayout</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnyListLayout.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyListLayout</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable20ListLayoutAppearanceP"></a>
+                    <a name="//apple_ref/swift/Protocol/ListLayoutAppearance" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable20ListLayoutAppearanceP">ListLayoutAppearance</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/ListLayoutAppearance.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ListLayoutAppearance</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable14ListViewSourceP"></a>
+                    <a name="//apple_ref/swift/Protocol/ListViewSource" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable14ListViewSourceP">ListViewSource</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/ListViewSource.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ListViewSource</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable11SectionInfoP"></a>
+                    <a name="//apple_ref/swift/Protocol/SectionInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable11SectionInfoP">SectionInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/SectionInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SectionInfo</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnySectionInfo.html">AnySectionInfo</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable14AnySectionInfoP"></a>
+                    <a name="//apple_ref/swift/Protocol/AnySectionInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable14AnySectionInfoP">AnySectionInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Protocols/AnySectionInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnySectionInfo</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-06)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
