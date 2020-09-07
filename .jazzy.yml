@@ -5,8 +5,6 @@ github_url: https://github.com/kyleve/Listable
 
 skip_undocumented: false
 
-output: /docs
-
 theme: fullwidth
 # TODO: to enable this, first rename docs whose names conflict with symbols
 # documentation: Documentation/**/*.md
