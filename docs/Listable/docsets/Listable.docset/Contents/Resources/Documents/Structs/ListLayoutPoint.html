@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ListLayoutPoint Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/ListLayoutPoint" class="dashAnchor"></a>
+    <a title="ListLayoutPoint Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Listable 0.9.0 Docs</a> (42% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Listable Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ListLayoutPoint Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyIdentifier.html">AnyIdentifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultItemContentCoordinator.html">DefaultItemContentCoordinator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DefaultSwipeActionsView.html">DefaultSwipeActionsView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DynamicSource.html">DynamicSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Identifier.html">Identifier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ItemContentCoordinatorActions.html">ItemContentCoordinatorActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ItemContentCoordinatorInfo.html">ItemContentCoordinatorInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ItemPreviewView.html">ItemPreviewView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListActions.html">ListActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListActions/Scrolling.html">– Scrolling</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListActions/ViewControllerTransitioning.html">– ViewControllerTransitioning</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListLayoutContent.html">ListLayoutContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC11SectionInfoC">– SectionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC21SupplementaryItemInfoC">– SupplementaryItemInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListLayoutContent.html#/s:8Listable17ListLayoutContentC8ItemInfoC">– ItemInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListView.html">ListView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ListViewController.html">ListViewController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ReorderingActions.html">ReorderingActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SourceState.html">SourceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/StateAccessor.html">StateAccessor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/StaticSource.html">StaticSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/StaticSource/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:8Listable15UpdateCallbacksC">UpdateCallbacks</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/__LST_KeyboardObserver_ObjCAccess.html">__LST_KeyboardObserver_ObjCAccess</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ApplyReason.html">ApplyReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/AutoScrollAction.html">AutoScrollAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/AutoScrollAction/OnInsertedItem.html">– OnInsertedItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/CustomWidth.html">CustomWidth</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/CustomWidth/Custom.html">– Custom</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/CustomWidth/Alignment.html">– Alignment</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/CustomWidth.html#/s:8Listable11CustomWidthO8PositionV">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ItemPosition.html">ItemPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ItemSelectionStyle.html">ItemSelectionStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Sizing.html">Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Sizing.html#/s:8Listable6SizingO11MeasureInfoV">– MeasureInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Sizing/Constraint.html">– Constraint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwipeActionState.html">SwipeActionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/WidthConstraint.html">WidthConstraint</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/SectionedDiff.html">SectionedDiff</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/SectionedDiff.html#/SectionChanges">– SectionChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/SectionedDiff.html#/ItemChanges">– ItemChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/UIRectEdge.html">UIRectEdge</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8Listable13listableFatal_4file4lines5NeverOSSyXK_s12StaticStringVSutF">listableFatal(_:file:line:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:8Listable20listablePrecondition__4file4lineySbyXK_SSyXKs12StaticStringVSutF">listablePrecondition(_:_:file:line:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyHeaderFooter.html">AnyHeaderFooter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyHeaderFooter_Internal.html">AnyHeaderFooter_Internal</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyItem.html">AnyItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyItem_Internal.html">AnyItem_Internal</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyLayoutDescriptionConfiguration.html">AnyLayoutDescriptionConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnyListLayout.html">AnyListLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/AnySectionInfo.html">AnySectionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/CollectionViewLayoutDelegate.html">CollectionViewLayoutDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ItemContent.html">ItemContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ItemContentCoordinator.html">ItemContentCoordinator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ListLayout.html">ListLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ListLayoutAppearance.html">ListLayoutAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ListViewSource.html">ListViewSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/SectionInfo.html">SectionInfo</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Appearance.html">Appearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Behavior.html">Behavior</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Behavior/KeyboardAdjustmentMode.html">– KeyboardAdjustmentMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Behavior/ScrollsToTop.html">– ScrollsToTop</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Behavior/SelectionMode.html">– SelectionMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Behavior/Underflow.html">– Underflow</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Content.html">Content</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DefaultItemProperties.html">DefaultItemProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EmbeddedList.html">EmbeddedList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GridAppearance.html">GridAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/GridAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeaderFooter.html">HeaderFooter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeaderFooterContentViews.html">HeaderFooterContentViews</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HeaderFooterLayout.html">HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/HorizontalPadding.html">HorizontalPadding</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item.html">Item</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnDisplay.html">– OnDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnEndDisplay.html">– OnEndDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnSelect.html">– OnSelect</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnDeselect.html">– OnDeselect</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnInsert.html">– OnInsert</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnRemove.html">– OnRemove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnMove.html">– OnMove</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Item/OnUpdate.html">– OnUpdate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemContentViews.html">ItemContentViews</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemInsertAndRemoveAnimations.html">ItemInsertAndRemoveAnimations</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemInsertAndRemoveAnimations/Attributes.html">– Attributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemLayout.html">ItemLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemPreview.html">ItemPreview</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemPreview/Properties.html">– Properties</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemScrollPosition.html">ItemScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemScrollPosition/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ItemState.html">ItemState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/s:8Listable21ItemStateDependenciesV">ItemStateDependencies</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LayoutDescription.html">LayoutDescription</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListAppearance.html">ListAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListAppearance/Sizing.html">– Sizing</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutAttributes.html">ListLayoutAttributes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV7SectionV">– Section</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV13SupplementaryV">– Supplementary</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutAttributes.html#/s:8Listable20ListLayoutAttributesV4ItemV">– Item</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutPoint.html">ListLayoutPoint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListProperties.html">ListProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListStateObserver.html">ListStateObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListStateObserver/DidScroll.html">– DidScroll</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListStateObserver/ContentUpdated.html">– ContentUpdated</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListStateObserver/VisibilityChanged.html">– VisibilityChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ListStateObserver/FrameChanged.html">– FrameChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PagedAppearance.html">PagedAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RefreshControl.html">RefreshControl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RefreshControl/Title.html">– Title</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Reordering.html">Reordering</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Reordering/Sections.html">– Sections</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Reordering/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ScrollInsets.html">ScrollInsets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Section.html">Section</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Section/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Section/Columns.html">– Columns</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeAction.html">SwipeAction</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:8Listable6Footera">Footer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:8Listable13FooterContenta">FooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:8Listable6Headera">Header</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:8Listable13HeaderContenta">HeaderContent</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ListLayoutPoint</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListLayoutPoint</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+
+                </div>
+              </div>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15ListLayoutPointV1x12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/x" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15ListLayoutPointV1x12CoreGraphics7CGFloatVvp">x</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">x</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15ListLayoutPointV1y12CoreGraphics7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/y" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15ListLayoutPointV1y12CoreGraphics7CGFloatVvp">y</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">y</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15ListLayoutPointV7rotatesSbvp"></a>
+                    <a name="//apple_ref/swift/Property/rotates" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15ListLayoutPointV7rotatesSbvp">rotates</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">rotates</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15ListLayoutPointV1x1y7rotatesAC12CoreGraphics7CGFloatV_AISbtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(x:y:rotates:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15ListLayoutPointV1x1y7rotatesAC12CoreGraphics7CGFloatV_AISbtcfc">init(x:<wbr>y:<wbr>rotates:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">rotates</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8Listable15ListLayoutPointV12CGPointValue3forSo0E0VAA0C9DirectionO_tF"></a>
+                    <a name="//apple_ref/swift/Method/CGPointValue(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8Listable15ListLayoutPointV12CGPointValue3forSo0E0VAA0C9DirectionO_tF">CGPointValue(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">CGPointValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Enums/LayoutDirection.html">LayoutDirection</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGPoint</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
