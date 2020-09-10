@@ -182,6 +182,29 @@ public struct Section
 }
 
 
+extension Section {
+    static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
+    {
+        return SectionedDiff(
+            old: old,
+            new: new,
+            configuration: SectionedDiff.Configuration(
+                section: .init(
+                    identifier: { $0.info.anyIdentifier },
+                    items: { $0.items },
+                    movedHint: { $0.info.anyWasMoved(comparedTo: $1.info) }
+                ),
+                item: .init(
+                    identifier: { $0.identifier },
+                    updated: { $0.anyIsEquivalent(to: $1) == false },
+                    movedHint: { $0.anyWasMoved(comparedTo: $1) }
+                )
+            )
+        )
+    }
+}
+
+
 public extension Section
 {
     struct Layout : Equatable
