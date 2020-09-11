@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'cocoapods', '~> 1.9'
-gem 'cocoapods-generate', '~> 1.0'
+gem 'cocoapods'
+gem 'cocoapods-generate'
 
-gem 'jazzy', '~> 0.13'
+gem 'jazzy'
