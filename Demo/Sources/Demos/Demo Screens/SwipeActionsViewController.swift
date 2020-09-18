@@ -157,6 +157,7 @@ final class SwipeActionsViewController: UIViewController  {
                 let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
                 column.add(growPriority: 0, shrinkPriority: 0, child: separator)
             }
+            .accessibility(label: "Swipeable item", value: item.title)
         }
     }
 

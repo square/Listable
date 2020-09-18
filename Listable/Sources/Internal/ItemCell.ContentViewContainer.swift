@@ -31,8 +31,6 @@ extension ItemCell {
 
             super.init(frame: frame)
 
-            isAccessibilityElement = true
-
             self.addSubview(self.contentView)
 
             NotificationCenter.default.addObserver(
@@ -223,8 +221,9 @@ extension ItemCell {
             }
         }
 
-        @objc private func performAccessibilityAction(_ action: AccessibilitySwipeAction) {
+        @objc private func performAccessibilityAction(_ action: AccessibilitySwipeAction) -> Bool {
             action.action.handler(self.didPerformAction)
+            return true
         }
 
         private func configureAccessibilityActions(for actions: [SwipeAction]) {
