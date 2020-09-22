@@ -23,6 +23,9 @@ class ItemElementCellTests : XCTestCase
         XCTAssertEqual(cell.contentView.layer.masksToBounds, false)
         
         XCTAssertEqual(cell.contentContainer.superview, cell.contentView)
+
+        // Ensure the content subviews can specify accessibility element params.
+        XCTAssertFalse(cell.contentContainer.isAccessibilityElement)
     }
     
     func test_sizeThatFits()

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ListReorderGesture Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Struct/ListReorderGesture" class="dashAnchor"></a>
+
+    <a title="ListReorderGesture Structure Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          BlueprintLists
+        </a>
+         (97% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/kyleve/Listable">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">BlueprintLists Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      ListReorderGesture Structure Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Element.html">Element</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/BlueprintHeaderFooterContent.html">BlueprintHeaderFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/BlueprintItemContent.html">BlueprintItemContent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/List.html">List</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListReorderGesture.html">ListReorderGesture</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:14BlueprintLists0A13FooterContenta">BlueprintFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:14BlueprintLists0A13HeaderContenta">BlueprintHeaderContent</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>ListReorderGesture</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListReorderGesture</span> <span class="p">:</span> <span class="kt">Element</span></code></pre>
+
+                </div>
+              </div>
+            <p>An element that wraps your provided element, to enable support
+for user-driven re-ordering in a list view.</p>
+
+<p>If you do not support reordering items, you do not need
+to add this element anywhere in your hierarchy.</p>
+
+<p>This element on its own has no visual appearance. Thus, you should
+still render your own reorder dragger / handle / etc in the passed in element.</p>
+
+<p>In the below example, we see how to set up the content of a simple item, which contains
+a text label and a reorder grabber.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">element</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span>
+<span class="p">{</span>
+    <span class="kt">Row</span> <span class="p">{</span> <span class="n">row</span> <span class="k">in</span>
+        <span class="n">row</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">child</span><span class="p">:</span> <span class="kt">Label</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"..."</span><span class="p">))</span>
+
+        <span class="n">row</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">child</span><span class="p">:</span> <span class="kt">ListReorderGesture</span><span class="p">(</span><span class="nv">actions</span><span class="p">:</span> <span class="n">info</span><span class="o">.</span><span class="n">actions</span><span class="p">,</span> <span class="nv">wrapping</span><span class="p">:</span> <span class="kt">MyReorderGrabber</span><span class="p">()))</span>
+
+        <span class="c1">// Could also be written as:</span>
+        <span class="n">row</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">child</span><span class="p">:</span> <span class="kt">MyReorderGrabber</span><span class="p">()</span><span class="o">.</span><span class="nf">listReorderGesture</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">info</span><span class="o">.</span><span class="n">reordering</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists18ListReorderGestureV7element0A2UI7Element_pvp"></a>
+                    <a name="//apple_ref/swift/Property/element" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists18ListReorderGestureV7element0A2UI7Element_pvp">element</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The element which is being wrapped by the reorder gesture.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">element</span><span class="p">:</span> <span class="kt">Element</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists18ListReorderGestureV9isEnabledSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isEnabled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists18ListReorderGestureV9isEnabledSbvp">isEnabled</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the gesture is enabled or not.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists18ListReorderGestureV9isEnabled7actions8wrappingACSb_8Listable17ReorderingActionsC0A2UI7Element_ptcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(isEnabled:actions:wrapping:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists18ListReorderGestureV9isEnabled7actions8wrappingACSb_8Listable17ReorderingActionsC0A2UI7Element_ptcfc">init(isEnabled:<wbr>actions:<wbr>wrapping:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new re-order gesture which wraps the provided element.</p>
+
+<p>This element on its own has no visual appearance. Thus, you should
+still render your own reorder dragger / handle / etc in the passed in element.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">isEnabled</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nv">actions</span> <span class="p">:</span> <span class="kt">ReorderingActions</span><span class="p">,</span>
+    <span class="n">wrapping</span> <span class="nv">element</span> <span class="p">:</span> <span class="kt">Element</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Element"></a>
+                <a name="//apple_ref/swift/Section/Element" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Element"></a>
+                  <h3 class="section-name"><p>Element</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11BlueprintUI7ElementP7contentAA0C7ContentVvp"></a>
+                    <a name="//apple_ref/swift/Property/content" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11BlueprintUI7ElementP7contentAA0C7ContentVvp">content</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">ElementContent</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:11BlueprintUI7ElementP22backingViewDescription6bounds13subtreeExtentAA0eF0VSgSo6CGRectV_AKSgtF"></a>
+                    <a name="//apple_ref/swift/Method/backingViewDescription(bounds:subtreeExtent:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:11BlueprintUI7ElementP22backingViewDescription6bounds13subtreeExtentAA0eF0VSgSo6CGRectV_AKSgtF">backingViewDescription(bounds:<wbr>subtreeExtent:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">backingViewDescription</span><span class="p">(</span><span class="nv">bounds</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">,</span> <span class="nv">subtreeExtent</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">ViewDescription</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-06)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

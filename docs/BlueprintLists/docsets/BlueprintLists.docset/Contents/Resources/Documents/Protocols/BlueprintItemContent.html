@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>BlueprintItemContent Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Protocol/BlueprintItemContent" class="dashAnchor"></a>
+
+    <a title="BlueprintItemContent Protocol Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          BlueprintLists
+        </a>
+         (97% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/kyleve/Listable">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">BlueprintLists Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      BlueprintItemContent Protocol Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Element.html">Element</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/BlueprintHeaderFooterContent.html">BlueprintHeaderFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/BlueprintItemContent.html">BlueprintItemContent</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/List.html">List</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListReorderGesture.html">ListReorderGesture</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:14BlueprintLists0A13FooterContenta">BlueprintFooterContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:14BlueprintLists0A13HeaderContenta">BlueprintHeaderContent</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>BlueprintItemContent</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">BlueprintItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span>
+    <span class="k">where</span>
+    <span class="kt">ContentView</span> <span class="o">==</span> <span class="kt">BlueprintView</span><span class="p">,</span>
+    <span class="kt">BackgroundView</span> <span class="o">==</span> <span class="kt">BlueprintView</span><span class="p">,</span>
+    <span class="kt">SelectedBackgroundView</span> <span class="o">==</span> <span class="kt">BlueprintView</span></code></pre>
+
+                </div>
+              </div>
+            <p>An <code>ItemContent</code> specialized for use with Blueprint. Instead of providing
+custom views from <code>createReusable{...}View</code>, and then updating them in <code>apply(to:)</code>,
+you instead provide Blueprint elements, and <code>Listable</code> handles mapping this to an underlying <code>BlueprintView</code>.</p>
+
+<p>A <code>BlueprintItemContent</code> that displays text might look like this:</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">BlueprintItemContent</span><span class="p">,</span> <span class="kt">Equatable</span>
+<span class="p">{</span>
+    <span class="k">var</span> <span class="nv">text</span> <span class="p">:</span> <span class="kt">String</span>
+
+    <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">MyItemContent</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">element</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span>
+    <span class="p">{</span>
+        <span class="kt">Label</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="o">.</span><span class="nf">systemFont</span><span class="p">(</span><span class="nv">ofSize</span><span class="p">:</span> <span class="mf">16.0</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">medium</span><span class="p">)</span>
+            <span class="nv">$0</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">isActive</span> <span class="p">?</span> <span class="o">.</span><span class="nv">white</span> <span class="p">:</span> <span class="o">.</span><span class="n">darkGray</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">inset</span><span class="p">(</span><span class="nv">horizontal</span><span class="p">:</span> <span class="mf">15.0</span><span class="p">,</span> <span class="nv">vertical</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">backgroundElement</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span>
+    <span class="p">{</span>
+        <span class="kt">Box</span><span class="p">(</span><span class="nv">backgroundColor</span><span class="p">:</span> <span class="o">.</span><span class="n">white</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">selectedBackgroundElement</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span>
+    <span class="p">{</span>
+        <span class="kt">Box</span><span class="p">(</span><span class="nv">backgroundColor</span><span class="p">:</span> <span class="o">.</span><span class="nf">white</span><span class="p">(</span><span class="mf">0.2</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Which uses the <code>backgroundElement</code> and <code>selectedBackgroundElement</code> methods
+to provide rendering of a background for the item, which will respond to its selection state.</p>
+
+<p>The ordering of the elements by z-index is as follows:
+z-index 3) <code>element</code>
+z-index 2) <code>selectedBackgroundElement</code> (Only if the item supports a <code>selectionStyle</code> and is selected or highlighted.)
+z-index 1) <code>backgroundElement</code></p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creating%20Blueprint%20Element%20Representations"></a>
+                <a name="//apple_ref/swift/Section/Creating Blueprint Element Representations" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Creating%20Blueprint%20Element%20Representations"></a>
+                  <h3 class="section-name"><p>Creating Blueprint Element Representations</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentP7element4with0A2UI7Element_p8Listable05ApplycD4InfoV_tF"></a>
+                    <a name="//apple_ref/swift/Method/element(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentP7element4with0A2UI7Element_p8Listable05ApplycD4InfoV_tF">element(with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Required. Create and return the Blueprint element used to represent the content.</p>
+
+<p>You can use the provided <code>ApplyItemContentInfo</code> to vary the appearance of the element
+based on the current state of the item.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">element</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg8Listable05ApplycD4InfoV_tF"></a>
+                    <a name="//apple_ref/swift/Method/backgroundElement(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg8Listable05ApplycD4InfoV_tF">backgroundElement(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Optional. Create and return the Blueprint element used to represent the background of the content.
+You usually provide this method alongside <code>selectedBackgroundElement</code>, if your content
+supports selection or highlighting.</p>
+
+<p>You can use the provided <code>ApplyItemContentInfo</code> to vary the appearance of the element
+based on the current state of the item.</p>
+<h2 id='note' class='heading'>Note</h2>
+
+<p>The default implementation of this method returns nil, and provides no background.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>By default, content has no background.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">backgroundElement</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg8Listable05ApplycD4InfoV_tF"></a>
+                    <a name="//apple_ref/swift/Method/selectedBackgroundElement(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg8Listable05ApplycD4InfoV_tF">selectedBackgroundElement(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Optional. Create and return the Blueprint element used to represent the background of the content when it is selected or highlighted.
+You usually provide this method alongside <code>backgroundElement</code>, if your content supports selection or highlighting.</p>
+
+<p>You can use the provided <code>ApplyItemContentInfo</code> to vary the appearance of the element
+based on the current state of the item.</p>
+<h2 id='note' class='heading'>Note</h2>
+
+<p>The default implementation of this method returns nil, and provides no selected background.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>By default, content has no selected background.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">selectedBackgroundElement</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/ItemContent"></a>
+                <a name="//apple_ref/swift/Section/ItemContent" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/ItemContent"></a>
+                  <h3 class="section-name"><p>ItemContent</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentPAAE5apply2to3for4withy8Listable0cD5ViewsVyxG_AH11ApplyReasonOAH0kcD4InfoVtF"></a>
+                    <a name="//apple_ref/swift/Method/apply(to:for:with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentPAAE5apply2to3for4withy8Listable0cD5ViewsVyxG_AH11ApplyReasonOAH0kcD4InfoVtF">apply(to:<wbr>for:<wbr>with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Maps the <code>BlueprintItemContent</code> methods into the underlying <code>BlueprintView</code>s used to render the element.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">views</span><span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span> <span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/createReusableContentView(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ">createReusableContentView(frame:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates the <code>BlueprintView</code> used to render the content of the item.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ContentView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:14BlueprintLists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/createReusableBackgroundView(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:14BlueprintLists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ">createReusableBackgroundView(frame:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates the <code>BlueprintView</code> used to render the background of the item.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableBackgroundView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">BackgroundView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-06)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
