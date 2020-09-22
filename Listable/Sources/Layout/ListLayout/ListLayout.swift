@@ -116,20 +116,23 @@ public extension AnyListLayout
         let visibleContentFrame = self.visibleContentFrame(for: collectionView)
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            let sectionMaxY = section.contentsFrame.maxY
+            let sectionMaxY = direction.maxY(for: section.contentsFrame)
             
             let header = section.header
             
-            if header.defaultFrame.origin.y < visibleContentFrame.origin.y {
+            if direction.y(for: header.defaultFrame.origin) < direction.y(for: visibleContentFrame.origin) {
                 
                 // Make sure the pinned origin stays within the section's frame.
-                
-                header.pinnedY = min(
-                    visibleContentFrame.origin.y,
-                    sectionMaxY - header.size.height
-                )
+                switch direction {
+                case .vertical:
+                    header.pinnedY = min(visibleContentFrame.origin.y, sectionMaxY - header.size.height)
+                    
+                case .horizontal:
+                    header.pinnedX = min(visibleContentFrame.origin.x, sectionMaxY - header.size.width)
+                }
             } else {
                 header.pinnedY = nil
+                header.pinnedX = nil
             }
         }
     }
@@ -143,16 +146,23 @@ public extension AnyListLayout
         
         let footer = self.content.overscrollFooter
                 
-        let contentHeight = self.content.contentSize.height
-        let viewHeight = collectionView.contentFrame.size.height
+        let contentHeight = direction.height(for: self.content.contentSize)
+        let viewHeight = direction.height(for: collectionView.contentFrame.size)
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
-        if contentHeight >= viewHeight {
-            footer.y = contentHeight + collectionView.contentInset.bottom + collectionView.lst_safeAreaInsets.bottom
-        } else {
-            footer.y = viewHeight - collectionView.contentInset.top - collectionView.lst_safeAreaInsets.top
+        let y : CGFloat = {
+            if contentHeight >= viewHeight {
+                return contentHeight + direction.bottom(with: collectionView.contentInset) + direction.bottom(with: collectionView.lst_safeAreaInsets)
+            } else {
+                return viewHeight - direction.top(with: collectionView.contentInset) - direction.top(with: collectionView.lst_safeAreaInsets)
+            }
+        }()
+        
+        switch direction {
+        case .vertical: footer.y = y
+        case .horizontal: footer.x = y
         }
     }
     
@@ -172,8 +182,8 @@ public extension AnyListLayout
             }
         }()
         
-        let contentHeight = self.content.contentSize.height
-        let viewHeight = collectionView.bounds.height
+        let contentHeight = direction.height(for: self.content.contentSize)
+        let viewHeight = direction.height(for: collectionView.bounds.size)
         
         let additionalOffset = self.behavior.underflow.alignment.offsetFor(
             contentHeight: contentHeight,
@@ -189,11 +199,11 @@ public extension AnyListLayout
         // Provide additional adjustment.
         
         for section in self.content.sections {
-            section.header.y += additionalOffset
-            section.footer.y += additionalOffset
+            section.header.set(for: direction, vertical: \.y, horizontal: \.x) { additionalOffset }
+            section.footer.set(for: direction, vertical: \.y, horizontal: \.x) { additionalOffset }
             
             for item in section.items {
-                item.y += additionalOffset
+                item.set(for: direction, vertical: \.y, horizontal: \.x) { additionalOffset }
             }
         }
     }

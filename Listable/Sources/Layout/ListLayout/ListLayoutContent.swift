@@ -223,7 +223,7 @@ public final class ListLayoutContent
 }
 
 
-protocol ListLayoutContentItem : AnyObject
+protocol ListLayoutContentItem : AnyObject, LayoutDirectionVarying
 {
     var size : CGSize { get set }
     var x : CGFloat { get set }
@@ -235,7 +235,7 @@ protocol ListLayoutContentItem : AnyObject
 
 public extension ListLayoutContent
 {
-    final class SectionInfo
+    final class SectionInfo : LayoutDirectionVarying
     {
         let layout : Section.Layout
         

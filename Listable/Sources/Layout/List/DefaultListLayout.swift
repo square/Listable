@@ -104,10 +104,10 @@ public extension LayoutDescription
 /// ```
 public struct ListAppearance : ListLayoutAppearance
 {
-    public var direction: LayoutDirection {
-        .vertical
-    }
+    /// How the layout should flow, either horizontally or vertically.
+    public var direction: LayoutDirection
     
+    /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
     /// Default sizing attributes for content in the list.
@@ -122,11 +122,14 @@ public struct ListAppearance : ListLayoutAppearance
         
     /// Creates a new `ListAppearance` object.
     public init(
+        direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
         sizing : Sizing = Sizing(),
         layout : Layout = Layout()
     ) {
+        self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
+        
         self.sizing = sizing
         self.layout = layout
     }
@@ -223,8 +226,7 @@ public struct ListAppearance : ListLayoutAppearance
             itemSpacing : CGFloat = 0.0,
             itemToSectionFooterSpacing : CGFloat = 0.0,
             lastSectionToFooterSpacing : CGFloat = 0.0
-        )
-        {
+        ) {
             self.padding = padding
             self.width = width
             
@@ -328,10 +330,10 @@ final class DefaultListLayout : ListLayout
         
         let viewSize = collectionView.bounds.size
         
-        let viewWidth = collectionView.bounds.width
+        let viewWidth = direction.width(for: collectionView.bounds.size)
         
         let rootWidth = ListAppearance.Layout.width(
-            with: viewSize.width,
+            with: direction.width(for: viewSize),
             padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
             constraint: layout.width
         )
@@ -358,13 +360,7 @@ final class DefaultListLayout : ListLayout
         // Header
         //
         
-        switch direction {
-        case .vertical:
-            lastContentMaxY += layout.padding.top
-            
-        case .horizontal:
-            lastContentMaxY += layout.padding.left
-        }
+        lastContentMaxY += direction.switch(vertical: layout.padding.top, horizontal: layout.padding.left)
         
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
@@ -581,10 +577,7 @@ final class DefaultListLayout : ListLayout
             }
         }
         
-        switch direction {
-        case .vertical: lastContentMaxY += layout.padding.bottom
-        case .horizontal: lastContentMaxY += layout.padding.right
-        }
+        lastContentMaxY += direction.switch(vertical: layout.padding.bottom, horizontal: layout.padding.right)
         
         //
         // Overscroll Footer

@@ -117,3 +117,32 @@ public enum LayoutDirection : Hashable
         }
     }
 }
+
+
+protocol LayoutDirectionVarying : AnyObject {
+    
+    func set<Value>(
+        for direction : LayoutDirection,
+        vertical : ReferenceWritableKeyPath<Self,Value>,
+        horizontal : ReferenceWritableKeyPath<Self,Value>,
+        value : () -> Value
+    )
+}
+
+
+extension LayoutDirectionVarying {
+    
+    func set<Value>(
+        for direction : LayoutDirection,
+        vertical : ReferenceWritableKeyPath<Self,Value>,
+        horizontal : ReferenceWritableKeyPath<Self,Value>,
+        value : () -> Value
+    ) {
+        switch direction {
+        case .vertical:
+            self[keyPath: vertical] = value()
+        case .horizontal:
+            self[keyPath: horizontal] = value()
+        }
+    }
+}
