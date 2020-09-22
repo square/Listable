@@ -120,6 +120,12 @@ public final class ListView : UIView
         self.layoutManager.collectionViewLayout
     }
     
+    var performsContentCallbacks : Bool = true {
+        didSet {
+            self.storage.presentationState.performsContentCallbacks = self.performsContentCallbacks
+        }
+    }
+    
     private(set) var visibleContent : VisibleContent
     
     //

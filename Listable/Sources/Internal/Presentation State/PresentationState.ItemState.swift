@@ -72,6 +72,8 @@ extension PresentationState
             self.storage.model
         }
         
+        let performsContentCallbacks : Bool
+        
         private(set) var coordination : Coordination
         
         struct Coordination {
@@ -86,9 +88,13 @@ extension PresentationState
         var itemPosition : ItemPosition
         
         let storage : Storage
-                
-        init(with model : Item<Content>, dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks)
-        {            
+        
+        init(
+            with model : Item<Content>,
+            dependencies : ItemStateDependencies,
+            updateCallbacks : UpdateCallbacks,
+            performsContentCallbacks : Bool
+        ) {
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
         
@@ -96,6 +102,8 @@ extension PresentationState
                         
             let storage = Storage(model)
             self.storage = storage
+            
+            self.performsContentCallbacks = performsContentCallbacks
                         
             let actions = ItemContentCoordinatorActions(
                 current: { storage.model },
@@ -113,7 +121,7 @@ extension PresentationState
                 current: { storage.model }
             )
             
-            let coordinator = model.isListSizingItem ? nil : model.content.makeCoordinator(actions: actions, info: info)
+            let coordinator = self.performsContentCallbacks ? model.content.makeCoordinator(actions: actions, info: info) : nil
             
             self.coordination = Coordination(
                 coordinator: coordinator,
@@ -148,7 +156,7 @@ extension PresentationState
             
             /// Now that we are set up, notify callbacks.
             
-            updateCallbacks.add {
+            updateCallbacks.add(if: self.performsContentCallbacks) {
                 self.model.onInsert?(.init(item: self.model))
                 self.coordination.coordinator?.wasInserted(.init(item: self.model))
             }
@@ -169,19 +177,23 @@ extension PresentationState
             self.isDisplayed = isDisplayed
             
             if self.isDisplayed {
-                self.model.onDisplay?(.init(
-                    item: self.model,
-                    isFirstDisplay: self.hasDisplayed == false
+                if self.performsContentCallbacks {
+                    self.model.onDisplay?(.init(
+                        item: self.model,
+                        isFirstDisplay: self.hasDisplayed == false
+                        )
                     )
-                )
+                }
                 
                 self.hasDisplayed = true
             } else {
-                self.model.onEndDisplay?(.init(
-                    item: self.model,
-                    isFirstEndDisplay: self.hasEndedDisplay == false
+                if self.performsContentCallbacks {
+                    self.model.onEndDisplay?(.init(
+                        item: self.model,
+                        isFirstEndDisplay: self.hasEndedDisplay == false
+                        )
                     )
-                )
+                }
                 
                 self.hasEndedDisplay = true
             }
@@ -266,19 +278,19 @@ extension PresentationState
             case .moveFromList:
                 self.coordination.info.original = new
  
-                updateCallbacks.add {
+                updateCallbacks.add(if: self.performsContentCallbacks) {
                     self.coordination.coordinator?.wasMoved(.init(old: old, new: new))
                     self.model.onMove?(.init(old: old, new: new))
                 }
             case .updateFromList:
                 self.coordination.info.original = new
                 
-                updateCallbacks.add {
+                updateCallbacks.add(if: self.performsContentCallbacks) {
                     self.coordination.coordinator?.wasUpdated(.init(old: old, new: new))
                     self.model.onUpdate?(.init(old: old, new: new))
                 }
             case .updateFromItemCoordinator:
-                updateCallbacks.add {
+                updateCallbacks.add(if: self.performsContentCallbacks) {
                     self.model.onUpdate?(.init(old: old, new: new))
                 }
             case .noChange: break
@@ -303,7 +315,7 @@ extension PresentationState
         
         func wasRemoved(updateCallbacks : UpdateCallbacks)
         {
-            updateCallbacks.add {
+            updateCallbacks.add(if: self.performsContentCallbacks) {
                 self.model.onRemove?(.init(item: self.model))
                 self.coordination.coordinator?.wasRemoved(.init(item: self.model))
             }
@@ -345,13 +357,15 @@ extension PresentationState
         
         func updateCoordinatorWithStateChange(old : State, new : State)
         {
-            let coordinator = self.coordination.coordinator
+            guard let coordinator = self.coordination.coordinator else {
+                return
+            }
             
             if old.isSelected != new.isSelected {
                 if new.isSelected {
-                    coordinator?.wasSelected()
+                    coordinator.wasSelected()
                 } else {
-                    coordinator?.wasDeselected()
+                    coordinator.wasDeselected()
                 }
             }
             
@@ -359,11 +373,11 @@ extension PresentationState
                 if let cell = new.visibleCell {
                     let contentView = cell.contentContainer.contentView
                     
-                    coordinator?.view = contentView
-                    coordinator?.willDisplay(with: contentView)
+                    coordinator.view = contentView
+                    coordinator.willDisplay(with: contentView)
                 } else {
                     if let view = old.visibleCell?.contentContainer.contentView {
-                        coordinator?.didEndDisplay(with: view)
+                        coordinator.didEndDisplay(with: view)
                     }
                 }
             }

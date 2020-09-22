@@ -15,7 +15,7 @@ class SupplementaryContainerViewTests: XCTestCase
     func newHeaderFooter() -> AnyPresentationHeaderFooterState
     {
         let headerFooter = HeaderFooter(TestHeaderFooterContent())
-        return PresentationState.HeaderFooterState(headerFooter)
+        return PresentationState.HeaderFooterState(headerFooter, performsContentCallbacks: true)
     }
     
     func test_init()

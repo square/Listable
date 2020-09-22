@@ -30,6 +30,7 @@ extension ListView
                 let shouldRebuild = self.collectionViewLayout.layoutDescription.configuration.shouldRebuild(layout: self.collectionViewLayout.layout)
                 
                 if shouldRebuild {
+                    /// TODO: We shouldn't need to rebuild in any case here; just push the new values through to the ListLayout.
                     self.collectionViewLayout.setNeedsRebuild()
                 }
             } else {

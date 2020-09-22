@@ -126,22 +126,6 @@ public struct Section
         self.items = items
     }
     
-    init(
-        info: AnySectionInfo,
-        layout: Section.Layout,
-        columns: Section.Columns,
-        header: AnyHeaderFooter?,
-        footer: AnyHeaderFooter?,
-        items: [AnyItem]
-    ) {
-        self.info = info
-        self.layout = layout
-        self.columns = columns
-        self.header = header
-        self.footer = footer
-        self.items = items
-    }
-    
     //
     // MARK: Adding & Removing Single Items
     //

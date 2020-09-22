@@ -13,12 +13,25 @@ class UpdateCallbacksTests : XCTestCase
 {
     func test_add_and_perform() {
         
+        self.testcase("shouldPerform is false") {
+            let callbacks = UpdateCallbacks(.immediate)
+            
+            var callCount : Int = 0
+            
+            callbacks.add(if: false) {
+                callCount += 1
+            }
+            
+            XCTAssertEqual(callCount, 0)
+            XCTAssertEqual(callbacks.calls.count, 0)
+        }
+        
         self.testcase("immediate") {
             let callbacks = UpdateCallbacks(.immediate)
             
             var callCount : Int = 0
             
-            callbacks.add {
+            callbacks.add(if: true) {
                 callCount += 1
             }
             
@@ -36,7 +49,7 @@ class UpdateCallbacksTests : XCTestCase
             
             var callCount : Int = 0
             
-            callbacks.add {
+            callbacks.add(if: true) {
                 callCount += 1
             }
             

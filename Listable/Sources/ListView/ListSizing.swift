@@ -73,15 +73,13 @@ extension ListView
         self.contentSize(in: fittingSize, for: .default(with: properties))
     }
     
-    private static let measurementView = ListView()
+    private static let measurementView : ListView = {
+        let view = ListView()
+        view.performsContentCallbacks = false
+        return view
+    }()
     
     public static func contentSize(in fittingSize : CGSize, for properties : ListProperties) -> CGSize {
-        
-        guard fittingSize.isEmpty == false else {
-            return .zero
-        }
-        
-        let properties = properties.toListSizable()
         
         let view = Self.measurementView
                 
@@ -114,70 +112,6 @@ extension ListView
         return CGSize(
             width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
             height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
-        )
-    }
-}
-
-fileprivate extension ListProperties
-{
-    func toListSizable() -> ListProperties {
-        ListProperties(
-            animatesChanges: false,
-            content: self.content.toListSizable(),
-            layout: self.layout,
-            appearance: self.appearance,
-            scrollInsets: self.scrollInsets,
-            behavior: self.behavior,
-            /// Intentionally empty to avoid user-provided callbacks during measurement.
-            stateObserver: ListStateObserver(),
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            actions: nil,
-            /// Intentionally none to avoid user-provided callbacks during measurement.
-            autoScrollAction: .none,
-            /// Intentionally nil because the list is never on-screen.
-            accessibilityIdentifier: nil,
-            /// Custom `debuggingIdentififer` to ensure the measurement list shows up differently in debug logs.
-            debuggingIdentifier: {
-                if let id = self.debuggingIdentifier, id.isEmpty == false {
-                    return "Measurement ListView for \(id)"
-                } else {
-                    return "Measurement ListView"
-                }
-            }()
-        )
-    }
-}
-
-fileprivate extension Content
-{
-    func toListSizable() -> Content {
-        Content(
-            identifier: self.identifier,
-            refreshControl: self.refreshControl,
-            header: self.header,
-            footer: self.footer,
-            overscrollFooter: self.overscrollFooter,
-            sections: self.sections.map {
-                $0.toListSizable()
-            }
-        )
-    }
-}
-
-
-fileprivate extension Section
-{
-    func toListSizable() -> Section
-    {
-        Section(
-            info: self.info,
-            layout: self.layout,
-            columns: self.columns,
-            header: self.header,
-            footer: self.footer,
-            items: self.items.map {
-                $0.toListSizableItem()
-            }
         )
     }
 }

@@ -125,6 +125,8 @@ extension LayoutDescription
         
         public func isSameLayoutType(as anyOther : AnyLayoutDescriptionConfiguration) -> Bool
         {
+            // TODO: We don't need both of these checks, just the second one.
+            
             guard let other = anyOther as? Self else {
                 return false
             }

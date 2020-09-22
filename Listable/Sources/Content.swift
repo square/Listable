@@ -103,7 +103,6 @@ public struct Content
     ) {
         self.identifier = identifier
         
-        
         self.refreshControl = refreshControl
         
         self.header = header

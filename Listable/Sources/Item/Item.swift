@@ -35,9 +35,11 @@ public protocol AnyItem_Internal
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyIsEquivalent(to other : AnyItem) -> Bool
     
-    func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
-    
-    func toListSizableItem() -> AnyItem
+    func newPresentationItemState(
+        with dependencies : ItemStateDependencies,
+        updateCallbacks : UpdateCallbacks,
+        performsContentCallbacks : Bool
+    ) -> Any
 }
 
 
@@ -72,8 +74,6 @@ public struct Item<Content:ItemContent> : AnyItem
     internal let reuseIdentifier : ReuseIdentifier<Content>
     
     public var debuggingIdentifier : String? = nil
-    
-    internal let isListSizingItem : Bool
     
     //
     // MARK: Initialization
@@ -163,50 +163,6 @@ public struct Item<Content:ItemContent> : AnyItem
         self.reuseIdentifier = .identifier(for: Content.self)
         
         self.identifier = self.content.identifier
-        
-        self.isListSizingItem = false
-    }
-    
-    init(
-        identifier: AnyIdentifier,
-        content: Content,
-        sizing: Sizing,
-        layout: ItemLayout,
-        selectionStyle: ItemSelectionStyle,
-        insertAndRemoveAnimations: ItemInsertAndRemoveAnimations?,
-        swipeActions: SwipeActionsConfiguration?,
-        reordering: Reordering?,
-        onDisplay: Item<Content>.OnDisplay.Callback?,
-        onEndDisplay: Item<Content>.OnEndDisplay.Callback?,
-        onSelect: Item<Content>.OnSelect.Callback?,
-        onDeselect: Item<Content>.OnDeselect.Callback?,
-        onInsert: Item<Content>.OnInsert.Callback?,
-        onRemove: Item<Content>.OnRemove.Callback?,
-        onMove: Item<Content>.OnMove.Callback?,
-        onUpdate: Item<Content>.OnUpdate.Callback?,
-        reuseIdentifier: ReuseIdentifier<Content>,
-        debuggingIdentifier: String?,
-        isListSizingItem : Bool
-    ) {
-        self.identifier = identifier
-        self.content = content
-        self.sizing = sizing
-        self.layout = layout
-        self.selectionStyle = selectionStyle
-        self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        self.swipeActions = swipeActions
-        self.reordering = reordering
-        self.onDisplay = onDisplay
-        self.onEndDisplay = onEndDisplay
-        self.onSelect = onSelect
-        self.onDeselect = onDeselect
-        self.onInsert = onInsert
-        self.onRemove = onRemove
-        self.onMove = onMove
-        self.onUpdate = onUpdate
-        self.reuseIdentifier = reuseIdentifier
-        self.debuggingIdentifier = debuggingIdentifier
-        self.isListSizingItem = isListSizingItem
     }
     
     // MARK: AnyItem_Internal
@@ -229,51 +185,17 @@ public struct Item<Content:ItemContent> : AnyItem
         return self.content.wasMoved(comparedTo: other.content)
     }
     
-    public func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
+    public func newPresentationItemState(
+        with dependencies : ItemStateDependencies,
+        updateCallbacks : UpdateCallbacks,
+        performsContentCallbacks : Bool
+    ) -> Any
     {
-        PresentationState.ItemState(with: self, dependencies: dependencies, updateCallbacks: updateCallbacks)
-    }
-    
-    public func toListSizableItem() -> AnyItem
-    {
-        Item(
-            identifier: self.identifier,
-            content: self.content,
-            sizing: self.sizing,
-            layout: self.layout,
-            selectionStyle: self.selectionStyle,
-            insertAndRemoveAnimations: self.insertAndRemoveAnimations,
-            swipeActions: self.swipeActions,
-            reordering: self.reordering,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onDisplay: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onEndDisplay: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onSelect: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onDeselect: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onInsert: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onRemove: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onMove: nil,
-            /// Intentionally nil to avoid user-provided callbacks during measurement.
-            onUpdate: nil,
-            reuseIdentifier: self.reuseIdentifier,
-            
-            /// Custom `debuggingIdentififer` to ensure the measurement item shows up differently in debug logs.
-            debuggingIdentifier: {
-                if let id = self.debuggingIdentifier, id.isEmpty == false {
-                    return "Measurement Item for \(id)"
-                } else {
-                    return "Measurement Item"
-                }
-            }(),
-            
-            /// Providing `true` to ensure no `Coordinator` is created, which also includes user-provided callbacks.
-            isListSizingItem: true
+        PresentationState.ItemState(
+            with: self,
+            dependencies: dependencies,
+            updateCallbacks: updateCallbacks,
+            performsContentCallbacks : performsContentCallbacks
         )
     }
 }

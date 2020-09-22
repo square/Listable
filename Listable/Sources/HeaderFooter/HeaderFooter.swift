@@ -20,7 +20,7 @@ public protocol AnyHeaderFooter_Internal
     
     func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     
-    func newPresentationHeaderFooterState() -> Any
+    func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
 }
 
 
@@ -96,9 +96,9 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         return self.content.isEquivalent(to: other.content)
     }
     
-    public func newPresentationHeaderFooterState() -> Any
+    public func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
     {
-        return PresentationState.HeaderFooterState(self)
+        return PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
     }
 }
 

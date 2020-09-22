@@ -189,35 +189,14 @@ public struct ListProperties
         build(&self)
     }
     
-    init(
-        animatesChanges: Bool,
-        content: Content,
-        layout: LayoutDescription,
-        appearance: Appearance,
-        scrollInsets: ScrollInsets,
-        behavior: Behavior,
-        stateObserver: ListStateObserver,
-        actions: ListActions?,
-        autoScrollAction: AutoScrollAction,
-        accessibilityIdentifier: String?,
-        debuggingIdentifier: String?
-    ) {
-        self.animatesChanges = animatesChanges
-        self.content = content
-        self.layout = layout
-        self.appearance = appearance
-        self.scrollInsets = scrollInsets
-        self.behavior = behavior
-        self.stateObserver = stateObserver
-        self.actions = actions
-        self.autoScrollAction = autoScrollAction
-        self.accessibilityIdentifier = accessibilityIdentifier
-        self.debuggingIdentifier = debuggingIdentifier
-    }
-    
     //
     // MARK: Mutating Content
     //
+    
+    /// Updates the `ListProperties` object with the changes in the provided builder.
+    public mutating func modify(using builder : Build) {
+        builder(&self)
+    }
     
     /// Creates a new `ListProperties` object modified by the changes in the provided builder.
     public func modified(using builder : Build) -> ListProperties {
