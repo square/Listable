@@ -98,7 +98,7 @@ public struct ListScrollPositionInfo : Equatable {
         self.scrollViewState = ScrollViewState(
             bounds: scrollView.bounds,
             contentSize : scrollView.contentSize,
-            safeAreaInsets: scrollView.lst_safeAreaInsets
+            safeAreaInsets: scrollView.safeAreaInsets
         )
         
         self.visibleItems = visibleItems

@@ -1000,7 +1000,7 @@ extension ListView : KeyboardObserverDelegate
                     return 0.0
                     
                 case .overlapping(let frame):
-                    return (self.bounds.size.height - frame.origin.y) - self.lst_safeAreaInsets.bottom
+                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
                 }
             }
         }()

@@ -96,8 +96,8 @@ public extension AnyListLayout
     func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
     {
         CGRect(
-            x: collectionView.contentOffset.x + collectionView.lst_safeAreaInsets.left,
-            y: collectionView.contentOffset.y + collectionView.lst_safeAreaInsets.top,
+            x: collectionView.contentOffset.x + collectionView.safeAreaInsets.left,
+            y: collectionView.contentOffset.y + collectionView.safeAreaInsets.top,
             width: collectionView.bounds.size.width,
             height: collectionView.bounds.size.height
         )
@@ -150,9 +150,9 @@ public extension AnyListLayout
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
         if contentHeight >= viewHeight {
-            footer.y = contentHeight + collectionView.contentInset.bottom + collectionView.lst_safeAreaInsets.bottom
+            footer.y = contentHeight + collectionView.contentInset.bottom + collectionView.safeAreaInsets.bottom
         } else {
-            footer.y = viewHeight - collectionView.contentInset.top - collectionView.lst_safeAreaInsets.top
+            footer.y = viewHeight - collectionView.contentInset.top - collectionView.safeAreaInsets.top
         }
     }
     
@@ -167,8 +167,8 @@ public extension AnyListLayout
         
         let safeAreaInsets : CGFloat = {
             switch self.direction {
-            case .vertical: return collectionView.lst_safeAreaInsets.top + collectionView.lst_safeAreaInsets.bottom
-            case .horizontal: return collectionView.lst_safeAreaInsets.left + collectionView.lst_safeAreaInsets.right
+            case .vertical: return collectionView.safeAreaInsets.top + collectionView.safeAreaInsets.bottom
+            case .horizontal: return collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right
             }
         }()
         
