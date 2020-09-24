@@ -187,7 +187,7 @@ public enum Sizing : Equatable
 
 Listable integrates closely with [Blueprint](https://github.com/square/blueprint/), Square's framework for declarative UI construction and management (if you've used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.
 
-All you need to do is take a dependency on the `BlueprintLists` pod, and then `import BlueprintLists` to begin using Blueprint integration.
+All you need to do is take a dependency on the `BlueprintLists` pod, and then `import BlueprintUILists` to begin using Blueprint integration.
 
 In this example, we see how to declare a `List` within a Blueprint element hierarchy.
 

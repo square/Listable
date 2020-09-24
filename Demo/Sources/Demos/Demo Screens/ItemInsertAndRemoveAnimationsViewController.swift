@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import BlueprintLists
+import BlueprintUILists
 
 
 final class ItemInsertAndRemoveAnimationsViewController : ListViewController
