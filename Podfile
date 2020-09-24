@@ -1,6 +1,6 @@
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
