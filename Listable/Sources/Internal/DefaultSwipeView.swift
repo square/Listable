@@ -18,7 +18,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     private var didPerformAction: SwipeAction.CompletionHandler
 
     public var swipeActionsWidth: CGFloat {
-        calculatedNaturalWidth + lst_safeAreaInsets.right
+        calculatedNaturalWidth + safeAreaInsets.right
     }
 
     private var state: SwipeActionState = .closed

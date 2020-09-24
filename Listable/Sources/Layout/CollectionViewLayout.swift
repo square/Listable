@@ -490,23 +490,6 @@ final class CollectionViewLayout : UICollectionViewLayout
 
 
 //
-// MARK: Layout Extensions
-//
-
-
-extension UIView
-{
-    var lst_safeAreaInsets : UIEdgeInsets {
-        if #available(iOS 11.0, *) {
-            return self.safeAreaInsets
-        } else {
-            return .zero
-        }
-    }
-}
-
-
-//
 // MARK: Invalidation Helpers
 //
 
@@ -527,7 +510,7 @@ struct CollectionViewLayoutProperties : Equatable
      init(collectionView : UICollectionView)
      {
          self.size = collectionView.bounds.size
-         self.safeAreaInsets = collectionView.lst_safeAreaInsets
+         self.safeAreaInsets = collectionView.safeAreaInsets
          self.contentInset = collectionView.contentInset
      }
  }

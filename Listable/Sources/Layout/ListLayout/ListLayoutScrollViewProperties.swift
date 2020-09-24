@@ -54,7 +54,7 @@ public struct ListLayoutScrollViewProperties
             view.isPagingEnabled = isPagingEnabled
         }
         
-        if #available(iOS 11.0, *), view.contentInsetAdjustmentBehavior != self.contentInsetAdjustmentBehavior.toUIScrollViewValue {
+        if view.contentInsetAdjustmentBehavior != self.contentInsetAdjustmentBehavior.toUIScrollViewValue {
             view.contentInsetAdjustmentBehavior = self.contentInsetAdjustmentBehavior.toUIScrollViewValue
         }
         
@@ -87,7 +87,6 @@ public struct ListLayoutScrollViewProperties
         case never
         case always
         
-        @available(iOS 11.0, *)
         var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
             switch self {
             case .automatic: return .automatic

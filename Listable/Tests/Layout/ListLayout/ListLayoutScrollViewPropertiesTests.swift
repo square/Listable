@@ -69,24 +69,22 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             XCTAssertEqual(scrollView.isPagingEnabled, false)
         }
         
-        if #available(iOS 11.0, *) {
-            self.testcase("contentInsetAdjustmentBehavior") {
-                let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-                scrollView.contentInsetAdjustmentBehavior = .never
-                
-                let properties = ListLayoutScrollViewProperties(
-                    isPagingEnabled: false,
-                    contentInsetAdjustmentBehavior: .automatic,
-                    allowsBounceVertical: false,
-                    allowsBounceHorizontal: false,
-                    allowsVerticalScrollIndicator: false,
-                    allowsHorizontalScrollIndicator: false
-                )
-                
-                properties.apply(to: scrollView, behavior: Behavior(), direction: .vertical, showsScrollIndicators: true)
-                
-                XCTAssertEqual(scrollView.contentInsetAdjustmentBehavior, .automatic)
-            }
+        self.testcase("contentInsetAdjustmentBehavior") {
+            let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+            scrollView.contentInsetAdjustmentBehavior = .never
+            
+            let properties = ListLayoutScrollViewProperties(
+                isPagingEnabled: false,
+                contentInsetAdjustmentBehavior: .automatic,
+                allowsBounceVertical: false,
+                allowsBounceHorizontal: false,
+                allowsVerticalScrollIndicator: false,
+                allowsHorizontalScrollIndicator: false
+            )
+            
+            properties.apply(to: scrollView, behavior: Behavior(), direction: .vertical, showsScrollIndicators: true)
+            
+            XCTAssertEqual(scrollView.contentInsetAdjustmentBehavior, .automatic)
         }
         
         self.testcase("alwaysBounceVertical & alwaysBounceHorizontal") {

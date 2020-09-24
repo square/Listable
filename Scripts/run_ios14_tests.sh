@@ -5,14 +5,14 @@ set -o pipefail
 
 # Deleting Old Simulators
 
-SIMULATOR_NAME="Listable CI iPhone 6 (iOS 10)"
+SIMULATOR_NAME="Listable CI iPhone 7 (iOS 14)"
 
 xcrun simctl delete "$SIMULATOR_NAME" || true
 
 # Create New Simulators
 
-DEVICE_UUID=$(xcrun simctl create "$SIMULATOR_NAME" "iPhone 6" "com.apple.CoreSimulator.SimRuntime.iOS-10-3")
-echo "Created iOS 10 simulator ($SIMULATOR_NAME): $DEVICE_UUID"
+DEVICE_UUID=$(xcrun simctl create "$SIMULATOR_NAME" "iPhone 7" "com.apple.CoreSimulator.SimRuntime.iOS-14-0")
+echo "Created iOS 14 simulator ($SIMULATOR_NAME): $DEVICE_UUID"
 
 xcrun simctl boot "$DEVICE_UUID"
 
