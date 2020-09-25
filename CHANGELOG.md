@@ -1,4 +1,18 @@
-# Main
+# [Main]
+
+### Fixed
+
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.10.0] - 2020-09-24
 
 ### Fixed
 
@@ -20,11 +34,7 @@
 
 - Listable has been [renamed to ListableUI](https://github.com/kyleve/Listable/pull/211/), and BlueprintLists is now named BlueprintUILists. This is done to be more consistent with other Square UI libraries, and to avoid a conflict with an existing published Cocoapod, also named Listable.
 
-### Misc
-
-# Past Releases
-
-# 0.9.0
+# 0.9.0 - Internal Only
 
 ### Added
 
@@ -36,7 +46,7 @@
 
 - Changed [how `zIndexes` are assigned to header and items, and support tapping headers / footers](https://github.com/kyleve/Listable/pull/193). This allows registering an `onTap` handler for any HeaderFooter, and providing a background to display while the tap's press is active.
 
-## 0.8.0
+## 0.8.0 - Internal Only
 
 ### Added
 
@@ -79,7 +89,7 @@
 
 - [Significant refactors to how the custom layout APIs work.](https://github.com/kyleve/Listable/pull/178) While this is mostly an internal concern, it continues to refine these APIs to set them up for public exposure and usage at a later date to customize layouts.
 
-## 0.7.0
+## 0.7.0 - Internal Only
 
 ### Fixed
 
@@ -160,14 +170,14 @@
 
 ### Misc
 
-## 0.6.1
+## 0.6.1 - Internal Only
 
 ### Changed
 
 - Change `Item`'s `onSelect` and `onDeselect` [to be performed asynchronously](https://github.com/kyleve/Listable/pull/155) after a single runloop spin, to give `UICollectionView` time to schedule animations if these callbacks are slow.
 - Add improved signpost logging for selection and deselection, to more easily identify slow callbacks.
 
-## 0.6.0
+## 0.6.0 - Internal Only
 
 ### Fixed
 
@@ -187,12 +197,16 @@
 - `SelectionMode` [was moved from `Content` to `Behavior`](https://github.com/kyleve/Listable/pull/152), which is in line with other collection view behaviours like scrolling and underflow.
 - Rename `ItemSelectionStyle.none` to `ItemSelectionStyle.notSelectable`. This is to avoid conflicts with `Optional.none` when working with `ItemSelectionStyle` as an `Optional`.
 
-## 0.5.0
+## 0.5.0 - Internal Only
 
 ### Added
 
 - Added support for [conditionally scrolling to items](https://github.com/kyleve/Listable/pull/129) on insert, based on the `shouldPerform` block passed to the `AutoScrollAction`.
 
-## Earlier
+## Earlier - Internal Only
 
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
+
+
+[Main]: https://github.com/square/Blueprint/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/square/Blueprint/compare/0.9.0...0.10.0
