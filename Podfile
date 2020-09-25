@@ -9,8 +9,8 @@ use_frameworks!
 
 target 'Demo' do
 	# Local Pods
-	pod 'Listable', :path => 'Listable.podspec', :testspecs => ['Tests']
-	pod 'BlueprintLists', :path => 'BlueprintLists.podspec', :testspecs => ['Tests']
+	pod 'ListableUI', :path => 'ListableUI.podspec', :testspecs => ['Tests']
+	pod 'BlueprintUILists', :path => 'BlueprintUILists.podspec', :testspecs => ['Tests']
 
 	# External Pods
 	pod 'BlueprintUI'

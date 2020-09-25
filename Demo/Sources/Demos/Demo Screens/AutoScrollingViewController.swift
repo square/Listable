@@ -8,8 +8,8 @@
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 

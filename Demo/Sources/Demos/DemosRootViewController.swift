@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Listable
+import ListableUI
 
 
 public final class DemosRootViewController : ListViewController

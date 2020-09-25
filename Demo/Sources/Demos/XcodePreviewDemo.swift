@@ -8,8 +8,8 @@
 
 import SwiftUI
 import BlueprintUICommonControls
-import BlueprintLists
-import Listable
+import BlueprintUILists
+import ListableUI
 
 
 fileprivate struct XcodePreviewDemoContent : BlueprintItemContent, Equatable

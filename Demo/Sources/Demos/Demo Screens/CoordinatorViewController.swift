@@ -6,7 +6,7 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintLists
+import BlueprintUILists
 import BlueprintUICommonControls
 
 
