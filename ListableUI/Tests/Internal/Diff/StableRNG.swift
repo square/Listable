@@ -12,7 +12,7 @@ struct StableRNG : RandomNumberGenerator
 {
     private static let numbers : [UInt64] = {
         let main = Bundle(for: ArrayDiffTests.self)
-        let bundle = Bundle(url: main.url(forResource: "ListableTestsResources", withExtension: "bundle")!)!
+        let bundle = Bundle(url: main.url(forResource: "ListableUITestsResources", withExtension: "bundle")!)!
         
         let url = bundle.url(forResource: "random_numbers", withExtension: "json")!
                 
