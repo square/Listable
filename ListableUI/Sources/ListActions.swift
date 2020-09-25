@@ -11,7 +11,7 @@ import Foundation
 ///
 /// `ListActions` is an type that you can use to gain access to actions to perform on a `List`
 /// (for example, scrolling to a given item in the list) when used when you otherwise do
-/// not have a reference to the underlying list view (for example, when using `ListViewController` or `BlueprintLists`).
+/// not have a reference to the underlying list view (for example, when using `ListViewController` or `BlueprintUILists`).
 ///
 /// You also gain access to a `ListActions` instance when using `ListStateObserver`, in each registered callback.
 ///

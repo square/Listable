@@ -13,7 +13,7 @@ import Foundation
 /// and display a list on screen. It is usually used in declarative APIs which deal in descriptions of views
 /// (eg, Blueprint, SwiftUI, `ListViewController`) in place of referencing and managing a view directly.
 ///
-/// For example, in `BlueprintLists`, you create a Listable `List` element like so:
+/// For example, in `BlueprintUILists`, you create a Listable `List` element like so:
 /// ```
 /// List { list in
 ///     list.appearance = .myAppearance
