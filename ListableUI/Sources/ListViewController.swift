@@ -134,7 +134,7 @@ public extension ListView {
     /// 1) If subclassing `UIViewController`: within your view controller's `viewWillAppear` method.
     ///
     /// 2) By invoking this same method on your `ListActions` that you have wired up to your list view. Use this
-    /// in the case that you do not have access to your list view at all, such as when using `BlueprintLists`.
+    /// in the case that you do not have access to your list view at all, such as when using `BlueprintUILists`.
     ///
     /// // Behaviour from UIKit Eng: https://twitter.com/smileyborg/status/1279473615553982464
     ///

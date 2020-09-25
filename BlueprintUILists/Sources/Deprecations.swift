@@ -9,7 +9,7 @@ import BlueprintUI
 
 
 ///
-/// This file contains deprecations which have occurred in BlueprintLists, for which there are reasonable
+/// This file contains deprecations which have occurred in BlueprintUILists, for which there are reasonable
 /// forward-moving defaults (eg, renames), to ease transitions for consumers when they update their library version.
 ///
 /// To add new deprecations and changes:

@@ -6,7 +6,7 @@
 //
 
 ///
-/// Import required dependencies when using BlueprintLists.
+/// Import required dependencies when using BlueprintUILists.
 ///
 
 @_exported import BlueprintUI
