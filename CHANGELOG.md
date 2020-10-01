@@ -12,6 +12,10 @@
 
 # Past Releases
 
+# [0.10.1] - 2020-10-01
+
+- [Fixed import](https://github.com/kyleve/Listable/pull/215) of Swift bridging header, so Cocoapods can build with or without `use_frameworks!`.
+
 # [0.10.0] - 2020-09-24
 
 ### Fixed

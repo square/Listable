@@ -8,7 +8,11 @@
 @import Foundation;
 @import UIKit;
 
-#import <ListableUI/ListableUI-Swift.h>
+#if __has_include (<ListableUI/ListableUI-Swift.h>)
+    #import <ListableUI/ListableUI-Swift.h>
+#elif __has_include ("ListableUI-Swift.h")
+    #import "ListableUI-Swift.h"
+#endif
 
 
 @interface __LST_SetupKeyboardObserverOnAppStartup : NSObject
