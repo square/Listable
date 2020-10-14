@@ -6,15 +6,6 @@
 //
 
 
-public enum ItemPosition
-{
-    case single
-    
-    case first
-    case middle
-    case last
-}
-
 
 public protocol AnyItem : AnyItem_Internal
 {

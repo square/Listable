@@ -66,6 +66,10 @@ public final class ListView : UIView
 
         self.dataSource.presentationState = self.storage.presentationState
         
+        self.dataSource.directionProvider = { [weak self] in
+            self?.layoutManager.collectionViewLayout.layout.direction ?? .vertical
+        }
+        
         self.delegate.view = self
         self.delegate.presentationState = self.storage.presentationState
         
