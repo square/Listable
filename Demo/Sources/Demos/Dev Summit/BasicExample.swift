@@ -20,7 +20,7 @@ struct BasicExample : ProxyElement
             list.layout = layout
             
             list(1) { section in
-                section += BasicItem(text: "First Item")
+                section += Item(BasicItem(text: "First Item"), selectionStyle: .tappable)
             }
             
             list(2) { section in
@@ -60,12 +60,19 @@ fileprivate struct BasicItem : BlueprintItemContent, Equatable {
             $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
         }
         .inset(uniform: 10.0)
-        .box(
-            background: .systemGray,
-            corners: .rounded(
-                radius: 10.0,
-                corners: info.position.listCorners(for: info.direction)
-            )
+    }
+    
+    func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
+        Box(
+            backgroundColor: .white(0.95),
+            cornerStyle: .rounded(radius: 10.0)
+        )
+    }
+    
+    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
+        Box(
+            backgroundColor: .white(0.85),
+            cornerStyle: .rounded(radius: 10.0)
         )
     }
 }

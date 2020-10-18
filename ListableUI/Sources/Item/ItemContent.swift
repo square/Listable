@@ -230,6 +230,10 @@ public struct ApplyItemContentInfo
     
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reordering : ReorderingActions
+    
+    public var listCorners : UIRectCorner {
+        self.position.listCorners(for: self.direction)
+    }
 }
 
 
