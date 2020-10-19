@@ -67,10 +67,13 @@ extension PresentationState
     final class HeaderFooterState<Content:HeaderFooterContent> : AnyPresentationHeaderFooterState
     {
         var model : HeaderFooter<Content>
+        
+        let performsContentCallbacks : Bool
                 
-        init(_ model : HeaderFooter<Content>)
+        init(_ model : HeaderFooter<Content>, performsContentCallbacks : Bool)
         {
             self.model = model
+            self.performsContentCallbacks = performsContentCallbacks
         }
         
         // MARK: AnyPresentationHeaderFooterState

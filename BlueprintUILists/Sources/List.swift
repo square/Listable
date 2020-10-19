@@ -41,26 +41,49 @@ import ListableUI
 ///
 public struct List : Element
 {
-    /// The values which back the on-screen list.
+    /// The properties which back the on-screen list.
+    ///
+    /// When it comes time to render the `List` on screen,
+    /// `ListView.configure(with: properties)` is called
+    /// to update the on-screen list with the provided properties.
     public var properties : ListProperties
+    
+    /// How the `List` is measured when the element is laid out
+    /// by Blueprint.  Defaults to `.fillParent`, which means
+    /// it will take up all the size it is given. You can change this to
+    /// `.measureContent` to instead measure the optimal size.
+    ///
+    /// See the `ListSizing` documentation for more.
+    public var sizing : ListSizing
     
     //
     // MARK: Initialization
     //
         
-    /// Create a new list, configured with the properties you set on the provided `ListProperties` object.
-    public init(build : ListProperties.Build)
-    {
+    /// Create a new list, configured with the provided properties,
+    /// configured with the provided `ListProperties` builder.
+    public init(
+        sizing : ListSizing = .fillParent,
+        build : ListProperties.Build
+    ) {
+        self.sizing = sizing
+        
         self.properties = .default(with: build)
     }
     
     //
     // MARK: Element
     //
-    
+        
     public var content : ElementContent {
-        ElementContent { constraint in
-            constraint.maximum
+        ElementContent { constraint -> CGSize in
+            switch self.sizing {
+            case .fillParent:
+                return constraint.maximum
+                
+            case .measureContent:
+                return ListView.contentSize(in: constraint.maximum, for: self.properties)
+            }
         }
     }
     
@@ -77,4 +100,3 @@ public struct List : Element
         }
     }
 }
-

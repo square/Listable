@@ -22,7 +22,12 @@ public final class UpdateCallbacks {
 
     private(set) var calls : [() -> ()] = []
         
-    func add(_ call : @escaping () -> ()) {
+    func add(if performsCallbacks : Bool, _ call : @escaping () -> ()) {
+        
+        guard performsCallbacks else {
+            return
+        }
+        
         switch self.executionType {
         case .immediate: call()
         case .queue: self.calls.append(call)

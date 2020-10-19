@@ -120,6 +120,12 @@ public final class ListView : UIView
         self.layoutManager.collectionViewLayout
     }
     
+    var performsContentCallbacks : Bool = true {
+        didSet {
+            self.storage.presentationState.performsContentCallbacks = self.performsContentCallbacks
+        }
+    }
+    
     private(set) var visibleContent : VisibleContent
     
     //
@@ -173,7 +179,7 @@ public final class ListView : UIView
     //
     // MARK: Layout
     //
-    
+        
     public var scrollPositionInfo : ListScrollPositionInfo {
         let visibleItems = Set(self.visibleContent.items.map { item in
             item.item.anyModel.identifier
@@ -491,6 +497,16 @@ public final class ListView : UIView
     //
     // MARK: UIView
     //
+    
+    @available(*, unavailable, message: "sizeThatFits does not re-measure the size of the list. Use ListView.contentSize(in:for:) instead.")
+    public override func sizeThatFits(_ size: CGSize) -> CGSize {
+        super.sizeThatFits(size)
+    }
+    
+    @available(*, unavailable, message: "intrinsicContentSize does not re-measure the size of the list. Use ListView.contentSize(in:for:) instead.")
+    public override var intrinsicContentSize: CGSize {
+        super.intrinsicContentSize
+    }
     
     public override var frame: CGRect {
         didSet {

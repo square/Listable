@@ -19,18 +19,36 @@ extension PresentationState
         
         var items : [AnyPresentationItemState]
         
+        let performsContentCallbacks : Bool
+        
         init(
             with model : Section,
             dependencies : ItemStateDependencies,
-            updateCallbacks : UpdateCallbacks
+            updateCallbacks : UpdateCallbacks,
+            performsContentCallbacks : Bool
         ) {
             self.model = model
             
-            self.header.state = SectionState.headerFooterState(with: self.header.state, new: model.header)
-            self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: model.footer)
+            self.header.state = SectionState.headerFooterState(
+                with: self.header.state,
+                new: model.header,
+                performsContentCallbacks: performsContentCallbacks
+            )
+            
+            self.footer.state = SectionState.headerFooterState(
+                with: self.footer.state,
+                new: model.footer,
+                performsContentCallbacks: performsContentCallbacks
+            )
+            
+            self.performsContentCallbacks = performsContentCallbacks
             
             self.items = self.model.items.map {
-                $0.newPresentationItemState(with: dependencies, updateCallbacks: updateCallbacks) as! AnyPresentationItemState
+                $0.newPresentationItemState(
+                    with: dependencies,
+                    updateCallbacks: updateCallbacks,
+                    performsContentCallbacks: performsContentCallbacks
+                ) as! AnyPresentationItemState
             }
         }
         
@@ -55,8 +73,17 @@ extension PresentationState
         ) {
             self.model = newSection
             
-            self.header.state = SectionState.headerFooterState(with: self.header.state, new: self.model.header)
-            self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: self.model.footer)
+            self.header.state = SectionState.headerFooterState(
+                with: self.header.state,
+                new: self.model.header,
+                performsContentCallbacks: self.performsContentCallbacks
+            )
+            
+            self.footer.state = SectionState.headerFooterState(
+                with: self.footer.state,
+                new: self.model.footer,
+                performsContentCallbacks: self.performsContentCallbacks
+            )
             
             self.items = changes.transform(
                 old: self.items,
@@ -64,7 +91,11 @@ extension PresentationState
                     _, item in item.wasRemoved(updateCallbacks: updateCallbacks)
                 },
                 added: {
-                    $0.newPresentationItemState(with: dependencies, updateCallbacks: updateCallbacks) as! AnyPresentationItemState
+                    $0.newPresentationItemState(
+                        with: dependencies,
+                        updateCallbacks: updateCallbacks,
+                        performsContentCallbacks: self.performsContentCallbacks
+                    ) as! AnyPresentationItemState
                 },
                 moved: { old, new, item in
                     item.setNew(item: new, reason: .moveFromList, updateCallbacks: updateCallbacks)
@@ -85,7 +116,11 @@ extension PresentationState
             }
         }
         
-        static func headerFooterState(with current : AnyPresentationHeaderFooterState?, new : AnyHeaderFooter?) -> AnyPresentationHeaderFooterState?
+        static func headerFooterState(
+            with current : AnyPresentationHeaderFooterState?,
+            new : AnyHeaderFooter?,
+            performsContentCallbacks : Bool
+        ) -> AnyPresentationHeaderFooterState?
         {
             if let current = current {
                 if let new = new {
@@ -95,14 +130,14 @@ extension PresentationState
                         current.setNew(headerFooter: new)
                         return current
                     } else {
-                        return (new.newPresentationHeaderFooterState() as! AnyPresentationHeaderFooterState)
+                        return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                     }
                 } else {
                     return nil
                 }
             } else {
                 if let new = new {
-                    return (new.newPresentationHeaderFooterState() as! AnyPresentationHeaderFooterState)
+                    return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                 } else {
                     return nil
                 }

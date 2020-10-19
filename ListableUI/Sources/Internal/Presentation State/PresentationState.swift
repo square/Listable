@@ -21,6 +21,8 @@ final class PresentationState
     var overscrollFooter : HeaderFooterViewStatePair = .init()
     
     var sections : [PresentationState.SectionState]
+    
+    var performsContentCallbacks : Bool = true
         
     private(set) var containsAllItems : Bool
     
@@ -210,9 +212,23 @@ final class PresentationState
         
         self.contentIdentifier = slice.content.identifier
         
-        self.header.state = SectionState.headerFooterState(with: self.header.state, new: slice.content.header)
-        self.footer.state = SectionState.headerFooterState(with: self.footer.state, new: slice.content.footer)
-        self.overscrollFooter.state = SectionState.headerFooterState(with: self.overscrollFooter.state, new: slice.content.overscrollFooter)
+        self.header.state = SectionState.headerFooterState(
+            with: self.header.state,
+            new: slice.content.header,
+            performsContentCallbacks: self.performsContentCallbacks
+        )
+        
+        self.footer.state = SectionState.headerFooterState(
+            with: self.footer.state,
+            new: slice.content.footer,
+            performsContentCallbacks: self.performsContentCallbacks
+        )
+        
+        self.overscrollFooter.state = SectionState.headerFooterState(
+            with: self.overscrollFooter.state,
+            new: slice.content.overscrollFooter,
+            performsContentCallbacks: self.performsContentCallbacks
+        )
         
         self.sections = diff.changes.transform(
             old: self.sections,
@@ -220,7 +236,12 @@ final class PresentationState
                 section.wasRemoved(updateCallbacks: updateCallbacks)
             },
             added: { section in
-                SectionState(with: section, dependencies: dependencies, updateCallbacks: updateCallbacks)
+                SectionState(
+                    with: section,
+                    dependencies: dependencies,
+                    updateCallbacks: updateCallbacks,
+                    performsContentCallbacks: self.performsContentCallbacks
+                )
             },
             moved: { old, new, changes, section in
                 section.update(

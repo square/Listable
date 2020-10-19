@@ -163,7 +163,6 @@ public struct ListProperties
     }
     
     /// Create a new instance of `ListProperties` with the provided values.
-    /// TODO: Remove `build`; make this init take in all properties?
     public init(
         animatesChanges: Bool,
         layout : LayoutDescription,
@@ -191,8 +190,20 @@ public struct ListProperties
     }
     
     //
-    // MARK: Adding Content
+    // MARK: Mutating Content
     //
+    
+    /// Updates the `ListProperties` object with the changes in the provided builder.
+    public mutating func modify(using builder : Build) {
+        builder(&self)
+    }
+    
+    /// Creates a new `ListProperties` object modified by the changes in the provided builder.
+    public func modified(using builder : Build) -> ListProperties {
+        var copy = self
+        builder(&copy)
+        return copy
+    }
     
     /// Adds a new section to the `content`.
     public mutating func add(_ section : Section)

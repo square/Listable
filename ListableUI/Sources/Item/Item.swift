@@ -35,7 +35,11 @@ public protocol AnyItem_Internal
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyIsEquivalent(to other : AnyItem) -> Bool
     
-    func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
+    func newPresentationItemState(
+        with dependencies : ItemStateDependencies,
+        updateCallbacks : UpdateCallbacks,
+        performsContentCallbacks : Bool
+    ) -> Any
 }
 
 
@@ -181,9 +185,18 @@ public struct Item<Content:ItemContent> : AnyItem
         return self.content.wasMoved(comparedTo: other.content)
     }
     
-    public func newPresentationItemState(with dependencies : ItemStateDependencies, updateCallbacks : UpdateCallbacks) -> Any
+    public func newPresentationItemState(
+        with dependencies : ItemStateDependencies,
+        updateCallbacks : UpdateCallbacks,
+        performsContentCallbacks : Bool
+    ) -> Any
     {
-        PresentationState.ItemState(with: self, dependencies: dependencies, updateCallbacks: updateCallbacks)
+        PresentationState.ItemState(
+            with: self,
+            dependencies: dependencies,
+            updateCallbacks: updateCallbacks,
+            performsContentCallbacks : performsContentCallbacks
+        )
     }
 }
 
