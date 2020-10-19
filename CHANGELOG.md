@@ -1,4 +1,22 @@
-# Main
+# [Main]
+
+### Fixed
+
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.10.1] - 2020-10-01
+
+- [Fixed import](https://github.com/kyleve/Listable/pull/215) of Swift bridging header, so Cocoapods can build with or without `use_frameworks!`.
+
+# [0.10.0] - 2020-09-24
 
 ### Fixed
 
@@ -10,17 +28,17 @@
 
 ### Removed
 
+- [Removed support for iOS 10](https://github.com/kyleve/Listable/pull/209). Future releases will only support iOS 11 and later.
+
 ### Changed
 
 - [Change how keyboard are observed](https://github.com/kyleve/Listable/pull/199) to avoid a pitfall where the keyboard would not be accounted for if a `ListView` is created while a keyboard is already on screen. To avoid this problem, we switch to a globally shared `KeyboardObserver` which is loaded at app startup time.
 
 - [`isEmpty` on `Content` and `Section` have been replaced with `contains(any:)`](https://github.com/kyleve/Listable/pull/197), which allows more granular comparison of the content in the whole list and in individual sections, respectively. This allows you to check if the list or sections contain headers, footers, items, all, or some combination of them.
 
-### Misc
+- Listable has been [renamed to ListableUI](https://github.com/kyleve/Listable/pull/211/), and BlueprintLists is now named BlueprintUILists. This is done to be more consistent with other Square UI libraries, and to avoid a conflict with an existing published Cocoapod, also named Listable.
 
-# Past Releases
-
-# 0.9.0
+# 0.9.0 - Internal Only
 
 ### Added
 
@@ -32,7 +50,7 @@
 
 - Changed [how `zIndexes` are assigned to header and items, and support tapping headers / footers](https://github.com/kyleve/Listable/pull/193). This allows registering an `onTap` handler for any HeaderFooter, and providing a background to display while the tap's press is active.
 
-## 0.8.0
+## 0.8.0 - Internal Only
 
 ### Added
 
@@ -75,7 +93,7 @@
 
 - [Significant refactors to how the custom layout APIs work.](https://github.com/kyleve/Listable/pull/178) While this is mostly an internal concern, it continues to refine these APIs to set them up for public exposure and usage at a later date to customize layouts.
 
-## 0.7.0
+## 0.7.0 - Internal Only
 
 ### Fixed
 
@@ -156,14 +174,14 @@
 
 ### Misc
 
-## 0.6.1
+## 0.6.1 - Internal Only
 
 ### Changed
 
 - Change `Item`'s `onSelect` and `onDeselect` [to be performed asynchronously](https://github.com/kyleve/Listable/pull/155) after a single runloop spin, to give `UICollectionView` time to schedule animations if these callbacks are slow.
 - Add improved signpost logging for selection and deselection, to more easily identify slow callbacks.
 
-## 0.6.0
+## 0.6.0 - Internal Only
 
 ### Fixed
 
@@ -178,17 +196,21 @@
 
 ### Changed
 
-- **Major Change:** `ItemElement` and `HeaderFooterElement` [were renamed to `ItemContent` and `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/150), respectively. This is intended to be a clearer indicaton as to what they are for (the content of an item or header/footer), and fixes a name collision with Blueprint, where we overloaded the meaning of `Element` when using Blueprint integration via `BlueprintLists`.
+- **Major Change:** `ItemElement` and `HeaderFooterElement` [were renamed to `ItemContent` and `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/150), respectively. This is intended to be a clearer indicaton as to what they are for (the content of an item or header/footer), and fixes a name collision with Blueprint, where we overloaded the meaning of `Element` when using Blueprint integration via `BlueprintUILists`.
 - Changed `BlueprintHeaderFooter{Content/Element}`'s main method to be `elementRepresentation` instead of `element`. This allows easier conformance of `BlueprintUI.ProxyElement` types to `BlueprintHeaderFooter{Content/Element}`.
 - `SelectionMode` [was moved from `Content` to `Behavior`](https://github.com/kyleve/Listable/pull/152), which is in line with other collection view behaviours like scrolling and underflow.
 - Rename `ItemSelectionStyle.none` to `ItemSelectionStyle.notSelectable`. This is to avoid conflicts with `Optional.none` when working with `ItemSelectionStyle` as an `Optional`.
 
-## 0.5.0
+## 0.5.0 - Internal Only
 
 ### Added
 
 - Added support for [conditionally scrolling to items](https://github.com/kyleve/Listable/pull/129) on insert, based on the `shouldPerform` block passed to the `AutoScrollAction`.
 
-## Earlier
+## Earlier - Internal Only
 
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
+
+
+[Main]: https://github.com/square/Blueprint/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/square/Blueprint/compare/0.9.0...0.10.0

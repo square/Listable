@@ -5,8 +5,8 @@
 //  Created by Kyle Van Essen on 3/24/20.
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 import UIKit

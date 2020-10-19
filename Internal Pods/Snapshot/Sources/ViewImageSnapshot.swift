@@ -1,6 +1,6 @@
 //
 //  ViewImageSnapshot.swift
-//  Listable-Unit-Tests
+//  ListableUI-Unit-Tests
 //
 //  Created by Kyle Van Essen on 11/26/19.
 //

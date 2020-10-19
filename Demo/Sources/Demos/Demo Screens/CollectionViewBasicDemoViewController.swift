@@ -1,14 +1,14 @@
 //
 //  CollectionViewBasicDemoViewController.swift
-//  Listable-DemoApp
+//  ListableUI-DemoApp
 //
 //  Created by Kyle Van Essen on 7/9/19.
 //
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 
 
 final class CollectionViewBasicDemoViewController : UIViewController
