@@ -4,6 +4,8 @@
 
 ### Added
 
+- Allow [setting the `sizing` type on a `List`](https://github.com/kyleve/Listable/pull/202). This controls how the list should be sized by Blueprint: Should it take up all allowed space, or should it size to fit based on its content.
+
 ### Removed
 
 ### Changed
