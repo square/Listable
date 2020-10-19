@@ -7,8 +7,7 @@
 
 import XCTest
 
-@testable import Listable
-
+@testable import ListableUI
 
 
 class ListView_ListSizingTests : XCTestCase
