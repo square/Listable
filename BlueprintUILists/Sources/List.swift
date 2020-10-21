@@ -82,7 +82,14 @@ public struct List : Element
                 return constraint.maximum
                 
             case .measureContent:
-                return ListView.contentSize(in: constraint.maximum, for: self.properties)
+                var size = ListView.contentSize(in: constraint.maximum, for: self.properties)
+                if let topInset = self.properties.scrollInsets.top {
+                    size.height += topInset
+                }
+                if let bottomInset = self.properties.scrollInsets.bottom {
+                    size.height += bottomInset
+                }
+                return size
             }
         }
     }

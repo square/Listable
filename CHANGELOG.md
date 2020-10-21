@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Scroll insets are [now correctly included](https://github.com/kyleve/Listable/pull/221) when using the `measureContent` sizing with `List`.
+
 ### Added
 
 ### Removed
