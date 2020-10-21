@@ -4,8 +4,6 @@
 
 ### Added
 
-- Allow [setting the `sizing` type on a `List`](https://github.com/kyleve/Listable/pull/202). This controls how the list should be sized by Blueprint: Should it take up all allowed space, or should it size to fit based on its content.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.11.0] - 2020-10-20
+
+### Added
+
+- Allow [setting the `sizing` type on a `List`](https://github.com/kyleve/Listable/pull/202). This controls how the list should be sized by Blueprint: Should it take up all allowed space, or should it size to fit based on its content.
 
 # [0.10.1] - 2020-10-01
 
@@ -214,5 +218,7 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Blueprint/compare/0.10.0...HEAD
+[Main]: https://github.com/square/Blueprint/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/square/Blueprint/compare/0.10.1...0.11.0
+[0.10.1]: https://github.com/square/Blueprint/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/square/Blueprint/compare/0.9.0...0.10.0
