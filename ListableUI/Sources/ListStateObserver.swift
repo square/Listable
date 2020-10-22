@@ -144,6 +144,29 @@ public struct ListStateObserver {
     private(set) var onFrameChanged : [OnFrameChanged] = []
     
     //
+    // MARK: Responding To Selection Changes
+    //
+    
+    public typealias OnSelectionChanged = (SelectionChanged) -> ()
+    
+    /// Registers a callback which will be called when the list view's selected items are changed by the user.
+    public mutating func onSelectionChanged(_ callback : @escaping OnSelectionChanged)
+    {
+        self.onSelectionChanged.append(callback)
+    }
+    
+    /// Parameters available for `OnSelectionChanged` callbacks.
+    public struct SelectionChanged {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+
+        public let old : Set<AnyIdentifier>
+        public let new : Set<AnyIdentifier>
+    }
+    
+    private(set) var onSelectionChanged : [OnSelectionChanged] = []
+    
+    //
     // MARK: Internal Methods
     //
     
