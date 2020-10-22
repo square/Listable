@@ -8,7 +8,7 @@
 import UIKit
 
 
-public final class ListView : UIView
+public final class ListView : UIView, KeyboardObserverDelegate
 {
     //
     // MARK: Initialization
@@ -22,7 +22,7 @@ public final class ListView : UIView
         
         self.behavior = Behavior()
         self.autoScrollAction = .none
-        self.scrollInsets = ScrollInsets(top: nil, bottom:  nil)
+        self.scrollIndicatorInsets = .zero
         
         self.storage = Storage()
         self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
@@ -84,7 +84,7 @@ public final class ListView : UIView
         
         self.applyAppearance()
         self.applyBehavior()
-        self.applyScrollInsets()
+        self.updateScrollViewInsets()
     }
     
     deinit
@@ -233,7 +233,7 @@ public final class ListView : UIView
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
         
-        self.setContentInsetWithKeyboardFrame()
+        self.updateScrollViewInsets()
     }
     
     private func updateCollectionViewWithCurrentLayoutProperties()
@@ -269,32 +269,94 @@ public final class ListView : UIView
     // MARK: Scroll Insets
     //
     
-    public var scrollInsets : ScrollInsets {
+    public var scrollIndicatorInsets : UIEdgeInsets {
         didSet {
-            guard oldValue != self.scrollInsets else {
+            guard oldValue != self.scrollIndicatorInsets else {
                 return
             }
             
-            self.applyScrollInsets()
+            self.updateScrollViewInsets()
+        }
+    }
+        
+    private func updateScrollViewInsets()
+    {
+        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets()
+        
+        if self.collectionView.contentInset != contentInsets {
+            self.collectionView.contentInset = contentInsets
+        }
+        
+        if self.collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
+            self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets
         }
     }
     
-    func applyScrollInsets()
+    func calculateScrollViewInsets() -> (UIEdgeInsets, UIEdgeInsets)
     {
-        let insets = self.scrollInsets.insets(
-            with: self.collectionView.contentInset,
-            layoutDirection: self.collectionViewLayout.layout.direction
+        let keyboardBottomInset : CGFloat = {
+            
+            guard let keyboardFrame = self.keyboardObserver.currentFrame(in: self) else {
+                return 0.0
+            }
+            
+            switch self.behavior.keyboardAdjustmentMode {
+            case .none:
+                return 0.0
+                
+            case .adjustsWhenVisible:
+                switch keyboardFrame {
+                case .nonOverlapping:
+                    return 0.0
+                    
+                case .overlapping(let frame):
+                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+                }
+            }
+        }()
+        
+        let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
+            $0.bottom = max($0.bottom, keyboardBottomInset)
+        }
+        
+        let contentInsets = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: keyboardBottomInset,
+            right: 0
         )
-
-        self.collectionView.contentInset = insets
-        self.collectionView.scrollIndicatorInsets = insets
+        
+        return (contentInsets, scrollIndicatorInsets)
+    }
+    
+    //
+    // MARK: KeyboardObserverDelegate
+    //
+    
+    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
+    
+    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+        
+        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+            return
+        }
+        
+        guard self.lastKeyboardFrame != frame else {
+            return
+        }
+        
+        self.lastKeyboardFrame = frame
+        
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.updateScrollViewInsets()
+        })
     }
     
     //
     // MARK: List State Observation
     //
     
-    /// A state observer allows you to recieve callbacks when varying types
+    /// A state observer allows you to receive callbacks when varying types
     /// of changes occur within the list's state, such as scroll events,
     /// content change events, frame change events, or item visibility changes.
     ///
@@ -453,7 +515,7 @@ public final class ListView : UIView
             animatesChanges: true,
             layout: self.layout,
             appearance: self.appearance,
-            scrollInsets: self.scrollInsets,
+            scrollIndicatorInsets: self.scrollIndicatorInsets,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
@@ -471,7 +533,7 @@ public final class ListView : UIView
         self.appearance = properties.appearance
         self.behavior = properties.behavior
         self.autoScrollAction = properties.autoScrollAction
-        self.scrollInsets = properties.scrollInsets
+        self.scrollIndicatorInsets = properties.scrollIndicatorInsets
         self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
         self.debuggingIdentifier = properties.debuggingIdentifier
         self.actions = properties.actions
@@ -537,7 +599,7 @@ public final class ListView : UIView
             }
             
             /// Our frame changed, update the keyboard inset in case the inset should now be different.
-            self.setContentInsetWithKeyboardFrame()
+            self.updateScrollViewInsets()
             
             ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
                 ListStateObserver.FrameChanged(
@@ -561,7 +623,7 @@ public final class ListView : UIView
         super.didMoveToWindow()
         
         if self.window != nil {
-            self.setContentInsetWithKeyboardFrame()
+            self.updateScrollViewInsets()
         }
     }
     
@@ -570,7 +632,7 @@ public final class ListView : UIView
         super.didMoveToSuperview()
         
         if self.superview != nil {
-            self.setContentInsetWithKeyboardFrame()
+            self.updateScrollViewInsets()
         }
     }
     
@@ -581,7 +643,7 @@ public final class ListView : UIView
         self.collectionView.frame = self.bounds
         
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
-        self.setContentInsetWithKeyboardFrame()
+        self.updateScrollViewInsets()
     }
     
     //
@@ -997,49 +1059,6 @@ extension ListView : SignpostLoggable
     }
 }
 
-extension ListView : KeyboardObserverDelegate
-{
-    private func setContentInsetWithKeyboardFrame()
-    {
-        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
-            return
-        }
-        
-        let inset : CGFloat = {
-            switch self.behavior.keyboardAdjustmentMode {
-            case .none:
-                return 0.0
-                
-            case .adjustsWhenVisible:
-                switch frame {
-                case .nonOverlapping:
-                    return 0.0
-                    
-                case .overlapping(let frame):
-                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
-                }
-            }
-        }()
-        
-        if self.collectionView.contentInset.bottom != inset {
-            self.collectionView.contentInset.bottom = inset
-        }
-        
-        if self.collectionView.scrollIndicatorInsets.bottom != inset {
-            self.collectionView.scrollIndicatorInsets.bottom = inset
-        }
-    }
-    
-    //
-    // MARK: KeyboardObserverDelegate
-    //
-    
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.setContentInsetWithKeyboardFrame()
-        })
-    }
-}
 
 fileprivate extension UIScrollView
 {
