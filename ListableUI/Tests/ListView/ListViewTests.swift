@@ -52,6 +52,57 @@ class ListViewTests: XCTestCase
         listView.collectionView.contentOffset.y = 100
         self.waitForOneRunloop()
     }
+    
+    func test_calculateScrollViewInsets()
+    {
+        let listView = ListView(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
+        
+        listView.scrollIndicatorInsets = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+        
+        self.testcase("Nil Keyboard Frame") {
+            let (content, scroll) = listView.calculateScrollViewInsets(with: nil)
+            
+            XCTAssertEqual(
+                content,
+                UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            )
+            
+            XCTAssertEqual(
+                scroll,
+                UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+            )
+        }
+        
+        self.testcase("Non-Overlapping Keyboard Frame") {
+            let (content, scroll) = listView.calculateScrollViewInsets(with: .nonOverlapping)
+            
+            XCTAssertEqual(
+                content,
+                UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            )
+            
+            XCTAssertEqual(
+                scroll,
+                UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+            )
+        }
+        
+        self.testcase("Overlapping Keyboard Frame") {
+            let (content, scroll) = listView.calculateScrollViewInsets(
+                with:.overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+            )
+            
+            XCTAssertEqual(
+                content,
+                UIEdgeInsets(top: 0, left: 0, bottom: 200, right: 0)
+            )
+            
+            XCTAssertEqual(
+                scroll,
+                UIEdgeInsets(top: 10, left: 20, bottom: 200, right: 40)
+            )
+        }
+    }
 }
 
 

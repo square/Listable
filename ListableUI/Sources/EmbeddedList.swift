@@ -100,7 +100,7 @@ public struct EmbeddedList : ItemContent
             appearance: .init {
                 $0.showsScrollIndicators = false
             },
-            scrollInsets: .init(),
+            scrollIndicatorInsets: .init(),
             behavior: .init(),
             autoScrollAction: .none,
             accessibilityIdentifier: nil,
