@@ -6,6 +6,8 @@
 
 ### Added
 
+- [Introduce `onSelectionChanged` on `ListStateObserver`](https://github.com/kyleve/Listable/pull/223) to allow observing when the selected rows change.
+
 ### Removed
 
 ### Changed

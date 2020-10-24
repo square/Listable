@@ -61,14 +61,20 @@ final class PresentationState
         }
     }
     
+    var selectedItems : [AnyPresentationItemState] {
+        let items : [[AnyPresentationItemState]] = self.sections.compactMap { section in
+            section.items.compactMap { item in
+                item.isSelected ? item : nil
+            }
+        }
+        
+        return items.flatMap { $0 }
+    }
+    
     var selectedIndexPaths : [IndexPath] {
         let indexes : [[IndexPath]] = self.sections.compactMapWithIndex { sectionIndex, _, section in
-            return section.items.compactMapWithIndex { itemIndex, _, item in
-                if item.isSelected {
-                    return IndexPath(item: itemIndex, section: sectionIndex)
-                } else {
-                    return nil
-                }
+            section.items.compactMapWithIndex { itemIndex, _, item in
+                item.isSelected ? IndexPath(item: itemIndex, section: sectionIndex) : nil
             }
         }
         

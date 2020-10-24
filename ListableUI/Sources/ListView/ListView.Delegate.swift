@@ -64,10 +64,14 @@ extension ListView
             item.set(isSelected: true, performCallbacks: true)
             item.applyToVisibleCell()
             
+            self.performOnSelectChanged()
+            
             if item.anyModel.selectionStyle == .tappable {
                 item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
                 item.applyToVisibleCell()
+                
+                self.performOnSelectChanged()
             }
         }
         
@@ -77,6 +81,32 @@ extension ListView
             
             item.set(isSelected: false, performCallbacks: true)
             item.applyToVisibleCell()
+            
+            self.performOnSelectChanged()
+        }
+        
+        private var oldSelectedItems : Set<AnyIdentifier> = []
+        
+        private func performOnSelectChanged() {
+            
+            let old = self.oldSelectedItems
+            
+            let new = Set(self.presentationState.selectedItems.map(\.anyModel.identifier))
+            
+            guard old != new else {
+                return
+            }
+            
+            self.oldSelectedItems = new
+            
+            ListStateObserver.perform(self.view.stateObserver.onSelectionChanged, "Selection Changed", with: self.view) {
+                ListStateObserver.SelectionChanged(
+                    actions: $0,
+                    positionInfo: self.view.scrollPositionInfo,
+                    old: old,
+                    new: new
+                )
+            }
         }
         
         private var displayedItems : [ObjectIdentifier:AnyPresentationItemState] = [:]
