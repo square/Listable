@@ -281,7 +281,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     private func updateScrollViewInsets()
     {
-        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets()
+        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
+            with: self.keyboardObserver.currentFrame(in: self)
+        )
         
         if self.collectionView.contentInset != contentInsets {
             self.collectionView.contentInset = contentInsets
@@ -292,11 +294,11 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
     }
     
-    func calculateScrollViewInsets() -> (UIEdgeInsets, UIEdgeInsets)
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
-            guard let keyboardFrame = self.keyboardObserver.currentFrame(in: self) else {
+            guard let keyboardFrame = keyboardFrame else {
                 return 0.0
             }
             
