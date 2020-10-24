@@ -104,6 +104,13 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
+                DemoItem(text: "Multi-Select"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(MultiSelectViewController())
+            })
+            
+            section += Item(
                 DemoItem(text: "Invoices Payment Schedule"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
