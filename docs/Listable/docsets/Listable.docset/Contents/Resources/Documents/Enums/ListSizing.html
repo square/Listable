@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ScrollInsets Structure Reference</title>
+    <title>ListSizing Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ScrollInsets" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/ListSizing" class="dashAnchor"></a>
 
-    <a title="ScrollInsets Structure Reference"></a>
+    <a title="ListSizing Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (42% documented)
+         (43% documented)
       </p>
-
+    
       <p class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" />
-      ScrollInsets Structure Reference
+      ListSizing Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -165,6 +165,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/Sizing.html">Sizing</a>
@@ -445,6 +448,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/FrameChanged.html">– FrameChanged</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/SelectionChanged.html">– SelectionChanged</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/PagedAppearance.html">PagedAppearance</a>
               </li>
               <li class="nav-group-task">
@@ -461,9 +467,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Reordering/Result.html">– Result</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ScrollInsets.html">ScrollInsets</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Section.html">Section</a>
@@ -505,15 +508,46 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ScrollInsets</h1>
+            <h1>ListSizing</h1>
               <div class="declaration">
                 <div class="language">
-
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScrollInsets</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ListSizing</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>Provides the possible options for how to size and measure a list when its measured size is queried
+by the layout system.</p>
+
+<p>You have two options: <code>.fillParent</code> and <code>.measureContent</code>.</p>
+
+<p>When using  <code>.fillParent</code>, the full available fitting size will be taken up, regardless
+of the size of the content itself.</p>
+
+<p>When using <code>.measureContent</code>, the content will be measured within the provided fitting size
+and the smallest of the two sizes will be returned.</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nv">fillParent</span><span class="p">:</span>
+<span class="err">┌───────────┐</span>
+<span class="err">│┌─────────┐│</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">│└─────────┘│</span>
+<span class="err">└───────────┘</span>
+
+<span class="o">.</span><span class="n">measureContent</span>
+<span class="err">┌───────────┐</span>
+<span class="err">│</span>           <span class="err">│</span>
+<span class="err">│</span>           <span class="err">│</span>
+<span class="err">│┌─────────┐│</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">│└─────────┘│</span>
+<span class="err">└───────────┘</span>
+</code></pre>
 
           </div>
         </section>
@@ -525,9 +559,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI12ScrollInsetsV3top12CoreGraphics7CGFloatVSgvp"></a>
-                    <a name="//apple_ref/swift/Property/top" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI12ScrollInsetsV3top12CoreGraphics7CGFloatVSgvp">top</a>
+                    <a name="/s:10ListableUI10ListSizingO10fillParentyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/fillParent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI10ListSizingO10fillParentyA2CmF">fillParent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -535,14 +569,23 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>When using  <code>.fillParent</code>, the full available space will be taken up, regardless
+of the content size of the list itself.</p>
+
+<p>Eg, if the fitting size passed to the list is (200w, 1000h), and the list&rsquo;s content
+is only (200w, 500h), (200w, 1000h) will still be returned.</p>
+
+<p>This is the setting you want to use when your list is being used to fill the content
+of a screen, such as if it is being presented in a navigation controller or tab bar controller.</p>
+
+<p>This option is the most performant, because no content measurement has to occur.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">top</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">fillParent</span></code></pre>
 
                         </div>
                       </div>
@@ -552,9 +595,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI12ScrollInsetsV6bottom12CoreGraphics7CGFloatVSgvp"></a>
-                    <a name="//apple_ref/swift/Property/bottom" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI12ScrollInsetsV6bottom12CoreGraphics7CGFloatVSgvp">bottom</a>
+                    <a name="/s:10ListableUI10ListSizingO14measureContentyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/measureContent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI10ListSizingO14measureContentyA2CmF">measureContent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -562,41 +605,18 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>When using <code>.measureContent</code>, the content will be measured within the provided fitting size
+and the smallest of the two sizes will be returned.</p>
+
+<p>If you are putting a list into a sheet or popover, this is generally the <code><a href="../Enums/Sizing.html">Sizing</a></code> type
+you will want to use, to ensure the sheet or popover takes up the minimum amount of space possible.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">bottom</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI12ScrollInsetsV3top6bottomAC12CoreGraphics7CGFloatVSg_AItcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(top:bottom:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI12ScrollInsetsV3top6bottomAC12CoreGraphics7CGFloatVSg_AItcfc">init(top:<wbr>bottom:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">top</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">bottom</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">measureContent</span></code></pre>
 
                         </div>
                       </div>
@@ -611,7 +631,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-24)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
