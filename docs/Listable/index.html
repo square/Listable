@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
-
+    
     <script src="js/lunr.min.js" defer></script>
     <script src="js/typeahead.jquery.js" defer></script>
     <script src="js/jazzy.search.js" defer></script>
@@ -22,22 +22,22 @@
         <a class="header-link" href="index.html">
           Listable
         </a>
-         (42% documented)
+         (43% documented)
       </p>
-
+    
       <p class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -164,6 +164,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/Sizing.html">Sizing</a>
@@ -444,6 +447,9 @@
                 <a class="nav-group-task-link" href="Structs/ListStateObserver/FrameChanged.html">– FrameChanged</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/SelectionChanged.html">– SelectionChanged</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/PagedAppearance.html">PagedAppearance</a>
               </li>
               <li class="nav-group-task">
@@ -460,9 +466,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Reordering/Result.html">– Result</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/ScrollInsets.html">ScrollInsets</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Section.html">Section</a>
@@ -504,7 +507,7 @@
 
         <section class="section">
           <div class="section-content top-matter">
-
+            
             <p><strong>Note</strong> – Listable is still experimental :see_no_evil:. While it is shipping in <a href="https://squareup.com/us/en/point-of-sale">Square Point of Sale</a> in several places, we&rsquo;re still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months.</p>
 <h1 id='listable' class='heading'>Listable</h1>
 
@@ -532,7 +535,7 @@
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Another Header"</span><span class="p">))</span>
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"The last row."</span><span class="p">)</span>
-    <span class="p">}</span>
+    <span class="p">}</span>    
 <span class="p">}</span>
 </code></pre>
 <h2 id='features' class='heading'>Features</h2>
@@ -552,7 +555,7 @@
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"This Is A Header"</span><span class="p">))</span>
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And here is a row"</span><span class="p">)</span>
-    <span class="p">}</span>
+    <span class="p">}</span> 
 <span class="p">}</span>
 </code></pre>
 
@@ -563,7 +566,7 @@
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And here is a row"</span><span class="p">)</span>
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"Another row!"</span><span class="p">)</span>
-    <span class="p">}</span>
+    <span class="p">}</span> 
 <span class="p">}</span>
 </code></pre>
 
@@ -649,7 +652,7 @@
 </code></pre>
 <h3 id='self-sizing-cells' class='heading'>Self-Sizing Cells</h3>
 
-<p>Another common pain-point for standard <code>UITableViews</code> or <code>UICollectionViews</code> is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each <code><a href="Structs/Item.html">Item</a></code> has a <code>sizing</code> property, which can be set to any of the following values. <code>.default</code> pulls the default sizing of the item from the <code>ListSizing</code> mentioned above, where as the <code>thatFits</code> and <code>autolayout</code> values size the item based on <code>sizeThatFits</code> and <code>systemLayoutSizeFitting</code>, respectively.</p>
+<p>Another common pain-point for standard <code>UITableViews</code> or <code>UICollectionViews</code> is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each <code><a href="Structs/Item.html">Item</a></code> has a <code>sizing</code> property, which can be set to any of the following values. <code>.default</code> pulls the default sizing of the item from the <code><a href="Enums/ListSizing.html">ListSizing</a></code> mentioned above, where as the <code>thatFits</code> and <code>autolayout</code> values size the item based on <code>sizeThatFits</code> and <code>systemLayoutSizeFitting</code>, respectively.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Sizing</span> <span class="p">:</span> <span class="kt">Equatable</span>
 <span class="p">{</span>
     <span class="k">case</span> <span class="p">`</span><span class="nv">default</span><span class="p">`</span>
@@ -665,7 +668,7 @@
 
 <p>Listable integrates closely with <a href="https://github.com/square/blueprint/">Blueprint</a>, Square&rsquo;s framework for declarative UI construction and management (if you&rsquo;ve used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.</p>
 
-<p>All you need to do is take a dependency on the <code>BlueprintLists</code> pod, and then <code>import BlueprintUILists</code> to begin using Blueprint integration.</p>
+<p>All you need to do is take a dependency on the <code>BlueprintUILists</code> pod, and then <code>import BlueprintUILists</code> to begin using Blueprint integration.</p>
 
 <p>In this example, we see how to declare a <code>List</code> within a Blueprint element hierarchy.</p>
 <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">elementRepresentation</span> <span class="p">:</span> <span class="kt">Element</span> <span class="p">{</span>
@@ -875,7 +878,7 @@
     <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span> <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>
-        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">detailLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">detail</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">detailLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">detail</span>        
     <span class="p">}</span>
 
     <span class="kd">typealias</span> <span class="kt">ContentView</span> <span class="o">=</span> <span class="kt">View</span>
@@ -911,7 +914,7 @@
     <span class="n">list</span> <span class="o">+=</span> <span class="kt">Section</span><span class="p">(</span><span class="s">"section-1"</span><span class="p">)</span> <span class="p">{</span> <span class="n">section</span> <span class="k">in</span>
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"This Is A Header"</span><span class="p">))</span>
         <span class="n">section</span><span class="o">.</span><span class="n">footer</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoFooter</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And this is a footer. Please check the EULA for details."</span><span class="p">))</span>
-    <span class="p">}</span>
+    <span class="p">}</span> 
 <span class="p">}</span>
 </code></pre>
 <h4 id='headerfootercontent' class='heading'>HeaderFooterContent</h4>
@@ -936,7 +939,7 @@
 
 <p>As is with <code><a href="Structs/Item.html">Item</a></code>, if your <code><a href="Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code> is <code>Equatable</code>, you get <code>isEquivalent</code> for free.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">HeaderFooterContent</span> <span class="k">where</span> <span class="k">Self</span><span class="p">:</span><span class="kt">Equatable</span>
-<span class="p">{</span>
+<span class="p">{</span>    
     <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="k">self</span> <span class="o">==</span> <span class="n">other</span>
@@ -951,7 +954,7 @@
 
     <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">view</span> <span class="p">:</span> <span class="kt">Appearance</span><span class="o">.</span><span class="kt">ContentView</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>       
     <span class="p">}</span>
 
     <span class="kd">typealias</span> <span class="kt">ContentView</span> <span class="o">=</span> <span class="kt">View</span>
@@ -981,7 +984,7 @@
 
 <p>However, section has many properties to allow for configuration. You can customize the layout, the number of and layout of columns, set the header and footer, and obviously provide items, via the <code>items</code> property, and via the many provided overrides of the <code>+=</code> operator.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Section</span>
-<span class="p">{</span>
+<span class="p">{</span>    
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">layout</span> <span class="p">:</span> <span class="kt">Layout</span>
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">columns</span> <span class="p">:</span> <span class="kt">Columns</span>
 
@@ -993,7 +996,7 @@
 </code></pre>
 <h2 id='integration-with-blueprint' class='heading'>Integration With Blueprint</h2>
 
-<p>If you&rsquo;re using Blueprint integration via the  <code>BlueprintLists</code> module, you will also interact with the following types.</p>
+<p>If you&rsquo;re using Blueprint integration via the  <code>BlueprintUILists</code> module, you will also interact with the following types.</p>
 <h3 id='list' class='heading'>List</h3>
 
 <p>When using <code><a href="Classes/ListView.html">ListView</a></code> directly, you&rsquo;d use <code>list.configure { list in ... }</code> to set the content of a list.</p>
@@ -1081,14 +1084,14 @@
 </code></pre>
 <h2 id='getting-started' class='heading'>Getting Started</h2>
 
-<p>Listable can be consumed via CocoaPods. Add one or both of these lines to your <code>Podfile</code> in order to consume Listable and BlueprintLists (the Blueprint wrapper for Listable).</p>
-<pre class="highlight plaintext"><code>  pod 'BlueprintLists', git: 'ssh://git@github.com:kyleve/Listable.git'
-  pod 'Listable', git: 'ssh://git@github.com:kyleve/Listable.git'
+<p>Listable is published on CocoaPods. You can add a dependency on Listable or it&rsquo;s Blueprint wrapper with the following in your Podspec: </p>
+<pre class="highlight plaintext"><code>s.dependency 'ListableUI'
+s.dependency 'BlueprintUILists'
 </code></pre>
 
-<p>You can then add the following to each <code>podspec</code> which should depend on Listable.</p>
-<pre class="highlight plaintext"><code>s.dependency 'Listable'
-s.dependency 'BlueprintLists'
+<p>If you want to depend on bleeding-edge changes, you can add the pods to your Podfile via the git repo like so:</p>
+<pre class="highlight plaintext"><code>  pod 'BlueprintUILists', git: 'ssh://git@github.com:kyleve/Listable.git'
+  pod 'ListableUI', git: 'ssh://git@github.com:kyleve/Listable.git'
 </code></pre>
 <h2 id='demo-project' class='heading'>Demo Project</h2>
 
@@ -1164,7 +1167,7 @@ Etc..</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-24)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

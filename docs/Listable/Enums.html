@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
-
+    
     <script src="js/lunr.min.js" defer></script>
     <script src="js/typeahead.jquery.js" defer></script>
     <script src="js/jazzy.search.js" defer></script>
@@ -23,22 +23,22 @@
         <a class="header-link" href="index.html">
           Listable
         </a>
-         (42% documented)
+         (43% documented)
       </p>
-
+    
       <p class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -165,6 +165,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/Sizing.html">Sizing</a>
@@ -445,6 +448,9 @@
                 <a class="nav-group-task-link" href="Structs/ListStateObserver/FrameChanged.html">– FrameChanged</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListStateObserver/SelectionChanged.html">– SelectionChanged</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/PagedAppearance.html">PagedAppearance</a>
               </li>
               <li class="nav-group-task">
@@ -461,9 +467,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Reordering/Result.html">– Result</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/ScrollInsets.html">ScrollInsets</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Section.html">Section</a>
@@ -748,6 +751,65 @@ layout directions. See the extensions in this file for more details.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI10ListSizingO"></a>
+                    <a name="//apple_ref/swift/Enum/ListSizing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI10ListSizingO">ListSizing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provides the possible options for how to size and measure a list when its measured size is queried
+by the layout system.</p>
+
+<p>You have two options: <code>.fillParent</code> and <code>.measureContent</code>.</p>
+
+<p>When using  <code>.fillParent</code>, the full available fitting size will be taken up, regardless
+of the size of the content itself.</p>
+
+<p>When using <code>.measureContent</code>, the content will be measured within the provided fitting size
+and the smallest of the two sizes will be returned.</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nv">fillParent</span><span class="p">:</span>
+<span class="err">┌───────────┐</span>
+<span class="err">│┌─────────┐│</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">│└─────────┘│</span>
+<span class="err">└───────────┘</span>
+
+<span class="o">.</span><span class="n">measureContent</span>
+<span class="err">┌───────────┐</span>
+<span class="err">│</span>           <span class="err">│</span>
+<span class="err">│</span>           <span class="err">│</span>
+<span class="err">│┌─────────┐│</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">││</span>         <span class="err">││</span>
+<span class="err">│└─────────┘│</span>
+<span class="err">└───────────┘</span>
+</code></pre>
+
+                        <a href="Enums/ListSizing.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ListSizing</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI6SizingO"></a>
                     <a name="//apple_ref/swift/Enum/Sizing" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI6SizingO">Sizing</a>
@@ -837,7 +899,7 @@ layout directions. See the extensions in this file for more details.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-24)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (97% documented)
       </p>
-
+    
       <p class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -100,7 +100,7 @@
             <h1>List</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">List</span> <span class="p">:</span> <span class="kt">Element</span></code></pre>
 
                 </div>
@@ -153,7 +153,11 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The values which back the on-screen list.</p>
+                        <p>The properties which back the on-screen list.</p>
+
+<p>When it comes time to render the <code>List</code> on screen,
+<code>ListView.configure(with: properties)</code> is called
+to update the on-screen list with the provided properties.</p>
 
                       </div>
                       <div class="declaration">
@@ -161,6 +165,38 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">properties</span><span class="p">:</span> <span class="kt">ListProperties</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16BlueprintUILists4ListV6sizing10ListableUI0C6SizingOvp"></a>
+                    <a name="//apple_ref/swift/Property/sizing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16BlueprintUILists4ListV6sizing10ListableUI0C6SizingOvp">sizing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>How the <code>List</code> is measured when the element is laid out
+by Blueprint.  Defaults to <code>.fillParent</code>, which means
+it will take up all the size it is given. You can change this to
+<code>.measureContent</code> to instead measure the optimal size.</p>
+
+<p>See the <code>ListSizing</code> documentation for more.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sizing</span><span class="p">:</span> <span class="kt">ListSizing</span></code></pre>
 
                         </div>
                       </div>
@@ -183,9 +219,9 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16BlueprintUILists4ListV5buildACy10ListableUI0C10PropertiesVzXE_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(build:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16BlueprintUILists4ListV5buildACy10ListableUI0C10PropertiesVzXE_tcfc">init(build:<wbr>)</a>
+                    <a name="/s:16BlueprintUILists4ListV6sizing5buildAC10ListableUI0C6SizingO_yAF0C10PropertiesVzXEtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(sizing:build:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16BlueprintUILists4ListV6sizing5buildAC10ListableUI0C6SizingO_yAF0C10PropertiesVzXEtcfc">init(sizing:<wbr>build:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -193,14 +229,18 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Create a new list, configured with the properties you set on the provided <code>ListProperties</code> object.</p>
+                        <p>Create a new list, configured with the provided properties,
+configured with the provided <code>ListProperties</code> builder.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">build</span><span class="p">:</span> <span class="kt">ListProperties</span><span class="o">.</span><span class="kt">Build</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">sizing</span> <span class="p">:</span> <span class="kt">ListSizing</span> <span class="o">=</span> <span class="o">.</span><span class="n">fillParent</span><span class="p">,</span>
+    <span class="nv">build</span> <span class="p">:</span> <span class="kt">ListProperties</span><span class="o">.</span><span class="kt">Build</span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -233,7 +273,7 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -259,7 +299,7 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -280,7 +320,7 @@ the size of a list, wrap it in a <code>ConstrainedSize</code>, or other size con
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">iOS Team</a>. All rights reserved. (Last updated: 2020-09-24)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

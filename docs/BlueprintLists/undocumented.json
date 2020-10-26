@@ -1,12 +1,12 @@
 {
   "warnings": [
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
+      "file": "/Users/k/Desktop/Development/Listable2/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
       "line": 112,
       "symbol": "BlueprintHeaderFooterContent.apply(to:reason:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/k/Desktop/Development/Listable5"
+  "source_directory": "/Users/k/Desktop/Development/Listable2"
 }
