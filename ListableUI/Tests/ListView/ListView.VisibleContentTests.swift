@@ -199,8 +199,11 @@ fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable
     
     typealias ContentView = UIView
     
-    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason)
-    {
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
         views.content.backgroundColor = self.color
     }
     

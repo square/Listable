@@ -8,6 +8,8 @@
 
 - [Introduce `onSelectionChanged` on `ListStateObserver`](https://github.com/kyleve/Listable/pull/223) to allow observing when the selected rows change.
 
+- [Pass through `BlueprintUI.Environment` to the `Element`s being rendered from `BlueprintItemContent` and `BlueprintHeaderFooterContent`](https://github.com/kyleve/Listable/pull/225). This ensures that the content you put into a `List` respects the `BlueprintUI.Environment` of the `List` itself. This PR also introduces `ListEnvironment` to facilitate this, which allows similar passthrough of environment variables within Listable. 
+
 ### Removed
 
 ### Changed

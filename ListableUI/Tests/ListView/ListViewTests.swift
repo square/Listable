@@ -127,7 +127,13 @@ fileprivate struct TestContent : ItemContent, Equatable
 
 fileprivate struct TestSupplementary : HeaderFooterContent, Equatable
 {
-    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {}
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        // Nothing.
+    }
     
     typealias ContentView = UIView
 

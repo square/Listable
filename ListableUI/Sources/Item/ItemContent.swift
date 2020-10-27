@@ -211,7 +211,7 @@ public struct ItemContentViews<Content:ItemContent>
 }
 
 
-/// Information about the current state of the content, which is passed to `apply(to:)`
+/// Information about the current state of the content, which is passed to `apply(to:for:with:)`
 /// during configuration and preparation for display.
 ///
 /// You can use this information to alter the display of your content, such as changing
@@ -227,6 +227,10 @@ public struct ApplyItemContentInfo
     
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reordering : ReorderingActions
+    
+    /// The environment of the containing list.
+    /// See `ListEnvironment` for usage information.
+    public var environment : ListEnvironment
 }
 
 

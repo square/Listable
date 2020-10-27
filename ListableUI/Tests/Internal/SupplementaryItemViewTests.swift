@@ -30,7 +30,9 @@ class SupplementaryContainerViewTests: XCTestCase
     {
         let cache = ReusableViewCache()
         let view = SupplementaryContainerView(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        
         view.reuseCache = cache
+        view.environment = .empty
         
         XCTAssertEqual(view.sizeThatFits(.zero), .zero)
         
@@ -43,7 +45,9 @@ class SupplementaryContainerViewTests: XCTestCase
     {
         let cache = ReusableViewCache()
         let view = SupplementaryContainerView(frame: .zero)
+        
         view.reuseCache = cache
+        view.environment = .empty
         
         XCTAssertEqual(view.content, nil)
         
@@ -80,7 +84,9 @@ class SupplementaryContainerViewTests: XCTestCase
     {
         let cache = ReusableViewCache()
         let view = SupplementaryContainerView(frame: .zero)
+        
         view.reuseCache = cache
+        view.environment = .empty
         
         view.headerFooter = self.newHeaderFooter()
         
@@ -94,7 +100,13 @@ fileprivate struct TestHeaderFooterContent : HeaderFooterContent, Equatable
 {
     // MARK: HeaderFooterContent
     
-    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {}
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        // Nothing.
+    }
         
     typealias ContentView = View
     

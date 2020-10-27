@@ -25,6 +25,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.scrollIndicatorInsets = .zero
         
         self.storage = Storage()
+        
+        self.environment = .empty
+        
         self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
         
         self.dataSource = DataSource()
@@ -469,6 +472,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
     // MARK: Setting & Getting Content
     //
     
+    public var environment : ListEnvironment {
+        didSet {
+            self.dataSource.environment = self.environment
+        }
+    }
+    
     public var content : Content {
         get { return self.storage.allContent }
         set { self.setContent(animated: false, newValue) }
@@ -541,6 +550,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.actions = properties.actions
 
         self.stateObserver = properties.stateObserver
+        
+        self.environment = properties.environment
         
         self.set(layout: properties.layout, animated: animated)
         
@@ -673,13 +684,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
         removed.forEach {
             let item = state.item(at: $0)
             view.deselectItem(at: $0, animated: animated)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.environment)
         }
         
         added.forEach {
             let item = state.item(at: $0)
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.environment)
         }
     }
     
@@ -761,7 +772,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: self,
-                coordinatorDelegate: self
+                coordinatorDelegate: self,
+                environmentProvider: { [weak self] in self?.environment ?? .empty }
             )
             
             presentationState.update(
@@ -916,7 +928,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            self.visibleContent.updateVisibleViews()
+            self.visibleContent.updateVisibleViews(with: self.environment)
         }
         
         if changes.hasIndexAffectingChanges {

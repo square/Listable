@@ -110,7 +110,13 @@ fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable {
         UIView(frame: frame)
     }
     
-    func apply(to views: HeaderFooterContentViews<TestHeaderFooter>, reason: ApplyReason) {}
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        // Nothing.
+    }
 }
 
 
