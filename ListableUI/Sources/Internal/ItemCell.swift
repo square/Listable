@@ -8,13 +8,18 @@
 import UIKit
 
 
+protocol AnyItemCell : UICollectionViewCell
+{
+    func closeSwipeActions()
+}
+
 ///
 /// An internal cell type used to render items in the list.
 ///
 /// Information on how cell selection appearance customization works:
 /// https://developer.apple.com/documentation/uikit/uicollectionviewdelegate/changing_the_appearance_of_selected_and_highlighted_cells
 ///
-final class ItemCell<Content:ItemContent> : UICollectionViewCell
+final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
     let contentContainer : ContentContainerView
 
@@ -24,7 +29,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
-        
+                
         self.contentContainer = ContentContainerView(frame: bounds)
         
         self.background = Content.createReusableBackgroundView(frame: bounds)
@@ -39,6 +44,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
         self.contentView.backgroundColor = .clear
         
         self.layer.masksToBounds = false
+        
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
@@ -84,9 +90,24 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
     
     // MARK: UIView
     
-    override func sizeThatFits(_ size: CGSize) -> CGSize
-    {
-        return self.contentContainer.contentView.sizeThatFits(size)
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        self.contentContainer.contentView.sizeThatFits(size)
+    }
+    
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        self.contentContainer.contentView.systemLayoutSizeFitting(targetSize)
+    }
+    
+    override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+    ) -> CGSize {
+        self.contentContainer.contentView.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
     }
 
     override func layoutSubviews()
@@ -95,5 +116,50 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell
                 
         self.contentContainer.frame = self.contentView.bounds
     }
+    
+    // MARK: AnyItemCell
+    
+    func closeSwipeActions() {
+        self.contentContainer.performAnimatedClose()
+    }
 }
 
+
+final class LiveCells {
+    
+    func add(_ cell : AnyItemCell) {
+        self.cells.insert(.init(cell))
+    }
+    
+    func perform(_ block : (AnyItemCell) -> ()) {
+        self.cells.forEach {
+            if let cell = $0.cell {
+                block(cell)
+            }
+        }
+        
+        self.cells = self.cells.filter { $0.cell != nil }
+    }
+    
+    private var cells : Set<LiveCell> = []
+    
+    struct LiveCell : Hashable {
+        
+        private let identifier : ObjectIdentifier
+        
+        weak var cell : AnyItemCell?
+        
+        init(_ cell : AnyItemCell) {
+            self.identifier = ObjectIdentifier(cell)
+            self.cell = cell
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(self.identifier)
+        }
+        
+        static func == (lhs : LiveCell, rhs : LiveCell) -> Bool {
+            lhs.identifier == rhs.identifier
+        }
+    }
+}
