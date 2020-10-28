@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 ///
 /// Controls how a header, footer, or item in a list view is sized.
