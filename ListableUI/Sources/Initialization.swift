@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Listable {
-  static func initialize() {
+public struct Listable {
+  public static func initialize() {
     _ = KeyboardObserver.shared
 
     KeyboardObserver.didSetupSharedInstanceDuringAppStartup = true
