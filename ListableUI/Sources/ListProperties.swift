@@ -65,6 +65,9 @@ public struct ListProperties
     /// }
     /// ```
     public var content : Content
+    
+    /// The environment associated with the List.
+    public var environment : ListEnvironment
 
     //
     // MARK: Layout & Appearance
@@ -93,12 +96,12 @@ public struct ListProperties
     public var scrollIndicatorInsets : UIEdgeInsets
     
     //
-    // MARK: Behaviour
+    // MARK: Behavior
     //
     
-    /// The various behaviour options to apply to the list, which affect how the user
+    /// The various behavior options to apply to the list, which affect how the user
     /// will interact with the list view. This includes keyboard dismissal, selection mode,
-    /// underflow behaviour, etc.
+    /// underflow behavior, etc.
     ///
     /// Note that some of the parameters within `Behavior` are not authoritative;
     /// they may be overridden by the provided `layout`. For example, even if your
@@ -184,6 +187,8 @@ public struct ListProperties
         self.debuggingIdentifier = debuggingIdentifier
         
         self.content = Content()
+        self.environment = ListEnvironment()
+        
         self.stateObserver = ListStateObserver()
 
         build(&self)

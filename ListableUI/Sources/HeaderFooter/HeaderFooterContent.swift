@@ -48,7 +48,11 @@ public protocol HeaderFooterContent
     // MARK: Applying To Displayed View
     //
     
-    func apply(to views : HeaderFooterContentViews<Self>, reason : ApplyReason)
+    func apply(
+        to views : HeaderFooterContentViews<Self>,
+        for reason : ApplyReason,
+        with info : ApplyHeaderFooterContentInfo
+    )
     
     //
     // MARK: Tracking Changes
@@ -119,6 +123,16 @@ public protocol HeaderFooterContent
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
+}
+
+
+/// Information about the current state of the content, which is passed to `apply(to:for:with:)`
+/// during configuration and preparation for display.
+public struct ApplyHeaderFooterContentInfo
+{
+    /// The environment of the containing list.
+    /// See `ListEnvironment` for usage information.
+    public var environment : ListEnvironment
 }
 
 

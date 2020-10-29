@@ -76,26 +76,65 @@ public struct List : Element
     //
         
     public var content : ElementContent {
-        ElementContent { constraint -> CGSize in
-            switch self.sizing {
-            case .fillParent:
-                return constraint.maximum
-                
-            case .measureContent:
-                return ListView.contentSize(in: constraint.maximum, for: self.properties)
-            }
+        ElementContent { size, env in
+            ListContent(
+                properties: self.properties,
+                sizing: self.sizing,
+                environment: env
+            )
         }
     }
     
-    public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
-    {
-        ListView.describe { config in
-            config.builder = {
-                ListView(frame: bounds, appearance: self.properties.appearance)
-            }
+    public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {
+        nil
+    }
+}
+
+
+extension List {
+    
+    fileprivate struct ListContent : Element {
+        
+        var properties : ListProperties
+        var sizing : ListSizing
+        
+        init(
+            properties : ListProperties,
+            sizing : ListSizing,
+            environment : Environment
+        ) {
+            var properties = properties
             
-            config.apply { listView in
-                listView.configure(with: self.properties)
+            properties.environment.blueprintEnvironment = environment
+            
+            self.properties = properties
+            self.sizing = sizing
+        }
+        
+        // MARK: Element
+            
+        public var content : ElementContent {
+            ElementContent { constraint -> CGSize in
+                switch self.sizing {
+                case .fillParent:
+                    return constraint.maximum
+                    
+                case .measureContent:
+                    return ListView.contentSize(in: constraint.maximum, for: self.properties)
+                }
+            }
+        }
+        
+        public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
+        {
+            ListView.describe { config in
+                config.builder = {
+                    ListView(frame: bounds, appearance: self.properties.appearance)
+                }
+                
+                config.apply { listView in
+                    listView.configure(with: self.properties)
+                }
             }
         }
     }

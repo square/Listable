@@ -12,15 +12,28 @@ protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
         
-    func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
+    func dequeueAndPrepareReusableHeaderFooterView(
+        in cache : ReusableViewCache,
+        frame : CGRect,
+        environment : ListEnvironment
+    ) -> UIView
+    
     func enqueueReusableHeaderFooterView(_ view : UIView, in cache : ReusableViewCache)
     
-    func applyTo(view anyView : UIView, reason : ApplyReason)
-    
+    func applyTo(
+        view : UIView,
+        for reason : ApplyReason,
+        with info : ApplyHeaderFooterContentInfo
+    )
+
     func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
     
     func resetCachedSizes()
-    func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
+    func size(
+        for info : Sizing.MeasureInfo,
+        cache : ReusableViewCache,
+        environment : ListEnvironment
+    ) -> CGSize
 }
 
 
@@ -54,15 +67,20 @@ extension PresentationState
             self.visibleContainer = nil
         }
         
-        func applyToVisibleView()
+        func applyToVisibleView(with environment : ListEnvironment)
         {
             guard let view = visibleContainer?.content, let state = self.state else {
                 return
             }
             
-            state.applyTo(view: view, reason: .wasUpdated)
+            state.applyTo(
+                view: view,
+                for: .wasUpdated,
+                with: .init(environment: environment)
+            )
         }
     }
+    
     
     final class HeaderFooterState<Content:HeaderFooterContent> : AnyPresentationHeaderFooterState
     {
@@ -82,13 +100,21 @@ extension PresentationState
             return self.model
         }
                 
-        func dequeueAndPrepareReusableHeaderFooterView(in cache : ReusableViewCache, frame : CGRect) -> UIView
+        func dequeueAndPrepareReusableHeaderFooterView(
+            in cache : ReusableViewCache,
+            frame : CGRect,
+            environment : ListEnvironment
+        ) -> UIView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
                 HeaderFooterContentView<Content>(frame: frame)
             }
             
-            self.applyTo(view: view, reason: .willDisplay)
+            self.applyTo(
+                view: view,
+                for: .willDisplay,
+                with: .init(environment: environment)
+            )
             
             return view
         }
@@ -98,8 +124,11 @@ extension PresentationState
             cache.push(view, with: self.model.reuseIdentifier)
         }
         
-        func applyTo(view : UIView, reason : ApplyReason)
-        {
+        func applyTo(
+            view : UIView,
+            for reason : ApplyReason,
+            with info : ApplyHeaderFooterContentInfo
+        ) {
             let view = view as! HeaderFooterContentView<Content>
             
             let views = HeaderFooterContentViews<Content>(
@@ -115,7 +144,7 @@ extension PresentationState
                 }
             }
             
-            self.model.content.apply(to: views, reason: reason)
+            self.model.content.apply(to: views, for: reason, with: info)
         }
         
         func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
@@ -138,7 +167,11 @@ extension PresentationState
             self.cachedSizes.removeAll()
         }
         
-        func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
+        func size(
+            for info : Sizing.MeasureInfo,
+            cache : ReusableViewCache,
+            environment : ListEnvironment
+        ) -> CGSize
         {
             guard info.sizeConstraint.isEmpty == false else {
                 return .zero
@@ -167,7 +200,11 @@ extension PresentationState
                         pressed: view.pressedBackground
                     )
                     
-                    self.model.content.apply(to: views, reason: .willDisplay)
+                    self.model.content.apply(
+                        to: views,
+                        for: .willDisplay,
+                        with: .init(environment: environment)
+                    )
                     
                     return self.model.sizing.measure(with: view, info: info)
                 })

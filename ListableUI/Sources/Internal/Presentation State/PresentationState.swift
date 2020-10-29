@@ -352,7 +352,8 @@ extension PresentationState
 extension PresentationState
 {
     func toListLayoutContent(
-        defaults: ListLayoutDefaults
+        defaults: ListLayoutDefaults,
+        environment : ListEnvironment
     ) -> ListLayoutContent
     {
         ListLayoutContent(
@@ -364,7 +365,7 @@ extension PresentationState
                     layout: header.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        header.size(for: info, cache: self.headerFooterMeasurementCache)
+                        header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                     }
                 )
             }(),
@@ -376,7 +377,7 @@ extension PresentationState
                     layout: footer.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                     }
                 )
             }(),
@@ -388,7 +389,7 @@ extension PresentationState
                     layout: footer.anyModel.layout,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                        footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                     }
                 )
             }(),
@@ -403,7 +404,7 @@ extension PresentationState
                             layout: header.anyModel.layout,
                             isPopulated: true,
                             measurer: { info in
-                                header.size(for: info, cache: self.headerFooterMeasurementCache)
+                                header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                             }
                         )
                     }(),
@@ -415,7 +416,7 @@ extension PresentationState
                             layout: footer.anyModel.layout,
                             isPopulated: true,
                             measurer: { info in
-                                footer.size(for: info, cache: self.headerFooterMeasurementCache)
+                                footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                             }
                         )
                     }(),
@@ -427,7 +428,7 @@ extension PresentationState
                             layout: item.anyModel.layout,
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
                             measurer: { info in
-                                item.size(for: info, cache: self.itemMeasurementCache)
+                                item.size(for: info, cache: self.itemMeasurementCache, environment: environment)
                             }
                         )
                     }

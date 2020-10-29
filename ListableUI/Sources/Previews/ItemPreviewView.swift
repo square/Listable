@@ -104,7 +104,7 @@ public final class ItemPreviewView : UIView {
         cell.isHighlighted = state.isHighlighted
         cell.isSelected = state.isSelected
         
-        presentationState.applyTo(cell: cell, itemState: state, reason: .willDisplay)
+        presentationState.applyTo(cell: cell, itemState: state, reason: .willDisplay, environment: .empty)
     }
     
     @available(*, unavailable) required init?(coder: NSCoder) { fatalError() }

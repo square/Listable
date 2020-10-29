@@ -16,7 +16,11 @@ public protocol AnyHeaderFooter_Internal
 {
     var layout : HeaderFooterLayout { get }
     
-    func apply(to headerFooterView : UIView, reason: ApplyReason)
+    func apply(
+        to headerFooterView : UIView,
+        for reason : ApplyReason,
+        with info : ApplyHeaderFooterContentInfo
+    )
     
     func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     
@@ -74,8 +78,11 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     // MARK: AnyHeaderFooter_Internal
     
-    public func apply(to anyView : UIView, reason: ApplyReason)
-    {
+    public func apply(
+        to anyView : UIView,
+        for reason : ApplyReason,
+        with info : ApplyHeaderFooterContentInfo
+    ) {
         let view = anyView as! HeaderFooterContentView<Content>
         
         let views = HeaderFooterContentViews<Content>(
@@ -84,7 +91,11 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
             pressed: view.pressedBackground
         )
         
-        self.content.apply(to: views, reason: reason)
+        self.content.apply(
+            to: views,
+            for: reason,
+            with: info
+        )
     }
         
     public func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
