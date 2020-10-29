@@ -585,43 +585,54 @@ public final class ListView : UIView, KeyboardObserverDelegate
     
     public override var frame: CGRect {
         didSet {
-            /**
-             Set the frame explicitly, so that the layout can occur
-             within performBatchUpdates. Waiting for layoutSubviews() is too late.
-             */
-            self.collectionView.frame = self.bounds
-            
-            guard oldValue != self.frame else {
-                return
-            }
-            
-            /**
-             Once the view actually has a size, we can provide content.
-            
-             There's no value in having content with no view size, as we cannot
-             size cells otherwise.
-             */
-            
-            let fromEmpty = oldValue.isEmpty && self.bounds.isEmpty == false
-            let toEmpty = oldValue.isEmpty == false && self.bounds.isEmpty
-            
-            if fromEmpty {
-                self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
-            } else if toEmpty {
-                self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
-            }
-            
-            /// Our frame changed, update the keyboard inset in case the inset should now be different.
-            self.updateScrollViewInsets()
-            
-            ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
-                ListStateObserver.FrameChanged(
-                    actions: actions,
-                    positionInfo: self.scrollPositionInfo,
-                    old: oldValue,
-                    new: self.frame
-                )
-            }
+            self.boundsDidChange(from: oldValue)
+        }
+    }
+    
+    public override var bounds: CGRect {
+        didSet {
+            self.boundsDidChange(from: oldValue)
+        }
+    }
+    
+    private func boundsDidChange(from oldValue : CGRect) {
+        
+        /**
+         Set the frame explicitly, so that the layout can occur
+         within performBatchUpdates. Waiting for layoutSubviews() is too late.
+         */
+        self.collectionView.frame = self.bounds
+        
+        guard oldValue != self.bounds else {
+            return
+        }
+        
+        /**
+         Once the view actually has a size, we can provide content.
+        
+         There's no value in having content with no view size, as we cannot
+         size cells otherwise.
+         */
+        
+        let fromEmpty = oldValue.isEmpty && self.bounds.isEmpty == false
+        let toEmpty = oldValue.isEmpty == false && self.bounds.isEmpty
+        
+        if fromEmpty {
+            self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
+        } else if toEmpty {
+            self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
+        }
+        
+        /// Our frame changed, update the keyboard inset in case the inset should now be different.
+        self.updateScrollViewInsets()
+        
+        ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
+            ListStateObserver.FrameChanged(
+                actions: actions,
+                positionInfo: self.scrollPositionInfo,
+                old: oldValue,
+                new: self.frame
+            )
         }
     }
     

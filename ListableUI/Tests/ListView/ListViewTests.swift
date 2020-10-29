@@ -103,6 +103,27 @@ class ListViewTests: XCTestCase
             )
         }
     }
+    
+    func test_change_size() {
+        
+        /// Ensure we respect the size of the view changing via both bounds and frame.
+        /// Frame is usually used via manual layout or Blueprint, whereas bounds is
+        /// set by autolayout if a developer is using autolayout.
+        
+        self.testcase("set bounds") {
+            let view = ListView()
+            view.bounds.size = CGSize(width: 200, height: 200)
+            
+            XCTAssertEqual(view.collectionView.bounds.size, CGSize(width: 200, height: 200))
+        }
+        
+        self.testcase("set frame") {
+            let view = ListView()
+            view.frame.size = CGSize(width: 200, height: 200)
+            
+            XCTAssertEqual(view.collectionView.bounds.size, CGSize(width: 200, height: 200))
+        }
+    }
 }
 
 
