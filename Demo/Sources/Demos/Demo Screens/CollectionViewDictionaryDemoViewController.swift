@@ -48,7 +48,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         self.listView.scrollTo(
             item: Identifier<WordRow>("clam"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
-            animated: true
+            animation: .default
         )
     }
     
@@ -57,10 +57,9 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         self.listView.scrollTo(
             item: Identifier<WordRow>("aard-vark"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
-            animated: true
+            animation: .default
         )
     }
-    
 
     struct Source : ListViewSource
     {

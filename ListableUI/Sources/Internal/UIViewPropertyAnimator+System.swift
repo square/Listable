@@ -1,5 +1,5 @@
 //
-//  UIViewProperyAnimtor+System.swift
+//  UIViewPropertyAnimator+System.swift
 //  ListableUI
 //
 //  Created by Kyle Bashour on 4/17/20.
