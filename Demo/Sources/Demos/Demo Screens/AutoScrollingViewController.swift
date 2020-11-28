@@ -66,13 +66,20 @@ final class AutoScrollingViewController : UIViewController
 
             if let last = items.last {
                 
-                list.autoScrollAction = .scrollTo(.lastItem, onInsertOf: last.identifier, position: .init(position: .bottom), animated: true) { state in
+                list.autoScrollAction = .scrollTo(
+                    .lastItem,
+                    onInsertOf: last.identifier,
+                    position: .init(position: .bottom),
+                    animation: .default
+                ) { info in
                     // Only scroll to the bottom if the bottom item is already visible.
                     if let identifier = lastItem {
-                        return state.visibleItems.contains(identifier)
+                        return info.visibleItems.contains(identifier)
                     } else {
                         return false
                     }
+                } didPerform: { info in
+                    print("Did scroll: \(info)")
                 }
             }
 

@@ -1,5 +1,5 @@
 //
-//  ItemScrollPosition.swift
+//  ScrollPosition.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 11/5/19.
@@ -11,7 +11,7 @@
 /// item is already visible on screen, and any additional custom offset
 /// to apply to the scroll event.
 ///
-public struct ItemScrollPosition : Equatable
+public struct ScrollPosition : Equatable
 {
     /// The position to scroll to within the list.
     var position : Position
