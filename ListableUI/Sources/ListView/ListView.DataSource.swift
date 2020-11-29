@@ -12,6 +12,7 @@ internal extension ListView
     {
         unowned var presentationState : PresentationState!
         unowned var liveCells : LiveCells!
+        var environment : ListEnvironment!
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
         {
@@ -34,7 +35,11 @@ internal extension ListView
             
             self.presentationState.registerCell(for: item, in: collectionView)
             
-            let cell = item.dequeueAndPrepareCollectionViewCell(in: collectionView, for: indexPath)
+            let cell = item.dequeueAndPrepareCollectionViewCell(
+                in: collectionView,
+                for: indexPath,
+                environment: environment
+            )
             
             self.liveCells.add(cell)
             
@@ -53,7 +58,8 @@ internal extension ListView
                 in: collectionView,
                 for: kind,
                 at: indexPath,
-                reuseCache: self.headerFooterReuseCache
+                reuseCache: self.headerFooterReuseCache,
+                environment: self.environment
             )
             
             container.headerFooter = {

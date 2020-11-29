@@ -17,7 +17,8 @@ class PresentationState_ItemStateTests : XCTestCase
         
         let dependencies = ItemStateDependencies(
             reorderingDelegate: ReorderingActionsDelegateMock(),
-            coordinatorDelegate: coordinatorDelegate
+            coordinatorDelegate: coordinatorDelegate,
+            environmentProvider: { .empty }
         )
         
         let initial = Item(TestContent(value: "initial"))
@@ -72,7 +73,8 @@ class PresentationState_ItemStateTests : XCTestCase
         self.testcase("Only update isSelected if the selectionStyle changes") {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: ReorderingActionsDelegateMock(),
-                coordinatorDelegate: ItemContentCoordinatorDelegateMock()
+                coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
+                environmentProvider: { .empty }
             )
                 
             let initial = Item(
@@ -118,7 +120,8 @@ class PresentationState_ItemStateTests : XCTestCase
         self.testcase("Testing Different ItemUpdateReasons") {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: ReorderingActionsDelegateMock(),
-                coordinatorDelegate: ItemContentCoordinatorDelegateMock()
+                coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
+                environmentProvider: { .empty }
             )
                 
             let initial = Item(
@@ -231,7 +234,8 @@ class PresentationState_ItemStateTests : XCTestCase
     {
         let dependencies = ItemStateDependencies(
             reorderingDelegate: ReorderingActionsDelegateMock(),
-            coordinatorDelegate: ItemContentCoordinatorDelegateMock()
+            coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
+            environmentProvider: { .empty }
         )
         
         let item = Item(TestContent(value: "initial"))

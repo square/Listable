@@ -125,9 +125,9 @@ public extension BlueprintItemContent
     /// Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.element = self.element(with: info)
-        views.background.element = self.backgroundElement(with: info)
-        views.selectedBackground.element = self.selectedBackgroundElement(with: info)
+        views.content.element = self.element(with: info).wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.background.element = self.backgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.selectedBackground.element = self.selectedBackgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
     }
     
     /// Creates the `BlueprintView` used to render the content of the item.

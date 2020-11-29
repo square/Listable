@@ -33,14 +33,14 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.view.environment)
         }
         
         func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath)
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.view.environment)
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
@@ -62,14 +62,14 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: true, performCallbacks: true)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.view.environment)
             
             self.performOnSelectChanged()
             
             if item.anyModel.selectionStyle == .tappable {
                 item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
-                item.applyToVisibleCell()
+                item.applyToVisibleCell(with: self.view.environment)
                 
                 self.performOnSelectChanged()
             }
@@ -80,7 +80,7 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: false, performCallbacks: true)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.view.environment)
             
             self.performOnSelectChanged()
         }
@@ -200,7 +200,7 @@ extension ListView
             }
         }
         
-        // MARK: ListViewLayoutDelegate
+        // MARK: CollectionViewLayoutDelegate
         
         func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
         {
@@ -211,9 +211,12 @@ extension ListView
             defaults: ListLayoutDefaults
         ) -> ListLayoutContent
         {
-            self.presentationState.toListLayoutContent(defaults: defaults)
+            self.presentationState.toListLayoutContent(
+                defaults: defaults,
+                environment: self.view.environment
+            )
         }
-        
+
         // MARK: UIScrollViewDelegate
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)

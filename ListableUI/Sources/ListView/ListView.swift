@@ -25,6 +25,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.scrollIndicatorInsets = .zero
         
         self.storage = Storage()
+        
+        self.environment = .empty
+        
         self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
         
         self.dataSource = DataSource()
@@ -67,6 +70,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.collectionView.view = self
 
         self.dataSource.presentationState = self.storage.presentationState
+        self.dataSource.environment = self.environment
+        self.dataSource.liveCells = self.liveCells
         
         self.delegate.view = self
         self.delegate.presentationState = self.storage.presentationState
@@ -383,14 +388,25 @@ public final class ListView : UIView, KeyboardObserverDelegate
     // MARK: Public - Scrolling To Sections & Items
     //
     
+    public typealias ScrollCompletion = (Bool) -> ()
+    
     ///
     /// Scrolls to the provided item, with the provided positioning.
     /// If the item is contained in the list, true is returned. If it is not, false is returned.
     ///
     @discardableResult
-    public func scrollTo(item : AnyItem, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    public func scrollTo(
+        item : AnyItem, position : ScrollPosition,
+        animation: ScrollAnimation = .none,
+        completion : @escaping ScrollCompletion = { _ in }
+    ) -> Bool
     {
-        return self.scrollTo(item: item.identifier, position: position, animated: animated)
+        self.scrollTo(
+            item: item.identifier,
+            position: position,
+            animation: animation,
+            completion: completion
+        )
     }
     
     ///
@@ -399,7 +415,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
     /// If the item is contained in the list, true is returned. If it is not, false is returned.
     ///
     @discardableResult
-    public func scrollTo(item : AnyIdentifier, position : ItemScrollPosition, animated : Bool = false) -> Bool
+    public func scrollTo(
+        item : AnyIdentifier,
+        position : ScrollPosition,
+        animation: ScrollAnimation = .none,
+        completion : @escaping ScrollCompletion = { _ in }
+    ) -> Bool
     {
         // Make sure the item identifier is valid.
         
@@ -421,29 +442,45 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 return
             }
             
-            self.collectionView.scrollToItem(
-                at: toIndexPath,
-                at: position.position.UICollectionViewScrollPosition,
-                animated: animated
+            animation.perform(
+                animations: {
+                    self.collectionView.scrollToItem(
+                        at: toIndexPath,
+                        at: position.position.UICollectionViewScrollPosition,
+                        animated: false
+                    )
+                },
+                completion: completion
             )
         }
     }
     
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
-    public func scrollToTop(animated : Bool = false) -> Bool {
+    public func scrollToTop(
+        animation: ScrollAnimation = .none,
+        completion : @escaping ScrollCompletion = { _ in }
+    ) -> Bool {
         
         // The rect we scroll to must have an area – an empty rect will result in no scrolling.
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
         
         return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
-            self.collectionView.scrollRectToVisible(rect, animated: animated)
+            animation.perform(
+                animations: {
+                    self.collectionView.scrollRectToVisible(rect, animated: false)
+                },
+                completion: completion
+            )
         }
     }
 
     /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
     @discardableResult
-    public func scrollToLastItem(animated : Bool = false) -> Bool {
+    public func scrollToLastItem(
+        animation: ScrollAnimation = .none,
+        completion : @escaping ScrollCompletion = { _ in }
+    ) -> Bool {
 
         // Make sure we have a valid last index path.
 
@@ -464,13 +501,24 @@ public final class ListView : UIView, KeyboardObserverDelegate
             let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.lst_adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
             
-            self.collectionView.setContentOffset(contentOffset, animated: animated)
+            animation.perform(
+                animations: {
+                    self.collectionView.setContentOffset(contentOffset, animated: false)
+                },
+                completion: completion
+            )
         }
     }
     
     //
     // MARK: Setting & Getting Content
     //
+    
+    public var environment : ListEnvironment {
+        didSet {
+            self.dataSource.environment = self.environment
+        }
+    }
     
     public var content : Content {
         get { return self.storage.allContent }
@@ -544,6 +592,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.actions = properties.actions
 
         self.stateObserver = properties.stateObserver
+        
+        self.environment = properties.environment
         
         self.set(layout: properties.layout, animated: animated)
         
@@ -687,13 +737,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
         removed.forEach {
             let item = state.item(at: $0)
             view.deselectItem(at: $0, animated: animated)
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.environment)
         }
         
         added.forEach {
             let item = state.item(at: $0)
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
-            item.applyToVisibleCell()
+            item.applyToVisibleCell(with: self.environment)
         }
     }
     
@@ -775,7 +825,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: self,
-                coordinatorDelegate: self
+                coordinatorDelegate: self,
+                environmentProvider: { [weak self] in self?.environment ?? .empty }
             )
             
             presentationState.update(
@@ -860,11 +911,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
             let wasInserted = addedItems.contains(info.insertedIdentifier)
             
             if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
+                
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let bothAnimate = info.animated && animated
+                let animation = info.animation.and(with: animated)
                 
                 if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animated: bothAnimate)
+                    self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
+                        info.didPerform(self.scrollPositionInfo)
+                    }
                 }
             }
         }
@@ -930,7 +984,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            self.visibleContent.updateVisibleViews()
+            self.visibleContent.updateVisibleViews(with: self.environment)
         }
         
         if changes.hasIndexAffectingChanges {

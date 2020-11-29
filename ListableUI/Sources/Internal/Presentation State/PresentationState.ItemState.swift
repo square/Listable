@@ -21,10 +21,20 @@ protocol AnyPresentationItemState : AnyObject
         
     var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String) { get }
     
-    func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> AnyItemCell
+    func dequeueAndPrepareCollectionViewCell(
+        in collectionView : UICollectionView,
+        for indexPath : IndexPath,
+        environment : ListEnvironment
+    ) -> AnyItemCell
     
-    func applyTo(cell anyCell : UICollectionViewCell, itemState : ListableUI.ItemState, reason : ApplyReason)
-    func applyToVisibleCell()
+    func applyTo(
+        cell anyCell : UICollectionViewCell,
+        itemState : ListableUI.ItemState,
+        reason : ApplyReason,
+        environment : ListEnvironment
+    )
+    
+    func applyToVisibleCell(with environment : ListEnvironment)
         
     func setNew(item anyItem : AnyItem, reason : PresentationState.ItemUpdateReason, updateCallbacks : UpdateCallbacks)
     
@@ -37,7 +47,12 @@ protocol AnyPresentationItemState : AnyObject
     func set(isSelected: Bool, performCallbacks: Bool)
     
     func resetCachedSizes()
-    func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
+    
+    func size(
+        for info : Sizing.MeasureInfo,
+        cache : ReusableViewCache,
+        environment : ListEnvironment
+    ) -> CGSize
     
     func moved(with result : Reordering.Result)
 }
@@ -53,6 +68,8 @@ public struct ItemStateDependencies
 {
     var reorderingDelegate : ReorderingActionsDelegate
     var coordinatorDelegate : ItemContentCoordinatorDelegate
+    
+    var environmentProvider : () -> ListEnvironment
 }
 
 
@@ -147,7 +164,7 @@ extension PresentationState
                 
                 delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
                 
-                self.applyToVisibleCell()
+                self.applyToVisibleCell(with: dependencies.environmentProvider())
             }
             
             self.storage.didSetState = { [weak self] old, new in
@@ -205,7 +222,11 @@ extension PresentationState
         
         var cellRegistrationInfo : (class:AnyClass, reuseIdentifier:String)
         
-        func dequeueAndPrepareCollectionViewCell(in collectionView : UICollectionView, for indexPath : IndexPath) -> AnyItemCell
+        func dequeueAndPrepareCollectionViewCell(
+            in collectionView : UICollectionView,
+            for indexPath : IndexPath,
+            environment : ListEnvironment
+        ) -> AnyItemCell
         {
             let anyCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellRegistrationInfo.reuseIdentifier, for: indexPath)
             
@@ -218,20 +239,26 @@ extension PresentationState
             self.applyTo(
                 cell: cell,
                 itemState: itemState,
-                reason: .willDisplay
+                reason: .willDisplay,
+                environment: environment
             )
             
             return cell
         }
         
-        func applyTo(cell anyCell : UICollectionViewCell, itemState : ListableUI.ItemState, reason : ApplyReason)
-        {
+        func applyTo(
+            cell anyCell : UICollectionViewCell,
+            itemState : ListableUI.ItemState,
+            reason : ApplyReason,
+            environment : ListEnvironment
+        ) {
             let cell = anyCell as! ItemCell<Content>
             
             let applyInfo = ApplyItemContentInfo(
                 state: itemState,
                 position: self.itemPosition,
-                reordering: self.reorderingActions
+                reordering: self.reorderingActions,
+                environment: environment
             )
             
             // Apply Model State
@@ -250,7 +277,7 @@ extension PresentationState
             }
         }
         
-        func applyToVisibleCell()
+        func applyToVisibleCell(with environment : ListEnvironment)
         {
             guard let cell = self.storage.state.visibleCell else {
                 return
@@ -259,7 +286,8 @@ extension PresentationState
             self.applyTo(
                 cell: cell,
                 itemState: .init(cell: cell),
-                reason: .wasUpdated
+                reason: .wasUpdated,
+                environment: environment
             )
         }
         
@@ -390,7 +418,11 @@ extension PresentationState
             self.cachedSizes.removeAll()
         }
         
-        func size(for info : Sizing.MeasureInfo, cache : ReusableViewCache) -> CGSize
+        func size(
+            for info : Sizing.MeasureInfo,
+            cache : ReusableViewCache,
+            environment : ListEnvironment
+        ) -> CGSize
         {
             guard info.sizeConstraint.isEmpty == false else {
                 return .zero
@@ -415,7 +447,12 @@ extension PresentationState
                 }, { cell in
                     let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false)
                     
-                    self.applyTo(cell: cell, itemState: itemState, reason: .willDisplay)
+                    self.applyTo(
+                        cell: cell,
+                        itemState: itemState,
+                        reason: .willDisplay,
+                        environment: environment
+                    )
                     
                     return self.model.sizing.measure(with: cell, info: info)
                 })

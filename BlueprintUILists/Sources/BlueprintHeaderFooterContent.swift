@@ -109,11 +109,14 @@ public extension BlueprintHeaderFooterContent
     // MARK: HeaderFooterContent
     //
     
-    func apply(to views: HeaderFooterContentViews<Self>, reason: ApplyReason)
-    {
-        views.content.element = self.elementRepresentation
-        views.background.element = self.background
-        views.pressed.element = self.pressedBackground
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        views.content.element = self.elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.background.element = self.background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView

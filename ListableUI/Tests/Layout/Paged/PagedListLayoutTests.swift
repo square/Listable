@@ -105,7 +105,11 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     
     var color : UIColor
     
-    func apply(to views : HeaderFooterContentViews<Self>, reason: ApplyReason) {
+    func apply(
+        to views: HeaderFooterContentViews<TestingHeaderFooterContent>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
         views.content.backgroundColor = self.color
     }
     

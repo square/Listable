@@ -53,7 +53,8 @@ final class SupplementaryContainerView : UICollectionReusableView
         in collectionView: UICollectionView,
         for kind : String,
         at indexPath : IndexPath,
-        reuseCache : ReusableViewCache
+        reuseCache : ReusableViewCache,
+        environment : ListEnvironment
     ) -> SupplementaryContainerView
     {
         let view = collectionView.dequeueReusableSupplementaryView(
@@ -63,6 +64,7 @@ final class SupplementaryContainerView : UICollectionReusableView
         ) as! SupplementaryContainerView
         
         view.reuseCache = reuseCache
+        view.environment = environment
         
         return view
     }
@@ -84,14 +86,25 @@ final class SupplementaryContainerView : UICollectionReusableView
             }
             
             if let headerFooter = self.headerFooter {
-                self.content = headerFooter.dequeueAndPrepareReusableHeaderFooterView(in: cache, frame: self.bounds)
+                self.content = headerFooter.dequeueAndPrepareReusableHeaderFooterView(
+                    in: cache,
+                    frame: self.bounds,
+                    environment: self.environment
+                )
             } else {
                 self.content = nil
             }
         }
     }
     
-    var reuseCache : ReusableViewCache?
+    /// Note: Using implicitly unwrapped optionals because we cannot do
+    /// initializer injection in this type – `UICollectionView` calls `init(frame:)`,
+    /// we must use property injection instead.
+    ///
+    /// We use IUOs to avoid having to unwrap the values at each call site.
+    
+    var environment : ListEnvironment!
+    var reuseCache : ReusableViewCache!
     
     private(set) var content : UIView? {
         didSet {

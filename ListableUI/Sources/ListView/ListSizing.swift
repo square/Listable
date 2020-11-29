@@ -68,7 +68,7 @@ extension ListView
     //
     // MARK: Measuring Lists
     //
-        
+    
     public static func contentSize(in fittingSize : CGSize, for properties : ListProperties.Build) -> CGSize {
         self.contentSize(in: fittingSize, for: .default(with: properties))
     }
@@ -94,9 +94,25 @@ extension ListView
         /// for the layout. Only the cross-axis of the direction – width for vertical, and height for
         /// horizontal.
         
+        let unconstrainedValues : Set<CGFloat> = [0.0, .greatestFiniteMagnitude, .infinity]
+        
         view.frame.size = view.collectionViewLayout.layout.direction.switch(
-            vertical: CGSize(width: fittingSize.width, height: 100.0),
-            horizontal: CGSize(width: 100.0, height: fittingSize.height)
+            vertical: {
+                precondition(
+                    unconstrainedValues.contains(fittingSize.width) == false,
+                    "Must provide a valid fitting width to measure vertically laid out lists. Instead, the width was '\(fittingSize.width)'."
+                )
+                
+                return CGSize(width: fittingSize.width, height: 100.0)
+            },
+            horizontal: {
+                precondition(
+                    unconstrainedValues.contains(fittingSize.height) == false,
+                    "Must provide a valid fitting height to measure horizontally laid out lists. Instead, the height was '\(fittingSize.height)'."
+                )
+                
+                return CGSize(width: 100.0, height: fittingSize.height)
+            }
         )
         
         let size = view.contentSize
