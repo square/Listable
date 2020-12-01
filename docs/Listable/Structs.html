@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
-    
+
     <script src="js/lunr.min.js" defer></script>
     <script src="js/typeahead.jquery.js" defer></script>
     <script src="js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (43% documented)
       </p>
-    
+
       <p class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -170,6 +170,12 @@
                 <a class="nav-group-task-link" href="Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ScrollAnimation.html">ScrollAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ScrollAnimation/AnimationOptions.html">– AnimationOptions</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/Sizing.html">Sizing</a>
               </li>
               <li class="nav-group-task">
@@ -197,6 +203,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Extensions/SectionedDiff.html#/ItemChanges">– ItemChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Set.html">Set</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Extensions/UIRectEdge.html">UIRectEdge</a>
@@ -254,6 +263,9 @@
                 <a class="nav-group-task-link" href="Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/ListLayout.html">ListLayout</a>
               </li>
               <li class="nav-group-task">
@@ -272,6 +284,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Appearance.html">Appearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ApplyHeaderFooterContentInfo.html">ApplyHeaderFooterContentInfo</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a>
@@ -373,15 +388,6 @@
                 <a class="nav-group-task-link" href="Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/ItemScrollPosition.html">ItemScrollPosition</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/ItemScrollPosition/Position.html">– Position</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/ItemScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ItemState.html">ItemState</a>
               </li>
               <li class="nav-group-task">
@@ -398,6 +404,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListLayoutAttributes.html">ListLayoutAttributes</a>
@@ -467,6 +476,15 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Reordering/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ScrollPosition.html">ScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ScrollPosition/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/Section.html">Section</a>
@@ -728,6 +746,35 @@ during cell reuse.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI28ApplyHeaderFooterContentInfoV"></a>
+                    <a name="//apple_ref/swift/Struct/ApplyHeaderFooterContentInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI28ApplyHeaderFooterContentInfoV">ApplyHeaderFooterContentInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Information about the current state of the content, which is passed to <code>apply(to:for:with:)</code>
+during configuration and preparation for display.</p>
+
+                        <a href="Structs/ApplyHeaderFooterContentInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ApplyHeaderFooterContentInfo</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI24HeaderFooterContentViewsV"></a>
                     <a name="//apple_ref/swift/Struct/HeaderFooterContentViews" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI24HeaderFooterContentViewsV">HeaderFooterContentViews</a>
@@ -941,7 +988,7 @@ simply leave the property nil.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Information about the current state of the content, which is passed to <code>apply(to:)</code>
+                        <p>Information about the current state of the content, which is passed to <code>apply(to:for:with:)</code>
 during configuration and preparation for display.</p>
 
 <p>You can use this information to alter the display of your content, such as changing
@@ -983,38 +1030,6 @@ for different item positions, etc.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ItemInsertAndRemoveAnimations</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI18ItemScrollPositionV"></a>
-                    <a name="//apple_ref/swift/Struct/ItemScrollPosition" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI18ItemScrollPositionV">ItemScrollPosition</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Specifies how to position an item in a list when requesting the list scrolls to it.</p>
-
-<p>You can specify a position (top, center, bottom), what to do if the
-item is already visible on screen, and any additional custom offset
-to apply to the scroll event.</p>
-
-                        <a href="Structs/ItemScrollPosition.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ItemScrollPosition</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -1412,6 +1427,64 @@ Edit the <code>PagedAppearance.monopic</code> file in this directory using Monod
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI15ListEnvironmentV"></a>
+                    <a name="//apple_ref/swift/Struct/ListEnvironment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI15ListEnvironmentV">ListEnvironment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An environment of keys and values that are passed to every <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>
+during layout and measurement, to allow passing down data.</p>
+
+<p>This type is similar to the SwiftUI or Blueprint <code>Environment</code>, where you define a <code><a href="Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a></code>,
+and then provide a custom getter and setter to read and write the content:</p>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MyLayoutTypeKey</span> <span class="p">:</span> <span class="kt">ListEnvironmentKey</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">defaultValue</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
+        <span class="o">.</span><span class="n">defaultLayout</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ListEnvironment</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">myLayoutType</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>You can retrieve the <code>ListEnvironment</code> through the <code>info</code> object passed in <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>&lsquo;s
+<code>apply(to:for:with:)</code> methods.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span>
+    <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span>
+<span class="p">)</span> <span class="p">{</span>
+   <span class="k">switch</span> <span class="n">info</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">myLayoutType</span> <span class="p">{</span>
+      <span class="o">...</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Structs/ListEnvironment.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEnvironment</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI14ListPropertiesV"></a>
                     <a name="//apple_ref/swift/Struct/ListProperties" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI14ListPropertiesV">ListProperties</a>
@@ -1651,6 +1724,38 @@ use Instruments.app to see what callback is slow.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI14ScrollPositionV"></a>
+                    <a name="//apple_ref/swift/Struct/ScrollPosition" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI14ScrollPositionV">ScrollPosition</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Specifies how to position an item in a list when requesting the list scrolls to it.</p>
+
+<p>You can specify a position (top, center, bottom), what to do if the
+item is already visible on screen, and any additional custom offset
+to apply to the scroll event.</p>
+
+                        <a href="Structs/ScrollPosition.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScrollPosition</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI7SectionV"></a>
                     <a name="//apple_ref/swift/Struct/Section" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI7SectionV">Section</a>
@@ -1769,7 +1874,7 @@ These are actions that are revealed when swiping on the cell.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-11-30)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

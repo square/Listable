@@ -4,7 +4,6 @@
 ## Build generated
 build/
 DerivedData/
-docs/json/
 
 ## Various settings
 *.pbxuser
