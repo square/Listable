@@ -2,6 +2,20 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.12.0] - 2020-12-01
+
+### Fixed
+
 - [Changed behavior of `scrollInsets` (now `scrollIndicatorInsets`)](https://github.com/kyleve/Listable/pull/222), which now only affects the scroll indicator insets of the contained scroll view, and does **not** affect the content inset of the scroll view. Please using `padding`, etc, on the various list layout types instead to control visual padding.
 
 - [Ensure we respect both `frame` and `bounds` changes](https://github.com/kyleve/Listable/pull/227) to update the inner `CollectionView`'s frame. We previously used to only respect `frame` changes, but we should also respect `bounds` changes, as these are used by auto layout.
@@ -20,13 +34,6 @@
 
 - [Change `animated` option on scrolling to an `animation` option`](https://github.com/kyleve/Listable/pull/229), to allow customizing the animation's behavior.
 
-### Removed
-
-### Changed
-
-### Misc
-
-# Past Releases
 
 # [0.11.0] - 2020-10-20
 
