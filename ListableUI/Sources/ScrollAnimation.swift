@@ -47,11 +47,17 @@ public enum ScrollAnimation {
             )
             
         case .custom(let duration, let options):
-            UIView.animate(withDuration: duration, delay: 0.0, options: options.toSystem) {
-                animations()
-            } completion: { finished in
-                completion(finished)
-            }
+            UIView.animate(
+                withDuration: duration,
+                delay: 0.0,
+                options: options.toSystem,
+                animations: {
+                    animations()
+                },
+                completion: { finished in
+                    completion(finished)
+                }
+            )
             
         case .spring(let duration, let timing):
             let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)

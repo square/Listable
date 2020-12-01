@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.12.1] - 2020-12-01
+
+### Fixed
+
+- [Fixed frame setting calcuations, and fixed building in Xcode 11](https://github.com/kyleve/Listable/pull/234).
+
 # [0.12.0] - 2020-12-01
 
 ### Fixed
