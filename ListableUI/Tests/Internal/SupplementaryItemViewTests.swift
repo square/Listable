@@ -41,6 +41,14 @@ class SupplementaryContainerViewTests: XCTestCase
         XCTAssertEqual(view.sizeThatFits(.zero), CGSize(width: 100, height: 100))
     }
     
+    func test_systemLayoutSizeFitting() {
+        XCTFail()
+    }
+    
+    func test_systemLayoutSizeFitting_withHorizontalFittingPriority_verticalFittingPriority() {
+        XCTFail()
+    }
+    
     func test_headerFooter()
     {
         let cache = ReusableViewCache()

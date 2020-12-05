@@ -129,6 +129,8 @@ final class LiveCells {
     
     func add(_ cell : AnyItemCell) {
         self.cells.insert(.init(cell))
+        
+        self.cells = self.cells.filter { $0.cell != nil }
     }
     
     func perform(_ block : (AnyItemCell) -> ()) {
@@ -137,13 +139,11 @@ final class LiveCells {
                 block(cell)
             }
         }
-        
-        self.cells = self.cells.filter { $0.cell != nil }
     }
     
     private var cells : Set<LiveCell> = []
     
-    struct LiveCell : Hashable {
+    private struct LiveCell : Hashable {
         
         private let identifier : ObjectIdentifier
         

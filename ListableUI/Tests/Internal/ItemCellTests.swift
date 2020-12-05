@@ -39,6 +39,14 @@ class ItemElementCellTests : XCTestCase
         let cell2 = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 150.0, height: 150.0)))
         XCTAssertEqual(cell2.sizeThatFits(.zero), CGSize(width: 150.0, height: 150.0))
     }
+    
+    func test_systemLayoutSizeFitting() {
+        XCTFail()
+    }
+    
+    func test_systemLayoutSizeFitting_withHorizontalFittingPriority_verticalFittingPriority() {
+        XCTFail()
+    }
 }
 
 fileprivate struct TestItemContent : ItemContent, Equatable
@@ -55,5 +63,17 @@ fileprivate struct TestItemContent : ItemContent, Equatable
     
     static func createReusableContentView(frame: CGRect) -> UIView {
         return UIView(frame: frame)
+    }
+}
+
+
+class ItemElementCell_LiveCells_Tests : XCTestCase
+{
+    func test_add() {
+        
+    }
+    
+    func test_perform() {
+        
     }
 }
