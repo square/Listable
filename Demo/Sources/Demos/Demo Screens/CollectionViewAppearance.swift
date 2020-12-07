@@ -81,7 +81,7 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 }
 
 
-struct DemoItem : BlueprintItemContent, Equatable
+struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
     
@@ -117,6 +117,10 @@ struct DemoItem : BlueprintItemContent, Equatable
             cornerStyle: .rounded(radius: 8.0),
             shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
+    }
+    
+    var collationString: String {
+        self.text
     }
 }
 
