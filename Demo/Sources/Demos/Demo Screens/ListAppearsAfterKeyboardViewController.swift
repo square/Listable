@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BlueprintLists
+import BlueprintUILists
 import BlueprintUICommonControls
 
 

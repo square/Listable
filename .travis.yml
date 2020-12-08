@@ -1,14 +1,14 @@
 git:
   depth: 1
 
-language: swift
-os: osx
-osx_image: xcode11.5
-
 # https://docs.travis-ci.com/user/caching/
 cache:
   bundler: true
   cocoapods: true
+
+language: swift
+os: osx
+osx_image: xcode12
 
 before_install:
   - bundle install
@@ -18,6 +18,9 @@ install:
 
 jobs:
   include:
+    - name: iOS 14 Tests
+      script: Scripts/run_ios14_tests.sh
+
     - name: iOS 13 Tests
       script: Scripts/run_ios13_tests.sh
 
@@ -26,6 +29,3 @@ jobs:
 
     - name: iOS 11 Tests
       script: Scripts/run_ios11_tests.sh
-
-    - name: iOS 10 Tests
-      script: Scripts/run_ios10_tests.sh

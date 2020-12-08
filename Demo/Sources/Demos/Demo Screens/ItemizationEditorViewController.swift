@@ -6,11 +6,11 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintLists
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
-import Listable
+import ListableUI
 
 
 final class ItemizationEditorViewController : UIViewController

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Listable
+import ListableUI
 
 
 public final class DemosRootViewController : ListViewController
@@ -101,6 +101,13 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ReorderingViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Multi-Select"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(MultiSelectViewController())
             })
             
             section += Item(

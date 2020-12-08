@@ -6,8 +6,8 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 

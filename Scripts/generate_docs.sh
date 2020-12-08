@@ -8,17 +8,17 @@ sourcekitten=`gem contents jazzy | grep 'bin/sourcekitten$' | head -1`
 
 destination="platform=iOS Simulator,name=iPhone 11"
 
-$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme Listable -destination "$destination" > docs/json/Listable.json
-$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme BlueprintLists -destination "$destination" > docs/json/BlueprintLists.json
+$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme ListableUI -destination "$destination" > docs/JSON/ListableUI.json
+$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme BlueprintUILists -destination "$destination" > docs/JSON/BlueprintUILists.json
 
 jazzy \
 	--clean \
-	--config docs/listable.yml \
-	--sourcekitten-sourcefile docs/json/Listable.json \
+	--config docs/ListableUI.yml \
+	--sourcekitten-sourcefile docs/JSON/ListableUI.json \
 	--output docs/Listable
 
 jazzy \
 	--clean \
-	--config docs/blueprintlists.yml \
-	--sourcekitten-sourcefile docs/json/BlueprintLists.json \
+	--config docs/BlueprintUILists.yml \
+	--sourcekitten-sourcefile docs/JSON/BlueprintUILists.json \
 	--output docs/BlueprintLists

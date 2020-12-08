@@ -5,8 +5,8 @@
 //  Created by Kyle Van Essen on 3/24/20.
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 import UIKit
@@ -157,6 +157,7 @@ final class SwipeActionsViewController: UIViewController  {
                 let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
                 column.add(growPriority: 0, shrinkPriority: 0, child: separator)
             }
+            .accessibility(label: "Swipeable item", value: item.title)
         }
     }
 
