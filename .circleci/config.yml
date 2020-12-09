@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - run: gem install xcode-install
-      - run: xcversion simulators --install="11.1" --no-progress
+      - run: xcversion simulators --install="iOS 11.1" --no-progress
 
   ios_12_tests:
 
