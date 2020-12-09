@@ -11,9 +11,8 @@ jobs:
 
     steps:
       - checkout
-      - run: bundle install
-      - run: bundle exec pod install --repo-update
-      - run: Scripts/run_ios11_tests.sh
+      - run: gem install xcode-install
+      - run: xcversion simulators --install="11.1" --no-progress
 
   ios_12_tests:
 
@@ -30,5 +29,5 @@ workflows:
   run_all_tests:
     jobs:
       - ios_11_tests
-      - ios_12_tests
+      #- ios_12_tests
 
