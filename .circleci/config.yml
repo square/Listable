@@ -13,7 +13,8 @@ jobs:
       - checkout
       #- run: bundle install
       #- run: bundle exec pod install --repo-update
-      - run: Scripts/run_ios11_tests.sh
+      - run: xcrun simctl list
+      #- run: Scripts/run_ios11_tests.sh
 
   ios_12_tests:
 
@@ -24,7 +25,6 @@ jobs:
       - checkout
       - run: bundle install
       - run: bundle exec pod install --repo-update
-      - run: Scripts/run_ios12_tests.sh
 
 workflows:
   run_all_tests:
