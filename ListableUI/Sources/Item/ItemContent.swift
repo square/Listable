@@ -178,7 +178,7 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a selected background view.
     ///
-    associatedtype SelectedBackgroundView:UIView = BackgroundView
+    associatedtype SelectedBackgroundView:UIView = UIView
     
     
     /// Create and return a new background view used to render the content's selected background.
@@ -295,11 +295,11 @@ public extension ItemContent where BackgroundView == UIView
 
 
 /// Provide a UIView when no special selected background view is specified.
-public extension ItemContent where BackgroundView == SelectedBackgroundView
+public extension ItemContent where BackgroundView == UIView
 {
-    static func createReusableSelectedBackgroundView(frame : CGRect) -> BackgroundView
+    static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     {
-        self.createReusableBackgroundView(frame: frame)
+        SelectedBackgroundView(frame: frame)
     }
 }
 

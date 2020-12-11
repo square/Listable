@@ -25,7 +25,7 @@ protocol AnyPresentationItemState : AnyObject
         in collectionView : UICollectionView,
         for indexPath : IndexPath,
         environment : ListEnvironment
-    ) -> UICollectionViewCell
+    ) -> AnyItemCell
     
     func applyTo(
         cell anyCell : UICollectionViewCell,
@@ -226,7 +226,7 @@ extension PresentationState
             in collectionView : UICollectionView,
             for indexPath : IndexPath,
             environment : ListEnvironment
-        ) -> UICollectionViewCell
+        ) -> AnyItemCell
         {
             let anyCell = collectionView.dequeueReusableCell(withReuseIdentifier: self.cellRegistrationInfo.reuseIdentifier, for: indexPath)
             

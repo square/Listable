@@ -11,6 +11,7 @@ internal extension ListView
     final class DataSource : NSObject, UICollectionViewDataSource
     {
         unowned var presentationState : PresentationState!
+        unowned var liveCells : LiveCells!
         var environment : ListEnvironment!
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
@@ -25,17 +26,24 @@ internal extension ListView
             return section.items.count
         }
         
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+        func collectionView(
+            _ collectionView: UICollectionView,
+            cellForItemAt indexPath: IndexPath
+        ) -> UICollectionViewCell
         {
             let item = self.presentationState.item(at: indexPath)
             
             self.presentationState.registerCell(for: item, in: collectionView)
             
-            return item.dequeueAndPrepareCollectionViewCell(
+            let cell = item.dequeueAndPrepareCollectionViewCell(
                 in: collectionView,
                 for: indexPath,
                 environment: environment
             )
+            
+            cell.wasDequeued(with: self.liveCells)
+            
+            return cell
         }
         
         private let headerFooterReuseCache = ReusableViewCache()
