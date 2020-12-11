@@ -1,5 +1,5 @@
 //
-//  UIView+Additions.swift
+//  UIView.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 10/28/20.

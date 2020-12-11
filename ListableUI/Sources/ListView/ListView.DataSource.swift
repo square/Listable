@@ -41,7 +41,7 @@ internal extension ListView
                 environment: environment
             )
             
-            self.liveCells.add(cell)
+            cell.wasDequeued(with: self.liveCells)
             
             return cell
         }

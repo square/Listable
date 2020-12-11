@@ -11,6 +11,8 @@ import UIKit
 protocol AnyItemCell : UICollectionViewCell
 {
     func closeSwipeActions()
+    
+    func wasDequeued(with liveCells : LiveCells)
 }
 
 ///
@@ -122,13 +124,25 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     func closeSwipeActions() {
         self.contentContainer.performAnimatedClose()
     }
+    
+    private var hasBeenDequeued = false
+    
+    func wasDequeued(with liveCells : LiveCells) {
+        guard hasBeenDequeued == false else {
+            return
+        }
+        
+        self.hasBeenDequeued = true
+        
+        liveCells.add(self)
+    }
 }
 
 
 final class LiveCells {
     
     func add(_ cell : AnyItemCell) {
-        self.cells.insert(.init(cell))
+        self.cells.append(.init(cell: cell))
         
         self.cells = self.cells.filter { $0.cell != nil }
     }
@@ -141,25 +155,9 @@ final class LiveCells {
         }
     }
     
-    private var cells : Set<LiveCell> = []
+    private(set) var cells : [LiveCell] = []
     
-    private struct LiveCell : Hashable {
-        
-        private let identifier : ObjectIdentifier
-        
+    struct LiveCell {
         weak var cell : AnyItemCell?
-        
-        init(_ cell : AnyItemCell) {
-            self.identifier = ObjectIdentifier(cell)
-            self.cell = cell
-        }
-        
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(self.identifier)
-        }
-        
-        static func == (lhs : LiveCell, rhs : LiveCell) -> Bool {
-            lhs.identifier == rhs.identifier
-        }
     }
 }
