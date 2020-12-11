@@ -13,7 +13,7 @@ extension ItemCell {
     final class ContentContainerView : UIView {
 
         let contentView : Content.ContentView
-        
+                
         private var swipeConfiguration: SwipeConfiguration?
         
         private var swipeState: SwipeActionState = .closed {
@@ -30,14 +30,8 @@ extension ItemCell {
             self.contentView = Content.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
-
+            
             self.addSubview(self.contentView)
-
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(didReceiveCloseNotification),
-                name: .closeSwipeActions, object: nil
-            )
         }
 
         @available(*, unavailable)
@@ -130,8 +124,15 @@ extension ItemCell {
                 set(state: .closed)
             }
         }
+        
+        private weak var listView : ListView? = nil
 
         @objc private func handlePan(sender: UIPanGestureRecognizer) {
+            
+            if self.listView == nil {
+                self.listView = self.firstSuperview(ofType: ListView.self)
+            }
+            
             guard let configuration = swipeConfiguration else { return }
 
             let offsetMultiplier = configuration.numberOfActions == 1 ? 0.5 : 0.7
@@ -140,8 +141,9 @@ extension ItemCell {
             let willPerformAction = currentSwipeOffset > performActionOffset
 
             if sender.state == .began {
-                let notification = Notification(name: .closeSwipeActions, object: self)
-                NotificationCenter.default.post(notification)
+                self.listView?.liveCells.perform {
+                    $0.closeSwipeActions()
+                }
             }
 
             switch sender.state {
@@ -186,7 +188,6 @@ extension ItemCell {
 
 
             default:
-
                 set(state: .closed)
 
             }
@@ -200,9 +201,13 @@ extension ItemCell {
                 self.set(state: .closed, animated: true)
             }
         }
+        
+        func performAnimatedClose() {
+            self.set(state: .closed, animated: true)
+        }
 
         private func set(state: SwipeActionState, animated: Bool = false) {
-            
+                        
             swipeState = state
 
             if animated {
@@ -212,12 +217,6 @@ extension ItemCell {
                 }.startAnimation()
             } else {
                 setNeedsLayout()
-            }
-        }
-
-        @objc private func didReceiveCloseNotification(notification: Notification) {
-            if notification.object as AnyObject? !== self {
-                set(state: .closed, animated: true)
             }
         }
 

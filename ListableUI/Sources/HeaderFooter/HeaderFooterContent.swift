@@ -109,7 +109,7 @@ public protocol HeaderFooterContent
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a selected background view.
     ///
-    associatedtype PressedBackgroundView:UIView = BackgroundView
+    associatedtype PressedBackgroundView:UIView = UIView
     
     /// Create and return a new background view used to render the content's pressed background.
     ///
@@ -171,10 +171,10 @@ public extension HeaderFooterContent where Self.BackgroundView == UIView
     }
 }
 
-public extension HeaderFooterContent where Self.PressedBackgroundView == BackgroundView
+public extension HeaderFooterContent where Self.PressedBackgroundView == UIView
 {
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
     {
-        self.createReusableBackgroundView(frame: frame)
+        PressedBackgroundView(frame: frame)
     }
 }

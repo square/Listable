@@ -147,4 +147,8 @@ public extension BlueprintItemContent
         
         return view
     }
+    
+    static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView {
+        self.createReusableBackgroundView(frame: frame)
+    }
 }

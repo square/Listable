@@ -64,6 +64,22 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         self.content.sizeThatFits(size)
     }
     
+    override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+        self.content.systemLayoutSizeFitting(targetSize)
+    }
+    
+    override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority
+    ) -> CGSize {
+        self.content.systemLayoutSizeFitting(
+            targetSize,
+            withHorizontalFittingPriority: horizontalFittingPriority,
+            verticalFittingPriority: verticalFittingPriority
+        )
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         

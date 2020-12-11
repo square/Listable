@@ -30,14 +30,29 @@ class ItemElementCellTests : XCTestCase
     
     func test_sizeThatFits()
     {
-        // The default implementation of size that fits on UIView returns the existing size of the view.
-        // Make sure that value is returned from the cell.
+        let cell = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        XCTAssertEqual(cell.sizeThatFits(.zero), CGSize(width: 40.0, height: 50.0))
+    }
+    
+    func test_systemLayoutSizeFitting()
+    {
+        let cell = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        XCTAssertEqual(cell.systemLayoutSizeFitting(.zero), CGSize(width: 41.0, height: 51.0))
+    }
+    
+    func test_systemLayoutSizeFitting_withHorizontalFittingPriority_verticalFittingPriority()
+    {
+        let cell = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
         
-        let cell1 = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
-        XCTAssertEqual(cell1.sizeThatFits(.zero), CGSize(width: 100.0, height: 100.0))
-        
-        let cell2 = ItemCell<TestItemContent>(frame: CGRect(origin: .zero, size: CGSize(width: 150.0, height: 150.0)))
-        XCTAssertEqual(cell2.sizeThatFits(.zero), CGSize(width: 150.0, height: 150.0))
+        XCTAssertEqual(
+            cell.systemLayoutSizeFitting(
+                .zero,
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            ),
+            
+            CGSize(width: 42.0, height: 52.0)
+        )
     }
 }
 
@@ -54,6 +69,74 @@ fileprivate struct TestItemContent : ItemContent, Equatable
     typealias ContentView = UIView
     
     static func createReusableContentView(frame: CGRect) -> UIView {
-        return UIView(frame: frame)
+        return View(frame: frame)
+    }
+    
+    private final class View : UIView {
+        override func sizeThatFits(_ size: CGSize) -> CGSize {
+            CGSize(width: 40, height: 50)
+        }
+        
+        override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+            CGSize(width: 41, height: 51)
+        }
+        
+        override func systemLayoutSizeFitting(
+            _ targetSize: CGSize,
+            withHorizontalFittingPriority horizontalFittingPriority:
+                UILayoutPriority, verticalFittingPriority: UILayoutPriority
+        ) -> CGSize {
+            CGSize(width: 42, height: 52)
+        }
+    }
+}
+
+
+class ItemElementCell_LiveCells_Tests : XCTestCase
+{
+    func test_add() {
+        let liveCells = LiveCells()
+        
+        var cell1 : AnyItemCell? = ItemCell<TestContent>(frame: .zero)
+        
+        liveCells.add(cell1!)
+        
+        // Should only add the cell once.
+        
+        XCTAssertEqual(liveCells.cells.count, 1)
+        
+        // Nil out the first cell
+        
+        weak var weakCell1 = cell1
+        
+        cell1 = nil
+        
+        self.waitFor {
+            weakCell1 == nil
+        }
+        
+        // Register a second cell, should remove the first
+        
+        let cell2 = ItemCell<TestContent>(frame: .zero)
+        
+        liveCells.add(cell2)
+        
+        XCTAssertEqual(liveCells.cells.count, 1)
+        XCTAssertTrue(liveCells.cells.first?.cell === cell2)
+    }
+
+    private struct TestContent : ItemContent, Equatable {
+        
+        var identifier: Identifier<TestContent> {
+            .init()
+        }
+        
+        static func createReusableContentView(frame: CGRect) -> UIView {
+            UIView(frame: frame)
+        }
+        
+        func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {
+            // Nothing needed
+        }
     }
 }
