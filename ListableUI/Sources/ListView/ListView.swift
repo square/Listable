@@ -627,37 +627,38 @@ public final class ListView : UIView, KeyboardObserverDelegate
     
     public override var frame: CGRect {
         didSet {
-            self.boundsDidChange(from: oldValue)
+            self.frameDidChange(from: oldValue, to: self.frame)
         }
     }
     
     public override var bounds: CGRect {
-        didSet {
-            self.boundsDidChange(from: oldValue)
+        get { super.bounds }
+        
+        set {
+            let oldValue = self.frame
+            
+            super.bounds = newValue
+            
+            self.frameDidChange(from: oldValue, to: self.frame)
         }
     }
     
-    private func boundsDidChange(from oldValue : CGRect) {
+    private func frameDidChange(from old : CGRect, to new : CGRect) {
         
-        /**
-         Set the frame explicitly, so that the layout can occur
-         within performBatchUpdates. Waiting for layoutSubviews() is too late.
-         */
+        /// Set the frame explicitly, so that the layout can occur
+        /// within performBatchUpdates. Waiting for layoutSubviews() is too late.
         self.collectionView.frame = self.bounds
         
-        guard oldValue != self.bounds else {
+        /// If nothing has changed, there's no work here – return early.
+        guard old != new else {
             return
         }
         
-        /**
-         Once the view actually has a size, we can provide content.
-        
-         There's no value in having content with no view size, as we cannot
-         size cells otherwise.
-         */
-        
-        let fromEmpty = oldValue.isEmpty && self.bounds.isEmpty == false
-        let toEmpty = oldValue.isEmpty == false && self.bounds.isEmpty
+        /// Once the view actually has a size, we can provide content.
+        ///
+        /// There's no value in having content with no view size, as we cannot size cells otherwise.
+        let fromEmpty = old.size.isEmpty && new.size.isEmpty == false
+        let toEmpty = old.size.isEmpty == false && new.size.isEmpty
         
         if fromEmpty {
             self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
@@ -672,8 +673,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
             ListStateObserver.FrameChanged(
                 actions: actions,
                 positionInfo: self.scrollPositionInfo,
-                old: oldValue,
-                new: self.frame
+                old: old,
+                new: new
             )
         }
     }

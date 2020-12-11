@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'BlueprintUILists'
-  s.version      = '0.11.0'
+  s.version      = '0.12.1'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 11.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = 'Apache License, Version 2.0'

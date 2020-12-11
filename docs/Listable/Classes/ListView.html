@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-    
+
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (43% documented)
       </p>
-    
+
       <p class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -170,6 +170,12 @@
                 <a class="nav-group-task-link" href="../Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScrollAnimation.html">ScrollAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScrollAnimation/AnimationOptions.html">– AnimationOptions</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/Sizing.html">Sizing</a>
               </li>
               <li class="nav-group-task">
@@ -197,6 +203,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/SectionedDiff.html#/ItemChanges">– ItemChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Set.html">Set</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/UIRectEdge.html">UIRectEdge</a>
@@ -254,6 +263,9 @@
                 <a class="nav-group-task-link" href="../Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ListLayout.html">ListLayout</a>
               </li>
               <li class="nav-group-task">
@@ -272,6 +284,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Appearance.html">Appearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ApplyHeaderFooterContentInfo.html">ApplyHeaderFooterContentInfo</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a>
@@ -373,15 +388,6 @@
                 <a class="nav-group-task-link" href="../Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition.html">ItemScrollPosition</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition/Position.html">– Position</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ItemState.html">ItemState</a>
               </li>
               <li class="nav-group-task">
@@ -398,6 +404,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutAttributes.html">ListLayoutAttributes</a>
@@ -469,6 +478,15 @@
                 <a class="nav-group-task-link" href="../Structs/Reordering/Result.html">– Result</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition.html">ScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Section.html">Section</a>
               </li>
               <li class="nav-group-task">
@@ -511,7 +529,7 @@
             <h1>ListView</h1>
               <div class="declaration">
                 <div class="language">
-                  
+
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListView</span> <span class="p">:</span> <span class="kt">UIView</span><span class="p">,</span> <span class="kt">KeyboardObserverDelegate</span></code></pre>
 
                 </div>
@@ -902,9 +920,36 @@ content change events, frame change events, or item visibility changes.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA0K14ScrollPositionVSbtF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA0K14ScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC16ScrollCompletiona"></a>
+                    <a name="//apple_ref/swift/Alias/ScrollCompletion" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">ScrollCompletion</span> <span class="o">=</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA7AnyItem_p_AA14ScrollPositionVAA0M9AnimationOySbctF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animation:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA7AnyItem_p_AA14ScrollPositionVAA0M9AnimationOySbctF">scrollTo(item:<wbr>position:<wbr>animation:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -921,7 +966,11 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span><span class="nv">item</span><span class="p">:</span> <span class="kt"><a href="../Protocols/AnyItem.html">AnyItem</a></span><span class="p">,</span> <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ItemScrollPosition.html">ItemScrollPosition</a></span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
+    <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyItem.html">AnyItem</a></span><span class="p">,</span> <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ScrollAnimation.html">ScrollAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -931,9 +980,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA18ItemScrollPositionVSbtF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA18ItemScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA13AnyIdentifierC_AA14ScrollPositionVAA0M9AnimationOySbctF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animation:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA13AnyIdentifierC_AA14ScrollPositionVAA0M9AnimationOySbctF">scrollTo(item:<wbr>position:<wbr>animation:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -951,7 +1000,12 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span><span class="nv">item</span><span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span> <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ItemScrollPosition.html">ItemScrollPosition</a></span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
+    <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
+    <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ScrollAnimation.html">ScrollAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -961,9 +1015,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC11scrollToTop8animatedS2b_tF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToTop(animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC11scrollToTop8animatedS2b_tF">scrollToTop(animated:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC11scrollToTop9animation10completionSbAA15ScrollAnimationO_ySbctF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToTop(animation:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC11scrollToTop9animation10completionSbAA15ScrollAnimationO_ySbctF">scrollToTop(animation:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -979,7 +1033,10 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToTop</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToTop</span><span class="p">(</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ScrollAnimation.html">ScrollAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -989,9 +1046,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC16scrollToLastItem8animatedS2b_tF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToLastItem(animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC16scrollToLastItem8animatedS2b_tF">scrollToLastItem(animated:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC16scrollToLastItem9animation10completionSbAA15ScrollAnimationO_ySbctF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToLastItem(animation:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC16scrollToLastItem9animation10completionSbAA15ScrollAnimationO_ySbctF">scrollToLastItem(animation:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1007,7 +1064,10 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToLastItem</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToLastItem</span><span class="p">(</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ScrollAnimation.html">ScrollAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -1027,6 +1087,33 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 </div>
               </div>
               <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8ListViewC11environmentAA0C11EnvironmentVvp"></a>
+                    <a name="//apple_ref/swift/Property/environment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC11environmentAA0C11EnvironmentVvp">environment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEnvironment.html">ListEnvironment</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -1197,6 +1284,33 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@ListableUI@objc(cs)ListView(py)bounds"></a>
+                    <a name="//apple_ref/swift/Property/bounds" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@ListableUI@objc(cs)ListView(py)bounds">bounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">bounds</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1454,7 +1568,7 @@ in the case that you do not have access to your list view at all, such as when u
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-11-30)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

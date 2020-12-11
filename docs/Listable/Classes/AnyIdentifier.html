@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-    
+
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (43% documented)
       </p>
-    
+
       <p class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -170,6 +170,12 @@
                 <a class="nav-group-task-link" href="../Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScrollAnimation.html">ScrollAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ScrollAnimation/AnimationOptions.html">– AnimationOptions</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/Sizing.html">Sizing</a>
               </li>
               <li class="nav-group-task">
@@ -197,6 +203,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/SectionedDiff.html#/ItemChanges">– ItemChanges</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Set.html">Set</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/UIRectEdge.html">UIRectEdge</a>
@@ -254,6 +263,9 @@
                 <a class="nav-group-task-link" href="../Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ListLayout.html">ListLayout</a>
               </li>
               <li class="nav-group-task">
@@ -272,6 +284,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Appearance.html">Appearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ApplyHeaderFooterContentInfo.html">ApplyHeaderFooterContentInfo</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a>
@@ -373,15 +388,6 @@
                 <a class="nav-group-task-link" href="../Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition.html">ItemScrollPosition</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition/Position.html">– Position</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ItemState.html">ItemState</a>
               </li>
               <li class="nav-group-task">
@@ -398,6 +404,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutAttributes.html">ListLayoutAttributes</a>
@@ -469,6 +478,15 @@
                 <a class="nav-group-task-link" href="../Structs/Reordering/Result.html">– Result</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition.html">ScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition/Position.html">– Position</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ScrollPosition/IfAlreadyVisible.html">– IfAlreadyVisible</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Section.html">Section</a>
               </li>
               <li class="nav-group-task">
@@ -511,7 +529,7 @@
             <h1>AnyIdentifier</h1>
               <div class="declaration">
                 <div class="language">
-                  
+
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AnyIdentifier</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">CustomDebugStringConvertible</span></code></pre>
 
                 </div>
@@ -560,7 +578,7 @@ it allows free bridging from <code><a href="../Classes/Identifier.html">Identifi
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -599,7 +617,7 @@ it allows free bridging from <code><a href="../Classes/Identifier.html">Identifi
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -638,7 +656,7 @@ it allows free bridging from <code><a href="../Classes/Identifier.html">Identifi
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -659,7 +677,7 @@ it allows free bridging from <code><a href="../Classes/Identifier.html">Identifi
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-10-25)</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-11-30)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
