@@ -4,8 +4,6 @@
 
 ### Added
 
-- [Introduce `LocalizedItemCollator`](https://github.com/kyleve/Listable/pull/236), a list-friendly version of `UILocalizedIndexedCollation` which allows collating a list of content at one time.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.13.0] - 2020-12-14
+
+### Added
+
+- [Introduce `LocalizedItemCollator`](https://github.com/kyleve/Listable/pull/236), a list-friendly version of `UILocalizedIndexedCollation` which allows collating a list of content at one time.
 
 # [0.12.1] - 2020-12-01
 
@@ -251,7 +255,10 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Blueprint/compare/0.11.0...HEAD
+[Main]: https://github.com/square/Blueprint/compare/0.13.0...HEAD
+[0.13.0]: https://github.com/square/Blueprint/compare/0.12.1...0.13.0
+[0.12.1]: https://github.com/square/Blueprint/compare/0.12.0...0.12.1
+[0.12.0]: https://github.com/square/Blueprint/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/square/Blueprint/compare/0.10.1...0.11.0
 [0.10.1]: https://github.com/square/Blueprint/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/square/Blueprint/compare/0.9.0...0.10.0
