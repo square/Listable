@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Introduce `LocalizedItemCollator`](https://github.com/kyleve/Listable/pull/236), a list-friendly version of `UILocalizedIndexedCollation` which allows collating a list of content at one time.
+
 ### Removed
 
 ### Changed
