@@ -20,6 +20,8 @@ public protocol AnyItem : AnyItem_Internal
 {
     var identifier : AnyIdentifier { get }
     
+    var anyContent : Any { get }
+    
     var sizing : Sizing { get set }
     var layout : ItemLayout { get set }
     var selectionStyle : ItemSelectionStyle { get set }
@@ -163,6 +165,12 @@ public struct Item<Content:ItemContent> : AnyItem
         self.reuseIdentifier = .identifier(for: Content.self)
         
         self.identifier = self.content.identifier
+    }
+    
+    // MARK: AnyItem
+    
+    public var anyContent: Any {
+        self.content
     }
     
     // MARK: AnyItem_Internal
