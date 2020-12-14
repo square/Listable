@@ -23,7 +23,7 @@
         <a class="header-link" href="index.html">
           Listable
         </a>
-         (43% documented)
+         (44% documented)
       </p>
 
       <p class="header-col--secondary">
@@ -245,6 +245,9 @@
                 <a class="nav-group-task-link" href="Protocols/AnyListLayout.html">AnyListLayout</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/AnyLocalizedCollatableItem.html">AnyLocalizedCollatableItem</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/AnySectionInfo.html">AnySectionInfo</a>
               </li>
               <li class="nav-group-task">
@@ -273,6 +276,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/ListViewSource.html">ListViewSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/LocalizedCollatableItemContent.html">LocalizedCollatableItemContent</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/SectionInfo.html">SectionInfo</a>
@@ -458,6 +464,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListStateObserver/SelectionChanged.html">– SelectionChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/LocalizedItemCollator.html">LocalizedItemCollator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/LocalizedItemCollator/CollatedSection.html">– CollatedSection</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/PagedAppearance.html">PagedAppearance</a>
@@ -646,6 +658,7 @@ when the list content underflows the available space in the list view.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt"><a href="Structs/Content.html">Content</a></span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnyItem.html">AnyItem</a></span> <span class="k">where</span> <span class="kt"><a href="Structs/Content.html">Content</a></span> <span class="p">:</span> <span class="kt"><a href="Protocols/ItemContent.html">ItemContent</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Item</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnyLocalizedCollatableItem.html">AnyLocalizedCollatableItem</a></span> <span class="k">where</span> <span class="kt"><a href="Structs/Content.html">Content</a></span> <span class="p">:</span> <span class="kt"><a href="Protocols/LocalizedCollatableItemContent.html">LocalizedCollatableItemContent</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1625,6 +1638,64 @@ use Instruments.app to see what callback is slow.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI21LocalizedItemCollatorV"></a>
+                    <a name="//apple_ref/swift/Struct/LocalizedItemCollator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI21LocalizedItemCollatorV">LocalizedItemCollator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If you&rsquo;re looking for the equivalent of <code>UILocalizedIndexedCollation</code> for lists,
+you have come to the right place.</p>
+
+<p><code>LocalizedItemCollator</code> takes in a list of unsorted content, and sorts and then
+partitions the content into sections, returning you a list of collated sections for display.</p>
+
+<p>Just like <code>UILocalizedIndexedCollation</code>, <code>LocalizedItemCollator</code> takes
+into account the localization settings of the device, using different collation for the various
+supported iOS languages.</p>
+<h2 id='example' class='heading'>Example</h2>
+<pre class="highlight swift"><code><span class="kt">List</span> <span class="p">{</span> <span class="n">list</span> <span class="k">in</span>
+    <span class="n">list</span> <span class="o">+=</span> <span class="kt">LocalizedItemCollator</span><span class="o">.</span><span class="nf">sections</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">items</span><span class="p">)</span> <span class="p">{</span> <span class="n">collated</span><span class="p">,</span> <span class="n">section</span> <span class="k">in</span>
+
+        <span class="c1">/// You are passed a pre-populated section on which you may</span>
+        <span class="c1">/// customize the header and footer, or mutate the content.</span>
+
+        <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="n">collated</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
+        <span class="n">section</span><span class="o">.</span><span class="n">footer</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoFooter</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="n">collated</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+<h2 id='warning' class='heading'>Warning</h2>
+
+<p>Sorting and partitioning thousands and thousands of <code>Items</code> each
+time a list updates can be expensive, especially on slower devices.</p>
+
+<p>If you have a list that you wish to collate that may contain thousands of items,
+it is recommended that you store the list pre-collated outside of Listable,
+so each recreation of the list&rsquo;s view model does not re-partake in an expensive sort operation.
+Instead only re-collate when the underlying list receives an update (from Core Data, an API callback, etc).</p>
+
+                        <a href="Structs/LocalizedItemCollator.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LocalizedItemCollator</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI11ItemPreviewV"></a>
                     <a name="//apple_ref/swift/Struct/ItemPreview" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI11ItemPreviewV">ItemPreview</a>
@@ -1874,8 +1945,8 @@ These are actions that are revealed when swiping on the cell.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-11-30)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2020-12-14)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
