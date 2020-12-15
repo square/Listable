@@ -28,6 +28,7 @@ public struct SwipeActionsConfiguration {
     }
 }
 
+
 /// Create SwipeActions to define actions that can be performed in a SwipeActionsConfiguration.
 public struct SwipeAction {
 

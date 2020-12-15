@@ -129,9 +129,9 @@ public enum Sizing : Hashable
 }
 
 
-public extension Sizing
+extension Sizing
 {
-    struct MeasureInfo
+    public struct MeasureInfo
     {
         var sizeConstraint : CGSize
         var defaultSize : CGSize
@@ -148,7 +148,7 @@ public extension Sizing
         }
     }
     
-    struct Constraint : Hashable
+    public struct Constraint : Hashable
     {
         public var width : Axis
         public var height : Axis

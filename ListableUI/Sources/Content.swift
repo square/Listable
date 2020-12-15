@@ -298,7 +298,7 @@ public struct Content
 }
 
 
-internal extension Content
+extension Content
 {
     struct Slice
     {

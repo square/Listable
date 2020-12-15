@@ -498,7 +498,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 return
             }
 
-            let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.lst_adjustedContentInset.top
+            let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
             
             animation.perform(

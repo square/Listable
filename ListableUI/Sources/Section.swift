@@ -182,9 +182,9 @@ public struct Section
 }
 
 
-public extension Section
+extension Section
 {
-    struct Layout : Equatable
+    public struct Layout : Equatable
     {
         public var width : CustomWidth
 
@@ -198,7 +198,8 @@ public extension Section
         }
     }
     
-    struct Columns
+    
+    public struct Columns
     {
         public var count : Int
         public var spacing : CGFloat

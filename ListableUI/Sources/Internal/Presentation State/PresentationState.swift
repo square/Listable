@@ -14,7 +14,7 @@ final class PresentationState
     // MARK: Properties
     //
         
-    var refreshControl : RefreshControl.PresentationState?
+    var refreshControl : RefreshControlState?
     
     var header : HeaderFooterViewStatePair = .init()
     var footer : HeaderFooterViewStatePair = .init()
@@ -273,7 +273,7 @@ final class PresentationState
         if let existing = self.refreshControl, let new = new {
             existing.update(with: new)
         } else if self.refreshControl == nil, let new = new {
-            let newControl = RefreshControl.PresentationState(new)
+            let newControl = RefreshControlState(new)
             view.refreshControl = newControl.view
             self.refreshControl = newControl
         } else if self.refreshControl != nil, new == nil {

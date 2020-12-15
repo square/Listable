@@ -63,10 +63,11 @@ public struct Behavior : Equatable
     }
 }
 
-public extension Behavior
+
+extension Behavior
 {
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
-    enum KeyboardAdjustmentMode : Equatable
+    public enum KeyboardAdjustmentMode : Equatable
     {
         /// The `contentInset` of the list is not adjusted when the keyboard appears or disappears.
         case none
@@ -75,8 +76,9 @@ public extension Behavior
         case adjustsWhenVisible
     }
     
+    
     /// How to react when the user taps on the status bar of the application.
-    enum ScrollsToTop : Equatable
+    public enum ScrollsToTop : Equatable
     {
         /// No action is performed when the user taps on the status bar.
         case disabled
@@ -85,8 +87,9 @@ public extension Behavior
         case enabled
     }
     
+    
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
-    enum SelectionMode : Equatable
+    public enum SelectionMode : Equatable
     {
         /// The list view does not allow any selections.
         case none
@@ -112,7 +115,8 @@ public extension Behavior
         case multiple
     }
     
-    struct Underflow : Equatable
+    
+    public struct Underflow : Equatable
     {
         public var alwaysBounce : Bool
         public var alignment : Alignment
