@@ -130,7 +130,11 @@ public struct ListAppearance : ListLayoutAppearance
         self.sizing = sizing
         self.layout = layout
     }
-    
+}
+
+
+extension ListAppearance
+{
     /// Sizing options for the list.
     public struct Sizing : Equatable
     {

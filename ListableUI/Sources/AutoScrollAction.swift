@@ -10,6 +10,7 @@ import Foundation
 
 /// Options for auto-scrolling to items when the list is updated.
 public enum AutoScrollAction {
+    
     /// The list never automatically scrolls.
     case none
 
@@ -71,10 +72,11 @@ public enum AutoScrollAction {
     }
 }
 
-public extension AutoScrollAction
+
+extension AutoScrollAction
 {
     /// Where to scroll as a result of an `AutoScrollAction`.
-    enum ScrollDestination : Equatable
+    public enum ScrollDestination : Equatable
     {
         /// Scroll to the first item in the list.
         case firstItem
@@ -94,8 +96,9 @@ public extension AutoScrollAction
         }
     }
     
+    
     /// Values used to configure the `scrollToItem(onInsertOf:)` action.
-    struct OnInsertedItem
+    public struct OnInsertedItem
     {
         /// The item in the list to scroll to when the `insertedIdentifier` is inserted.
         public var destination : ScrollDestination

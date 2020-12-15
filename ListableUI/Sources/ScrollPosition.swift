@@ -32,7 +32,11 @@ public struct ScrollPosition : Equatable
         self.ifAlreadyVisible = ifAlreadyVisible
         self.offset = offset
     }
-    
+}
+
+
+extension ScrollPosition
+{
     /// How the item should be positioned within the list.
     public enum Position : Equatable
     {
@@ -53,6 +57,7 @@ public struct ScrollPosition : Equatable
             }
         }
     }
+    
     
     /// What action should be taken if an item is already partially visible within a list.
     public enum IfAlreadyVisible : Equatable

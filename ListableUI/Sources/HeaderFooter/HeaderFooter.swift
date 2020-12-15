@@ -6,30 +6,9 @@
 //
 
 
-public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
-{
-    var sizing : Sizing { get set }
-    var layout : HeaderFooterLayout { get set }
-}
-
-public protocol AnyHeaderFooter_Internal
-{
-    var layout : HeaderFooterLayout { get }
-    
-    func apply(
-        to headerFooterView : UIView,
-        for reason : ApplyReason,
-        with info : ApplyHeaderFooterContentInfo
-    )
-    
-    func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
-    
-    func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
-}
-
-
 public typealias Header<Content:HeaderFooterContent> = HeaderFooter<Content>
 public typealias Footer<Content:HeaderFooterContent> = HeaderFooter<Content>
+
 
 public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
 {
@@ -121,17 +100,5 @@ extension HeaderFooter : SignpostLoggable
             identifier: self.debuggingIdentifier,
             instanceIdentifier: nil
         )
-    }
-}
-
-
-public struct HeaderFooterLayout : Equatable
-{
-    public var width : CustomWidth
-        
-    public init(
-        width : CustomWidth = .default
-    ) {
-        self.width = width
     }
 }

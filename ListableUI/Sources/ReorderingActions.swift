@@ -6,15 +6,6 @@
 //
 
 
-protocol ReorderingActionsDelegate : AnyObject
-{
-    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
-    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
-    func endInteractiveMovement()
-    func cancelInteractiveMovement()
-}
-
-
 public final class ReorderingActions
 {
     public private(set) var isMoving : Bool
@@ -61,4 +52,13 @@ public final class ReorderingActions
         
         self.delegate?.endInteractiveMovement()
     }
+}
+
+
+protocol ReorderingActionsDelegate : AnyObject
+{
+    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
+    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
+    func endInteractiveMovement()
+    func cancelInteractiveMovement()
 }

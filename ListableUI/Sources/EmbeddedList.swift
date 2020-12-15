@@ -42,32 +42,6 @@ public extension Item where Content == EmbeddedList
 }
 
 
-public extension EmbeddedList
-{
-    /// How you specify sizing for an embedded list. The surface area
-    /// of this `Sizing` enum is intentionally reduced from the standard `Sizing`
-    /// enum, because several of those values do not make sense for embedded lists.
-    enum Sizing : Equatable
-    {
-        /// Falls back to the default sizing of `Item`s in the list view.
-        case `default`
-        
-        /// A fixed size item with the given width or height.
-        ///
-        /// Note: Depending on the list layout type, only one of width or height may be used.
-        /// Eg, for list layouts, vertical lists only use the height, and horizontal lists only use the width.
-        case fixed(width: CGFloat = 0.0, height : CGFloat = 0.0)
-        
-        var toStandardSizing : ListableUI.Sizing {
-            switch self {
-            case .default: return .default
-            case .fixed(let w, let h): return .fixed(width: w, height: h)
-            }
-        }
-    }
-}
-
-
 /// Describes item content which can be used to embed a list inside another list,
 /// for example if you'd like to place a horizontally scrollable list within a vertically scrolling
 /// list, or vice versa.
@@ -132,5 +106,31 @@ public struct EmbeddedList : ItemContent
     public static func createReusableContentView(frame : CGRect) -> ListView
     {
         ListView(frame: frame)
+    }
+}
+
+
+extension EmbeddedList
+{
+    /// How you specify sizing for an embedded list. The surface area
+    /// of this `Sizing` enum is intentionally reduced from the standard `Sizing`
+    /// enum, because several of those values do not make sense for embedded lists.
+    public enum Sizing : Equatable
+    {
+        /// Falls back to the default sizing of `Item`s in the list view.
+        case `default`
+        
+        /// A fixed size item with the given width or height.
+        ///
+        /// Note: Depending on the list layout type, only one of width or height may be used.
+        /// Eg, for list layouts, vertical lists only use the height, and horizontal lists only use the width.
+        case fixed(width: CGFloat = 0.0, height : CGFloat = 0.0)
+        
+        var toStandardSizing : ListableUI.Sizing {
+            switch self {
+            case .default: return .default
+            case .fixed(let w, let h): return .fixed(width: w, height: h)
+            }
+        }
     }
 }
