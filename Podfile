@@ -19,10 +19,3 @@ target 'Demo' do
 	# Internal Pods
 	pod 'EnglishDictionary', :path => 'Internal Pods/EnglishDictionary/EnglishDictionary.podspec'
 end
-
-
-target 'Test Targets' do
-	# XCTest-Referencing Pods
-	pod 'Snapshot', :path => 'Internal Pods/Snapshot/Snapshot.podspec', :testspecs => ['Tests']
-end
-
