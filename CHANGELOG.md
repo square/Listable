@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [0.13.0] - 2020-12-14
+
+### Added
+
+- [Introduce `LocalizedItemCollator`](https://github.com/kyleve/Listable/pull/236), a list-friendly version of `UILocalizedIndexedCollation` which allows collating a list of content at one time.
+
 # [0.12.1] - 2020-12-01
 
 ### Fixed
@@ -27,6 +33,8 @@
 - [Changed behavior of `scrollInsets` (now `scrollIndicatorInsets`)](https://github.com/kyleve/Listable/pull/222), which now only affects the scroll indicator insets of the contained scroll view, and does **not** affect the content inset of the scroll view. Please using `padding`, etc, on the various list layout types instead to control visual padding.
 
 - [Ensure we respect both `frame` and `bounds` changes](https://github.com/kyleve/Listable/pull/227) to update the inner `CollectionView`'s frame. We previously used to only respect `frame` changes, but we should also respect `bounds` changes, as these are used by auto layout.
+
+- [Fix support for `autolayout` items and headers/footers](https://github.com/kyleve/Listable/pull/228) by ensuring we pass through the correct `systemLayoutSizeFitting` calls to content. Add assertions that measured sizing is within a reasonable bound.
 
 - [`Appearance.backgroundColor` now respects the current `UITraitCollection.userInterfaceStyle`](https://github.com/kyleve/Listable/pull/231). This means that the background color will default to `white` in light mode, and `black` in dark mode.
 
@@ -249,7 +257,10 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Blueprint/compare/0.11.0...HEAD
-[0.11.0]: https://github.com/square/Blueprint/compare/0.10.1...0.11.0
-[0.10.1]: https://github.com/square/Blueprint/compare/0.10.0...0.10.1
-[0.10.0]: https://github.com/square/Blueprint/compare/0.9.0...0.10.0
+[Main]: https://github.com/kyleve/Listable/compare/0.13.0...HEAD
+[0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
+[0.12.1]: https://github.com/kyleve/Listable/compare/0.12.0...0.12.1
+[0.12.0]: https://github.com/kyleve/Listable/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/kyleve/Listable/compare/0.10.1...0.11.0
+[0.10.1]: https://github.com/kyleve/Listable/compare/0.10.0...0.10.1
+[0.10.0]: https://github.com/kyleve/Listable/compare/0.9.0...0.10.0

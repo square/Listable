@@ -15,6 +15,7 @@ public extension LayoutDescription
     }
 }
 
+
 public struct GridAppearance : ListLayoutAppearance
 {
     public var sizing : Sizing
@@ -441,6 +442,7 @@ fileprivate extension GridAppearance.Sizing.ItemSize {
         return grouped
     }
 }
+
 
 fileprivate extension Array
 {

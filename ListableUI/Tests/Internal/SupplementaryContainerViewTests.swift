@@ -29,7 +29,7 @@ class SupplementaryContainerViewTests: XCTestCase
     func test_sizeThatFits()
     {
         let cache = ReusableViewCache()
-        let view = SupplementaryContainerView(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
+        let view = SupplementaryContainerView(frame:.zero)
         
         view.reuseCache = cache
         view.environment = .empty
@@ -38,7 +38,43 @@ class SupplementaryContainerViewTests: XCTestCase
         
         view.headerFooter = self.newHeaderFooter()
         
-        XCTAssertEqual(view.sizeThatFits(.zero), CGSize(width: 100, height: 100))
+        XCTAssertEqual(view.sizeThatFits(.zero), CGSize(width: 50, height: 40))
+    }
+    
+    func test_systemLayoutSizeFitting() {
+        let cache = ReusableViewCache()
+        let view = SupplementaryContainerView(frame:.zero)
+        
+        view.reuseCache = cache
+        view.environment = .empty
+        
+        XCTAssertEqual(view.sizeThatFits(.zero), .zero)
+        
+        view.headerFooter = self.newHeaderFooter()
+        
+        XCTAssertEqual(view.systemLayoutSizeFitting(.zero), CGSize(width: 51, height: 41))
+    }
+    
+    func test_systemLayoutSizeFitting_withHorizontalFittingPriority_verticalFittingPriority() {
+        let cache = ReusableViewCache()
+        let view = SupplementaryContainerView(frame:.zero)
+        
+        view.reuseCache = cache
+        view.environment = .empty
+        
+        XCTAssertEqual(view.sizeThatFits(.zero), .zero)
+        
+        view.headerFooter = self.newHeaderFooter()
+        
+        XCTAssertEqual(
+            view.systemLayoutSizeFitting(
+                .zero,
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .defaultLow
+            ),
+            
+            CGSize(width: 52, height: 42)
+        )
     }
     
     func test_headerFooter()
@@ -63,7 +99,7 @@ class SupplementaryContainerViewTests: XCTestCase
         let content = view.content!
         
         XCTAssertTrue(type(of: content) === HeaderFooterContentView<TestHeaderFooterContent>.self)
-        XCTAssertEqual(view.frame.size, CGSize(width: 100, height: 100))
+        XCTAssertEqual(view.frame.size, CGSize(width: 50, height: 40))
         
         // Unset the header footer, make sure the view is pushed back into the cache.
         
@@ -117,9 +153,20 @@ fileprivate struct TestHeaderFooterContent : HeaderFooterContent, Equatable
     
     final class View : UIView
     {
-        override func sizeThatFits(_ size: CGSize) -> CGSize
-        {
-            return CGSize(width: 100, height: 100)
+        override func sizeThatFits(_ size: CGSize) -> CGSize {
+            CGSize(width: 50, height: 40)
+        }
+        
+        override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
+            CGSize(width: 51, height: 41)
+        }
+        
+        override func systemLayoutSizeFitting(
+            _ targetSize: CGSize,
+            withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+            verticalFittingPriority: UILayoutPriority
+        ) -> CGSize {
+            CGSize(width: 52, height: 42)
         }
     }
 }

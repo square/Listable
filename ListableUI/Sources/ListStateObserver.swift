@@ -62,12 +62,6 @@ public struct ListStateObserver {
         self.onDidScroll.append(callback)
     }
     
-    /// Parameters available for `OnDidScroll` callbacks.
-    public struct DidScroll {
-        public let actions : ListActions
-        public let positionInfo : ListScrollPositionInfo
-    }
-    
     private(set) var onDidScroll : [OnDidScroll] = []
     
     //
@@ -86,14 +80,6 @@ public struct ListStateObserver {
         self.onContentUpdated.append(callback)
     }
     
-    /// Parameters available for `OnContentUpdated` callbacks.
-    public struct ContentUpdated {
-        public let hadChanges : Bool
-        
-        public let actions : ListActions
-        public let positionInfo : ListScrollPositionInfo
-    }
-    
     private(set) var onContentUpdated : [OnContentUpdated] = []
     
     //
@@ -107,15 +93,6 @@ public struct ListStateObserver {
     public mutating func onVisibilityChanged( _ callback : @escaping OnVisibilityChanged)
     {
         self.onVisibilityChanged.append(callback)
-    }
-    
-    /// Parameters available for `OnVisibilityChanged` callbacks.
-    public struct VisibilityChanged {
-        public let actions : ListActions
-        public let positionInfo : ListScrollPositionInfo
-        
-        public let displayed : [AnyItem]
-        public let endedDisplay : [AnyItem]
     }
     
     private(set) var onVisibilityChanged : [OnVisibilityChanged] = []
@@ -132,15 +109,6 @@ public struct ListStateObserver {
         self.onFrameChanged.append(callback)
     }
     
-    /// Parameters available for `OnFrameChanged` callbacks.
-    public struct FrameChanged {
-        public let actions : ListActions
-        public let positionInfo : ListScrollPositionInfo
-
-        public let old : CGRect
-        public let new : CGRect
-    }
-    
     private(set) var onFrameChanged : [OnFrameChanged] = []
     
     //
@@ -153,15 +121,6 @@ public struct ListStateObserver {
     public mutating func onSelectionChanged(_ callback : @escaping OnSelectionChanged)
     {
         self.onSelectionChanged.append(callback)
-    }
-    
-    /// Parameters available for `OnSelectionChanged` callbacks.
-    public struct SelectionChanged {
-        public let actions : ListActions
-        public let positionInfo : ListScrollPositionInfo
-
-        public let old : Set<AnyIdentifier>
-        public let new : Set<AnyIdentifier>
     }
     
     private(set) var onSelectionChanged : [OnSelectionChanged] = []
@@ -191,5 +150,54 @@ public struct ListStateObserver {
         }
         
         actions.listView = nil
+    }
+}
+
+
+extension ListStateObserver
+{
+    /// Parameters available for `OnDidScroll` callbacks.
+    public struct DidScroll {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+    }
+    
+    
+    /// Parameters available for `OnContentUpdated` callbacks.
+    public struct ContentUpdated {
+        public let hadChanges : Bool
+        
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+    }
+    
+    
+    /// Parameters available for `OnVisibilityChanged` callbacks.
+    public struct VisibilityChanged {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+        
+        public let displayed : [AnyItem]
+        public let endedDisplay : [AnyItem]
+    }
+    
+    
+    /// Parameters available for `OnFrameChanged` callbacks.
+    public struct FrameChanged {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+
+        public let old : CGRect
+        public let new : CGRect
+    }
+    
+    
+    /// Parameters available for `OnSelectionChanged` callbacks.
+    public struct SelectionChanged {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+
+        public let old : Set<AnyIdentifier>
+        public let new : Set<AnyIdentifier>
     }
 }

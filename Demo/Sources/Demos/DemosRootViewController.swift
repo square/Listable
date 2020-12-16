@@ -125,6 +125,13 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
+                DemoItem(text: "Localized Collation"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(LocalizedCollationViewController())
+            })
+            
+            section += Item(
                 DemoItem(text: "Item Content Coordinator"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
@@ -151,6 +158,13 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .tappable,
                 onSelect: { _ in
                     self.push(AccordionViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Using Autolayout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(AutoLayoutDemoViewController())
             })
         }
         

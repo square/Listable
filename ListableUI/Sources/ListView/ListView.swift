@@ -47,6 +47,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
             collectionView: self.collectionView
         )
         
+        self.liveCells = LiveCells()
+                
         self.visibleContent = VisibleContent()
 
         self.keyboardObserver = KeyboardObserver.shared
@@ -69,6 +71,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         self.dataSource.presentationState = self.storage.presentationState
         self.dataSource.environment = self.environment
+        self.dataSource.liveCells = self.liveCells
         
         self.delegate.view = self
         self.delegate.presentationState = self.storage.presentationState
@@ -119,6 +122,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     let collectionView : CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
+    let liveCells : LiveCells
     
     var collectionViewLayout : CollectionViewLayout {
         self.layoutManager.collectionViewLayout
@@ -494,7 +498,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 return
             }
 
-            let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.lst_adjustedContentInset.top
+            let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
             
             animation.perform(

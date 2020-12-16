@@ -1,0 +1,194 @@
+  # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
+  # https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
+
+
+name: Tests
+
+on:
+  pull_request:
+
+jobs:
+
+  ios_14:
+    name: iOS 14
+
+    runs-on: macos-10.15
+
+    steps:
+      - name: Switch To Xcode 12
+        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Run Tests
+        run: Scripts/run_ios14_tests.sh
+
+
+  ios_13:
+    name: iOS 13
+
+    runs-on: macos-10.15
+
+    steps:
+      - name: Switch To Xcode 12
+        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle Install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Install iOS 13.2
+        run: xcversion simulators --install="iOS 13.2"
+
+      - name: Run Tests
+        run: Scripts/run_ios13_tests.sh
+
+
+  ios_12:
+    name: iOS 12
+
+    runs-on: macos-10.15
+
+    steps:
+      - name: Switch To Xcode 12
+        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle Install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Install iOS 12.1
+        run: xcversion simulators --install="iOS 12.1"
+
+      - name: Run Tests
+        run: Scripts/run_ios12_tests.sh
+
+
+  ios_11:
+    name: iOS 11
+
+    runs-on: macos-10.15
+
+    steps:
+      - name: Switch To Xcode 12
+        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle Install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Install iOS 11.1
+        run: xcversion simulators --install="iOS 11.1"
+
+      - name: Run Tests
+        run: Scripts/run_ios11_tests.sh

@@ -66,7 +66,7 @@ public enum Sizing : Hashable
     /// The returned value is `ceil()`'d to round up to the next full integer value.
     func measure(with view : UIView, info : MeasureInfo) -> CGSize
     {
-        let value : CGSize = {
+        let size : CGSize = {
             switch self {
             case .default:
                 return info.defaultSize
@@ -80,30 +80,58 @@ public enum Sizing : Hashable
                 return constraint.clamp(size, with: info.defaultSize)
                 
             case .autolayout(let constraint):
-                let size : CGSize
                 
-                switch info.direction {
-                case .vertical:
-                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-                case .horizontal:
-                    size = view.systemLayoutSizeFitting(info.sizeConstraint, withHorizontalFittingPriority: .defaultLow, verticalFittingPriority: .required)
-                }
-                
+                let size : CGSize = {
+                    switch info.direction {
+                    case .vertical:
+                        return view.systemLayoutSizeFitting(
+                            CGSize(width: info.sizeConstraint.width, height:0),
+                            withHorizontalFittingPriority: .required,
+                            verticalFittingPriority: .fittingSizeLevel
+                        )
+                    case .horizontal:
+                        return view.systemLayoutSizeFitting(
+                            CGSize(width: 0, height:info.sizeConstraint.height),
+                            withHorizontalFittingPriority: .fittingSizeLevel,
+                            verticalFittingPriority: .required
+                        )
+                    }
+                }()
+
                 return constraint.clamp(size, with: info.defaultSize)
             }
         }()
         
+        self.validateMeasuredSize(size)
+        
         return CGSize(
-            width: ceil(value.width),
-            height: ceil(value.height)
+            width: ceil(size.width),
+            height: ceil(size.height)
+        )
+    }
+    
+    private func validateMeasuredSize(_ size : CGSize) {
+        
+        // Ensure we have a reasonably valid size for the cell.
+        
+        let reasonableMaxDimension : CGFloat = 10_000
+        
+        precondition(
+            size.height <= reasonableMaxDimension,
+            "The height of the view was outside of reasonable expectations, and this is likely programmer error. Height: \(size.height). Your sizeThatFits or autolayout constraints are likely incorrect."
+        )
+        
+        precondition(
+            size.width <= reasonableMaxDimension,
+            "The width of the view was outside of reasonable expectations, and this is likely programmer error. Width: \(size.width). Your sizeThatFits or autolayout constraints are likely incorrect."
         )
     }
 }
 
 
-public extension Sizing
+extension Sizing
 {
-    struct MeasureInfo
+    public struct MeasureInfo
     {
         var sizeConstraint : CGSize
         var defaultSize : CGSize
@@ -120,7 +148,7 @@ public extension Sizing
         }
     }
     
-    struct Constraint : Hashable
+    public struct Constraint : Hashable
     {
         public var width : Axis
         public var height : Axis

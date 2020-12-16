@@ -35,7 +35,7 @@ import Foundation
 /// In these cases, you can apply `ListProperties` to a `ListView` by calling one of the
 /// available `func configure(with:)` methods. Having a separate method which describes and provides
 /// all the properties to configure your `ListView` allows for a more singular flow of data through your application,
-/// and eases in testibility.
+/// and eases in testability.
 public struct ListProperties
 {
     //
