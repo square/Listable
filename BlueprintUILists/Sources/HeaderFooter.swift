@@ -5,7 +5,8 @@
 //  Created by Kyle Van Essen on 10/9/20.
 //
 
-import Listable
+import ListableUI
+import BlueprintUI
 
 
 extension HeaderFooter
