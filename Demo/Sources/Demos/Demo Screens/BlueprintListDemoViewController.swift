@@ -56,26 +56,28 @@ final class BlueprintListDemoViewController : UIViewController
                 guard self.showingData else {
                     return
                 }
-
+                
                 section += podcasts.map { podcast in
-                    PodcastRow(podcast: podcast)
+                    
+                    Item(podcast, identifier: \.name) { _, _ in
+                        PodcastElement(podcast: podcast)
+                    } background: { _, _ in
+                        Box(backgroundColor: .white, cornerStyle: .square)
+                    } selectedBackground: { _, _ in
+                        Box(backgroundColor: .lightGray, cornerStyle: .square)
+                    }
                 }
             }
         }
     }
 }
 
-struct PodcastRow : BlueprintItemContent, Equatable
-{
+
+fileprivate struct PodcastElement : ProxyElement {
+    
     var podcast : Podcast
     
-    var identifier: Identifier<PodcastRow> {
-        return .init(self.podcast.name)
-    }
-
-    func element(with info : ApplyItemContentInfo) -> Element
-    {
-        
+    var elementRepresentation: Element {
         Row { row in
             row.horizontalUnderflow = .growUniformly
             row.verticalAlignment = .fill
@@ -118,18 +120,8 @@ struct PodcastRow : BlueprintItemContent, Equatable
         }
         .inset(uniform: 10.0)
     }
-    
-    func backgroundElement(with state: ItemState) -> Element?
-    {
-        return Box(backgroundColor: .white, cornerStyle: .square)
-    }
-    
-    func selectedBackgroundElement(with state: ItemState) -> Element?
-    {
-        return Box(backgroundColor: .lightGray, cornerStyle: .square)
-    }
-
 }
+
 
 struct Podcast : Equatable
 {

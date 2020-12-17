@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Adds a way to create items or header/footers](https://github.com/kyleve/Listable/pull/206) for Blueprint lists without requiring the creation of a `BlueprintItemContent` or `BlueprintHeaderFooterContent`.
+
 - [Assert that `ItemContent` and `HeaderFooterContent` are value types](https://github.com/kyleve/Listable/pull/243). This is assumed by the framework and should be validated.
 
 ### Removed
