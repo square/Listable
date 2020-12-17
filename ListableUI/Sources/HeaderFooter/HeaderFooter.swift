@@ -45,6 +45,8 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         layout : HeaderFooterLayout = HeaderFooterLayout(),
         onTap : OnTap? = nil
     ) {
+        assertIsValueType(Content.self)
+        
         self.content = content
         
         self.sizing = sizing

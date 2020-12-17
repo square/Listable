@@ -70,6 +70,8 @@ public struct Item<Content:ItemContent> : AnyItem
         onMove : OnMove.Callback? = nil,
         onUpdate : OnUpdate.Callback? = nil
     ) {
+        assertIsValueType(Content.self)
+        
         self.content = content
                 
         if let sizing = sizing {

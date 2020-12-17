@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Assert that `ItemContent` and `HeaderFooterContent` are value types](https://github.com/kyleve/Listable/pull/243). This is assumed by the framework and should be validated.
+
 ### Removed
 
 ### Changed
