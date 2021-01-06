@@ -15,7 +15,7 @@ import BlueprintUICommonControls
 extension Appearance
 {
     static var demoAppearance = Appearance {
-        $0.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        $0.backgroundColor = Color(UIColor(white: 0.95, alpha: 1.0))
     }
 }
 

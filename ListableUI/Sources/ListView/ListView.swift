@@ -173,11 +173,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Appearance
         
         self.collectionViewLayout.appearance = self.appearance
-        self.backgroundColor = self.appearance.backgroundColor
-        
-        // Row Sizing
-        
-        self.storage.presentationState.resetAllCachedSizes()
+        self.backgroundColor = self.appearance.backgroundColor.value
         
         // Scroll View
         

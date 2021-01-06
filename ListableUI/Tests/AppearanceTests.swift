@@ -17,13 +17,21 @@ class AppearanceTests: XCTestCase
         let appearance = Appearance()
         
         if #available(iOS 13.0, *) {
-            XCTAssertEqual(appearance.backgroundColor.resolvedColor(with: .init(userInterfaceStyle: .dark)), .black)
-            XCTAssertEqual(appearance.backgroundColor.resolvedColor(with: .init(userInterfaceStyle: .light)), .white)
+            XCTAssertEqual(appearance.backgroundColor.value.resolvedColor(with: .init(userInterfaceStyle: .dark)), .black)
+            XCTAssertEqual(appearance.backgroundColor.value.resolvedColor(with: .init(userInterfaceStyle: .light)), .white)
         } else {
-            XCTAssertEqual(appearance.backgroundColor, .white)
+            XCTAssertEqual(appearance.backgroundColor.value, .white)
         }
         
         XCTAssertEqual(appearance.showsScrollIndicators, true)
+    }
+    
+    func test_equatable() {
+        // Verify that the default values pass equality.
+        // We use a dynamic color provider for the background color,
+        // so ensure equality still passes.
+        
+        XCTAssertEqual(Appearance(), Appearance())
     }
 }
 
