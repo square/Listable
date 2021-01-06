@@ -15,14 +15,14 @@
 public struct Appearance : Equatable
 {
     /// The background color for the list.
-    public var backgroundColor : UIColor
+    public var backgroundColor : Color
     
     /// If the list should display its scroll indicators.
     public var showsScrollIndicators : Bool
         
     /// Creates a new appearance object with the provided options.
     public init(
-        backgroundColor : UIColor = Self.defaultBackgroundColor,
+        backgroundColor : Color = Color(Self.defaultBackgroundColor),
         showsScrollIndicators : Bool = true,
         configure : (inout Self) -> () = { _ in }
     ) {
@@ -34,7 +34,7 @@ public struct Appearance : Equatable
     }
     
     /// The default background color for the `Appearance`.
-    public static var defaultBackgroundColor : UIColor {
+    public static let defaultBackgroundColor : UIColor = {
         if #available(iOS 13.0, *) {
             return UIColor { traits in
                 switch traits.userInterfaceStyle {
@@ -49,5 +49,5 @@ public struct Appearance : Equatable
         } else {
             return .white
         }
-    }
+    }()
 }
