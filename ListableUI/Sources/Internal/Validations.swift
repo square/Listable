@@ -11,10 +11,8 @@ import Foundation
 /// Validates that the provided object is not a class type.
 func assertIsValueType<Value>(_ valueType : Value.Type) {
         
-    #if !DEBUG
-    return
-    #endif
-        
+    #if DEBUG
+    
     precondition(
         valueType is AnyClass == false,
         {
@@ -27,4 +25,6 @@ func assertIsValueType<Value>(_ valueType : Value.Type) {
             """
         }()
     )
+    
+    #endif
 }
