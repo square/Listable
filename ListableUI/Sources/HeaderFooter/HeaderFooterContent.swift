@@ -42,7 +42,7 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 2) `PressedBackgroundView` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
 /// z-Index 1) `BackgroundView`
 ///
-public protocol HeaderFooterContent : Listable_Contents_Should_Be_Value_Types
+public protocol HeaderFooterContent
 {    
     //
     // MARK: Applying To Displayed View

@@ -37,7 +37,7 @@
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : Listable_Contents_Should_Be_Value_Types where Coordinator.ItemContentType == Self
+public protocol ItemContent where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification

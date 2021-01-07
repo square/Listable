@@ -2,7 +2,7 @@
 
 ### Fixed
 
-- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/245). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance. 
+- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/243). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance. 
 
 - [Fix a regression](https://github.com/kyleve/Listable/pull/246/) that caused content to be re-measured during each application of an `Appearance`, even if the new `Appearance` was equal.
 
