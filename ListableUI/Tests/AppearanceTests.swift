@@ -17,10 +17,10 @@ class AppearanceTests: XCTestCase
         let appearance = Appearance()
         
         if #available(iOS 13.0, *) {
-            XCTAssertEqual(appearance.backgroundColor.value.resolvedColor(with: .init(userInterfaceStyle: .dark)), .black)
-            XCTAssertEqual(appearance.backgroundColor.value.resolvedColor(with: .init(userInterfaceStyle: .light)), .white)
+            XCTAssertEqual(appearance.backgroundColor.resolvedColor(with: .init(userInterfaceStyle: .dark)), .black)
+            XCTAssertEqual(appearance.backgroundColor.resolvedColor(with: .init(userInterfaceStyle: .light)), .white)
         } else {
-            XCTAssertEqual(appearance.backgroundColor.value, .white)
+            XCTAssertEqual(appearance.backgroundColor, .white)
         }
         
         XCTAssertEqual(appearance.showsScrollIndicators, true)

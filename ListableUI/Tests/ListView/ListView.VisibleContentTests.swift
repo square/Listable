@@ -16,7 +16,7 @@ class ListView_VisibleContentTests : XCTestCase
         
         listView.configure { list in
             
-            list.appearance.backgroundColor = Color(.black)
+            list.appearance.backgroundColor = .black
 
             list.layout = .list {
                 $0.stickySectionHeaders = false

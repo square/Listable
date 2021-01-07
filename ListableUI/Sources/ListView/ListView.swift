@@ -173,7 +173,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Appearance
         
         self.collectionViewLayout.appearance = self.appearance
-        self.backgroundColor = self.appearance.backgroundColor.value
+        self.backgroundColor = self.appearance.backgroundColor
         
         // Scroll View
         

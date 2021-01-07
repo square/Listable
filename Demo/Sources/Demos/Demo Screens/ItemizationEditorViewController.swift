@@ -151,7 +151,7 @@ final class ItemizationEditorViewController : UIViewController
     }
     
     var listAppearance : Appearance {
-        Appearance(backgroundColor: Color(.white))
+        Appearance(backgroundColor: .white)
     }
     
     var listLayout : LayoutDescription {
