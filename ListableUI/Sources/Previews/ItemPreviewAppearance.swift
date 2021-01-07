@@ -29,7 +29,7 @@ public struct ItemPreviewAppearance : Equatable
     
     func configure(list properties : inout ListProperties)
     {
-        properties.appearance.backgroundColor = Color(self.backgroundColor)
+        properties.appearance.backgroundColor = self.backgroundColor
         
         properties.layout = .list {
             $0.layout.padding = UIEdgeInsets(top: self.padding, left: self.padding, bottom: self.padding, right: self.padding)
