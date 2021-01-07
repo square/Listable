@@ -187,7 +187,7 @@ public enum Sizing : Equatable
 
 Listable integrates closely with [Blueprint](https://github.com/square/blueprint/), Square's framework for declarative UI construction and management (if you've used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.
 
-All you need to do is take a dependency on the `BlueprintLists` pod, and then `import BlueprintLists` to begin using Blueprint integration.
+All you need to do is take a dependency on the `BlueprintUILists` pod, and then `import BlueprintUILists` to begin using Blueprint integration.
 
 In this example, we see how to declare a `List` within a Blueprint element hierarchy.
 
@@ -558,7 +558,7 @@ public struct Section
 
 ## Integration With Blueprint
 
-If you're using Blueprint integration via the  `BlueprintLists` module, you will also interact with the following types.
+If you're using Blueprint integration via the  `BlueprintUILists` module, you will also interact with the following types.
 
 ### List
 When using `ListView` directly, you'd use `list.configure { list in ... }` to set the content of a list.
@@ -657,18 +657,18 @@ struct MyHeader : BlueprintHeaderFooterContent, Equatable
 
 ## Getting Started
 
-Listable can be consumed via CocoaPods. Add one or both of these lines to your `Podfile` in order to consume Listable and BlueprintLists (the Blueprint wrapper for Listable).
+Listable is published on CocoaPods. You can add a dependency on Listable or it's Blueprint wrapper with the following in your Podspec: 
 
 ```
-  pod 'BlueprintLists', git: 'ssh://git@github.com:kyleve/Listable.git'
-  pod 'Listable', git: 'ssh://git@github.com:kyleve/Listable.git'
+s.dependency 'ListableUI'
+s.dependency 'BlueprintUILists'
 ```
 
-You can then add the following to each `podspec` which should depend on Listable.
+If you want to depend on bleeding-edge changes, you can add the pods to your Podfile via the git repo like so:
 
 ```
-s.dependency 'Listable'
-s.dependency 'BlueprintLists'
+  pod 'BlueprintUILists', git: 'ssh://git@github.com:kyleve/Listable.git'
+  pod 'ListableUI', git: 'ssh://git@github.com:kyleve/Listable.git'
 ```
 
 ## Demo Project

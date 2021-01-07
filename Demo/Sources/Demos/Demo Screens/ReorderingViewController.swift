@@ -8,8 +8,8 @@
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -100,8 +100,8 @@ struct ReorderItem : BlueprintItemContent, Equatable
         
         box.borderStyle = .solid(color: .white(0.9), width: 2.0)
         
-        return ReorderGesture(
-            reordering: info.reordering,
+        return ListReorderGesture(
+            actions: info.reordering,
             wrapping: box
         )
     }

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -81,7 +81,7 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 }
 
 
-struct DemoItem : BlueprintItemContent, Equatable
+struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
     
@@ -98,6 +98,7 @@ struct DemoItem : BlueprintItemContent, Equatable
             $0.color = info.state.isActive ? .white : .darkGray
         }
         .inset(horizontal: 15.0, vertical: 10.0)
+        .accessibility(label: self.text, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
@@ -116,6 +117,10 @@ struct DemoItem : BlueprintItemContent, Equatable
             cornerStyle: .rounded(radius: 8.0),
             shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
+    }
+    
+    var collationString: String {
+        self.text
     }
 }
 

@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import Listable
+import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
-import BlueprintLists
+import BlueprintUILists
 
 
 final class HorizontalLayoutViewController : UIViewController
@@ -39,7 +39,7 @@ final class HorizontalLayoutViewController : UIViewController
                     sizing: .fixed(height: 200)
                 )
                 
-                section += Item.list(identifier: "carousel", sizing: .fixed(height: 200.0)) { horizontal in
+                section += Item.list("carousel", sizing: .fixed(height: 200.0)) { horizontal in
                     
                     horizontal.layout = .paged {
                         $0.direction = .horizontal

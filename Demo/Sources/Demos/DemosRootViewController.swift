@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Listable
+import ListableUI
 
 
 public final class DemosRootViewController : ListViewController
@@ -83,10 +83,17 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
-                DemoItem(text: "Keyboard Testing"),
+                DemoItem(text: "Keyboard Inset (Full Screen List)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(KeyboardTestingViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Keyboard Inset (Appears Later)"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(ListAppearsAfterKeyboardViewController())
             })
             
             section += Item(
@@ -94,6 +101,13 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(ReorderingViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Multi-Select"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(MultiSelectViewController())
             })
             
             section += Item(
@@ -108,6 +122,13 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .selectable(),
                 onSelect : { _ in
                     self.push(SwipeActionsViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Localized Collation"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(LocalizedCollationViewController())
             })
             
             section += Item(
@@ -137,6 +158,13 @@ public final class DemosRootViewController : ListViewController
                 selectionStyle: .tappable,
                 onSelect: { _ in
                     self.push(AccordionViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Using Autolayout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(AutoLayoutDemoViewController())
             })
         }
         

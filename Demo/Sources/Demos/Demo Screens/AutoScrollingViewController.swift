@@ -8,8 +8,8 @@
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -57,6 +57,7 @@ final class AutoScrollingViewController : UIViewController
     }
 
     private func updateItems(autoScrollIfVisible lastItem : AnyIdentifier? = nil) {
+        
         self.list.configure { list in
             list.appearance = .demoAppearance
             list.layout = .demoLayout
@@ -66,14 +67,23 @@ final class AutoScrollingViewController : UIViewController
 
             if let last = items.last {
                 
-                list.autoScrollAction = .scrollTo(.lastItem, onInsertOf: last.identifier, position: .init(position: .bottom), animated: true) { state in
-                    // Only scroll to the bottom if the bottom item is already visible.
-                    if let identifier = lastItem {
-                        return state.visibleItems.contains(identifier)
-                    } else {
-                        return false
+                list.autoScrollAction = .scrollTo(
+                    .lastItem,
+                    onInsertOf: last.identifier,
+                    position: .init(position: .bottom),
+                    animation: .default,
+                    shouldPerform: { info in
+                        // Only scroll to the bottom if the bottom item is already visible.
+                        if let identifier = lastItem {
+                            return info.visibleItems.contains(identifier)
+                        } else {
+                            return false
+                        }
+                    },
+                    didPerform: { info in
+                        print("Did scroll: \(info)")
                     }
-                }
+                )
             }
 
             let itemization = [
