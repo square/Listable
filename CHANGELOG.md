@@ -12,7 +12,7 @@
 
 # Past Releases
 
-# [0.14.0] - 2020-01-06
+# [0.14.1] - 2020-01-06
 
 ### Fixed
 
@@ -23,8 +23,6 @@
 ### Added
 
 - [Adds a way to create items or header/footers](https://github.com/kyleve/Listable/pull/206) for Blueprint lists without requiring the creation of a `BlueprintItemContent` or `BlueprintHeaderFooterContent`.
-
-- [Assert that `ItemContent` and `HeaderFooterContent` are value types](https://github.com/kyleve/Listable/pull/243). This is assumed by the framework and should be validated.
 
 # [0.13.0] - 2020-12-14
 
@@ -269,7 +267,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.13.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.14.1...HEAD
+[0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
 [0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
 [0.12.1]: https://github.com/kyleve/Listable/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/kyleve/Listable/compare/0.11.0...0.12.0
