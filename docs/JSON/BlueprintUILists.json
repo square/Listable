@@ -5,11 +5,11 @@
     "key.offset" : 0,
     "key.substructure" : [
       {
-        "key.annotated_decl" : "<Declaration>protocol Element<\/Declaration>",
+        "key.annotated_decl" : "<Declaration>protocol Element : <Type usr=\"s:11BlueprintUI01_A31_Elements_Should_Be_Value_TypesP\">_Blueprint_Elements_Should_Be_Value_Types<\/Type><\/Declaration>",
         "key.bodylength" : 198,
         "key.bodyoffset" : 125,
         "key.doc.column" : 17,
-        "key.doc.declaration" : "protocol Element",
+        "key.doc.declaration" : "protocol Element : BlueprintUI._Blueprint_Elements_Should_Be_Value_Types",
         "key.doc.discussion" : [
           {
             "Para" : "The ultimate purpose of an element is to provide visual content. This can be done in two ways:"
@@ -25,12 +25,12 @@
           }
         ],
         "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift",
-        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift\" line=\"41\" column=\"17\"><Name>Element<\/Name><USR>s:11BlueprintUI7ElementP<\/USR><Declaration>protocol Element<\/Declaration><CommentParts><Abstract><Para>Conforming types represent a rectangular content area in a two-dimensional layout space.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>The ultimate purpose of an element is to provide visual content. This can be done in two ways:<\/Para><List-Bullet><Item><Para>By providing a view description (<codeVoice>ViewDescription<\/codeVoice>).<\/Para><\/Item><Item><Para>By providing child elements that will be displayed recursively within the local coordinate space.<\/Para><\/Item><\/List-Bullet><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>A custom element might look something like this:<\/Para><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[struct MyElement: Element {]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var backgroundColor: UIColor = .red]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Returns a single child element.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var content: ElementContent {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return ElementContent(child: Label(text: \"😂\"))]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Providing a view description means that this element will be]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ backed by a UIView instance when displayed in a `BlueprintView`.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return UIView.describe { config in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[            config.bind(backgroundColor, to: \\.backgrouncColor)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        }]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Class>",
+        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift\" line=\"41\" column=\"17\"><Name>Element<\/Name><USR>s:11BlueprintUI7ElementP<\/USR><Declaration>protocol Element : BlueprintUI._Blueprint_Elements_Should_Be_Value_Types<\/Declaration><CommentParts><Abstract><Para>Conforming types represent a rectangular content area in a two-dimensional layout space.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>The ultimate purpose of an element is to provide visual content. This can be done in two ways:<\/Para><List-Bullet><Item><Para>By providing a view description (<codeVoice>ViewDescription<\/codeVoice>).<\/Para><\/Item><Item><Para>By providing child elements that will be displayed recursively within the local coordinate space.<\/Para><\/Item><\/List-Bullet><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>A custom element might look something like this:<\/Para><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[struct MyElement: Element {]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var backgroundColor: UIColor = .red]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Returns a single child element.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var content: ElementContent {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return ElementContent(child: Label(text: \"😂\"))]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Providing a view description means that this element will be]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ backed by a UIView instance when displayed in a `BlueprintView`.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return UIView.describe { config in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[            config.bind(backgroundColor, to: \\.backgrouncColor)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        }]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Class>",
         "key.doc.line" : 41,
         "key.doc.name" : "Element",
         "key.doc.type" : "Class",
         "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift",
-        "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>Element<\/decl.name><\/decl.protocol>",
+        "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>Element<\/decl.name> : <ref.protocol usr=\"s:11BlueprintUI01_A31_Elements_Should_Be_Value_TypesP\">_Blueprint_Elements_Should_Be_Value_Types<\/ref.protocol><\/decl.protocol>",
         "key.kind" : "source.lang.swift.decl.extension",
         "key.length" : 218,
         "key.modulename" : "BlueprintUI",
@@ -1601,6 +1601,1257 @@
     ]
   }
 }, {
+  "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift" : {
+    "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
+    "key.length" : 5198,
+    "key.offset" : 0,
+    "key.substructure" : [
+      {
+        "key.annotated_decl" : "<Declaration>struct HeaderFooter&lt;Content&gt; : <Type usr=\"s:10ListableUI15AnyHeaderFooterP\">AnyHeaderFooter<\/Type> where Content : <Type usr=\"s:10ListableUI19HeaderFooterContentP\">HeaderFooterContent<\/Type><\/Declaration>",
+        "key.bodylength" : 3998,
+        "key.bodyoffset" : 159,
+        "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/HeaderFooter\/HeaderFooter.swift",
+        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>HeaderFooter<\/decl.name>&lt;<decl.generic_type_param usr=\"s:10ListableUI12HeaderFooterV7Contentxmfp\"><decl.generic_type_param.name>Content<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt; : <ref.protocol usr=\"s:10ListableUI15AnyHeaderFooterP\">AnyHeaderFooter<\/ref.protocol> <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content : <ref.protocol usr=\"s:10ListableUI19HeaderFooterContentP\">HeaderFooterContent<\/ref.protocol><\/decl.generic_type_requirement><\/decl.struct>",
+        "key.kind" : "source.lang.swift.decl.extension",
+        "key.length" : 4023,
+        "key.modulename" : "ListableUI",
+        "key.name" : "HeaderFooter",
+        "key.namelength" : 12,
+        "key.nameoffset" : 145,
+        "key.offset" : 135,
+        "key.parsed_declaration" : "extension HeaderFooter",
+        "key.parsed_scope.end" : 119,
+        "key.parsed_scope.start" : 12,
+        "key.substructure" : [
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public init&lt;Represented&gt;(_ representing: <Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>, isEquivalent: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:Sb\">Bool<\/Type>, element: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>, background: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _ in nil }, pressedBackground: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _ in nil }, configure: (inout <Type usr=\"s:10ListableUI12HeaderFooterV\">HeaderFooter<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/Type>&lt;<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/Type>&gt;&gt;) -&gt; () = { _ in }) where Content == <Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/Type>&lt;Represented&gt;<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 1260
+              }
+            ],
+            "key.bodylength" : 387,
+            "key.bodyoffset" : 1821,
+            "key.doc.column" : 12,
+            "key.doc.comment" : "\nProvides a way to create a `HeaderFooter` for your Blueprint elements without\nrequiring the creation of a new `BlueprintHeaderFooterContent` struct.\n\nMost arguments on this method are not required – you must only\nprovide an input and an element provider.\n\nNote\n----\nThis initializer is helpful if you have to nest an existing element that needs to be used in\na single place, without needing to define an entirely new type.\n\nIf your header or footer is to be used in more than one place, it is recommended that you\ncreate a `BlueprintHeaderFooterContent` struct to share logic to avoid duplicate code.\n\nExample\n-------\n```\nsection.header = HeaderFooter(album) { lhs, rhs in\n    lhs.value != rhs.value\n}, element: { album in\n    AlbumElement(...)\n}, background: { album in\n    ...\n}, pressedBackground: album in\n    ...\n}, configure: { header in\n    ...\n}\n```",
+            "key.doc.declaration" : "public init<Represented>(_ representing: Represented, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented) -> Element, background: @escaping (Represented) -> Element? = { _ in nil }, pressedBackground: @escaping (Represented) -> Element? = { _ in nil }, configure: (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> () = { _ in }) where Content == BlueprintUILists.BlueprintHeaderFooterContentWrapper<Represented>",
+            "key.doc.discussion" : [
+              {
+                "Para" : "Most arguments on this method are not required – you must only provide an input and an element provider."
+              },
+              {
+                "Para" : "This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type."
+              },
+              {
+                "Para" : "If your header or footer is to be used in more than one place, it is recommended that you create a `BlueprintHeaderFooterContent` struct to share logic to avoid duplicate code."
+              },
+              {
+                "CodeListing" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift\" line=\"44\" column=\"12\"><Name>init(_:isEquivalent:element:background:pressedBackground:configure:)<\/Name><USR>s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc<\/USR><Declaration>public init&lt;Represented&gt;(_ representing: Represented, isEquivalent: @escaping (Represented, Represented) -&gt; Bool, element: @escaping (Represented) -&gt; Element, background: @escaping (Represented) -&gt; Element? = { _ in nil }, pressedBackground: @escaping (Represented) -&gt; Element? = { _ in nil }, configure: (inout HeaderFooter&lt;BlueprintHeaderFooterContentWrapper&lt;Represented&gt;&gt;) -&gt; () = { _ in }) where Content == BlueprintUILists.BlueprintHeaderFooterContentWrapper&lt;Represented&gt;<\/Declaration><CommentParts><Abstract><Para>Provides a way to create a <codeVoice>HeaderFooter<\/codeVoice> for your Blueprint elements without requiring the creation of a new <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> struct.<\/Para><\/Abstract><Discussion><Para>Most arguments on this method are not required – you must only provide an input and an element provider.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type.<\/Para><Para>If your header or footer is to be used in more than one place, it is recommended that you create a <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> struct to share logic to avoid duplicate code.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Example<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[section.header = HeaderFooter(album) { lhs, rhs in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    lhs.value != rhs.value]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, element: { album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    AlbumElement(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, background: { album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, pressedBackground: album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, configure: { header in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 44,
+            "key.doc.name" : "init(_:isEquivalent:element:background:pressedBackground:configure:)",
+            "key.doc.type" : "Function",
+            "key.doclength" : 1092,
+            "key.docoffset" : 164,
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>&lt;<decl.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt;(<decl.var.parameter><decl.var.parameter.argument_label>_<\/decl.var.parameter.argument_label> <decl.var.parameter.name>representing<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>isEquivalent<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>element<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>background<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>pressedBackground<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type>(<decl.var.parameter><decl.var.parameter.type><syntaxtype.keyword>inout<\/syntaxtype.keyword> <ref.struct usr=\"s:10ListableUI12HeaderFooterV\">HeaderFooter<\/ref.struct>&lt;<ref.struct usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>&gt;&gt;<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><tuple>()<\/tuple><\/decl.function.returntype><\/decl.var.parameter.type> = { _ in }<\/decl.var.parameter>) <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content == <ref.struct usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/ref.struct>&lt;Represented&gt;<\/decl.generic_type_requirement><\/decl.function.constructor>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 942,
+            "key.name" : "init(_:isEquivalent:element:background:pressedBackground:configure:)",
+            "key.namelength" : 482,
+            "key.nameoffset" : 1267,
+            "key.offset" : 1267,
+            "key.parsed_declaration" : "public init<Represented>(\n    _ representing : Represented,\n    \n    isEquivalent : @escaping (Represented, Represented) -> Bool,\n    \n    element : @escaping (Represented) -> Element,\n    background : @escaping (Represented) -> Element? = { _ in nil },\n    pressedBackground : @escaping (Represented) -> Element? = { _ in nil },\n    \n    configure : (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> () = { _ in }\n    \n) where Content == BlueprintHeaderFooterContentWrapper<Represented>",
+            "key.parsed_scope.end" : 67,
+            "key.parsed_scope.start" : 44,
+            "key.related_decls" : [
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc\">init(_:element:background:pressedBackground:configure:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV_5buildACyxGx_yAEzXEtcfc\">init(_:build:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV_6sizing6layout5onTapACyxGx_AA6SizingOAA0cD6LayoutVyxcSgtcfc\">init(_:sizing:layout:onTap:)<\/RelatedName>"
+              }
+            ],
+            "key.substructure" : [
+              {
+                "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 11,
+                "key.name" : "Represented",
+                "key.namelength" : 11,
+                "key.nameoffset" : 1272,
+                "key.offset" : 1272,
+                "key.parsed_declaration" : "public init<Represented",
+                "key.parsed_scope.end" : 44,
+                "key.parsed_scope.start" : 44,
+                "key.typename" : "Represented.Type",
+                "key.typeusr" : "$sqd__mD",
+                "key.usr" : "s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc11RepresentedL_qd__mfp"
+              }
+            ],
+            "key.typename" : "<Content, Represented where Content == BlueprintHeaderFooterContentWrapper<Represented>> (HeaderFooter<Content>.Type) -> (Represented, @escaping (Represented, Represented) -> Bool, @escaping (Represented) -> Element, @escaping (Represented) -> Element?, @escaping (Represented) -> Element?, (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> ()) -> HeaderFooter<Content>",
+            "key.typeusr" : "$s_12isEquivalent7element10background17pressedBackground9configure10ListableUI12HeaderFooterVy16BlueprintUILists0ljK14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0lI07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszluD",
+            "key.usr" : "s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public init&lt;Represented&gt;(_ representing: <Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/Type>, element: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>, background: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _ in nil }, pressedBackground: @escaping (<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _ in nil }, configure: (inout <Type usr=\"s:10ListableUI12HeaderFooterV\">HeaderFooter<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/Type>&lt;<Type usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/Type>&gt;&gt;) -&gt; () = { _ in }) where Content == <Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/Type>&lt;Represented&gt;, Represented : <Type usr=\"s:SQ\">Equatable<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 3246
+              }
+            ],
+            "key.bodylength" : 387,
+            "key.bodyoffset" : 3768,
+            "key.doc.column" : 12,
+            "key.doc.comment" : "\nProvides a way to create a `HeaderFooter` for your Blueprint elements without\nrequiring the creation of a new `BlueprintHeaderFooterContent` struct.\n\nMost arguments on this method are not required – you must only\nprovide an input and an element provider.\n\nNote\n----\nThis initializer is helpful if you have to nest an existing element that needs to be used in\na single place, without needing to define an entirely new type.\n\nIf your header or footer is to be used in more than one place, it is recommended that you\ncreate a `BlueprintHeaderFooterContent` struct to share logic to avoid duplicate code.\n\nExample\n-------\n```\nsection.header = HeaderFooter(album) { album in\n    AlbumElement(...)\n}, background: { album in\n    ...\n}, pressedBackground: album in\n    ...\n}, configure: { header in\n    ...\n}\n```",
+            "key.doc.declaration" : "public init<Represented>(_ representing: Represented, element: @escaping (Represented) -> Element, background: @escaping (Represented) -> Element? = { _ in nil }, pressedBackground: @escaping (Represented) -> Element? = { _ in nil }, configure: (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> () = { _ in }) where Content == BlueprintUILists.BlueprintHeaderFooterContentWrapper<Represented>, Represented : Equatable",
+            "key.doc.discussion" : [
+              {
+                "Para" : "Most arguments on this method are not required – you must only provide an input and an element provider."
+              },
+              {
+                "Para" : "This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type."
+              },
+              {
+                "Para" : "If your header or footer is to be used in more than one place, it is recommended that you create a `BlueprintHeaderFooterContent` struct to share logic to avoid duplicate code."
+              },
+              {
+                "CodeListing" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift\" line=\"97\" column=\"12\"><Name>init(_:element:background:pressedBackground:configure:)<\/Name><USR>s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc<\/USR><Declaration>public init&lt;Represented&gt;(_ representing: Represented, element: @escaping (Represented) -&gt; Element, background: @escaping (Represented) -&gt; Element? = { _ in nil }, pressedBackground: @escaping (Represented) -&gt; Element? = { _ in nil }, configure: (inout HeaderFooter&lt;BlueprintHeaderFooterContentWrapper&lt;Represented&gt;&gt;) -&gt; () = { _ in }) where Content == BlueprintUILists.BlueprintHeaderFooterContentWrapper&lt;Represented&gt;, Represented : Equatable<\/Declaration><CommentParts><Abstract><Para>Provides a way to create a <codeVoice>HeaderFooter<\/codeVoice> for your Blueprint elements without requiring the creation of a new <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> struct.<\/Para><\/Abstract><Discussion><Para>Most arguments on this method are not required – you must only provide an input and an element provider.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type.<\/Para><Para>If your header or footer is to be used in more than one place, it is recommended that you create a <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> struct to share logic to avoid duplicate code.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Example<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[section.header = HeaderFooter(album) { album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    AlbumElement(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, background: { album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, pressedBackground: album in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}, configure: { header in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    ...]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 97,
+            "key.doc.name" : "init(_:element:background:pressedBackground:configure:)",
+            "key.doc.type" : "Function",
+            "key.doclength" : 1023,
+            "key.docoffset" : 2219,
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>&lt;<decl.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt;(<decl.var.parameter><decl.var.parameter.argument_label>_<\/decl.var.parameter.argument_label> <decl.var.parameter.name>representing<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>element<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>background<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>pressedBackground<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type>(<decl.var.parameter><decl.var.parameter.type><syntaxtype.keyword>inout<\/syntaxtype.keyword> <ref.struct usr=\"s:10ListableUI12HeaderFooterV\">HeaderFooter<\/ref.struct>&lt;<ref.struct usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>&gt;&gt;<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><tuple>()<\/tuple><\/decl.function.returntype><\/decl.var.parameter.type> = { _ in }<\/decl.var.parameter>) <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content == <ref.struct usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV\">BlueprintHeaderFooterContentWrapper<\/ref.struct>&lt;Represented&gt;<\/decl.generic_type_requirement>, <decl.generic_type_requirement>Represented : <ref.protocol usr=\"s:SQ\">Equatable<\/ref.protocol><\/decl.generic_type_requirement><\/decl.function.constructor>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 903,
+            "key.name" : "init(_:element:background:pressedBackground:configure:)",
+            "key.namelength" : 420,
+            "key.nameoffset" : 3253,
+            "key.offset" : 3253,
+            "key.parsed_declaration" : "public init<Represented>(\n    _ representing : Represented,\n                    \n    element : @escaping (Represented) -> Element,\n    background : @escaping (Represented) -> Element? = { _ in nil },\n    pressedBackground : @escaping (Represented) -> Element? = { _ in nil },\n    \n    configure : (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> () = { _ in }\n    \n) where Content == BlueprintHeaderFooterContentWrapper<Represented>, Represented:Equatable",
+            "key.parsed_scope.end" : 118,
+            "key.parsed_scope.start" : 97,
+            "key.related_decls" : [
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV16BlueprintUIListsE_12isEquivalent7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___Sbqd___qd__tc0eB07Element_pqd__cAnO_pSgqd__cAPqd__cyAMzXEtcALRszlufc\">init(_:isEquivalent:element:background:pressedBackground:configure:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV_5buildACyxGx_yAEzXEtcfc\">init(_:build:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI12HeaderFooterV_6sizing6layout5onTapACyxGx_AA6SizingOAA0cD6LayoutVyxcSgtcfc\">init(_:sizing:layout:onTap:)<\/RelatedName>"
+              }
+            ],
+            "key.substructure" : [
+              {
+                "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 11,
+                "key.name" : "Represented",
+                "key.namelength" : 11,
+                "key.nameoffset" : 3258,
+                "key.offset" : 3258,
+                "key.parsed_declaration" : "public init<Represented",
+                "key.parsed_scope.end" : 97,
+                "key.parsed_scope.start" : 97,
+                "key.typename" : "Represented.Type",
+                "key.typeusr" : "$sqd__mD",
+                "key.usr" : "s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc11RepresentedL_qd__mfp"
+              }
+            ],
+            "key.typename" : "<Content, Represented where Content == BlueprintHeaderFooterContentWrapper<Represented>, Represented : Equatable> (HeaderFooter<Content>.Type) -> (Represented, @escaping (Represented) -> Element, @escaping (Represented) -> Element?, @escaping (Represented) -> Element?, (inout HeaderFooter<BlueprintHeaderFooterContentWrapper<Represented>>) -> ()) -> HeaderFooter<Content>",
+            "key.typeusr" : "$s_7element10background17pressedBackground9configure10ListableUI12HeaderFooterVy16BlueprintUILists0jhI14ContentWrapperVyqd__GGqd___0jG07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__luD",
+            "key.usr" : "s:10ListableUI12HeaderFooterV16BlueprintUIListsE_7element10background17pressedBackground9configureACyAD0ecD14ContentWrapperVyqd__GGqd___0eB07Element_pqd__cAmN_pSgqd__cAOqd__cyALzXEtcAKRszSQRd__lufc"
+          }
+        ],
+        "key.typename" : "HeaderFooter<Content>.Type",
+        "key.typeusr" : "$s10ListableUI12HeaderFooterVyxGmD",
+        "key.usr" : "s:10ListableUI12HeaderFooterV"
+      },
+      {
+        "key.accessibility" : "source.lang.swift.accessibility.public",
+        "key.annotated_decl" : "<Declaration>public struct BlueprintHeaderFooterContentWrapper&lt;Represented&gt; : <Type usr=\"s:16BlueprintUILists0A19HeaderFooterContentP\">BlueprintHeaderFooterContent<\/Type><\/Declaration>",
+        "key.attributes" : [
+          {
+            "key.attribute" : "source.decl.attribute.public",
+            "key.length" : 6,
+            "key.offset" : 4360
+          }
+        ],
+        "key.bodylength" : 741,
+        "key.bodyoffset" : 4455,
+        "key.doc.column" : 15,
+        "key.doc.comment" : "The `BlueprintHeaderFooterContent` type that is used to provide\na lightweight way to present an `Element`, without needing to provide an entirely\nnew `BlueprintHeaderFooterContent` type.",
+        "key.doc.declaration" : "public struct BlueprintHeaderFooterContentWrapper<Represented> : BlueprintHeaderFooterContent",
+        "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift\" line=\"125\" column=\"15\"><Name>BlueprintHeaderFooterContentWrapper<\/Name><USR>s:16BlueprintUILists0A26HeaderFooterContentWrapperV<\/USR><Declaration>public struct BlueprintHeaderFooterContentWrapper&lt;Represented&gt; : BlueprintHeaderFooterContent<\/Declaration><CommentParts><Abstract><Para>The <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> type that is used to provide a lightweight way to present an <codeVoice>Element<\/codeVoice>, without needing to provide an entirely new <codeVoice>BlueprintHeaderFooterContent<\/codeVoice> type.<\/Para><\/Abstract><\/CommentParts><\/Class>",
+        "key.doc.line" : 125,
+        "key.doc.name" : "BlueprintHeaderFooterContentWrapper",
+        "key.doc.type" : "Class",
+        "key.doclength" : 199,
+        "key.docoffset" : 4161,
+        "key.elements" : [
+          {
+            "key.kind" : "source.lang.swift.structure.elem.typeref",
+            "key.length" : 28,
+            "key.offset" : 4425
+          }
+        ],
+        "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>BlueprintHeaderFooterContentWrapper<\/decl.name>&lt;<decl.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt; : <ref.protocol usr=\"s:16BlueprintUILists0A19HeaderFooterContentP\">BlueprintHeaderFooterContent<\/ref.protocol><\/decl.struct>",
+        "key.inheritedtypes" : [
+          {
+            "key.name" : "BlueprintHeaderFooterContent"
+          }
+        ],
+        "key.kind" : "source.lang.swift.decl.struct",
+        "key.length" : 830,
+        "key.name" : "BlueprintHeaderFooterContentWrapper",
+        "key.namelength" : 35,
+        "key.nameoffset" : 4374,
+        "key.offset" : 4367,
+        "key.parsed_declaration" : "public struct BlueprintHeaderFooterContentWrapper<Represented> : BlueprintHeaderFooterContent",
+        "key.parsed_scope.end" : 149,
+        "key.parsed_scope.start" : 125,
+        "key.substructure" : [
+          {
+            "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+            "key.kind" : "source.lang.swift.decl.generic_type_param",
+            "key.length" : 11,
+            "key.name" : "Represented",
+            "key.namelength" : 11,
+            "key.nameoffset" : 4410,
+            "key.offset" : 4410,
+            "key.parsed_declaration" : "public struct BlueprintHeaderFooterContentWrapper<Represented",
+            "key.parsed_scope.end" : 125,
+            "key.parsed_scope.start" : 125,
+            "key.typename" : "Represented.Type",
+            "key.typeusr" : "$sxmD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public let representing: <Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 4460
+              }
+            ],
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>representing<\/decl.name>: <decl.var.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 30,
+            "key.name" : "representing",
+            "key.namelength" : 12,
+            "key.nameoffset" : 4471,
+            "key.offset" : 4467,
+            "key.parsed_declaration" : "public let representing : Represented",
+            "key.parsed_scope.end" : 127,
+            "key.parsed_scope.start" : 127,
+            "key.typename" : "Represented",
+            "key.typeusr" : "$sxD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV12representingxvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let isEquivalentProvider: (<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type>) -&gt; <Type usr=\"s:Sb\">Bool<\/Type><\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>isEquivalentProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 61,
+            "key.name" : "isEquivalentProvider",
+            "key.namelength" : 20,
+            "key.nameoffset" : 4507,
+            "key.offset" : 4503,
+            "key.parsed_declaration" : "let isEquivalentProvider : (Represented, Represented) -> Bool",
+            "key.parsed_scope.end" : 129,
+            "key.parsed_scope.start" : 129,
+            "key.typename" : "(Represented, Represented) -> Bool",
+            "key.typeusr" : "$sySbx_xtcD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV20isEquivalentProviderySbx_xtcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let elementProvider: (<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>elementProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 46,
+            "key.name" : "elementProvider",
+            "key.namelength" : 15,
+            "key.nameoffset" : 4573,
+            "key.offset" : 4569,
+            "key.parsed_declaration" : "let elementProvider : (Represented) -> Element",
+            "key.parsed_scope.end" : 130,
+            "key.parsed_scope.start" : 130,
+            "key.typename" : "(Represented) -> Element",
+            "key.typeusr" : "$sy11BlueprintUI7Element_pxcD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV15elementProvidery0A2UI7Element_pxcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let backgroundProvider: (<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>backgroundProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 50,
+            "key.name" : "backgroundProvider",
+            "key.namelength" : 18,
+            "key.nameoffset" : 4624,
+            "key.offset" : 4620,
+            "key.parsed_declaration" : "let backgroundProvider : (Represented) -> Element?",
+            "key.parsed_scope.end" : 131,
+            "key.parsed_scope.start" : 131,
+            "key.typename" : "(Represented) -> Element?",
+            "key.typeusr" : "$sy11BlueprintUI7Element_pSgxcD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV18backgroundProvidery0A2UI7Element_pSgxcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let pressedBackgroundProvider: (<Type usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>pressedBackgroundProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A26HeaderFooterContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 57,
+            "key.name" : "pressedBackgroundProvider",
+            "key.namelength" : 25,
+            "key.nameoffset" : 4679,
+            "key.offset" : 4675,
+            "key.parsed_declaration" : "let pressedBackgroundProvider : (Represented) -> Element?",
+            "key.parsed_scope.end" : 132,
+            "key.parsed_scope.start" : 132,
+            "key.typename" : "(Represented) -> Element?",
+            "key.typeusr" : "$sy11BlueprintUI7Element_pSgxcD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV25pressedBackgroundProvidery0A2UI7Element_pSgxcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public func isEquivalent(to other: `Self`) -&gt; <Type usr=\"s:Sb\">Bool<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 4742
+              }
+            ],
+            "key.bodylength" : 78,
+            "key.bodyoffset" : 4792,
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>isEquivalent<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>to<\/decl.var.parameter.argument_label> <decl.var.parameter.name>other<\/decl.var.parameter.name>: <decl.var.parameter.type>`Self`<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.function.method.instance>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 122,
+            "key.name" : "isEquivalent(to:)",
+            "key.namelength" : 28,
+            "key.nameoffset" : 4754,
+            "key.offset" : 4749,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:10ListableUI19HeaderFooterContentP12isEquivalent2toSbx_tF"
+              }
+            ],
+            "key.parsed_declaration" : "public func isEquivalent(to other: Self) -> Bool",
+            "key.parsed_scope.end" : 136,
+            "key.parsed_scope.start" : 134,
+            "key.substructure" : [
+
+            ],
+            "key.typename" : "<Represented> (BlueprintHeaderFooterContentWrapper<Represented>) -> (BlueprintHeaderFooterContentWrapper<Represented>) -> Bool",
+            "key.typeusr" : "$s2toSb16BlueprintUILists0B26HeaderFooterContentWrapperVyxG_tcD",
+            "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV12isEquivalent2toSbACyxG_tF"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public var elementRepresentation: <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type> { get }<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 4881
+              }
+            ],
+            "key.bodylength" : 53,
+            "key.bodyoffset" : 4925,
+            "key.doc.column" : 9,
+            "key.doc.declaration" : "var elementRepresentation: Element { get }",
+            "key.doc.discussion" : [
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
+            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift\" line=\"71\" column=\"9\"><Name>elementRepresentation<\/Name><USR>s:16BlueprintUILists0A19HeaderFooterContentP21elementRepresentation0A2UI7Element_pvp<\/USR><Declaration>var elementRepresentation: Element { get }<\/Declaration><CommentParts><Abstract><Para>Required. Create and return the Blueprint element used to represent the content.<\/Para><\/Abstract><Discussion><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintHeaderFooterContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Other>",
+            "key.doc.line" : 71,
+            "key.doc.name" : "elementRepresentation",
+            "key.doc.type" : "Other",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>elementRepresentation<\/decl.name>: <decl.var.type><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 91,
+            "key.name" : "elementRepresentation",
+            "key.namelength" : 21,
+            "key.nameoffset" : 4892,
+            "key.offset" : 4888,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP21elementRepresentation0A2UI7Element_pvp"
+              }
+            ],
+            "key.parsed_declaration" : "public var elementRepresentation : Element",
+            "key.parsed_scope.end" : 140,
+            "key.parsed_scope.start" : 138,
+            "key.typename" : "Element",
+            "key.typeusr" : "$s11BlueprintUI7Element_pD",
+            "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP21elementRepresentation0A2UI7Element_pvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public var background: <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? { get }<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 4989
+              }
+            ],
+            "key.bodylength" : 56,
+            "key.bodyoffset" : 5023,
+            "key.doc.column" : 9,
+            "key.doc.declaration" : "var background: Element? { get }",
+            "key.doc.discussion" : [
+              {
+                "Para" : "The default implementation of this method returns nil, and provides no background."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
+            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift\" line=\"81\" column=\"9\"><Name>background<\/Name><USR>s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp<\/USR><Declaration>var background: Element? { get }<\/Declaration><CommentParts><Abstract><Para>Optional. Create and return the Blueprint element used to represent the background of the content. You usually provide this method alongside <codeVoice>pressedBackground<\/codeVoice>, if your header has an <codeVoice>onTap<\/codeVoice> handler.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>The default implementation of this method returns nil, and provides no background.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintHeaderFooterContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Other>",
+            "key.doc.line" : 81,
+            "key.doc.name" : "background",
+            "key.doc.type" : "Other",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>background<\/decl.name>: <decl.var.type><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 84,
+            "key.name" : "background",
+            "key.namelength" : 10,
+            "key.nameoffset" : 5000,
+            "key.offset" : 4996,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp"
+              }
+            ],
+            "key.parsed_declaration" : "public var background : Element?",
+            "key.parsed_scope.end" : 144,
+            "key.parsed_scope.start" : 142,
+            "key.typename" : "Element?",
+            "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
+            "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public var pressedBackground: <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? { get }<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5090
+              }
+            ],
+            "key.bodylength" : 63,
+            "key.bodyoffset" : 5131,
+            "key.doc.column" : 9,
+            "key.doc.declaration" : "var pressedBackground: Element? { get }",
+            "key.doc.discussion" : [
+              {
+                "Para" : "The default implementation of this method returns nil, and provides no selected background."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
+            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift\" line=\"90\" column=\"9\"><Name>pressedBackground<\/Name><USR>s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp<\/USR><Declaration>var pressedBackground: Element? { get }<\/Declaration><CommentParts><Abstract><Para>Optional. Create and return the Blueprint element used to represent the background of the content when it is pressed. You usually provide this method alongside <codeVoice>background<\/codeVoice>, if your header has an <codeVoice>onTap<\/codeVoice> handler.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>The default implementation of this method returns nil, and provides no selected background.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintHeaderFooterContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Other>",
+            "key.doc.line" : 90,
+            "key.doc.name" : "pressedBackground",
+            "key.doc.type" : "Other",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/HeaderFooter.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>pressedBackground<\/decl.name>: <decl.var.type><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 98,
+            "key.name" : "pressedBackground",
+            "key.namelength" : 17,
+            "key.nameoffset" : 5101,
+            "key.offset" : 5097,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp"
+              }
+            ],
+            "key.parsed_declaration" : "public var pressedBackground : Element?",
+            "key.parsed_scope.end" : 148,
+            "key.parsed_scope.start" : 146,
+            "key.typename" : "Element?",
+            "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
+            "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp"
+          }
+        ],
+        "key.typename" : "BlueprintHeaderFooterContentWrapper<Represented>.Type",
+        "key.typeusr" : "$s16BlueprintUILists0A26HeaderFooterContentWrapperVyxGmD",
+        "key.usr" : "s:16BlueprintUILists0A26HeaderFooterContentWrapperV"
+      }
+    ]
+  }
+}, {
+  "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift" : {
+    "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
+    "key.length" : 6130,
+    "key.offset" : 0,
+    "key.substructure" : [
+      {
+        "key.annotated_decl" : "<Declaration>struct Item&lt;Content&gt; : <Type usr=\"s:10ListableUI7AnyItemP\">AnyItem<\/Type> where Content : <Type usr=\"s:10ListableUI11ItemContentP\">ItemContent<\/Type><\/Declaration>",
+        "key.bodylength" : 4589,
+        "key.bodyoffset" : 143,
+        "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/Item\/Item.swift",
+        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>Item<\/decl.name>&lt;<decl.generic_type_param usr=\"s:10ListableUI4ItemV7Contentxmfp\"><decl.generic_type_param.name>Content<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt; : <ref.protocol usr=\"s:10ListableUI7AnyItemP\">AnyItem<\/ref.protocol> <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content : <ref.protocol usr=\"s:10ListableUI11ItemContentP\">ItemContent<\/ref.protocol><\/decl.generic_type_requirement><\/decl.struct>",
+        "key.kind" : "source.lang.swift.decl.extension",
+        "key.length" : 4606,
+        "key.modulename" : "ListableUI",
+        "key.name" : "Item",
+        "key.namelength" : 4,
+        "key.nameoffset" : 137,
+        "key.offset" : 127,
+        "key.parsed_declaration" : "extension Item",
+        "key.parsed_scope.end" : 129,
+        "key.parsed_scope.start" : 12,
+        "key.substructure" : [
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public init&lt;Represented, IDType&gt;(_ representing: <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, identifier: <Type usr=\"s:s7KeyPathC\">KeyPath<\/Type>&lt;<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/Type>&gt;, isEquivalent: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>) -&gt; <Type usr=\"s:Sb\">Bool<\/Type>, element: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>, background: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _, _ in nil }, selectedBackground: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _, _ in nil }, configure: (inout <Type usr=\"s:10ListableUI4ItemV\">Item<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/Type>&lt;<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/Type>&gt;&gt;) -&gt; () = { _ in }) where Content == <Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/Type>&lt;Represented, IDType&gt;, IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 1326
+              }
+            ],
+            "key.bodylength" : 470,
+            "key.bodyoffset" : 2029,
+            "key.doc.column" : 12,
+            "key.doc.comment" : "\nProvides a way to create an `Item` for your Blueprint elements without\nrequiring the creation of a new `BlueprintItemContent` struct.\n\nMost arguments on this method are not required – you must only\nprovide an input, a key path for the backing identifier value, and an element provider.\n\nNote\n----\nThis initializer is helpful if you have to nest an existing element that needs to be used in\na single place, without needing to define an entirely new type.\n\nIf your item is to be used in more than one place, it is recommended that you\ncreate a `BlueprintItemContent` struct to share logic to avoid duplicate code.\n\nExample\n-------\n```\nItem(podcast, identifier: \\.name) { lhs, rhs in\n    lhs.value != rhs.value\n} element: { podcast, info in\n    PodcastElement(podcast: podcast)\n} background: { podcast, info in\n    Box(...)\n} selectedBackground: { podcast, info in\n    Box(...)\n} configure: { item in\n    item.selectionStyle = .tappable\n}\n```",
+            "key.doc.declaration" : "public init<Represented, IDType>(_ representing: Represented, identifier: KeyPath<Represented, IDType>, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented, ApplyItemContentInfo) -> Element, background: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil }, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil }, configure: (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }) where Content == BlueprintUILists.BlueprintItemContentWrapper<Represented, IDType>, IDType : Hashable",
+            "key.doc.discussion" : [
+              {
+                "Para" : "Most arguments on this method are not required – you must only provide an input, a key path for the backing identifier value, and an element provider."
+              },
+              {
+                "Para" : "This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type."
+              },
+              {
+                "Para" : "If your item is to be used in more than one place, it is recommended that you create a `BlueprintItemContent` struct to share logic to avoid duplicate code."
+              },
+              {
+                "CodeListing" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift\" line=\"44\" column=\"12\"><Name>init(_:identifier:isEquivalent:element:background:selectedBackground:configure:)<\/Name><USR>s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc<\/USR><Declaration>public init&lt;Represented, IDType&gt;(_ representing: Represented, identifier: KeyPath&lt;Represented, IDType&gt;, isEquivalent: @escaping (Represented, Represented) -&gt; Bool, element: @escaping (Represented, ApplyItemContentInfo) -&gt; Element, background: @escaping (Represented, ApplyItemContentInfo) -&gt; Element? = { _, _ in nil }, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -&gt; Element? = { _, _ in nil }, configure: (inout Item&lt;BlueprintItemContentWrapper&lt;Represented, IDType&gt;&gt;) -&gt; () = { _ in }) where Content == BlueprintUILists.BlueprintItemContentWrapper&lt;Represented, IDType&gt;, IDType : Hashable<\/Declaration><CommentParts><Abstract><Para>Provides a way to create an <codeVoice>Item<\/codeVoice> for your Blueprint elements without requiring the creation of a new <codeVoice>BlueprintItemContent<\/codeVoice> struct.<\/Para><\/Abstract><Discussion><Para>Most arguments on this method are not required – you must only provide an input, a key path for the backing identifier value, and an element provider.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type.<\/Para><Para>If your item is to be used in more than one place, it is recommended that you create a <codeVoice>BlueprintItemContent<\/codeVoice> struct to share logic to avoid duplicate code.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Example<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[Item(podcast, identifier: \\.name) { lhs, rhs in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    lhs.value != rhs.value]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} element: { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    PodcastElement(podcast: podcast)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} background: { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    Box(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} selectedBackground: { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    Box(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} configure: { item in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    item.selectionStyle = .tappable]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 44,
+            "key.doc.name" : "init(_:identifier:isEquivalent:element:background:selectedBackground:configure:)",
+            "key.doc.type" : "Function",
+            "key.doclength" : 1174,
+            "key.docoffset" : 148,
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>&lt;<decl.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>, <decl.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp\"><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt;(<decl.var.parameter><decl.var.parameter.argument_label>_<\/decl.var.parameter.argument_label> <decl.var.parameter.name>representing<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>identifier<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.class usr=\"s:s7KeyPathC\">KeyPath<\/ref.class>&lt;<ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>, <ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/ref.generic_type_param>&gt;<\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>isEquivalent<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>element<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>background<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _, _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>selectedBackground<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _, _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type>(<decl.var.parameter><decl.var.parameter.type><syntaxtype.keyword>inout<\/syntaxtype.keyword> <ref.struct usr=\"s:10ListableUI4ItemV\">Item<\/ref.struct>&lt;<ref.struct usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>, <ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/ref.generic_type_param>&gt;&gt;<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><tuple>()<\/tuple><\/decl.function.returntype><\/decl.var.parameter.type> = { _ in }<\/decl.var.parameter>) <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content == <ref.struct usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/ref.struct>&lt;Represented, IDType&gt;<\/decl.generic_type_requirement>, <decl.generic_type_requirement>IDType : <ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_requirement><\/decl.function.constructor>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 1167,
+            "key.name" : "init(_:identifier:isEquivalent:element:background:selectedBackground:configure:)",
+            "key.namelength" : 624,
+            "key.nameoffset" : 1333,
+            "key.offset" : 1333,
+            "key.parsed_declaration" : "public init<Represented, IDType:Hashable>(\n    _ representing : Represented,\n    \n    identifier : KeyPath<Represented, IDType>,\n    \n    isEquivalent : @escaping (Represented, Represented) -> Bool,\n    \n    element : @escaping (Represented, ApplyItemContentInfo) -> Element,\n    background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },\n    selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },\n    \n    configure : (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }\n    \n) where Content == BlueprintItemContentWrapper<Represented, IDType>",
+            "key.parsed_scope.end" : 72,
+            "key.parsed_scope.start" : 44,
+            "key.related_decls" : [
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc\">init(_:identifier:element:background:selectedBackground:configure:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV_5buildACyxGx_yAEzXEtcfc\">init(_:build:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV_6sizing6layout14selectionStyle25insertAndRemoveAnimations12swipeActions10reordering9onDisplay0o3EndP00O6Select0O8Deselect0O6Insert0oJ00O4Move0O6UpdateACyxGx_AA6SizingOSgAA0C6LayoutVSgAA0c9SelectionG0OSgAA0ctijK0VSgAA05SwipeM13ConfigurationVSgAA10ReorderingVSgyAC02OnP0Vyx_GcSgyAC02OnqP0Vyx_GcSgyAC02OnR0Vyx_GcSgyAC02OnS0Vyx_GcSgyAC02OnT0Vyx_GcSgyAC02OnJ0Vyx_GcSgyAC02OnU0Vyx_GcSgyAC02OnV0Vyx_GcSgtcfc\">init(_:sizing:layout:selectionStyle:insertAndRemoveAnimations:swipeActions:reordering:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)<\/RelatedName>"
+              }
+            ],
+            "key.substructure" : [
+              {
+                "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 11,
+                "key.name" : "Represented",
+                "key.namelength" : 11,
+                "key.nameoffset" : 1338,
+                "key.offset" : 1338,
+                "key.parsed_declaration" : "public init<Represented",
+                "key.parsed_scope.end" : 44,
+                "key.parsed_scope.start" : 44,
+                "key.typename" : "Represented.Type",
+                "key.typeusr" : "$sqd__mD",
+                "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc11RepresentedL_qd__mfp"
+              },
+              {
+                "key.annotated_decl" : "<Declaration>IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+                "key.elements" : [
+                  {
+                    "key.kind" : "source.lang.swift.structure.elem.typeref",
+                    "key.length" : 8,
+                    "key.offset" : 1358
+                  }
+                ],
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name> : <decl.generic_type_param.constraint><ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_param.constraint><\/decl.generic_type_param>",
+                "key.inheritedtypes" : [
+                  {
+                    "key.name" : "Hashable"
+                  }
+                ],
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 15,
+                "key.name" : "IDType",
+                "key.namelength" : 6,
+                "key.nameoffset" : 1351,
+                "key.offset" : 1351,
+                "key.parsed_declaration" : "public init<Represented, IDType:Hashable",
+                "key.parsed_scope.end" : 44,
+                "key.parsed_scope.start" : 44,
+                "key.typename" : "IDType.Type",
+                "key.typeusr" : "$sqd_0_mD",
+                "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc6IDTypeL_qd_0_mfp"
+              }
+            ],
+            "key.typename" : "<Content, Represented, IDType where Content == BlueprintItemContentWrapper<Represented, IDType>, IDType : Hashable> (Item<Content>.Type) -> (Represented, KeyPath<Represented, IDType>, @escaping (Represented, Represented) -> Bool, @escaping (Represented, ApplyItemContentInfo) -> Element, @escaping (Represented, ApplyItemContentInfo) -> Element?, @escaping (Represented, ApplyItemContentInfo) -> Element?, (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> ()) -> Item<Content>",
+            "key.typeusr" : "$s_10identifier12isEquivalent7element10background18selectedBackground9configure10ListableUI4ItemVy16BlueprintUILists0lK14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0lJ07Element_pqd___AG05ApplykN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_luD",
+            "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public init&lt;Represented, IDType&gt;(_ representing: <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, identifier: <Type usr=\"s:s7KeyPathC\">KeyPath<\/Type>&lt;<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/Type>&gt;, element: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>, background: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _, _ in nil }, selectedBackground: @escaping (<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>? = { _, _ in nil }, configure: (inout <Type usr=\"s:10ListableUI4ItemV\">Item<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/Type>&lt;<Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/Type>&gt;&gt;) -&gt; () = { _ in }) where Content == <Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/Type>&lt;Represented, IDType&gt;, Represented : <Type usr=\"s:SQ\">Equatable<\/Type>, IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 3620
+              }
+            ],
+            "key.bodylength" : 470,
+            "key.bodyoffset" : 4260,
+            "key.doc.column" : 12,
+            "key.doc.comment" : "\nProvides a way to create an `Item` for your Blueprint elements without\nrequiring the creation of a new `BlueprintItemContent` struct.\n\nMost arguments on this method are not required – you must only\nprovide an input, a key path for the backing identifier value, and an element provider.\n\nNote\n----\nThis initializer is helpful if you have to nest an existing element that needs to be used in\na single place, without needing to define an entirely new type.\n\nIf your item is to be used in more than one place, it is recommended that you\ncreate a `BlueprintItemContent` struct to share logic to avoid duplicate code.\n\nExample\n-------\n```\nItem(podcast, identifier: \\.name) { podcast, info in\n    PodcastElement(podcast: podcast)\n} background: { podcast, info in\n    Box(...)\n} selectedBackground: { podcast, info in\n    Box(...)\n} configure: { item in\n    item.selectionStyle = .tappable\n}\n```",
+            "key.doc.declaration" : "public init<Represented, IDType>(_ representing: Represented, identifier: KeyPath<Represented, IDType>, element: @escaping (Represented, ApplyItemContentInfo) -> Element, background: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil }, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil }, configure: (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }) where Content == BlueprintUILists.BlueprintItemContentWrapper<Represented, IDType>, Represented : Equatable, IDType : Hashable",
+            "key.doc.discussion" : [
+              {
+                "Para" : "Most arguments on this method are not required – you must only provide an input, a key path for the backing identifier value, and an element provider."
+              },
+              {
+                "Para" : "This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type."
+              },
+              {
+                "Para" : "If your item is to be used in more than one place, it is recommended that you create a `BlueprintItemContent` struct to share logic to avoid duplicate code."
+              },
+              {
+                "CodeListing" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift\" line=\"102\" column=\"12\"><Name>init(_:identifier:element:background:selectedBackground:configure:)<\/Name><USR>s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc<\/USR><Declaration>public init&lt;Represented, IDType&gt;(_ representing: Represented, identifier: KeyPath&lt;Represented, IDType&gt;, element: @escaping (Represented, ApplyItemContentInfo) -&gt; Element, background: @escaping (Represented, ApplyItemContentInfo) -&gt; Element? = { _, _ in nil }, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -&gt; Element? = { _, _ in nil }, configure: (inout Item&lt;BlueprintItemContentWrapper&lt;Represented, IDType&gt;&gt;) -&gt; () = { _ in }) where Content == BlueprintUILists.BlueprintItemContentWrapper&lt;Represented, IDType&gt;, Represented : Equatable, IDType : Hashable<\/Declaration><CommentParts><Abstract><Para>Provides a way to create an <codeVoice>Item<\/codeVoice> for your Blueprint elements without requiring the creation of a new <codeVoice>BlueprintItemContent<\/codeVoice> struct.<\/Para><\/Abstract><Discussion><Para>Most arguments on this method are not required – you must only provide an input, a key path for the backing identifier value, and an element provider.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>This initializer is helpful if you have to nest an existing element that needs to be used in a single place, without needing to define an entirely new type.<\/Para><Para>If your item is to be used in more than one place, it is recommended that you create a <codeVoice>BlueprintItemContent<\/codeVoice> struct to share logic to avoid duplicate code.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Example<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[Item(podcast, identifier: \\.name) { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    PodcastElement(podcast: podcast)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} background: { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    Box(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} selectedBackground: { podcast, info in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    Box(...)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[} configure: { item in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    item.selectionStyle = .tappable]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 102,
+            "key.doc.name" : "init(_:identifier:element:background:selectedBackground:configure:)",
+            "key.doc.type" : "Function",
+            "key.doclength" : 1106,
+            "key.docoffset" : 2510,
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>&lt;<decl.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>, <decl.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp\"><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt;(<decl.var.parameter><decl.var.parameter.argument_label>_<\/decl.var.parameter.argument_label> <decl.var.parameter.name>representing<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>identifier<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.class usr=\"s:s7KeyPathC\">KeyPath<\/ref.class>&lt;<ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>, <ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/ref.generic_type_param>&gt;<\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>element<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>background<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _, _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>selectedBackground<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@escaping<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> (<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.parameter.type> = { _, _ in nil }<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type>(<decl.var.parameter><decl.var.parameter.type><syntaxtype.keyword>inout<\/syntaxtype.keyword> <ref.struct usr=\"s:10ListableUI4ItemV\">Item<\/ref.struct>&lt;<ref.struct usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp\">Represented<\/ref.generic_type_param>, <ref.generic_type_param usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp\">IDType<\/ref.generic_type_param>&gt;&gt;<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><tuple>()<\/tuple><\/decl.function.returntype><\/decl.var.parameter.type> = { _ in }<\/decl.var.parameter>) <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>Content == <ref.struct usr=\"s:16BlueprintUILists0A18ItemContentWrapperV\">BlueprintItemContentWrapper<\/ref.struct>&lt;Represented, IDType&gt;<\/decl.generic_type_requirement>, <decl.generic_type_requirement>Represented : <ref.protocol usr=\"s:SQ\">Equatable<\/ref.protocol><\/decl.generic_type_requirement>, <decl.generic_type_requirement>IDType : <ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_requirement><\/decl.function.constructor>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 1104,
+            "key.name" : "init(_:identifier:element:background:selectedBackground:configure:)",
+            "key.namelength" : 538,
+            "key.nameoffset" : 3627,
+            "key.offset" : 3627,
+            "key.parsed_declaration" : "public init<Represented, IDType:Hashable>(\n    _ representing : Represented,\n    \n    identifier : KeyPath<Represented, IDType>,\n\n    element : @escaping (Represented, ApplyItemContentInfo) -> Element,\n    background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },\n    selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },\n    \n    configure : (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }\n    \n) where Content == BlueprintItemContentWrapper<Represented, IDType>, Represented:Equatable",
+            "key.parsed_scope.end" : 128,
+            "key.parsed_scope.start" : 102,
+            "key.related_decls" : [
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV16BlueprintUIListsE_10identifier12isEquivalent7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_GSbqd___qd__tc0dB07Element_pqd___AA05ApplycN4InfoVtcArS_pSgqd___AUtcAVqd___AUtcyANzXEtcAMRszSHRd_0_r0_lufc\">init(_:identifier:isEquivalent:element:background:selectedBackground:configure:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV_5buildACyxGx_yAEzXEtcfc\">init(_:build:)<\/RelatedName>"
+              },
+              {
+                "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI4ItemV_6sizing6layout14selectionStyle25insertAndRemoveAnimations12swipeActions10reordering9onDisplay0o3EndP00O6Select0O8Deselect0O6Insert0oJ00O4Move0O6UpdateACyxGx_AA6SizingOSgAA0C6LayoutVSgAA0c9SelectionG0OSgAA0ctijK0VSgAA05SwipeM13ConfigurationVSgAA10ReorderingVSgyAC02OnP0Vyx_GcSgyAC02OnqP0Vyx_GcSgyAC02OnR0Vyx_GcSgyAC02OnS0Vyx_GcSgyAC02OnT0Vyx_GcSgyAC02OnJ0Vyx_GcSgyAC02OnU0Vyx_GcSgyAC02OnV0Vyx_GcSgtcfc\">init(_:sizing:layout:selectionStyle:insertAndRemoveAnimations:swipeActions:reordering:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)<\/RelatedName>"
+              }
+            ],
+            "key.substructure" : [
+              {
+                "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 11,
+                "key.name" : "Represented",
+                "key.namelength" : 11,
+                "key.nameoffset" : 3632,
+                "key.offset" : 3632,
+                "key.parsed_declaration" : "public init<Represented",
+                "key.parsed_scope.end" : 102,
+                "key.parsed_scope.start" : 102,
+                "key.typename" : "Represented.Type",
+                "key.typeusr" : "$sqd__mD",
+                "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc11RepresentedL_qd__mfp"
+              },
+              {
+                "key.annotated_decl" : "<Declaration>IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+                "key.elements" : [
+                  {
+                    "key.kind" : "source.lang.swift.structure.elem.typeref",
+                    "key.length" : 8,
+                    "key.offset" : 3652
+                  }
+                ],
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+                "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name> : <decl.generic_type_param.constraint><ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_param.constraint><\/decl.generic_type_param>",
+                "key.inheritedtypes" : [
+                  {
+                    "key.name" : "Hashable"
+                  }
+                ],
+                "key.kind" : "source.lang.swift.decl.generic_type_param",
+                "key.length" : 15,
+                "key.name" : "IDType",
+                "key.namelength" : 6,
+                "key.nameoffset" : 3645,
+                "key.offset" : 3645,
+                "key.parsed_declaration" : "public init<Represented, IDType:Hashable",
+                "key.parsed_scope.end" : 102,
+                "key.parsed_scope.start" : 102,
+                "key.typename" : "IDType.Type",
+                "key.typeusr" : "$sqd_0_mD",
+                "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc6IDTypeL_qd_0_mfp"
+              }
+            ],
+            "key.typename" : "<Content, Represented, IDType where Content == BlueprintItemContentWrapper<Represented, IDType>, Represented : Equatable, IDType : Hashable> (Item<Content>.Type) -> (Represented, KeyPath<Represented, IDType>, @escaping (Represented, ApplyItemContentInfo) -> Element, @escaping (Represented, ApplyItemContentInfo) -> Element?, @escaping (Represented, ApplyItemContentInfo) -> Element?, (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> ()) -> Item<Content>",
+            "key.typeusr" : "$s_10identifier7element10background18selectedBackground9configure10ListableUI4ItemVy16BlueprintUILists0jI14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0jH07Element_pqd___AF05ApplyiL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_luD",
+            "key.usr" : "s:10ListableUI4ItemV16BlueprintUIListsE_10identifier7element10background18selectedBackground9configureACyAD0dC14ContentWrapperVyqd__qd_0_GGqd___s7KeyPathCyqd__qd_0_G0dB07Element_pqd___AA05ApplycL4InfoVtcAqR_pSgqd___ATtcAUqd___ATtcyAMzXEtcALRszSQRd__SHRd_0_r0_lufc"
+          }
+        ],
+        "key.typename" : "Item<Content>.Type",
+        "key.typeusr" : "$s10ListableUI4ItemVyxGmD",
+        "key.usr" : "s:10ListableUI4ItemV"
+      },
+      {
+        "key.accessibility" : "source.lang.swift.accessibility.public",
+        "key.annotated_decl" : "<Declaration>public struct BlueprintItemContentWrapper&lt;Represented, IDType&gt; : <Type usr=\"s:16BlueprintUILists0A11ItemContentP\">BlueprintItemContent<\/Type> where IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+        "key.attributes" : [
+          {
+            "key.attribute" : "source.decl.attribute.public",
+            "key.length" : 6,
+            "key.offset" : 4919
+          }
+        ],
+        "key.bodylength" : 1113,
+        "key.bodyoffset" : 5015,
+        "key.doc.column" : 15,
+        "key.doc.comment" : "The `BlueprintItemContent` type that is used to provide\na lightweight way to present an `Element`, without needing to provide an entirely\nnew `BlueprintItemContent` type.",
+        "key.doc.declaration" : "public struct BlueprintItemContentWrapper<Represented, IDType> : BlueprintItemContent where IDType : Hashable",
+        "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift\" line=\"135\" column=\"15\"><Name>BlueprintItemContentWrapper<\/Name><USR>s:16BlueprintUILists0A18ItemContentWrapperV<\/USR><Declaration>public struct BlueprintItemContentWrapper&lt;Represented, IDType&gt; : BlueprintItemContent where IDType : Hashable<\/Declaration><CommentParts><Abstract><Para>The <codeVoice>BlueprintItemContent<\/codeVoice> type that is used to provide a lightweight way to present an <codeVoice>Element<\/codeVoice>, without needing to provide an entirely new <codeVoice>BlueprintItemContent<\/codeVoice> type.<\/Para><\/Abstract><\/CommentParts><\/Class>",
+        "key.doc.line" : 135,
+        "key.doc.name" : "BlueprintItemContentWrapper",
+        "key.doc.type" : "Class",
+        "key.doclength" : 183,
+        "key.docoffset" : 4736,
+        "key.elements" : [
+          {
+            "key.kind" : "source.lang.swift.structure.elem.typeref",
+            "key.length" : 20,
+            "key.offset" : 4993
+          }
+        ],
+        "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>BlueprintItemContentWrapper<\/decl.name>&lt;<decl.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\"><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>, <decl.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV6IDTypeq_mfp\"><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name><\/decl.generic_type_param>&gt; : <ref.protocol usr=\"s:16BlueprintUILists0A11ItemContentP\">BlueprintItemContent<\/ref.protocol> <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement>IDType : <ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_requirement><\/decl.struct>",
+        "key.inheritedtypes" : [
+          {
+            "key.name" : "BlueprintItemContent"
+          }
+        ],
+        "key.kind" : "source.lang.swift.decl.struct",
+        "key.length" : 1203,
+        "key.name" : "BlueprintItemContentWrapper",
+        "key.namelength" : 27,
+        "key.nameoffset" : 4933,
+        "key.offset" : 4926,
+        "key.parsed_declaration" : "public struct BlueprintItemContentWrapper<Represented, IDType:Hashable> : BlueprintItemContent",
+        "key.parsed_scope.end" : 164,
+        "key.parsed_scope.start" : 135,
+        "key.substructure" : [
+          {
+            "key.annotated_decl" : "<Declaration>Represented<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>Represented<\/decl.generic_type_param.name><\/decl.generic_type_param>",
+            "key.kind" : "source.lang.swift.decl.generic_type_param",
+            "key.length" : 11,
+            "key.name" : "Represented",
+            "key.namelength" : 11,
+            "key.nameoffset" : 4961,
+            "key.offset" : 4961,
+            "key.parsed_declaration" : "public struct BlueprintItemContentWrapper<Represented",
+            "key.parsed_scope.end" : 135,
+            "key.parsed_scope.start" : 135,
+            "key.typename" : "Represented.Type",
+            "key.typeusr" : "$sxmD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp"
+          },
+          {
+            "key.annotated_decl" : "<Declaration>IDType : <Type usr=\"s:SH\">Hashable<\/Type><\/Declaration>",
+            "key.elements" : [
+              {
+                "key.kind" : "source.lang.swift.structure.elem.typeref",
+                "key.length" : 8,
+                "key.offset" : 4981
+              }
+            ],
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.generic_type_param><decl.generic_type_param.name>IDType<\/decl.generic_type_param.name> : <decl.generic_type_param.constraint><ref.protocol usr=\"s:SH\">Hashable<\/ref.protocol><\/decl.generic_type_param.constraint><\/decl.generic_type_param>",
+            "key.inheritedtypes" : [
+              {
+                "key.name" : "Hashable"
+              }
+            ],
+            "key.kind" : "source.lang.swift.decl.generic_type_param",
+            "key.length" : 15,
+            "key.name" : "IDType",
+            "key.namelength" : 6,
+            "key.nameoffset" : 4974,
+            "key.offset" : 4974,
+            "key.parsed_declaration" : "public struct BlueprintItemContentWrapper<Represented, IDType:Hashable",
+            "key.parsed_scope.end" : 135,
+            "key.parsed_scope.start" : 135,
+            "key.typename" : "IDType.Type",
+            "key.typeusr" : "$sq_mD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV6IDTypeq_mfp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public let representing: <Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5020
+              }
+            ],
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>representing<\/decl.name>: <decl.var.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 30,
+            "key.name" : "representing",
+            "key.namelength" : 12,
+            "key.nameoffset" : 5031,
+            "key.offset" : 5027,
+            "key.parsed_declaration" : "public let representing : Represented",
+            "key.parsed_scope.end" : 137,
+            "key.parsed_scope.start" : 137,
+            "key.typename" : "Represented",
+            "key.typeusr" : "$sxD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV12representingxvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let identifierKeyPath: <Type usr=\"s:s7KeyPathC\">KeyPath<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV6IDTypeq_mfp\">IDType<\/Type>&gt;<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>identifierKeyPath<\/decl.name>: <decl.var.type><ref.class usr=\"s:s7KeyPathC\">KeyPath<\/ref.class>&lt;<ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param>, <ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV6IDTypeq_mfp\">IDType<\/ref.generic_type_param>&gt;<\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 52,
+            "key.name" : "identifierKeyPath",
+            "key.namelength" : 17,
+            "key.nameoffset" : 5067,
+            "key.offset" : 5063,
+            "key.parsed_declaration" : "let identifierKeyPath : KeyPath<Represented, IDType>",
+            "key.parsed_scope.end" : 139,
+            "key.parsed_scope.start" : 139,
+            "key.typename" : "KeyPath<Represented, IDType>",
+            "key.typeusr" : "$ss7KeyPathCyxq_GD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV17identifierKeyPaths0gH0Cyxq_Gvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let isEquivalentProvider: (<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>) -&gt; <Type usr=\"s:Sb\">Bool<\/Type><\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>isEquivalentProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 61,
+            "key.name" : "isEquivalentProvider",
+            "key.namelength" : 20,
+            "key.nameoffset" : 5124,
+            "key.offset" : 5120,
+            "key.parsed_declaration" : "let isEquivalentProvider : (Represented, Represented) -> Bool",
+            "key.parsed_scope.end" : 140,
+            "key.parsed_scope.start" : 140,
+            "key.typename" : "(Represented, Represented) -> Bool",
+            "key.typeusr" : "$sySbx_xtcD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV20isEquivalentProviderySbx_xtcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let elementProvider: (<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>elementProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 68,
+            "key.name" : "elementProvider",
+            "key.namelength" : 15,
+            "key.nameoffset" : 5190,
+            "key.offset" : 5186,
+            "key.parsed_declaration" : "let elementProvider : (Represented, ApplyItemContentInfo) -> Element",
+            "key.parsed_scope.end" : 141,
+            "key.parsed_scope.start" : 141,
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element",
+            "key.typeusr" : "$sy11BlueprintUI7Element_px_08ListableB020ApplyItemContentInfoVtcD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV15elementProvidery0A2UI7Element_px_08ListableH005ApplycD4InfoVtcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let backgroundProvider: (<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>backgroundProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 72,
+            "key.name" : "backgroundProvider",
+            "key.namelength" : 18,
+            "key.nameoffset" : 5263,
+            "key.offset" : 5259,
+            "key.parsed_declaration" : "let backgroundProvider : (Represented, ApplyItemContentInfo) -> Element?",
+            "key.parsed_scope.end" : 142,
+            "key.parsed_scope.start" : 142,
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element?",
+            "key.typeusr" : "$sy11BlueprintUI7Element_pSgx_08ListableB020ApplyItemContentInfoVtcD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV18backgroundProvidery0A2UI7Element_pSgx_08ListableH005ApplycD4InfoVtcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.internal",
+            "key.annotated_decl" : "<Declaration>let selectedBackgroundProvider: (<Type usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/Type>, <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>let<\/syntaxtype.keyword> <decl.name>selectedBackgroundProvider<\/decl.name>: <decl.var.type>(<decl.var.parameter><decl.var.parameter.type><ref.generic_type_param usr=\"s:16BlueprintUILists0A18ItemContentWrapperV11Representedxmfp\">Represented<\/ref.generic_type_param><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.var.type><\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 80,
+            "key.name" : "selectedBackgroundProvider",
+            "key.namelength" : 26,
+            "key.nameoffset" : 5340,
+            "key.offset" : 5336,
+            "key.parsed_declaration" : "let selectedBackgroundProvider : (Represented, ApplyItemContentInfo) -> Element?",
+            "key.parsed_scope.end" : 143,
+            "key.parsed_scope.start" : 143,
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element?",
+            "key.typeusr" : "$sy11BlueprintUI7Element_pSgx_08ListableB020ApplyItemContentInfoVtcD",
+            "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV26selectedBackgroundProvidery0A2UI7Element_pSgx_08ListableI005ApplycD4InfoVtcvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public var identifier: <Type usr=\"s:10ListableUI10IdentifierC\">Identifier<\/Type>&lt;`Self`&gt; { get }<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5426
+              }
+            ],
+            "key.bodylength" : 71,
+            "key.bodyoffset" : 5467,
+            "key.doc.column" : 9,
+            "key.doc.declaration" : "var identifier: ListableUI.Identifier<Self> { get }",
+            "key.doc.discussion" : [
+              {
+                "Para" : "Does not have to be globally unique – the list will make a “best guess” if there are multiple items with the same identifier. However, diffing of changes will be more correct with a unique identifier."
+              },
+              {
+                "Para" : "If you’re backing your content with some sort of client or server-provided data, consider using its server or client UUID here, or some other unique identifier from the underlying data model."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/Item\/ItemContent.swift",
+            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/Item\/ItemContent.swift\" line=\"54\" column=\"9\"><Name>identifier<\/Name><USR>s:10ListableUI11ItemContentP10identifierAA10IdentifierCyxGvp<\/USR><Declaration>var identifier: ListableUI.Identifier&lt;Self&gt; { get }<\/Declaration><CommentParts><Abstract><Para>Identifies the content across updates to the list. This value must remain the same, otherwise the content will be considered a new item, and the old one removed from the list.<\/Para><\/Abstract><Discussion><Para>Does not have to be globally unique – the list will make a “best guess” if there are multiple items with the same identifier. However, diffing of changes will be more correct with a unique identifier.<\/Para><Para>If you’re backing your content with some sort of client or server-provided data, consider using its server or client UUID here, or some other unique identifier from the underlying data model.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>ItemContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Other>",
+            "key.doc.line" : 54,
+            "key.doc.name" : "identifier",
+            "key.doc.type" : "Other",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>identifier<\/decl.name>: <decl.var.type><ref.class usr=\"s:10ListableUI10IdentifierC\">Identifier<\/ref.class>&lt;`Self`&gt;<\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
+            "key.kind" : "source.lang.swift.decl.var.instance",
+            "key.length" : 106,
+            "key.name" : "identifier",
+            "key.namelength" : 10,
+            "key.nameoffset" : 5437,
+            "key.offset" : 5433,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:10ListableUI11ItemContentP10identifierAA10IdentifierCyxGvp"
+              }
+            ],
+            "key.parsed_declaration" : "public var identifier: Identifier<Self>",
+            "key.parsed_scope.end" : 147,
+            "key.parsed_scope.start" : 145,
+            "key.typename" : "Identifier<BlueprintItemContentWrapper<Represented, IDType>>",
+            "key.typeusr" : "$s10ListableUI10IdentifierCy16BlueprintUILists0D18ItemContentWrapperVyxq_GGD",
+            "key.usr" : "s:10ListableUI11ItemContentP10identifierAA10IdentifierCyxGvp"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public func isEquivalent(to other: `Self`) -&gt; <Type usr=\"s:Sb\">Bool<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5549
+              }
+            ],
+            "key.bodylength" : 78,
+            "key.bodyoffset" : 5599,
+            "key.doc.column" : 10,
+            "key.doc.declaration" : "func isEquivalent(to other: Self) -> Bool",
+            "key.doc.discussion" : [
+              {
+                "Para" : "If this method returns false, the row representing the content is reloaded."
+              },
+              {
+                "Para" : "There is a default implementation of this method when `ItemContent ` conforms to `Equatable` which returns `self == other`."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/Item\/ItemContent.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/ListableUI\/Sources\/Item\/ItemContent.swift\" line=\"105\" column=\"10\"><Name>isEquivalent(to:)<\/Name><USR>s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF<\/USR><Declaration>func isEquivalent(to other: Self) -&gt; Bool<\/Declaration><CommentParts><Abstract><Para>Return false if the content’ changed based on the old value passed into the function.<\/Para><\/Abstract><Discussion><Para>If this method returns false, the row representing the content is reloaded.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>There is a default implementation of this method when <codeVoice>ItemContent <\/codeVoice> conforms to <codeVoice>Equatable<\/codeVoice> which returns <codeVoice>self == other<\/codeVoice>.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>ItemContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 105,
+            "key.doc.name" : "isEquivalent(to:)",
+            "key.doc.type" : "Function",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>isEquivalent<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>to<\/decl.var.parameter.argument_label> <decl.var.parameter.name>other<\/decl.var.parameter.name>: <decl.var.parameter.type>`Self`<\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.function.returntype><\/decl.function.method.instance>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 122,
+            "key.name" : "isEquivalent(to:)",
+            "key.namelength" : 28,
+            "key.nameoffset" : 5561,
+            "key.offset" : 5556,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF"
+              }
+            ],
+            "key.parsed_declaration" : "public func isEquivalent(to other: Self) -> Bool",
+            "key.parsed_scope.end" : 151,
+            "key.parsed_scope.start" : 149,
+            "key.substructure" : [
+
+            ],
+            "key.typename" : "<Represented, IDType where IDType : Hashable> (BlueprintItemContentWrapper<Represented, IDType>) -> (BlueprintItemContentWrapper<Represented, IDType>) -> Bool",
+            "key.typeusr" : "$s2toSb16BlueprintUILists0B18ItemContentWrapperVyxq_G_tcD",
+            "key.usr" : "s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public func element(with info: <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5688
+              }
+            ],
+            "key.bodylength" : 59,
+            "key.bodyoffset" : 5753,
+            "key.doc.column" : 10,
+            "key.doc.declaration" : "func element(with info: ApplyItemContentInfo) -> Element",
+            "key.doc.discussion" : [
+              {
+                "Para" : "You can use the provided `ApplyItemContentInfo` to vary the appearance of the element based on the current state of the item."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"70\" column=\"10\"><Name>element(with:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentP7element4with0A2UI7Element_p08ListableG005ApplycD4InfoV_tF<\/USR><Declaration>func element(with info: ApplyItemContentInfo) -&gt; Element<\/Declaration><CommentParts><Abstract><Para>Required. Create and return the Blueprint element used to represent the content.<\/Para><\/Abstract><Discussion><Para>You can use the provided <codeVoice>ApplyItemContentInfo<\/codeVoice> to vary the appearance of the element based on the current state of the item.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintItemContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 70,
+            "key.doc.name" : "element(with:)",
+            "key.doc.type" : "Function",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>element<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>info<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.function.method.instance>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 118,
+            "key.name" : "element(with:)",
+            "key.namelength" : 40,
+            "key.nameoffset" : 5700,
+            "key.offset" : 5695,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A11ItemContentP7element4with0A2UI7Element_p08ListableG005ApplycD4InfoV_tF"
+              }
+            ],
+            "key.parsed_declaration" : "public func element(with info: ApplyItemContentInfo) -> Element",
+            "key.parsed_scope.end" : 155,
+            "key.parsed_scope.start" : 153,
+            "key.substructure" : [
+
+            ],
+            "key.typename" : "<Represented, IDType where IDType : Hashable> (BlueprintItemContentWrapper<Represented, IDType>) -> (ApplyItemContentInfo) -> Element",
+            "key.typeusr" : "$s4with11BlueprintUI7Element_p08ListableC020ApplyItemContentInfoV_tcD",
+            "key.usr" : "s:16BlueprintUILists0A11ItemContentP7element4with0A2UI7Element_p08ListableG005ApplycD4InfoV_tF"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public func backgroundElement(with info: <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5823
+              }
+            ],
+            "key.bodylength" : 62,
+            "key.bodyoffset" : 5899,
+            "key.doc.column" : 10,
+            "key.doc.declaration" : "func backgroundElement(with info: ApplyItemContentInfo) -> Element?",
+            "key.doc.discussion" : [
+              {
+                "Para" : "You can use the provided `ApplyItemContentInfo` to vary the appearance of the element based on the current state of the item."
+              },
+              {
+                "Para" : "The default implementation of this method returns nil, and provides no background."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"83\" column=\"10\"><Name>backgroundElement(with:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF<\/USR><Declaration>func backgroundElement(with info: ApplyItemContentInfo) -&gt; Element?<\/Declaration><CommentParts><Abstract><Para>Optional. Create and return the Blueprint element used to represent the background of the content. You usually provide this method alongside <codeVoice>selectedBackgroundElement<\/codeVoice>, if your content supports selection or highlighting.<\/Para><\/Abstract><Discussion><Para>You can use the provided <codeVoice>ApplyItemContentInfo<\/codeVoice> to vary the appearance of the element based on the current state of the item.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>The default implementation of this method returns nil, and provides no background.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintItemContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 83,
+            "key.doc.name" : "backgroundElement(with:)",
+            "key.doc.type" : "Function",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>backgroundElement<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>info<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.function.method.instance>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 132,
+            "key.name" : "backgroundElement(with:)",
+            "key.namelength" : 50,
+            "key.nameoffset" : 5835,
+            "key.offset" : 5830,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF"
+              }
+            ],
+            "key.parsed_declaration" : "public func backgroundElement(with info: ApplyItemContentInfo) -> Element?",
+            "key.parsed_scope.end" : 159,
+            "key.parsed_scope.start" : 157,
+            "key.substructure" : [
+
+            ],
+            "key.typename" : "<Represented, IDType where IDType : Hashable> (BlueprintItemContentWrapper<Represented, IDType>) -> (ApplyItemContentInfo) -> Element?",
+            "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
+            "key.usr" : "s:16BlueprintUILists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF"
+          },
+          {
+            "key.accessibility" : "source.lang.swift.accessibility.public",
+            "key.annotated_decl" : "<Declaration>public func selectedBackgroundElement(with info: <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type>?<\/Declaration>",
+            "key.attributes" : [
+              {
+                "key.attribute" : "source.decl.attribute.public",
+                "key.length" : 6,
+                "key.offset" : 5972
+              }
+            ],
+            "key.bodylength" : 70,
+            "key.bodyoffset" : 6056,
+            "key.doc.column" : 10,
+            "key.doc.declaration" : "func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?",
+            "key.doc.discussion" : [
+              {
+                "Para" : "You can use the provided `ApplyItemContentInfo` to vary the appearance of the element based on the current state of the item."
+              },
+              {
+                "Para" : "The default implementation of this method returns nil, and provides no selected background."
+              },
+              {
+                "Note" : ""
+              }
+            ],
+            "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"95\" column=\"10\"><Name>selectedBackgroundElement(with:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF<\/USR><Declaration>func selectedBackgroundElement(with info: ApplyItemContentInfo) -&gt; Element?<\/Declaration><CommentParts><Abstract><Para>Optional. Create and return the Blueprint element used to represent the background of the content when it is selected or highlighted. You usually provide this method alongside <codeVoice>backgroundElement<\/codeVoice>, if your content supports selection or highlighting.<\/Para><\/Abstract><Discussion><Para>You can use the provided <codeVoice>ApplyItemContentInfo<\/codeVoice> to vary the appearance of the element based on the current state of the item.<\/Para><rawHTML><![CDATA[<h2>]]><\/rawHTML>Note<rawHTML><![CDATA[<\/h2>]]><\/rawHTML><Para>The default implementation of this method returns nil, and provides no selected background.<\/Para><Note><Para>This documentation comment was inherited from <codeVoice>BlueprintItemContent<\/codeVoice>.<\/Para><\/Note><\/Discussion><\/CommentParts><\/Function>",
+            "key.doc.line" : 95,
+            "key.doc.name" : "selectedBackgroundElement(with:)",
+            "key.doc.type" : "Function",
+            "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/Item.swift",
+            "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>selectedBackgroundElement<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>info<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol>?<\/decl.function.returntype><\/decl.function.method.instance>",
+            "key.kind" : "source.lang.swift.decl.function.method.instance",
+            "key.length" : 148,
+            "key.name" : "selectedBackgroundElement(with:)",
+            "key.namelength" : 58,
+            "key.nameoffset" : 5984,
+            "key.offset" : 5979,
+            "key.overrides" : [
+              {
+                "key.usr" : "s:16BlueprintUILists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
+              }
+            ],
+            "key.parsed_declaration" : "public func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?",
+            "key.parsed_scope.end" : 163,
+            "key.parsed_scope.start" : 161,
+            "key.substructure" : [
+
+            ],
+            "key.typename" : "<Represented, IDType where IDType : Hashable> (BlueprintItemContentWrapper<Represented, IDType>) -> (ApplyItemContentInfo) -> Element?",
+            "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
+            "key.usr" : "s:16BlueprintUILists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
+          }
+        ],
+        "key.typename" : "BlueprintItemContentWrapper<Represented, IDType>.Type",
+        "key.typeusr" : "$s16BlueprintUILists0A18ItemContentWrapperVyxq_GmD",
+        "key.usr" : "s:16BlueprintUILists0A18ItemContentWrapperV"
+      }
+    ]
+  }
+}, {
   "\/Users\/k\/Desktop\/Development\/Listable3\/BlueprintUILists\/Sources\/List.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
     "key.length" : 4241,
@@ -2662,7 +3913,7 @@
       },
       {
         "key.accessibility" : "source.lang.swift.accessibility.public",
-        "key.annotated_decl" : "<Declaration>protocol Element<\/Declaration>",
+        "key.annotated_decl" : "<Declaration>protocol Element : <Type usr=\"s:11BlueprintUI01_A31_Elements_Should_Be_Value_TypesP\">_Blueprint_Elements_Should_Be_Value_Types<\/Type><\/Declaration>",
         "key.attributes" : [
           {
             "key.attribute" : "source.decl.attribute.public",
@@ -2673,7 +3924,7 @@
         "key.bodylength" : 243,
         "key.bodyoffset" : 2883,
         "key.doc.column" : 17,
-        "key.doc.declaration" : "protocol Element",
+        "key.doc.declaration" : "protocol Element : BlueprintUI._Blueprint_Elements_Should_Be_Value_Types",
         "key.doc.discussion" : [
           {
             "Para" : "The ultimate purpose of an element is to provide visual content. This can be done in two ways:"
@@ -2689,12 +3940,12 @@
           }
         ],
         "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift",
-        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift\" line=\"41\" column=\"17\"><Name>Element<\/Name><USR>s:11BlueprintUI7ElementP<\/USR><Declaration>protocol Element<\/Declaration><CommentParts><Abstract><Para>Conforming types represent a rectangular content area in a two-dimensional layout space.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>The ultimate purpose of an element is to provide visual content. This can be done in two ways:<\/Para><List-Bullet><Item><Para>By providing a view description (<codeVoice>ViewDescription<\/codeVoice>).<\/Para><\/Item><Item><Para>By providing child elements that will be displayed recursively within the local coordinate space.<\/Para><\/Item><\/List-Bullet><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>A custom element might look something like this:<\/Para><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[struct MyElement: Element {]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var backgroundColor: UIColor = .red]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Returns a single child element.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var content: ElementContent {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return ElementContent(child: Label(text: \"😂\"))]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Providing a view description means that this element will be]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ backed by a UIView instance when displayed in a `BlueprintView`.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return UIView.describe { config in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[            config.bind(backgroundColor, to: \\.backgrouncColor)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        }]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Class>",
+        "key.doc.full_as_xml" : "<Class file=\"\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift\" line=\"41\" column=\"17\"><Name>Element<\/Name><USR>s:11BlueprintUI7ElementP<\/USR><Declaration>protocol Element : BlueprintUI._Blueprint_Elements_Should_Be_Value_Types<\/Declaration><CommentParts><Abstract><Para>Conforming types represent a rectangular content area in a two-dimensional layout space.<\/Para><\/Abstract><Discussion><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>The ultimate purpose of an element is to provide visual content. This can be done in two ways:<\/Para><List-Bullet><Item><Para>By providing a view description (<codeVoice>ViewDescription<\/codeVoice>).<\/Para><\/Item><Item><Para>By providing child elements that will be displayed recursively within the local coordinate space.<\/Para><\/Item><\/List-Bullet><rawHTML><![CDATA[<hr\/>]]><\/rawHTML><Para>A custom element might look something like this:<\/Para><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[struct MyElement: Element {]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var backgroundColor: UIColor = .red]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Returns a single child element.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    var content: ElementContent {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return ElementContent(child: Label(text: \"😂\"))]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ Providing a view description means that this element will be]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    \/\/ backed by a UIView instance when displayed in a `BlueprintView`.]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        return UIView.describe { config in]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[            config.bind(backgroundColor, to: \\.backgrouncColor)]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[        }]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[    }]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[}]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Class>",
         "key.doc.line" : 41,
         "key.doc.name" : "Element",
         "key.doc.type" : "Class",
         "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable3\/Pods\/BlueprintUI\/BlueprintUI\/Sources\/Element\/Element.swift",
-        "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>Element<\/decl.name><\/decl.protocol>",
+        "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>Element<\/decl.name> : <ref.protocol usr=\"s:11BlueprintUI01_A31_Elements_Should_Be_Value_TypesP\">_Blueprint_Elements_Should_Be_Value_Types<\/ref.protocol><\/decl.protocol>",
         "key.kind" : "source.lang.swift.decl.extension",
         "key.length" : 263,
         "key.modulename" : "BlueprintUI",
