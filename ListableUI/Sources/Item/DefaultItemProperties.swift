@@ -20,7 +20,7 @@ import Foundation
 public struct DefaultItemProperties<Content:ItemContent>
 {
     public var sizing : Sizing?
-    public var layout : ItemLayout?
+    public var layouts : ItemLayouts?
     
     public var selectionStyle : ItemSelectionStyle?
     
@@ -30,13 +30,13 @@ public struct DefaultItemProperties<Content:ItemContent>
     
     public init(
         sizing : Sizing? = nil,
-        layout : ItemLayout? = nil,
+        layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil
     ) {
         self.sizing = sizing
-        self.layout = layout
+        self.layouts = layouts
         self.selectionStyle = selectionStyle
         self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.swipeActions = swipeActions

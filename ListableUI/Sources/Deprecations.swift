@@ -70,7 +70,7 @@ public extension Section {
     @available(*, unavailable, renamed: "Section.init(_:build:)")
     init<Identifier:Hashable>(
         identifier : Identifier,
-        build : Build = { _ in }
+        configure : Configure = { _ in }
     ) {
         fatalError()
     }

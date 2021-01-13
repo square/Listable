@@ -362,7 +362,7 @@ extension PresentationState
                 
                 return .init(
                     kind: .listHeader,
-                    layout: header.anyModel.layout,
+                    layouts: header.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -374,7 +374,7 @@ extension PresentationState
                 
                 return .init(
                     kind: .listFooter,
-                    layout: footer.anyModel.layout,
+                    layouts: footer.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -386,7 +386,7 @@ extension PresentationState
                 
                 return .init(
                     kind: .overscrollFooter,
-                    layout: footer.anyModel.layout,
+                    layouts: footer.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -395,13 +395,13 @@ extension PresentationState
             }(),
             sections: self.sections.mapWithIndex { sectionIndex, _, section in
                 .init(
-                    layout: section.model.layout,
+                    layouts: section.model.layouts,
                     header: {
                         guard let header = section.header.state else { return nil }
                         
                         return .init(
                             kind: .sectionHeader,
-                            layout: header.anyModel.layout,
+                            layouts: header.anyModel.layouts,
                             isPopulated: true,
                             measurer: { info in
                                 header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -413,19 +413,18 @@ extension PresentationState
                         
                         return .init(
                             kind: .sectionFooter,
-                            layout: footer.anyModel.layout,
+                            layouts: footer.anyModel.layouts,
                             isPopulated: true,
                             measurer: { info in
                                 footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
                             }
                         )
                     }(),
-                    columns: section.model.columns,
                     items: section.items.mapWithIndex { itemIndex, _, item in
                         .init(
                             delegateProvidedIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
                             liveIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
-                            layout: item.anyModel.layout,
+                            layouts: item.anyModel.layouts,
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
                             measurer: { info in
                                 item.size(for: info, cache: self.itemMeasurementCache, environment: environment)

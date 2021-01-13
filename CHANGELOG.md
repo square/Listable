@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.list`.
+
 ### Removed
 
 ### Changed

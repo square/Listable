@@ -48,7 +48,7 @@ final class HorizontalLayoutViewController : UIViewController
 
                     horizontal += Section("cards") { section in
 
-                        section.columns = .init(count: 2, spacing: 20.0)
+                        section.layouts.list.columns = .init(count: 2, spacing: 20.0)
 
                         section += Item(
                             CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.90)),

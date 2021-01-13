@@ -98,8 +98,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
+                        
                         sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                        
+                        layouts: .init {
+                            $0.list.itemSpacing = 20.0
+                        }
                     )
                     
                     section += Item(
@@ -140,7 +144,9 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             }
                         },
                         sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                        layouts: .init {
+                            $0.list.itemSpacing = 20
+                        }
                     )
                     
                     section += Item(
