@@ -13,9 +13,9 @@ extension ItemCell {
     final class ContentContainerView : UIView {
 
         let contentView : Content.ContentView
-                
+
         private var swipeConfiguration: SwipeConfiguration?
-        
+
         private var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
@@ -30,7 +30,7 @@ extension ItemCell {
             self.contentView = Content.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
-            
+
             self.addSubview(self.contentView)
         }
 
@@ -112,7 +112,8 @@ extension ItemCell {
                 swipeConfiguration = SwipeConfiguration(
                     panGestureRecognizer: panGestureRecognizer,
                     swipeView: swipeView,
-                    numberOfActions: actions.actions.count
+                    numberOfActions: actions.actions.count,
+                    performsFirstActionWithFullSwipe: actions.performsFirstActionWithFullSwipe
                 )
             }
 
@@ -124,21 +125,22 @@ extension ItemCell {
                 set(state: .closed)
             }
         }
-        
+
         private weak var listView : ListView? = nil
 
         @objc private func handlePan(sender: UIPanGestureRecognizer) {
-            
+
             if self.listView == nil {
                 self.listView = self.firstSuperview(ofType: ListView.self)
             }
-            
+
             guard let configuration = swipeConfiguration else { return }
 
             let offsetMultiplier = configuration.numberOfActions == 1 ? 0.5 : 0.7
             let performActionOffset = frame.width * CGFloat(offsetMultiplier)
             let currentSwipeOffset = -contentView.frame.origin.x
             let willPerformAction = currentSwipeOffset > performActionOffset
+                && configuration.performsFirstActionWithFullSwipe
 
             if sender.state == .began {
                 self.listView?.liveCells.perform {
@@ -194,20 +196,20 @@ extension ItemCell {
         }
 
         private func didPerformAction(expandActions: Bool) {
-            
+
             if expandActions {
                 self.set(state: .expandActions, animated: true)
             } else {
                 self.set(state: .closed, animated: true)
             }
         }
-        
+
         func performAnimatedClose() {
             self.set(state: .closed, animated: true)
         }
 
         private func set(state: SwipeActionState, animated: Bool = false) {
-                        
+
             swipeState = state
 
             if animated {
@@ -236,6 +238,7 @@ extension ItemCell {
         let panGestureRecognizer: UIPanGestureRecognizer
         let swipeView: Content.SwipeActionsView
         var numberOfActions: Int
+        var performsFirstActionWithFullSwipe: Bool
     }
 }
 
