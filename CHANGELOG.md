@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- `SwipeActionsConfiguration.performsFirstActionWithFullSwipe` is now respected when set to `false`.
+
 ### Added
 
 ### Removed
