@@ -10,7 +10,7 @@ import Foundation
 
 /// Controls various behaviors of the list view, such as keyboard dismissal, selection mode, and behavior
 /// when the list content underflows the available space in the list view.
-public struct Behavior : Equatable
+public struct Behavior
 {
     /// How the keyboard should be dismissed (if at all) based on scrolling of the list view.
     public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
@@ -41,7 +41,7 @@ public struct Behavior : Equatable
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
-        keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
+        keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible(),
         scrollsToTop : ScrollsToTop = .enabled,
         selectionMode : SelectionMode = .single(),
         underflow : Underflow = Underflow(),
@@ -67,13 +67,15 @@ public struct Behavior : Equatable
 extension Behavior
 {
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
-    public enum KeyboardAdjustmentMode : Equatable
+    public enum KeyboardAdjustmentMode
     {
         /// The `contentInset` of the list is not adjusted when the keyboard appears or disappears.
         case none
         
+        public typealias ExtraInset = () -> CGFloat
+        
         /// The `contentInset` of the list is adjusted when the keyboard appears or disappears.
-        case adjustsWhenVisible
+        case adjustsWhenVisible(extraInset : ExtraInset = { 0 })
     }
     
     
