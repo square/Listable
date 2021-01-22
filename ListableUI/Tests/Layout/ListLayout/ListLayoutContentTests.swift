@@ -16,21 +16,21 @@ class ListLayoutContentTests : XCTestCase
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
             kind: .listHeader,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
             kind: .listFooter,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let overscroll = ListLayoutContent.SupplementaryItemInfo(
             kind: .overscrollFooter,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
@@ -39,17 +39,16 @@ class ListLayoutContentTests : XCTestCase
             .init(
                 delegateProvidedIndexPath: IndexPath(item: index, section: 0),
                 liveIndexPath: IndexPath(item: index, section: 0),
-                layout: .init(),
+                layouts: .init(),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
         }
                 
         let section = ListLayoutContent.SectionInfo(
-            layout: .init(width: .default),
+            layouts: .init(),
             header: nil,
             footer: nil,
-            columns: .one,
             items: items
         )
         
@@ -92,14 +91,14 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
             kind: .sectionHeader,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
             kind: .sectionHeader,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
@@ -108,7 +107,7 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
             .init(
                 delegateProvidedIndexPath: IndexPath(item: index, section: 0),
                 liveIndexPath: IndexPath(item: index, section: 0),
-                layout: .init(),
+                layouts: .init(),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
@@ -117,10 +116,9 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
         // Shouldn't include header or footer if they are empty.
         
         let section1 = ListLayoutContent.SectionInfo(
-            layout: .init(width: .default),
+            layouts: .init(),
             header: nil,
             footer: nil,
-            columns: .one,
             items: items
         )
         
@@ -129,10 +127,9 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
         // Should include header and footer if they are populated.
         
         let section2 = ListLayoutContent.SectionInfo(
-            layout: .init(width: .default),
+            layouts: .init(),
             header: header,
             footer: footer,
-            columns: .one,
             items: items
         )
         
@@ -143,14 +140,14 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
             kind: .sectionHeader,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
             kind: .sectionHeader,
-            layout: .init(),
+            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
@@ -159,17 +156,16 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
             .init(
                 delegateProvidedIndexPath: IndexPath(item: index, section: 0),
                 liveIndexPath: IndexPath(item: index, section: 0),
-                layout: .init(),
+                layouts: .init(),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
         }
                 
         let section = ListLayoutContent.SectionInfo(
-            layout: .init(width: .default),
+            layouts: .init(),
             header: header,
             footer: footer,
-            columns: .one,
             items: items
         )
         
