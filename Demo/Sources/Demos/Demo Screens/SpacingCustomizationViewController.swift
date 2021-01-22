@@ -24,7 +24,7 @@ final class SpacingCustomizationViewController : UIViewController
 
         self.listView.configure { list in
             
-            list.layout = .list {
+            list.layout = .table {
                 $0.layout.set {
                     $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
                     $0.itemSpacing = 20.0
@@ -42,7 +42,7 @@ final class SpacingCustomizationViewController : UIViewController
 
             list += Section("custom-50") { section in
 
-                section.layouts.list = .init(customInterSectionSpacing: 50)
+                section.layouts.table = .init(customInterSectionSpacing: 50)
 
                 section += Item(
                     CardElement(title: "Default Row In 50 Spacing Section", color: .white(0.95)),
@@ -52,7 +52,7 @@ final class SpacingCustomizationViewController : UIViewController
 
             list += Section("custom-100") { section in
 
-                section.layouts.list = .init(customInterSectionSpacing: 100)
+                section.layouts.table = .init(customInterSectionSpacing: 100)
 
                 section += Item(
                     CardElement(title: "Default Row In 100 Spacing Section", color: .white(0.95)),

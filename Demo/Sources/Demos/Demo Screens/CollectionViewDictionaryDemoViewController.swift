@@ -21,7 +21,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     {
         self.title = "Dictionary"
         
-        self.listView.layout = .list {
+        self.listView.layout = .table {
             $0.layout.set {
                 $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0)
                 $0.width = .atMost(600.0)
@@ -92,7 +92,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 rows += Item(
                     search,
                     layouts: .init {
-                        $0.list.width = .fill
+                        $0.table.width = .fill
                     }
                 )
             }

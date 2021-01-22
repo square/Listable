@@ -1,5 +1,5 @@
 //
-//  DefaultListLayoutTests.swift
+//  TableListLayoutTests.swift
 //  ListableUI-Unit-Tests
 //
 //  Created by Kyle Van Essen on 5/8/20.
@@ -11,23 +11,23 @@ import Snapshot
 @testable import ListableUI
 
 
-class ListAppearanceTests : XCTestCase
+class TableAppearanceTests : XCTestCase
 {
     func test_init()
     {
-        let appearance = ListAppearance()
+        let appearance = TableAppearance()
         
-        XCTAssertEqual(appearance.sizing, ListAppearance.Sizing())
-        XCTAssertEqual(appearance.layout, ListAppearance.Layout())
+        XCTAssertEqual(appearance.sizing, TableAppearance.Sizing())
+        XCTAssertEqual(appearance.layout, TableAppearance.Layout())
     }
 }
 
 
-class ListAppearance_SizingTests : XCTestCase
+class TableAppearance_SizingTests : XCTestCase
 {
     func test_init()
     {
-        let sizing = ListAppearance.Sizing()
+        let sizing = TableAppearance.Sizing()
         
         XCTAssertEqual(sizing.itemHeight, 50.0)
         XCTAssertEqual(sizing.sectionHeaderHeight, 60.0)
@@ -40,11 +40,11 @@ class ListAppearance_SizingTests : XCTestCase
 }
 
 
-class ListAppearance_LayoutTests : XCTestCase
+class TableAppearance_LayoutTests : XCTestCase
 {
     func test_init()
     {
-        let layout = ListAppearance.Layout()
+        let layout = TableAppearance.Layout()
         
         XCTAssertEqual(layout.padding, UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0))
         XCTAssertEqual(layout.width, .noConstraint)
@@ -58,18 +58,18 @@ class ListAppearance_LayoutTests : XCTestCase
     func test_width()
     {
         self.testcase("No width constraint") {
-            XCTAssertEqual(110.0, ListAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .noConstraint))
+            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .noConstraint))
         }
         
         self.testcase("Has width constraint") {
-            XCTAssertEqual(100.0, ListAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .fixed(100.0)))
-            XCTAssertEqual(110.0, ListAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .atMost(200.0)))
+            XCTAssertEqual(100.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .fixed(100.0)))
+            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .atMost(200.0)))
         }
     }
 }
 
 
-class DefaultListLayoutTests : XCTestCase
+class TableListLayoutTests : XCTestCase
 {
     func test_layout_vertical()
     {
@@ -87,7 +87,7 @@ class DefaultListLayoutTests : XCTestCase
         
         listView.configure { list in
             
-            list.layout = .list {
+            list.layout = .table {
                 $0.layout = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
                     width: .noConstraint,
@@ -105,7 +105,7 @@ class DefaultListLayoutTests : XCTestCase
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section("first") { section in
-                section.layouts.list.customInterSectionSpacing = 30
+                section.layouts.table.customInterSectionSpacing = 30
 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))

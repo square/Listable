@@ -1,5 +1,5 @@
 //
-//  DefaultListLayout.swift
+//  TableListLayout.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 11/19/19.
@@ -10,23 +10,23 @@ import Foundation
 
 public extension LayoutDescription
 {
-    static func list(_ configure : @escaping (inout ListAppearance) -> () = { _ in }) -> Self
+    static func table(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self
     {
-        DefaultListLayout.describe(appearance: configure)
+        TableListLayout.describe(appearance: configure)
     }
 }
 
 
 ///
-/// `ListAppearance` defines the appearance and layout attribute for list layouts within a Listable list.
+/// `TableAppearance` defines the appearance and layout attribute for list layouts within a Listable list.
 ///
-/// The below diagram shows where each of the properties on the `ListAppearance.Layout` values are
+/// The below diagram shows where each of the properties on the `TableAppearance.Layout` values are
 /// applied when laying out the list.
 ///
 /// Note
 /// ----
 /// Do not edit this ASCII diagram directly.
-/// Edit the `ListAppearance.monopic` file in this directory using Monodraw.
+/// Edit the `TableAppearance.monopic` file in this directory using Monodraw.
 /// ```
 /// ┌─────────────────────────────────────────────────────────────────┐
 /// │                          padding.top                            │
@@ -102,7 +102,7 @@ public extension LayoutDescription
 /// │                         padding.bottom                          │
 /// └─────────────────────────────────────────────────────────────────┘
 /// ```
-public struct ListAppearance : ListLayoutAppearance
+public struct TableAppearance : ListLayoutAppearance
 {
     public var direction: LayoutDirection {
         .vertical
@@ -116,11 +116,11 @@ public struct ListAppearance : ListLayoutAppearance
     /// Layout attributes for content in the list.
     public var layout : Layout
     
-    public static var `default`: ListAppearance {
+    public static var `default`: TableAppearance {
         return self.init()
     }
         
-    /// Creates a new `ListAppearance` object.
+    /// Creates a new `TableAppearance` object.
     public init(
         stickySectionHeaders : Bool = true,
         sizing : Sizing = Sizing(),
@@ -133,107 +133,100 @@ public struct ListAppearance : ListLayoutAppearance
 }
 
 
-extension ListAppearance
+extension TableAppearance
 {
-    public enum Item {
-        public struct Layout : Equatable, ItemLayoutsValue
-        {            
-            public var itemSpacing : CGFloat?
-            public var itemToSectionFooterSpacing : CGFloat?
-            
-            public var width : CustomWidth
-                
-            public init(
-                itemSpacing : CGFloat? = nil,
-                itemToSectionFooterSpacing : CGFloat? = nil,
-                width : CustomWidth = .default
-            ) {
-                self.itemSpacing = itemSpacing
-                self.itemSpacing = itemSpacing
-                
-                self.width = width
-            }
-            
-            public static var defaultValue : Self {
-                Self.init()
-            }
-        }
-    }
-    
-    public enum HeaderFooter {
-        public struct Layout : Equatable, HeaderFooterLayoutsValue
-        {
-            public var width : CustomWidth
-                
-            public init(
-                width : CustomWidth = .default
-            ) {
-                self.width = width
-            }
-            
-            public static var defaultValue : Self {
-                .init()
-            }
-        }
-
-    }
-    
-    public enum Section {
+    public struct ItemLayout : Equatable, ItemLayoutsValue
+    {
+        public var itemSpacing : CGFloat?
+        public var itemToSectionFooterSpacing : CGFloat?
         
-        public struct Layout : Equatable, SectionLayoutsValue
-        {
-            public var width : CustomWidth
+        public var width : CustomWidth
+            
+        public init(
+            itemSpacing : CGFloat? = nil,
+            itemToSectionFooterSpacing : CGFloat? = nil,
+            width : CustomWidth = .default
+        ) {
+            self.itemSpacing = itemSpacing
+            self.itemSpacing = itemSpacing
+            
+            self.width = width
+        }
+        
+        public static var defaultValue : Self {
+            Self.init()
+        }
+    }
+    
+    
+    public struct HeaderFooterLayout : Equatable, HeaderFooterLayoutsValue
+    {
+        public var width : CustomWidth
+            
+        public init(
+            width : CustomWidth = .default
+        ) {
+            self.width = width
+        }
+        
+        public static var defaultValue : Self {
+            .init()
+        }
+    }
+    
+    public struct SectionLayout : Equatable, SectionLayoutsValue
+    {
+        public var width : CustomWidth
 
-            /// Overrides the calculated spacing after this section
-            public var customInterSectionSpacing : CGFloat?
+        /// Overrides the calculated spacing after this section
+        public var customInterSectionSpacing : CGFloat?
+        
+        public var columns : Columns
+        
+        public init(
+            width : CustomWidth = .default,
+            customInterSectionSpacing : CGFloat? = nil,
+            columns : Columns = .one
+        ) {
+            self.width = width
+            self.customInterSectionSpacing = customInterSectionSpacing
             
-            public var columns : Columns
+            self.columns = columns
+        }
+        
+        public static var defaultValue : Self {
+            Self.init()
+        }
+        
+        public struct Columns : Equatable
+        {
+            public var count : Int
+            public var spacing : CGFloat
             
-            public init(
-                width : CustomWidth = .default,
-                customInterSectionSpacing : CGFloat? = nil,
-                columns : Columns = .one
-            ) {
-                self.width = width
-                self.customInterSectionSpacing = customInterSectionSpacing
-                
-                self.columns = columns
+            public static var one : Columns {
+                return Columns(count: 1, spacing: 0.0)
             }
             
-            public static var defaultValue : Self {
-                Self.init()
-            }
-            
-            public struct Columns : Equatable
+            public init(count : Int = 1, spacing : CGFloat = 0.0)
             {
-                public var count : Int
-                public var spacing : CGFloat
+                precondition(count >= 1, "Columns must be greater than or equal to 1.")
+                precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
                 
-                public static var one : Columns {
-                    return Columns(count: 1, spacing: 0.0)
+                self.count = count
+                self.spacing = spacing
+            }
+            
+            func group<Value>(values : [Value]) -> [[Value]]
+            {
+                var values = values
+                
+                var grouped : [[Value]] = []
+                
+                while values.count > 0 {
+                    grouped.append(values.safeDropFirst(self.count))
                 }
                 
-                public init(count : Int = 1, spacing : CGFloat = 0.0)
-                {
-                    precondition(count >= 1, "Columns must be greater than or equal to 1.")
-                    precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
-                    
-                    self.count = count
-                    self.spacing = spacing
-                }
-                
-                func group<Value>(values : [Value]) -> [[Value]]
-                {
-                    var values = values
-                    
-                    var grouped : [[Value]] = []
-                    
-                    while values.count > 0 {
-                        grouped.append(values.safeDropFirst(self.count))
-                    }
-                    
-                    return grouped
-                }
+                return grouped
             }
         }
     }
@@ -372,43 +365,43 @@ extension ListAppearance
 
 extension ItemLayouts {
     
-    /// Allows customization of an `Item`'s layout when it is presented within a `.list` style layout.
-    public var list : ListAppearance.Item.Layout {
-        get { self[ListAppearance.Item.Layout.self] }
-        set { self[ListAppearance.Item.Layout.self] = newValue }
+    /// Allows customization of an `Item`'s layout when it is presented within a `.table` style layout.
+    public var table : TableAppearance.ItemLayout {
+        get { self[TableAppearance.ItemLayout.self] }
+        set { self[TableAppearance.ItemLayout.self] = newValue }
     }
 }
 
 
 extension HeaderFooterLayouts {
     
-    /// Allows customization of a `HeaderFooter`'s layout when it is presented within a `.list` style layout.
-    public var list : ListAppearance.HeaderFooter.Layout {
-        get { self[ListAppearance.HeaderFooter.Layout.self] }
-        set { self[ListAppearance.HeaderFooter.Layout.self] = newValue }
+    /// Allows customization of a `HeaderFooter`'s layout when it is presented within a `.table` style layout.
+    public var table : TableAppearance.HeaderFooterLayout {
+        get { self[TableAppearance.HeaderFooterLayout.self] }
+        set { self[TableAppearance.HeaderFooterLayout.self] = newValue }
     }
 }
 
 
 extension SectionLayouts {
     
-    /// Allows customization of a `Section`'s layout when it is presented within a `.list` style layout.
-    public var list : ListAppearance.Section.Layout {
-        get { self[ListAppearance.Section.Layout.self] }
-        set { self[ListAppearance.Section.Layout.self] = newValue }
+    /// Allows customization of a `Section`'s layout when it is presented within a `.table` style layout.
+    public var table : TableAppearance.SectionLayout {
+        get { self[TableAppearance.SectionLayout.self] }
+        set { self[TableAppearance.SectionLayout.self] = newValue }
     }
 }
 
 
-final class DefaultListLayout : ListLayout
+final class TableListLayout : ListLayout
 {
-    typealias LayoutAppearance = ListAppearance
+    typealias LayoutAppearance = TableAppearance
     
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .top)
     }
     
-    var layoutAppearance: ListAppearance
+    var layoutAppearance: TableAppearance
     
     //
     // MARK: Public Properties
@@ -467,7 +460,7 @@ final class DefaultListLayout : ListLayout
         
         let viewWidth = collectionView.bounds.width
         
-        let rootWidth = ListAppearance.Layout.width(
+        let rootWidth = TableAppearance.Layout.width(
             with: viewSize.width,
             padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
             constraint: layout.width
@@ -506,7 +499,7 @@ final class DefaultListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = header.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -535,7 +528,7 @@ final class DefaultListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
+            let sectionPosition = section.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             //
             // Section Header
@@ -545,7 +538,7 @@ final class DefaultListLayout : ListLayout
             let hasSectionFooter = section.footer.isPopulated
             
             performLayout(for: section.header) { header in
-                let width = header.layouts.list.width.merge(with: section.layouts.list.width)
+                let width = header.layouts.table.width.merge(with: section.layouts.table.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -573,9 +566,9 @@ final class DefaultListLayout : ListLayout
             // Section Items
             //
             
-            if section.layouts.list.columns.count == 1 {
+            if section.layouts.table.columns.count == 1 {
                 section.items.forEachWithIndex { itemIndex, isLast, item in
-                    let width = item.layouts.list.width.merge(with: section.layouts.list.width)
+                    let width = item.layouts.table.width.merge(with: section.layouts.table.width)
                     let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                     
                     let measureInfo = Sizing.MeasureInfo(
@@ -594,16 +587,16 @@ final class DefaultListLayout : ListLayout
 
                     if isLast {
                         if hasSectionFooter {
-                            lastContentMaxY += item.layouts.list.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                            lastContentMaxY += item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
                         }
                     } else {
-                        lastContentMaxY += item.layouts.list.itemSpacing ?? layout.itemSpacing
+                        lastContentMaxY += item.layouts.table.itemSpacing ?? layout.itemSpacing
                     }
                 }
             } else {
-                let itemWidth = round((sectionPosition.width - (section.layouts.list.columns.spacing * CGFloat(section.layouts.list.columns.count - 1))) / CGFloat(section.layouts.list.columns.count))
+                let itemWidth = round((sectionPosition.width - (section.layouts.table.columns.spacing * CGFloat(section.layouts.table.columns.count - 1))) / CGFloat(section.layouts.table.columns.count))
                 
-                let groupedItems = section.layouts.list.columns.group(values: section.items)
+                let groupedItems = section.layouts.table.columns.group(values: section.items)
                 
                 groupedItems.forEachWithIndex { rowIndex, isLast, row in
                     var maxHeight : CGFloat = 0.0
@@ -623,8 +616,8 @@ final class DefaultListLayout : ListLayout
                                                 
                         let height = item.measurer(measureInfo).height
                         
-                        let itemSpacing = item.layouts.list.itemSpacing ?? layout.itemSpacing
-                        let itemToSectionFooterSpacing = item.layouts.list.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                        let itemSpacing = item.layouts.table.itemSpacing ?? layout.itemSpacing
+                        let itemToSectionFooterSpacing = item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
                         
                         item.size = CGSize(width: itemWidth, height: height)
                         
@@ -632,7 +625,7 @@ final class DefaultListLayout : ListLayout
                         maxItemSpacing = max(itemSpacing, maxItemSpacing)
                         maxItemToSectionFooterSpacing = max(itemToSectionFooterSpacing, maxItemToSectionFooterSpacing)
                         
-                        columnXOrigin += (itemWidth + section.layouts.list.columns.spacing)
+                        columnXOrigin += (itemWidth + section.layouts.table.columns.spacing)
                     }
                     
                     lastContentMaxY += maxHeight
@@ -652,7 +645,7 @@ final class DefaultListLayout : ListLayout
             //
             
             performLayout(for: section.footer) { footer in
-                let width = footer.layouts.list.width.merge(with: section.layouts.list.width)
+                let width = footer.layouts.table.width.merge(with: section.layouts.table.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -680,7 +673,7 @@ final class DefaultListLayout : ListLayout
                 }
             } else {
                 let additionalSectionSpacing: CGFloat
-                if let customInterSectionSpacing = section.layouts.list.customInterSectionSpacing {
+                if let customInterSectionSpacing = section.layouts.table.customInterSectionSpacing {
                     additionalSectionSpacing = customInterSectionSpacing
                 } else {
                     additionalSectionSpacing = hasSectionFooter
@@ -699,7 +692,7 @@ final class DefaultListLayout : ListLayout
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
             
-            let position = footer.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -728,7 +721,7 @@ final class DefaultListLayout : ListLayout
         //
                     
         performLayout(for: self.content.overscrollFooter) { footer in
-            let position = footer.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -760,9 +753,9 @@ final class DefaultListLayout : ListLayout
 
 fileprivate extension ListLayoutContent.SectionInfo
 {
-    func setItemPositions(with appearance : ListAppearance)
+    func setItemPositions(with appearance : TableAppearance)
     {
-        if self.layouts.list.columns.count == 1 {
+        if self.layouts.table.columns.count == 1 {
             let groups = ListLayoutContent.SectionInfo.grouped(
                 items: self.items,
                 groupingHeight: appearance.sizing.itemPositionGroupingHeight,
@@ -795,7 +788,7 @@ fileprivate extension ListLayoutContent.SectionInfo
         }
     }
     
-    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : ListAppearance) -> [[ListLayoutContent.ItemInfo]]
+    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : TableAppearance) -> [[ListLayoutContent.ItemInfo]]
     {
         var all = [[ListLayoutContent.ItemInfo]]()
         var current = [ListLayoutContent.ItemInfo]()
@@ -812,7 +805,7 @@ fileprivate extension ListLayoutContent.SectionInfo
             
             current.append(item)
             
-            lastSpacing = item.layouts.list.itemSpacing ?? appearance.layout.itemSpacing
+            lastSpacing = item.layouts.table.itemSpacing ?? appearance.layout.itemSpacing
         }
         
         if current.isEmpty == false {

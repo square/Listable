@@ -22,7 +22,7 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
-        .list {
+        .table {
             $0.layout = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
                 width: .atMost(600.0),

@@ -31,7 +31,7 @@ public struct ItemPreviewAppearance : Equatable
     {
         properties.appearance.backgroundColor = self.backgroundColor
         
-        properties.layout = .list {
+        properties.layout = .table {
             $0.layout.padding = UIEdgeInsets(top: self.padding, left: self.padding, bottom: self.padding, right: self.padding)
         }
     }

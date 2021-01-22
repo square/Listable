@@ -16,7 +16,7 @@ final class MultiSelectViewController : ListViewController
         
         list.behavior.selectionMode = .multiple
         
-        list.layout = .list {
+        list.layout = .table {
             $0.layout.itemSpacing = 10.0
             $0.layout.padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         }

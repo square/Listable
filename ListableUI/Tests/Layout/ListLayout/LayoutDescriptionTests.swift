@@ -55,7 +55,7 @@ final class LayoutDescriptionTests : XCTestCase
     
     func test_isSameLayoutType()
     {
-        let description1 = DefaultListLayout.describe()
+        let description1 = TableListLayout.describe()
         let description2 = PagedListLayout.describe()
         
         XCTAssertEqual(description1.configuration.isSameLayoutType(as: description1.configuration), true)

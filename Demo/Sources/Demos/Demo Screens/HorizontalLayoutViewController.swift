@@ -23,7 +23,7 @@ final class HorizontalLayoutViewController : UIViewController
         
         self.listView.configure { list in
             
-            list.layout = .list {
+            list.layout = .table {
                 $0.layout.itemSpacing = 20.0
                 $0.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
             }
@@ -48,7 +48,7 @@ final class HorizontalLayoutViewController : UIViewController
 
                     horizontal += Section("cards") { section in
 
-                        section.layouts.list.columns = .init(count: 2, spacing: 20.0)
+                        section.layouts.table.columns = .init(count: 2, spacing: 20.0)
 
                         section += Item(
                             CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.90)),

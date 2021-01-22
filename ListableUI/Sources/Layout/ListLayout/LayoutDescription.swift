@@ -17,7 +17,7 @@ import Foundation
 /// For example, to use a standard list layout, and customize the layout, your code would look something like this:
 ///
 /// ```
-/// listView.layout = .list {
+/// listView.layout = .table {
 ///     $0.stickySectionHeaders = true
 ///
 ///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)

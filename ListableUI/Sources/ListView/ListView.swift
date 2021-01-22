@@ -35,7 +35,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         let initialLayout = CollectionViewLayout(
             delegate: self.delegate,
-            layoutDescription: .list(),
+            layoutDescription: .table(),
             appearance: self.appearance,
             behavior: self.behavior
         )

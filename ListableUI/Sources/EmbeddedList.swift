@@ -18,7 +18,7 @@ public extension Item where Content == EmbeddedList
     ///     sizing: .fixed(height: 200)
     /// ) { list in
     ///
-    ///     list.layout = .list {
+    ///     list.layout = .table {
     ///         $0.direction = .horizontal
     ///     }
     ///
@@ -39,7 +39,7 @@ public extension Item where Content == EmbeddedList
             sizing: sizing.toStandardSizing,
             
             layouts: .init {
-                $0.list = .init(width: .fill)
+                $0.table = .init(width: .fill)
             }
         )
     }
@@ -74,7 +74,7 @@ public struct EmbeddedList : ItemContent
         
         self.properties = ListProperties(
             animatesChanges: true,
-            layout: .list(),
+            layout: .table(),
             appearance: .init {
                 $0.showsScrollIndicators = false
             },

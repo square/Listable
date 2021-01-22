@@ -73,14 +73,14 @@ public struct ListProperties
     // MARK: Layout & Appearance
     //
     
-    /// The layout type to use with the list. Defaults to `.list()`, aka a list
-    /// with no spacing and full width headers, footers, and content.
+    /// The layout type to use with the list. Defaults to `.table()`, aka a table
+    /// with no spacing and full width headers, footers, and content – basically a plain table view.
     ///
     /// If you would like to change the layout to either a new type, or provide
     /// a `list` with different configuration options, assign it here.
     ///
     /// ```
-    /// list.layout = .list {
+    /// list.layout = .table {
     ///     $0.stickySectionHeaders = true
     ///
     ///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -154,7 +154,7 @@ public struct ListProperties
     public static func `default`(with builder : Build = { _ in }) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
-            layout: .list(),
+            layout: .table(),
             appearance: .init(),
             scrollIndicatorInsets: .zero,
             behavior: .init(),
