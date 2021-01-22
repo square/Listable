@@ -89,7 +89,12 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                     state.value.filter = string
                 }
                 
-                rows += Item(search, layout: .init(width: .fill))
+                rows += Item(
+                    search,
+                    layouts: .init {
+                        $0.list.width = .fill
+                    }
+                )
             }
             
             var hasContent = false

@@ -105,7 +105,7 @@ class DefaultListLayoutTests : XCTestCase
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section("first") { section in
-                section.layout = Section.Layout(customInterSectionSpacing: 30)
+                section.layouts.list.customInterSectionSpacing = 30
 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))

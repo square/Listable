@@ -35,8 +35,12 @@ public extension Item where Content == EmbeddedList
     {
         Item(
             EmbeddedList(identifier: identifier, build: build),
+            
             sizing: sizing.toStandardSizing,
-            layout: ItemLayout(width: .fill)
+            
+            layouts: .init {
+                $0.list = .init(width: .fill)
+            }
         )
     }
 }

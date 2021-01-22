@@ -218,12 +218,12 @@ public final class DemosRootViewController : ListViewController
 
             section += Item(
                 DemoItem(text: "Tappable Row"),
-                selectionStyle: .selectable()
+                selectionStyle: .tappable
             )
             
             section += Item(
                 DemoItem(text: "Tappable Row (Slow Is Selected)"),
-                selectionStyle: .selectable(),
+                selectionStyle: .tappable,
                 onSelect: { _ in
                     Thread.sleep(forTimeInterval: 0.5)
                 }

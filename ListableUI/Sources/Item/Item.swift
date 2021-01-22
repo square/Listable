@@ -13,7 +13,7 @@ public struct Item<Content:ItemContent> : AnyItem
     public var content : Content
     
     public var sizing : Sizing
-    public var layout : ItemLayout
+    public var layouts : ItemLayouts
     
     public var selectionStyle : ItemSelectionStyle
     
@@ -56,7 +56,7 @@ public struct Item<Content:ItemContent> : AnyItem
     public init(
         _ content : Content,
         sizing : Sizing? = nil,
-        layout : ItemLayout? = nil,
+        layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
@@ -82,12 +82,12 @@ public struct Item<Content:ItemContent> : AnyItem
             self.sizing = .thatFits(.init(.atLeast(.default)))
         }
         
-        if let layout = layout {
-            self.layout = layout
-        } else if let layout = content.defaultItemProperties.layout {
-            self.layout = layout
+        if let layouts = layouts {
+            self.layouts = layouts
+        } else if let layouts = content.defaultItemProperties.layouts {
+            self.layouts = layouts
         } else {
-            self.layout = ItemLayout()
+            self.layouts = ItemLayouts()
         }
         
         if let selectionStyle = selectionStyle {
@@ -181,6 +181,3 @@ extension Item : SignpostLoggable
         )
     }
 }
-
-
-

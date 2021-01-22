@@ -222,7 +222,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = header.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -257,7 +257,7 @@ final class GridListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let sectionPosition = section.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
             
             //
             // Section Header
@@ -267,7 +267,7 @@ final class GridListLayout : ListLayout
             let hasSectionFooter = section.footer.isPopulated
             
             performLayout(for: section.header) { header in
-                let width = header.layout.width.merge(with: section.layout.width)
+                let width = header.layouts.list.width.merge(with: section.layouts.list.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -315,7 +315,7 @@ final class GridListLayout : ListLayout
             //
             
             performLayout(for: section.footer) { footer in
-                let width = footer.layout.width.merge(with: section.layout.width)
+                let width = footer.layouts.list.width.merge(with: section.layouts.list.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -357,7 +357,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
             
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -383,7 +383,7 @@ final class GridListLayout : ListLayout
                     
         performLayout(for: self.content.overscrollFooter) { footer in
 
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.list.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),

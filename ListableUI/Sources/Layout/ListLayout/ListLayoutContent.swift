@@ -237,13 +237,11 @@ public extension ListLayoutContent
 {
     final class SectionInfo
     {
-        let layout : Section.Layout
+        let layouts : SectionLayouts
         
         let header : SupplementaryItemInfo
         let footer : SupplementaryItemInfo
-        
-        let columns : Section.Columns
-        
+                
         var items : [ItemInfo]
         
         var all : [ListLayoutContentItem] {
@@ -265,20 +263,17 @@ public extension ListLayoutContent
         private(set) var contentsFrame : CGRect
                 
         init(
-            layout : Section.Layout,
+            layouts : SectionLayouts,
             header : SupplementaryItemInfo?,
             footer : SupplementaryItemInfo?,
-            columns : Section.Columns,
             items : [ItemInfo]
         ) {
             self.contentsFrame = .zero
             
-            self.layout = layout
+            self.layouts = layouts
             
             self.header = header ?? .empty(.sectionHeader)
             self.footer = footer ?? .empty(.sectionFooter)
-            
-            self.columns = columns
             
             self.items = items
         }
@@ -307,13 +302,13 @@ public extension ListLayoutContent
         {
             SupplementaryItemInfo(
                 kind: kind,
-                layout: .init(),
+                layouts: .init(),
                 isPopulated: false, measurer: { _ in .zero }
             )
         }
         
         let kind : SupplementaryKind
-        let layout : HeaderFooterLayout
+        let layouts : HeaderFooterLayouts
         let measurer : (Sizing.MeasureInfo) -> CGSize
                 
         let isPopulated : Bool
@@ -347,13 +342,13 @@ public extension ListLayoutContent
         
         init(
             kind : SupplementaryKind,
-            layout : HeaderFooterLayout,
+            layouts : HeaderFooterLayouts,
             isPopulated: Bool,
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.kind = kind
             
-            self.layout = layout
+            self.layouts = layouts
             self.isPopulated = isPopulated
             self.measurer = measurer
         }
@@ -375,7 +370,8 @@ public extension ListLayoutContent
         var delegateProvidedIndexPath : IndexPath
         var liveIndexPath : IndexPath
         
-        let layout : ItemLayout
+        let layouts : ItemLayouts
+        
         let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
         let measurer : (Sizing.MeasureInfo) -> CGSize
         
@@ -398,14 +394,15 @@ public extension ListLayoutContent
         init(
             delegateProvidedIndexPath : IndexPath,
             liveIndexPath : IndexPath,
-            layout : ItemLayout,
+            layouts : ItemLayouts,
             insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.delegateProvidedIndexPath = delegateProvidedIndexPath
             self.liveIndexPath = liveIndexPath
                         
-            self.layout = layout
+            self.layouts = layouts
+            
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
             
             self.measurer = measurer

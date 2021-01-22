@@ -42,7 +42,7 @@ final class SpacingCustomizationViewController : UIViewController
 
             list += Section("custom-50") { section in
 
-                section.layout = Section.Layout(customInterSectionSpacing: 50)
+                section.layouts.list = .init(customInterSectionSpacing: 50)
 
                 section += Item(
                     CardElement(title: "Default Row In 50 Spacing Section", color: .white(0.95)),
@@ -52,7 +52,7 @@ final class SpacingCustomizationViewController : UIViewController
 
             list += Section("custom-100") { section in
 
-                section.layout = Section.Layout(customInterSectionSpacing: 100)
+                section.layouts.list = .init(customInterSectionSpacing: 100)
 
                 section += Item(
                     CardElement(title: "Default Row In 100 Spacing Section", color: .white(0.95)),

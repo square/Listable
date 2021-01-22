@@ -239,9 +239,9 @@ public struct ListProperties
     ///     }
     /// }
     /// ```
-    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, configure : Section.Configure)
     {
-        self += Section(identifier, build: build)
+        self += Section(identifier, configure: configure)
     }
 }
 

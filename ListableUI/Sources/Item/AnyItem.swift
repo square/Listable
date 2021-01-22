@@ -15,7 +15,9 @@ public protocol AnyItem : AnyItem_Internal
     var anyContent : Any { get }
     
     var sizing : Sizing { get set }
-    var layout : ItemLayout { get set }
+    
+    var layouts : ItemLayouts { get }
+    
     var selectionStyle : ItemSelectionStyle { get set }
     var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }
     var swipeActions : SwipeActionsConfiguration? { get set }

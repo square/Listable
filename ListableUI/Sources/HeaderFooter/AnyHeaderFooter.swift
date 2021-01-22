@@ -11,13 +11,13 @@ import Foundation
 public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
 {
     var sizing : Sizing { get set }
-    var layout : HeaderFooterLayout { get set }
+    var layouts : HeaderFooterLayouts { get set }
 }
 
 
 public protocol AnyHeaderFooter_Internal
 {
-    var layout : HeaderFooterLayout { get }
+    var layouts : HeaderFooterLayouts { get }
     
     func apply(
         to headerFooterView : UIView,

@@ -77,7 +77,7 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(SectionIdentifier.variations) { section in
                 
-                section.columns = .init(count: 2, spacing: 20.0)
+                section.layouts.list.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits())
                 section.footer = HeaderFooter(Footer(text: footerText), sizing: .thatFits())
                 
@@ -97,7 +97,7 @@ final class ItemizationEditorViewController : UIViewController
             list += itemization.modifiers.map { set in
                 Section(SectionIdentifier.modifier(set.name)) { section in
                     
-                    section.columns = .init(count: 2, spacing: 20.0)
+                    section.layouts.list.columns = .init(count: 2, spacing: 20.0)
                     
                     section.header = HeaderFooter(Header(title: set.name), sizing: .thatFits())
                     section.footer = HeaderFooter(Footer(text: "Choose modifiers"), sizing: .thatFits())
@@ -118,7 +118,7 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(SectionIdentifier.discounts) { section in
                 
-                section.columns = .init(count: 2, spacing: 20.0)
+                section.layouts.list.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits())
                 
                 section += self.availableOptions.allDiscounts.map { discount in
@@ -134,7 +134,7 @@ final class ItemizationEditorViewController : UIViewController
             
             list += Section(SectionIdentifier.taxes) { section in
                 
-                section.columns = .init(count: 2, spacing: 20.0)
+                section.layouts.list.columns = .init(count: 2, spacing: 20.0)
                 section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits())
                 
                 section += self.availableOptions.allTaxes.map { tax in
