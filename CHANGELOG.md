@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [0.14.2] - 2020-01-21
+
+### Fixed
+
+- `SwipeActionsConfiguration.performsFirstActionWithFullSwipe` is now respected when set to `false`.
+
 # [0.14.1] - 2020-01-06
 
 ### Fixed
@@ -269,7 +275,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.14.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.14.2...HEAD
+[0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
 [0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
 [0.12.1]: https://github.com/kyleve/Listable/compare/0.12.0...0.12.1
