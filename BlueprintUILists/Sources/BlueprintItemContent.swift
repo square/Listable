@@ -131,24 +131,23 @@ public extension BlueprintItemContent
     }
     
     /// Creates the `BlueprintView` used to render the content of the item.
-    static func createReusableContentView(frame: CGRect) -> ContentView
-    {
-        let view = BlueprintView(frame: frame)
-        view.backgroundColor = .clear
-        
-        return view
+    static func createReusableContentView(frame: CGRect) -> ContentView {
+        self.newBlueprintView(with: frame)
     }
     
     /// Creates the `BlueprintView` used to render the background of the item.
-    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView
-    {
+    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    private static func newBlueprintView(with frame : CGRect) -> BlueprintView {
         let view = BlueprintView(frame: frame)
         view.backgroundColor = .clear
         
         return view
-    }
-    
-    static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView {
-        self.createReusableBackgroundView(frame: frame)
     }
 }

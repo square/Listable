@@ -119,24 +119,19 @@ public extension BlueprintHeaderFooterContent
         views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
     }
     
-    static func createReusableContentView(frame: CGRect) -> ContentView
-    {
-        let view = BlueprintView(frame: frame)
-        view.backgroundColor = .clear
-        
-        return view
+    static func createReusableContentView(frame: CGRect) -> ContentView {
+        self.newBlueprintView(with: frame)
     }
     
-    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView
-    {
-        let view = BlueprintView(frame: frame)
-        view.backgroundColor = .clear
-        
-        return view
+    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
+        self.newBlueprintView(with: frame)
     }
     
-    static func createReusablePressedBackgroundView(frame: CGRect) -> PressedBackgroundView
-    {
+    static func createReusablePressedBackgroundView(frame: CGRect) -> PressedBackgroundView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    private static func newBlueprintView(with frame : CGRect) -> BlueprintView {
         let view = BlueprintView(frame: frame)
         view.backgroundColor = .clear
         
