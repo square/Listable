@@ -4,27 +4,33 @@
 
 ### Added
 
-- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.table`.
-
-- [Add `inserted` and `removed` items to `.onContentChanged`](https://github.com/kyleve/Listable/pull/260), to easily determine what content was added or removed from the list a central location.
-
 ### Removed
 
 ### Changed
-
-- [Rename `.list` layout to `.table`](https://github.com/kyleve/Listable/pull/258), which is clearer, and also reduces confusion between `ListLayout` (the base protocol for layouts), and the specific table-type layout.
 
 ### Misc
 
 # Past Releases
 
-# [0.14.2] - 2020-01-21
+# [0.15.0] - 2021-01-22
+
+### Added
+
+- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.table`.
+
+- [Add `inserted` and `removed` items to `.onContentChanged`](https://github.com/kyleve/Listable/pull/260), to easily determine what content was added or removed from the list a central location.
+
+### Changed
+
+- [Rename `.list` layout to `.table`](https://github.com/kyleve/Listable/pull/258), which is clearer, and also reduces confusion between `ListLayout` (the base protocol for layouts), and the specific table-type layout.
+
+# [0.14.2] - 2021-01-21
 
 ### Fixed
 
 - `SwipeActionsConfiguration.performsFirstActionWithFullSwipe` is now respected when set to `false`.
 
-# [0.14.1] - 2020-01-06
+# [0.14.1] - 2021-01-06
 
 ### Fixed
 
@@ -279,7 +285,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.14.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.15.0...HEAD
+[0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
 [0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
