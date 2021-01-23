@@ -1,6 +1,6 @@
 PODS:
-  - BlueprintUI (0.19.0)
-  - BlueprintUICommonControls (0.19.0):
+  - BlueprintUI (0.20.0)
+  - BlueprintUICommonControls (0.20.0):
     - BlueprintUI
   - BlueprintUILists (0.14.2):
     - BlueprintUI
@@ -43,8 +43,8 @@ EXTERNAL SOURCES:
     :path: Internal Pods/Snapshot/Snapshot.podspec
 
 SPEC CHECKSUMS:
-  BlueprintUI: 0a86c26f7f51bfc8dd37ead2c41d53b72995d318
-  BlueprintUICommonControls: c177a134b6112a7e08db91b893f0164f49a75a25
+  BlueprintUI: d26766f3e006d1f9348cba6a7f15efc64da74cb3
+  BlueprintUICommonControls: b7b6a10581203f4bd6283c9d2a9b810d513d804b
   BlueprintUILists: afcc5b470731c70d1c2952ee4c24e6bcd566a2bd
   EnglishDictionary: f03968b9382ddc5c8dd63535efbf783c6cd45f1c
   ListableUI: 40e95b6299084145f04b421353612efbf9f50672
