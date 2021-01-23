@@ -6,7 +6,7 @@
 
 - [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.table`.
 
-- [Add `inserted` and `removed` items to `.onContentChanged`](https://github.com/kyleve/Listable/pull/260), to easier determine what content was added or removed from the list a central location.
+- [Add `inserted` and `removed` items to `.onContentChanged`](https://github.com/kyleve/Listable/pull/260), to easily determine what content was added or removed from the list a central location.
 
 ### Removed
 
