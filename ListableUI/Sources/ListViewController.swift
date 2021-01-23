@@ -45,7 +45,7 @@ open class ListViewController : UIViewController
     /// {
     ///     list.appearance = .myAppearance
     ///
-    ///     list.layout = .list { appearance in
+    ///     list.layout = .table { appearance in
     ///         // Configure the appearance.
     ///     }
     ///

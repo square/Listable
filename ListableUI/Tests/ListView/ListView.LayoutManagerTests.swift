@@ -13,7 +13,7 @@ class LayoutManagerTests : XCTestCase
 {
     func test_set_layout()
     {
-        let startingLayout : LayoutDescription = .list()
+        let startingLayout : LayoutDescription = .table()
         
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 100)))
         listView.layout = startingLayout
@@ -34,7 +34,7 @@ class LayoutManagerTests : XCTestCase
         
         /// Setting the same layout type, but changing the description should change the inner ListLayout.
         
-        let newLayout1 : LayoutDescription = .list {
+        let newLayout1 : LayoutDescription = .table {
             $0.layout.padding = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         }
         

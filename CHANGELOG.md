@@ -4,11 +4,13 @@
 
 ### Added
 
-- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.list`.
+- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.table`.
 
 ### Removed
 
 ### Changed
+
+- [Rename `.list` layout to `.table`](https://github.com/kyleve/Listable/pull/258), which is clearer, and also reduces confusion between `ListLayout` (the base protocol for layouts), and the specific table-type layout.
 
 ### Misc
 
@@ -146,7 +148,7 @@
 
 ### Removed
 
-- [Removed support for .`horiztonal` layouts](https://github.com/kyleve/Listable/pull/178) on `.list()` layouts. Now only `.vertical` is supported (this could return at a later date if needed).
+- [Removed support for .`horiztonal` layouts](https://github.com/kyleve/Listable/pull/178) on `.table()` layouts. Now only `.vertical` is supported (this could return at a later date if needed).
 
 ### Changed
 
@@ -215,14 +217,14 @@
   Previously, to configure a layout, you would write code like this:
 
   ```
-  list.appearance.layoutType = .list
-  list.appearance.list.layout.padding = UIEdgeInsets(...)
+  list.appearance.layoutType = .table
+  list.appearance.table.layout.padding = UIEdgeInsets(...)
   ```
 
   Now, you configure the layout like this:
 
   ```
-  list.layout = .list {
+  list.layout = .table {
     $0.layout.padding = UIEdgeInsets(...)
   }
   ```

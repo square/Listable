@@ -21,7 +21,7 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.layout = .list {
+        self.listView.layout = .table {
             $0.layout.itemSpacing = 10.0
         }
         
