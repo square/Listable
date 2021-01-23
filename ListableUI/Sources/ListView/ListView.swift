@@ -870,6 +870,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
                 ListStateObserver.ContentUpdated(
                     hadChanges: diff.changes.isEmpty == false,
+                    insertionsAndRemovals: .init(diff: diff),
                     actions: actions,
                     positionInfo: self.scrollPositionInfo
                 )
