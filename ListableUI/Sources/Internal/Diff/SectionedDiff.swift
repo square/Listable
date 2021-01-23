@@ -87,6 +87,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         let noChange : [NoChange]
         
         let addedItemIdentifiers : Set<ItemIdentifier>
+        let removedItemIdentifiers : Set<ItemIdentifier>
         
         let sectionsChangeCount : Int
         let itemsChangeCount : Int
@@ -113,6 +114,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.added = diff.added.map {
                 Added(
+                    identifier: $0.identifier,
                     newIndex: $0.newIndex,
                     newValue: $0.new
                 )
@@ -120,6 +122,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.removed = diff.removed.map {
                 Removed(
+                    identifier: $0.identifier,
                     oldIndex: $0.oldIndex,
                     oldValue: $0.old
                 )
@@ -127,6 +130,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.moved = diff.moved.map {
                 Moved(
+                    identifier: $0.identifier,
                     oldIndex: $0.old.oldIndex,
                     newIndex: $0.new.newIndex,
                     oldValue: $0.old.old,
@@ -143,7 +147,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             }
             
             self.noChange = diff.noChange.map {
-                return NoChange(
+                NoChange(
+                    identifier: $0.identifier,
                     oldIndex: $0.oldIndex,
                     newIndex: $0.newIndex,
                     oldValue: $0.old,
@@ -159,38 +164,51 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                 )
             }
             
-            let addedIDs : [[ItemIdentifier]] = self.added.map {
-                let items = configuration.section.items($0.newValue)
-                return items.map { configuration.item.identifier($0) }
-            }
-            
-            let movedIDs : [[ItemIdentifier]] = self.moved.map {
-                let items = $0.itemChanges.added
-                return items.map { configuration.item.identifier($0.newValue) }
-            }
-            
-            let noChangeIDs : [[ItemIdentifier]] = self.noChange.map {
-                let items = $0.itemChanges.added
-                return items.map { configuration.item.identifier($0.newValue) }
-            }
-            
-            let allIDs = addedIDs.flatMap { $0 } + movedIDs.flatMap { $0 } + noChangeIDs.flatMap { $0 }
-            
-            self.addedItemIdentifiers = Set(allIDs)
-            
-            self.sectionsChangeCount = self.added.count
+            let sectionsChangeCount =
+                self.added.count
                 + self.removed.count
                 + self.moved.count
             
-            self.itemsChangeCount =
-                self.moved.reduce(0, { $0 + $1.itemChanges.changeCount }) +
-                self.noChange.reduce(0, { $0 + $1.itemChanges.changeCount })
+            let itemsChangeCount =
+                self.moved.reduce(0, { $0 + $1.itemChanges.changeCount })
+                + self.noChange.reduce(0, { $0 + $1.itemChanges.changeCount })
+            
+            self.sectionsChangeCount = sectionsChangeCount
+            self.itemsChangeCount = itemsChangeCount
+            
+            let hasChanges = itemsChangeCount > 0 || sectionsChangeCount > 0
+            
+            if hasChanges {
+                let oldIDs = Self.allItemIDs(in: old, configuration: configuration)
+                let newIDs = Self.allItemIDs(in: new, configuration: configuration)
+                
+                self.addedItemIdentifiers = newIDs.subtracting(oldIDs)
+                self.removedItemIdentifiers = oldIDs.subtracting(newIDs)
+            } else {
+                self.addedItemIdentifiers = []
+                self.removedItemIdentifiers = []
+            }
             
             listablePrecondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
         
+        private static func allItemIDs(in sections : [Section], configuration : Configuration) -> Set<ItemIdentifier> {
+            
+            var IDs = Set<ItemIdentifier>()
+            
+            for section in sections {
+                for item in configuration.section.items(section) {
+                    IDs.insert(configuration.item.identifier(item))
+                }
+            }
+            
+            return IDs
+        }
+        
         struct Added
         {
+            let identifier : SectionIdentifier
+            
             let newIndex : Int
             
             let newValue : Section
@@ -198,6 +216,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Removed
         {
+            let identifier : SectionIdentifier
+            
             let oldIndex : Int
             
             let oldValue : Section
@@ -205,6 +225,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Moved
         {
+            let identifier : SectionIdentifier
+            
             let oldIndex : Int
             let newIndex : Int
             
@@ -216,6 +238,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct NoChange
         {
+            let identifier : SectionIdentifier
+            
             let oldIndex : Int
             let newIndex : Int
             
@@ -263,6 +287,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.added = diff.added.map {
                 Added(
+                    identifier: $0.identifier,
                     newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     newValue: $0.new
                 )
@@ -270,6 +295,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.removed = diff.removed.map {
                 Removed(
+                    identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
                     oldValue: $0.old
                 )
@@ -277,6 +303,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.moved = diff.moved.map {
                 Moved(
+                    identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.old.oldIndex, section: oldIndex),
                     newIndex: IndexPath(item: $0.new.newIndex, section: newIndex),
                     oldValue: $0.old.old,
@@ -286,6 +313,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.updated = diff.updated.map {
                 Updated(
+                    identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
                     newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     oldValue: $0.old,
@@ -295,6 +323,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
             
             self.noChange = diff.noChange.map {
                 NoChange(
+                    identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
                     newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     oldValue: $0.old,
@@ -310,6 +339,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Added
         {
+            let identifier : ItemIdentifier
+            
             let newIndex : IndexPath
             
             let newValue : Item
@@ -317,6 +348,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Removed
         {
+            let identifier : ItemIdentifier
+            
             let oldIndex : IndexPath
             
             let oldValue : Item
@@ -324,6 +357,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Moved
         {
+            let identifier : ItemIdentifier
+            
             let oldIndex : IndexPath
             let newIndex : IndexPath
             
@@ -333,6 +368,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct Updated
         {
+            let identifier : ItemIdentifier
+            
             let oldIndex : IndexPath
             let newIndex : IndexPath
             
@@ -342,6 +379,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
         
         struct NoChange
         {
+            let identifier : ItemIdentifier
+            
             let oldIndex : IndexPath
             let newIndex : IndexPath
             
@@ -351,9 +390,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
     }
 }
 
-
-extension SectionedDiff.SectionChanges.Added : Equatable where Section:Equatable {}
-extension SectionedDiff.SectionChanges.Removed : Equatable where Section:Equatable {}
+extension SectionedDiff.SectionChanges.Added : Equatable where Section:Equatable, Item:Equatable {}
+extension SectionedDiff.SectionChanges.Removed : Equatable where Section:Equatable, Item:Equatable {}
 extension SectionedDiff.SectionChanges.Moved : Equatable where Section:Equatable, Item:Equatable {}
 extension SectionedDiff.SectionChanges.NoChange : Equatable where Section:Equatable, Item:Equatable {}
 

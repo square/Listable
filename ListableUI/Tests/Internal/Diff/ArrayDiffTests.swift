@@ -46,10 +46,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 1, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 3, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 1, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 3, old: "d", new: "d"),
             ])
         }
         
@@ -70,13 +70,13 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.moved, [])
             
             XCTAssertEqual(diff.updated, [
-                ArrayDiff.Updated(oldIndex: 0, newIndex: 0, old: "a", new: "A")
+                ArrayDiff.Updated(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "A")
             ])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 1, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 3, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 1, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 3, old: "d", new: "d"),
             ])
         }
     }
@@ -95,10 +95,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
-                ArrayDiff.Added(newIndex: 0, new: "a"),
-                ArrayDiff.Added(newIndex: 1, new: "b"),
-                ArrayDiff.Added(newIndex: 2, new: "c"),
-                ArrayDiff.Added(newIndex: 3, new: "d"),
+                ArrayDiff.Added(identifier:"a", newIndex: 0, new: "a"),
+                ArrayDiff.Added(identifier:"b", newIndex: 1, new: "b"),
+                ArrayDiff.Added(identifier:"c", newIndex: 2, new: "c"),
+                ArrayDiff.Added(identifier:"d", newIndex: 3, new: "d"),
             ])
             
             XCTAssertEqual(diff.removed, [])
@@ -121,10 +121,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.added, [])
             
             XCTAssertEqual(diff.removed, [
-                ArrayDiff.Removed(oldIndex: 3, old: "d"),
-                ArrayDiff.Removed(oldIndex: 2, old: "c"),
-                ArrayDiff.Removed(oldIndex: 1, old: "b"),
-                ArrayDiff.Removed(oldIndex: 0, old: "a"),
+                ArrayDiff.Removed(identifier:"d", oldIndex: 3, old: "d"),
+                ArrayDiff.Removed(identifier:"c", oldIndex: 2, old: "c"),
+                ArrayDiff.Removed(identifier:"b", oldIndex: 1, old: "b"),
+                ArrayDiff.Removed(identifier:"a", oldIndex: 0, old: "a"),
             ])
             
             XCTAssertEqual(diff.moved, [])
@@ -144,9 +144,9 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
-                ArrayDiff.Added(newIndex: 1, new: "a2"),
-                ArrayDiff.Added(newIndex: 4, new: "c2"),
-                ArrayDiff.Added(newIndex: 6, new: "d2"),
+                ArrayDiff.Added(identifier:"a2", newIndex: 1, new: "a2"),
+                ArrayDiff.Added(identifier:"c2", newIndex: 4, new: "c2"),
+                ArrayDiff.Added(identifier:"d2", newIndex: 6, new: "d2"),
             ])
             
             XCTAssertEqual(diff.removed, [])
@@ -154,10 +154,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 2, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 3, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 5, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 1, newIndex: 2, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 3, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 5, old: "d", new: "d"),
             ])
         }
         
@@ -175,19 +175,19 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.added, [])
             
             XCTAssertEqual(diff.removed, [
-                ArrayDiff.Removed(oldIndex: 6, old: "d2"),
-                ArrayDiff.Removed(oldIndex: 4, old: "c2"),
-                ArrayDiff.Removed(oldIndex: 1, old: "a2"),
+                ArrayDiff.Removed(identifier:"d2", oldIndex: 6, old: "d2"),
+                ArrayDiff.Removed(identifier:"c2", oldIndex: 4, old: "c2"),
+                ArrayDiff.Removed(identifier:"a2", oldIndex: 1, old: "a2"),
             ])
             
             XCTAssertEqual(diff.moved, [])
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 5, newIndex: 3, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 2, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 3, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 5, newIndex: 3, old: "d", new: "d"),
             ])
         }
         
@@ -203,22 +203,22 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
-                ArrayDiff.Added(newIndex: 1, new: "a2"),
-                ArrayDiff.Added(newIndex: 3, new: "c2"),
-                ArrayDiff.Added(newIndex: 4, new: "d2"),
+                ArrayDiff.Added(identifier:"a2", newIndex: 1, new: "a2"),
+                ArrayDiff.Added(identifier:"c2", newIndex: 3, new: "c2"),
+                ArrayDiff.Added(identifier:"d2", newIndex: 4, new: "d2"),
             ])
             
             XCTAssertEqual(diff.removed, [
-                ArrayDiff.Removed(oldIndex: 3, old: "d"),
-                ArrayDiff.Removed(oldIndex: 1, old: "b"),
+                ArrayDiff.Removed(identifier:"d", oldIndex: 3, old: "d"),
+                ArrayDiff.Removed(identifier:"b", oldIndex: 1, old: "b"),
             ])
             
             XCTAssertEqual(diff.moved, [])
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 2, old: "c", new: "c"),
             ])
         }
     }
@@ -241,17 +241,18 @@ class ArrayDiffTests: XCTestCase
             
             XCTAssertEqual(diff.moved, [
                 ArrayDiff.Moved(
-                    old: ArrayDiff.Removed(oldIndex: 0, old: "a"),
-                    new: ArrayDiff.Added(newIndex: 3, new: "a")
+                    identifier:"a",
+                    old: ArrayDiff.Removed(identifier:"a", oldIndex: 0, old: "a"),
+                    new: ArrayDiff.Added(identifier:"a", newIndex: 3, new: "a")
                 )
             ])
             
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 0, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 1, newIndex: 0, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 1, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 2, old: "d", new: "d"),
             ])
         }
         
@@ -271,18 +272,19 @@ class ArrayDiffTests: XCTestCase
             
             XCTAssertEqual(diff.moved, [
                 ArrayDiff.Moved(
-                    old: ArrayDiff.Removed(oldIndex: 1, old: "b"),
-                    new: ArrayDiff.Added(newIndex: 3, new: "B")
+                    identifier:"b", 
+                    old: ArrayDiff.Removed(identifier:"b", oldIndex: 1, old: "b"),
+                    new: ArrayDiff.Added(identifier:"b", newIndex: 3, new: "B")
                 )
             ])
             
             XCTAssertEqual(diff.updated, [
-                ArrayDiff.Updated(oldIndex: 0, newIndex: 0, old: "a", new: "A")
+                ArrayDiff.Updated(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "A")
             ])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 2, old: "d", new: "d")
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 1, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 2, old: "d", new: "d")
             ])
         }
     }
@@ -301,10 +303,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.usedFastPath, false)
             
             XCTAssertEqual(diff.added, [
-                ArrayDiff.Added(newIndex: 1, new: "a"),
-                ArrayDiff.Added(newIndex: 3, new: "b"),
-                ArrayDiff.Added(newIndex: 5, new: "c"),
-                ArrayDiff.Added(newIndex: 7, new: "d"),
+                ArrayDiff.Added(identifier:"a", newIndex: 1, new: "a"),
+                ArrayDiff.Added(identifier:"b", newIndex: 3, new: "b"),
+                ArrayDiff.Added(identifier:"c", newIndex: 5, new: "c"),
+                ArrayDiff.Added(identifier:"d", newIndex: 7, new: "d"),
             ])
             
             XCTAssertEqual(diff.removed, [])
@@ -312,10 +314,10 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 1, newIndex: 2, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 4, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 3, newIndex: 6, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 1, newIndex: 2, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 2, newIndex: 4, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 3, newIndex: 6, old: "d", new: "d"),
             ])
         }
         
@@ -333,20 +335,20 @@ class ArrayDiffTests: XCTestCase
             XCTAssertEqual(diff.added, [])
             
             XCTAssertEqual(diff.removed, [
-                ArrayDiff.Removed(oldIndex: 7, old: "d"),
-                ArrayDiff.Removed(oldIndex: 5, old: "c"),
-                ArrayDiff.Removed(oldIndex: 3, old: "b"),
-                ArrayDiff.Removed(oldIndex: 1, old: "a"),
+                ArrayDiff.Removed(identifier:"d", oldIndex: 7, old: "d"),
+                ArrayDiff.Removed(identifier:"c", oldIndex: 5, old: "c"),
+                ArrayDiff.Removed(identifier:"b", oldIndex: 3, old: "b"),
+                ArrayDiff.Removed(identifier:"a", oldIndex: 1, old: "a"),
             ])
             
             XCTAssertEqual(diff.moved, [])
             XCTAssertEqual(diff.updated, [])
             
             XCTAssertEqual(diff.noChange, [
-                ArrayDiff.NoChange(oldIndex: 0, newIndex: 0, old: "a", new: "a"),
-                ArrayDiff.NoChange(oldIndex: 2, newIndex: 1, old: "b", new: "b"),
-                ArrayDiff.NoChange(oldIndex: 4, newIndex: 2, old: "c", new: "c"),
-                ArrayDiff.NoChange(oldIndex: 6, newIndex: 3, old: "d", new: "d"),
+                ArrayDiff.NoChange(identifier:"a", oldIndex: 0, newIndex: 0, old: "a", new: "a"),
+                ArrayDiff.NoChange(identifier:"b", oldIndex: 2, newIndex: 1, old: "b", new: "b"),
+                ArrayDiff.NoChange(identifier:"c", oldIndex: 4, newIndex: 2, old: "c", new: "c"),
+                ArrayDiff.NoChange(identifier:"d", oldIndex: 6, newIndex: 3, old: "d", new: "d"),
             ])
         }
     }

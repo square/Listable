@@ -23,6 +23,8 @@ struct ArrayDiff<Element, Identifier:Hashable>
     
     struct Added
     {
+        let identifier : Identifier
+        
         let newIndex : Int
         
         let new : Element
@@ -30,6 +32,8 @@ struct ArrayDiff<Element, Identifier:Hashable>
     
     struct Removed
     {
+        let identifier : Identifier
+        
         let oldIndex : Int
         
         let old : Element
@@ -37,12 +41,16 @@ struct ArrayDiff<Element, Identifier:Hashable>
     
     struct Moved
     {
+        let identifier : Identifier
+        
         let old : Removed
         let new : Added
     }
     
     struct Updated
     {
+        let identifier : Identifier
+        
         let oldIndex : Int
         let newIndex : Int
         
@@ -52,6 +60,8 @@ struct ArrayDiff<Element, Identifier:Hashable>
     
     struct NoChange
     {
+        let identifier : Identifier
+        
         let oldIndex : Int
         let newIndex : Int
         
@@ -105,11 +115,19 @@ struct ArrayDiff<Element, Identifier:Hashable>
         let removed = old.subtractDifference(from: new)
         
         self.added = added.map {
-            Added(newIndex: $0.index, new: $0.value)
+            Added(
+                identifier: $0.identifier.base,
+                newIndex: $0.index,
+                new: $0.value
+            )
         }
         
         self.removed = removed.map {
-            Removed(oldIndex: $0.index, old: $0.value)
+            Removed(
+                identifier: $0.identifier.base,
+                oldIndex: $0.index,
+                old: $0.value
+            )
         }
         
         //
@@ -145,11 +163,22 @@ struct ArrayDiff<Element, Identifier:Hashable>
                 )
                 
                 self.moved.append(Moved(
-                    old: Removed(oldIndex: pair.old.index, old: pair.old.value),
-                    new: Added(newIndex: pair.new.index, new: pair.new.value)
+                    identifier: pair.new.identifier.base,
+                    
+                    old: Removed(
+                        identifier: pair.old.identifier.base,
+                        oldIndex: pair.old.index,
+                        old: pair.old.value
+                    ),
+                    new: Added(
+                        identifier: pair.new.identifier.base,
+                        newIndex: pair.new.index,
+                        new: pair.new.value
+                    )
                 ))
             } else if pair.updated {
                 self.updated.append(Updated(
+                    identifier: pair.new.identifier.base,
                     oldIndex: pair.old.index,
                     newIndex: pair.new.index,
                     old: pair.old.value,
@@ -157,6 +186,7 @@ struct ArrayDiff<Element, Identifier:Hashable>
                 ))
             } else {
                 self.noChange.append(NoChange(
+                    identifier: pair.new.identifier.base,
                     oldIndex: pair.old.index,
                     newIndex: pair.new.index,
                     old: pair.old.value,
@@ -199,14 +229,32 @@ struct ArrayDiff<Element, Identifier:Hashable>
             let old = old[index]
             let new = new[index]
             
-            guard identifierProvider(old) == identifierProvider(new) else {
+            let newID = identifierProvider(new)
+            
+            guard identifierProvider(old) == newID else {
                 return nil
             }
             
             if updated(old, new) {
-                updates.append(Updated(oldIndex: index, newIndex: index, old: old, new: new))
+                updates.append(
+                    Updated(
+                        identifier: newID,
+                        oldIndex: index,
+                        newIndex: index,
+                        old: old,
+                        new: new
+                    )
+                )
             } else {
-                notChanged.append(NoChange(oldIndex: index, newIndex: index, old: old, new: new))
+                notChanged.append(
+                    NoChange(
+                        identifier: newID,
+                        oldIndex: index,
+                        newIndex: index,
+                        old: old,
+                        new: new
+                    )
+                )
             }
         }
         
@@ -423,7 +471,8 @@ private class DiffContainer<Value, Identifier:Hashable>
 
 private struct UniqueIdentifier<Type, Identifier:Hashable> : Hashable
 {
-    private let base : Identifier
+    let base : Identifier
+    
     private let modifier : Int
     
     private let hash : Int

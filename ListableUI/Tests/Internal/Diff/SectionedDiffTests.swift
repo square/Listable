@@ -31,10 +31,13 @@ class SectionedDiffTests: XCTestCase {
 
             let diff = makeDiff(old: old, new: new)
 
-            let addedIdentifier = 2
+            XCTAssertEqual(diff.changes.addedItemIdentifiers, [2])
+            XCTAssertEqual(diff.changes.removedItemIdentifiers, [])
+            
+            let diffInverse = makeDiff(old: new, new: old)
 
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedIdentifier))
-            XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 1)
+            XCTAssertEqual(diffInverse.changes.addedItemIdentifiers, [])
+            XCTAssertEqual(diffInverse.changes.removedItemIdentifiers, [2])
         }
 
         self.testcase("test_added_items_in_no_change_section") {
@@ -49,13 +52,13 @@ class SectionedDiffTests: XCTestCase {
 
             let diff = makeDiff(old: old, new: new)
 
-            let firstAddedIndentifier = 2
-            let secondAddedIndentifier = 3
+            XCTAssertEqual(diff.changes.addedItemIdentifiers, [2, 3])
+            XCTAssertEqual(diff.changes.removedItemIdentifiers, [])
+            
+            let diffInverse = makeDiff(old: new, new: old)
 
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(firstAddedIndentifier))
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(secondAddedIndentifier))
-
-            XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 2)
+            XCTAssertEqual(diffInverse.changes.addedItemIdentifiers, [])
+            XCTAssertEqual(diffInverse.changes.removedItemIdentifiers, [2, 3])
         }
 
         self.testcase("test_added_items_in_moved_section") {
@@ -69,12 +72,16 @@ class SectionedDiffTests: XCTestCase {
                 Section(identifier: 1, items: [2, 3]),
                 Section(identifier: 0, items: [0, 1, 4]),
             ]
+            
             let diff = makeDiff(old: old, new: new)
 
-            let addedIdentifier = 4
+            XCTAssertEqual(diff.changes.addedItemIdentifiers, [4])
+            XCTAssertEqual(diff.changes.removedItemIdentifiers, [])
+            
+            let diffInverse = makeDiff(old: new, new: old)
 
-            XCTAssert(diff.changes.addedItemIdentifiers.contains(addedIdentifier))
-            XCTAssertEqual(diff.changes.addedItemIdentifiers.count, 1)
+            XCTAssertEqual(diffInverse.changes.addedItemIdentifiers, [])
+            XCTAssertEqual(diffInverse.changes.removedItemIdentifiers, [4])
         }
 
         self.testcase("test_moving_item_is_not_added") {
@@ -89,7 +96,13 @@ class SectionedDiffTests: XCTestCase {
 
             let diff = makeDiff(old: old, new: new)
 
-            XCTAssert(diff.changes.addedItemIdentifiers.isEmpty)
+            XCTAssertEqual(diff.changes.addedItemIdentifiers, [])
+            XCTAssertEqual(diff.changes.removedItemIdentifiers, [])
+            
+            let diffInverse = makeDiff(old: new, new: old)
+
+            XCTAssertEqual(diffInverse.changes.addedItemIdentifiers, [])
+            XCTAssertEqual(diffInverse.changes.removedItemIdentifiers, [])
         }
 
         func makeDiff(old: [Section], new: [Section]) -> SectionedDiff<Section, Int, Int, Int> {
