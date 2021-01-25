@@ -14,7 +14,7 @@ import BlueprintUICommonControls
 
 final class ChatDemoViewController : ListViewController {
     
-    var initialTexts : [Text] = initialTexts
+    var texts : [Text] = initialTexts
     
     override func configure(list: inout ListProperties) {
         
