@@ -148,10 +148,10 @@ public struct ListProperties
     // MARK: Initialization
     //
 
-    public typealias Build = (inout ListProperties) -> ()
+    public typealias Configure = (inout ListProperties) -> ()
     
     /// An instance of `ListProperties` with sensible default values.
-    public static func `default`(with builder : Build = { _ in }) -> Self {
+    public static func `default`(with configure : Configure = { _ in }) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             layout: .table(),
@@ -161,7 +161,7 @@ public struct ListProperties
             autoScrollAction: .none,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
-            build: builder
+            configure: configure
         )
     }
     
@@ -175,7 +175,7 @@ public struct ListProperties
         autoScrollAction : AutoScrollAction,
         accessibilityIdentifier: String?,
         debuggingIdentifier: String?,
-        build : Build
+        configure : Configure
     ) {
         self.animatesChanges = animatesChanges
         self.layout = layout
@@ -191,7 +191,7 @@ public struct ListProperties
         
         self.stateObserver = ListStateObserver()
 
-        build(&self)
+        configure(&self)
     }
     
     //
@@ -199,14 +199,14 @@ public struct ListProperties
     //
     
     /// Updates the `ListProperties` object with the changes in the provided builder.
-    public mutating func modify(using builder : Build) {
-        builder(&self)
+    public mutating func modify(using configure : Configure) {
+        configure(&self)
     }
     
     /// Creates a new `ListProperties` object modified by the changes in the provided builder.
-    public func modified(using builder : Build) -> ListProperties {
+    public func modified(using configure : Configure) -> ListProperties {
         var copy = self
-        builder(&copy)
+        configure(&copy)
         return copy
     }
     

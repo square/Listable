@@ -62,7 +62,7 @@ extension HeaderFooter
                 backgroundProvider: background,
                 pressedBackgroundProvider: pressedBackground
             ),
-            build: configure
+            configure: configure
         )
     }
     
@@ -113,7 +113,7 @@ extension HeaderFooter
                 backgroundProvider: background,
                 pressedBackgroundProvider: pressedBackground
             ),
-            build: configure
+            configure: configure
         )
     }
 }

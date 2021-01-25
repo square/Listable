@@ -28,15 +28,15 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     // MARK: Initialization
     //
     
-    public typealias Build = (inout HeaderFooter) -> ()
+    public typealias Configure = (inout HeaderFooter) -> ()
     
     public init(
         _ content : Content,
-        build : Build
+        configure : Configure
     ) {
         self.init(content)
         
-        build(&self)
+        configure(&self)
     }
     
     public init(

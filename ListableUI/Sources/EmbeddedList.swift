@@ -30,11 +30,11 @@ public extension Item where Content == EmbeddedList
     static func list<Identifier:Hashable>(
         _ identifier : Identifier,
         sizing : EmbeddedList.Sizing,
-        build : ListProperties.Build
+        configure : ListProperties.Configure
     ) -> Item<EmbeddedList>
     {
         Item(
-            EmbeddedList(identifier: identifier, build: build),
+            EmbeddedList(identifier: identifier, configure: configure),
             
             sizing: sizing.toStandardSizing,
             
@@ -68,7 +68,7 @@ public struct EmbeddedList : ItemContent
     // MARK: Initialization
     //
     
-    public init<Identifier:Hashable>(identifier : Identifier, build : ListProperties.Build)
+    public init<Identifier:Hashable>(identifier : Identifier, configure : ListProperties.Configure)
     {
         self.contentIdentifier = AnyHashable(identifier)
         
@@ -83,7 +83,7 @@ public struct EmbeddedList : ItemContent
             autoScrollAction: .none,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
-            build: build
+            configure: configure
         )
     }
     

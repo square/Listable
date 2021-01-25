@@ -42,15 +42,15 @@ public struct Item<Content:ItemContent> : AnyItem
     // MARK: Initialization
     //
     
-    public typealias Build = (inout Item) -> ()
+    public typealias Configure = (inout Item) -> ()
     
     public init(
         _ content : Content,
-        build : Build
+        configure : Configure
     ) {
         self.init(content)
         
-        build(&self)
+        configure(&self)
     }
     
     public init(

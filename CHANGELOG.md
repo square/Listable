@@ -8,6 +8,8 @@
 
 ### Changed
 
+- [Rename `build` parameters to `configure`](https://github.com/kyleve/Listable/pull/262), in order to be more consistent within the framework and with Blueprint.
+
 ### Misc
 
 # Past Releases

@@ -69,7 +69,7 @@ extension ListView
     // MARK: Measuring Lists
     //
     
-    public static func contentSize(in fittingSize : CGSize, for properties : ListProperties.Build) -> CGSize {
+    public static func contentSize(in fittingSize : CGSize, for properties : ListProperties.Configure) -> CGSize {
         self.contentSize(in: fittingSize, for: .default(with: properties))
     }
     

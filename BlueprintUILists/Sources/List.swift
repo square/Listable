@@ -64,11 +64,11 @@ public struct List : Element
     /// configured with the provided `ListProperties` builder.
     public init(
         sizing : ListSizing = .fillParent,
-        build : ListProperties.Build
+        configure : ListProperties.Configure
     ) {
         self.sizing = sizing
         
-        self.properties = .default(with: build)
+        self.properties = .default(with: configure)
     }
     
     //
