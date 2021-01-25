@@ -91,7 +91,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.applyAppearance()
         self.applyBehavior()
-        self.updateScrollViewInsets()
+        self.updateLayoutForKeyboard()
     }
     
     deinit
@@ -237,7 +237,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
         
-        self.updateScrollViewInsets()
+        self.updateLayoutForKeyboard()
     }
     
     private func updateCollectionViewWithCurrentLayoutProperties()
@@ -279,12 +279,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 return
             }
             
-            self.updateScrollViewInsets()
+            self.updateLayoutForKeyboard()
         }
     }
         
-    private func updateScrollViewInsets()
+    private func updateLayoutForKeyboard()
     {
+        // 1) Position the bottom bar correctly.
+        
+        self.layoutBottomBar()
+        
+        // 2) Also update the insets for the keyboard.
+        
         let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
@@ -321,14 +327,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
             }
         }()
         
+        let bottomBarHeight = self.bottomBar?.frame.height ?? 0.0
+        
+        let totalBottomInset : CGFloat = keyboardBottomInset + bottomBarHeight
+        
         let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
-            $0.bottom = max($0.bottom, keyboardBottomInset)
+            $0.bottom = max($0.bottom, totalBottomInset)
         }
         
         let contentInsets = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: keyboardBottomInset,
+            bottom: totalBottomInset,
             right: 0
         )
         
@@ -354,7 +364,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.lastKeyboardFrame = frame
         
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
+            self.updateLayoutForKeyboard()
         })
     }
     
@@ -567,6 +577,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
             scrollIndicatorInsets: self.scrollIndicatorInsets,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
+            bottomBar: {
+                if let bar = self.bottomBar {
+                    return .init(type(of: bar), create: { bar }, update: { _ in })
+                } else {
+                    return nil
+                }
+            }(),
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             debuggingIdentifier: self.debuggingIdentifier,
             build: builder
@@ -593,6 +610,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.set(layout: properties.layout, animated: animated)
         
+        self.bottomBar = UIViewDescription.update(view: self.bottomBar, with: properties.bottomBar)
+        
         self.setContent(animated: animated, properties.content)
     }
     
@@ -605,6 +624,26 @@ public final class ListView : UIView, KeyboardObserverDelegate
         let identifierChanged = oldIdentifier != newIdentifier
         
         self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
+    }
+    
+    //
+    // MARK: Accessory Views
+    //
+    
+    public var bottomBar : UIView? {
+        didSet {
+            guard oldValue != self.bottomBar else {
+                return
+            }
+            
+            if let old = oldValue {
+                old.removeFromSuperview()
+            }
+            
+            if let new = self.bottomBar {
+                self.addSubview(new)
+            }
+        }
     }
     
     //
@@ -663,7 +702,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
         
         /// Our frame changed, update the keyboard inset in case the inset should now be different.
-        self.updateScrollViewInsets()
+        self.updateLayoutForKeyboard()
         
         ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
             ListStateObserver.FrameChanged(
@@ -686,7 +725,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         super.didMoveToWindow()
         
         if self.window != nil {
-            self.updateScrollViewInsets()
+            self.updateLayoutForKeyboard()
         }
     }
     
@@ -695,7 +734,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         super.didMoveToSuperview()
         
         if self.superview != nil {
-            self.updateScrollViewInsets()
+            self.updateLayoutForKeyboard()
         }
     }
     
@@ -705,8 +744,35 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.collectionView.frame = self.bounds
         
+        self.layoutBottomBar()
+        
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
-        self.updateScrollViewInsets()
+        self.updateLayoutForKeyboard()
+    }
+    
+    private func layoutBottomBar() {
+        
+        guard let bar = self.bottomBar else {
+            return
+        }
+        
+        let size = bar.sizeThatFits(
+            .init(
+                width: self.bounds.width,
+                height: self.bounds.height
+            )
+        )
+        
+        let newFrame = CGRect(
+            x: 0.0,
+            y: self.bounds.height - size.height,
+            width: self.bounds.width,
+            height: size.height
+        )
+        
+        if bar.frame != newFrame {
+            bar.frame = newFrame
+        }
     }
     
     //

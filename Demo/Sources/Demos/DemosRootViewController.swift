@@ -161,6 +161,13 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
+                DemoItem(text: "Chat Demo"),
+                selectionStyle: .tappable,
+                onSelect: { _ in
+                    self.push(ChatDemoViewController())
+            })
+            
+            section += Item(
                 DemoItem(text: "Using Autolayout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in

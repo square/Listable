@@ -134,6 +134,13 @@ public struct ListProperties
     public var autoScrollAction : AutoScrollAction
     
     //
+    // MARK: Bottom Bar
+    
+    public typealias BottomBarDescription = UIViewDescription<UIView>
+    
+    public var bottomBar : BottomBarDescription?
+    
+    //
     // MARK: Identifiers
     //
     
@@ -159,6 +166,7 @@ public struct ListProperties
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
+            bottomBar: nil,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
             build: builder
@@ -173,6 +181,7 @@ public struct ListProperties
         scrollIndicatorInsets : UIEdgeInsets,
         behavior : Behavior,
         autoScrollAction : AutoScrollAction,
+        bottomBar : BottomBarDescription?,
         accessibilityIdentifier: String?,
         debuggingIdentifier: String?,
         build : Build
@@ -183,6 +192,7 @@ public struct ListProperties
         self.scrollIndicatorInsets = scrollIndicatorInsets
         self.behavior = behavior
         self.autoScrollAction = autoScrollAction
+        self.bottomBar = bottomBar
         self.accessibilityIdentifier = accessibilityIdentifier
         self.debuggingIdentifier = debuggingIdentifier
         
@@ -244,4 +254,3 @@ public struct ListProperties
         self += Section(identifier, configure: configure)
     }
 }
-
