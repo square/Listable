@@ -126,6 +126,20 @@ public struct ListStateObserver {
     private(set) var onSelectionChanged : [OnSelectionChanged] = []
     
     //
+    // MARK: Responding To Keyboard Changes
+    //
+    
+    public typealias OnKeyboardChanged = (KeyboardChanged) -> ()
+    
+    /// Registers a callback which will be called when the list view's layout is affected by the keyboard.
+    public mutating func onKeyboardChanged(_ callback : @escaping OnKeyboardChanged)
+    {
+        self.onKeyboardChanged.append(callback)
+    }
+    
+    private(set) var onKeyboardChanged : [OnKeyboardChanged] = []
+    
+    //
     // MARK: Internal Methods
     //
     
@@ -225,5 +239,27 @@ extension ListStateObserver
 
         public let old : Set<AnyIdentifier>
         public let new : Set<AnyIdentifier>
+    }
+    
+    
+    public struct KeyboardChanged {
+        
+        public let change : Change
+        
+        public let old : Frame
+        public let new : Frame
+        
+        public enum Change {
+            
+            case appeared
+            case disappeared
+            case layoutChanged(CGRect, CGRect)
+        }
+        
+        public enum Frame : Equatable {
+            
+            case notVisible
+            case visible(CGRect)
+        }
     }
 }
