@@ -13,6 +13,45 @@ import XCTest
 
 class ListViewTests: XCTestCase
 {
+    func test_no_retain_cycles()
+    {
+        // Verify that there's no retain cycles within the list,
+        // by making a list, putting content in it, and then waiting
+        // for the list to be deallocated by testing a weak pointer.
+        
+        weak var weakList : ListView? = nil
+        
+        autoreleasepool {
+            var listView : ListView? = ListView(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
+            
+            listView?.configure { list in
+                
+                list.content.header = HeaderFooter(TestSupplementary())
+                list.content.footer = HeaderFooter(TestSupplementary())
+                list.content.overscrollFooter = HeaderFooter(TestSupplementary())
+
+                list("content") { section in
+                    section.header = HeaderFooter(TestSupplementary())
+                    section.footer = HeaderFooter(TestSupplementary())
+                    
+                    section += TestContent(title: "1")
+                    section += TestContent(title: "2")
+                    section += TestContent(title: "3")
+                }
+            }
+
+            self.waitForOneRunloop()
+            
+            weakList = listView
+            
+            listView = nil
+        }
+        
+        self.waitFor {
+            weakList == nil
+        }
+    }
+    
     func test_changing_supplementary_views()
     {
         // Ensure that we can swap out a supplementary view without any other changes.

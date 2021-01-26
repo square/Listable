@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [0.15.1] - 2021-01-25
+
+### Fixed
+
+- [Fix a memory leak in `ListView`](https://github.com/kyleve/Listable/pull/263) that caused all `ListViews` with content in them to leak.
+
 # [0.15.0] - 2021-01-22
 
 ### Added
@@ -287,7 +293,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.15.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.15.1...HEAD
+[0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
 [0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
