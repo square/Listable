@@ -66,8 +66,8 @@ protocol ItemContentCoordinatorDelegate : AnyObject
 
 public struct ItemStateDependencies
 {
-    var reorderingDelegate : ReorderingActionsDelegate
-    var coordinatorDelegate : ItemContentCoordinatorDelegate
+    weak var reorderingDelegate : ReorderingActionsDelegate?
+    weak var coordinatorDelegate : ItemContentCoordinatorDelegate?
     
     var environmentProvider : () -> ListEnvironment
 }
