@@ -81,14 +81,14 @@ public struct Content
     // MARK: Initialization
     //
     
-    public typealias Build = (inout Content) -> ()
+    public typealias Configure = (inout Content) -> ()
     
     /// Creates a new instance, configured as needed via the provided builder block.
-    public init(with build : Build)
+    public init(with configure : Configure)
     {
         self.init()
         
-        build(&self)
+        configure(&self)
     }
     
     /// Creates a new instance with the provided parameters.

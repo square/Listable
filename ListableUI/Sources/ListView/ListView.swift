@@ -558,7 +558,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         })
     }
     
-    public func configure(with builder : ListProperties.Build)
+    public func configure(with configure : ListProperties.Configure)
     {
         let description = ListProperties(
             animatesChanges: true,
@@ -569,7 +569,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             autoScrollAction: self.autoScrollAction,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             debuggingIdentifier: self.debuggingIdentifier,
-            build: builder
+            configure: configure
         )
         
         self.configure(with: description)

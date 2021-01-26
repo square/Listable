@@ -67,7 +67,7 @@ extension Item
                 backgroundProvider: background,
                 selectedBackgroundProvider: selectedBackground
             ),
-            build: configure
+            configure: configure
         )
     }
     
@@ -123,7 +123,7 @@ extension Item
                 backgroundProvider: background,
                 selectedBackgroundProvider: selectedBackground
             ),
-            build: configure
+            configure: configure
         )
     }
 }

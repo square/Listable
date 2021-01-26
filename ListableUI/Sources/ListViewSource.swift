@@ -165,7 +165,7 @@ public final class StaticSource : ListViewSource
         self.content = content
     }
     
-    public convenience init(with builder : Content.Build)
+    public convenience init(with builder : Content.Configure)
     {
         self.init(with: Content(with: builder))
     }
