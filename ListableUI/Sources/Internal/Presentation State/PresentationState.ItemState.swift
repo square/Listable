@@ -156,6 +156,7 @@ extension PresentationState
             weak var coordinatorDelegate = dependencies.coordinatorDelegate
             
             self.coordination.actions.updateCallback = { [weak self, weak coordinatorDelegate] new, animated in
+                
                 guard let self = self, let delegate = coordinatorDelegate else {
                     return
                 }

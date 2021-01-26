@@ -183,7 +183,6 @@ extension ItemCell {
                     } else {
                         swipeState = .closed
                     }
-
                 }
 
                 set(state: swipeState, animated: true)

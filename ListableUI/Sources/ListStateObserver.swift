@@ -146,7 +146,8 @@ public struct ListStateObserver {
     static func perform<CallbackInfo>(
         _ callbacks : Array<(CallbackInfo) -> ()>,
         _ loggingName : StaticString,
-        with listView : ListView, makeInfo : (ListActions) -> (CallbackInfo)
+        with listView : ListView,
+        makeInfo : (ListActions) -> (CallbackInfo)
     ){
         guard callbacks.isEmpty == false else {
             return
