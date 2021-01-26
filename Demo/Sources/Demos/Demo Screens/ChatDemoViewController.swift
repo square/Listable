@@ -24,7 +24,9 @@ final class ChatDemoViewController : ListViewController {
         }
         
         list.bottomBar = .element {
-            Box(backgroundColor: .red).constrainedTo(width: 200, height: 50)
+            TextField(text: "Hello, world!")
+                .box(background: .lightGray)
+                .constrainedTo(height: .atLeast(50))
         }
         
         list("chat") { section in

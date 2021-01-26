@@ -65,3 +65,41 @@ public struct UIViewDescription<RequiredType:UIView> {
         }
     }
 }
+
+
+extension UIViewDescription {
+    
+    final class Instance : UIView {
+        
+        var viewDescription : UIViewDescription? {
+            didSet {
+                self.updateView()
+            }
+        }
+        
+        private var view : RequiredType?
+        
+        init(frame : CGRect = .zero, _ description : UIViewDescription? = nil) {
+            self.viewDescription = description
+            self.view = nil
+            
+            super.init(frame: frame)
+            
+            self.updateView()
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+        
+        
+        private func updateView() {
+            self.view = UIViewDescription.update(
+                view: self.view,
+                with: self.viewDescription,
+                created: { self.addSubview($0) },
+                removed: { $0.removeFromSuperview() },
+                replaced: { $0.removeFromSuperview(); self.addSubview($1) }
+            )
+        }
+    }
+}
