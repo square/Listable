@@ -9,10 +9,10 @@ import BlueprintUI
 import ListableUI
 
 
-extension UIViewDescription where ViewType == BlueprintView {
+extension UIViewDescription where RequiredType == UIView {
     
-    static func element(_ provider : @escaping () -> Element) -> Self {
-        Self(BlueprintView.self) {
+    public static func element(_ provider : @escaping () -> Element) -> Self {
+        Self<UIView>(BlueprintView.self) {
             BlueprintView()
         } update: { view in
             view.element = provider()

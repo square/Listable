@@ -282,18 +282,16 @@ public final class ListView : UIView, KeyboardObserverDelegate
             self.updateLayoutForKeyboard()
         }
     }
-        
+            
     private func updateLayoutForKeyboard()
     {
-        // 1) Position the bottom bar correctly.
-        
-        self.layoutBottomBar()
-        
-        // 2) Also update the insets for the keyboard.
+        // 1) Calculate the relevant insets for the list content.
         
         let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
+        
+        // 2) Apply the insets to the scroll view.
         
         if self.collectionView.contentInset != contentInsets {
             self.collectionView.contentInset = contentInsets
@@ -327,18 +325,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
             }
         }()
         
-        let bottomBarHeight = self.bottomBar?.frame.height ?? 0.0
-        
-        let totalBottomInset : CGFloat = keyboardBottomInset + bottomBarHeight
-        
         let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
-            $0.bottom = max($0.bottom, totalBottomInset)
+            $0.bottom = max($0.bottom, keyboardBottomInset)
         }
         
         let contentInsets = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: totalBottomInset,
+            bottom: keyboardBottomInset,
             right: 0
         )
         
@@ -750,12 +744,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.updateLayoutForKeyboard()
     }
     
+    public override var inputAccessoryView: UIView? {
+        self.bottomBar
+    }
+    
     private func layoutBottomBar() {
         
         guard let bar = self.bottomBar else {
             return
         }
         
+        let safeArea = self.safeAreaInsets.bottom
+                
         let size = bar.sizeThatFits(
             .init(
                 width: self.bounds.width,
@@ -763,13 +763,15 @@ public final class ListView : UIView, KeyboardObserverDelegate
             )
         )
         
+        let height = size.height + safeArea
+        
         let newFrame = CGRect(
             x: 0.0,
-            y: self.bounds.height - size.height,
+            y: self.bounds.height - height,
             width: self.bounds.width,
-            height: size.height
+            height: height
         )
-        
+
         if bar.frame != newFrame {
             bar.frame = newFrame
         }

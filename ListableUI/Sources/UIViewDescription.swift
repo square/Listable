@@ -8,34 +8,34 @@
 import Foundation
 
 
-public struct UIViewDescription<ViewType:UIView> {
+public struct UIViewDescription<RequiredType:UIView> {
     
-    private let viewType : ViewType.Type
+    private let viewType : UIView.Type
     private let create : () -> UIView
     private let update : (UIView) -> ()
     
-    public init(
-        _ type : ViewType.Type,
-        create : @escaping () -> ViewType,
-        update : @escaping (ViewType) -> ()
+    public init<ConcreteType:UIView>(
+        _ type : ConcreteType.Type,
+        create : @escaping () -> ConcreteType,
+        update : @escaping (ConcreteType) -> ()
     ) {
         self.viewType = type
         
         self.create = create
         
         self.update = { existing in
-            update(existing as! ViewType)
+            update(existing as! ConcreteType)
         }
     }
     
     static func update(
-        view : ViewType?,
+        view : RequiredType?,
         with description : UIViewDescription?,
-        created : (ViewType) -> () = { _ in },
-        removed : (ViewType) -> () = { _ in },
-        replaced : (ViewType, ViewType) -> () = { _, _ in },
-        updated : (ViewType) -> () = { _ in }
-    ) -> ViewType? {
+        created : (RequiredType) -> () = { _ in },
+        removed : (RequiredType) -> () = { _ in },
+        replaced : (RequiredType, RequiredType) -> () = { _, _ in },
+        updated : (RequiredType) -> () = { _ in }
+    ) -> RequiredType? {
         if let view = view {
             if let description = description {
                 if type(of: view) == description.viewType {
@@ -43,7 +43,7 @@ public struct UIViewDescription<ViewType:UIView> {
                     updated(view)
                     return view
                 } else {
-                    let newView = description.create() as! ViewType
+                    let newView = description.create() as! RequiredType
                     description.update(newView)
                     replaced(view, newView)
                     return newView
@@ -54,7 +54,7 @@ public struct UIViewDescription<ViewType:UIView> {
             }
         } else {
             if let description = description {
-                let view = description.create() as! ViewType
+                let view = description.create() as! RequiredType
                 description.update(view)
                 created(view)
                 return view

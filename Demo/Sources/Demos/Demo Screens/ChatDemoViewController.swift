@@ -23,12 +23,15 @@ final class ChatDemoViewController : ListViewController {
             $0.layout.itemSpacing = 10.0
         }
         
+        list.bottomBar = .element {
+            Box(backgroundColor: .red).constrainedTo(width: 200, height: 50)
+        }
+        
         list("chat") { section in
             section += self.texts.map {
                 ChatBubble(text: $0)
             }
         }
-        
     }
 }
 
