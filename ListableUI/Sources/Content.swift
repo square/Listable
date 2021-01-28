@@ -81,14 +81,14 @@ public struct Content
     // MARK: Initialization
     //
     
-    public typealias Build = (inout Content) -> ()
+    public typealias Configure = (inout Content) -> ()
     
     /// Creates a new instance, configured as needed via the provided builder block.
-    public init(with build : Build)
+    public init(with configure : Configure)
     {
         self.init()
         
-        build(&self)
+        configure(&self)
     }
     
     /// Creates a new instance with the provided parameters.
@@ -239,9 +239,9 @@ public struct Content
     ///     }
     /// }
     ///
-    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, configure : Section.Configure)
     {
-        self += Section(identifier, build: build)
+        self += Section(identifier, configure: configure)
     }
     
     /// Removes the `Item` at the given `IndexPath`.

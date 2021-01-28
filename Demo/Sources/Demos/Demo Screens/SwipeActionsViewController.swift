@@ -37,7 +37,7 @@ final class SwipeActionsViewController: UIViewController  {
 
             list.animatesChanges = animated
             
-            list.layout = .list { [weak self] in
+            list.layout = .table { [weak self] in
                 guard let self = self else { return }
                 
                 if #available(iOS 11, *) {

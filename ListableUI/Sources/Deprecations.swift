@@ -40,79 +40,14 @@ import Foundation
 ///
 
 //
-// MARK: Deprecated Jul 15, 2020
+// MARK: Deprecated Jan 22, 2021
 //
 
-public extension ListView {
-    
-    @available(*, unavailable, renamed: "configure(with:)")
-    func setContent(_ builder : ListProperties.Build) {
-        fatalError()
-    }
-    
-    @available(*, unavailable, renamed: "configure(with:)")
-    func setProperties(with builder : ListProperties.Build) {
-        fatalError()
-    }
-    
-    @available(*, unavailable, renamed: "configure(with:)")
-    func setProperties(with properties : ListProperties) {
-        fatalError()
-    }
-}
-
-//
-// MARK: Deprecated Jul 1, 2020
-//
-
-public extension Section {
-
-    @available(*, unavailable, renamed: "Section.init(_:build:)")
-    init<Identifier:Hashable>(
-        identifier : Identifier,
-        build : Build = { _ in }
-    ) {
-        fatalError()
-    }
-}
-
-
-//
-// MARK: Deprecated May 29, 2020
-//
-
-@available(*, unavailable, renamed: "ItemContent")
-public typealias ItemElement = ItemContent
-
-@available(*, unavailable, renamed: "ApplyItemContentInfo")
-public typealias ApplyItemElementInfo = ApplyItemContentInfo
-
-@available(*, unavailable, renamed: "ItemContentViews")
-public typealias ItemElementViews = ItemContentViews
-
-@available(*, unavailable, renamed: "ItemContentSwipeActionsView")
-public typealias ItemElementSwipeActionsView = ItemContentSwipeActionsView
-
-public extension Item {
-    @available(*, unavailable, renamed: "content")
-    var element : Content {
-        self.content
-    }
-}
-
-@available(*, unavailable, renamed: "HeaderFooterContent")
-public typealias HeaderFooterElement = HeaderFooterContent
-
-public extension HeaderFooter {
-    @available(*, unavailable, renamed: "content")
-    var element : Content {
-        self.content
-    }
-}
-
-public extension Content {
-    @available(*, unavailable, message: "'Content.selectionMode' has moved to 'Behavior.selectionMode'.")
-    var selectionMode : Behavior.SelectionMode {
-        fatalError()
+extension LayoutDescription
+{
+    @available(*, unavailable, renamed: "table")
+    public static func list(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self
+    {
+        TableListLayout.describe(appearance: configure)
     }
 }

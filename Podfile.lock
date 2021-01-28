@@ -1,16 +1,16 @@
 PODS:
-  - BlueprintUI (0.19.0)
-  - BlueprintUICommonControls (0.19.0):
+  - BlueprintUI (0.20.0)
+  - BlueprintUICommonControls (0.20.0):
     - BlueprintUI
-  - BlueprintUILists (0.14.1):
+  - BlueprintUILists (0.15.1):
     - BlueprintUI
     - ListableUI
-  - BlueprintUILists/Tests (0.14.1):
+  - BlueprintUILists/Tests (0.15.1):
     - BlueprintUI
     - ListableUI
   - EnglishDictionary (1.0.0.LOCAL)
-  - ListableUI (0.14.1)
-  - ListableUI/Tests (0.14.1):
+  - ListableUI (0.15.1)
+  - ListableUI/Tests (0.15.1):
     - EnglishDictionary
     - Snapshot
   - Snapshot (1.0.0.LOCAL)
@@ -43,11 +43,11 @@ EXTERNAL SOURCES:
     :path: Internal Pods/Snapshot/Snapshot.podspec
 
 SPEC CHECKSUMS:
-  BlueprintUI: 0a86c26f7f51bfc8dd37ead2c41d53b72995d318
-  BlueprintUICommonControls: c177a134b6112a7e08db91b893f0164f49a75a25
-  BlueprintUILists: 2cac46a7a7276fc69df1dc550b4464706a1ec267
+  BlueprintUI: d26766f3e006d1f9348cba6a7f15efc64da74cb3
+  BlueprintUICommonControls: b7b6a10581203f4bd6283c9d2a9b810d513d804b
+  BlueprintUILists: b28ac85a6989295dc22eb6563a68ad3685009fcf
   EnglishDictionary: f03968b9382ddc5c8dd63535efbf783c6cd45f1c
-  ListableUI: 2123d9d9296fdc0b7b099f8cefa869d17e89ebbe
+  ListableUI: 9f085c174cb13abe18c458d15dcbe128b21a92a5
   Snapshot: cda3414db426919d09f775434b36289c8e864183
 
 PODFILE CHECKSUM: c1209f66d9213201c70fd26a2f0907a6e29e8cbe

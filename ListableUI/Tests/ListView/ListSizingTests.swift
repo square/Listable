@@ -36,7 +36,7 @@ class ListView_ListSizingTests : XCTestCase
             self.testcase("vertical list") {
                 let properties = ListProperties.default { list in
                     
-                    list.layout = .list()
+                    list.layout = .table()
                     
                     list += section
                 }

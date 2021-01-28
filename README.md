@@ -100,14 +100,14 @@ public struct Appearance : Equatable
     
     public var stickySectionHeaders : Bool
     
-    public var list : ListAppearance
+    public var list : TableAppearance
 }
 ``` 
 
-You use the `ListAppearance.Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
+You use the `TableAppearance.Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
 
 ```swift
-public struct ListAppearance.Sizing : Equatable
+public struct TableAppearance.Sizing : Equatable
 {
     public var itemHeight : CGFloat
     
@@ -121,10 +121,10 @@ public struct ListAppearance.Sizing : Equatable
 }
 ```
 
-You can use `ListAppearance.Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
+You can use `TableAppearance.Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
 
 ```swift
-public struct ListAppearance.Layout : Equatable
+public struct TableAppearance.Layout : Equatable
 {
     public var padding : UIEdgeInsets
     public var width : WidthConstraint

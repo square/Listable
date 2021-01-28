@@ -7,9 +7,9 @@
 
 import Foundation
 
-public extension LayoutDescription
+extension LayoutDescription
 {
-    static func grid_experimental(_ configure : @escaping (inout GridAppearance) -> () = { _ in }) -> Self
+    public static func experimental_grid(_ configure : @escaping (inout GridAppearance) -> () = { _ in }) -> Self
     {
         GridListLayout.describe(appearance: configure)
     }
@@ -133,6 +133,76 @@ public struct GridAppearance : ListLayoutAppearance
 }
 
 
+extension GridAppearance {
+    
+    public struct ItemLayout : ItemLayoutsValue {
+        
+        public static var defaultValue: Self {
+            .init()
+        }
+        
+        public init() {
+            
+        }
+    }
+    
+    
+    public struct HeaderFooterLayout : HeaderFooterLayoutsValue {
+        
+        public var width : CustomWidth
+        
+        public static var defaultValue: Self {
+            .init()
+        }
+        
+        public init(
+            width : CustomWidth = .default
+        ) {
+            self.width = width
+        }
+    }
+    
+    
+    public struct SectionLayout : SectionLayoutsValue {
+        
+        public var width : CustomWidth
+        
+        public static var defaultValue: Self {
+            .init()
+        }
+        
+        public init(
+            width : CustomWidth = .default
+        ) {
+            self.width = width
+        }
+    }
+}
+
+
+extension ItemLayouts {
+    public var grid : GridAppearance.ItemLayout {
+        get { self[GridAppearance.ItemLayout.self] }
+        set { self[GridAppearance.ItemLayout.self] = newValue }
+    }
+}
+
+
+extension HeaderFooterLayouts {
+    public var grid : GridAppearance.HeaderFooterLayout {
+        get { self[GridAppearance.HeaderFooterLayout.self] }
+        set { self[GridAppearance.HeaderFooterLayout.self] = newValue }
+    }
+}
+
+extension SectionLayouts {
+    public var grid : GridAppearance.SectionLayout {
+        get { self[GridAppearance.SectionLayout.self] }
+        set { self[GridAppearance.SectionLayout.self] = newValue }
+    }
+}
+
+
 final class GridListLayout : ListLayout
 {
     typealias LayoutAppearance = GridAppearance
@@ -202,7 +272,7 @@ final class GridListLayout : ListLayout
         
         let viewWidth = viewSize.width
         
-        let rootWidth = ListAppearance.Layout.width(
+        let rootWidth = TableAppearance.Layout.width(
             with: viewWidth,
             padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
             constraint: layout.width
@@ -222,7 +292,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = header.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -257,7 +327,7 @@ final class GridListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let sectionPosition = section.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
             
             //
             // Section Header
@@ -267,7 +337,7 @@ final class GridListLayout : ListLayout
             let hasSectionFooter = section.footer.isPopulated
             
             performLayout(for: section.header) { header in
-                let width = header.layout.width.merge(with: section.layout.width)
+                let width = header.layouts.grid.width.merge(with: section.layouts.grid.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -315,7 +385,7 @@ final class GridListLayout : ListLayout
             //
             
             performLayout(for: section.footer) { footer in
-                let width = footer.layout.width.merge(with: section.layout.width)
+                let width = footer.layouts.grid.width.merge(with: section.layouts.grid.width)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -357,7 +427,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
             
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -383,7 +453,7 @@ final class GridListLayout : ListLayout
                     
         performLayout(for: self.content.overscrollFooter) { footer in
 
-            let position = footer.layout.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),

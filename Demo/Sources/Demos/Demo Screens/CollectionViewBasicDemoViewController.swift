@@ -64,7 +64,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             list += self.rows.map { sectionRows in
                 Section("Demo Section") { section in
                     
-                    section.columns = .init(count: 2, spacing: 10.0)
+                    section.layouts.table.columns = .init(count: 2, spacing: 10.0)
                      
                     if self.showsSectionHeaders {
                         section.header = HeaderFooter(DemoHeader(title: "Section Header"))

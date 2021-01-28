@@ -15,7 +15,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     public var content : Content
     
     public var sizing : Sizing
-    public var layout : HeaderFooterLayout
+    public var layouts : HeaderFooterLayouts
     
     public typealias OnTap = (Content) -> ()
     public var onTap : OnTap?
@@ -28,21 +28,21 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     // MARK: Initialization
     //
     
-    public typealias Build = (inout HeaderFooter) -> ()
+    public typealias Configure = (inout HeaderFooter) -> ()
     
     public init(
         _ content : Content,
-        build : Build
+        configure : Configure
     ) {
         self.init(content)
         
-        build(&self)
+        configure(&self)
     }
     
     public init(
         _ content : Content,
         sizing : Sizing = .thatFits(.init(.atLeast(.default))),
-        layout : HeaderFooterLayout = HeaderFooterLayout(),
+        layouts : HeaderFooterLayouts = .init(),
         onTap : OnTap? = nil
     ) {
         assertIsValueType(Content.self)
@@ -50,7 +50,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         self.content = content
         
         self.sizing = sizing
-        self.layout = layout
+        self.layouts = layouts
         
         self.onTap = onTap
         

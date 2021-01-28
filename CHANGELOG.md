@@ -8,11 +8,37 @@
 
 ### Changed
 
+- [Rename `build` parameters to `configure`](https://github.com/kyleve/Listable/pull/262), in order to be more consistent within the framework and with Blueprint.
+
 ### Misc
 
 # Past Releases
 
-# [0.14.1] - 2020-01-06
+# [0.15.1] - 2021-01-25
+
+### Fixed
+
+- [Fix a memory leak in `ListView`](https://github.com/kyleve/Listable/pull/263) that caused all `ListViews` with content in them to leak.
+
+# [0.15.0] - 2021-01-22
+
+### Added
+
+- [Introduce support for layout customization for `Item`, `HeaderFooter`, and `Section`](https://github.com/kyleve/Listable/pull/257) for all `ListLayout` types, not just `.table`.
+
+- [Add `inserted` and `removed` items to `.onContentChanged`](https://github.com/kyleve/Listable/pull/260), to easily determine what content was added or removed from the list a central location.
+
+### Changed
+
+- [Rename `.list` layout to `.table`](https://github.com/kyleve/Listable/pull/258), which is clearer, and also reduces confusion between `ListLayout` (the base protocol for layouts), and the specific table-type layout.
+
+# [0.14.2] - 2021-01-21
+
+### Fixed
+
+- `SwipeActionsConfiguration.performsFirstActionWithFullSwipe` is now respected when set to `false`.
+
+# [0.14.1] - 2021-01-06
 
 ### Fixed
 
@@ -138,7 +164,7 @@
 
 ### Removed
 
-- [Removed support for .`horiztonal` layouts](https://github.com/kyleve/Listable/pull/178) on `.list()` layouts. Now only `.vertical` is supported (this could return at a later date if needed).
+- [Removed support for .`horiztonal` layouts](https://github.com/kyleve/Listable/pull/178) on `.table()` layouts. Now only `.vertical` is supported (this could return at a later date if needed).
 
 ### Changed
 
@@ -207,14 +233,14 @@
   Previously, to configure a layout, you would write code like this:
 
   ```
-  list.appearance.layoutType = .list
-  list.appearance.list.layout.padding = UIEdgeInsets(...)
+  list.appearance.layoutType = .table
+  list.appearance.table.layout.padding = UIEdgeInsets(...)
   ```
 
   Now, you configure the layout like this:
 
   ```
-  list.layout = .list {
+  list.layout = .table {
     $0.layout.padding = UIEdgeInsets(...)
   }
   ```
@@ -267,7 +293,10 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.14.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.15.1...HEAD
+[0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
+[0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
+[0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
 [0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
 [0.12.1]: https://github.com/kyleve/Listable/compare/0.12.0...0.12.1

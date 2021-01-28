@@ -165,10 +165,36 @@ extension ListStateObserver
     
     /// Parameters available for `OnContentUpdated` callbacks.
     public struct ContentUpdated {
+        
         public let hadChanges : Bool
+        public let insertionsAndRemovals : InsertionsAndRemovals
         
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
+        
+        public struct InsertionsAndRemovals {
+
+            public var sections : ChangedIDs
+            public var items : ChangedIDs
+            
+            init(diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>) {
+                
+                self.sections = ChangedIDs(
+                    inserted: Set(diff.changes.added.map{ $0.identifier }),
+                    removed: Set(diff.changes.removed.map{ $0.identifier })
+                )
+                
+                self.items = ChangedIDs(
+                    inserted: diff.changes.addedItemIdentifiers,
+                    removed: diff.changes.removedItemIdentifiers
+                )
+            }
+            
+            public struct ChangedIDs {
+                public var inserted : Set<AnyIdentifier>
+                public var removed : Set<AnyIdentifier>
+            }
+        }
     }
     
     

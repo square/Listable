@@ -73,14 +73,14 @@ public struct ListProperties
     // MARK: Layout & Appearance
     //
     
-    /// The layout type to use with the list. Defaults to `.list()`, aka a list
-    /// with no spacing and full width headers, footers, and content.
+    /// The layout type to use with the list. Defaults to `.table()`, aka a table
+    /// with no spacing and full width headers, footers, and content – basically a plain table view.
     ///
     /// If you would like to change the layout to either a new type, or provide
     /// a `list` with different configuration options, assign it here.
     ///
     /// ```
-    /// list.layout = .list {
+    /// list.layout = .table {
     ///     $0.stickySectionHeaders = true
     ///
     ///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -148,20 +148,20 @@ public struct ListProperties
     // MARK: Initialization
     //
 
-    public typealias Build = (inout ListProperties) -> ()
+    public typealias Configure = (inout ListProperties) -> ()
     
     /// An instance of `ListProperties` with sensible default values.
-    public static func `default`(with builder : Build = { _ in }) -> Self {
+    public static func `default`(with configure : Configure = { _ in }) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
-            layout: .list(),
+            layout: .table(),
             appearance: .init(),
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
-            build: builder
+            configure: configure
         )
     }
     
@@ -175,7 +175,7 @@ public struct ListProperties
         autoScrollAction : AutoScrollAction,
         accessibilityIdentifier: String?,
         debuggingIdentifier: String?,
-        build : Build
+        configure : Configure
     ) {
         self.animatesChanges = animatesChanges
         self.layout = layout
@@ -191,7 +191,7 @@ public struct ListProperties
         
         self.stateObserver = ListStateObserver()
 
-        build(&self)
+        configure(&self)
     }
     
     //
@@ -199,14 +199,14 @@ public struct ListProperties
     //
     
     /// Updates the `ListProperties` object with the changes in the provided builder.
-    public mutating func modify(using builder : Build) {
-        builder(&self)
+    public mutating func modify(using configure : Configure) {
+        configure(&self)
     }
     
     /// Creates a new `ListProperties` object modified by the changes in the provided builder.
-    public func modified(using builder : Build) -> ListProperties {
+    public func modified(using configure : Configure) -> ListProperties {
         var copy = self
-        builder(&copy)
+        configure(&copy)
         return copy
     }
     
@@ -239,9 +239,9 @@ public struct ListProperties
     ///     }
     /// }
     /// ```
-    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, build : Section.Build)
+    public mutating func callAsFunction<Identifier:Hashable>(_ identifier : Identifier, configure : Section.Configure)
     {
-        self += Section(identifier, build: build)
+        self += Section(identifier, configure: configure)
     }
 }
 

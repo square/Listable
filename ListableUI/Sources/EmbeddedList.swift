@@ -18,7 +18,7 @@ public extension Item where Content == EmbeddedList
     ///     sizing: .fixed(height: 200)
     /// ) { list in
     ///
-    ///     list.layout = .list {
+    ///     list.layout = .table {
     ///         $0.direction = .horizontal
     ///     }
     ///
@@ -30,13 +30,17 @@ public extension Item where Content == EmbeddedList
     static func list<Identifier:Hashable>(
         _ identifier : Identifier,
         sizing : EmbeddedList.Sizing,
-        build : ListProperties.Build
+        configure : ListProperties.Configure
     ) -> Item<EmbeddedList>
     {
         Item(
-            EmbeddedList(identifier: identifier, build: build),
+            EmbeddedList(identifier: identifier, configure: configure),
+            
             sizing: sizing.toStandardSizing,
-            layout: ItemLayout(width: .fill)
+            
+            layouts: .init {
+                $0.table = .init(width: .fill)
+            }
         )
     }
 }
@@ -64,13 +68,13 @@ public struct EmbeddedList : ItemContent
     // MARK: Initialization
     //
     
-    public init<Identifier:Hashable>(identifier : Identifier, build : ListProperties.Build)
+    public init<Identifier:Hashable>(identifier : Identifier, configure : ListProperties.Configure)
     {
         self.contentIdentifier = AnyHashable(identifier)
         
         self.properties = ListProperties(
             animatesChanges: true,
-            layout: .list(),
+            layout: .table(),
             appearance: .init {
                 $0.showsScrollIndicators = false
             },
@@ -79,7 +83,7 @@ public struct EmbeddedList : ItemContent
             autoScrollAction: .none,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
-            build: build
+            configure: configure
         )
     }
     

@@ -35,7 +35,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         let initialLayout = CollectionViewLayout(
             delegate: self.delegate,
-            layoutDescription: .list(),
+            layoutDescription: .table(),
             appearance: self.appearance,
             behavior: self.behavior
         )
@@ -558,7 +558,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         })
     }
     
-    public func configure(with builder : ListProperties.Build)
+    public func configure(with configure : ListProperties.Configure)
     {
         let description = ListProperties(
             animatesChanges: true,
@@ -569,7 +569,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             autoScrollAction: self.autoScrollAction,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             debuggingIdentifier: self.debuggingIdentifier,
-            build: builder
+            configure: configure
         )
         
         self.configure(with: description)
@@ -870,6 +870,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
                 ListStateObserver.ContentUpdated(
                     hadChanges: diff.changes.isEmpty == false,
+                    insertionsAndRemovals: .init(diff: diff),
                     actions: actions,
                     positionInfo: self.scrollPositionInfo
                 )

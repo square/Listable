@@ -41,18 +41,5 @@ import BlueprintUI
 ///
 
 //
-// MARK: Deprecated May 29, 2019
+// MARK: Deprecated Month XX, 20XX
 //
-
-@available(*, unavailable, renamed: "BlueprintItemContent")
-public typealias BlueprintItemElement = BlueprintItemContent
-
-@available(*, unavailable, renamed: "BlueprintHeaderFooterContent")
-public typealias BlueprintHeaderFooterElement = BlueprintHeaderFooterContent
-
-public extension BlueprintHeaderFooterContent {
-    @available(*, unavailable, renamed: "elementRepresentation")
-    var element : Element {
-        self.elementRepresentation
-    }
-}

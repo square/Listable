@@ -1,12 +1,33 @@
 {
   "warnings": [
     {
-      "file": "/Users/k/Desktop/Development/Listable3/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
+      "file": "/Users/k/Desktop/Development/Listable2/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
       "line": 112,
       "symbol": "BlueprintHeaderFooterContent.apply(to:for:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable2/BlueprintUILists/Sources/HeaderFooter.swift",
+      "line": 127,
+      "symbol": "BlueprintHeaderFooterContentWrapper.representing",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable2/BlueprintUILists/Sources/HeaderFooter.swift",
+      "line": 134,
+      "symbol": "BlueprintHeaderFooterContentWrapper.isEquivalent(to:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable2/BlueprintUILists/Sources/Item.swift",
+      "line": 137,
+      "symbol": "BlueprintItemContentWrapper.representing",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/k/Desktop/Development/Listable3"
+  "source_directory": "/Users/k/Desktop/Development/Listable2"
 }

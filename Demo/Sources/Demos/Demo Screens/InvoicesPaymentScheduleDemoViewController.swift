@@ -37,7 +37,7 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func setAppearance()
     {
-        self.list.layout = .list {
+        self.list.layout = .table {
             $0.layout.set {
                 $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
                 $0.interSectionSpacingWithFooter = 30.0
@@ -98,8 +98,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
+                        
                         sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                        
+                        layouts: .init {
+                            $0.table.itemSpacing = 20.0
+                        }
                     )
                     
                     section += Item(
@@ -140,7 +144,9 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                             }
                         },
                         sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                        layouts: .init {
+                            $0.table.itemSpacing = 20
+                        }
                     )
                     
                     section += Item(
