@@ -67,7 +67,6 @@ final class AutoScrollingViewController : UIViewController
             
             items.mutateLast { last in
                 last.autoScrollAction = .onInsert(
-                    scrollTo: .lastItem,
                     position: .init(position: .bottom),
                     animation: .default,
                     shouldPerform: { info in
