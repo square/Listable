@@ -38,3 +38,37 @@ public protocol AnyItem_Internal
         performsContentCallbacks : Bool
     ) -> Any
 }
+
+
+extension Array {
+    
+    public mutating func mutateAt(index : Int, _ mutate : (inout Element) -> ()) {
+        var element = self[index]
+        mutate(&element)
+        self[index] = element
+    }
+    
+    public mutating func mutateEach(index : Int, _ mutate : (inout Element) -> ()) {
+        for (index, element) in self.enumerated() {
+            var element = element
+            mutate(&element)
+            self[index] = element
+        }
+    }
+    
+    public mutating func mutateFirst(_ mutate : (inout Element) -> ()) {
+        guard self.isEmpty == false else {
+            return
+        }
+        
+        self.mutateAt(index: 0, mutate)
+    }
+    
+    public mutating func mutateLast(_ mutate : (inout Element) -> ()) {
+        guard self.isEmpty == false else {
+            return
+        }
+        
+        self.mutateAt(index: self.count - 1, mutate)
+    }
+}
