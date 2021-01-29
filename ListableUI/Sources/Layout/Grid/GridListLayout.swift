@@ -268,7 +268,7 @@ final class GridListLayout : ListLayout
         lastContentMaxY : CGFloat,
         after : () -> ()
     ) {
-        let hasListHeader = self.content.header.isPopulated
+        let hasListHeader = headerFooter.isPopulated
                 
         let position = width.position(with: viewSize, defaultWidth: rootWidth)
         
