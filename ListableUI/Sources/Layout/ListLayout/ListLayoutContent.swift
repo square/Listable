@@ -303,7 +303,8 @@ public extension ListLayoutContent
             SupplementaryItemInfo(
                 kind: kind,
                 layouts: .init(),
-                isPopulated: false, measurer: { _ in .zero }
+                isPopulated: false,
+                measurer: { _ in .zero }
             )
         }
         

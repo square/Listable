@@ -464,7 +464,10 @@ final class TableListLayout : ListLayout
         
         let rootWidth = TableAppearance.Layout.width(
             with: direction.width(for: viewSize),
-            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
+            padding: direction.switch(
+                vertical: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
+                horizontal: HorizontalPadding(left: layout.padding.bottom, right: layout.padding.top)
+            ),
             constraint: layout.width
         )
                 
@@ -498,7 +501,7 @@ final class TableListLayout : ListLayout
             let position = header.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
-                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                fittingSize: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                 defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
                 direction: .vertical
             )
@@ -538,7 +541,7 @@ final class TableListLayout : ListLayout
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
-                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    fittingSize: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                     defaultSize: CGSize(width: 0.0, height: sizing.sectionHeaderHeight),
                     direction: .vertical
                 )
@@ -568,7 +571,7 @@ final class TableListLayout : ListLayout
                     let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                     
                     let measureInfo = Sizing.MeasureInfo(
-                        sizeConstraint: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
+                        fittingSize: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude),
                         defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
                         direction: .vertical
                     )
@@ -605,7 +608,7 @@ final class TableListLayout : ListLayout
                         item.y = lastContentMaxY
                                                 
                         let measureInfo = Sizing.MeasureInfo(
-                            sizeConstraint: CGSize(width: itemWidth, height: .greatestFiniteMagnitude),
+                            fittingSize: CGSize(width: itemWidth, height: .greatestFiniteMagnitude),
                             defaultSize: CGSize(width: 0.0, height: sizing.itemHeight),
                             direction: .vertical
                         )
@@ -645,7 +648,7 @@ final class TableListLayout : ListLayout
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
-                    sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                    fittingSize: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                     defaultSize: CGSize(width: 0.0, height: sizing.sectionFooterHeight),
                     direction: .vertical
                 )
@@ -691,7 +694,7 @@ final class TableListLayout : ListLayout
             let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
-                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                fittingSize: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                 defaultSize: CGSize(width: 0.0, height: sizing.listFooterHeight),
                 direction: .vertical
             )
@@ -717,7 +720,7 @@ final class TableListLayout : ListLayout
             let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
-                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                fittingSize: CGSize(width: position.width, height: .greatestFiniteMagnitude),
                 defaultSize: CGSize(width: 0.0, height: sizing.overscrollFooterHeight),
                 direction: .vertical
             )
