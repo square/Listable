@@ -325,12 +325,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
             $0.bottom = max($0.bottom, keyboardBottomInset)
         }
         
-        let contentInsets = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: keyboardBottomInset,
-            right: 0
-        )
+        let contentInsets = modified(self.collectionView.contentInset) {
+            $0.bottom = keyboardBottomInset
+        }
         
         return (contentInsets, scrollIndicatorInsets)
     }

@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers. 
+
 ### Added
 
 ### Removed
