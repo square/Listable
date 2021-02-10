@@ -2,19 +2,25 @@
 
 ### Fixed
 
-- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers. 
-
 ### Added
 
 ### Removed
 
 ### Changed
 
-- [Rename `build` parameters to `configure`](https://github.com/kyleve/Listable/pull/262), in order to be more consistent within the framework and with Blueprint.
-
 ### Misc
 
 # Past Releases
+
+# [0.16.0] - 2021-02-08
+
+### Fixed
+
+- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers. 
+
+### Changed
+
+- [Rename `build` parameters to `configure`](https://github.com/kyleve/Listable/pull/262), in order to be more consistent within the framework and with Blueprint.
 
 # [0.15.1] - 2021-01-25
 
@@ -295,7 +301,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.15.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.16.0...HEAD
+[0.16.0]: https://github.com/kyleve/Listable/compare/0.15.1...0.16.0
 [0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
 [0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
 [0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
