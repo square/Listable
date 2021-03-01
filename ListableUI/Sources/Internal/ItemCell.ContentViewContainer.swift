@@ -68,7 +68,8 @@ extension ItemCell {
             case .swiping:
 
                 let translation = configuration.panGestureRecognizer.translation(in: self)
-                xOriginOffset = contentView.frame.origin.x + translation.x
+                // No actions exist to the left, so limit overscrolling to the right to 20% of the width.
+                xOriginOffset = min(bounds.width / 5.0, contentView.frame.origin.x + translation.x)
 
                 configuration.panGestureRecognizer.setTranslation(.zero, in: self)
 
