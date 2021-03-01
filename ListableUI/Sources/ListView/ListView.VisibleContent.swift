@@ -79,6 +79,10 @@ extension ListView
         
         private func calculateVisibleContent(in view : ListView) -> (Set<Item>, Set<HeaderFooter>)
         {
+            guard view.bounds.isEmpty == false else {
+                return ([], [])
+            }
+            
             let visibleFrame = view.collectionView.bounds
             
             let visibleAttributes = view.collectionViewLayout.visibleLayoutAttributesForElements(in: visibleFrame) ?? []
