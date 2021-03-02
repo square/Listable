@@ -107,7 +107,7 @@ extension ItemCell {
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true
 
-                let panGestureRecognizer = HorizontalPanGestureRecognizer(target: self, action: #selector(handlePan))
+                let panGestureRecognizer = LeftPanGestureRecognizer(target: self, action: #selector(handlePan))
                 addGestureRecognizer(panGestureRecognizer)
 
                 swipeConfiguration = SwipeConfiguration(
@@ -137,7 +137,6 @@ extension ItemCell {
 
             guard let configuration = swipeConfiguration else { return }
 
-            let velocity = sender.velocity(in: self).x
             let offsetMultiplier = configuration.numberOfActions == 1 ? 0.5 : 0.7
             let performActionOffset = frame.width * CGFloat(offsetMultiplier)
             let currentSwipeOffset = -contentView.frame.origin.x
@@ -152,19 +151,14 @@ extension ItemCell {
 
             switch sender.state {
             case .began, .changed:
-
-                if swipeState == .closed && velocity > 0 {
-                    // The cell is closed and this is a swipe to the right. Ignore the swipe.
-                    sender.setTranslation(.zero, in: self)
-                } else {
-                    let swipeState = SwipeActionState.swiping(willPerformAction: willPerformAction)
-                    set(state: swipeState)
-                }
+                let swipeState = SwipeActionState.swiping(willPerformAction: willPerformAction)
+                set(state: swipeState)
 
             case .ended, .cancelled:
 
                 let swipeActionsWidth = configuration.swipeView.swipeActionsWidth
                 let keepOpenOffset = swipeActionsWidth / 2
+                let velocity = sender.velocity(in: self).x
 
                 var swipeState: SwipeActionState
 
