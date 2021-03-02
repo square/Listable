@@ -390,7 +390,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     @discardableResult
     public func scrollTo(
         item : AnyItem, position : ScrollPosition,
-        animation: ScrollAnimation = .none,
+        animation: ViewAnimation = .none,
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool
     {
@@ -411,7 +411,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     public func scrollTo(
         item : AnyIdentifier,
         position : ScrollPosition,
-        animation: ScrollAnimation = .none,
+        animation: ViewAnimation = .none,
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool
     {
@@ -451,7 +451,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
     public func scrollToTop(
-        animation: ScrollAnimation = .none,
+        animation: ViewAnimation = .none,
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool {
         
@@ -471,7 +471,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
     @discardableResult
     public func scrollToLastItem(
-        animation: ScrollAnimation = .none,
+        animation: ViewAnimation = .none,
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool {
 
@@ -1042,16 +1042,10 @@ public extension ListView
 
 extension ListView : ItemContentCoordinatorDelegate
 {
-    func coordinatorUpdated(for : AnyItem, animated : Bool)
+    func coordinatorUpdated(for : AnyItem)
     {
-        if animated {
-            UIView.animate(withDuration: 0.25) {
-                self.collectionViewLayout.setNeedsRelayout()
-                self.collectionView.layoutIfNeeded()
-            }
-        } else {
-            self.collectionViewLayout.setNeedsRelayout()
-        }
+        self.collectionViewLayout.setNeedsRelayout()
+        self.collectionView.layoutIfNeeded()
     }
 }
 

@@ -56,7 +56,7 @@ public enum AutoScrollAction {
         _ destination : ScrollDestination? = nil,
         onInsertOf insertedIdentifier: AnyIdentifier,
         position: ScrollPosition,
-        animation: ScrollAnimation = .none,
+        animation: ViewAnimation = .none,
         shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
         didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
     ) -> AutoScrollAction
@@ -115,7 +115,7 @@ extension AutoScrollAction
         /// ----
         /// The action will only be animated if it is animated, **and** the list update itself is
         /// animated. Otherwise, no animation occurs.
-        public var animation : ScrollAnimation
+        public var animation : ViewAnimation
         
         /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool

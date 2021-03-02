@@ -388,7 +388,7 @@ fileprivate struct TestContent : ItemContent, Equatable
             self.wasInserted_calls.append(())
         }
         
-        var wasUpdated_calls = [Item<ItemContentType>.OnUpdate]()
+        var wasUpdated_calls = [Item.OnUpdate]()
         
         func wasUpdated(_ info : Item<ItemContentType>.OnUpdate)
         {
@@ -402,30 +402,18 @@ fileprivate struct TestContent : ItemContent, Equatable
             self.wasRemoved_calls.append(())
         }
         
-        // MARK: ItemElementCoordinator - Visibility & View Lifecycle
-        
-        typealias View = ItemContentType.ContentView
-        
-        var view_didSet_calls = [View?]()
-        
-        var view : View? {
-            didSet {
-                self.view_didSet_calls.append(self.view)
-            }
+        var willDisplay_calls = [Void]()
+
+        func willDisplay()
+        {
+            self.willDisplay_calls.append(())
         }
         
-        var willDisplay_calls = [View]()
+        var didEndDisplay_calls = [Void]()
 
-        func willDisplay(with view : View)
+        func didEndDisplay()
         {
-            self.willDisplay_calls.append(view)
-        }
-        
-        var didEndDisplay_calls = [View]()
-
-        func didEndDisplay(with view : View)
-        {
-            self.didEndDisplay_calls.append(view)
+            self.didEndDisplay_calls.append(())
         }
         
         // MARK: ItemElementCoordinator - Selection & Highlight Lifecycle
@@ -452,7 +440,7 @@ fileprivate class ItemContentCoordinatorDelegateMock : ItemContentCoordinatorDel
 {
     var coordinatorUpdated_calls = [AnyItem]()
     
-    func coordinatorUpdated(for item: AnyItem, animated : Bool)
+    func coordinatorUpdated(for item: AnyItem)
     {
         self.coordinatorUpdated_calls.append(item)
     }

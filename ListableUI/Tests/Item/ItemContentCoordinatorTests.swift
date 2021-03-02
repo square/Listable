@@ -23,16 +23,6 @@ class ItemContentCoordinatorActionsTests : XCTestCase
             callbackCount += 1
         })
         
-        self.testcase("Setter based update") {
-        
-            var updated = item
-            updated.content.value = "update1"
-            actions.update(updated)
-            
-            XCTAssertEqual(item.content.value, "update1")
-            XCTAssertEqual(callbackCount, 1)
-        }
-        
         self.testcase("Closure based update") {
                         
             actions.update {

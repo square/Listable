@@ -57,6 +57,9 @@ public protocol ItemContentCoordinator : AnyObject
     /// The type of `ItemContent` associated with this coordinator.
     associatedtype ItemContentType : ItemContent
     
+    /// The item associated with the coordinator.
+    typealias Item = ListableUI.Item<ItemContentType>
+    
     // MARK: Actions & Info
     
     /// The available actions you can perform on the coordinated `Item`. Eg, updating it to a new value.
@@ -68,38 +71,32 @@ public protocol ItemContentCoordinator : AnyObject
     // MARK: Instance Lifecycle
     
     /// Invoked on the coordinator when it is first created and configured.
-    func wasInserted(_ info : Item<ItemContentType>.OnInsert)
+    func wasInserted(_ info : Item.OnInsert)
     
     /// Invoked on the coordinator when its owned item is removed from the list due to
     /// the item, or its entire section, being removed from the list.
     ///
     /// Not invoked during deallocation of a list.
-    func wasRemoved(_ info : Item<ItemContentType>.OnRemove)
+    func wasRemoved(_ info : Item.OnRemove)
     
     /// Invoked on the coordinator when its owned item is moved inside a list due to its
     /// order changing.
     ///
     /// Not invoked when an item is manually re-ordered by a user.
-    func wasMoved(_ info : Item<ItemContentType>.OnMove)
+    func wasMoved(_ info : Item.OnMove)
     
     /// Invoked on the coordinator when an external update is pushed onto the owned `Item`.
     /// This happens when the developer updates the content of the list, and the item is
     /// reported as changed via its `isEquivalent(to:)` method.
-    func wasUpdated(_ info : Item<ItemContentType>.OnUpdate)
+    func wasUpdated(_ info : Item.OnUpdate)
     
     // MARK: Visibility & View Lifecycle
-    
-    /// The view type associated with the item.
-    typealias View = ItemContentType.ContentView
-    
-    /// The view, if any, currently used to display the item.
-    var view : View? { get set }
 
     /// Invoked when the list is about to begin displaying the item with the given view.
-    func willDisplay(with view : View)
+    func willDisplay()
 
     /// Invoked when the list is about to complete displaying the item with the given view.
-    func didEndDisplay(with view : View)
+    func didEndDisplay()
     
     // MARK: Selection & Highlight Lifecycle
     
@@ -115,19 +112,19 @@ public extension ItemContentCoordinator
 {
     // MARK: Instance Lifecycle
     
-    func wasInserted(_ info : Item<ItemContentType>.OnInsert) {}
+    func wasInserted(_ info : Item.OnInsert) {}
     
-    func wasRemoved(_ info : Item<ItemContentType>.OnRemove) {}
+    func wasRemoved(_ info : Item.OnRemove) {}
     
-    func wasMoved(_ info : Item<ItemContentType>.OnMove) {}
+    func wasMoved(_ info : Item.OnMove) {}
     
-    func wasUpdated(_ info : Item<ItemContentType>.OnUpdate) {}
+    func wasUpdated(_ info : Item.OnUpdate) {}
     
     // MARK: Visibility Lifecycle
         
-    func willDisplay(with view : View) {}
+    func willDisplay() {}
 
-    func didEndDisplay(with view : View) {}
+    func didEndDisplay() {}
     
     // MARK: Selection & Highlight Lifecycle
     
@@ -141,28 +138,41 @@ public extension ItemContentCoordinator
 public final class ItemContentCoordinatorActions<Content:ItemContent>
 {
     private let currentProvider : () -> Item<Content>
-    var updateCallback : (Item<Content>, Bool) -> ()
+    var updateCallback : (Item<Content>, ViewAnimation) -> ()
     
-    init(current : @escaping () -> Item<Content>, update : @escaping (Item<Content>, Bool) -> ())
+    init(current : @escaping () -> Item<Content>, update : @escaping (Item<Content>, ViewAnimation) -> ())
     {
         self.currentProvider = current
         self.updateCallback = update
     }
-    
-    /// Updates the item to the provided item.
-    public func update(animated: Bool = false, _ new : Item<Content>)
-    {
-        self.updateCallback(new, animated)
-    }
-    
-    /// Allows you to update the item passed into the update closure.
-    public func update(animated: Bool = false, _ update : (inout Item<Content>) -> ())
-    {
+
+    ///
+    /// Allows you to update the displayed item via the provided closure, with an optional
+    /// animation or delay.
+    ///
+    /// ```
+    /// func wasSelected() {
+    ///    self.update(animation: .animated(0.15), after: 1.0) { item in
+    ///       item.content.myProperty = true
+    ///    }
+    /// }
+    /// ```
+    public func update(
+        animation: ViewAnimation = .default,
+        after delay: TimeInterval = 0,
+        update : (inout Item<Content>) -> ()
+    ) {
         var new = self.currentProvider()
         
         update(&new)
         
-        self.update(animated: animated, new)
+        if delay > 0 {
+            Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { _ in
+                self.updateCallback(new, animation)
+            }
+        } else {
+            self.updateCallback(new, animation)
+        }
     }
 }
 
@@ -198,15 +208,11 @@ public final class DefaultItemContentCoordinator<Content:ItemContent> : ItemCont
     public let actions : Content.CoordinatorActions
     public let info : Content.CoordinatorInfo
     
-    public var view : Content.ContentView?
-    
     internal init(
         actions: Content.CoordinatorActions,
-        info: Content.CoordinatorInfo,
-        view: DefaultItemContentCoordinator<Content>.View?
+        info: Content.CoordinatorInfo
     ) {
         self.actions = actions
         self.info = info
-        self.view = view
     }
 }

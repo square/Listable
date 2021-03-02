@@ -93,7 +93,7 @@ public final class ListActions {
         public func scrollTo(
             item : AnyItem,
             position : ScrollPosition,
-            animation : ScrollAnimation = .none,
+            animation : ViewAnimation = .none,
             completion : @escaping ScrollCompletion = { _ in }
         ) -> Bool
         {
@@ -118,7 +118,7 @@ public final class ListActions {
         public func scrollTo(
             item : AnyIdentifier,
             position : ScrollPosition,
-            animation : ScrollAnimation = .none,
+            animation : ViewAnimation = .none,
             completion : @escaping ScrollCompletion = { _ in }
             ) -> Bool
         {
@@ -137,7 +137,7 @@ public final class ListActions {
         /// Scrolls to the very top of the list, which includes displaying the list header.
         @discardableResult
         public func scrollToTop(
-            animation : ScrollAnimation = .none,
+            animation : ViewAnimation = .none,
             completion : @escaping ScrollCompletion = { _ in }
         ) -> Bool
         {
@@ -154,7 +154,7 @@ public final class ListActions {
         /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
         @discardableResult
         public func scrollToLastItem(
-            animation : ScrollAnimation = .none,
+            animation : ViewAnimation = .none,
             completion : @escaping ScrollCompletion = { _ in }
         ) -> Bool
         {

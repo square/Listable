@@ -60,7 +60,7 @@ protocol AnyPresentationItemState : AnyObject
 
 protocol ItemContentCoordinatorDelegate : AnyObject
 {
-    func coordinatorUpdated(for item : AnyItem, animated : Bool)
+    func coordinatorUpdated(for item : AnyItem)
 }
 
 
@@ -155,16 +155,17 @@ extension PresentationState
             
             weak var coordinatorDelegate = dependencies.coordinatorDelegate
             
-            self.coordination.actions.updateCallback = { [weak self, weak coordinatorDelegate] new, animated in
+            self.coordination.actions.updateCallback = { [weak self, weak coordinatorDelegate] new, animation in
                 guard let self = self, let delegate = coordinatorDelegate else {
                     return
                 }
                 
                 self.setNew(item: new, reason: .updateFromItemCoordinator, updateCallbacks: UpdateCallbacks(.immediate))
                 
-                delegate.coordinatorUpdated(for: self.anyModel, animated: animated)
-                
-                self.applyToVisibleCell(with: dependencies.environmentProvider())
+                animation.perform {
+                    self.applyToVisibleCell(with: dependencies.environmentProvider())
+                    delegate.coordinatorUpdated(for: self.anyModel)
+                }
             }
             
             self.storage.didSetState = { [weak self] old, new in
@@ -398,15 +399,10 @@ extension PresentationState
             }
             
             if old.visibleCell != new.visibleCell {
-                if let cell = new.visibleCell {
-                    let contentView = cell.contentContainer.contentView
-                    
-                    coordinator.view = contentView
-                    coordinator.willDisplay(with: contentView)
+                if new.visibleCell != nil {
+                    coordinator.willDisplay()
                 } else {
-                    if let view = old.visibleCell?.contentContainer.contentView {
-                        coordinator.didEndDisplay(with: view)
-                    }
+                    coordinator.didEndDisplay()
                 }
             }
         }
