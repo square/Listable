@@ -85,7 +85,7 @@ class ListLayoutContentTests : XCTestCase
 }
 
 
-class ListLayoutContent_SectionInfo_Tests : XCTestCase
+class ListLayoutContent_SectionInfoTests : XCTestCase
 {
     func test_all()
     {
@@ -195,18 +195,19 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
 }
 
 
-class ListLayoutContent_SupplementaryItemInfo_Tests : XCTestCase
+class ListLayoutContent_SupplementaryItemInfoTests : XCTestCase
 {
     
 }
 
 
-class ListLayoutContent_ItemInfo_Tests : XCTestCase
+class ListLayoutContent_ItemInfoTests : XCTestCase
 {
     
 }
 
-class ListLayoutContent_CGRect_Tests : XCTestCase
+
+class ListLayoutContent_CGRectTests : XCTestCase
 {
     func test_unioned()
     {
@@ -232,6 +233,156 @@ class ListLayoutContent_CGRect_Tests : XCTestCase
                 CGRect.unioned(from: rects.shuffled()),
                 CGRect(x: 10.0, y: 10.0, width: 100.0, height: 200.0)
             )
+        }
+    }
+}
+
+
+let binarySearchVerticalRects : [CGRect] = [
+    CGRect(x: 0, y: 0, width: 100, height: 10),
+    CGRect(x: 0, y: 10, width: 100, height: 10),
+    CGRect(x: 0, y: 20, width: 100, height: 10),
+    CGRect(x: 0, y: 30, width: 100, height: 10),
+    CGRect(x: 0, y: 40, width: 100, height: 10),
+    CGRect(x: 0, y: 50, width: 100, height: 10),
+    CGRect(x: 0, y: 60, width: 100, height: 10),
+    CGRect(x: 0, y: 70, width: 100, height: 10),
+    CGRect(x: 0, y: 80, width: 100, height: 10),
+    CGRect(x: 0, y: 90, width: 100, height: 10),
+]
+
+
+class ListLayoutContent_ArrayTests : XCTestCase {
+    
+    func test_fowardFrom() {
+        
+        self.testcase("vertical") {
+            let rects = binarySearchVerticalRects
+            
+            XCTAssertEqual(
+                rects.forwardFrom {
+                    .value(
+                        for: $0,
+                        in: CGRect(x: 0, y: 0, width: 100, height: 30),
+                        direction: .vertical
+                    )
+                },
+                
+                0
+            )
+            
+            XCTAssertEqual(
+                rects.forwardFrom {
+                    .value(
+                        for: $0,
+                        in: CGRect(x: 0, y: 25, width: 100, height: 30),
+                        direction: .vertical
+                    )
+                },
+                
+                2
+            )
+        }
+    }
+    
+    func test_binarySearch() {
+        
+        self.testcase("vertical") {
+            let rects = binarySearchVerticalRects
+            
+            XCTAssertEqual(
+                rects.binarySearch(
+                    for: {
+                        .value(
+                            for: $0,
+                            in: CGRect(x: 0, y: 25, width: 100, height: 1),
+                            direction: .vertical
+                        )
+                    },
+                    in: 0..<rects.count
+                ),
+                
+                2
+            )
+            
+            XCTAssertEqual(
+                rects.binarySearch(
+                    for: {
+                        .value(
+                            for: $0,
+                            in: CGRect(x: 0, y: 25, width: 100, height: 30),
+                            direction: .vertical
+                        )
+                    },
+                    in: 0..<rects.count
+                ),
+                
+                5
+            )
+        }
+    }
+}
+
+
+class ListLayoutContent_Array_SearchResultTests : XCTestCase {
+    
+    func test_value() {
+        
+        self.testcase("vertical") {
+            
+            XCTAssertEqual(
+                BinarySearchResult.value(
+                    for: CGRect(x: 0, y: -11, width: 100, height: 10),
+                    in: CGRect(x: 0, y: 0, width: 100, height: 100),
+                    direction: .vertical
+                ),
+                
+                .less
+            )
+            
+            XCTAssertEqual(
+                BinarySearchResult.value(
+                    for: CGRect(x: 0, y: -10, width: 100, height: 10),
+                    in: CGRect(x: 0, y: 0, width: 100, height: 100),
+                    direction: .vertical
+                ),
+                
+                .equal
+            )
+                    
+            XCTAssertEqual(
+                BinarySearchResult.value(
+                    for: CGRect(x: 0, y: 0, width: 100, height: 10),
+                    in: CGRect(x: 0, y: 0, width: 100, height: 100),
+                    direction: .vertical
+                ),
+                
+                .equal
+            )
+            
+            XCTAssertEqual(
+                BinarySearchResult.value(
+                    for: CGRect(x: 0, y: 100, width: 100, height: 10),
+                    in: CGRect(x: 0, y: 0, width: 100, height: 100),
+                    direction: .vertical
+                ),
+                
+                .equal
+            )
+
+            XCTAssertEqual(
+                BinarySearchResult.value(
+                    for: CGRect(x: 0, y: 101, width: 100, height: 10),
+                    in: CGRect(x: 0, y: 0, width: 100, height: 100),
+                    direction: .vertical
+                ),
+                
+                .greater
+            )
+        }
+        
+        self.testcase("horizontal") {
+            
         }
     }
 }
