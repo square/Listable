@@ -452,35 +452,6 @@ extension CGRect {
 }
 
 
-enum BinarySearchComparison : Equatable {
-    
-    case less
-    case equal
-    case greater
-    
-    static func compare(
-        frame : CGRect,
-        in parent : CGRect,
-        direction : LayoutDirection
-    ) -> Self
-    {
-        switch direction {
-        case .vertical:
-            if frame.maxY < parent.origin.y {
-                return .less
-            } else if frame.minY > parent.maxY {
-                return .greater
-            } else {
-                return .equal
-            }
-            
-        case .horizontal:
-            fatalError("TODO")
-        }
-    }
-}
-
-
 extension Array {
     
     /// Implements a binary search to find the first object in an array
@@ -550,5 +521,34 @@ extension Array {
         }
         
         return nil
+    }
+}
+
+
+enum BinarySearchComparison : Equatable {
+    
+    case less
+    case equal
+    case greater
+    
+    static func compare(
+        frame : CGRect,
+        in parent : CGRect,
+        direction : LayoutDirection
+    ) -> Self
+    {
+        switch direction {
+        case .vertical:
+            if frame.maxY < parent.origin.y {
+                return .less
+            } else if frame.minY > parent.maxY {
+                return .greater
+            } else {
+                return .equal
+            }
+            
+        case .horizontal:
+            fatalError("TODO")
+        }
     }
 }
