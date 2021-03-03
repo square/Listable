@@ -114,7 +114,7 @@ public final class ListLayoutContent
         
         // Sections
         
-        self.sections.forEachAfter { section in
+        BinarySearch.forEach(in: self.sections) { section in
             .compare(frame: section.contentsFrame, in: rect, direction: .vertical) // TODO fixme: Not only vertical
         } forEach: { sectionIndex, section in
             
@@ -129,8 +129,8 @@ public final class ListLayoutContent
             }
             
             // Items
-                        
-            section.items.forEachAfter { item in
+            
+            BinarySearch.forEach(in: section.items) { item in
                 .compare(frame: item.frame, in: rect, direction: .vertical) // TODO fixme: Not only vertical
             } forEach: { _, item in
                 if rect.intersects(item.frame) {

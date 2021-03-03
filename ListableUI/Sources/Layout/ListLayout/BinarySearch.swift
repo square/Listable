@@ -37,38 +37,36 @@ enum BinarySearch {
             }
         }
     }
-}
-
-
-extension Array {
     
     /// Implements a binary search to find the first object in an array
     /// that passes the given test, and then enumerates forwards until
     /// the `forEach` closure returns false.
-    func forEachAfter(
+    static func forEach<Element>(
+        in array : Array<Element>,
         first isFirst : (Element) -> BinarySearch.Comparison,
         forEach : (Int, Element) -> Bool
     ) {
-        guard let start = self.firstIndexPassing(isFirst) else {
+        guard let start = self.firstIndexPassing(in: array, isFirst: isFirst) else {
             return
         }
         
-        for (index, item) in self[start..<self.endIndex].enumerated() {
+        for (index, item) in array[start..<array.endIndex].enumerated() {
             if forEach(index + start, item) == false { // TODO: I think the index here is wrong? Did the fix fix it?
                 break
             }
         }
     }
     
-    func firstIndexPassing(
-        _ isFirst : (Element) -> BinarySearch.Comparison
+    static func firstIndexPassing<Element>(
+        in array : Array<Element>,
+        isFirst : (Element) -> BinarySearch.Comparison
     ) -> Int?
     {
-        guard let startGuess = self.binarySearch(for: isFirst, in: 0..<self.count) else {
+        guard let startGuess = self.binarySearch(in: array, for: isFirst, range: 0..<array.count) else {
             return nil
         }
         
-        let slice = self[0...startGuess]
+        let slice = array[0...startGuess]
         
         for (index, element) in slice.reversed().enumerated() {
             let comparison = isFirst(element)
@@ -81,22 +79,23 @@ extension Array {
         return 0
     }
     
-    func binarySearch(
+    static func binarySearch<Element>(
+        in array : Array<Element>,
         for find : (Element) -> BinarySearch.Comparison,
-        in range : Range<Int>
+        range : Range<Int>
     ) -> Int?
     {
-        guard self.isEmpty == false else {
+        guard array.isEmpty == false else {
             return nil
         }
         
         var lower = 0
-        var upper = self.count
+        var upper = array.count
         
         while lower < upper {
             let index = lower + (upper - lower) / 2
             
-            let result = find(self[index])
+            let result = find(array[index])
             
             switch result {
             case .less:
