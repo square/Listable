@@ -216,6 +216,11 @@ extension ListView
                 environment: self.view.environment
             )
         }
+        
+        func listViewLayoutDidLayoutContents()
+        {
+            self.view.visibleContent.update(with: self.view)
+        }
 
         // MARK: UIScrollViewDelegate
         
