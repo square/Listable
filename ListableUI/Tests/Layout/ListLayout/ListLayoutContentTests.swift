@@ -261,8 +261,8 @@ class ListLayoutContent_ArrayTests : XCTestCase {
             
             XCTAssertEqual(
                 rects.forwardFrom {
-                    .value(
-                        for: $0,
+                    .compare(
+                        frame: $0,
                         in: CGRect(x: 0, y: 0, width: 100, height: 30),
                         direction: .vertical
                     )
@@ -273,8 +273,8 @@ class ListLayoutContent_ArrayTests : XCTestCase {
             
             XCTAssertEqual(
                 rects.forwardFrom {
-                    .value(
-                        for: $0,
+                    .compare(
+                        frame: $0,
                         in: CGRect(x: 0, y: 25, width: 100, height: 30),
                         direction: .vertical
                     )
@@ -293,8 +293,8 @@ class ListLayoutContent_ArrayTests : XCTestCase {
             XCTAssertEqual(
                 rects.binarySearch(
                     for: {
-                        .value(
-                            for: $0,
+                        .compare(
+                            frame: $0,
                             in: CGRect(x: 0, y: 25, width: 100, height: 1),
                             direction: .vertical
                         )
@@ -308,8 +308,8 @@ class ListLayoutContent_ArrayTests : XCTestCase {
             XCTAssertEqual(
                 rects.binarySearch(
                     for: {
-                        .value(
-                            for: $0,
+                        .compare(
+                            frame: $0,
                             in: CGRect(x: 0, y: 25, width: 100, height: 30),
                             direction: .vertical
                         )
@@ -326,13 +326,13 @@ class ListLayoutContent_ArrayTests : XCTestCase {
 
 class ListLayoutContent_Array_SearchResultTests : XCTestCase {
     
-    func test_value() {
+    func test_compare() {
         
         self.testcase("vertical") {
             
             XCTAssertEqual(
-                BinarySearchResult.value(
-                    for: CGRect(x: 0, y: -11, width: 100, height: 10),
+                BinarySearchComparison.compare(
+                    frame: CGRect(x: 0, y: -11, width: 100, height: 10),
                     in: CGRect(x: 0, y: 0, width: 100, height: 100),
                     direction: .vertical
                 ),
@@ -341,8 +341,8 @@ class ListLayoutContent_Array_SearchResultTests : XCTestCase {
             )
             
             XCTAssertEqual(
-                BinarySearchResult.value(
-                    for: CGRect(x: 0, y: -10, width: 100, height: 10),
+                BinarySearchComparison.compare(
+                    frame: CGRect(x: 0, y: -10, width: 100, height: 10),
                     in: CGRect(x: 0, y: 0, width: 100, height: 100),
                     direction: .vertical
                 ),
@@ -351,8 +351,8 @@ class ListLayoutContent_Array_SearchResultTests : XCTestCase {
             )
                     
             XCTAssertEqual(
-                BinarySearchResult.value(
-                    for: CGRect(x: 0, y: 0, width: 100, height: 10),
+                BinarySearchComparison.compare(
+                    frame: CGRect(x: 0, y: 0, width: 100, height: 10),
                     in: CGRect(x: 0, y: 0, width: 100, height: 100),
                     direction: .vertical
                 ),
@@ -361,8 +361,8 @@ class ListLayoutContent_Array_SearchResultTests : XCTestCase {
             )
             
             XCTAssertEqual(
-                BinarySearchResult.value(
-                    for: CGRect(x: 0, y: 100, width: 100, height: 10),
+                BinarySearchComparison.compare(
+                    frame: CGRect(x: 0, y: 100, width: 100, height: 10),
                     in: CGRect(x: 0, y: 0, width: 100, height: 100),
                     direction: .vertical
                 ),
@@ -371,8 +371,8 @@ class ListLayoutContent_Array_SearchResultTests : XCTestCase {
             )
 
             XCTAssertEqual(
-                BinarySearchResult.value(
-                    for: CGRect(x: 0, y: 101, width: 100, height: 10),
+                BinarySearchComparison.compare(
+                    frame: CGRect(x: 0, y: 101, width: 100, height: 10),
                     in: CGRect(x: 0, y: 0, width: 100, height: 100),
                     direction: .vertical
                 ),

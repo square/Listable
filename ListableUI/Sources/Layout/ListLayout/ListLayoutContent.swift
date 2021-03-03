@@ -114,10 +114,12 @@ public final class ListLayoutContent
         
         // Sections
         
-        for (sectionIndex, section) in self.sections.enumerated() {
+        self.sections.forEachForwardFrom { section in
+            .compare(frame: section.contentsFrame, in: rect, direction: .vertical) // TODO fixme: Not only vertical
+        } forEach: { sectionIndex, section in
             
             guard rect.intersects(section.contentsFrame) else {
-                continue
+                return false
             }
             
             // Section Header
@@ -129,7 +131,7 @@ public final class ListLayoutContent
             // Items
                         
             section.items.forEachForwardFrom { item in
-                .value(for: item.frame, in: rect, direction: .vertical) // TODO fixme
+                .compare(frame: item.frame, in: rect, direction: .vertical) // TODO fixme: Not only vertical
             } forEach: { _, item in
                 if rect.intersects(item.frame) {
                     attributes.append(item.layoutAttributes(with: item.liveIndexPath))
@@ -144,6 +146,8 @@ public final class ListLayoutContent
             if rect.intersects(section.footer.visibleFrame) {
                 attributes.append(section.footer.layoutAttributes(with: section.footer.kind.indexPath(in: sectionIndex)))
             }
+            
+            return true
         }
         
         // List Footer
@@ -448,22 +452,23 @@ extension CGRect {
 }
 
 
-enum BinarySearchResult : Equatable {
+enum BinarySearchComparison : Equatable {
+    
     case less
     case equal
     case greater
     
-    static func value(
-        for frame : CGRect,
-        in rect : CGRect,
+    static func compare(
+        frame : CGRect,
+        in parent : CGRect,
         direction : LayoutDirection
     ) -> Self
     {
         switch direction {
         case .vertical:
-            if frame.maxY < rect.origin.y {
+            if frame.maxY < parent.origin.y {
                 return .less
-            } else if frame.minY > rect.maxY {
+            } else if frame.minY > parent.maxY {
                 return .greater
             } else {
                 return .equal
@@ -479,13 +484,13 @@ enum BinarySearchResult : Equatable {
 extension Array {
     
     /// Implements a binary search to find the first object in an array
-    /// that passes the given test, and then enumerates forward until
+    /// that passes the given test, and then enumerates forwards until
     /// the `forEach` closure returns false.
     func forEachForwardFrom(
-        start isStart : (Element) -> BinarySearchResult,
+        first isFirst : (Element) -> BinarySearchComparison,
         forEach : (Int, Element) -> Bool
     ) {
-        guard let start = self.forwardFrom(start: isStart) else {
+        guard let start = self.forwardFrom(first: isFirst) else {
             return
         }
         
@@ -497,17 +502,17 @@ extension Array {
     }
     
     func forwardFrom(
-        start isStart : (Element) -> BinarySearchResult
+        first isFirst : (Element) -> BinarySearchComparison
     ) -> Int?
     {
-        guard let startGuess = self.binarySearch(for: isStart, in: 0..<self.count) else {
+        guard let startGuess = self.binarySearch(for: isFirst, in: 0..<self.count) else {
             return nil
         }
         
         let slice = self[0...startGuess]
         
         for (index, element) in slice.reversed().enumerated() {
-            if isStart(element) == .less {
+            if isFirst(element) == .less {
                 return startGuess - index + 1
             }
         }
@@ -516,7 +521,7 @@ extension Array {
     }
     
     func binarySearch(
-        for find : (Element) -> BinarySearchResult,
+        for find : (Element) -> BinarySearchComparison,
         in range : Range<Int>
     ) -> Int?
     {
