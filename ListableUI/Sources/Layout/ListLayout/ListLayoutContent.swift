@@ -495,7 +495,7 @@ extension Array {
         }
         
         for (index, item) in self[start..<self.endIndex].enumerated() {
-            if forEach(index, item) == false {
+            if forEach(index + start, item) == false { // TODO: I think the index here is wrong? Did the fix fix it?
                 break
             }
         }
@@ -512,7 +512,9 @@ extension Array {
         let slice = self[0...startGuess]
         
         for (index, element) in slice.reversed().enumerated() {
-            if isFirst(element) == .less {
+            let comparison = isFirst(element)
+            
+            if comparison == .less {
                 return startGuess - index + 1
             }
         }
