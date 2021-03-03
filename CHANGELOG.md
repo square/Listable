@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [When swiping to delete](https://github.com/kyleve/Listable/pull/270), limit overscrolling to 20% of the cell width. This prevents undesirable visual state while maintaining swipe bounciness. Additionally, ignore initial swipes to the right which do not "open" the cell.
+
 ### Added
 
 ### Removed
