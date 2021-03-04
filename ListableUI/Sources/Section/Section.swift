@@ -12,9 +12,8 @@ public struct Section
     // MARK: Public Properties
     //
     
-    /// Data backing the identity and updates to the section – for example
-    /// if the section has been moved, plus the identifier for the section's content.
-    public var info : AnySectionInfo
+    /// The value which uniquely identifies the section within a list.
+    public var identifier : Identifier<Section>
     
     /// The header, if any, associated with the section.
     public var header : AnyHeaderFooter?
@@ -64,19 +63,9 @@ public struct Section
     //
     
     public typealias Configure = (inout Section) -> ()
-        
-    public init<Info:SectionInfo>(
-        _ info: Info,
-        configure : Configure
-        )
-    {
-        self.init(info)
-        
-        configure(&self)
-    }
     
-    public init<Identifier:Hashable>(
-        _ identifier : Identifier,
+    public init<IdentifierType:Hashable>(
+        _ identifier : IdentifierType,
         layouts : SectionLayouts = .init(),
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
@@ -84,25 +73,7 @@ public struct Section
         configure : Configure = { _ in }
         )
     {
-        self.init(
-            HashableSectionInfo(identifier),
-            header: header,
-            footer: footer,
-            items: items,
-            configure: configure
-        )
-    }
-    
-    public init<Info:SectionInfo>(
-        _ info: Info,
-        layouts : SectionLayouts = .init(),
-        header : AnyHeaderFooter? = nil,
-        footer : AnyHeaderFooter? = nil,
-        items : [AnyItem] = [],
-        configure : Configure = { _ in }
-        )
-    {
-        self.info = info
+        self.identifier = Identifier<Section>(identifier)
         
         self.layouts = layouts
         
@@ -166,68 +137,5 @@ public struct Section
         let end = min(self.items.count, limit)
         
         return Array(self.items[0..<end])
-    }
-}
-
-
-public protocol SectionInfo : AnySectionInfo
-{
-    //
-    // MARK: Identifying Content & Changes
-    //
-    
-    var identifier : Identifier<Self> { get }
-    
-    func wasMoved(comparedTo other : Self) -> Bool
-}
-
-
-public protocol AnySectionInfo
-{
-    //
-    // MARK: Identifying Content & Changes
-    //
-    
-    var anyIdentifier : AnyIdentifier { get }
-    
-    func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool
-}
-
-
-public extension SectionInfo
-{
-    var anyIdentifier : AnyIdentifier {
-        self.identifier
-    }
-    
-    func anyWasMoved(comparedTo other : AnySectionInfo) -> Bool
-    {
-        guard let other = other as? Self else {
-            return true
-        }
-        
-        return self.wasMoved(comparedTo: other)
-    }
-}
-
-
-private struct HashableSectionInfo<Value:Hashable> : SectionInfo
-{
-    var value : Value
-    
-    init(_ value : Value)
-    {
-        self.value = value
-    }
-    
-    // MARK: SectionInfo
-    
-    var identifier : Identifier<HashableSectionInfo> {
-        return .init(self.value)
-    }
-    
-    func wasMoved(comparedTo other : HashableSectionInfo) -> Bool
-    {
-        return self.value != other.value
     }
 }

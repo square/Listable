@@ -1001,9 +1001,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
             new: new,
             configuration: SectionedDiff.Configuration(
                 section: .init(
-                    identifier: { $0.info.anyIdentifier },
+                    identifier: { $0.identifier },
                     items: { $0.items },
-                    movedHint: { $0.info.anyWasMoved(comparedTo: $1.info) }
+                    movedHint: { $0.identifier != $1.identifier }
                 ),
                 item: .init(
                     identifier: { $0.identifier },
