@@ -133,6 +133,34 @@ public final class ListActions {
                 completion: completion
             )
         }
+
+        ///
+        /// Scrolls to the section with the provided identifier, with the provided positioning.
+        /// If there is more than one section with the same identifier, the list scrolls to the first.
+        /// If the section has content and is contained in the list, true is returned. If not, false is returned.
+        ///
+        /// The list will first attempt to scroll to the section header. If no header is present, it'll scroll to the
+        /// first item instead. If neither header nor items are found, the list will fallback to the footer.
+        ///
+        @discardableResult
+        public func scrollTo(
+            section : AnyIdentifier,
+            position : ScrollPosition,
+            animation : ScrollAnimation = .none,
+            completion : @escaping ScrollCompletion = { _ in }
+            ) -> Bool
+        {
+            guard let listView = self.listView else {
+                return false
+            }
+
+            return listView.scrollTo(
+                section: section,
+                position: position,
+                animation: animation,
+                completion: completion
+            )
+        }
         
         /// Scrolls to the very top of the list, which includes displaying the list header.
         @discardableResult

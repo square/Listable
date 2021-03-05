@@ -418,7 +418,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     {
         // Make sure the item identifier is valid.
         
-        guard let toIndexPath = self.storage.allContent.firstIndexPath(for: item) else {
+        guard let toIndexPath = self.storage.allContent.firstIndexPathFor(itemIdentifier: item) else {
             return false
         }
         
@@ -446,6 +446,86 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 },
                 completion: completion
             )
+        }
+    }
+
+    ///
+    /// Scrolls to the section with the provided identifier, with the provided positioning.
+    /// If there is more than one section with the same identifier, the list scrolls to the first.
+    /// If the section has content and is contained in the list, true is returned. If not, false is returned.
+    ///
+    /// The list will first attempt to scroll to the section header. If no header is present, it'll scroll to the
+    /// first item instead. If neither header nor items are found, the list will fallback to the footer.
+    ///
+    @discardableResult
+    public func scrollTo(
+        section: AnyIdentifier,
+        position : ScrollPosition,
+        animation: ScrollAnimation = .none,
+        completion : @escaping ScrollCompletion = { _ in }
+    ) -> Bool
+    {
+        let storageContent = storage.allContent
+        let layoutContent = collectionViewLayout.layout.content
+
+        // Make sure the section identifier is valid and the section has content.
+
+        guard let sectionPath = storageContent.firstIndexPathFor(sectionIdentifier: section),
+              layoutContent.sections[sectionPath.section].all.isEmpty == false
+        else {
+            return false
+        }
+
+        let headerFrame = layoutContent.sections[sectionPath.section].header.defaultFrame
+        let footerFrame = layoutContent.sections[sectionPath.section].footer.defaultFrame
+
+        func performScrollTo(targetFrame: CGRect, position: ScrollPosition.Position, at sectionPath: IndexPath) -> Bool
+        {
+            let topInset = collectionView.adjustedContentInset.top
+            let contentFrameHeight = collectionView.contentFrame.height
+            let adjustedOriginY = targetFrame.origin.y - topInset
+
+            var resultOffset = collectionView.contentOffset
+
+            switch position {
+            case .top:
+                resultOffset.y = adjustedOriginY
+            case .centered:
+                resultOffset.y = adjustedOriginY - (contentFrameHeight / 2 - targetFrame.size.height / 2)
+            case .bottom:
+                resultOffset.y = adjustedOriginY - (contentFrameHeight - targetFrame.size.height)
+            }
+
+            // Don't scroll past the bottom of the list.
+
+            let maxOffsetHeight = collectionViewLayout.collectionViewContentSize.height - contentFrameHeight - topInset
+            resultOffset.y = min(resultOffset.y, maxOffsetHeight)
+
+            // Don't scroll beyond the top of the list.
+
+            resultOffset.y = max(resultOffset.y, -topInset)
+
+            return preparePresentationStateForScroll(to: sectionPath) {
+                animation.perform(
+                    animations: {
+                        self.collectionView.setContentOffset(resultOffset, animated: false)
+                    },
+                    completion: completion
+                )
+            }
+        }
+
+        if headerFrame.height != 0 {
+            // Scroll to header if present.
+            return performScrollTo(targetFrame: headerFrame, position: position.position, at: sectionPath)
+
+        } else if let firstSectionItem = storageContent.sections[sectionPath.section].items.first {
+            // If not, scroll to first item if present.
+            return scrollTo(item: firstSectionItem, position: position)
+
+        } else {
+            // Otherwise, fallback to footer.
+            return performScrollTo(targetFrame: footerFrame, position: position.position, at: sectionPath)
         }
     }
     
@@ -879,7 +959,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         } else {
             switch self.autoScrollAction {
             case .scrollToItem(let insertInfo):
-                guard let autoScrollIndexPath = self.storage.allContent.firstIndexPath(for: insertInfo.insertedIdentifier) else {
+                let itemPath = self.storage.allContent.firstIndexPathFor(itemIdentifier: insertInfo.insertedIdentifier)
+                guard let autoScrollIndexPath = itemPath else {
                     fallthrough
                 }
 
@@ -918,15 +999,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
 
-        // Make sure we have a last loaded index path.
-
-        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
-            return false
-        }
-
         // Update presentation state if needed, then scroll.
 
-        if lastLoadedIndexPath < toIndexPath {
+        if let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath,
+           lastLoadedIndexPath < toIndexPath {
             self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
                 scroll()
             }
