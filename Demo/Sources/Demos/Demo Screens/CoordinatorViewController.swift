@@ -116,9 +116,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         
         let actions: CoordinatorActions
         let info: CoordinatorInfo
-        
-        var view : View?
-        
+                
         init(actions: CoordinatorActions, info: CoordinatorInfo)
         {
             self.actions = actions
@@ -126,7 +124,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         }
         
         func wasSelected() {
-            self.actions.update(animated: true) {
+            self.actions.update(animation: .default) {
                 $0.content.showBottomBar = true
             }
             
@@ -157,7 +155,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         }
         
         func wasDeselected() {
-            self.actions.update(animated: true) {
+            self.actions.update(animation: .default) {
                 $0.content.showBottomBar = false
             }
         }

@@ -279,7 +279,7 @@ public extension ItemContent where Coordinator == DefaultItemContentCoordinator<
 {
     func makeCoordinator(actions : ItemContentCoordinatorActions<Self>, info : ItemContentCoordinatorInfo<Self>) -> Coordinator
     {
-        DefaultItemContentCoordinator(actions: actions, info: info, view: nil)
+        DefaultItemContentCoordinator(actions: actions, info: info)
     }
 }
 

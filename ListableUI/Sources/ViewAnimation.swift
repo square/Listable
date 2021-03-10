@@ -1,5 +1,5 @@
 //
-//  ScrollAnimation.swift
+//  ViewAnimation.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 10/29/20.
@@ -8,23 +8,26 @@
 import Foundation
 
 
-/// Specifies the kind of animation to use when scrolling a list view.
-public enum ScrollAnimation {
+/// Specifies the kind of animation to use when updating various parts of a list,
+/// such as updating an item or scrolling to a given position.
+public enum ViewAnimation {
     
     /// No animation is performed.
     case none
     
-    /// A default animation is performed. This is the same as `.custom()`.
-    case `default`
+    /// A default animation is performed. This is the same as `.animated()`.
+    public static var `default` : Self = .animated()
     
-    /// A custom animation is performed.
+    /// A `UIView.animate(...)` animation is performed.
     /// The default parameters are 0.25 seconds and `.curveEaseInOut` animation curve.
-    case custom(duration : TimeInterval = 0.25, options : Set<AnimationOptions> = .default)
+    case animated(TimeInterval = 0.25, options : Set<AnimationOptions> = .default)
     
-    case spring(duration : TimeInterval = 0.25, timing : UISpringTimingParameters = .init())
+    /// A spring based animation is performed.
+    /// The default value is `UISpringTimingParameters()`.
+    case spring(UISpringTimingParameters = .init())
     
     /// Ands the animation with the provided bool, returning the animation if true, and `.none` if false.
-    public func and(with animated : Bool) -> ScrollAnimation {
+    public func and(with animated : Bool) -> ViewAnimation {
         if animated {
             return self
         } else {
@@ -32,21 +35,17 @@ public enum ScrollAnimation {
         }
     }
     
-    /// Performs the provided animations for the `ScrollAnimation`.
-    public func perform(animations : @escaping () -> (), completion : @escaping (Bool) -> () = { _ in })
-    {
+    /// Performs the provided animations for the `ViewAnimation`.
+    public func perform(
+        animations : @escaping () -> (),
+        completion : @escaping (Bool) -> () = { _ in }
+    ) {
         switch self {
         case .none:
             animations()
             completion(true)
-            
-        case .default:
-            Self.custom().perform(
-                animations: animations,
-                completion: completion
-            )
-            
-        case .custom(let duration, let options):
+
+        case .animated(let duration, let options):
             UIView.animate(
                 withDuration: duration,
                 delay: 0.0,
@@ -59,8 +58,8 @@ public enum ScrollAnimation {
                 }
             )
             
-        case .spring(let duration, let timing):
-            let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+        case .spring(let timing):
+            let animator = UIViewPropertyAnimator(duration: 0, timingParameters: timing)
             
             animator.addAnimations(animations)
             
@@ -74,9 +73,9 @@ public enum ScrollAnimation {
 }
 
 
-extension ScrollAnimation {
+extension ViewAnimation {
     
-    /// The animations options available for the `ScrollAnimation`.
+    /// The animations options available for the `ViewAnimation`.
     public enum AnimationOptions : Hashable {
         case curveEaseInOut
         case curveEaseIn
@@ -86,7 +85,7 @@ extension ScrollAnimation {
 }
 
 
-extension Set where Element == ScrollAnimation.AnimationOptions {
+extension Set where Element == ViewAnimation.AnimationOptions {
     
     public static var `default` : Self {[
         .curveEaseInOut

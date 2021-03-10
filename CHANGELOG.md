@@ -12,6 +12,8 @@
 
 ### Changed
 
+- [Updates to `ItemContentCoordinator`](https://github.com/kyleve/Listable/pull/274) to properly support animations in Blueprint-backed rows. This change also generalizes the contained animation type to `ViewAnimation`, for use in both scrolling and content updates.
+
 ### Misc
 
 # Past Releases

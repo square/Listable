@@ -132,13 +132,6 @@ public final class DemosRootViewController : ListViewController
             })
             
             section += Item(
-                DemoItem(text: "Item Content Coordinator"),
-                selectionStyle: .selectable(),
-                onSelect : { _ in
-                    self.push(CoordinatorViewController())
-            })
-            
-            section += Item(
                 DemoItem(text: "Item Insert & Remove Animations"),
                 selectionStyle: .selectable(),
                 onSelect: { _ in
@@ -166,6 +159,28 @@ public final class DemosRootViewController : ListViewController
                 onSelect : { _ in
                     self.push(AutoLayoutDemoViewController())
             })
+        }
+        
+        list("coordinator") { section in
+            
+            section.header = HeaderFooter(
+                DemoHeader(title: "Item Coordinator")
+            )
+            
+            section += Item(
+                DemoItem(text: "Expand / Collapse Items"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(CoordinatorViewController())
+            })
+            
+            section += Item(
+                DemoItem(text: "Animating On Tap"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(OnTapItemAnimationViewController())
+            })
+            
         }
         
         list("layouts") { section in
