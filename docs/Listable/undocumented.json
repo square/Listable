@@ -1241,22 +1241,29 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 527,
+      "line": 530,
       "symbol": "CollectionViewLayoutDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 529,
+      "line": 532,
       "symbol": "CollectionViewLayoutDelegate.listViewLayoutUpdatedItemPositions(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 531,
+      "line": 534,
       "symbol": "CollectionViewLayoutDelegate.listLayoutContent(defaults:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
+      "line": 538,
+      "symbol": "CollectionViewLayoutDelegate.listViewLayoutDidLayoutContents()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -2515,154 +2522,154 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 155,
+      "line": 156,
       "symbol": "ListView.debuggingIdentifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 161,
+      "line": 162,
       "symbol": "ListView.appearance",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 187,
+      "line": 188,
       "symbol": "ListView.scrollPositionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 200,
+      "line": 201,
       "symbol": "ListView.layout",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 205,
+      "line": 206,
       "symbol": "ListView.set(layout:animated:completion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 210,
+      "line": 211,
       "symbol": "ListView.contentSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 218,
+      "line": 219,
       "symbol": "ListView.behavior",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 276,
+      "line": 277,
       "symbol": "ListView.scrollIndicatorInsets",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 384,
+      "line": 385,
       "symbol": "ListView.ScrollCompletion",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 510,
+      "line": 511,
       "symbol": "ListView.environment",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 516,
+      "line": 517,
       "symbol": "ListView.content",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 521,
+      "line": 522,
       "symbol": "ListView.setContent(animated:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 533,
+      "line": 534,
       "symbol": "ListView.set(source:initial:animated:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 558,
+      "line": 559,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 575,
+      "line": 576,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 621,
+      "line": 622,
       "symbol": "ListView.frame",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 627,
+      "line": 628,
       "symbol": "ListView.bounds",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 675,
+      "line": 676,
       "symbol": "ListView.backgroundColor",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 681,
+      "line": 682,
       "symbol": "ListView.didMoveToWindow()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 690,
+      "line": 691,
       "symbol": "ListView.didMoveToSuperview()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 699,
+      "line": 700,
       "symbol": "ListView.layoutSubviews()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 1022,
+      "line": 1019,
       "symbol": "ListView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
@@ -3022,48 +3029,6 @@
       "line": 45,
       "symbol": "ReorderingActions.end()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 24,
-      "symbol": "ScrollAnimation.spring(duration:timing:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 81,
-      "symbol": "ScrollAnimation.AnimationOptions.curveEaseInOut",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 82,
-      "symbol": "ScrollAnimation.AnimationOptions.curveEaseIn",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 83,
-      "symbol": "ScrollAnimation.AnimationOptions.curveEaseOut",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 84,
-      "symbol": "ScrollAnimation.AnimationOptions.curveLinear",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ScrollAnimation.swift",
-      "line": 91,
-      "symbol": "Set.default",
-      "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
@@ -3596,6 +3561,41 @@
       "line": 50,
       "symbol": "SwipeAction.init(title:backgroundColor:image:handler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
+      "line": 80,
+      "symbol": "ViewAnimation.AnimationOptions.curveEaseInOut",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
+      "line": 81,
+      "symbol": "ViewAnimation.AnimationOptions.curveEaseIn",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
+      "line": 82,
+      "symbol": "ViewAnimation.AnimationOptions.curveEaseOut",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
+      "line": 83,
+      "symbol": "ViewAnimation.AnimationOptions.curveLinear",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
+      "line": 90,
+      "symbol": "Set.default",
+      "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     }
   ],

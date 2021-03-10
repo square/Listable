@@ -214,7 +214,7 @@
 }, {
   "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
-    "key.length" : 4636,
+    "key.length" : 5093,
     "key.offset" : 0,
     "key.substructure" : [
       {
@@ -489,7 +489,7 @@
             "key.offset" : 3226
           }
         ],
-        "key.bodylength" : 1361,
+        "key.bodylength" : 1818,
         "key.bodyoffset" : 3273,
         "key.doc.column" : 17,
         "key.doc.declaration" : "public protocol BlueprintHeaderFooterContent : ListableUI.HeaderFooterContent where Self.BackgroundView == BlueprintUI.BlueprintView, Self.ContentView == BlueprintUI.BlueprintView, Self.PressedBackgroundView == BlueprintUI.BlueprintView",
@@ -524,13 +524,13 @@
         "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
         "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>BlueprintHeaderFooterContent<\/decl.name> : <ref.protocol usr=\"s:10ListableUI19HeaderFooterContentP\">HeaderFooterContent<\/ref.protocol> <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A19HeaderFooterContentP4Selfxmfp\">Self<\/ref.generic_type_param>.BackgroundView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement>, <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A19HeaderFooterContentP4Selfxmfp\">Self<\/ref.generic_type_param>.ContentView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement>, <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A19HeaderFooterContentP4Selfxmfp\">Self<\/ref.generic_type_param>.PressedBackgroundView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement><\/decl.protocol>",
         "key.kind" : "source.lang.swift.decl.extension",
-        "key.length" : 1402,
+        "key.length" : 1859,
         "key.name" : "BlueprintHeaderFooterContent",
         "key.namelength" : 28,
         "key.nameoffset" : 3243,
         "key.offset" : 3233,
         "key.parsed_declaration" : "public extension BlueprintHeaderFooterContent",
-        "key.parsed_scope.end" : 140,
+        "key.parsed_scope.end" : 149,
         "key.parsed_scope.start" : 94,
         "key.substructure" : [
           {
@@ -632,18 +632,18 @@
           {
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>func apply(to views: <Type usr=\"s:10ListableUI24HeaderFooterContentViewsV\">HeaderFooterContentViews<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A19HeaderFooterContentPAAE4Selfxmfp\">Self<\/Type>&gt;, for reason: <Type usr=\"s:10ListableUI11ApplyReasonO\">ApplyReason<\/Type>, with info: <Type usr=\"s:10ListableUI28ApplyHeaderFooterContentInfoV\">ApplyHeaderFooterContentInfo<\/Type>)<\/Declaration>",
-            "key.bodylength" : 358,
+            "key.bodylength" : 815,
             "key.bodyoffset" : 3658,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>apply<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>to<\/decl.var.parameter.argument_label> <decl.var.parameter.name>views<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI24HeaderFooterContentViewsV\">HeaderFooterContentViews<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:16BlueprintUILists0A19HeaderFooterContentPAAE4Selfxmfp\">Self<\/ref.generic_type_param>&gt;<\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>for<\/decl.var.parameter.argument_label> <decl.var.parameter.name>reason<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.enum usr=\"s:10ListableUI11ApplyReasonO\">ApplyReason<\/ref.enum><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>info<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI28ApplyHeaderFooterContentInfoV\">ApplyHeaderFooterContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.method.instance>",
             "key.kind" : "source.lang.swift.decl.function.method.instance",
-            "key.length" : 509,
+            "key.length" : 966,
             "key.name" : "apply(to:for:with:)",
             "key.namelength" : 143,
             "key.nameoffset" : 3513,
             "key.offset" : 3508,
             "key.parsed_declaration" : "func apply(\n    to views: HeaderFooterContentViews<Self>,\n    for reason: ApplyReason,\n    with info: ApplyHeaderFooterContentInfo\n)",
-            "key.parsed_scope.end" : 120,
+            "key.parsed_scope.end" : 129,
             "key.parsed_scope.start" : 112,
             "key.related_decls" : [
               {
@@ -661,8 +661,9 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusableContentView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI19HeaderFooterContentP0E4ViewQa\">ContentView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 4096,
+            "key.bodyoffset" : 4553,
             "key.doc.column" : 17,
+            "key.doc.comment" : "`BlueprintView` does not update its content until the next layout cycle.\nForce that layout cycle within this method if we're updating an already on-screen\n`ItemContent`, to ensure that we inherit any animation blocks we may be within.",
             "key.doc.declaration" : "static func createReusableContentView(frame: CGRect) -> Self.ContentView",
             "key.doc.discussion" : [
               {
@@ -683,11 +684,11 @@
             "key.length" : 118,
             "key.name" : "createReusableContentView(frame:)",
             "key.namelength" : 40,
-            "key.nameoffset" : 4039,
-            "key.offset" : 4027,
+            "key.nameoffset" : 4496,
+            "key.offset" : 4484,
             "key.parsed_declaration" : "static func createReusableContentView(frame: CGRect) -> ContentView",
-            "key.parsed_scope.end" : 124,
-            "key.parsed_scope.start" : 122,
+            "key.parsed_scope.end" : 133,
+            "key.parsed_scope.start" : 131,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI19HeaderFooterContentP014createReusableE4View5frame0eH0QzSo6CGRectV_tFZ\">createReusableContentView(frame: CGRect) -&gt; Self.ContentView<\/RelatedName>"
@@ -704,7 +705,7 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusableBackgroundView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI19HeaderFooterContentP14BackgroundViewQa\">BackgroundView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 4230,
+            "key.bodyoffset" : 4687,
             "key.doc.column" : 17,
             "key.doc.declaration" : "static func createReusableBackgroundView(frame: CGRect) -> Self.BackgroundView",
             "key.doc.discussion" : [
@@ -726,11 +727,11 @@
             "key.length" : 124,
             "key.name" : "createReusableBackgroundView(frame:)",
             "key.namelength" : 43,
-            "key.nameoffset" : 4167,
-            "key.offset" : 4155,
+            "key.nameoffset" : 4624,
+            "key.offset" : 4612,
             "key.parsed_declaration" : "static func createReusableBackgroundView(frame: CGRect) -> BackgroundView",
-            "key.parsed_scope.end" : 128,
-            "key.parsed_scope.start" : 126,
+            "key.parsed_scope.end" : 137,
+            "key.parsed_scope.start" : 135,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI19HeaderFooterContentP28createReusableBackgroundView5frame0hI0QzSo6CGRectV_tFZ\">createReusableBackgroundView(frame: CGRect) -&gt; Self.BackgroundView<\/RelatedName>"
@@ -750,7 +751,7 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusablePressedBackgroundView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI19HeaderFooterContentP21PressedBackgroundViewQa\">PressedBackgroundView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 4378,
+            "key.bodyoffset" : 4835,
             "key.doc.column" : 17,
             "key.doc.declaration" : "static func createReusablePressedBackgroundView(frame: CGRect) -> Self.PressedBackgroundView",
             "key.doc.discussion" : [
@@ -778,11 +779,11 @@
             "key.length" : 138,
             "key.name" : "createReusablePressedBackgroundView(frame:)",
             "key.namelength" : 50,
-            "key.nameoffset" : 4301,
-            "key.offset" : 4289,
+            "key.nameoffset" : 4758,
+            "key.offset" : 4746,
             "key.parsed_declaration" : "static func createReusablePressedBackgroundView(frame: CGRect) -> PressedBackgroundView",
-            "key.parsed_scope.end" : 132,
-            "key.parsed_scope.start" : 130,
+            "key.parsed_scope.end" : 141,
+            "key.parsed_scope.start" : 139,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI19HeaderFooterContentP35createReusablePressedBackgroundView5frame0hiJ0QzSo6CGRectV_tFZ\">createReusablePressedBackgroundView(frame: CGRect) -&gt; Self.PressedBackgroundView<\/RelatedName>"
@@ -805,22 +806,22 @@
               {
                 "key.attribute" : "source.decl.attribute.private",
                 "key.length" : 7,
-                "key.offset" : 4437
+                "key.offset" : 4894
               }
             ],
             "key.bodylength" : 119,
-            "key.bodyoffset" : 4513,
+            "key.bodyoffset" : 4970,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintHeaderFooterContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.static><syntaxtype.keyword>private<\/syntaxtype.keyword> <syntaxtype.keyword>static<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>newBlueprintView<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>frame<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"c:@S@CGRect\">CGRect<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.function.returntype><\/decl.function.method.static>",
             "key.kind" : "source.lang.swift.decl.function.method.static",
             "key.length" : 188,
             "key.name" : "newBlueprintView(with:)",
             "key.namelength" : 37,
-            "key.nameoffset" : 4457,
-            "key.offset" : 4445,
+            "key.nameoffset" : 4914,
+            "key.offset" : 4902,
             "key.parsed_declaration" : "private static func newBlueprintView(with frame : CGRect) -> BlueprintView",
-            "key.parsed_scope.end" : 139,
-            "key.parsed_scope.start" : 134,
+            "key.parsed_scope.end" : 148,
+            "key.parsed_scope.start" : 143,
             "key.substructure" : [
               {
                 "key.annotated_decl" : "<Declaration>let view: <Type usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/Type><\/Declaration>",
@@ -830,11 +831,11 @@
                 "key.length" : 38,
                 "key.name" : "view",
                 "key.namelength" : 4,
-                "key.nameoffset" : 4526,
-                "key.offset" : 4522,
+                "key.nameoffset" : 4983,
+                "key.offset" : 4979,
                 "key.parsed_declaration" : "let view = BlueprintView(frame: frame)",
-                "key.parsed_scope.end" : 135,
-                "key.parsed_scope.start" : 135,
+                "key.parsed_scope.end" : 144,
+                "key.parsed_scope.start" : 144,
                 "key.typename" : "BlueprintView",
                 "key.typeusr" : "$s11BlueprintUI0A4ViewCD",
                 "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentPAAE03newA4View33_02A79BC97C366F3BDEC29D56D447731DLL4with0A2UI0aG0CSo6CGRectV_tFZ4viewL_AIvp"
@@ -854,7 +855,7 @@
 }, {
   "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
-    "key.length" : 5486,
+    "key.length" : 5954,
     "key.offset" : 0,
     "key.substructure" : [
       {
@@ -1198,7 +1199,7 @@
             "key.offset" : 3992
           }
         ],
-        "key.bodylength" : 1453,
+        "key.bodylength" : 1921,
         "key.bodyoffset" : 4031,
         "key.doc.column" : 17,
         "key.doc.declaration" : "public protocol BlueprintItemContent : ListableUI.ItemContent where Self.BackgroundView == BlueprintUI.BlueprintView, Self.ContentView == BlueprintUI.BlueprintView, Self.SelectedBackgroundView == BlueprintUI.BlueprintView",
@@ -1224,13 +1225,13 @@
         "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
         "key.fully_annotated_decl" : "<decl.protocol><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>protocol<\/syntaxtype.keyword> <decl.name>BlueprintItemContent<\/decl.name> : <ref.protocol usr=\"s:10ListableUI11ItemContentP\">ItemContent<\/ref.protocol> <syntaxtype.keyword>where<\/syntaxtype.keyword> <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A11ItemContentP4Selfxmfp\">Self<\/ref.generic_type_param>.BackgroundView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement>, <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A11ItemContentP4Selfxmfp\">Self<\/ref.generic_type_param>.ContentView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement>, <decl.generic_type_requirement><ref.generic_type_param usr=\"s:16BlueprintUILists0A11ItemContentP4Selfxmfp\">Self<\/ref.generic_type_param>.SelectedBackgroundView == <ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.generic_type_requirement><\/decl.protocol>",
         "key.kind" : "source.lang.swift.decl.extension",
-        "key.length" : 1486,
+        "key.length" : 1954,
         "key.name" : "BlueprintItemContent",
         "key.namelength" : 20,
         "key.nameoffset" : 4009,
         "key.offset" : 3999,
         "key.parsed_declaration" : "public extension BlueprintItemContent",
-        "key.parsed_scope.end" : 153,
+        "key.parsed_scope.end" : 162,
         "key.parsed_scope.start" : 119,
         "key.substructure" : [
           {
@@ -1244,7 +1245,7 @@
           {
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>func apply(to views: <Type usr=\"s:10ListableUI16ItemContentViewsV\">ItemContentViews<\/Type>&lt;<Type usr=\"s:16BlueprintUILists0A11ItemContentPAAE4Selfxmfp\">Self<\/Type>&gt;, for reason: <Type usr=\"s:10ListableUI11ApplyReasonO\">ApplyReason<\/Type>, with info: <Type usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/Type>)<\/Declaration>",
-            "key.bodylength" : 406,
+            "key.bodylength" : 874,
             "key.bodyoffset" : 4303,
             "key.doc.column" : 10,
             "key.doc.comment" : "Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.",
@@ -1259,13 +1260,13 @@
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>apply<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>to<\/decl.var.parameter.argument_label> <decl.var.parameter.name>views<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI16ItemContentViewsV\">ItemContentViews<\/ref.struct>&lt;<ref.generic_type_param usr=\"s:16BlueprintUILists0A11ItemContentPAAE4Selfxmfp\">Self<\/ref.generic_type_param>&gt;<\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>for<\/decl.var.parameter.argument_label> <decl.var.parameter.name>reason<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.enum usr=\"s:10ListableUI11ApplyReasonO\">ApplyReason<\/ref.enum><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>info<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI20ApplyItemContentInfoV\">ApplyItemContentInfo<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.method.instance>",
             "key.kind" : "source.lang.swift.decl.function.method.instance",
-            "key.length" : 517,
+            "key.length" : 985,
             "key.name" : "apply(to:for:with:)",
             "key.namelength" : 99,
             "key.nameoffset" : 4198,
             "key.offset" : 4193,
             "key.parsed_declaration" : "func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)",
-            "key.parsed_scope.end" : 131,
+            "key.parsed_scope.end" : 140,
             "key.parsed_scope.start" : 126,
             "key.related_decls" : [
               {
@@ -1283,28 +1284,28 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusableContentView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI11ItemContentP0D4ViewQa\">ContentView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 4865,
+            "key.bodyoffset" : 5333,
             "key.doc.column" : 17,
             "key.doc.comment" : "Creates the `BlueprintView` used to render the content of the item.",
             "key.doc.declaration" : "static func createReusableContentView(frame: CGRect) -> ContentView",
             "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
-            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"134\" column=\"17\"><Name>createReusableContentView(frame:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ<\/USR><Declaration>static func createReusableContentView(frame: CGRect) -&gt; ContentView<\/Declaration><CommentParts><Abstract><Para>Creates the <codeVoice>BlueprintView<\/codeVoice> used to render the content of the item.<\/Para><\/Abstract><\/CommentParts><\/Function>",
-            "key.doc.line" : 134,
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"143\" column=\"17\"><Name>createReusableContentView(frame:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ<\/USR><Declaration>static func createReusableContentView(frame: CGRect) -&gt; ContentView<\/Declaration><CommentParts><Abstract><Para>Creates the <codeVoice>BlueprintView<\/codeVoice> used to render the content of the item.<\/Para><\/Abstract><\/CommentParts><\/Function>",
+            "key.doc.line" : 143,
             "key.doc.name" : "createReusableContentView(frame:)",
             "key.doc.type" : "Function",
             "key.doclength" : 72,
-            "key.docoffset" : 4720,
+            "key.docoffset" : 5188,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.static><syntaxtype.keyword>static<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>createReusableContentView<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>frame<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"c:@S@CGRect\">CGRect<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.associatedtype usr=\"s:10ListableUI11ItemContentP0D4ViewQa\">ContentView<\/ref.associatedtype><\/decl.function.returntype><\/decl.function.method.static>",
             "key.kind" : "source.lang.swift.decl.function.method.static",
             "key.length" : 118,
             "key.name" : "createReusableContentView(frame:)",
             "key.namelength" : 40,
-            "key.nameoffset" : 4808,
-            "key.offset" : 4796,
+            "key.nameoffset" : 5276,
+            "key.offset" : 5264,
             "key.parsed_declaration" : "static func createReusableContentView(frame: CGRect) -> ContentView",
-            "key.parsed_scope.end" : 136,
-            "key.parsed_scope.start" : 134,
+            "key.parsed_scope.end" : 145,
+            "key.parsed_scope.start" : 143,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI11ItemContentP014createReusableD4View5frame0dG0QzSo6CGRectV_tFZ\">createReusableContentView(frame: CGRect) -&gt; Self.ContentView<\/RelatedName>"
@@ -1321,28 +1322,28 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusableBackgroundView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI11ItemContentP14BackgroundViewQa\">BackgroundView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 5078,
+            "key.bodyoffset" : 5546,
             "key.doc.column" : 17,
             "key.doc.comment" : "Creates the `BlueprintView` used to render the background of the item.",
             "key.doc.declaration" : "static func createReusableBackgroundView(frame: CGRect) -> BackgroundView",
             "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
-            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"139\" column=\"17\"><Name>createReusableBackgroundView(frame:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ<\/USR><Declaration>static func createReusableBackgroundView(frame: CGRect) -&gt; BackgroundView<\/Declaration><CommentParts><Abstract><Para>Creates the <codeVoice>BlueprintView<\/codeVoice> used to render the background of the item.<\/Para><\/Abstract><\/CommentParts><\/Function>",
-            "key.doc.line" : 139,
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift\" line=\"148\" column=\"17\"><Name>createReusableBackgroundView(frame:)<\/Name><USR>s:16BlueprintUILists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ<\/USR><Declaration>static func createReusableBackgroundView(frame: CGRect) -&gt; BackgroundView<\/Declaration><CommentParts><Abstract><Para>Creates the <codeVoice>BlueprintView<\/codeVoice> used to render the background of the item.<\/Para><\/Abstract><\/CommentParts><\/Function>",
+            "key.doc.line" : 148,
             "key.doc.name" : "createReusableBackgroundView(frame:)",
             "key.doc.type" : "Function",
             "key.doclength" : 75,
-            "key.docoffset" : 4924,
+            "key.docoffset" : 5392,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.static><syntaxtype.keyword>static<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>createReusableBackgroundView<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>frame<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"c:@S@CGRect\">CGRect<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.associatedtype usr=\"s:10ListableUI11ItemContentP14BackgroundViewQa\">BackgroundView<\/ref.associatedtype><\/decl.function.returntype><\/decl.function.method.static>",
             "key.kind" : "source.lang.swift.decl.function.method.static",
             "key.length" : 124,
             "key.name" : "createReusableBackgroundView(frame:)",
             "key.namelength" : 43,
-            "key.nameoffset" : 5015,
-            "key.offset" : 5003,
+            "key.nameoffset" : 5483,
+            "key.offset" : 5471,
             "key.parsed_declaration" : "static func createReusableBackgroundView(frame: CGRect) -> BackgroundView",
-            "key.parsed_scope.end" : 141,
-            "key.parsed_scope.start" : 139,
+            "key.parsed_scope.end" : 150,
+            "key.parsed_scope.start" : 148,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI11ItemContentP28createReusableBackgroundView5frame0gH0QzSo6CGRectV_tFZ\">createReusableBackgroundView(frame: CGRect) -&gt; Self.BackgroundView<\/RelatedName>"
@@ -1362,7 +1363,7 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>static func createReusableSelectedBackgroundView(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>) -&gt; <Type usr=\"s:10ListableUI11ItemContentP22SelectedBackgroundViewQa\">SelectedBackgroundView<\/Type><\/Declaration>",
             "key.bodylength" : 48,
-            "key.bodyoffset" : 5228,
+            "key.bodyoffset" : 5696,
             "key.doc.column" : 17,
             "key.doc.declaration" : "static func createReusableSelectedBackgroundView(frame: CGRect) -> Self.SelectedBackgroundView",
             "key.doc.discussion" : [
@@ -1390,11 +1391,11 @@
             "key.length" : 140,
             "key.name" : "createReusableSelectedBackgroundView(frame:)",
             "key.namelength" : 51,
-            "key.nameoffset" : 5149,
-            "key.offset" : 5137,
+            "key.nameoffset" : 5617,
+            "key.offset" : 5605,
             "key.parsed_declaration" : "static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView",
-            "key.parsed_scope.end" : 145,
-            "key.parsed_scope.start" : 143,
+            "key.parsed_scope.end" : 154,
+            "key.parsed_scope.start" : 152,
             "key.related_decls" : [
               {
                 "key.annotated_decl" : "<RelatedName usr=\"s:10ListableUI11ItemContentP36createReusableSelectedBackgroundView5frame0ghI0QzSo6CGRectV_tFZ\">createReusableSelectedBackgroundView(frame: CGRect) -&gt; Self.SelectedBackgroundView<\/RelatedName>"
@@ -1417,22 +1418,22 @@
               {
                 "key.attribute" : "source.decl.attribute.private",
                 "key.length" : 7,
-                "key.offset" : 5287
+                "key.offset" : 5755
               }
             ],
             "key.bodylength" : 119,
-            "key.bodyoffset" : 5363,
+            "key.bodyoffset" : 5831,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/BlueprintItemContent.swift",
             "key.fully_annotated_decl" : "<decl.function.method.static><syntaxtype.keyword>private<\/syntaxtype.keyword> <syntaxtype.keyword>static<\/syntaxtype.keyword> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>newBlueprintView<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>frame<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.struct usr=\"c:@S@CGRect\">CGRect<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.class usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/ref.class><\/decl.function.returntype><\/decl.function.method.static>",
             "key.kind" : "source.lang.swift.decl.function.method.static",
             "key.length" : 188,
             "key.name" : "newBlueprintView(with:)",
             "key.namelength" : 37,
-            "key.nameoffset" : 5307,
-            "key.offset" : 5295,
+            "key.nameoffset" : 5775,
+            "key.offset" : 5763,
             "key.parsed_declaration" : "private static func newBlueprintView(with frame : CGRect) -> BlueprintView",
-            "key.parsed_scope.end" : 152,
-            "key.parsed_scope.start" : 147,
+            "key.parsed_scope.end" : 161,
+            "key.parsed_scope.start" : 156,
             "key.substructure" : [
               {
                 "key.annotated_decl" : "<Declaration>let view: <Type usr=\"c:@M@BlueprintUI@objc(cs)BlueprintView\">BlueprintView<\/Type><\/Declaration>",
@@ -1442,11 +1443,11 @@
                 "key.length" : 38,
                 "key.name" : "view",
                 "key.namelength" : 4,
-                "key.nameoffset" : 5376,
-                "key.offset" : 5372,
+                "key.nameoffset" : 5844,
+                "key.offset" : 5840,
                 "key.parsed_declaration" : "let view = BlueprintView(frame: frame)",
-                "key.parsed_scope.end" : 148,
-                "key.parsed_scope.start" : 148,
+                "key.parsed_scope.end" : 157,
+                "key.parsed_scope.start" : 157,
                 "key.typename" : "BlueprintView",
                 "key.typeusr" : "$s11BlueprintUI0A4ViewCD",
                 "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE03newA4View33_00A2BB1FCE0BEE1B772989891DE46E9ALL4with0A2UI0aF0CSo6CGRectV_tFZ4viewL_AIvp"
