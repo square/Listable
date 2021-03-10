@@ -170,12 +170,6 @@
                 <a class="nav-group-task-link" href="../Enums/ListSizing.html">ListSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/ScrollAnimation.html">ScrollAnimation</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/ScrollAnimation/AnimationOptions.html">– AnimationOptions</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/Sizing.html">Sizing</a>
               </li>
               <li class="nav-group-task">
@@ -186,6 +180,12 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/SwipeActionState.html">SwipeActionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ViewAnimation.html">ViewAnimation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ViewAnimation/AnimationOptions.html">– AnimationOptions</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/WidthConstraint.html">WidthConstraint</a>
@@ -639,9 +639,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA0D9AnimationOSbAA04ListdS4InfoVcyATctFZ"></a>
+                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ"></a>
                     <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA0D9AnimationOSbAA04ListdS4InfoVcyATctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -682,7 +682,7 @@ the action will be performed on insert.</p>
     <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">onInsertOf</span> <span class="nv">insertedIdentifier</span><span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ScrollAnimation.html">ScrollAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
     <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
     <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
@@ -756,7 +756,7 @@ the action will be performed on insert.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-02-09)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-03-10)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
