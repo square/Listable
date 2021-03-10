@@ -40,7 +40,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
             behavior: self.behavior
         )
 
-        self.collectionView = CollectionView(frame: CGRect(origin: .zero, size: frame.size), collectionViewLayout: initialLayout)
+        self.collectionView = UICollectionView(
+            frame: CGRect(origin: .zero, size: frame.size),
+            collectionViewLayout: initialLayout
+        )
         
         self.layoutManager = LayoutManager(
             layout: initialLayout,
@@ -66,8 +69,6 @@ public final class ListView : UIView, KeyboardObserverDelegate
         super.init(frame: frame)
         
         // Associate ourselves with our child objects.
-
-        self.collectionView.view = self
 
         self.dataSource.presentationState = self.storage.presentationState
         self.dataSource.environment = self.environment
@@ -119,7 +120,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     //
     
     let storage : Storage
-    let collectionView : CollectionView
+    let collectionView : UICollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -846,10 +847,6 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
         
-        // Update the visible items.
-        
-        self.visibleContent.update(with: self)
-        
         // Perform any needed auto scroll actions.
         self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
@@ -1080,30 +1077,6 @@ extension ListView : ReorderingActionsDelegate
     func cancelInteractiveMovement()
     {
         self.collectionView.cancelInteractiveMovement()
-    }
-}
-
-
-extension ListView
-{
-    final class CollectionView : UICollectionView
-    {
-        weak var view : ListView?
-        
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            if let view = self.view {
-                ///
-                /// Update visibility of items and header / footers in the list view.
-                ///
-                /// This is intentionally performed in `layoutSubviews` of the `UICollectionView`,
-                /// **not** within `scrollViewDidScroll`. Why? `visibleContent.update(with:)`
-                /// depends on the collection view's layout, which is not updated until it `layoutSubviews`.
-                ///
-                view.visibleContent.update(with: view)
-            }
-        }
     }
 }
 

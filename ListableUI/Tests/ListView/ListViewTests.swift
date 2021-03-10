@@ -34,9 +34,9 @@ class ListViewTests: XCTestCase
                     section.header = HeaderFooter(TestSupplementary())
                     section.footer = HeaderFooter(TestSupplementary())
                     
-                    section += TestContent(title: "1")
-                    section += TestContent(title: "2")
-                    section += TestContent(title: "3")
+                    section += TestContent(content: "1")
+                    section += TestContent(content: "2")
+                    section += TestContent(content: "3")
                 }
             }
 
@@ -163,18 +163,68 @@ class ListViewTests: XCTestCase
             XCTAssertEqual(view.collectionView.bounds.size, CGSize(width: 200, height: 200))
         }
     }
+    
+    func test_changing_to_empty_frame_does_not_crash() {
+        
+        let view = ListView()
+        view.frame.size = CGSize(width: 200, height: 400)
+        
+        view.configure { list in
+            
+            for section in 1...5 {
+                
+                list(section) { section in
+                    section.header = HeaderFooter(
+                        TestSupplementary(),
+                        sizing: .fixed(height: 50)
+                    )
+                    
+                    for row in 1...10 {
+                        section += Item(
+                            TestContent(content: row),
+                            sizing: .fixed(height: 50)
+                        )
+                    }
+                }
+            }
+        }
+        
+        /// Force the cells in the collection view to be updated.
+        view.collectionView.layoutIfNeeded()
+        
+        /// Changing the view width to an empty size removes content
+        /// from the inner collection view, because laying out content
+        /// with zero area is meaningless.
+        ///
+        /// This test is here because this change would previously crash at this line,
+        /// because the collection view layout's `visibleLayoutAttributesForElements`
+        /// had not yet updated, leaving us with invalid index paths.
+        view.frame.size.width = 0.0
+        
+        view.collectionView.layoutIfNeeded()
+        
+        view.frame.size.width = 200
+        
+        view.collectionView.layoutIfNeeded()
+    }
 }
 
 
 fileprivate struct TestContent : ItemContent, Equatable
 {
-    var title : String
+    var content : AnyHashable
     
     var identifier: Identifier<TestContent> {
-        return .init(self.title)
+        return .init(self.content)
     }
     
-    func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
+    func apply(
+        to views: ItemContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyItemContentInfo
+    ) {
+        views.content.backgroundColor = .red
+    }
     
     typealias ContentView = UIView
     
@@ -192,7 +242,7 @@ fileprivate struct TestSupplementary : HeaderFooterContent, Equatable
         for reason: ApplyReason,
         with info: ApplyHeaderFooterContentInfo
     ) {
-        // Nothing.
+        views.content.backgroundColor = .blue
     }
     
     typealias ContentView = UIView

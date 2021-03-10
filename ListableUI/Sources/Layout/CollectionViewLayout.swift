@@ -278,21 +278,22 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         self.neededLayoutType.update(with: {
             
-            // Layouts with zero size are generally undefined, so skip them until the view has a size.
-            guard size.isEmpty == false else {
-                return false
-            }
+            // Layouts with zero area are undefined,
+            // so skip them until the view has a size.
+            let shouldLayout = size.isEmpty == false
             
             switch self.neededLayoutType {
             case .none: return true
             case .relayout: self.performLayout()
-            case .rebuild: self.performRebuild()
+            case .rebuild: self.performRebuild(andLayout: shouldLayout)
             }
             
             return true
         }())
         
         self.performLayoutUpdate()
+        
+        self.delegate.listViewLayoutDidLayoutContents()
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem])
@@ -317,7 +318,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
     
-    private func performRebuild()
+    private func performRebuild(andLayout layout : Bool)
     {
         self.previousLayout = self.layout
         
@@ -334,7 +335,9 @@ final class CollectionViewLayout : UICollectionViewLayout
             showsScrollIndicators: self.appearance.showsScrollIndicators
         )
                 
-        self.performLayout()
+        if layout {
+            self.performLayout()
+        }
     }
     
     private func performLayout()
@@ -531,6 +534,8 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     func listLayoutContent(
         defaults: ListLayoutDefaults
     ) -> ListLayoutContent
+    
+    func listViewLayoutDidLayoutContents()
 }
 
 
