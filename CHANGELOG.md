@@ -2,21 +2,27 @@
 
 ### Fixed
 
-- [When swiping to delete](https://github.com/kyleve/Listable/pull/270), limit overscrolling to 20% of the cell width. This prevents undesirable visual state while maintaining swipe bounciness. Additionally, ignore initial swipes to the right which do not "open" the cell.
-
-- [Fixed a crash that occurred](https://github.com/kyleve/Listable/pull/271) when the list's width or height would become zero.
-
 ### Added
 
 ### Removed
 
 ### Changed
 
-- [Updates to `ItemContentCoordinator`](https://github.com/kyleve/Listable/pull/274) to properly support animations in Blueprint-backed rows. This change also generalizes the contained animation type to `ViewAnimation`, for use in both scrolling and content updates.
-
 ### Misc
 
 # Past Releases
+
+# [0.17.0] - 2021-03-10
+
+### Fixed
+
+- [When swiping to delete](https://github.com/kyleve/Listable/pull/270), limit overscrolling to 20% of the cell width. This prevents undesirable visual state while maintaining swipe bounciness. Additionally, ignore initial swipes to the right which do not "open" the cell.
+
+- [Fixed a crash that occurred](https://github.com/kyleve/Listable/pull/271) when the list's width or height would become zero.
+
+### Changed
+
+- [Updates to `ItemContentCoordinator`](https://github.com/kyleve/Listable/pull/274) to properly support animations in Blueprint-backed rows. This change also generalizes the contained animation type to `ViewAnimation`, for use in both scrolling and content updates.
 
 # [0.16.0] - 2021-02-08
 
@@ -307,7 +313,8 @@
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.16.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.17.0...HEAD
+[0.17.0]: https://github.com/kyleve/Listable/compare/0.16.0...0.17.0
 [0.16.0]: https://github.com/kyleve/Listable/compare/0.15.1...0.16.0
 [0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
 [0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
