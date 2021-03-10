@@ -23,8 +23,8 @@ public enum ViewAnimation {
     case animated(TimeInterval = 0.25, options : Set<AnimationOptions> = .default)
     
     /// A spring based animation is performed.
-    /// The default parameters are 0.25 seconds and `UISpringTimingParameters()` timing.
-    case spring(TimeInterval = 0.25, timing : UISpringTimingParameters = .init())
+    /// The default value is `UISpringTimingParameters()`.
+    case spring(UISpringTimingParameters = .init())
     
     /// Ands the animation with the provided bool, returning the animation if true, and `.none` if false.
     public func and(with animated : Bool) -> ViewAnimation {
@@ -58,8 +58,8 @@ public enum ViewAnimation {
                 }
             )
             
-        case .spring(let duration, let timing):
-            let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timing)
+        case .spring(let timing):
+            let animator = UIViewPropertyAnimator(duration: 0, timingParameters: timing)
             
             animator.addAnimations(animations)
             

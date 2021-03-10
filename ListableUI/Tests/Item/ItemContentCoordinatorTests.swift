@@ -29,7 +29,11 @@ class ItemContentCoordinatorActionsTests : XCTestCase
                 $0.content.value = "update2"
             }
             
-            XCTAssertEqual(item.content.value, "update2")
+            actions.update {
+                $0.content.value = "update3"
+            }
+            
+            XCTAssertEqual(item.content.value, "update3")
             XCTAssertEqual(callbackCount, 2)
         }
     }

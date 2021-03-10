@@ -150,6 +150,9 @@ public final class ItemContentCoordinatorActions<Content:ItemContent>
     /// Allows you to update the displayed item via the provided closure, with an optional
     /// animation or delay.
     ///
+    /// Note that the `update` callback is invoked after the provided `delay`, and
+    /// is passed the value of the `Item` at that point in time.
+    ///
     /// ```
     /// func wasSelected() {
     ///    self.update(animation: .animated(0.15), after: 1.0) { item in
@@ -160,17 +163,19 @@ public final class ItemContentCoordinatorActions<Content:ItemContent>
     public func update(
         animation: ViewAnimation = .default,
         after delay: TimeInterval = 0,
-        update : (inout Item<Content>) -> ()
+        update : @escaping (inout Item<Content>) -> ()
     ) {
-        var new = self.currentProvider()
-        
-        update(&new)
-        
         if delay > 0 {
             Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { _ in
+                var new = self.currentProvider()
+                update(&new)
+                
                 self.updateCallback(new, animation)
             }
         } else {
+            var new = self.currentProvider()
+            update(&new)
+            
             self.updateCallback(new, animation)
         }
     }
