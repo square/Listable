@@ -148,11 +148,11 @@ public struct Content
     /// Returns the first `IndexPath` for the contained `Item` with the given `AnyIdentifier`,
     /// if it can be found. If nothing is found, nil is returned.
     /// If you have multiple `Item`s with the same identifier, the first one will be returned.
-    public func firstIndexPathFor(itemIdentifier : AnyIdentifier) -> IndexPath?
+    public func firstIndexPathForItem(with identifier : AnyIdentifier) -> IndexPath?
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (itemIndex, item) in section.items.enumerated() {
-                if item.identifier == itemIdentifier {
+                if item.identifier == identifier {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 }
             }
@@ -161,14 +161,14 @@ public struct Content
         return nil
     }
 
-    /// Returns the first `IndexPath` for the contained `Section` with the given `AnyIdentifier`,
+    /// Returns the first index position for the contained `Section` with the given `AnyIdentifier`,
     /// if it can be found. If nothing is found, nil is returned.
     /// If you have multiple `Section`s with the same identifier, the first one will be returned.
-    public func firstIndexPathFor(sectionIdentifier : AnyIdentifier) -> IndexPath?
+    public func firstIndexForSection(with identifier : AnyIdentifier) -> Int?
     {
         for (sectionIndex, section) in self.sections.enumerated() {
-            if section.identifier == sectionIdentifier {
-                return IndexPath(item: 0, section: sectionIndex)
+            if section.identifier == identifier {
+                return sectionIndex
             }
         }
 

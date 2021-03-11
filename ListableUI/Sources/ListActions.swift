@@ -135,28 +135,37 @@ public final class ListActions {
         }
 
         ///
-        /// Scrolls to the section with the provided identifier, with the provided positioning.
-        /// If there is more than one section with the same identifier, the list scrolls to the first.
-        /// If the section has content and is contained in the list, true is returned. If not, false is returned.
+        /// Scrolls to the section with the given identifier, with the provided scroll and section positioning.
         ///
-        /// The list will first attempt to scroll to the section header. If no header is present, it'll scroll to the
-        /// first item instead. If neither header nor items are found, the list will fallback to the footer.
+        /// If there is more than one section with the same identifier, the list scrolls to the first.
+        /// If the section has any content and is contained in the list, true is returned. If not, false is returned.
+        ///
+        /// The list will first attempt to scroll to the section's supplementary view
+        /// (header for `SectionPosition.top`, footer for `SectionPosition.bottom`).
+        ///
+        /// If not found, the list will scroll to the adjacent item instead
+        /// (section's first item for `.top`, last item for `.bottom`).
+        ///
+        /// If none of the above are present, the list will fallback to the remaining supplementary view
+        /// (footer for `.top`, header for `.bottom`).
         ///
         @discardableResult
-        public func scrollTo(
-            section : AnyIdentifier,
-            position : ScrollPosition,
-            animation : ScrollAnimation = .none,
+        public func scrollToSection(
+            with identifier : AnyIdentifier,
+            sectionPosition : SectionPosition = .top,
+            scrollPosition : ScrollPosition,
+            animation: ViewAnimation = .none,
             completion : @escaping ScrollCompletion = { _ in }
-            ) -> Bool
+        ) -> Bool
         {
             guard let listView = self.listView else {
                 return false
             }
 
-            return listView.scrollTo(
-                section: section,
-                position: position,
+            return listView.scrollToSection(
+                with: identifier,
+                sectionPosition: sectionPosition,
+                scrollPosition: scrollPosition,
                 animation: animation,
                 completion: completion
             )
