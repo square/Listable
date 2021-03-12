@@ -133,6 +133,43 @@ public final class ListActions {
                 completion: completion
             )
         }
+
+        ///
+        /// Scrolls to the section with the given identifier, with the provided scroll and section positioning.
+        ///
+        /// If there is more than one section with the same identifier, the list scrolls to the first.
+        /// If the section has any content and is contained in the list, true is returned. If not, false is returned.
+        ///
+        /// The list will first attempt to scroll to the section's supplementary view
+        /// (header for `SectionPosition.top`, footer for `SectionPosition.bottom`).
+        ///
+        /// If not found, the list will scroll to the adjacent item instead
+        /// (section's first item for `.top`, last item for `.bottom`).
+        ///
+        /// If none of the above are present, the list will fallback to the remaining supplementary view
+        /// (footer for `.top`, header for `.bottom`).
+        ///
+        @discardableResult
+        public func scrollToSection(
+            with identifier : AnyIdentifier,
+            sectionPosition : SectionPosition = .top,
+            scrollPosition : ScrollPosition,
+            animation: ViewAnimation = .none,
+            completion : @escaping ScrollCompletion = { _ in }
+        ) -> Bool
+        {
+            guard let listView = self.listView else {
+                return false
+            }
+
+            return listView.scrollToSection(
+                with: identifier,
+                sectionPosition: sectionPosition,
+                scrollPosition: scrollPosition,
+                animation: animation,
+                completion: completion
+            )
+        }
         
         /// Scrolls to the very top of the list, which includes displaying the list header.
         @discardableResult
