@@ -4,6 +4,18 @@
 
 ### Added
 
+- [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`. 
+
+Example usage:
+
+```
+listActions.scrolling.scrollToSection(
+  with: Identifier<Section>(id),
+  sectionPosition: .top,
+  scrollPosition: ScrollPosition(position: .centered)
+)
+```
+
 ### Removed
 
 ### Changed
