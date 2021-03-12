@@ -1015,6 +1015,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
         completion : @escaping ScrollCompletion = { _ in }
     )
     {
+        // If the item is already visible and that's good enough, return.
+
+        let isAlreadyVisible = collectionView.contentFrame.contains(targetFrame)
+        if isAlreadyVisible && scrollPosition.ifAlreadyVisible == .doNothing {
+            return
+        }
+
         let topInset = collectionView.adjustedContentInset.top
         let contentFrameHeight = collectionView.contentFrame.height
         let adjustedOriginY = targetFrame.origin.y - topInset
