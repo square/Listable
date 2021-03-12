@@ -2,6 +2,20 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.18.0] - 2021-03-12
+
+### Fixed
+
 - When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279). 
 
 ### Added
@@ -17,14 +31,6 @@ listActions.scrolling.scrollToSection(
   scrollPosition: ScrollPosition(position: .centered)
 )
 ```
-
-### Removed
-
-### Changed
-
-### Misc
-
-# Past Releases
 
 # [0.17.0] - 2021-03-10
 
@@ -327,7 +333,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.17.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.18.0...HEAD
+[0.18.0]: https://github.com/kyleve/Listable/compare/0.17.0...0.18.0
 [0.17.0]: https://github.com/kyleve/Listable/compare/0.16.0...0.17.0
 [0.16.0]: https://github.com/kyleve/Listable/compare/0.15.1...0.16.0
 [0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
