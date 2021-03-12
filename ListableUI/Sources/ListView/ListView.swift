@@ -424,27 +424,44 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
-                        
-            let isAlreadyVisible: Bool = {
-                let frame = self.collectionViewLayout.frameForItem(at: toIndexPath)
+            let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
-                return self.collectionView.contentFrame.contains(frame)
-            }()
+            let isAlreadyVisible = self.collectionView.contentFrame.contains(itemFrame)
 
             // If the item is already visible and that's good enough, return.
 
             if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
                 return
             }
-            
-            animation.perform(
-                animations: {
+
+            let scroll: () -> Void = {
+                let sectionHeader = self.collectionViewLayout.layout.content.sections[toIndexPath.section].header
+
+                // Prevent the item from appearing underneath a sticky section header.
+
+                if sectionHeader.isPopulated,
+                   self.collectionViewLayout.layout.stickySectionHeaders,
+                   position.position == .top {
+
+                    let itemFrameAdjustedForStickyHeaders = CGRect(
+                        x: itemFrame.minX,
+                        y: itemFrame.minY - sectionHeader.size.height,
+                        width: itemFrame.width,
+                        height: itemFrame.height
+                    )
+                    self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position)
+
+                } else {
                     self.collectionView.scrollToItem(
                         at: toIndexPath,
                         at: position.position.UICollectionViewScrollPosition,
                         animated: false
                     )
-                },
+                }
+            }
+            
+            animation.perform(
+                animations: scroll,
                 completion: completion
             )
         }
