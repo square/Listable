@@ -2263,7 +2263,7 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListActions.swift",
-      "line": 175,
+      "line": 212,
       "symbol": "ListActions.ViewControllerTransitioning.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -2585,91 +2585,91 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 511,
+      "line": 619,
       "symbol": "ListView.environment",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 517,
+      "line": 625,
       "symbol": "ListView.content",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 522,
+      "line": 630,
       "symbol": "ListView.setContent(animated:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 534,
+      "line": 642,
       "symbol": "ListView.set(source:initial:animated:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 559,
+      "line": 667,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 576,
+      "line": 684,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 622,
+      "line": 730,
       "symbol": "ListView.frame",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 628,
+      "line": 736,
       "symbol": "ListView.bounds",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 676,
+      "line": 784,
       "symbol": "ListView.backgroundColor",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 682,
+      "line": 790,
       "symbol": "ListView.didMoveToWindow()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 691,
+      "line": 799,
       "symbol": "ListView.didMoveToSuperview()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 700,
+      "line": 808,
       "symbol": "ListView.layoutSubviews()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 1019,
+      "line": 1196,
       "symbol": "ListView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
@@ -3040,44 +3040,65 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 60,
+      "line": 59,
       "symbol": "Section.layouts",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 66,
+      "line": 65,
       "symbol": "Section.Configure",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 68,
-      "symbol": "Section.init(_:configure:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 78,
+      "line": 67,
       "symbol": "Section.init(_:layouts:header:footer:items:configure:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 96,
-      "symbol": "Section.init(_:layouts:header:footer:items:configure:)",
+      "line": 92,
+      "symbol": "Section.add(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
+      "line": 97,
+      "symbol": "Section.+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
+      "line": 102,
+      "symbol": "Section.+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
+      "line": 107,
+      "symbol": "Section.+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
+      "line": 116,
+      "symbol": "Section.+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
       "line": 121,
-      "symbol": "Section.add(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "symbol": "Section.+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
@@ -3085,104 +3106,6 @@
       "line": 126,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 131,
-      "symbol": "Section.+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 136,
-      "symbol": "Section.+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 145,
-      "symbol": "Section.+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 150,
-      "symbol": "Section.+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 155,
-      "symbol": "Section.+=(_:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 173,
-      "symbol": "SectionInfo",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 179,
-      "symbol": "SectionInfo.identifier",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 181,
-      "symbol": "SectionInfo.wasMoved(comparedTo:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 185,
-      "symbol": "AnySectionInfo",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 191,
-      "symbol": "AnySectionInfo.anyIdentifier",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 193,
-      "symbol": "AnySectionInfo.anyWasMoved(comparedTo:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 197,
-      "symbol": "SectionInfo",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 199,
-      "symbol": "SectionInfo.anyIdentifier",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Section/Section.swift",
-      "line": 203,
-      "symbol": "SectionInfo.anyWasMoved(comparedTo:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
