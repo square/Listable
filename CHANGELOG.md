@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279). 
+
 ### Added
 
 - [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`. 
