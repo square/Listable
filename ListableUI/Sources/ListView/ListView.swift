@@ -954,7 +954,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Update Collection View
         
         self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
-        
+
+        // Update the offset of the scroll view to show the refresh control if needed
+        presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
+
         // Perform any needed auto scroll actions.
         self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 

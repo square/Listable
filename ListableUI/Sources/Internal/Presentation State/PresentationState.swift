@@ -276,9 +276,30 @@ final class PresentationState
             let newControl = RefreshControlState(new)
             view.refreshControl = newControl.view
             self.refreshControl = newControl
+            newControl.update(with: new)
         } else if self.refreshControl != nil, new == nil {
             view.refreshControl = nil
             self.refreshControl = nil
+        }
+    }
+
+    internal func adjustContentOffsetForRefreshControl(in view : UIScrollView)
+    {
+        guard
+            let control = refreshControl,
+            control.model.isRefreshing == true
+        else {
+            return
+        }
+
+        switch control.model.offsetAdjustmentBehavior {
+        case .displayWhenRefreshing(let animate):
+            let contentOffset = CGPoint(x: 0, y: -control.view.frame.height - view.safeAreaInsets.top)
+            view.setContentOffset(contentOffset, animated: animate)
+            control.view.beginRefreshing()
+
+        case .none:
+            return
         }
     }
     

@@ -116,6 +116,13 @@ public final class DemosRootViewController : ListViewController
                 onSelect : { _ in
                     self.push(InvoicesPaymentScheduleDemoViewController())
             })
+
+            section += Item(
+                DemoItem(text: "Refresh Control"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(RefreshControlOffsetAdjustmentViewController())
+            })
             
             section += Item(
                 DemoItem(text: "Swipe Actions"),

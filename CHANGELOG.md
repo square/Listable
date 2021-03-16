@@ -3,6 +3,17 @@
 ### Fixed
 
 ### Added
+- Add support for adjusting the content offset when the refresh control becomes visible with the `offsetAdjustmentBehavior` property.
+
+Example usage:
+
+```
+list.content.refreshControl = RefreshControl(
+    isRefreshing: isRefreshing,
+    offsetAdjustmentBehavior: .displayWhenRefreshing(animate: true),
+    onRefresh: onRefresh
+)
+```
 
 ### Removed
 
