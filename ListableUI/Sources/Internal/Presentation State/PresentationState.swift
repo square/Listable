@@ -285,10 +285,7 @@ final class PresentationState
 
     internal func adjustContentOffsetForRefreshControl(in view : UIScrollView)
     {
-        guard
-            let control = refreshControl,
-            control.model.isRefreshing == true
-        else {
+        guard let control = refreshControl, control.model.isRefreshing else {
             return
         }
 
