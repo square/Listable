@@ -10,7 +10,7 @@ Example usage:
 ```
 list.content.refreshControl = RefreshControl(
     isRefreshing: isRefreshing,
-    offsetAdjustmentBehavior: .displayWhenRefreshing(animate: true),
+    offsetAdjustmentBehavior: .displayWhenRefreshing(animate: true, scrollToTop: true),
     onRefresh: onRefresh
 )
 ```
