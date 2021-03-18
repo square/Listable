@@ -18,6 +18,7 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
 {
     private let blueprintView = BlueprintView()
     private var isRefreshing: Bool = false
+    private var enableScrollToTop: Bool = false
 
     // MARK: - Views
 
@@ -30,18 +31,33 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
 
     private func updateNavigationItems()
     {
+        var items: [UIBarButtonItem] = [
+            UIBarButtonItem(
+                title: "Scroll to top: \(enableScrollToTop ? "ON" : "OFF")",
+                style: .plain,
+                target: self, action: #selector(toggleScrollToTop))
+        ]
+
         if isRefreshing {
-            navigationItem.rightBarButtonItems = [
-                UIBarButtonItem(title: "Stop Refreshing", style: .plain, target: self, action: #selector(stopRefreshing)),
-            ]
+            items.append(
+                UIBarButtonItem(title: "Stop Refreshing", style: .plain, target: self, action: #selector(stopRefreshing))
+            )
         } else {
-            navigationItem.rightBarButtonItems = [
-                UIBarButtonItem(title: "Refresh", style: .plain, target: self, action: #selector(refresh)),
-            ]
+            items.append(
+                UIBarButtonItem(title: "Refresh", style: .plain, target: self, action: #selector(refresh))
+            )
         }
+
+        navigationItem.rightBarButtonItems = items
     }
 
     // MARK: - Actions
+
+    @objc func toggleScrollToTop()
+    {
+        enableScrollToTop.toggle()
+        updateNavigationItems()
+    }
 
     @objc func refresh()
     {
@@ -63,22 +79,24 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
     {
         blueprintView.element = List { list in
             list.layout = .table {
-                $0.layout.padding.top = 24.0
+                $0.layout.padding = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
                 $0.layout.itemSpacing = 10.0
             }
 
             list.content.refreshControl = RefreshControl(
                 isRefreshing: isRefreshing,
-                offsetAdjustmentBehavior: .displayWhenRefreshing(animate: true),
+                offsetAdjustmentBehavior: .displayWhenRefreshing(animate: true, scrollToTop: enableScrollToTop),
                 onRefresh: { [weak self] in
                     self?.refresh()
                 }
             )
 
             list += Section("section") { section in
-                section += DemoItem(text: "Item 1")
-                section += DemoItem(text: "Item 2")
-                section += DemoItem(text: "Item 3")
+                section.items = (1 ... 100).map {
+                    Item(
+                        DemoItem(text: "Item \($0)")
+                    )
+                }
             }
         }
     }

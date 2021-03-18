@@ -290,10 +290,14 @@ final class PresentationState
         }
 
         switch control.model.offsetAdjustmentBehavior {
-        case .displayWhenRefreshing(let animate):
-            let contentOffset = CGPoint(x: 0, y: -control.view.frame.height - view.safeAreaInsets.top)
+        case .displayWhenRefreshing(let animate, let scrollToTop):
+            // If we are not scrolled to the top or don't enable scroll to top, don't do anything
+            guard view.isScrolledToTop || scrollToTop else {
+                return
+            }
+
+            let contentOffset = CGPoint(x: 0, y: -view.adjustedContentInset.top)
             view.setContentOffset(contentOffset, animated: animate)
-            control.view.beginRefreshing()
 
         case .none:
             return
@@ -452,5 +456,20 @@ extension PresentationState
                 )
             }
         )
+    }
+}
+
+fileprivate extension UIScrollView
+{
+    var isScrolledToTop: Bool
+    {
+        // adjustedContentInset includes the refresh control height, subtract that to
+        // get the top point at rest
+        var topInset = adjustedContentInset.top
+        if let refreshControl = self.refreshControl {
+            topInset -= refreshControl.frame.height
+        }
+
+        return contentOffset.y <= -topInset
     }
 }

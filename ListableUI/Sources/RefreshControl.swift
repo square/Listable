@@ -46,7 +46,7 @@ extension RefreshControl
     public enum OffsetAdjustmentBehavior : Equatable
     {
         case none
-        case displayWhenRefreshing(animate: Bool)
+        case displayWhenRefreshing(animate: Bool, scrollToTop: Bool)
     }
 
     public enum Title : Equatable
