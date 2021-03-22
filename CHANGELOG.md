@@ -3,6 +3,18 @@
 ### Fixed
 
 ### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.19.0] - 2021-03-22
+
+### Added
 - Add support for adjusting the content offset when the refresh control becomes visible with the `offsetAdjustmentBehavior` property.
 
 Example usage:
@@ -14,14 +26,6 @@ list.content.refreshControl = RefreshControl(
     onRefresh: onRefresh
 )
 ```
-
-### Removed
-
-### Changed
-
-### Misc
-
-# Past Releases
 
 # [0.18.0] - 2021-03-12
 
@@ -344,7 +348,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.18.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.19.0...HEAD
+[0.19.0]: https://github.com/kyleve/Listable/compare/0.18.0...0.19.0
 [0.18.0]: https://github.com/kyleve/Listable/compare/0.17.0...0.18.0
 [0.17.0]: https://github.com/kyleve/Listable/compare/0.16.0...0.17.0
 [0.16.0]: https://github.com/kyleve/Listable/compare/0.15.1...0.16.0
