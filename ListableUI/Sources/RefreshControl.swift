@@ -10,8 +10,11 @@ import Foundation
 
 public struct RefreshControl
 {
+
     public var isRefreshing : Bool
-    
+
+    public var offsetAdjustmentBehavior: OffsetAdjustmentBehavior
+
     public var title : Title?
     
     public var tintColor : UIColor?
@@ -21,12 +24,14 @@ public struct RefreshControl
     
     public init(
         isRefreshing: Bool,
+        offsetAdjustmentBehavior: OffsetAdjustmentBehavior = .none,
         title : Title? = nil,
         tintColor : UIColor? = nil,
         onRefresh : @escaping OnRefresh
         )
     {
         self.isRefreshing = isRefreshing
+        self.offsetAdjustmentBehavior = offsetAdjustmentBehavior
 
         self.title = title
         self.tintColor = tintColor
@@ -38,6 +43,12 @@ public struct RefreshControl
 
 extension RefreshControl
 {
+    public enum OffsetAdjustmentBehavior : Equatable
+    {
+        case none
+        case displayWhenRefreshing(animate: Bool, scrollToTop: Bool)
+    }
+
     public enum Title : Equatable
     {
         case string(String)

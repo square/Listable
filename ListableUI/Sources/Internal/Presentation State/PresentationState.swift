@@ -276,9 +276,31 @@ final class PresentationState
             let newControl = RefreshControlState(new)
             view.refreshControl = newControl.view
             self.refreshControl = newControl
+            newControl.update(with: new)
         } else if self.refreshControl != nil, new == nil {
             view.refreshControl = nil
             self.refreshControl = nil
+        }
+    }
+
+    internal func adjustContentOffsetForRefreshControl(in view : UIScrollView)
+    {
+        guard let control = refreshControl, control.model.isRefreshing else {
+            return
+        }
+
+        switch control.model.offsetAdjustmentBehavior {
+        case .displayWhenRefreshing(let animate, let scrollToTop):
+            // If we are not scrolled to the top or don't enable scroll to top, don't do anything
+            guard view.isScrolledToTop || scrollToTop else {
+                return
+            }
+
+            let contentOffset = CGPoint(x: 0, y: -view.adjustedContentInset.top)
+            view.setContentOffset(contentOffset, animated: animate)
+
+        case .none:
+            return
         }
     }
     
@@ -434,5 +456,20 @@ extension PresentationState
                 )
             }
         )
+    }
+}
+
+fileprivate extension UIScrollView
+{
+    var isScrolledToTop: Bool
+    {
+        // adjustedContentInset includes the refresh control height, subtract that to
+        // get the top point at rest
+        var topInset = adjustedContentInset.top
+        if let refreshControl = self.refreshControl {
+            topInset -= refreshControl.frame.height
+        }
+
+        return contentOffset.y <= -topInset
     }
 }
