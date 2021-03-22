@@ -2669,7 +2669,7 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 1196,
+      "line": 1199,
       "symbol": "ListView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
@@ -2928,70 +2928,98 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 13,
+      "line": 14,
       "symbol": "RefreshControl.isRefreshing",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 15,
+      "line": 16,
+      "symbol": "RefreshControl.offsetAdjustmentBehavior",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
+      "line": 18,
       "symbol": "RefreshControl.title",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 17,
+      "line": 20,
       "symbol": "RefreshControl.tintColor",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 19,
+      "line": 22,
       "symbol": "RefreshControl.OnRefresh",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 20,
+      "line": 23,
       "symbol": "RefreshControl.onRefresh",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 22,
-      "symbol": "RefreshControl.init(isRefreshing:title:tintColor:onRefresh:)",
+      "line": 25,
+      "symbol": "RefreshControl.init(isRefreshing:offsetAdjustmentBehavior:title:tintColor:onRefresh:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 39,
+      "line": 44,
       "symbol": "RefreshControl",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 41,
+      "line": 46,
+      "symbol": "RefreshControl.OffsetAdjustmentBehavior",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
+      "line": 48,
+      "symbol": "RefreshControl.OffsetAdjustmentBehavior.none",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
+      "line": 49,
+      "symbol": "RefreshControl.OffsetAdjustmentBehavior.displayWhenRefreshing(animate:scrollToTop:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
+      "line": 52,
       "symbol": "RefreshControl.Title",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 43,
+      "line": 54,
       "symbol": "RefreshControl.Title.string(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/RefreshControl.swift",
-      "line": 44,
+      "line": 55,
       "symbol": "RefreshControl.Title.attributed(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
