@@ -202,7 +202,7 @@ extension ListView
         
         // MARK: CollectionViewLayoutDelegate
         
-        func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
+        func listViewLayoutUpdatedItemPositions()
         {
             self.view.setPresentationStateItemPositions()
         }

@@ -14,6 +14,9 @@ public enum ViewAnimation {
     
     /// No animation is performed.
     case none
+
+    /// The current animation is inherited from the superview's animation context.
+    case inherited
     
     /// A default animation is performed. This is the same as `.animated()`.
     public static var `default` : Self = .animated()
@@ -42,6 +45,12 @@ public enum ViewAnimation {
     ) {
         switch self {
         case .none:
+            UIView.performWithoutAnimation {
+                animations()
+                completion(true)
+            }
+            
+        case .inherited:
             animations()
             completion(true)
 

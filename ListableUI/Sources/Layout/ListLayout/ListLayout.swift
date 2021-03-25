@@ -25,6 +25,19 @@ public protocol ListLayout : AnyListLayout
 }
 
 
+public struct ListLayoutLayoutContext : Equatable {
+    
+    public var viewBounds : CGRect
+    
+    init(viewBounds : CGRect) {
+        self.viewBounds = viewBounds
+    }
+    
+    init(_ collectionView : UICollectionView) {
+        self.viewBounds = collectionView.bounds
+    }
+}
+
 public extension ListLayout
 {
     var direction: LayoutDirection {
@@ -61,8 +74,8 @@ public protocol AnyListLayout : AnyObject
     func updateLayout(in collectionView : UICollectionView)
     
     func layout(
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
+        delegate : CollectionViewLayoutDelegate?,
+        in context : ListLayoutLayoutContext
     )
     
     func setZIndexes()

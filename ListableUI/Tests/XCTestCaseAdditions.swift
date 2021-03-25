@@ -74,16 +74,18 @@ extension XCTestCase
         let start = Date()
 
         var iterations : Int = 0
+        
+        var lastUpdateDate = Date()
 
         repeat {
-            let iterationStart = Date()
             block()
-            let iterationEnd = Date()
-            let duration = iterationEnd.timeIntervalSince(iterationStart)
-
+            
             iterations += 1
-
-            print("Iteration: \(iterations), Duration : \(duration)")
+            
+            if Date().timeIntervalSince(lastUpdateDate) >= 2 {
+                lastUpdateDate = Date()
+                print("Continuing Test...")
+            }
 
         } while Date() < start + seconds
 

@@ -260,15 +260,14 @@ final class GridListLayout : ListLayout
     }
     
     func layout(
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
-        )
-    {
+        delegate : CollectionViewLayoutDelegate?,
+        in context : ListLayoutLayoutContext
+    ) {
         let direction = self.layoutAppearance.direction
         let layout = self.layoutAppearance.layout
         let sizing = self.layoutAppearance.sizing
         
-        let viewSize = collectionView.bounds.size
+        let viewSize = context.viewBounds.size
         
         let viewWidth = viewSize.width
         

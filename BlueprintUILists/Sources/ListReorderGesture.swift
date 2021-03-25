@@ -75,7 +75,7 @@ public struct ListReorderGesture : Element
     //
     
     public var content: ElementContent {
-        return ElementContent(child: self.element)
+        ElementContent(child: self.element)
     }
     
     public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?

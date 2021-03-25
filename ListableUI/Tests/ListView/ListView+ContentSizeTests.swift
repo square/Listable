@@ -1,5 +1,5 @@
 //
-//  ListSizingTests.swift
+//  ListView+ContentSizeTests.swift
 //  Listable-Unit-Tests
 //
 //  Created by Kyle Van Essen on 9/21/20.
@@ -10,7 +10,7 @@ import XCTest
 @testable import ListableUI
 
 
-class ListView_ListSizingTests : XCTestCase
+class ListView_ContentSizeTests : XCTestCase
 {
     func test_contentSize()
     {
@@ -24,7 +24,7 @@ class ListView_ListSizingTests : XCTestCase
         /// latter tests after the first one will likely fail.
         ///
         /// 3) We loop over the cases to ensure the measurement is reported reliably; eg it doesn't
-        /// for some reason break after a few passes.
+        /// for some reason break after a few passes (eg due to measurement view cache reuse).
         
         let section = Section("section") { section in
             section += Item(TestContent(title: "first item"), sizing: .fixed(width: 200, height: 50))
@@ -40,10 +40,11 @@ class ListView_ListSizingTests : XCTestCase
                     
                     list += section
                 }
-                
-                let size = ListView.contentSize(in: CGSize(width: 100.0, height: 0.0), for: properties)
-                
-                XCTAssertEqual(size, CGSize(width: 100.0, height: 150.0))
+                                
+                XCTAssertEqual(
+                    ListView.contentSize(in: CGSize(width: 100.0, height: 0.0), for: properties),
+                    CGSize(width: 100.0, height: 150.0)
+                )
             }
             
             self.testcase("vertical paged") {
@@ -56,10 +57,11 @@ class ListView_ListSizingTests : XCTestCase
                     
                     list += section
                 }
-                
-                let size = ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties)
-                
-                XCTAssertEqual(size, CGSize(width: 100.0, height: 300.0))
+                                
+                XCTAssertEqual(
+                    ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties),
+                    CGSize(width: 100.0, height: 300.0)
+                )
             }
             
             self.testcase("horizontal paged") {
@@ -73,9 +75,10 @@ class ListView_ListSizingTests : XCTestCase
                     list += section
                 }
                 
-                let size = ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties)
-                
-                XCTAssertEqual(size, CGSize(width: 300.0, height: 100.0))
+                XCTAssertEqual(
+                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties),
+                    CGSize(width: 300.0, height: 100.0)
+                )
             }
         }
     }

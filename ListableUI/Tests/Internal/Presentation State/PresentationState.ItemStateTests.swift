@@ -402,14 +402,14 @@ fileprivate struct TestContent : ItemContent, Equatable
             self.wasRemoved_calls.append(())
         }
         
-        var willDisplay_calls = [Void]()
+        var willDisplay_calls: [Void] = [Void]()
 
         func willDisplay()
         {
             self.willDisplay_calls.append(())
         }
         
-        var didEndDisplay_calls = [Void]()
+        var didEndDisplay_calls: [Void] = [Void]()
 
         func didEndDisplay()
         {

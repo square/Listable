@@ -25,7 +25,9 @@ final class LayoutDescriptionTests : XCTestCase
         let populated = description.configuration.createPopulatedLayout(
             appearance: listView.appearance,
             behavior: listView.behavior,
-            delegate: listView.delegate
+            content: {
+                listView.delegate.listLayoutContent(defaults: $0)
+            }
         )
         
         XCTAssertEqual(describeCallCount, 1)
@@ -120,5 +122,5 @@ private final class TestLayout : ListLayout
     
     func updateLayout(in collectionView: UICollectionView) { }
     
-    func layout(delegate: CollectionViewLayoutDelegate, in collectionView: UICollectionView) { }
+    func layout(delegate: CollectionViewLayoutDelegate?, in context: ListLayoutLayoutContext) {}
 }

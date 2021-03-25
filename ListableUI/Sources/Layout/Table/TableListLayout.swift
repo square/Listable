@@ -450,15 +450,14 @@ final class TableListLayout : ListLayout
     }
     
     func layout(
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView
+        delegate : CollectionViewLayoutDelegate?,
+        in context : ListLayoutLayoutContext
     ) {
         let layout = self.layoutAppearance.layout
         let sizing = self.layoutAppearance.sizing
         
-        let viewSize = collectionView.bounds.size
-        
-        let viewWidth = collectionView.bounds.width
+        let viewSize = context.viewBounds.size
+        let viewWidth = context.viewBounds.width
         
         let rootWidth = TableAppearance.Layout.width(
             with: viewSize.width,
@@ -476,7 +475,7 @@ final class TableListLayout : ListLayout
          */
         self.setItemPositions()
         
-        delegate.listViewLayoutUpdatedItemPositions(collectionView)
+        delegate?.listViewLayoutUpdatedItemPositions()
         
         //
         // Set Frame Origins

@@ -114,13 +114,27 @@ extension List {
         // MARK: Element
             
         public var content : ElementContent {
-            ElementContent { constraint -> CGSize in
-                switch self.sizing {
-                case .fillParent:
-                    return constraint.maximum
-                    
-                case .measureContent:
-                    return ListView.contentSize(in: constraint.maximum, for: self.properties)
+            switch self.sizing {
+            case .fillParent:
+                return ElementContent { constraint -> CGSize in
+                    constraint.maximum
+                }
+                
+            case .measureContent(let key, let limit):
+                return ElementContent(
+                    measurementCachingKey: {
+                        if let key = key {
+                            return MeasurementCachingKey(type: Self.self, input: key)
+                        } else {
+                            return nil
+                        }
+                    }()
+                ) { constraint -> CGSize in
+                    ListView.contentSize(
+                        in: constraint.maximum,
+                        for: self.properties,
+                        itemLimit: limit
+                    )
                 }
             }
         }
