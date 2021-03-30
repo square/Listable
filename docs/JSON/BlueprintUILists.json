@@ -1483,7 +1483,7 @@
 }, {
   "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/Exports.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
-    "key.length" : 209,
+    "key.length" : 221,
     "key.offset" : 0,
     "key.substructure" : [
 
@@ -2743,7 +2743,7 @@
 }, {
   "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
-    "key.length" : 4253,
+    "key.length" : 4763,
     "key.offset" : 0,
     "key.substructure" : [
       {
@@ -2849,7 +2849,7 @@
           },
           {
             "key.accessibility" : "source.lang.swift.accessibility.public",
-            "key.annotated_decl" : "<Declaration>public var sizing: <Type usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/Type><\/Declaration>",
+            "key.annotated_decl" : "<Declaration>public var sizing: <Type usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/Type><\/Declaration>",
             "key.attributes" : [
               {
                 "key.attribute" : "source.decl.attribute.public",
@@ -2866,14 +2866,14 @@
               }
             ],
             "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift\" line=\"57\" column=\"16\"><Name>sizing<\/Name><USR>s:16BlueprintUILists4ListV6sizing10ListableUI0C6SizingOvp<\/USR><Declaration>public var sizing: ListSizing<\/Declaration><CommentParts><Abstract><Para>How the <codeVoice>List<\/codeVoice> is measured when the element is laid out by Blueprint.  Defaults to <codeVoice>.fillParent<\/codeVoice>, which means it will take up all the size it is given. You can change this to <codeVoice>.measureContent<\/codeVoice> to instead measure the optimal size.<\/Para><\/Abstract><Discussion><Para>See the <codeVoice>ListSizing<\/codeVoice> documentation for more.<\/Para><\/Discussion><\/CommentParts><\/Other>",
+            "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift\" line=\"57\" column=\"16\"><Name>sizing<\/Name><USR>s:16BlueprintUILists4ListV6sizingAA0C6SizingOvp<\/USR><Declaration>public var sizing: ListSizing<\/Declaration><CommentParts><Abstract><Para>How the <codeVoice>List<\/codeVoice> is measured when the element is laid out by Blueprint.  Defaults to <codeVoice>.fillParent<\/codeVoice>, which means it will take up all the size it is given. You can change this to <codeVoice>.measureContent<\/codeVoice> to instead measure the optimal size.<\/Para><\/Abstract><Discussion><Para>See the <codeVoice>ListSizing<\/codeVoice> documentation for more.<\/Para><\/Discussion><\/CommentParts><\/Other>",
             "key.doc.line" : 57,
             "key.doc.name" : "sizing",
             "key.doc.type" : "Other",
             "key.doclength" : 319,
             "key.docoffset" : 1628,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>sizing<\/decl.name>: <decl.var.type><ref.enum usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.type><\/decl.var.instance>",
+            "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>sizing<\/decl.name>: <decl.var.type><ref.enum usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.type><\/decl.var.instance>",
             "key.kind" : "source.lang.swift.decl.var.instance",
             "key.length" : 23,
             "key.name" : "sizing",
@@ -2885,8 +2885,8 @@
             "key.parsed_scope.start" : 57,
             "key.setter_accessibility" : "source.lang.swift.accessibility.public",
             "key.typename" : "ListSizing",
-            "key.typeusr" : "$s10ListableUI10ListSizingOD",
-            "key.usr" : "s:16BlueprintUILists4ListV6sizing10ListableUI0C6SizingOvp"
+            "key.typeusr" : "$s16BlueprintUILists10ListSizingOD",
+            "key.usr" : "s:16BlueprintUILists4ListV6sizingAA0C6SizingOvp"
           },
           {
             "key.kind" : "source.lang.swift.syntaxtype.comment.mark",
@@ -2898,7 +2898,7 @@
           },
           {
             "key.accessibility" : "source.lang.swift.accessibility.public",
-            "key.annotated_decl" : "<Declaration>public init(sizing: <Type usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/Type> = .fillParent, configure: <Type usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/Type>.<Type usr=\"s:10ListableUI14ListPropertiesV9Configurea\">Configure<\/Type>)<\/Declaration>",
+            "key.annotated_decl" : "<Declaration>public init(sizing: <Type usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/Type> = .fillParent, configure: <Type usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/Type>.<Type usr=\"s:10ListableUI14ListPropertiesV9Configurea\">Configure<\/Type>)<\/Declaration>",
             "key.attributes" : [
               {
                 "key.attribute" : "source.decl.attribute.public",
@@ -2912,14 +2912,14 @@
             "key.doc.comment" : "Create a new list, configured with the provided properties,\nconfigured with the provided `ListProperties` builder.",
             "key.doc.declaration" : "public init(sizing: ListSizing = .fillParent, configure: ListProperties.Configure)",
             "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift\" line=\"65\" column=\"12\"><Name>init(sizing:configure:)<\/Name><USR>s:16BlueprintUILists4ListV6sizing9configureAC10ListableUI0C6SizingO_yAF0C10PropertiesVzXEtcfc<\/USR><Declaration>public init(sizing: ListSizing = .fillParent, configure: ListProperties.Configure)<\/Declaration><CommentParts><Abstract><Para>Create a new list, configured with the provided properties, configured with the provided <codeVoice>ListProperties<\/codeVoice> builder.<\/Para><\/Abstract><\/CommentParts><\/Function>",
+            "key.doc.full_as_xml" : "<Function file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift\" line=\"65\" column=\"12\"><Name>init(sizing:configure:)<\/Name><USR>s:16BlueprintUILists4ListV6sizing9configureAcA0C6SizingO_y10ListableUI0C10PropertiesVzXEtcfc<\/USR><Declaration>public init(sizing: ListSizing = .fillParent, configure: ListProperties.Configure)<\/Declaration><CommentParts><Abstract><Para>Create a new list, configured with the provided properties, configured with the provided <codeVoice>ListProperties<\/codeVoice> builder.<\/Para><\/Abstract><\/CommentParts><\/Function>",
             "key.doc.line" : 65,
             "key.doc.name" : "init(sizing:configure:)",
             "key.doc.type" : "Function",
             "key.doclength" : 127,
             "key.docoffset" : 2042,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>sizing<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.enum usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.parameter.type> = .fillParent<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/ref.struct>.<ref.typealias usr=\"s:10ListableUI14ListPropertiesV9Configurea\">Configure<\/ref.typealias><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
+            "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>sizing<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.enum usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.parameter.type> = .fillParent<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>configure<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/ref.struct>.<ref.typealias usr=\"s:10ListableUI14ListPropertiesV9Configurea\">Configure<\/ref.typealias><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
             "key.kind" : "source.lang.swift.decl.function.method.instance",
             "key.length" : 197,
             "key.name" : "init(sizing:configure:)",
@@ -2933,8 +2933,8 @@
 
             ],
             "key.typename" : "(List.Type) -> (ListSizing, (inout ListProperties) -> ()) -> List",
-            "key.typeusr" : "$s6sizing9configure16BlueprintUILists4ListV10ListableUI0E6SizingO_yAF0E10PropertiesVzXEtcD",
-            "key.usr" : "s:16BlueprintUILists4ListV6sizing9configureAC10ListableUI0C6SizingO_yAF0C10PropertiesVzXEtcfc"
+            "key.typeusr" : "$s6sizing9configure16BlueprintUILists4ListVAC0E6SizingO_y10ListableUI0E10PropertiesVzXEtcD",
+            "key.usr" : "s:16BlueprintUILists4ListV6sizing9configureAcA0C6SizingO_y10ListableUI0C10PropertiesVzXEtcfc"
           },
           {
             "key.kind" : "source.lang.swift.syntaxtype.comment.mark",
@@ -3074,7 +3074,7 @@
       },
       {
         "key.annotated_decl" : "<Declaration>public struct List : <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
-        "key.bodylength" : 1430,
+        "key.bodylength" : 1940,
         "key.bodyoffset" : 2821,
         "key.doc.column" : 15,
         "key.doc.declaration" : "public struct List : Element",
@@ -3100,13 +3100,13 @@
         "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
         "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>List<\/decl.name> : <ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.struct>",
         "key.kind" : "source.lang.swift.decl.extension",
-        "key.length" : 1447,
+        "key.length" : 1957,
         "key.name" : "List",
         "key.namelength" : 4,
         "key.nameoffset" : 2815,
         "key.offset" : 2805,
         "key.parsed_declaration" : "extension List",
-        "key.parsed_scope.end" : 141,
+        "key.parsed_scope.end" : 155,
         "key.parsed_scope.start" : 94,
         "key.substructure" : [
           {
@@ -3119,7 +3119,7 @@
                 "key.offset" : 2831
               }
             ],
-            "key.bodylength" : 1376,
+            "key.bodylength" : 1886,
             "key.bodyoffset" : 2873,
             "key.elements" : [
               {
@@ -3136,13 +3136,13 @@
               }
             ],
             "key.kind" : "source.lang.swift.decl.struct",
-            "key.length" : 1407,
+            "key.length" : 1917,
             "key.name" : "ListContent",
             "key.namelength" : 11,
             "key.nameoffset" : 2850,
             "key.offset" : 2843,
             "key.parsed_declaration" : "fileprivate struct ListContent : Element",
-            "key.parsed_scope.end" : 140,
+            "key.parsed_scope.end" : 154,
             "key.parsed_scope.start" : 96,
             "key.substructure" : [
               {
@@ -3166,9 +3166,9 @@
               },
               {
                 "key.accessibility" : "source.lang.swift.accessibility.internal",
-                "key.annotated_decl" : "<Declaration>var sizing: <Type usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/Type><\/Declaration>",
+                "key.annotated_decl" : "<Declaration>var sizing: <Type usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/Type><\/Declaration>",
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-                "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>sizing<\/decl.name>: <decl.var.type><ref.enum usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.type><\/decl.var.instance>",
+                "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>sizing<\/decl.name>: <decl.var.type><ref.enum usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.type><\/decl.var.instance>",
                 "key.kind" : "source.lang.swift.decl.var.instance",
                 "key.length" : 23,
                 "key.name" : "sizing",
@@ -3180,16 +3180,16 @@
                 "key.parsed_scope.start" : 99,
                 "key.setter_accessibility" : "source.lang.swift.accessibility.internal",
                 "key.typename" : "ListSizing",
-                "key.typeusr" : "$s10ListableUI10ListSizingOD",
-                "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV6sizing10ListableUI0C6SizingOvp"
+                "key.typeusr" : "$s16BlueprintUILists10ListSizingOD",
+                "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV6sizingAA0C6SizingOvp"
               },
               {
                 "key.accessibility" : "source.lang.swift.accessibility.internal",
-                "key.annotated_decl" : "<Declaration>init(properties: <Type usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/Type>, sizing: <Type usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/Type>, environment: <Type usr=\"s:11BlueprintUI11EnvironmentV\">Environment<\/Type>)<\/Declaration>",
+                "key.annotated_decl" : "<Declaration>init(properties: <Type usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/Type>, sizing: <Type usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/Type>, environment: <Type usr=\"s:11BlueprintUI11EnvironmentV\">Environment<\/Type>)<\/Declaration>",
                 "key.bodylength" : 219,
                 "key.bodyoffset" : 3101,
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
-                "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>properties<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>sizing<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.enum usr=\"s:10ListableUI10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>environment<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:11BlueprintUI11EnvironmentV\">Environment<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
+                "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>properties<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:10ListableUI14ListPropertiesV\">ListProperties<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>sizing<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.enum usr=\"s:16BlueprintUILists10ListSizingO\">ListSizing<\/ref.enum><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>environment<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:11BlueprintUI11EnvironmentV\">Environment<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
                 "key.kind" : "source.lang.swift.decl.function.method.instance",
                 "key.length" : 349,
                 "key.name" : "init(properties:sizing:environment:)",
@@ -3220,12 +3220,12 @@
                     ],
                     "key.typename" : "ListProperties",
                     "key.typeusr" : "$s10ListableUI14ListPropertiesVD",
-                    "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV10properties6sizing11environmentAF10ListableUI0C10PropertiesV_AJ0C6SizingO0aP011EnvironmentVtcfcAGL0_ALvp"
+                    "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV10properties6sizing11environmentAF10ListableUI0C10PropertiesV_AA0C6SizingO0aP011EnvironmentVtcfcAGL0_ALvp"
                   }
                 ],
                 "key.typename" : "(List.ListContent.Type) -> (ListProperties, ListSizing, Environment) -> List.ListContent",
-                "key.typeusr" : "$s10properties6sizing11environment16BlueprintUILists4ListV0F7Content33_1D008FD48BBA46D37B823B02ED201314LLV10ListableUI0F10PropertiesV_AJ0F6SizingO0dP011EnvironmentVtcD",
-                "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV10properties6sizing11environmentAF10ListableUI0C10PropertiesV_AJ0C6SizingO0aP011EnvironmentVtcfc"
+                "key.typeusr" : "$s10properties6sizing11environment16BlueprintUILists4ListV0F7Content33_1D008FD48BBA46D37B823B02ED201314LLV10ListableUI0F10PropertiesV_AD0F6SizingO0dP011EnvironmentVtcD",
+                "key.usr" : "s:16BlueprintUILists4ListV0C7Content33_1D008FD48BBA46D37B823B02ED201314LLV10properties6sizing11environmentAF10ListableUI0C10PropertiesV_AA0C6SizingO0aP011EnvironmentVtcfc"
               },
               {
                 "key.kind" : "source.lang.swift.syntaxtype.comment.mark",
@@ -3245,7 +3245,7 @@
                     "key.offset" : 3377
                   }
                 ],
-                "key.bodylength" : 364,
+                "key.bodylength" : 874,
                 "key.bodyoffset" : 3414,
                 "key.doc.column" : 9,
                 "key.doc.declaration" : "var content: BlueprintUI.ElementContent { get }",
@@ -3268,7 +3268,7 @@
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/List.swift",
                 "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>content<\/decl.name>: <decl.var.type><ref.struct usr=\"s:11BlueprintUI14ElementContentV\">ElementContent<\/ref.struct><\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
                 "key.kind" : "source.lang.swift.decl.var.instance",
-                "key.length" : 395,
+                "key.length" : 905,
                 "key.name" : "content",
                 "key.namelength" : 7,
                 "key.nameoffset" : 3388,
@@ -3279,7 +3279,7 @@
                   }
                 ],
                 "key.parsed_declaration" : "public var content : ElementContent",
-                "key.parsed_scope.end" : 126,
+                "key.parsed_scope.end" : 140,
                 "key.parsed_scope.start" : 116,
                 "key.typename" : "ElementContent",
                 "key.typeusr" : "$s11BlueprintUI14ElementContentVD",
@@ -3292,11 +3292,11 @@
                   {
                     "key.attribute" : "source.decl.attribute.public",
                     "key.length" : 6,
-                    "key.offset" : 3797
+                    "key.offset" : 4307
                   }
                 ],
                 "key.bodylength" : 342,
-                "key.bodyoffset" : 3901,
+                "key.bodyoffset" : 4411,
                 "key.doc.column" : 10,
                 "key.doc.declaration" : "func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> BlueprintUI.ViewDescription?",
                 "key.doc.discussion" : [
@@ -3341,16 +3341,16 @@
                 "key.length" : 440,
                 "key.name" : "backingViewDescription(bounds:subtreeExtent:)",
                 "key.namelength" : 62,
-                "key.nameoffset" : 3809,
-                "key.offset" : 3804,
+                "key.nameoffset" : 4319,
+                "key.offset" : 4314,
                 "key.overrides" : [
                   {
                     "key.usr" : "s:11BlueprintUI7ElementP22backingViewDescription6bounds13subtreeExtentAA0eF0VSgSo6CGRectV_AKSgtF"
                   }
                 ],
                 "key.parsed_declaration" : "public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?",
-                "key.parsed_scope.end" : 139,
-                "key.parsed_scope.start" : 128,
+                "key.parsed_scope.end" : 153,
+                "key.parsed_scope.start" : 142,
                 "key.substructure" : [
 
                 ],
@@ -3373,7 +3373,7 @@
 }, {
   "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift" : {
     "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
-    "key.length" : 4872,
+    "key.length" : 4865,
     "key.offset" : 0,
     "key.substructure" : [
       {
@@ -3386,7 +3386,7 @@
             "key.offset" : 1081
           }
         ],
-        "key.bodylength" : 1728,
+        "key.bodylength" : 1721,
         "key.bodyoffset" : 1125,
         "key.doc.column" : 15,
         "key.doc.comment" : "\nAn element that wraps your provided element, to enable support\nfor user-driven re-ordering in a list view.\n\nIf you do not support reordering items, you do not need\nto add this element anywhere in your hierarchy.\n\nThis element on its own has no visual appearance. Thus, you should\nstill render your own reorder dragger \/ handle \/ etc in the passed in element.\n\nIn the below example, we see how to set up the content of a simple item, which contains\na text label and a reorder grabber.\n\n```\nfunc element(with info : ApplyItemContentInfo) -> Element\n{\n    Row { row in\n        row.add(child: Label(text: \"...\"))\n\n        row.add(child: ListReorderGesture(actions: info.actions, wrapping: MyReorderGrabber()))\n\n        \/\/ Could also be written as:\n        row.add(child: MyReorderGrabber().listReorderGesture(with: info.reordering))\n    }\n}\n```",
@@ -3427,7 +3427,7 @@
           }
         ],
         "key.kind" : "source.lang.swift.decl.struct",
-        "key.length" : 1766,
+        "key.length" : 1759,
         "key.name" : "ListReorderGesture",
         "key.namelength" : 18,
         "key.nameoffset" : 1095,
@@ -3682,7 +3682,7 @@
                 "key.offset" : 2169
               }
             ],
-            "key.bodylength" : 56,
+            "key.bodylength" : 49,
             "key.bodyoffset" : 2205,
             "key.doc.column" : 9,
             "key.doc.declaration" : "var content: BlueprintUI.ElementContent { get }",
@@ -3705,7 +3705,7 @@
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
             "key.fully_annotated_decl" : "<decl.var.instance><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>var<\/syntaxtype.keyword> <decl.name>content<\/decl.name>: <decl.var.type><ref.struct usr=\"s:11BlueprintUI14ElementContentV\">ElementContent<\/ref.struct><\/decl.var.type> { <syntaxtype.keyword>get<\/syntaxtype.keyword> }<\/decl.var.instance>",
             "key.kind" : "source.lang.swift.decl.var.instance",
-            "key.length" : 86,
+            "key.length" : 79,
             "key.name" : "content",
             "key.namelength" : 7,
             "key.nameoffset" : 2180,
@@ -3729,11 +3729,11 @@
               {
                 "key.attribute" : "source.decl.attribute.public",
                 "key.length" : 6,
-                "key.offset" : 2272
+                "key.offset" : 2265
               }
             ],
             "key.bodylength" : 479,
-            "key.bodyoffset" : 2372,
+            "key.bodyoffset" : 2365,
             "key.doc.column" : 10,
             "key.doc.declaration" : "func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> BlueprintUI.ViewDescription?",
             "key.doc.discussion" : [
@@ -3778,8 +3778,8 @@
             "key.length" : 573,
             "key.name" : "backingViewDescription(bounds:subtreeExtent:)",
             "key.namelength" : 62,
-            "key.nameoffset" : 2284,
-            "key.offset" : 2279,
+            "key.nameoffset" : 2277,
+            "key.offset" : 2272,
             "key.overrides" : [
               {
                 "key.usr" : "s:11BlueprintUI7ElementP22backingViewDescription6bounds13subtreeExtentAA0eF0VSgSo6CGRectV_AKSgtF"
@@ -3807,11 +3807,11 @@
           {
             "key.attribute" : "source.decl.attribute.public",
             "key.length" : 6,
-            "key.offset" : 2857
+            "key.offset" : 2850
           }
         ],
         "key.bodylength" : 243,
-        "key.bodyoffset" : 2883,
+        "key.bodyoffset" : 2876,
         "key.doc.column" : 17,
         "key.doc.declaration" : "protocol Element",
         "key.doc.discussion" : [
@@ -3840,8 +3840,8 @@
         "key.modulename" : "BlueprintUI",
         "key.name" : "Element",
         "key.namelength" : 7,
-        "key.nameoffset" : 2874,
-        "key.offset" : 2864,
+        "key.nameoffset" : 2867,
+        "key.offset" : 2857,
         "key.parsed_declaration" : "public extension Element",
         "key.parsed_scope.end" : 107,
         "key.parsed_scope.start" : 100,
@@ -3850,7 +3850,7 @@
             "key.accessibility" : "source.lang.swift.accessibility.public",
             "key.annotated_decl" : "<Declaration>func listReorderGesture(with actions: <Type usr=\"s:10ListableUI17ReorderingActionsC\">ReorderingActions<\/Type>, isEnabled: <Type usr=\"s:Sb\">Bool<\/Type> = true) -&gt; <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
             "key.bodylength" : 88,
-            "key.bodyoffset" : 3036,
+            "key.bodyoffset" : 3029,
             "key.doc.column" : 10,
             "key.doc.comment" : "Wraps the element in a re-order gesture.",
             "key.doc.declaration" : "func listReorderGesture(with actions: ReorderingActions, isEnabled: Bool = true) -> Element",
@@ -3860,15 +3860,15 @@
             "key.doc.name" : "listReorderGesture(with:isEnabled:)",
             "key.doc.type" : "Function",
             "key.doclength" : 45,
-            "key.docoffset" : 2888,
+            "key.docoffset" : 2881,
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
             "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>listReorderGesture<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>with<\/decl.var.parameter.argument_label> <decl.var.parameter.name>actions<\/decl.var.parameter.name>: <decl.var.parameter.type><ref.class usr=\"s:10ListableUI17ReorderingActionsC\">ReorderingActions<\/ref.class><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>isEnabled<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:Sb\">Bool<\/ref.struct><\/decl.var.parameter.type> = true<\/decl.var.parameter>) -&gt; <decl.function.returntype><ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.function.returntype><\/decl.function.method.instance>",
             "key.kind" : "source.lang.swift.decl.function.method.instance",
             "key.length" : 188,
             "key.name" : "listReorderGesture(with:isEnabled:)",
             "key.namelength" : 77,
-            "key.nameoffset" : 2942,
-            "key.offset" : 2937,
+            "key.nameoffset" : 2935,
+            "key.offset" : 2930,
             "key.parsed_declaration" : "func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true) -> Element",
             "key.parsed_scope.end" : 106,
             "key.parsed_scope.start" : 103,
@@ -3891,11 +3891,11 @@
           {
             "key.attribute" : "source.decl.attribute.fileprivate",
             "key.length" : 11,
-            "key.offset" : 3130
+            "key.offset" : 3123
           }
         ],
         "key.bodylength" : 1698,
-        "key.bodyoffset" : 3172,
+        "key.bodyoffset" : 3165,
         "key.doc.column" : 15,
         "key.doc.declaration" : "public struct ListReorderGesture : Element",
         "key.doc.discussion" : [
@@ -3923,8 +3923,8 @@
         "key.length" : 1729,
         "key.name" : "ListReorderGesture",
         "key.namelength" : 18,
-        "key.nameoffset" : 3152,
-        "key.offset" : 3142,
+        "key.nameoffset" : 3145,
+        "key.offset" : 3135,
         "key.parsed_declaration" : "fileprivate extension ListReorderGesture",
         "key.parsed_scope.end" : 171,
         "key.parsed_scope.start" : 110,
@@ -3936,21 +3936,21 @@
               {
                 "key.attribute" : "source.decl.attribute.final",
                 "key.length" : 5,
-                "key.offset" : 3185
+                "key.offset" : 3178
               },
               {
                 "key.attribute" : "source.decl.attribute.private",
                 "key.length" : 7,
-                "key.offset" : 3177
+                "key.offset" : 3170
               }
             ],
             "key.bodylength" : 1002,
-            "key.bodyoffset" : 3245,
+            "key.bodyoffset" : 3238,
             "key.elements" : [
               {
                 "key.kind" : "source.lang.swift.structure.elem.typeref",
                 "key.length" : 22,
-                "key.offset" : 3217
+                "key.offset" : 3210
               }
             ],
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
@@ -3964,8 +3964,8 @@
             "key.length" : 1057,
             "key.name" : "GestureRecognizer",
             "key.namelength" : 17,
-            "key.nameoffset" : 3197,
-            "key.offset" : 3191,
+            "key.nameoffset" : 3190,
+            "key.offset" : 3184,
             "key.parsed_declaration" : "private final class GestureRecognizer : UIPanGestureRecognizer",
             "key.parsed_scope.end" : 147,
             "key.parsed_scope.start" : 112,
@@ -3977,7 +3977,7 @@
                   {
                     "key.attribute" : "source.decl.attribute.public",
                     "key.length" : 6,
-                    "key.offset" : 3254
+                    "key.offset" : 3247
                   }
                 ],
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
@@ -3986,8 +3986,8 @@
                 "key.length" : 28,
                 "key.name" : "onStart",
                 "key.namelength" : 7,
-                "key.nameoffset" : 3265,
-                "key.offset" : 3261,
+                "key.nameoffset" : 3258,
+                "key.offset" : 3254,
                 "key.parsed_declaration" : "public var onStart : OnStart? = nil",
                 "key.parsed_scope.end" : 114,
                 "key.parsed_scope.start" : 114,
@@ -4003,7 +4003,7 @@
                   {
                     "key.attribute" : "source.decl.attribute.public",
                     "key.length" : 6,
-                    "key.offset" : 3298
+                    "key.offset" : 3291
                   }
                 ],
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
@@ -4012,8 +4012,8 @@
                 "key.length" : 26,
                 "key.name" : "onMove",
                 "key.namelength" : 6,
-                "key.nameoffset" : 3309,
-                "key.offset" : 3305,
+                "key.nameoffset" : 3302,
+                "key.offset" : 3298,
                 "key.parsed_declaration" : "public var onMove : OnMove? = nil",
                 "key.parsed_scope.end" : 115,
                 "key.parsed_scope.start" : 115,
@@ -4029,7 +4029,7 @@
                   {
                     "key.attribute" : "source.decl.attribute.public",
                     "key.length" : 6,
-                    "key.offset" : 3340
+                    "key.offset" : 3333
                   }
                 ],
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
@@ -4038,8 +4038,8 @@
                 "key.length" : 26,
                 "key.name" : "onDone",
                 "key.namelength" : 6,
-                "key.nameoffset" : 3351,
-                "key.offset" : 3347,
+                "key.nameoffset" : 3344,
+                "key.offset" : 3340,
                 "key.parsed_declaration" : "public var onDone : OnDone? = nil",
                 "key.parsed_scope.end" : 116,
                 "key.parsed_scope.start" : 116,
@@ -4055,19 +4055,19 @@
                   {
                     "key.attribute" : "source.decl.attribute.override",
                     "key.length" : 8,
-                    "key.offset" : 3391
+                    "key.offset" : 3384
                   }
                 ],
                 "key.bodylength" : 239,
-                "key.bodyoffset" : 3447,
+                "key.bodyoffset" : 3440,
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
                 "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>override<\/syntaxtype.keyword> <syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>target<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><syntaxtype.keyword>Any<\/syntaxtype.keyword>?<\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>action<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:10ObjectiveC8SelectorV\">Selector<\/ref.struct>?<\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
                 "key.kind" : "source.lang.swift.decl.function.method.instance",
                 "key.length" : 287,
                 "key.name" : "init(target:action:)",
                 "key.namelength" : 37,
-                "key.nameoffset" : 3400,
-                "key.offset" : 3400,
+                "key.nameoffset" : 3393,
+                "key.offset" : 3393,
                 "key.overrides" : [
                   {
                     "key.usr" : "c:objc(cs)UIGestureRecognizer(im)initWithTarget:action:"
@@ -4098,19 +4098,19 @@
                   {
                     "key.attribute" : "source.decl.attribute.objc",
                     "key.length" : 5,
-                    "key.offset" : 3713
+                    "key.offset" : 3706
                   }
                 ],
                 "key.bodylength" : 498,
-                "key.bodyoffset" : 3743,
+                "key.bodyoffset" : 3736,
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
                 "key.fully_annotated_decl" : "<decl.function.method.instance><syntaxtype.attribute.builtin><syntaxtype.attribute.name>@objc<\/syntaxtype.attribute.name><\/syntaxtype.attribute.builtin> <syntaxtype.keyword>func<\/syntaxtype.keyword> <decl.name>updated<\/decl.name>()<\/decl.function.method.instance>",
                 "key.kind" : "source.lang.swift.decl.function.method.instance",
                 "key.length" : 523,
                 "key.name" : "updated()",
                 "key.namelength" : 9,
-                "key.nameoffset" : 3724,
-                "key.offset" : 3719,
+                "key.nameoffset" : 3717,
+                "key.offset" : 3712,
                 "key.parsed_declaration" : "@objc func updated()",
                 "key.parsed_scope.end" : 146,
                 "key.parsed_scope.start" : 128,
@@ -4133,21 +4133,21 @@
               {
                 "key.attribute" : "source.decl.attribute.final",
                 "key.length" : 5,
-                "key.offset" : 4266
+                "key.offset" : 4259
               },
               {
                 "key.attribute" : "source.decl.attribute.private",
                 "key.length" : 7,
-                "key.offset" : 4258
+                "key.offset" : 4251
               }
             ],
             "key.bodylength" : 564,
-            "key.bodyoffset" : 4304,
+            "key.bodyoffset" : 4297,
             "key.elements" : [
               {
                 "key.kind" : "source.lang.swift.structure.elem.typeref",
                 "key.length" : 6,
-                "key.offset" : 4292
+                "key.offset" : 4285
               }
             ],
             "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
@@ -4161,8 +4161,8 @@
             "key.length" : 597,
             "key.name" : "WrapperView",
             "key.namelength" : 11,
-            "key.nameoffset" : 4278,
-            "key.offset" : 4272,
+            "key.nameoffset" : 4271,
+            "key.offset" : 4265,
             "key.parsed_declaration" : "private final class WrapperView : UIView",
             "key.parsed_scope.end" : 170,
             "key.parsed_scope.start" : 149,
@@ -4176,8 +4176,8 @@
                 "key.length" : 34,
                 "key.name" : "recognizer",
                 "key.namelength" : 10,
-                "key.nameoffset" : 4317,
-                "key.offset" : 4313,
+                "key.nameoffset" : 4310,
+                "key.offset" : 4306,
                 "key.parsed_declaration" : "let recognizer : GestureRecognizer",
                 "key.parsed_scope.end" : 151,
                 "key.parsed_scope.start" : 151,
@@ -4189,15 +4189,15 @@
                 "key.accessibility" : "source.lang.swift.accessibility.internal",
                 "key.annotated_decl" : "<Declaration>init(frame: <Type usr=\"c:@S@CGRect\">CGRect<\/Type>, wrapping: <Type usr=\"s:16BlueprintUILists18ListReorderGestureV\">ListReorderGesture<\/Type>)<\/Declaration>",
                 "key.bodylength" : 305,
-                "key.bodyoffset" : 4425,
+                "key.bodyoffset" : 4418,
                 "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListReorderGesture.swift",
                 "key.fully_annotated_decl" : "<decl.function.constructor><syntaxtype.keyword>init<\/syntaxtype.keyword>(<decl.var.parameter><decl.var.parameter.argument_label>frame<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"c:@S@CGRect\">CGRect<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>wrapping<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:16BlueprintUILists18ListReorderGestureV\">ListReorderGesture<\/ref.struct><\/decl.var.parameter.type><\/decl.var.parameter>)<\/decl.function.constructor>",
                 "key.kind" : "source.lang.swift.decl.function.method.instance",
                 "key.length" : 366,
                 "key.name" : "init(frame:wrapping:)",
                 "key.namelength" : 50,
-                "key.nameoffset" : 4365,
-                "key.offset" : 4365,
+                "key.nameoffset" : 4358,
+                "key.offset" : 4358,
                 "key.parsed_declaration" : "init(frame: CGRect, wrapping : ListReorderGesture)",
                 "key.parsed_scope.end" : 164,
                 "key.parsed_scope.start" : 153,
@@ -4214,23 +4214,23 @@
                   {
                     "key.attribute" : "source.decl.attribute.required",
                     "key.length" : 8,
-                    "key.offset" : 4784
+                    "key.offset" : 4777
                   },
                   {
                     "key.attribute" : "source.decl.attribute.available",
                     "key.length" : 26,
-                    "key.offset" : 4749
+                    "key.offset" : 4742
                   }
                 ],
                 "key.bodylength" : 37,
-                "key.bodyoffset" : 4825,
+                "key.bodyoffset" : 4818,
                 "key.internal_diagnostic" : "Unavailable in the current compilation context.",
                 "key.kind" : "source.lang.swift.decl.function.method.instance",
                 "key.length" : 70,
                 "key.name" : "init(coder:)",
                 "key.namelength" : 30,
-                "key.nameoffset" : 4793,
-                "key.offset" : 4793,
+                "key.nameoffset" : 4786,
+                "key.offset" : 4786,
                 "key.substructure" : [
 
                 ]
@@ -4244,6 +4244,190 @@
         "key.typename" : "ListReorderGesture.Type",
         "key.typeusr" : "$s16BlueprintUILists18ListReorderGestureVmD",
         "key.usr" : "s:16BlueprintUILists18ListReorderGestureV"
+      }
+    ]
+  }
+}, {
+  "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift" : {
+    "key.diagnostic_stage" : "source.diagnostic.stage.swift.parse",
+    "key.length" : 3454,
+    "key.offset" : 0,
+    "key.substructure" : [
+      {
+        "key.accessibility" : "source.lang.swift.accessibility.public",
+        "key.annotated_decl" : "<Declaration>public enum ListSizing : <Type usr=\"s:SQ\">Equatable<\/Type><\/Declaration>",
+        "key.attributes" : [
+          {
+            "key.attribute" : "source.decl.attribute.public",
+            "key.length" : 6,
+            "key.offset" : 1266
+          }
+        ],
+        "key.bodylength" : 2150,
+        "key.bodyoffset" : 1302,
+        "key.doc.column" : 13,
+        "key.doc.comment" : "\nProvides the possible options for how to size and measure a list when its measured size is queried\nby the layout system.\n\nYou have two options: `.fillParent` and `.measureContent`.\n\nWhen using  `.fillParent`, the full available fitting size will be taken up, regardless\nof the size of the content itself.\n\nWhen using `.measureContent`, the content will be measured within the provided fitting size\nand the smallest of the two sizes will be returned.\n```\n.fillParent:\n┌───────────┐\n│┌─────────┐│\n││         ││\n││         ││\n││         ││\n││         ││\n││         ││\n│└─────────┘│\n└───────────┘\n\n.measureContent\n┌───────────┐\n│           │\n│           │\n│┌─────────┐│\n││         ││\n││         ││\n││         ││\n│└─────────┘│\n└───────────┘\n```",
+        "key.doc.declaration" : "public enum ListSizing : Equatable",
+        "key.doc.discussion" : [
+          {
+            "Para" : "You have two options: `.fillParent` and `.measureContent`."
+          },
+          {
+            "Para" : "When using  `.fillParent`, the full available fitting size will be taken up, regardless of the size of the content itself."
+          },
+          {
+            "Para" : "When using `.measureContent`, the content will be measured within the provided fitting size and the smallest of the two sizes will be returned."
+          },
+          {
+            "CodeListing" : ""
+          }
+        ],
+        "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+        "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift\" line=\"45\" column=\"13\"><Name>ListSizing<\/Name><USR>s:16BlueprintUILists10ListSizingO<\/USR><Declaration>public enum ListSizing : Equatable<\/Declaration><CommentParts><Abstract><Para>Provides the possible options for how to size and measure a list when its measured size is queried by the layout system.<\/Para><\/Abstract><Discussion><Para>You have two options: <codeVoice>.fillParent<\/codeVoice> and <codeVoice>.measureContent<\/codeVoice>.<\/Para><Para>When using  <codeVoice>.fillParent<\/codeVoice>, the full available fitting size will be taken up, regardless of the size of the content itself.<\/Para><Para>When using <codeVoice>.measureContent<\/codeVoice>, the content will be measured within the provided fitting size and the smallest of the two sizes will be returned.<\/Para><CodeListing language=\"swift\"><zCodeLineNumbered><![CDATA[.fillParent:]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[┌───────────┐]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│┌─────────┐│]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│└─────────┘│]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[└───────────┘]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[.measureContent]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[┌───────────┐]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│           │]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│           │]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│┌─────────┐│]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[││         ││]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[│└─────────┘│]]><\/zCodeLineNumbered><zCodeLineNumbered><![CDATA[└───────────┘]]><\/zCodeLineNumbered><zCodeLineNumbered><\/zCodeLineNumbered><\/CodeListing><\/Discussion><\/CommentParts><\/Other>",
+        "key.doc.line" : 45,
+        "key.doc.name" : "ListSizing",
+        "key.doc.type" : "Other",
+        "key.doclength" : 1152,
+        "key.docoffset" : 114,
+        "key.elements" : [
+          {
+            "key.kind" : "source.lang.swift.structure.elem.typeref",
+            "key.length" : 9,
+            "key.offset" : 1291
+          }
+        ],
+        "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+        "key.fully_annotated_decl" : "<decl.enum><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>enum<\/syntaxtype.keyword> <decl.name>ListSizing<\/decl.name> : <ref.protocol usr=\"s:SQ\">Equatable<\/ref.protocol><\/decl.enum>",
+        "key.inheritedtypes" : [
+          {
+            "key.name" : "Equatable"
+          }
+        ],
+        "key.kind" : "source.lang.swift.decl.enum",
+        "key.length" : 2180,
+        "key.name" : "ListSizing",
+        "key.namelength" : 10,
+        "key.nameoffset" : 1278,
+        "key.offset" : 1273,
+        "key.parsed_declaration" : "public enum ListSizing : Equatable",
+        "key.parsed_scope.end" : 80,
+        "key.parsed_scope.start" : 45,
+        "key.substructure" : [
+          {
+            "key.kind" : "source.lang.swift.decl.enumcase",
+            "key.length" : 15,
+            "key.namelength" : 0,
+            "key.nameoffset" : 0,
+            "key.offset" : 1914,
+            "key.substructure" : [
+              {
+                "key.accessibility" : "source.lang.swift.accessibility.public",
+                "key.annotated_decl" : "<Declaration>case fillParent<\/Declaration>",
+                "key.doc.column" : 10,
+                "key.doc.comment" : "When using  `.fillParent`, the full available space will be taken up, regardless\nof the content size of the list itself.\n\nEg, if the fitting size passed to the list is (200w, 1000h), and the list's content\nis only (200w, 500h), (200w, 1000h) will still be returned.\n\nThis is the setting you want to use when your list is being used to fill the content\nof a screen, such as if it is being presented in a navigation controller or tab bar controller.\n\nThis option is the most performant, because no content measurement has to occur.",
+                "key.doc.declaration" : "",
+                "key.doc.discussion" : [
+                  {
+                    "Para" : "Eg, if the fitting size passed to the list is (200w, 1000h), and the list’s content is only (200w, 500h), (200w, 1000h) will still be returned."
+                  },
+                  {
+                    "Para" : "This is the setting you want to use when your list is being used to fill the content of a screen, such as if it is being presented in a navigation controller or tab bar controller."
+                  },
+                  {
+                    "Para" : "This option is the most performant, because no content measurement has to occur."
+                  }
+                ],
+                "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+                "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift\" line=\"57\" column=\"10\"><Name>fillParent<\/Name><USR>s:16BlueprintUILists10ListSizingO10fillParentyA2CmF<\/USR><Declaration><\/Declaration><CommentParts><Abstract><Para>When using  <codeVoice>.fillParent<\/codeVoice>, the full available space will be taken up, regardless of the content size of the list itself.<\/Para><\/Abstract><Discussion><Para>Eg, if the fitting size passed to the list is (200w, 1000h), and the list’s content is only (200w, 500h), (200w, 1000h) will still be returned.<\/Para><Para>This is the setting you want to use when your list is being used to fill the content of a screen, such as if it is being presented in a navigation controller or tab bar controller.<\/Para><Para>This option is the most performant, because no content measurement has to occur.<\/Para><\/Discussion><\/CommentParts><\/Other>",
+                "key.doc.line" : 57,
+                "key.doc.name" : "fillParent",
+                "key.doc.type" : "Other",
+                "key.doclength" : 603,
+                "key.docoffset" : 1307,
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+                "key.fully_annotated_decl" : "<decl.enumelement><syntaxtype.keyword>case<\/syntaxtype.keyword> <decl.name>fillParent<\/decl.name><\/decl.enumelement>",
+                "key.kind" : "source.lang.swift.decl.enumelement",
+                "key.length" : 10,
+                "key.name" : "fillParent",
+                "key.namelength" : 10,
+                "key.nameoffset" : 1919,
+                "key.offset" : 1919,
+                "key.parsed_declaration" : "case fillParent",
+                "key.parsed_scope.end" : 57,
+                "key.parsed_scope.start" : 57,
+                "key.typename" : "(ListSizing.Type) -> ListSizing",
+                "key.typeusr" : "$sy16BlueprintUILists10ListSizingOACmcD",
+                "key.usr" : "s:16BlueprintUILists10ListSizingO10fillParentyA2CmF"
+              }
+            ]
+          },
+          {
+            "key.kind" : "source.lang.swift.decl.enumcase",
+            "key.length" : 142,
+            "key.namelength" : 0,
+            "key.nameoffset" : 0,
+            "key.offset" : 3309,
+            "key.substructure" : [
+              {
+                "key.accessibility" : "source.lang.swift.accessibility.public",
+                "key.annotated_decl" : "<Declaration>case measureContent(cacheKey: <Type usr=\"s:s11AnyHashableV\">AnyHashable<\/Type>? = nil, itemLimit: <Type usr=\"s:Si\">Int<\/Type>? = ListView.defaultContentSizeItemLimit)<\/Declaration>",
+                "key.doc.column" : 10,
+                "key.doc.comment" : "When using `.measureContent`, the content of the list will be measured within the provided fitting size\nand the smallest of the two sizes will be returned.\n\nIf you are putting a list into a sheet or popover (or even another list!), this is generally the `Sizing` type\nyou will want to use, to ensure the sheet or popover takes up the minimum amount of space possible.\n\n- parameters:\n    - cacheKey: If provided, the underlying `Element`'s `measurementCacheKey` will be set to this value.\n    Note that this value must be unique within the entire blueprint view – so please provide a sufficiently unique value,\n    or measurement collisions will occur (one element's measurement being used for another) for duplicate keys.\n\n    - itemLimit: When measuring the list, how many items should be measured to determine the height. Defaults\n    to 50, which is usually enough to fill the `fittingSize`. If you truly want to determine the entire height of all of\n    the content in the list, set this to `nil` (but you should rarely need to do this). The lower this value, the less\n    overall measurement that has to occur (if the value is less than the number of items in the list), which improvements\n    measurement and layout performance.",
+                "key.doc.declaration" : "",
+                "key.doc.discussion" : [
+                  {
+                    "Para" : "If you are putting a list into a sheet or popover (or even another list!), this is generally the `Sizing` type you will want to use, to ensure the sheet or popover takes up the minimum amount of space possible."
+                  }
+                ],
+                "key.doc.file" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+                "key.doc.full_as_xml" : "<Other file=\"\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift\" line=\"76\" column=\"10\"><Name>measureContent(cacheKey:itemLimit:)<\/Name><USR>s:16BlueprintUILists10ListSizingO14measureContentyACs11AnyHashableVSg_SiSgtcACmF<\/USR><Declaration><\/Declaration><CommentParts><Abstract><Para>When using <codeVoice>.measureContent<\/codeVoice>, the content of the list will be measured within the provided fitting size and the smallest of the two sizes will be returned.<\/Para><\/Abstract><Parameters><Parameter><Name>cacheKey<\/Name><Direction isExplicit=\"0\">in<\/Direction><Discussion><Para>If provided, the underlying <codeVoice>Element<\/codeVoice>‘s <codeVoice>measurementCacheKey<\/codeVoice> will be set to this value. Note that this value must be unique within the entire blueprint view – so please provide a sufficiently unique value, or measurement collisions will occur (one element’s measurement being used for another) for duplicate keys.<\/Para><\/Discussion><\/Parameter><Parameter><Name>itemLimit<\/Name><Direction isExplicit=\"0\">in<\/Direction><Discussion><Para>When measuring the list, how many items should be measured to determine the height. Defaults to 50, which is usually enough to fill the <codeVoice>fittingSize<\/codeVoice>. If you truly want to determine the entire height of all of the content in the list, set this to <codeVoice>nil<\/codeVoice> (but you should rarely need to do this). The lower this value, the less overall measurement that has to occur (if the value is less than the number of items in the list), which improvements measurement and layout performance.<\/Para><\/Discussion><\/Parameter><\/Parameters><Discussion><Para>If you are putting a list into a sheet or popover (or even another list!), this is generally the <codeVoice>Sizing<\/codeVoice> type you will want to use, to ensure the sheet or popover takes up the minimum amount of space possible.<\/Para><\/Discussion><\/CommentParts><\/Other>",
+                "key.doc.line" : 76,
+                "key.doc.name" : "measureContent(cacheKey:itemLimit:)",
+                "key.doc.parameters" : [
+                  {
+                    "discussion" : [
+                      {
+                        "Para" : "If provided, the underlying `Element`‘s `measurementCacheKey` will be set to this value. Note that this value must be unique within the entire blueprint view – so please provide a sufficiently unique value, or measurement collisions will occur (one element’s measurement being used for another) for duplicate keys."
+                      }
+                    ],
+                    "name" : "cacheKey"
+                  },
+                  {
+                    "discussion" : [
+                      {
+                        "Para" : "When measuring the list, how many items should be measured to determine the height. Defaults to 50, which is usually enough to fill the `fittingSize`. If you truly want to determine the entire height of all of the content in the list, set this to `nil` (but you should rarely need to do this). The lower this value, the less overall measurement that has to occur (if the value is less than the number of items in the list), which improvements measurement and layout performance."
+                      }
+                    ],
+                    "name" : "itemLimit"
+                  }
+                ],
+                "key.doc.type" : "Other",
+                "key.doclength" : 1366,
+                "key.docoffset" : 1939,
+                "key.filepath" : "\/Users\/k\/Desktop\/Development\/Listable5\/BlueprintUILists\/Sources\/ListSizing.swift",
+                "key.fully_annotated_decl" : "<decl.enumelement><syntaxtype.keyword>case<\/syntaxtype.keyword> <decl.name>measureContent<\/decl.name>(<decl.var.parameter><decl.var.parameter.argument_label>cacheKey<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:s11AnyHashableV\">AnyHashable<\/ref.struct>?<\/decl.var.parameter.type> = nil<\/decl.var.parameter>, <decl.var.parameter><decl.var.parameter.argument_label>itemLimit<\/decl.var.parameter.argument_label>: <decl.var.parameter.type><ref.struct usr=\"s:Si\">Int<\/ref.struct>?<\/decl.var.parameter.type> = ListView.defaultContentSizeItemLimit<\/decl.var.parameter>)<\/decl.enumelement>",
+                "key.kind" : "source.lang.swift.decl.enumelement",
+                "key.length" : 137,
+                "key.name" : "measureContent(cacheKey:itemLimit:)",
+                "key.namelength" : 137,
+                "key.nameoffset" : 3314,
+                "key.offset" : 3314,
+                "key.parsed_declaration" : "case measureContent(\n        cacheKey : AnyHashable? = nil,\n        itemLimit : Int? = ListView.defaultContentSizeItemLimit\n     )",
+                "key.parsed_scope.end" : 76,
+                "key.parsed_scope.start" : 76,
+                "key.substructure" : [
+
+                ],
+                "key.typename" : "(ListSizing.Type) -> (AnyHashable?, Int?) -> ListSizing",
+                "key.typeusr" : "$sy16BlueprintUILists10ListSizingOs11AnyHashableVSg_SiSgtcACmcD",
+                "key.usr" : "s:16BlueprintUILists10ListSizingO14measureContentyACs11AnyHashableVSg_SiSgtcACmF"
+              }
+            ]
+          }
+        ],
+        "key.typename" : "ListSizing.Type",
+        "key.typeusr" : "$s16BlueprintUILists10ListSizingOmD",
+        "key.usr" : "s:16BlueprintUILists10ListSizingO"
       }
     ]
   }
