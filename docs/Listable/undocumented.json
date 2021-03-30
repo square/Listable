@@ -1241,28 +1241,28 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 530,
+      "line": 531,
       "symbol": "CollectionViewLayoutDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 532,
-      "symbol": "CollectionViewLayoutDelegate.listViewLayoutUpdatedItemPositions(_:)",
+      "line": 533,
+      "symbol": "CollectionViewLayoutDelegate.listViewLayoutUpdatedItemPositions()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 534,
+      "line": 535,
       "symbol": "CollectionViewLayoutDelegate.listLayoutContent(defaults:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 538,
+      "line": 539,
       "symbol": "CollectionViewLayoutDelegate.listViewLayoutDidLayoutContents()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -1564,7 +1564,7 @@
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/LayoutDescription.swift",
       "line": 147,
-      "symbol": "AnyLayoutDescriptionConfiguration.createPopulatedLayout(appearance:behavior:delegate:)",
+      "symbol": "AnyLayoutDescriptionConfiguration.createPopulatedLayout(appearance:behavior:content:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -1620,71 +1620,43 @@
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
       "line": 28,
+      "symbol": "ListLayoutLayoutContext",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 30,
+      "symbol": "ListLayoutLayoutContext.viewBounds",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 41,
       "symbol": "ListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 30,
+      "line": 43,
       "symbol": "ListLayout.direction",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 34,
+      "line": 47,
       "symbol": "ListLayout.stickySectionHeaders",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 40,
+      "line": 53,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 46,
-      "symbol": "AnyListLayout.appearance",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 47,
-      "symbol": "AnyListLayout.behavior",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 49,
-      "symbol": "AnyListLayout.content",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 51,
-      "symbol": "AnyListLayout.scrollViewProperties",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 53,
-      "symbol": "AnyListLayout.direction",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 55,
-      "symbol": "AnyListLayout.stickySectionHeaders",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
@@ -1696,77 +1668,119 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 61,
+      "line": 59,
+      "symbol": "AnyListLayout.appearance",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 60,
+      "symbol": "AnyListLayout.behavior",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 62,
+      "symbol": "AnyListLayout.content",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 64,
+      "symbol": "AnyListLayout.scrollViewProperties",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 66,
+      "symbol": "AnyListLayout.direction",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 68,
+      "symbol": "AnyListLayout.stickySectionHeaders",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 74,
       "symbol": "AnyListLayout.updateLayout(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 63,
+      "line": 76,
       "symbol": "AnyListLayout.layout(delegate:in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 68,
+      "line": 81,
       "symbol": "AnyListLayout.setZIndexes()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 72,
+      "line": 85,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 74,
+      "line": 87,
       "symbol": "AnyListLayout.setZIndexes()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 94,
+      "line": 107,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 96,
+      "line": 109,
       "symbol": "AnyListLayout.visibleContentFrame(for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 108,
+      "line": 121,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 110,
+      "line": 123,
       "symbol": "AnyListLayout.positionStickySectionHeadersIfNeeded(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 137,
+      "line": 150,
       "symbol": "AnyListLayout.updateOverscrollFooterPosition(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 159,
+      "line": 172,
       "symbol": "AnyListLayout.adjustPositionsForLayoutUnderflow(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -2479,17 +2493,17 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListSizing.swift",
-      "line": 72,
-      "symbol": "ListView.contentSize(in:for:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView+ContentSize.swift",
+      "line": 18,
+      "symbol": "ListView.defaultContentSizeItemLimit",
+      "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListSizing.swift",
-      "line": 82,
-      "symbol": "ListView.contentSize(in:for:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
+      "line": 9,
+      "symbol": "ListView",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
@@ -2504,13 +2518,6 @@
       "line": 17,
       "symbol": "ListView.init(frame:appearance:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ListView/ListView.swift",
-      "line": 66,
-      "symbol": "ListView",
-      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
@@ -3516,35 +3523,35 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
-      "line": 80,
+      "line": 89,
       "symbol": "ViewAnimation.AnimationOptions.curveEaseInOut",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
-      "line": 81,
+      "line": 90,
       "symbol": "ViewAnimation.AnimationOptions.curveEaseIn",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
-      "line": 82,
+      "line": 91,
       "symbol": "ViewAnimation.AnimationOptions.curveEaseOut",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
-      "line": 83,
+      "line": 92,
       "symbol": "ViewAnimation.AnimationOptions.curveLinear",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable5/ListableUI/Sources/ViewAnimation.swift",
-      "line": 90,
+      "line": 99,
       "symbol": "Set.default",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"

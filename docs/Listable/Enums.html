@@ -167,9 +167,6 @@
                 <a class="nav-group-task-link" href="Enums/LayoutDirection.html">LayoutDirection</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/ListSizing.html">ListSizing</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/SectionPosition.html">SectionPosition</a>
               </li>
               <li class="nav-group-task">
@@ -437,6 +434,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListLayoutLayoutContext.html">ListLayoutLayoutContext</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListLayoutPoint.html">ListLayoutPoint</a>
@@ -808,65 +808,6 @@ layout directions. See the extensions in this file for more details.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI10ListSizingO"></a>
-                    <a name="//apple_ref/swift/Enum/ListSizing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI10ListSizingO">ListSizing</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Provides the possible options for how to size and measure a list when its measured size is queried
-by the layout system.</p>
-
-<p>You have two options: <code>.fillParent</code> and <code>.measureContent</code>.</p>
-
-<p>When using  <code>.fillParent</code>, the full available fitting size will be taken up, regardless
-of the size of the content itself.</p>
-
-<p>When using <code>.measureContent</code>, the content will be measured within the provided fitting size
-and the smallest of the two sizes will be returned.</p>
-<pre class="highlight swift"><code><span class="o">.</span><span class="nv">fillParent</span><span class="p">:</span>
-<span class="err">┌───────────┐</span>
-<span class="err">│┌─────────┐│</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">│└─────────┘│</span>
-<span class="err">└───────────┘</span>
-
-<span class="o">.</span><span class="n">measureContent</span>
-<span class="err">┌───────────┐</span>
-<span class="err">│</span>           <span class="err">│</span>
-<span class="err">│</span>           <span class="err">│</span>
-<span class="err">│┌─────────┐│</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">││</span>         <span class="err">││</span>
-<span class="err">│└─────────┘│</span>
-<span class="err">└───────────┘</span>
-</code></pre>
-
-                        <a href="Enums/ListSizing.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ListSizing</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:10ListableUI15SectionPositionO"></a>
                     <a name="//apple_ref/swift/Enum/SectionPosition" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI15SectionPositionO">SectionPosition</a>
@@ -1013,7 +954,7 @@ such as updating an item or scrolling to a given position.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-03-22)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-03-29)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
