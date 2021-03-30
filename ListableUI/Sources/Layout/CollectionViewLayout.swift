@@ -325,7 +325,9 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.layout = self.layoutDescription.configuration.createPopulatedLayout(
             appearance: self.appearance,
             behavior: self.behavior,
-            delegate: self.delegate
+            content: {
+                self.delegate.listLayoutContent(defaults: $0)
+            }
         )
         
         self.layout.scrollViewProperties.apply(
@@ -346,7 +348,7 @@ final class CollectionViewLayout : UICollectionViewLayout
                 
         self.layout.layout(
             delegate: self.delegate,
-            in: view
+            in: .init(view)
         )
         
         self.layout.content.setSectionContentsFrames()
@@ -526,10 +528,9 @@ struct CollectionViewLayoutProperties : Equatable
 // MARK: Delegate For Layout Information
 //
 
-
 public protocol CollectionViewLayoutDelegate : AnyObject
 {
-    func listViewLayoutUpdatedItemPositions(_ collectionView : UICollectionView)
+    func listViewLayoutUpdatedItemPositions()
     
     func listLayoutContent(
         defaults: ListLayoutDefaults

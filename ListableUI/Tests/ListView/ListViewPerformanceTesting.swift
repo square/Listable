@@ -70,6 +70,34 @@ class ListViewPerformanceTesting : XCTestCase {
             }
         }
     }
+    
+    func test_contentSize() {
+        
+        let properties = ListProperties.default {
+            $0.content = Content(
+                identifier: nil,
+                refreshControl: nil,
+                header: HeaderFooter(TestHeaderFooterContent(title: "header")),
+                footer:  HeaderFooter(TestHeaderFooterContent(title: "footer")),
+                overscrollFooter: nil,
+                sections: (1...5).map { sectionIndex in
+                    
+                    Section(sectionIndex) { section in
+                        
+                        section += (1...50).map { itemIndex in
+                            TestContent(title: "")
+                        }
+                    }
+                }
+            )
+        }
+        
+        let fittingSize = CGSize(width: 400, height: 700)
+        
+        self.determineAverage(for: 5.0) {
+            _ = ListView.contentSize(in: fittingSize, for: properties)
+        }
+    }
 }
 
 
@@ -82,11 +110,27 @@ fileprivate struct TestContent : ItemContent, Equatable
     }
     
     func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
-    
-    typealias ContentView = UIView
-    
+        
     static func createReusableContentView(frame: CGRect) -> UIView
     {
         return UIView(frame: frame)
+    }
+}
+
+fileprivate struct TestHeaderFooterContent : HeaderFooterContent, Equatable
+{
+    var title : String
+    
+    func apply(
+        to views: HeaderFooterContentViews<TestHeaderFooterContent>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        // Nothing for now
+    }
+    
+    static func createReusableContentView(frame : CGRect) -> UIView
+    {
+        UIView(frame: frame)
     }
 }

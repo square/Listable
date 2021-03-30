@@ -85,13 +85,13 @@ public struct PagedAppearance : ListLayoutAppearance
         case view
         case fixed(CGFloat)
         
-        func size(for view : UIView, direction : LayoutDirection) -> CGSize {
+        func size(for viewSize : CGSize, direction : LayoutDirection) -> CGSize {
             switch self {
-            case .view: return view.bounds.size
+            case .view: return viewSize
             case .fixed(let fixed):
                 switch direction {
-                case .vertical: return CGSize(width: view.bounds.width, height: fixed)
-                case .horizontal: return CGSize(width: fixed, height: view.bounds.height)
+                case .vertical: return CGSize(width: viewSize.width, height: fixed)
+                case .horizontal: return CGSize(width: fixed, height: viewSize.height)
                 }
             }
         }
@@ -151,10 +151,13 @@ final class PagedListLayout : ListLayout
     }
     
     func layout(
-        delegate : CollectionViewLayoutDelegate,
-        in collectionView : UICollectionView  
+        delegate : CollectionViewLayoutDelegate?,
+        in context : ListLayoutLayoutContext
     ) {
-        let viewSize = self.layoutAppearance.pagingSize.size(for: collectionView, direction: self.direction)
+        let viewSize = self.layoutAppearance.pagingSize.size(
+            for: context.viewBounds.size,
+            direction: self.direction
+        )
         
         var lastMaxY : CGFloat = 0.0
         

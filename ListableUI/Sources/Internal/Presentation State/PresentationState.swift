@@ -28,8 +28,8 @@ final class PresentationState
     
     private(set) var contentIdentifier : AnyHashable?
     
-    private let itemMeasurementCache = ReusableViewCache()
-    private let headerFooterMeasurementCache = ReusableViewCache()
+    private let itemMeasurementCache : ReusableViewCache
+    private let headerFooterMeasurementCache : ReusableViewCache
     
     //
     // MARK: Initialization
@@ -43,6 +43,58 @@ final class PresentationState
         self.containsAllItems = true
         
         self.contentIdentifier = nil
+        
+        self.itemMeasurementCache = ReusableViewCache()
+        self.headerFooterMeasurementCache = ReusableViewCache()
+    }
+    
+    init(
+        content : Content,
+        environment : ListEnvironment,
+        itemMeasurementCache : ReusableViewCache,
+        headerFooterMeasurementCache : ReusableViewCache
+    ) {
+        self.itemMeasurementCache = itemMeasurementCache
+        self.headerFooterMeasurementCache = headerFooterMeasurementCache
+        
+        self.refreshControl = {
+            if let refreshControl = content.refreshControl {
+                return RefreshControlState(refreshControl)
+            } else {
+                return nil
+            }
+        }()
+        
+        self.header.state = SectionState.headerFooterState(
+            with: nil,
+            new: content.header,
+            performsContentCallbacks: false
+        )
+        
+        self.footer.state = SectionState.headerFooterState(
+            with: nil,
+            new: content.footer,
+            performsContentCallbacks: false
+        )
+        
+        self.overscrollFooter.state = SectionState.headerFooterState(
+            with: nil,
+            new: content.overscrollFooter,
+            performsContentCallbacks: false
+        )
+        
+        self.sections = content.sections.map { section in
+            SectionState(
+                with: section,
+                dependencies: .init(reorderingDelegate: nil, coordinatorDelegate: nil, environmentProvider: { environment }),
+                updateCallbacks: .init(.immediate),
+                performsContentCallbacks: false
+            )
+        }
+        
+        self.containsAllItems = true
+        
+        self.contentIdentifier = content.identifier
     }
     
     //

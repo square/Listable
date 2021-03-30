@@ -97,7 +97,7 @@ extension LayoutDescription
         public func createPopulatedLayout(
             appearance : Appearance,
             behavior: Behavior,
-            delegate : CollectionViewLayoutDelegate
+            content : (ListLayoutDefaults) -> ListLayoutContent
         ) -> AnyListLayout
         {
             var layoutAppearance = LayoutType.LayoutAppearance.default
@@ -107,7 +107,7 @@ extension LayoutDescription
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
-                content: delegate.listLayoutContent(defaults: LayoutType.defaults)
+                content: content(LayoutType.defaults)
             )
         }
         
@@ -147,7 +147,7 @@ public protocol AnyLayoutDescriptionConfiguration
     func createPopulatedLayout(
         appearance : Appearance,
         behavior: Behavior,
-        delegate : CollectionViewLayoutDelegate
+        content : (ListLayoutDefaults) -> ListLayoutContent
     ) -> AnyListLayout
     
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
