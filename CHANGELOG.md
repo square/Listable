@@ -12,10 +12,16 @@
 
 # Past Releases
 
+# [0.20.0] - 2021-03-29
+
+### Changed
+
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `ListSizing` also moved to `BlueprintUILists`, as that is the only place it was used. 
+
 # [0.19.0] - 2021-03-22
 
 ### Added
-- Add support for adjusting the content offset when the refresh control becomes visible with the `offsetAdjustmentBehavior` property.
+- [Add support for adjusting the content offset](https://github.com/kyleve/Listable/pull/281) when the refresh control becomes visible with the `offsetAdjustmentBehavior` property.
 
 Example usage:
 
@@ -348,7 +354,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.19.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.20.0...HEAD
+[0.20.0]: https://github.com/kyleve/Listable/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/kyleve/Listable/compare/0.18.0...0.19.0
 [0.18.0]: https://github.com/kyleve/Listable/compare/0.17.0...0.18.0
 [0.17.0]: https://github.com/kyleve/Listable/compare/0.16.0...0.17.0
