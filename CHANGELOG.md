@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- [`TableListLayout` now maintains padding by default and with center alignments.](https://github.com/kyleve/Listable/pull/286)
-
 ### Added
 
 ### Removed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.20.1] - 2021-04-06
+
+### Fixed
+
+- [`TableListLayout` now maintains padding by default and with center alignments.](https://github.com/kyleve/Listable/pull/286)
 
 # [0.20.0] - 2021-03-29
 
@@ -356,7 +360,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.20.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.20.1...HEAD
+[0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/kyleve/Listable/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/kyleve/Listable/compare/0.18.0...0.19.0
 [0.18.0]: https://github.com/kyleve/Listable/compare/0.17.0...0.18.0
