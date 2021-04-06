@@ -321,7 +321,8 @@ public enum CustomWidth : Equatable
             case .left:
                 return padding.left
             case .center:
-                return round((parentWidth - width) / 2.0)
+                let availableWidth = parentWidth - (padding.left + padding.right)
+                return round((availableWidth - width) / 2.0) + padding.left
             case .right:
                 return parentWidth - width - padding.right
             }

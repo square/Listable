@@ -459,11 +459,13 @@ final class TableListLayout : ListLayout
         let viewSize = context.viewBounds.size
         let viewWidth = context.viewBounds.width
         
-        let rootWidth = TableAppearance.Layout.width(
-            with: viewSize.width,
+        let rootWidth = CustomWidth.custom(CustomWidth.Custom(
             padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
-            constraint: layout.width
-        )
+            width: layout.width,
+            alignment: .center
+        ))
+
+        let defaultWidth = rootWidth.position(with: viewSize, defaultWidth: viewSize.width).width
                 
         //
         // Item Positioning
@@ -497,8 +499,8 @@ final class TableListLayout : ListLayout
         
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
-            
-            let position = header.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
+            let headerWith = header.layouts.table.width.merge(with: rootWidth)
+            let position = headerWith.position(with: viewSize, defaultWidth: defaultWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -526,8 +528,8 @@ final class TableListLayout : ListLayout
         //
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            
-            let sectionPosition = section.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
+            let sectionWidth = section.layouts.table.width.merge(with: rootWidth)
+            let sectionPosition = sectionWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
             //
             // Section Header
@@ -537,7 +539,7 @@ final class TableListLayout : ListLayout
             let hasSectionFooter = section.footer.isPopulated
             
             performLayout(for: section.header) { header in
-                let width = header.layouts.table.width.merge(with: section.layouts.table.width)
+                let width = header.layouts.table.width.merge(with: sectionWidth)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -567,7 +569,7 @@ final class TableListLayout : ListLayout
             
             if section.layouts.table.columns.count == 1 {
                 section.items.forEachWithIndex { itemIndex, isLast, item in
-                    let width = item.layouts.table.width.merge(with: section.layouts.table.width)
+                    let width = item.layouts.table.width.merge(with: rootWidth)
                     let itemPosition = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                     
                     let measureInfo = Sizing.MeasureInfo(
@@ -644,7 +646,7 @@ final class TableListLayout : ListLayout
             //
             
             performLayout(for: section.footer) { footer in
-                let width = footer.layouts.table.width.merge(with: section.layouts.table.width)
+                let width = footer.layouts.table.width.merge(with: sectionWidth)
                 let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
@@ -690,8 +692,8 @@ final class TableListLayout : ListLayout
         
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
-            
-            let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
+            let footerWidth = footer.layouts.table.width.merge(with: rootWidth)
+            let position = footerWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -720,7 +722,8 @@ final class TableListLayout : ListLayout
         //
                     
         performLayout(for: self.content.overscrollFooter) { footer in
-            let position = footer.layouts.table.width.position(with: viewSize, defaultWidth: rootWidth)
+            let footerWidth = footer.layouts.table.width.merge(with: rootWidth)
+            let position = footerWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),

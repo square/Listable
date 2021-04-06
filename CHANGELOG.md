@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [`TableListLayout` now maintains padding by default and with center alignments.](https://github.com/kyleve/Listable/pull/286)
+
 ### Added
 
 ### Removed
