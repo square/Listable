@@ -54,6 +54,14 @@ public protocol HeaderFooterContent
         with info : ApplyHeaderFooterContentInfo
     )
     
+    /// When the `HeaderFooterContent` is on screen, controls how and when to apply updates
+    /// to the view.
+    ///
+    /// Defaults to ``ReappliesToVisibleView/always``.
+    ///
+    /// See ``ReappliesToVisibleView`` for a full discussion.
+    var reappliesToVisibleView: ReappliesToVisibleView { get }
+    
     //
     // MARK: Tracking Changes
     //
@@ -147,6 +155,15 @@ public struct HeaderFooterContentViews<Content:HeaderFooterContent>
     
     /// The background view of the content that's displayed while a press is active.
     public var pressed : Content.PressedBackgroundView
+}
+
+
+/// Provide a default implementation of `reappliesToVisibleView` which returns `.always`.
+public extension HeaderFooterContent {
+    
+    var reappliesToVisibleView: ReappliesToVisibleView {
+        .always
+    }
 }
 
 

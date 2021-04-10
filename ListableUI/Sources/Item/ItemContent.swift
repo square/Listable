@@ -77,6 +77,14 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
         with info : ApplyItemContentInfo
     )
     
+    /// When the `ItemContent` is on screen, controls how and when to apply updates
+    /// to the view.
+    ///
+    /// Defaults to ``ReappliesToVisibleView/always``.
+    ///
+    /// See ``ReappliesToVisibleView`` for a full discussion.
+    var reappliesToVisibleView : ReappliesToVisibleView { get }
+    
     //
     // MARK: Tracking Changes
     //
@@ -260,6 +268,15 @@ public extension ItemContent
     func wasMoved(comparedTo other : Self) -> Bool
     {
         return self.isEquivalent(to: other) == false
+    }
+}
+
+
+/// Provide a default implementation of `reappliesToVisibleView` which returns `.always`.
+public extension ItemContent
+{
+    var reappliesToVisibleView : ReappliesToVisibleView {
+        .always
     }
 }
 

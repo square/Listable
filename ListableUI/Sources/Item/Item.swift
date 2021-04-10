@@ -136,6 +136,10 @@ public struct Item<Content:ItemContent> : AnyItem
         self.content
     }
     
+    public var reappliesToVisibleView: ReappliesToVisibleView {
+        self.content.reappliesToVisibleView
+    }
+    
     // MARK: AnyItem_Internal
     
     public func anyIsEquivalent(to other : AnyItem) -> Bool

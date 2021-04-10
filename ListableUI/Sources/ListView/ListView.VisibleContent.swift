@@ -62,21 +62,6 @@ extension ListView
             )
         }
         
-        func updateVisibleViews(with environment : ListEnvironment)
-        {
-            // Perform Updates Of Visible Headers & Footers
-            
-            self.headerFooters.forEach {
-                $0.headerFooter.applyToVisibleView(with: environment)
-            }
-            
-            // Perform Updates Of Visible Items
-            
-            self.items.forEach {
-                $0.item.applyToVisibleCell(with: environment)
-            }
-        }
-        
         private func calculateVisibleContent(in view : ListView) -> (Set<Item>, Set<HeaderFooter>)
         {
             let visibleFrame = view.collectionView.bounds
