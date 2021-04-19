@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name         = 'ListableUI'
-  s.version      = '0.20.1'
+  s.version      = '0.20.2'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 11.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = 'Apache License, Version 2.0'
