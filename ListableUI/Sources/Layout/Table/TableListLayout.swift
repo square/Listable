@@ -499,8 +499,8 @@ final class TableListLayout : ListLayout
         
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
-            let headerWith = header.layouts.table.width.merge(with: rootWidth)
-            let position = headerWith.position(with: viewSize, defaultWidth: defaultWidth)
+            let headerWidth = header.layouts.table.width.merge(with: rootWidth)
+            let position = headerWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -515,11 +515,11 @@ final class TableListLayout : ListLayout
             header.y = lastContentMaxY
             
             if hasListHeader {
-                lastContentMaxY += header.defaultFrame.maxY
-            }
-            
-            if self.content.sections.isEmpty == false {
-                lastContentMaxY += layout.headerToFirstSectionSpacing
+                lastContentMaxY = header.defaultFrame.maxY
+
+                if self.content.sections.isEmpty == false {
+                    lastContentMaxY += layout.headerToFirstSectionSpacing
+                }
             }
         }
         
