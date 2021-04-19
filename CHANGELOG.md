@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [Fixed the spacing between the header and the first section of a `TableListLayout`](https://github.com/kyleve/Listable/pull/289) to not add the top padding.
+
 ### Added
 
 ### Removed

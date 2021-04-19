@@ -71,22 +71,32 @@ class TableAppearance_LayoutTests : XCTestCase
 
 class TableListLayoutTests : XCTestCase
 {
-    func test_layout_vertical()
+    func test_layout_vertical_includingHeader()
     {
-        let listView = self.list()
+        let listView = self.list(includeHeader: true)
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
         snapshot.test(output: ViewImageSnapshot.self)
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
+
+    func test_layout_vertical_excludingHeader()
+    {
+        let listView = self.list(includeHeader: false)
+
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
     
-    func list() -> ListView
+    func list(includeHeader: Bool) -> ListView
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
         listView.configure { list in
-            
+
             list.layout = .table {
                 $0.layout = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
@@ -100,8 +110,11 @@ class TableListLayoutTests : XCTestCase
                     lastSectionToFooterSpacing: 20.0
                 )
             }
-            
-            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
+
+            if includeHeader {
+                list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
+            }
+
             list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
             
             list += Section("first") { section in
