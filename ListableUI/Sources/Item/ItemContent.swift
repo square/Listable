@@ -10,13 +10,14 @@
 /// in a listable section.
 ///
 /// A `ItemContent` that displays text might look like this:
-/// ```
+/// ```swift
 /// struct MyItemContent : ItemContent, Equatable
 /// {
 ///     var text : String
+///     var id : UUID
 ///
-///     var identifier: Identifier<MyItemContent> {
-///         return .init(self.text)
+///     var identifier: UUID {
+///         self.id
 ///     }
 ///
 ///     static func createReusableContentView(frame : CGRect) -> MyContentView {
@@ -43,15 +44,109 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     // MARK: Identification
     //
     
-    /// Identifies the content across updates to the list. This value must remain the same,
-    /// otherwise the content will be considered a new item, and the old one removed from the list.
+    /// A `Hashable` type which is returned from ``ItemContent/identifier``,
+    /// which is used to identify the ``ItemContent`` when it put into a list.
     ///
-    /// Does not have to be globally unique – the list will make a "best guess" if there are multiple items
-    /// with the same identifier. However, diffing of changes will be more correct with a unique identifier.
+    /// The identifier is used to unique the item, control its lifetime, and identify it across update operations.
+    /// See ``ItemContent/identifier`` for more.
+    associatedtype IdentifierType : Hashable
+    
     ///
-    /// If you're backing your content with some sort of client or server-provided data, consider using its
-    /// server or client UUID here, or some other unique identifier from the underlying data model.
-    var identifier : Identifier<Self> { get }
+    /// The identifier is used to unique the item, control its lifetime, and identify it across update operations.
+    ///
+    /// ### Identifier Stability
+    /// This value must be stable. Changing the `identifier` will mean that the list will think
+    /// the item has been removed from the list (and a new one inserted), which can cause
+    /// undesired animations or other undesired behavior when a new view is created and inserted.
+    ///
+    /// ```swift
+    /// struct MyItemContent : ItemContent {
+    ///
+    ///     var identifier : UUID {
+    ///         // 🚫 Wrong; will change every time the item is accessed.
+    ///         UUID()
+    ///     }
+    /// }
+    ///
+    /// struct MyItemContent : ItemContent {
+    ///
+    ///     let contentID = UUID()
+    ///
+    ///     var identifier : UUID {
+    ///         // 🚫 Also wrong, will change every time the item is built.
+    ///         self.contentID()
+    ///     }
+    /// }
+    ///
+    /// struct MyItemContent : ItemContent {
+    ///
+    ///     var identifier : UUID {
+    ///          // ✅ Good! Stable across updates.
+    ///         self.data.serverID
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// This is especially important with items that embed interactive controls, like buttons, sliders,
+    /// text fields, etc. The identifier of the control should be stable and independent of the value
+    /// the control is currently representing. Including the value the control is currently representing
+    /// will cause the list to repeatedly re-create the control, removing the old item and inserting the new one.
+    /// ```swift
+    /// struct MySearchBarRow : ItemContent {
+    ///
+    ///     let searchText : String
+    ///
+    ///     var identifier : searchText {
+    ///         // 🚫 Wrong; will change every time the search text changes.
+    ///         searchText
+    ///     }
+    /// }
+    ///
+    /// struct MySearchBarRow : ItemContent {
+    ///
+    ///     let searchText : String
+    ///     let id : String // Something like "item-search".
+    ///
+    ///     var identifier : String {
+    ///         // ✅ Good! Stable across updates.
+    ///         id
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// ### Identifier Uniqueness
+    /// While identifiers do need to be _stable_, they do not need to be globally unique – the list will make a
+    /// "best guess" if there are multiple items with the same identifier. However, diffing of changes
+    /// will be more visually correct with a unique identifier.
+    ///
+    /// If you are backing your content with some sort of client or server-provided data, consider using its
+    /// server or client UUID here, or some other stable unique identifier from the underlying data model:
+    /// ```swift
+    /// struct MyItemContent : ItemContent {
+    ///
+    ///     let model : Model
+    ///
+    ///     var identifier : UUID {
+    ///         // 🚫 Likely wrong. If entered by the user,
+    ///         // there could be many items with this name,
+    ///         // or multiple items with no name at all, leading
+    ///         // to identifier collisions.
+    ///
+    ///         self.model.name
+    ///     }
+    /// }
+    ///
+    /// struct MyItemContent : ItemContent {
+    ///
+    ///     let model : Model
+    ///
+    ///     var identifier : UUID {
+    ///         // ✅ Good! Very unique.
+    ///         self.model.serverID
+    ///     }
+    /// }
+    /// ```
+    var identifier : IdentifierType { get }
     
     //
     // MARK: Default Item Properties
@@ -217,6 +312,8 @@ public struct ItemContentViews<Content:ItemContent>
 /// You can use this information to alter the display of your content, such as changing
 /// the background color for highlights and selections, providing different corner styles
 /// for different item positions, etc.
+///
+/// TODO: Rename to `ApplyItemContext`
 public struct ApplyItemContentInfo
 {
     /// The state of the `Item` currently displaying the content. Is it highlighted, selected, etc.
@@ -226,7 +323,11 @@ public struct ApplyItemContentInfo
     public var position : ItemPosition
     
     /// Provides access to actions to handle re-ordering the content within the list.
-    public var reordering : ReorderingActions
+    public var reorderingActions : ReorderingActions
+    
+    /// If the item can be reordered.
+    /// Use this property to determine if your `ItemContent` should display a reorder control.
+    public var isReorderable : Bool
     
     /// The environment of the containing list.
     /// See `ListEnvironment` for usage information.
@@ -244,12 +345,30 @@ public extension ItemContent where Self:Equatable
 }
 
 
+public extension ItemContent {
+    
+    /// Creates an ``Identifier`` with the provided value.
+    ///
+    /// This method allows creating an ``Identifier`` in a type safe manner; enforcing that the
+    /// `Represented` and `Value` parameters are of the correct type for the ``ItemContent``:
+    /// ```
+    /// MyItem.identifier(with: "my-id") // ✅ OK
+    /// MyItem.identifier(with: 1)       // 🚫 Error: MyItem's IdentifierType is String.
+    /// ```
+    /// You can also read the identifier via  ``Item/identifier`` or ``AnyItem/anyIdentifier``.
+    ///
+    static func identifier(with value : IdentifierType) -> Identifier<Self, IdentifierType> {
+        Identifier(value)
+    }
+}
+
+
 /// Provides a default implementation of `identifier` when self conforms to Swift's `Identifiable` protocol.
 @available(iOS 13.0, *)
 public extension ItemContent where Self:Identifiable
 {
-    var identifier : Identifier<Self> {
-        .init(self.id)
+    var identifier : ID {
+        self.id
     }
 }
 

@@ -27,7 +27,7 @@ class ItemPreviewViewTests : XCTestCase
                 
         view.update(
             with: 300.0,
-            state: .init(isSelected: false, isHighlighted: false),
+            state: .init(isSelected: false, isHighlighted: false, isReordering: false),
             item: Item(TestContent(height: 50.0))
         )
         
@@ -36,7 +36,7 @@ class ItemPreviewViewTests : XCTestCase
         
         view.update(
             with: 300.0,
-            state: .init(isSelected: false, isHighlighted: true),
+            state: .init(isSelected: false, isHighlighted: true, isReordering: false),
             item: Item(TestContent(height: 50.0))
         )
         
@@ -45,7 +45,7 @@ class ItemPreviewViewTests : XCTestCase
         
         view.update(
             with: 300.0,
-            state: .init(isSelected: true, isHighlighted: false),
+            state: .init(isSelected: true, isHighlighted: false, isReordering: false),
             item: Item(TestContent(height: 50.0))
         )
         
@@ -54,7 +54,7 @@ class ItemPreviewViewTests : XCTestCase
         
         view.update(
             with: 300.0,
-            state: .init(isSelected: true, isHighlighted: true),
+            state: .init(isSelected: true, isHighlighted: true, isReordering: false),
             item: Item(TestContent(height: 50.0))
         )
         
@@ -68,8 +68,8 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var height : CGFloat
     
-    var identifier: Identifier<TestContent> {
-        .init(self.height)
+    var identifier: CGFloat {
+        self.height
     }
     
     func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {

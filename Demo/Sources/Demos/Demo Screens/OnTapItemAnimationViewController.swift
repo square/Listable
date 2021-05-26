@@ -37,8 +37,8 @@ fileprivate struct ItemRow : BlueprintItemContent, Equatable {
     
     var isShowingPrice : Bool = true
     
-    var identifier: Identifier<ItemRow> {
-        .init(name)
+    var identifier: String {
+        self.name
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {

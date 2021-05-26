@@ -76,8 +76,8 @@ struct TextFieldElement : BlueprintItemContent, Equatable
     
     // MARK: BlueprintItemElement
     
-    var identifier: Identifier<TextFieldElement> {
-        return .init(self.content)
+    var identifier: String {
+        self.content
     }
     
     func element(with info : ApplyItemContentInfo) -> Element

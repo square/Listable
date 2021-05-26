@@ -80,8 +80,8 @@ fileprivate struct AccordionRow : BlueprintItemContent, Equatable
 {
     var text : String
     
-    var identifier: Identifier<AccordionRow> {
-        .init(text)
+    var identifier: String {
+        self.text
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {

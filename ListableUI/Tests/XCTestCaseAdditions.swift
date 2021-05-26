@@ -82,9 +82,9 @@ extension XCTestCase
             
             iterations += 1
             
-            if Date().timeIntervalSince(lastUpdateDate) >= 2 {
+            if Date().timeIntervalSince(lastUpdateDate) >= 1 {
                 lastUpdateDate = Date()
-                print("Continuing Test...")
+                print("Continuing Test: \(iterations) Iterations...")
             }
 
         } while Date() < start + seconds

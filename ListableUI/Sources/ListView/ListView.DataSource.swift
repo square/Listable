@@ -10,8 +10,11 @@ internal extension ListView
 {
     final class DataSource : NSObject, UICollectionViewDataSource
     {
+        unowned var view : ListView!
         unowned var presentationState : PresentationState!
+        unowned var storage : ListView.Storage!
         unowned var liveCells : LiveCells!
+        
         var environment : ListEnvironment!
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
@@ -75,8 +78,11 @@ internal extension ListView
             return container
         }
         
-        func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
-        {
+        func collectionView(
+            _ collectionView: UICollectionView,
+            canMoveItemAt indexPath: IndexPath
+        ) -> Bool
+        {            
             let item = self.presentationState.item(at: indexPath)
             
             return item.anyModel.reordering != nil
@@ -84,18 +90,53 @@ internal extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            moveItemAt sourceIndexPath: IndexPath,
-            to destinationIndexPath: IndexPath
+            moveItemAt from: IndexPath,
+            to: IndexPath
+        ) {
+            guard from != to else {
+                return
+            }
+            
+            /// Perform the change in our data source.
+            
+            self.storage.moveItem(from: from, to: to)
+
+            /// Notify our observers about the change.
+
+            let result = ItemReordering.Result(
+                from: from,
+                fromSection: self.presentationState.sections[from.section].model,
+                to: to,
+                toSection: self.presentationState.sections[to.section].model
             )
-        {
-            let item = self.presentationState.item(at: destinationIndexPath)
-                        
-            item.moved(with: Reordering.Result(
-                fromSection: self.presentationState.sections[sourceIndexPath.section].model,
-                fromIndexPath: sourceIndexPath,
-                toSection: self.presentationState.sections[destinationIndexPath.section].model,
-                toIndexPath: destinationIndexPath
-            ))
+            
+            let item = self.presentationState.item(at: to)
+            
+            let itemHadCallback = item.performDidReorder(with: result)
+            let hasStateObservers = self.view.stateObserver.onItemReordered.isEmpty == false
+            
+            guard itemHadCallback || hasStateObservers else {
+                fatalError(
+                    """
+                    Performed a reorder (\(result.indexPathsDescription)) of an Item \
+                    with the identifier `\(item.anyModel.anyIdentifier)`, but the Item \
+                    did not have a onWasReordered callback, and there were no onItemReordered \
+                    callbacks registered with the ListStateObserver. You must register at least \
+                    one of these callback types to update your data model with the result of the
+                    reorder event.
+                    """
+                )
+            }
+            
+            ListStateObserver.perform(self.view.stateObserver.onItemReordered, "Item Reordered", with: self.view) {
+                ListStateObserver.ItemReordered(
+                    actions: $0,
+                    positionInfo: self.view.scrollPositionInfo,
+                    item: item.anyModel,
+                    sections: self.presentationState.sectionModels,
+                    result: result
+                )
+            }
         }
     }
 }

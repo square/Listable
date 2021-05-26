@@ -139,7 +139,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {
-        // Note – Please keep this comment in sync with the comment in ItemCell.
+        /// **Note** – Please keep this comment in sync with the comment in ItemCell.
         
         /**
          Listable already properly sizes each cell. We do not use self-sizing cells.

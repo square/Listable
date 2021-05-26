@@ -91,8 +91,8 @@ fileprivate struct TestItemContent : BlueprintItemContent {
     
     var wasCalled : () -> ()
     
-    var identifier: Identifier<TestItemContent> {
-        .init()
+    var identifier: String {
+        ""
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {

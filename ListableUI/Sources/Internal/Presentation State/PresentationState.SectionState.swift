@@ -52,10 +52,10 @@ extension PresentationState
             }
         }
         
-        func removeItem(at index : Int)
+        func removeItem(at index : Int) -> AnyPresentationItemState
         {
             self.model.items.remove(at: index)
-            self.items.remove(at: index)
+            return self.items.remove(at: index)
         }
         
         func insert(item : AnyPresentationItemState, at index : Int)

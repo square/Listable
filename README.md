@@ -213,8 +213,8 @@ struct DemoItem : BlueprintItemContent, Equatable
     
     // ItemContent
     
-    var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+    var identifier: String {
+        return self.text
     }
     
     // BlueprintItemContent
@@ -299,7 +299,7 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var swipeActions : SwipeActions?
     
-    public var reordering : Reordering?
+    public var reordering : ItemReordering?
         
     public typealias OnSelect = (Content) -> ()
     public var onSelect : OnSelect?
@@ -344,7 +344,9 @@ To prepare the views for display, the `apply(to:for:with:)` method is called, wh
 ```swift
 public protocol ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierType : Hashable
+
+    var identifier : Identifier<Self, IdentifierType> { get }
 
     func apply(
         to views : ItemContentViews<Self>,
@@ -586,7 +588,9 @@ Unless you are supporting highlighting and selection of your `ItemContent`, you 
 ```swift
 public protocol BlueprintItemContent : ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierType : Hashable
+
+    var identifier : Identifier<Self, IdentifierType> { get }
 
     func wasMoved(comparedTo other : Self) -> Bool
     func isEquivalent(to other : Self) -> Bool
@@ -608,8 +612,8 @@ struct MyPerson : BlueprintItemContent, Equatable
     var name : String
     var phoneNumber : String
 
-    var identifier : Identifier<Self> {
-        .init(name)
+    var identifier : String {
+        self.name
     }
     
     func element(with info : ApplyItemContentInfo) -> Element {

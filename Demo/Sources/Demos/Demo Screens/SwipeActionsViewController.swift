@@ -122,8 +122,8 @@ final class SwipeActionsViewController: UIViewController  {
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
         var item: SwipeActionItem
 
-        var identifier: Identifier<SwipeActionsDemoItem> {
-            return .init(item.identifier)
+        var identifier: Int {
+            self.item.identifier
         }
 
         func element(with info : ApplyItemContentInfo) -> Element {

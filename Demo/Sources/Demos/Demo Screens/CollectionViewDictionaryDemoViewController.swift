@@ -46,7 +46,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     @objc func tappedScrollDown()
     {
         self.listView.scrollTo(
-            item: Identifier<WordRow>("clam"),
+            item: WordRow.identifier(with: "clam"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
             animation: .default
         )
@@ -55,7 +55,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     @objc func tappedScrollUp()
     {
         self.listView.scrollTo(
-            item: Identifier<WordRow>("aard-vark"),
+            item: WordRow.identifier(with: "aard-vark"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
             animation: .default
         )
@@ -147,8 +147,8 @@ fileprivate struct SearchBarElement : ItemContent
     
     // MARK: ItemElement
         
-    var identifier: Identifier<SearchBarElement> {
-        return .init("search")
+    var identifier: String {
+        "searchbar"
     }
     
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
@@ -192,8 +192,8 @@ fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable
         )
     }
     
-    var identifier: Identifier<SectionHeader> {
-        return .init(self.title)
+    var identifier: String {
+        self.title
     }
 }
 
@@ -225,8 +225,8 @@ fileprivate struct WordRow : BlueprintItemContent, Equatable
         )
     }
     
-    var identifier: Identifier<WordRow> {
-        return .init(self.title)
+    var identifier: String {
+        self.title
     }
 }
 

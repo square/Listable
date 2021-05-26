@@ -74,7 +74,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -92,7 +92,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0))
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 0, section: 0))
                 ]
             )
         )
@@ -109,8 +109,8 @@ class ListView_VisibleContentTests : XCTestCase
             ListView.VisibleContent.Info(
                 headerFooters: [],
                 items: [
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 0, section: 0)),
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 0, section: 0)),
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -129,7 +129,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .sectionFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -148,7 +148,7 @@ class ListView_VisibleContentTests : XCTestCase
                     .init(kind: .listFooter, indexPath: IndexPath(item: 0, section: 0)),
                 ],
                 items: [
-                    .init(identifier: Identifier<TestContent>(), indexPath: IndexPath(item: 1, section: 0))
+                    .init(identifier: TestContent.identifier(with: ""), indexPath: IndexPath(item: 1, section: 0))
                 ]
             )
         )
@@ -179,8 +179,8 @@ fileprivate struct TestContent : ItemContent, Equatable
     
     typealias ContentView = UIView
     
-    var identifier: Identifier<TestContent> {
-        .init()
+    var identifier: String {
+        ""
     }
     
     func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo)

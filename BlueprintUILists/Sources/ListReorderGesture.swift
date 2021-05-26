@@ -31,7 +31,7 @@ import ListableUI
 ///         row.add(child: ListReorderGesture(actions: info.actions, wrapping: MyReorderGrabber()))
 ///
 ///         // Could also be written as:
-///         row.add(child: MyReorderGrabber().listReorderGesture(with: info.reordering))
+///         row.add(child: MyReorderGrabber().listReorderGesture(with: info.reorderingActions))
 ///     }
 /// }
 /// ```
@@ -43,14 +43,7 @@ public struct ListReorderGesture : Element
     /// If the gesture is enabled or not.
     public var isEnabled : Bool
     
-    typealias OnStart = () -> Bool
-    var onStart : OnStart
-    
-    typealias OnMove = (UIPanGestureRecognizer) -> ()
-    var onMove : OnMove
-    
-    typealias OnDone = () -> ()
-    var onDone : OnDone
+    let actions : ReorderingActions
     
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
@@ -63,9 +56,7 @@ public struct ListReorderGesture : Element
     ) {
         self.isEnabled =  isEnabled
         
-        self.onStart = { actions.beginMoving() }
-        self.onMove = { actions.moved(with: $0) }
-        self.onDone = { actions.end() }
+        self.actions = actions
         
         self.element = element
     }
@@ -80,17 +71,15 @@ public struct ListReorderGesture : Element
     
     public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
     {
-        return ViewDescription(WrapperView.self) { config in
+        return ViewDescription(View.self) { config in
             config.builder = {
-                WrapperView(frame: bounds, wrapping: self)
+                View(frame: bounds, wrapping: self)
             }
             
             config.apply { view in
                 view.recognizer.isEnabled = self.isEnabled
                 
-                view.recognizer.onStart = self.onStart
-                view.recognizer.onMove = self.onMove
-                view.recognizer.onDone = self.onDone
+                view.recognizer.apply(actions: self.actions)
             }
         }
     }
@@ -109,50 +98,13 @@ public extension Element
 
 fileprivate extension ListReorderGesture
 {
-    private final class GestureRecognizer : UIPanGestureRecognizer
+    private final class View : UIView
     {
-        public var onStart : OnStart? = nil
-        public var onMove : OnMove? = nil
-        public var onDone : OnDone? = nil
-        
-        override init(target: Any?, action: Selector?)
-        {
-            super.init(target: target, action: action)
-            
-            self.addTarget(self, action: #selector(updated))
-            
-            self.minimumNumberOfTouches = 1
-            self.maximumNumberOfTouches = 1
-        }
-                
-        @objc func updated()
-        {
-            switch self.state {
-            case .possible: break
-            case .began:
-                let canStart = self.onStart?()
-                
-                if canStart == false {
-                    self.state = .cancelled
-                }
-            case .changed:
-                self.onMove?(self)
-
-            case .ended: self.onDone?()
-            case .cancelled, .failed: self.onDone?()
-                
-            @unknown default: listableFatal()
-            }
-        }
-    }
-    
-    private final class WrapperView : UIView
-    {
-        let recognizer : GestureRecognizer
+        let recognizer : ItemReordering.GestureRecognizer
         
         init(frame: CGRect, wrapping : ListReorderGesture)
         {
-            self.recognizer = GestureRecognizer()
+            self.recognizer = .init()
             
             super.init(frame: frame)
             
