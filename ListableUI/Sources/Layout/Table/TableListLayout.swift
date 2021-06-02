@@ -460,8 +460,6 @@ final class TableListLayout : ListLayout
         lastContentMaxY : CGFloat,
         after : () -> ()
     ) {
-        let hasListHeader = headerFooter.isPopulated
-                
         let position = width.position(with: viewSize, defaultWidth: rootWidth)
         
         let measureInfo = Sizing.MeasureInfo(
@@ -476,7 +474,7 @@ final class TableListLayout : ListLayout
         headerFooter.size = CGSize(width: position.width, height: height)
         headerFooter.y = lastContentMaxY
         
-        if hasListHeader {
+        if headerFooter.isPopulated {
             after()
         }
     }
