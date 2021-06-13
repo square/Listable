@@ -14,47 +14,124 @@ final class PaymentTypesViewController : ListViewController {
     
     override func configure(list: inout ListProperties) {
         
+        list.layout = .table { table in
+            table.layout.interSectionSpacingWithNoFooter = 10.0
+        }
+        
         let types = self.types
         
-        let makeRow = { (type:PaymentType) -> PaymentTypeRow in
-            .init(type: type) { isOn in
-                self.types = self.types.edit(with: type.name) {
-                    $0.isEnabled = isOn
-                }
-            }
+        list.stateObserver.onItemReordered { [weak self] info in
+            self?.save(with: info)
         }
         
         list += Section(SectionID.main) { section in
             
+            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.main.title))
+            
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain }
             .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeRow)
+            .map(makeItem(with:))
         }
         
         list += Section(SectionID.more) { section in
             
+            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.more.title))
+            
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain == false }
             .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeRow)
+            .map(makeItem(with:))
         }
         
         list += Section(SectionID.disabled) { section in
             
+            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.disabled.title))
+            
             section += types.filter { $0.isEnabled == false }
             .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeRow)
+            .map(makeItem(with:))
         }
+    }
+    
+    private func save(with info : ListStateObserver.ItemReordered) {
+        let main = info.sections.first { $0.identifier == Section.identifier(for: SectionID.main) }!
+        let more = info.sections.first { $0.identifier == Section.identifier(for: SectionID.more) }!
+        let disabled = info.sections.first { $0.identifier == Section.identifier(for: SectionID.disabled) }!
+        
+        let mainItems : [PaymentTypeRow] = main.filtered(to: PaymentTypeRow.self).map { row in
+            var row = row
+            row.type.isEnabled = true
+            row.type.isMain = true
+            
+            return row
+        }
+        
+        let moreItems : [PaymentTypeRow] = more.filtered(to: PaymentTypeRow.self).map { row in
+            var row = row
+            row.type.isEnabled = true
+            row.type.isMain = false
+            
+            return row
+        }
+        
+        let disabledItems : [PaymentTypeRow] = disabled.filtered(to: PaymentTypeRow.self).map { row in
+            var row = row
+            row.type.isEnabled = false
+            
+            return row
+        }
+        
+        var index : Int = 0
+        let all : [PaymentTypeRow] = (mainItems + moreItems + disabledItems).map { row in
+            defer { index += 1 }
+            
+            var row = row
+            row.type.sortOrder = index
+            
+            return row
+        }
+        
+        self.types = all.map(\.type)
+    }
+    
+    private func makeItem(with type : PaymentType) -> Item<PaymentTypeRow> {
+        Item(
+            PaymentTypeRow(type: type) { isOn in
+                self.types = self.types.edit(with: type.name) {
+                    $0.isEnabled = isOn
+                }
+            },
+            reordering: .init(sections: .all)
+        )
     }
     
     enum SectionID : Hashable {
         case main
         case more
         case disabled
+        
+        var title : String {
+            switch self {
+            case .main: return "Main payment types"
+            case .more: return "More payment types"
+            case .disabled: return "Disabled payment types"
+            }
+        }
     }
 }
 
+fileprivate struct PaymentTypeHeader : BlueprintHeaderFooterContent, Equatable {
+    
+    var title : String
+    
+    var elementRepresentation: Element {
+        Label(text: title) {
+            $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        }
+        .inset(uniform: 15.0)
+    }
+}
 
 fileprivate struct PaymentTypeRow : BlueprintItemContent {
     
@@ -67,7 +144,46 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {
-        fatalError()
+        
+        Row { row in
+            row.horizontalUnderflow = .growUniformly
+            row.verticalAlignment = .center
+            
+            row.addFixed(child: Label(text: type.name) {
+                $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+                $0.color = .darkText
+            })
+            row.addFlexible(child: Spacer(width: 1))
+            row.addFixed(child: Toggle(isOn: type.isEnabled, onToggle: onToggle))
+            row.addFixed(child: Spacer(width: 10))
+            
+            row.addFixed(
+                child: Image(
+                    image: UIImage(named: "ReorderControl"),
+                    contentMode: .center
+                ).listReorderGesture(with: info.reorderingActions)
+            )
+        }
+        .inset(uniform: 15.0)
+        
+    }
+    
+    func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
+        Box(
+            backgroundColor: .white,
+            shadowStyle: {
+                if info.state.isReordering {
+                    return .simple(
+                        radius: 5.0,
+                        opacity: 0.4,
+                        offset: CGSize(width: 0, height: 2),
+                        color: .black
+                    )
+                } else {
+                    return .none
+                }
+            }()
+        )
     }
     
     func isEquivalent(to other: PaymentTypeRow) -> Bool {
