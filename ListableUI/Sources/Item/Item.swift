@@ -127,7 +127,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         self.reuseIdentifier = .identifier(for: Content.self)
         
-        self.identifier = Identifier<Content>(self.content.identifier)
+        self.identifier = Identifier<Content, Content.IdentifierType>(self.content.identifier)
     }
     
     // MARK: AnyItem

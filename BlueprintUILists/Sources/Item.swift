@@ -142,8 +142,8 @@ public struct BlueprintItemContentWrapper<Represented, IDType:Hashable> : Bluepr
     let backgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
     let selectedBackgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
     
-    public var identifier: Identifier<Self> {
-        .init(self.representing[keyPath: self.identifierKeyPath])
+    public var identifier: IDType {
+        self.representing[keyPath: self.identifierKeyPath]
     }
     
     public func isEquivalent(to other: Self) -> Bool {

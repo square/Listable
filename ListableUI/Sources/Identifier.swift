@@ -14,36 +14,59 @@ import Foundation
 /// of those items and sections as updates are pushed through the list view.
 ///
 /// Identifiers for content shouldn't change – if it does, the item or section is
-/// treated as a new item. This means that for your `ItemContent` or `Section`,
-/// you should use a stable identifier like server ID or unique value that does not change.
+/// treated as new. This means that for your `ItemContent` or `Section`,
+/// you should use a stable identifier like server ID or other
+/// unique value that does not change across updates to the list.
 ///
-/// Identifiers do _not_ have to be unique, but it certainly helps. When applying updates,
-/// Listable will convert duplicate identifiers to unique identifiers by counting upward for
-/// each equal identifier it finds (eg, "MyID.1, MyID.2, MyID.3", etc). However, you should do
-/// your best to ensure identifiers are unique, as this helps generate a visually correct diff when applying updates.
+/// Identifiers do _not_ have to be unique, but it certainly helps.
+/// When applying updates, Listable will convert duplicate identifiers to
+/// unique identifiers by counting upward for each equal identifier it finds: (eg, "myID".1, "myID".2, "myID".3", etc).
+/// However, you should do your best to ensure identifiers are unique,
+/// as this helps generate a visually correct diff when applying updates.
 ///
 /// Identifiers are strongly typed; alongside their contained value,
 /// they also encode their `Represented` type. This means that these two
 /// identifiers are different, despite having the same `value`.
-/// ```
-/// let first = Identifier<MyThing>("value")
-/// let second = Identifier<MyOtherThing>("value")
+/// ```swift
+/// let first = Identifier<MyThing, String>("value")
+/// let second = Identifier<MyOtherThing, String>("value")
 /// ```
 /// Even once type-erased to `AnyIdentifier`, these identifiers will still not be
 /// equal, because their underlying `Represented` type is different.
 ///
-public final class Identifier<Represented> : AnyIdentifier
+public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
 {
-    /// Identifier which identifies by the type of `Represented` only.
-    /// If you have multiple of `Represented` within a list, it is recommended that
-    /// you use `init(_ value:)` to provide a unique inner value.
-    public convenience init()
-    {
-        self.init("")
+    // MARK: Reading Values
+    
+    ///
+    /// The underlying value that backs the identifier.
+    /// For example, if you create an identifier using:
+    /// ```swift
+    /// Identifier<MyThing, String>("1")
+    /// ```
+    /// Then the value of `value` will be `"1"`.
+    ///
+    public var value : Value {
+        self.anyValue.base as! Value
     }
     
+    // MARK: Initialization
+    
+    ///
     /// Creates an identifier which identifies by both `Represented`, and the `value` passed to init.
-    public init<Value:Hashable>(_ value : Value)
+    ///
+    /// **Note** – It is intentional that this method is internal. You should not directly create identifiers
+    /// by calling this method. Instead, use the extensions on `Section` and `ItemContent` to create
+    /// strongly typed identifiers with the correct `Value` type:
+    /// ```swift
+    /// MyItem.identifier(with: "my-id")  // ✅ OK
+    /// MyItem.identifier(with: 1)        // 🚫 Error: MyItem's IdentifierType is String.
+    /// ```
+    ///
+    /// You can also read  ``Item.identifier-swift.property`` or ``AnyItem.anyIdentifier-swift.property``
+    /// to get the identifier of an item that has been created in a type safe manner.
+    ///
+    init(_ value : Value)
     {
         super.init(
             type: ObjectIdentifier(Represented.self),
@@ -54,43 +77,62 @@ public final class Identifier<Represented> : AnyIdentifier
     // MARK: CustomDebugStringConvertible
     
     public override var debugDescription : String {
-        "Identifier<\(String(describing: Represented.self))>: \(self.value.identifierContentString)"
+        "Identifier<\(String(describing: Represented.self)), \(String(describing: Value.self))>: \(self.anyValue.identifierContentString)"
     }
 }
 
 
 ///
-/// A type-erased `Identifier` used to identify content in a listable list.
+/// A type-erased `Identifier` used to identify content in a list.
 ///
 /// Even though type-erased, the original `Represented` type from the `Identifier`
 /// is still retained when being type erased, meaning comparing two `AnyIdentifiers`
 /// with the same `value` but different `Represented` types will report `false`:
-/// ```
-/// let first = Identifier<MyThing>("value") as AnyIdentifier
-/// let second = Identifier<MyOtherThing>("value") as AnyIdentifier
+/// ```swift
+/// let first = Identifier<MyThing, String>("value") as AnyIdentifier
+/// let second = Identifier<MyOtherThing, String>("value") as AnyIdentifier
 ///
 /// let equal = first == second // false
 /// ```
-/// Note that like Swift `KeyPath`s, `AnyIdentifier` is the base type for
-/// `Identifier<Represented>`. This is done purely for performance reasons;
+///
+/// **Note** – Like Swift's`KeyPath`, `AnyIdentifier` is the base type for
+/// `Identifier<Represented, Value>`. This is done  for performance reasons;
 /// it allows free bridging from `Identifier` to `AnyIdentifier`.
 ///
 public class AnyIdentifier : Hashable, CustomDebugStringConvertible
 {
-    private let representedType : ObjectIdentifier
+    ///
+    /// The underlying value that backs the identifier.
+    /// For example, if you create an identifier using:
+    /// ```swift
+    /// Identifier<MyThing, String>("1")
+    /// ```
+    /// Then the value of `anyValue` will be `AnyHashable("1")`.
+    ///
+    /// To directly read the value, access `anyValue.base`.
+    ///
+    public let anyValue : AnyHashable
     
-    fileprivate let value : AnyHashable
+    ///
+    /// The underlying type that backs the identifier.
+    /// For example, if you create an identifier using:
+    /// ```swift
+    /// Identifier<MyThing, String>("1")
+    /// ```
+    /// Then the value of `representedType` will be `ObjectIdentifier(MyThing.self)`.
+    ///
+    public let representedType : ObjectIdentifier
     
     private let hash : Int
     
     fileprivate init(type : ObjectIdentifier, value : AnyHashable)
     {
         self.representedType = type
-        self.value = value
+        self.anyValue = value
         
         var hasher = Hasher()
         hasher.combine(self.representedType)
-        hasher.combine(self.value)
+        hasher.combine(self.anyValue)
         self.hash = hasher.finalize()
     }
     
@@ -98,7 +140,7 @@ public class AnyIdentifier : Hashable, CustomDebugStringConvertible
     
     public static func == (lhs: AnyIdentifier, rhs: AnyIdentifier) -> Bool
     {
-        return lhs.hash == rhs.hash && lhs.representedType == rhs.representedType && lhs.value == rhs.value
+        return lhs.hash == rhs.hash && lhs.representedType == rhs.representedType && lhs.anyValue == rhs.anyValue
     }
     
     // MARK: Hashable
@@ -128,3 +170,4 @@ fileprivate extension AnyHashable
         }
     }
 }
+

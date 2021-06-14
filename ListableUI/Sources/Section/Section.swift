@@ -13,7 +13,7 @@ public struct Section
     //
     
     /// The value which uniquely identifies the section within a list.
-    public var identifier : Identifier<Section>
+    public var identifier : Identifier<Section, AnyHashable>
     
     /// The header, if any, associated with the section.
     public var header : AnyHeaderFooter?
@@ -73,7 +73,7 @@ public struct Section
         configure : Configure = { _ in }
         )
     {
-        self.identifier = Identifier<Section>(identifier)
+        self.identifier = Identifier<Section, AnyHashable>(identifier)
         
         self.layouts = layouts
         

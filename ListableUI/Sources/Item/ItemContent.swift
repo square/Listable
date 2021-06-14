@@ -250,8 +250,8 @@ public extension ItemContent where Self:Equatable
 @available(iOS 13.0, *)
 public extension ItemContent where Self:Identifiable
 {
-    var identifier : Identifier<Self> {
-        .init(self.id)
+    var identifier : ID {
+        self.id
     }
 }
 
