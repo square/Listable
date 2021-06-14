@@ -214,7 +214,7 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var content : AnyHashable
     
-    var identifier: AnyHashable {
+    var identifierValue: AnyHashable {
         self.content
     }
     

@@ -1159,7 +1159,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
             
-            self.visibleContent.updateVisibleViews(with: self.environment)
+            self.visibleContent.updateVisibleViews(with: self.environment, animated: animated)
         }
         
         if changes.hasIndexAffectingChanges {

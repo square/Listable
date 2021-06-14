@@ -12,8 +12,11 @@ public struct Section
     // MARK: Public Properties
     //
     
+    /// The `Identifier` type used for a `Section`.
+    public typealias Identifier = ListableUI.Identifier<Section, AnyHashable>
+    
     /// The value which uniquely identifies the section within a list.
-    public var identifier : Identifier<Section, AnyHashable>
+    public var identifier : Identifier
     
     /// The header, if any, associated with the section.
     public var header : AnyHeaderFooter?
@@ -72,8 +75,8 @@ public struct Section
     
     public typealias Configure = (inout Section) -> ()
     
-    public init<IdentifierType:Hashable>(
-        _ identifier : IdentifierType,
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
@@ -194,7 +197,7 @@ public struct Section
 public extension Section {
     
     /// Provides a new identifier for a ``Section``, with the given underlying value.
-    static func identifier<Value:Hashable>(for value : Value) -> Identifier<Section, AnyHashable> {
+    static func identifier<Value:Hashable>(for value : Value) -> Identifier {
         Identifier(value)
     }
 }

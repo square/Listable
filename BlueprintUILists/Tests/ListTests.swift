@@ -91,7 +91,7 @@ fileprivate struct TestItemContent : BlueprintItemContent {
     
     var wasCalled : () -> ()
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     

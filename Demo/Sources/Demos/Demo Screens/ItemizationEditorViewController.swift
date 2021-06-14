@@ -239,7 +239,7 @@ struct ChoiceItem : BlueprintItemContent, Equatable
         return box
     }
     
-    var identifier : String {
+    var identifierValue : String {
         self.title
     }
 }
@@ -263,7 +263,7 @@ struct ToggleItem : BlueprintItemContent
         return self.content == other.content
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.content.title
     }
     

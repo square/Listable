@@ -213,7 +213,7 @@ struct DemoItem : BlueprintItemContent, Equatable
     
     // ItemContent
     
-    var identifier: String {
+    var identifierValue: String {
         return self.text
     }
     
@@ -288,7 +288,7 @@ An `Item` is what you add to a section to represent a row in a list. It contains
 ```swift
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : AnyIdentifier
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -344,9 +344,9 @@ To prepare the views for display, the `apply(to:for:with:)` method is called, wh
 ```swift
 public protocol ItemContent
 {
-    associatedtype IdentifierType : Hashable
+    associatedtype IdentifierValue : Hashable
 
-    var identifier : Identifier<Self, IdentifierType> { get }
+    var identifierValue : IdentifierValue { get }
 
     func apply(
         to views : ItemContentViews<Self>,
@@ -588,9 +588,9 @@ Unless you are supporting highlighting and selection of your `ItemContent`, you 
 ```swift
 public protocol BlueprintItemContent : ItemContent
 {
-    associatedtype IdentifierType : Hashable
+    associatedtype IdentifierValue : Hashable
 
-    var identifier : Identifier<Self, IdentifierType> { get }
+    var identifierValue : IdentifierValue { get }
 
     func wasMoved(comparedTo other : Self) -> Bool
     func isEquivalent(to other : Self) -> Bool
@@ -612,7 +612,7 @@ struct MyPerson : BlueprintItemContent, Equatable
     var name : String
     var phoneNumber : String
 
-    var identifier : String {
+    var identifierValue : String {
         self.name
     }
     

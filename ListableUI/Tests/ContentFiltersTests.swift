@@ -122,7 +122,7 @@ fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable {
 
 fileprivate struct TestItem : ItemContent, Equatable {
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     

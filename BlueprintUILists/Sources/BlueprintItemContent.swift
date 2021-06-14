@@ -21,7 +21,7 @@ import ListableUI
 ///     var text : String
 ///     var id : UUID
 ///
-///     var identifier: String {
+///     var identifierValue: String {
 ///         self.id
 ///     }
 ///

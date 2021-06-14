@@ -76,7 +76,7 @@ struct TextFieldElement : BlueprintItemContent, Equatable
     
     // MARK: BlueprintItemElement
     
-    var identifier: String {
+    var identifierValue: String {
         self.content
     }
     

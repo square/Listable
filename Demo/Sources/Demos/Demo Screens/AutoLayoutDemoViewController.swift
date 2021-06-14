@@ -34,7 +34,7 @@ struct AutoLayoutContent : ItemContent, Equatable {
     var header : String
     var detail : String
     
-    var identifier: String {
+    var identifierValue: String {
         header + detail
     }
     

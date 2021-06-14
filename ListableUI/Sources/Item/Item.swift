@@ -8,7 +8,7 @@
 
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : Identifier<Content, Content.IdentifierType>
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -132,7 +132,20 @@ public struct Item<Content:ItemContent> : AnyItem
         
         self.reuseIdentifier = .identifier(for: Content.self)
         
-        self.identifier = Content.identifier(with: self.content.identifier)
+        self.identifier = self.content.identifier
+        
+        #if DEBUG
+        precondition(
+            self.identifier.value == self.content.identifierValue,
+            
+            """
+            `\(String(describing: Content.self)).identifierValue` is not stable: When requested twice, \
+            the value changed from `\(self.identifier.value)` to `\(self.content.identifierValue)`. In \
+            order for Listable to perform correct and efficient updates to your content, your `identifierValue` \
+            must be stable. See the documentation on `ItemContent.identifierValue` for suggestions.
+            """
+        )
+        #endif
     }
     
     // MARK: AnyItem

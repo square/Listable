@@ -93,7 +93,7 @@ public struct EmbeddedList : ItemContent
         
     public typealias ContentView = ListView
     
-    public var identifier: AnyHashable {
+    public var identifierValue: AnyHashable {
         return self.contentIdentifier
     }
     

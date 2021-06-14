@@ -68,7 +68,7 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var height : CGFloat
     
-    var identifier: CGFloat {
+    var identifierValue: CGFloat {
         self.height
     }
     

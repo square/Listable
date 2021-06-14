@@ -337,7 +337,7 @@ fileprivate func AssertListLayoutContentItemEqual(
 
 fileprivate struct TestItem : ItemContent, Equatable {
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     

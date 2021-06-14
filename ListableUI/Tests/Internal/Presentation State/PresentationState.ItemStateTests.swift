@@ -342,7 +342,7 @@ fileprivate struct TestContent : ItemContent, Equatable
     var value : String
     var updates : [String] = []
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     

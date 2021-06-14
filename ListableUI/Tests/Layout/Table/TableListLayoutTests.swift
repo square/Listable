@@ -185,7 +185,7 @@ fileprivate struct TestingItemContent : ItemContent {
     
     var color : UIColor
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     

@@ -16,7 +16,7 @@ fileprivate struct XcodePreviewDemoContent : BlueprintItemContent, Equatable
 {
     var text : String
     
-    var identifier: String {
+    var identifierValue: String {
         return self.text
     }
     

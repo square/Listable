@@ -37,7 +37,7 @@ fileprivate struct ItemRow : BlueprintItemContent, Equatable {
     
     var isShowingPrice : Bool = true
     
-    var identifier: String {
+    var identifierValue: String {
         self.name
     }
     

@@ -60,7 +60,7 @@ public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
     /// strongly typed identifiers with the correct `Value` type:
     /// ```swift
     /// MyItem.identifier(with: "my-id")  // ✅ OK
-    /// MyItem.identifier(with: 1)        // 🚫 Error: MyItem's IdentifierType is String.
+    /// MyItem.identifier(with: 1)        // 🚫 Error: MyItem's IdentifierValue is String.
     /// ```
     ///
     /// You can also read  ``Item.identifier-swift.property`` or ``AnyItem.anyIdentifier-swift.property``

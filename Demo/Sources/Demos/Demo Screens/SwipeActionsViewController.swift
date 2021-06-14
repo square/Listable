@@ -122,7 +122,7 @@ final class SwipeActionsViewController: UIViewController  {
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
         var item: SwipeActionItem
 
-        var identifier: Int {
+        var identifierValue: Int {
             self.item.identifier
         }
 

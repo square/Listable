@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- [When applying an update to visible views during content updates, the update now occurs within an animation block](https://github.com/kyleve/Listable/pull/292). This allows your view to inherit implicit animations more easily.
+
 ### Added
 
 - [Reordering between multiple sections is now supported](https://github.com/kyleve/Listable/pull/292).
@@ -18,9 +20,11 @@
 - [`Item.identifier` has been renamed to `Item.anyIdentifier`](https://github.com/kyleve/Listable/pull/292). The new `Item.identifier` property is now a fully type safe identifier.
 - [`ReorderingActions` was refactored](https://github.com/kyleve/Listable/pull/292) to expose less public state and ease use in UIView-backed list elements.
 - [`Identifier<Represented>` is now `Identifier<Represented, Value>`; eg `Identifier<MyContent, UUID>`](https://github.com/kyleve/Listable/pull/292). This is done to support reacting to reordering events in a more type safe manner, and to make `Identifier` creation more type safe. This is a large breaking change.
-- [Changed how `identifier`s for `ItemContent` are represented](https://github.com/kyleve/Listable/pull/292). `ItemContent` now returns a an identifier of a specific `IdentifierType` (eg, `String`, `UUID`, etc), which is then assembled into an `Identifier` by the containing item. Additional APIs have been added for creating `Identifier`s in a more type safe manner. This is a large breaking change.
+- [Changed how `identifier`s for `ItemContent` are represented](https://github.com/kyleve/Listable/pull/292). `ItemContent` now returns a an identifier of a specific `IdentifierValue` (eg, `String`, `UUID`, etc), which is then assembled into an `Identifier` by the containing item. Additional APIs have been added for creating `Identifier`s in a more type safe manner. This is a large breaking change.
 
 ### Misc
+
+- [The Blueprint-based shortcuts to create inline items and header footers have been renamed to `ElementItem` and `ElementHeaderFooter`](https://github.com/kyleve/Listable/pull/292).
 
 # Past Releases
 

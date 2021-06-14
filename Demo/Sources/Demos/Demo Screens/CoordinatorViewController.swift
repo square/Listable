@@ -38,7 +38,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
     
     var showBottomBar : Bool = false
     
-    var identifier: String {
+    var identifierValue: String {
         self.podcast.name
     }
     

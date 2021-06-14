@@ -139,7 +139,7 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
     
     var onToggle : (Bool) -> ()
     
-    var identifier: String {
+    var identifierValue: String {
         self.type.name
     }
     

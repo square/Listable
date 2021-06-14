@@ -60,7 +60,7 @@ fileprivate struct TestItemContent : ItemContent, Equatable
 {
     // MARK: ItemElement
     
-    var identifier: String {
+    var identifierValue: String {
         ""
     }
     
@@ -127,7 +127,7 @@ class ItemElementCell_LiveCells_Tests : XCTestCase
 
     private struct TestContent : ItemContent, Equatable {
         
-        var identifier: String {
+        var identifierValue: String {
             ""
         }
         

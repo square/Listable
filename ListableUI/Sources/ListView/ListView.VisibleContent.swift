@@ -62,7 +62,7 @@ extension ListView
             )
         }
         
-        func updateVisibleViews(with environment : ListEnvironment)
+        func updateVisibleViews(with environment : ListEnvironment, animated : Bool)
         {
             // Perform Updates Of Visible Headers & Footers
             
@@ -72,8 +72,16 @@ extension ListView
             
             // Perform Updates Of Visible Items
             
-            self.items.forEach {
-                $0.item.applyToVisibleCell(with: environment)
+            let update = {
+                self.items.forEach {
+                    $0.item.applyToVisibleCell(with: environment)
+                }
+            }
+            
+            if animated {
+                UIView.animate(withDuration: 0.2, animations: update)
+            } else {
+                update()
             }
         }
         

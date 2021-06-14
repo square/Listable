@@ -23,7 +23,7 @@ final class ReorderingViewController : ListViewController
     }
     
     @objc private func reload() {
-        
+        self.reload(animated: true)
     }
     
     override func configure(list: inout ListProperties) {

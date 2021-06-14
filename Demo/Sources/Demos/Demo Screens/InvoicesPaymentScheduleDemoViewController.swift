@@ -288,7 +288,7 @@ fileprivate struct ToggleRow : BlueprintItemContent
         })
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.content.text
     }
     
@@ -339,7 +339,7 @@ fileprivate struct SegmentedControlRow : BlueprintItemContent
         return self.control
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.id
     }
     
@@ -404,7 +404,7 @@ fileprivate struct AmountRow : BlueprintItemContent
         return box
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.content.title
     }
     
@@ -425,7 +425,7 @@ fileprivate struct ButtonRow : BlueprintItemContent
         fatalError()
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.text
     }
     

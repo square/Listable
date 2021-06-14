@@ -147,7 +147,7 @@ fileprivate struct SearchBarElement : ItemContent
     
     // MARK: ItemElement
         
-    var identifier: String {
+    var identifierValue: String {
         "searchbar"
     }
     
@@ -225,7 +225,7 @@ fileprivate struct WordRow : BlueprintItemContent, Equatable
         )
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.title
     }
 }

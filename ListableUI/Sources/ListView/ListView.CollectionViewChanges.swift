@@ -25,6 +25,7 @@ internal extension ListView
         var movedItems : [ItemChanges.Moved] = []
                 
         var hasIndexAffectingChanges : Bool {
+            return true
             return
                 self.deletedSections.isEmpty == false ||
                     self.insertedItems.isEmpty == false ||

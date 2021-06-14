@@ -140,7 +140,7 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
         .box(background: self.color, corners: .rounded(radius: 15.0))
     }
     
-    var identifier: String {
+    var identifierValue: String {
         self.title
     }
     

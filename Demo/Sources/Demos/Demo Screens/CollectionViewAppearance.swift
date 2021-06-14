@@ -85,7 +85,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
 {
     var text : String
     
-    var identifier: String {
+    var identifierValue: String {
         return self.text
     }
 
@@ -173,7 +173,9 @@ struct Toggle : Element {
             }
             
             config.apply { toggle in
-                toggle.isOn = self.isOn
+                if toggle.isOn != self.isOn {
+                    toggle.setOn(self.isOn, animated: UIView.inheritedAnimationDuration > 0.0)
+                }
                 toggle.onToggle = self.onToggle
             }
         }

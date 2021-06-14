@@ -71,7 +71,7 @@ public struct ItemPreview : View
             var item : AnyItem
             var properties : Properties
     
-            var identifier : Identifier
+            var identifierValue : Identifier
             
             struct Identifier : Hashable {
                 var index : Int
@@ -83,11 +83,11 @@ public struct ItemPreview : View
             PreviewsItem(
                 item: item,
                 properties: $2,
-                identifier: .init(index: $0, totalCount: properties.count)
+                identifierValue: .init(index: $0, totalCount: properties.count)
             )
         }
         
-        return ForEach(previewsItems, id: \.identifier) {
+        return ForEach(previewsItems, id: \.identifierValue) {
             ItemPreview(item, properties: $0.properties)
         }
     }

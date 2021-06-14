@@ -56,7 +56,7 @@ fileprivate struct CollatedContent : Equatable, ItemContent, LocalizedCollatable
     
     var text : String
     
-    var identifier: String {
+    var identifierValue: String {
         self.text
     }
     

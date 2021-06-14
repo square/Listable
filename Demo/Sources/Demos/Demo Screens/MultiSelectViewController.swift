@@ -41,7 +41,7 @@ fileprivate struct SelectableRow : BlueprintItemContent, Equatable {
     
     var text : String
     
-    var identifier: String {
+    var identifierValue: String {
         self.text
     }
     

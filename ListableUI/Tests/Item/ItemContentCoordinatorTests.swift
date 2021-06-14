@@ -63,7 +63,7 @@ fileprivate struct TestContent : ItemContent, Equatable
     
     typealias ContentView = UIView
     
-    var identifier: String {
+    var identifierValue: String {
         self.value
     }
     

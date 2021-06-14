@@ -565,6 +565,18 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: UICollectionViewLayout Methods: Moving Items
     //
     
+    override func targetIndexPath(
+        forInteractivelyMovingItem previousIndexPath: IndexPath,
+        withPosition position: CGPoint
+    ) -> IndexPath {
+        
+        /// TODO: The default implementation provided by `UICollectionView` does not work correctly
+        /// when trying to move an item to the end of a section, or when trying to move an item into an
+        /// empty section. We should add casing that allows moving into the section in these cases.
+        
+        return super.targetIndexPath(forInteractivelyMovingItem: previousIndexPath, withPosition: position)
+    }
+    
     override func layoutAttributesForInteractivelyMovingItem(
         at indexPath: IndexPath,
         withTargetPosition position: CGPoint

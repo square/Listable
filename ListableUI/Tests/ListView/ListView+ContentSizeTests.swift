@@ -89,7 +89,7 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var title : String
     
-    var identifier: String {
+    var identifierValue: String {
         self.title
     }
     
