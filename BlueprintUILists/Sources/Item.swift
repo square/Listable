@@ -130,6 +130,33 @@ extension Item
 
 // This works
 
+func Item<Represented:Equatable, IDType:Hashable>(
+    with representing : Represented,
+    
+    identifier : KeyPath<Represented, IDType>,
+
+    element : @escaping (Represented, ApplyItemContentInfo) -> Element,
+    background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+    selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+    
+    configure : (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }
+) -> Item<BlueprintItemContentWrapper<Represented, IDType>>
+{
+    Item(
+        BlueprintItemContentWrapper(
+            representing: representing,
+            
+            identifierKeyPath: identifier,
+            
+            isEquivalentProvider: { $0 == $1 },
+            elementProvider: element,
+            backgroundProvider: background,
+            selectedBackgroundProvider: selectedBackground
+        ),
+        configure: configure
+    )
+}
+
 enum Inline {
     
     static func with<Represented:Equatable, IDType:Hashable>(
