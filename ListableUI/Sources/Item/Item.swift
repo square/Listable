@@ -127,10 +127,14 @@ public struct Item<Content:ItemContent> : AnyItem
         
         self.reuseIdentifier = .identifier(for: Content.self)
         
-        self.identifier = self.content.identifier
+        self.identifier = Identifier<Content>(self.content.identifier)
     }
     
     // MARK: AnyItem
+    
+    public var anyIdentifier: AnyIdentifier {
+        self.identifier
+    }
     
     public var anyContent: Any {
         self.content

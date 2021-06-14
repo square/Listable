@@ -187,14 +187,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     public var scrollPositionInfo : ListScrollPositionInfo {
         let visibleItems = Set(self.visibleContent.items.map { item in
-            item.item.anyModel.identifier
+            item.item.anyModel.anyIdentifier
         })
         
         return ListScrollPositionInfo(
             scrollView: self.collectionView,
             visibleItems: visibleItems,
-            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
-            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
+            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.anyIdentifier) } ?? false,
+            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.anyIdentifier) } ?? false
         )
     }
     
@@ -397,7 +397,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     ) -> Bool
     {
         self.scrollTo(
-            item: item.identifier,
+            item: item.anyIdentifier,
             position: position,
             animation: animation,
             completion: completion
@@ -1186,7 +1186,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     movedHint: { $0.identifier != $1.identifier }
                 ),
                 item: .init(
-                    identifier: { $0.identifier },
+                    identifier: { $0.anyIdentifier },
                     updated: { $0.anyIsEquivalent(to: $1) == false },
                     movedHint: { $0.anyWasMoved(comparedTo: $1) }
                 )

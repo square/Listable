@@ -10,7 +10,7 @@ import Foundation
 
 public protocol AnyItem : AnyItem_Internal
 {
-    var identifier : AnyIdentifier { get }
+    var anyIdentifier : AnyIdentifier { get }
     
     var anyContent : Any { get }
     

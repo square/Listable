@@ -43,6 +43,8 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     // MARK: Identification
     //
     
+    associatedtype IdentifierType : Hashable
+    
     /// Identifies the content across updates to the list. This value must remain the same,
     /// otherwise the content will be considered a new item, and the old one removed from the list.
     ///
@@ -51,7 +53,7 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     ///
     /// If you're backing your content with some sort of client or server-provided data, consider using its
     /// server or client UUID here, or some other unique identifier from the underlying data model.
-    var identifier : Identifier<Self> { get }
+    var identifier : IdentifierType { get }
     
     //
     // MARK: Default Item Properties

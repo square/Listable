@@ -91,7 +91,7 @@ extension ListView
             
             let old = self.oldSelectedItems
             
-            let new = Set(self.presentationState.selectedItems.map(\.anyModel.identifier))
+            let new = Set(self.presentationState.selectedItems.map(\.anyModel.anyIdentifier))
             
             guard old != new else {
                 return

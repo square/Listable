@@ -152,7 +152,7 @@ public struct Content
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (itemIndex, item) in section.items.enumerated() {
-                if item.identifier == identifier {
+                if item.anyIdentifier == identifier {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 }
             }
