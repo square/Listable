@@ -112,7 +112,7 @@ extension Item
         
     ) where Content == BlueprintItemContentWrapper<Represented, IDType>, Represented:Equatable
     {
-        self.init(
+        Item(
             BlueprintItemContentWrapper<Represented, IDType>(
                 representing: representing,
                 
@@ -127,6 +127,39 @@ extension Item
         )
     }
 }
+
+// This works
+
+enum Inline {
+    
+    static func with<Represented:Equatable, IDType:Hashable>(
+        _ representing : Represented,
+        
+        identifier : KeyPath<Represented, IDType>,
+
+        element : @escaping (Represented, ApplyItemContentInfo) -> Element,
+        background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+        selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+        
+        configure : (inout Item<BlueprintItemContentWrapper<Represented, IDType>>) -> () = { _ in }
+    ) -> Item<BlueprintItemContentWrapper<Represented, IDType>>
+    {
+        Item(
+            BlueprintItemContentWrapper(
+                representing: representing,
+                
+                identifierKeyPath: identifier,
+                
+                isEquivalentProvider: { $0 == $1 },
+                elementProvider: element,
+                backgroundProvider: background,
+                selectedBackgroundProvider: selectedBackground
+            ),
+            configure: configure
+        )
+    }
+}
+
 
 
 /// The `BlueprintItemContent` type that is used to provide
