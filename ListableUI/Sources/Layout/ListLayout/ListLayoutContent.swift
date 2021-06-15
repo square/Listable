@@ -67,6 +67,9 @@ public final class ListLayoutContent
     // MARK: Reading Default Values From Layouts
     //
     
+    /// TODO: Once the reordering PR (https://github.com/kyleve/Listable/pull/292) lands,
+    /// we can remove this; and instead read the layout values right from the `state` parameter
+    /// on the SectionInfo, SupplementaryInfo, ItemInfo, etc, directly, I think?
     func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
         
         let defaults = layout.defaults
