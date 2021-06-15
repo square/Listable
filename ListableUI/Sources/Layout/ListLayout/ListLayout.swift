@@ -12,9 +12,9 @@ public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
     
-    associatedtype ItemLayout : ItemLayoutsValue = EmptyItemLayoutsValue
-    associatedtype HeaderFooterLayout : HeaderFooterLayoutsValue = EmptyHeaderFooterLayoutsValue
-    associatedtype SectionLayout : SectionLayoutsValue = EmptySectionLayoutsValue
+    associatedtype ItemLayout : ItemLayoutsValue
+    associatedtype HeaderFooterLayout : HeaderFooterLayoutsValue
+    associatedtype SectionLayout : SectionLayoutsValue
     
     static var defaults : ListLayoutDefaults { get }
         
@@ -27,17 +27,6 @@ public protocol ListLayout : AnyListLayout
         content : ListLayoutContent
     )
 }
-
-
-//public struct ListLayoutContentLayoutsKeyPaths<
-//    ItemLayouts : ItemLayoutsValue,
-//    HeaderFooterLayout : HeaderFooterLayoutsValue,
-//    SectionLayouts : SectionLayoutsValue
-//> {
-//    public var itemLayout : KeyPath<ItemLayouts, ItemLayouts>?
-//    public var headerFooterLayout : KeyPath<HeaderFooterLayouts, HeaderFooterLayout>?
-//    public var sectionLayout : KeyPath<SectionLayouts, SectionLayouts>?
-//}
 
 
 public struct ListLayoutLayoutContext : Equatable {

@@ -399,6 +399,10 @@ final class TableListLayout : ListLayout
 {
     typealias LayoutAppearance = TableAppearance
     
+    typealias ItemLayout = TableAppearance.ItemLayout
+    typealias HeaderFooterLayout = TableAppearance.HeaderFooterLayout
+    typealias SectionLayout = TableAppearance.SectionLayout
+    
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .top)
     }
@@ -519,10 +523,6 @@ final class TableListLayout : ListLayout
             header.y = lastContentMaxY
             
             if hasListHeader {
-                if let transform = header.layoutTransformation {
-                    // TODO
-                }
-                
                 lastContentMaxY = header.defaultFrame.maxY
 
                 if self.content.sections.isEmpty == false {
@@ -563,6 +563,10 @@ final class TableListLayout : ListLayout
                 header.y = lastContentMaxY
                 
                 if hasSectionHeader {
+                    if let transform = header.layoutTransformation {
+                        print("Got em")
+                    }
+                    
                     lastContentMaxY = section.header.defaultFrame.maxY
                     
                     if section.items.isEmpty == false {

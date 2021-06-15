@@ -207,6 +207,10 @@ final class GridListLayout : ListLayout
 {
     typealias LayoutAppearance = GridAppearance
     
+    typealias ItemLayout = GridAppearance.ItemLayout
+    typealias HeaderFooterLayout = GridAppearance.HeaderFooterLayout
+    typealias SectionLayout = GridAppearance.SectionLayout
+    
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .scaleDown)
     }

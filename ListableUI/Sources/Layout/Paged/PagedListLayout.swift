@@ -101,7 +101,11 @@ public struct PagedAppearance : ListLayoutAppearance
 
 final class PagedListLayout : ListLayout
 {
-    public typealias LayoutAppearance = PagedAppearance
+    typealias LayoutAppearance = PagedAppearance
+    
+    typealias ItemLayout = EmptyItemLayoutsValue
+    typealias HeaderFooterLayout = EmptyHeaderFooterLayoutsValue
+    typealias SectionLayout = EmptySectionLayoutsValue
     
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .scaleDown)
