@@ -69,7 +69,13 @@ public final class ListLayoutContent
     
     func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
         
-        self.header.setValuesFrom(values: LayoutType.self)
+        self.header.setValuesFrom(layout: layout)
+        self.footer.setValuesFrom(layout: layout)
+        self.overscrollFooter.setValuesFrom(layout: layout)
+        
+        for section in self.sections {
+            section.setValuesFrom(layout: layout)
+        }
         
         self.updateItemsWithLayoutTransformations()
     }

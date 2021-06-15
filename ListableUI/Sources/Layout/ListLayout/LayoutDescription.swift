@@ -105,6 +105,8 @@ extension LayoutDescription
             
             let content = contentProvider(LayoutType.defaults)
             
+            content.setValuesFrom(layout: LayoutType.self)
+            
             return LayoutType(
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
