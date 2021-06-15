@@ -111,3 +111,10 @@ public protocol SectionLayoutsValue {
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
 }
+
+
+public struct EmptySectionLayoutsValue : SectionLayoutsValue {
+    public static var defaultValue: EmptySectionLayoutsValue {
+        .init()
+    }
+}

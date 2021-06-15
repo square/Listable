@@ -185,6 +185,10 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         context.viewPropertiesChanged = self.viewProperties != CollectionViewLayoutProperties(collectionView: view)
         
+        // Handle LayoutTransformations
+        
+        context.hasLayoutAffectingTransformations = self.layout.content.layoutTransformingItemsAffectLayout
+        
         // Update Needed Layout Type
                 
         self.neededLayoutType.merge(with: context)
@@ -218,6 +222,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         var viewPropertiesChanged : Bool = false
         
         var performedInteractiveMove : Bool = false
+        
+        var hasLayoutAffectingTransformations : Bool = false
     }
     
     //
@@ -234,7 +240,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             let context = context as! InvalidationContext
             
             let requeryDataSourceCounts = context.invalidateEverything || context.invalidateDataSourceCounts
-            let needsRelayout = context.viewPropertiesChanged || context.performedInteractiveMove
+            let needsRelayout = context.viewPropertiesChanged || context.performedInteractiveMove || context.hasLayoutAffectingTransformations
             
             if requeryDataSourceCounts {
                 self.merge(with: .rebuild)
@@ -348,7 +354,7 @@ final class CollectionViewLayout : UICollectionViewLayout
                 
         self.layout.layout(
             delegate: self.delegate,
-            in: .init(view)
+            in: .init(view: view, direction: self.layout.direction)
         )
         
         self.layout.content.setSectionContentsFrames()
@@ -370,6 +376,12 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.layout.positionStickySectionHeadersIfNeeded(in: view)
         
         self.layout.updateLayout(in: view)
+        
+        self.updateLayoutTransformations()
+    }
+    
+    private func updateLayoutTransformations() {
+        
     }
     
     //

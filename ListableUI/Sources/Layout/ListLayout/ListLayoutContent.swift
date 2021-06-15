@@ -19,6 +19,9 @@ public final class ListLayoutContent
     
     let sections : [SectionInfo]
     
+    private(set) var layoutTransformingItems : [ListLayoutContentItem] = []
+    private(set) var layoutTransformingItemsAffectLayout : Bool = false
+    
     var all : [ListLayoutContentItem] {
         var all : [ListLayoutContentItem] = []
         
@@ -58,6 +61,27 @@ public final class ListLayoutContent
         self.footer = footer ?? .empty(.listFooter)
         self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter)
         self.sections = sections
+    }
+    
+    //
+    // MARK: Reading Default Values From Layouts
+    //
+    
+    func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+        
+        self.header.setValuesFrom(values: LayoutType.self)
+        
+        self.updateItemsWithLayoutTransformations()
+    }
+    
+    func updateItemsWithLayoutTransformations() {
+        self.layoutTransformingItems = self.all.filter {
+            $0.layoutTransformation != nil
+        }
+        
+        self.layoutTransformingItemsAffectLayout = self.layoutTransformingItems.first {
+            $0.layoutTransformation?.externality == .affectsLayout
+        } != nil
     }
     
     //
@@ -196,6 +220,8 @@ public final class ListLayoutContent
         
         self.sections[from.section].items.remove(at: from.item)
         self.sections[to.section].items.insert(info, at: to.item)
+        
+        self.updateItemsWithLayoutTransformations()
     }
     
     //
@@ -230,6 +256,8 @@ protocol ListLayoutContentItem : AnyObject
     var y : CGFloat { get set }
     
     var zIndex : Int { get set }
+    
+    var layoutTransformation : LayoutTransformation? { get set }
 }
 
 
@@ -242,7 +270,7 @@ public extension ListLayoutContent
         let header : SupplementaryItemInfo
         let footer : SupplementaryItemInfo
                 
-        var items : [ItemInfo]
+        fileprivate(set) var items : [ItemInfo]
         
         var all : [ListLayoutContentItem] {
             var all : [ListLayoutContentItem] = []
@@ -294,6 +322,16 @@ public extension ListLayoutContent
 
             self.contentsFrame = .unioned(from: allFrames)
         }
+        
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+
+            self.header.setValuesFrom(layout: layout)
+            self.footer.setValuesFrom(layout: layout)
+            
+            for item in self.items {
+                item.setValuesFrom(layout: layout)
+            }
+        }
     }
 
     final class SupplementaryItemInfo : ListLayoutContentItem
@@ -303,7 +341,8 @@ public extension ListLayoutContent
             SupplementaryItemInfo(
                 kind: kind,
                 layouts: .init(),
-                isPopulated: false, measurer: { _ in .zero }
+                isPopulated: false,
+                measurer: { _ in .zero }
             )
         }
         
@@ -322,6 +361,8 @@ public extension ListLayoutContent
         var pinnedY : CGFloat? = nil
         
         var zIndex : Int = 0
+        
+        var layoutTransformation : LayoutTransformation? = nil
         
         var defaultFrame : CGRect {
             CGRect(
@@ -362,6 +403,10 @@ public extension ListLayoutContent
             
             return attributes
         }
+        
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+            self.layoutTransformation = self.layouts[LayoutType.HeaderFooterLayout.self].layoutTransformation
+        }
     }
     
 
@@ -383,6 +428,8 @@ public extension ListLayoutContent
         var y : CGFloat = .zero
         
         var zIndex : Int = 0
+        
+        var layoutTransformation : LayoutTransformation? = nil
         
         var frame : CGRect {
             CGRect(
@@ -416,6 +463,10 @@ public extension ListLayoutContent
             attributes.zIndex = self.zIndex
             
             return attributes
+        }
+        
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+            self.layoutTransformation = self.layouts[LayoutType.ItemLayout.self].layoutTransformation
         }
     }
 }

@@ -55,6 +55,10 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     @available(*, unavailable)
     required init?(coder: NSCoder) { listableFatal() }
     
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+    }
+    
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {
         // Note – Please keep this comment in sync with the comment in SupplementaryContainerView.

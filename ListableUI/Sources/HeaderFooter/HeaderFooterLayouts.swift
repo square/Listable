@@ -111,4 +111,21 @@ public protocol HeaderFooterLayoutsValue {
 
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
+    
+    var layoutTransformation : LayoutTransformation? { get }
+}
+
+
+extension HeaderFooterLayoutsValue {
+    
+    public var layoutTransformation : LayoutTransformation? {
+        nil
+    }
+}
+
+
+public struct EmptyHeaderFooterLayoutsValue : HeaderFooterLayoutsValue {
+    public static var defaultValue: EmptyHeaderFooterLayoutsValue {
+        .init()
+    }
 }

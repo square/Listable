@@ -32,9 +32,14 @@ public final class DemosRootViewController : ListViewController
         
         list("list-view") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "List Views")
-            )
+            section.header = HeaderFooter(DemoHeader(title: "List Views")) {
+                $0.layouts.table.layoutTransformation = LayoutTransformation(
+                    externality: .affectsSelf,
+                    behavior: .contentOnly
+                ) { context, attributes in
+                    attributes.transform = .affine(.init(scaleX: 2.0, y: 2.0))
+                }
+            }
             
             section += Item(
                 DemoItem(text: "Basic Demo"),

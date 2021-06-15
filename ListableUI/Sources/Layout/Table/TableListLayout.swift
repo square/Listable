@@ -159,10 +159,12 @@ extension TableAppearance
     }
     
     
-    public struct HeaderFooterLayout : Equatable, HeaderFooterLayoutsValue
+    public struct HeaderFooterLayout : HeaderFooterLayoutsValue
     {
         public var width : CustomWidth
             
+        public var layoutTransformation : LayoutTransformation?
+        
         public init(
             width : CustomWidth = .default
         ) {
@@ -466,6 +468,8 @@ final class TableListLayout : ListLayout
         ))
 
         let defaultWidth = rootWidth.position(with: viewSize, defaultWidth: viewSize.width).width
+        
+        let transformationContext = LayoutTransformation.Context(layoutContext: context)
                 
         //
         // Item Positioning
@@ -515,6 +519,10 @@ final class TableListLayout : ListLayout
             header.y = lastContentMaxY
             
             if hasListHeader {
+                if let transform = header.layoutTransformation {
+                    // TODO
+                }
+                
                 lastContentMaxY = header.defaultFrame.maxY
 
                 if self.content.sections.isEmpty == false {

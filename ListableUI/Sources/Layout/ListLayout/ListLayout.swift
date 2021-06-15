@@ -12,10 +12,14 @@ public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
     
-    static var defaults : ListLayoutDefaults { get }
+    associatedtype ItemLayout : ItemLayoutsValue = EmptyItemLayoutsValue
+    associatedtype HeaderFooterLayout : HeaderFooterLayoutsValue = EmptyHeaderFooterLayoutsValue
+    associatedtype SectionLayout : SectionLayoutsValue = EmptySectionLayoutsValue
     
+    static var defaults : ListLayoutDefaults { get }
+        
     var layoutAppearance : LayoutAppearance { get }
-            
+    
     init(
         layoutAppearance : LayoutAppearance,
         appearance : Appearance,
@@ -25,16 +29,55 @@ public protocol ListLayout : AnyListLayout
 }
 
 
+//public struct ListLayoutContentLayoutsKeyPaths<
+//    ItemLayouts : ItemLayoutsValue,
+//    HeaderFooterLayout : HeaderFooterLayoutsValue,
+//    SectionLayouts : SectionLayoutsValue
+//> {
+//    public var itemLayout : KeyPath<ItemLayouts, ItemLayouts>?
+//    public var headerFooterLayout : KeyPath<HeaderFooterLayouts, HeaderFooterLayout>?
+//    public var sectionLayout : KeyPath<SectionLayouts, SectionLayouts>?
+//}
+
+
 public struct ListLayoutLayoutContext : Equatable {
     
     public var viewBounds : CGRect
+    public var viewSize : CGSize
     
-    init(viewBounds : CGRect) {
+    public var contentOffset : CGPoint
+    public var contentInset : UIEdgeInsets
+    
+    public var safeAreaInsets : UIEdgeInsets
+    
+    public var direction : LayoutDirection
+    
+    init(
+        viewBounds : CGRect,
+        viewSize : CGSize,
+        contentOffset : CGPoint,
+        contentInset : UIEdgeInsets,
+        safeAreaInsets : UIEdgeInsets,
+        direction : LayoutDirection
+    ) {
         self.viewBounds = viewBounds
+        self.viewSize = viewSize
+        self.contentOffset = contentOffset
+        self.contentInset = contentInset
+        self.safeAreaInsets = safeAreaInsets
+        self.direction = direction
     }
     
-    init(_ collectionView : UICollectionView) {
-        self.viewBounds = collectionView.bounds
+    init(
+        view : UICollectionView,
+        direction : LayoutDirection
+    ) {
+        self.viewBounds = view.bounds
+        self.viewSize = view.bounds.size
+        self.contentOffset = view.contentOffset
+        self.contentInset = view.contentInset
+        self.safeAreaInsets = view.safeAreaInsets
+        self.direction = direction
     }
 }
 

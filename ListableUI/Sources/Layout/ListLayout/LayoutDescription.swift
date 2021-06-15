@@ -97,17 +97,19 @@ extension LayoutDescription
         public func createPopulatedLayout(
             appearance : Appearance,
             behavior: Behavior,
-            content : (ListLayoutDefaults) -> ListLayoutContent
+            content contentProvider : (ListLayoutDefaults) -> ListLayoutContent
         ) -> AnyListLayout
         {
             var layoutAppearance = LayoutType.LayoutAppearance.default
             self.configure(&layoutAppearance)
             
+            let content = contentProvider(LayoutType.defaults)
+            
             return LayoutType(
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
-                content: content(LayoutType.defaults)
+                content: content
             )
         }
         

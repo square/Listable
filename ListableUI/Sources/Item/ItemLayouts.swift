@@ -110,4 +110,23 @@ public protocol ItemLayoutsValue {
     
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
+    
+    var layoutTransformation : LayoutTransformation? { get }
 }
+
+
+extension ItemLayoutsValue {
+    
+    public var layoutTransformation : LayoutTransformation? {
+        nil
+    }
+}
+
+
+public struct EmptyItemLayoutsValue : ItemLayoutsValue {
+    public static var defaultValue: EmptyItemLayoutsValue {
+        .init()
+    }
+}
+
+
