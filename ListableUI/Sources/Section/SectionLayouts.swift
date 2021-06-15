@@ -113,8 +113,8 @@ public protocol SectionLayoutsValue {
 }
 
 
-public struct EmptySectionLayoutsValue : SectionLayoutsValue {
-    public static var defaultValue: EmptySectionLayoutsValue {
+public struct HasNoSectionLayoutsValue : SectionLayoutsValue {
+    public static var defaultValue: Self {
         .init()
     }
 }

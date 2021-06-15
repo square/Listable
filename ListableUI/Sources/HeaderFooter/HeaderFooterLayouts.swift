@@ -124,8 +124,8 @@ extension HeaderFooterLayoutsValue {
 }
 
 
-public struct EmptyHeaderFooterLayoutsValue : HeaderFooterLayoutsValue {
-    public static var defaultValue: EmptyHeaderFooterLayoutsValue {
+public struct HasNoHeaderFooterLayoutsValue : HeaderFooterLayoutsValue {
+    public static var defaultValue: Self {
         .init()
     }
 }

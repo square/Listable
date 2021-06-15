@@ -103,9 +103,9 @@ final class PagedListLayout : ListLayout
 {
     typealias LayoutAppearance = PagedAppearance
     
-    typealias ItemLayout = EmptyItemLayoutsValue
-    typealias HeaderFooterLayout = EmptyHeaderFooterLayoutsValue
-    typealias SectionLayout = EmptySectionLayoutsValue
+    typealias ItemLayout = HasNoItemLayoutsValue
+    typealias HeaderFooterLayout = HasNoHeaderFooterLayoutsValue
+    typealias SectionLayout = HasNoSectionLayoutsValue
     
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .scaleDown)

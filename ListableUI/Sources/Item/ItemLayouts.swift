@@ -123,8 +123,8 @@ extension ItemLayoutsValue {
 }
 
 
-public struct EmptyItemLayoutsValue : ItemLayoutsValue {
-    public static var defaultValue: EmptyItemLayoutsValue {
+public struct HasNoItemLayoutsValue : ItemLayoutsValue {
+    public static var defaultValue: Self {
         .init()
     }
 }
