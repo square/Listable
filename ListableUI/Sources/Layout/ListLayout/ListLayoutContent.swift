@@ -69,12 +69,14 @@ public final class ListLayoutContent
     
     func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
         
-        self.header.setValuesFrom(layout: layout)
-        self.footer.setValuesFrom(layout: layout)
-        self.overscrollFooter.setValuesFrom(layout: layout)
+        let defaults = layout.defaults
+        
+        self.header.setValuesFrom(layout: layout, with: defaults)
+        self.footer.setValuesFrom(layout: layout, with: defaults)
+        self.overscrollFooter.setValuesFrom(layout: layout, with: defaults)
         
         for section in self.sections {
-            section.setValuesFrom(layout: layout)
+            section.setValuesFrom(layout: layout, with: defaults)
         }
         
         self.updateItemsWithLayoutTransformations()
@@ -329,13 +331,13 @@ public extension ListLayoutContent
             self.contentsFrame = .unioned(from: allFrames)
         }
         
-        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type, with defaults : ListLayoutDefaults) {
 
-            self.header.setValuesFrom(layout: layout)
-            self.footer.setValuesFrom(layout: layout)
+            self.header.setValuesFrom(layout: layout, with: defaults)
+            self.footer.setValuesFrom(layout: layout, with: defaults)
             
             for item in self.items {
-                item.setValuesFrom(layout: layout)
+                item.setValuesFrom(layout: layout, with: defaults)
             }
         }
     }
@@ -410,7 +412,7 @@ public extension ListLayoutContent
             return attributes
         }
         
-        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type, with defaults : ListLayoutDefaults) {
             self.layoutTransformation = self.layouts[LayoutType.HeaderFooterLayout.self].layoutTransformation
         }
     }
@@ -471,7 +473,7 @@ public extension ListLayoutContent
             return attributes
         }
         
-        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type) {
+        func setValuesFrom<LayoutType:ListLayout>(layout : LayoutType.Type, with defaults : ListLayoutDefaults) {
             self.layoutTransformation = self.layouts[LayoutType.ItemLayout.self].layoutTransformation
         }
     }
