@@ -2,6 +2,20 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.21.0] - 2021-06-17
+
+### Fixed
+
 - [When applying an update to visible views during content updates, the update now occurs within an animation block](https://github.com/kyleve/Listable/pull/292). This allows your view to inherit implicit animations more easily.
 
 ### Added
@@ -10,8 +24,6 @@
 - [Introduced type safe access to `Section` content following reorder events](https://github.com/kyleve/Listable/pull/292). See `Section.filtered`.
 - [`ListStateObserver.onItemReordered` was added](https://github.com/kyleve/Listable/pull/292) to observe reorder events at a list-wide level.
 - [`ListLayout` was extended](https://github.com/kyleve/Listable/pull/292) to allow customization of in-progress moves. Note that `ListLayout` is not yet public.
-
-### Removed
 
 ### Changed
 
@@ -25,8 +37,6 @@
 ### Misc
 
 - [The Blueprint-based shortcuts to create inline items and header footers have been renamed to `ElementItem` and `ElementHeaderFooter`](https://github.com/kyleve/Listable/pull/292).
-
-# Past Releases
 
 # [0.20.2] - 2021-04-19
 
@@ -382,7 +392,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.20.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.21.0...HEAD
+[0.21.0]: https://github.com/kyleve/Listable/compare/0.20.2...0.21.0
 [0.20.2]: https://github.com/kyleve/Listable/compare/0.20.1...0.20.2
 [0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/kyleve/Listable/compare/0.19.0...0.20.0
