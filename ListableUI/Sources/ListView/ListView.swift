@@ -1163,6 +1163,17 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
         
         if changes.hasIndexAffectingChanges {
+            
+            if self.hasInProgressReorders {
+                print(
+                    """
+                    LISTABLE WARNING: Reordering while applying an update diff that has changes which affect index \
+                    path stability is currently experimental, and will likely crash. A fix is planned, but this \
+                    warning is here so you know what to expect.
+                    """
+                )
+            }
+            
             self.cancelAllInProgressReorders()
         }
         
@@ -1282,6 +1293,19 @@ extension ListView : ReorderingActionsDelegate
         }
         
         self.collectionView.cancelInteractiveMovement()
+    }
+    
+    private var hasInProgressReorders : Bool {
+        
+        for section in self.storage.presentationState.sections {
+            for item in section.items {
+                if item.isReordering {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
 }
 

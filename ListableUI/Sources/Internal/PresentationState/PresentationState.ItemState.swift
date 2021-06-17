@@ -58,6 +58,8 @@ protocol AnyPresentationItemState : AnyObject
     func endReorder(with environment: ListEnvironment, result : ReorderingActions.Result)
     func performDidReorder(with result : ItemReordering.Result) -> Bool
     
+    var isReordering : Bool { get }
+    
     var activeReorderEventInfo : PresentationState.ActiveReorderEventInfo? { get }
 }
 

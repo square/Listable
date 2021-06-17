@@ -55,7 +55,8 @@ public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
     ///
     /// Creates an identifier which identifies by both `Represented`, and the `value` passed to init.
     ///
-    /// **Note** – It is intentional that this method is internal. You should not directly create identifiers
+    /// ### Note
+    /// It is intentional that this method is internal. You should not directly create identifiers
     /// by calling this method. Instead, use the extensions on `Section` and `ItemContent` to create
     /// strongly typed identifiers with the correct `Value` type:
     /// ```swift
