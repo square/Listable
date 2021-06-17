@@ -9,22 +9,22 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/BlueprintUILists/Sources/HeaderFooter.swift",
-      "line": 127,
-      "symbol": "BlueprintHeaderFooterContentWrapper.representing",
+      "line": 123,
+      "symbol": "ElementHeaderFooterContent.represented",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/BlueprintUILists/Sources/HeaderFooter.swift",
-      "line": 134,
-      "symbol": "BlueprintHeaderFooterContentWrapper.isEquivalent(to:)",
+      "line": 130,
+      "symbol": "ElementHeaderFooterContent.isEquivalent(to:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/BlueprintUILists/Sources/Item.swift",
-      "line": 137,
-      "symbol": "BlueprintItemContentWrapper.representing",
+      "line": 129,
+      "symbol": "ElementItemContent.represented",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     }

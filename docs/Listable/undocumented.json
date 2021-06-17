@@ -289,14 +289,14 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/HeaderFooter/HeaderFooterContent.swift",
-      "line": 159,
+      "line": 161,
       "symbol": "HeaderFooterContent.isEquivalent(to:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Identifier.swift",
-      "line": 56,
+      "line": 80,
       "symbol": "Identifier.debugDescription",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -400,9 +400,16 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Internal/Presentation State/PresentationState.ItemState.swift",
-      "line": 67,
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Internal/PresentationState/PresentationState.ItemState.swift",
+      "line": 73,
       "symbol": "ItemStateDependencies",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Internal/PresentationState/PresentationState.ItemState.swift",
+      "line": 92,
+      "symbol": "PresentationState.ActiveReorderEventInfo",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
@@ -416,7 +423,7 @@
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/AnyItem.swift",
       "line": 13,
-      "symbol": "AnyItem.identifier",
+      "symbol": "AnyItem.anyIdentifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
@@ -612,118 +619,139 @@
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 24,
+      "symbol": "Item.OnWasReordered",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
+      "line": 26,
       "symbol": "Item.reordering",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 26,
-      "symbol": "Item.onDisplay",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 27,
-      "symbol": "Item.onEndDisplay",
+      "symbol": "Item.onWasReordered",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 29,
-      "symbol": "Item.onSelect",
+      "symbol": "Item.onDisplay",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 30,
-      "symbol": "Item.onDeselect",
+      "symbol": "Item.onEndDisplay",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 32,
-      "symbol": "Item.onInsert",
+      "symbol": "Item.onSelect",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 33,
-      "symbol": "Item.onRemove",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 34,
-      "symbol": "Item.onMove",
+      "symbol": "Item.onDeselect",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
       "line": 35,
+      "symbol": "Item.onInsert",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
+      "line": 36,
+      "symbol": "Item.onRemove",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
+      "line": 37,
+      "symbol": "Item.onMove",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
+      "line": 38,
       "symbol": "Item.onUpdate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 39,
+      "line": 42,
       "symbol": "Item.debuggingIdentifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 45,
+      "line": 48,
       "symbol": "Item.Configure",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 47,
+      "line": 50,
       "symbol": "Item.init(_:configure:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 56,
-      "symbol": "Item.init(_:sizing:layouts:selectionStyle:insertAndRemoveAnimations:swipeActions:reordering:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)",
+      "line": 59,
+      "symbol": "Item.init(_:sizing:layouts:selectionStyle:insertAndRemoveAnimations:swipeActions:reordering:onWasReordered:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 135,
+      "line": 153,
+      "symbol": "Item.anyIdentifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
+      "line": 157,
       "symbol": "Item.anyContent",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 141,
+      "line": 163,
       "symbol": "Item.anyIsEquivalent(to:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 150,
+      "line": 172,
       "symbol": "Item.anyWasMoved(comparedTo:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Item.swift",
-      "line": 159,
+      "line": 181,
       "symbol": "Item.newPresentationItemState(with:updateCallbacks:performsContentCallbacks:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -905,28 +933,35 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemContent.swift",
-      "line": 313,
+      "line": 522,
+      "symbol": "ItemContent.identifier",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemContent.swift",
+      "line": 584,
       "symbol": "ItemContentSwipeActionsView.swipeActionsWidth",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemContent.swift",
-      "line": 315,
+      "line": 586,
       "symbol": "ItemContentSwipeActionsView.init(didPerformAction:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemContent.swift",
-      "line": 317,
+      "line": 588,
       "symbol": "ItemContentSwipeActionsView.apply(actions:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemContent.swift",
-      "line": 319,
+      "line": 590,
       "symbol": "ItemContentSwipeActionsView.apply(state:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -975,112 +1010,56 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 32,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
       "line": 34,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.bounds",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 35,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.center",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 37,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.transform",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 38,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.transform3D",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 40,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.alpha",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 42,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.zIndex",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 44,
-      "symbol": "ItemInsertAndRemoveAnimations.Attributes.frame",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 96,
       "symbol": "ItemInsertAndRemoveAnimations",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 98,
+      "line": 36,
       "symbol": "ItemInsertAndRemoveAnimations.fade",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 109,
+      "line": 47,
       "symbol": "ItemInsertAndRemoveAnimations.right",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 122,
+      "line": 60,
       "symbol": "ItemInsertAndRemoveAnimations.left",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 135,
+      "line": 73,
       "symbol": "ItemInsertAndRemoveAnimations.top",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 148,
+      "line": 86,
       "symbol": "ItemInsertAndRemoveAnimations.bottom",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 161,
+      "line": 99,
       "symbol": "ItemInsertAndRemoveAnimations.scaleDown",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemInsertAndRemoveAnimations.swift",
-      "line": 174,
+      "line": 112,
       "symbol": "ItemInsertAndRemoveAnimations.scaleUp",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
@@ -1121,6 +1100,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemReordering.swift",
+      "line": 46,
+      "symbol": "ItemReordering.CanReorder",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemState.swift",
       "line": 11,
       "symbol": "ItemState",
@@ -1130,139 +1116,41 @@
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemState.swift",
       "line": 13,
-      "symbol": "ItemState.init(isSelected:isHighlighted:)",
+      "symbol": "ItemState.init(isSelected:isHighlighted:isReordering:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/ItemState.swift",
-      "line": 19,
-      "symbol": "ItemState.init(cell:)",
+      "line": 20,
+      "symbol": "ItemState.init(cell:isReordering:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 11,
-      "symbol": "Reordering",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 13,
-      "symbol": "Reordering.sections",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 15,
-      "symbol": "Reordering.CanReorder",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 16,
-      "symbol": "Reordering.canReorder",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 18,
-      "symbol": "Reordering.DidReorder",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 19,
-      "symbol": "Reordering.didReorder",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 21,
-      "symbol": "Reordering.init(sections:canReorder:didReorder:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 31,
-      "symbol": "Reordering.Sections",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 33,
-      "symbol": "Reordering.Sections.same",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 36,
-      "symbol": "Reordering.Result",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 38,
-      "symbol": "Reordering.Result.fromSection",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 39,
-      "symbol": "Reordering.Result.fromIndexPath",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 41,
-      "symbol": "Reordering.Result.toSection",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Item/Reordering.swift",
-      "line": 42,
-      "symbol": "Reordering.Result.toIndexPath",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 531,
+      "line": 635,
       "symbol": "CollectionViewLayoutDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 533,
+      "line": 637,
       "symbol": "CollectionViewLayoutDelegate.listViewLayoutUpdatedItemPositions()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 535,
+      "line": 639,
       "symbol": "CollectionViewLayoutDelegate.listLayoutContent(defaults:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/CollectionViewLayout.swift",
-      "line": 539,
+      "line": 643,
       "symbol": "CollectionViewLayoutDelegate.listViewLayoutDidLayoutContents()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -1583,6 +1471,48 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 53,
+      "symbol": "ListContentLayoutAttributes.transform",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 54,
+      "symbol": "ListContentLayoutAttributes.transform3D",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 56,
+      "symbol": "ListContentLayoutAttributes.alpha",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 58,
+      "symbol": "ListContentLayoutAttributes.zIndex",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 64,
+      "symbol": "ListContentLayoutAttributes.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListContentLayoutAttributes.swift",
+      "line": 81,
+      "symbol": "ListContentLayoutAttributes.apply(to:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
       "line": 11,
       "symbol": "ListLayout",
@@ -1731,56 +1661,70 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 85,
+      "line": 87,
+      "symbol": "AnyListLayout.adjust(layoutAttributesForReorderingItem:originalAttributes:at:withTargetPosition:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 96,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 87,
+      "line": 98,
       "symbol": "AnyListLayout.setZIndexes()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 107,
+      "line": 116,
+      "symbol": "AnyListLayout.adjust(layoutAttributesForReorderingItem:originalAttributes:at:withTargetPosition:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
+      "line": 127,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 109,
+      "line": 129,
       "symbol": "AnyListLayout.visibleContentFrame(for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 121,
+      "line": 141,
       "symbol": "AnyListLayout",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 123,
+      "line": 143,
       "symbol": "AnyListLayout.positionStickySectionHeadersIfNeeded(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 150,
+      "line": 170,
       "symbol": "AnyListLayout.updateOverscrollFooterPosition(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayout.swift",
-      "line": 172,
+      "line": 192,
       "symbol": "AnyListLayout.adjustPositionsForLayoutUnderflow(in:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -1850,28 +1794,28 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayoutContent.swift",
-      "line": 236,
+      "line": 249,
       "symbol": "ListLayoutContent",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayoutContent.swift",
-      "line": 238,
+      "line": 251,
       "symbol": "ListLayoutContent.SectionInfo",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayoutContent.swift",
-      "line": 299,
+      "line": 316,
       "symbol": "ListLayoutContent.SupplementaryItemInfo",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Layout/ListLayout/ListLayoutContent.swift",
-      "line": 368,
+      "line": 389,
       "symbol": "ListLayoutContent.ItemInfo",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
@@ -2326,169 +2270,211 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 161,
+      "line": 132,
+      "symbol": "ListStateObserver.OnItemReordered",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 176,
       "symbol": "ListStateObserver.DidScroll.actions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 162,
+      "line": 177,
       "symbol": "ListStateObserver.DidScroll.positionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 169,
+      "line": 184,
       "symbol": "ListStateObserver.ContentUpdated.hadChanges",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 170,
+      "line": 185,
       "symbol": "ListStateObserver.ContentUpdated.insertionsAndRemovals",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 172,
+      "line": 187,
       "symbol": "ListStateObserver.ContentUpdated.actions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 173,
+      "line": 188,
       "symbol": "ListStateObserver.ContentUpdated.positionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 175,
+      "line": 190,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 177,
+      "line": 192,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals.sections",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 178,
+      "line": 193,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals.items",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 193,
+      "line": 208,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals.ChangedIDs",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 194,
+      "line": 209,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals.ChangedIDs.inserted",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 195,
+      "line": 210,
       "symbol": "ListStateObserver.ContentUpdated.InsertionsAndRemovals.ChangedIDs.removed",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 203,
+      "line": 218,
       "symbol": "ListStateObserver.VisibilityChanged.actions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 204,
+      "line": 219,
       "symbol": "ListStateObserver.VisibilityChanged.positionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 206,
+      "line": 221,
       "symbol": "ListStateObserver.VisibilityChanged.displayed",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 207,
+      "line": 222,
       "symbol": "ListStateObserver.VisibilityChanged.endedDisplay",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 213,
+      "line": 228,
       "symbol": "ListStateObserver.FrameChanged.actions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 214,
+      "line": 229,
       "symbol": "ListStateObserver.FrameChanged.positionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 216,
+      "line": 231,
       "symbol": "ListStateObserver.FrameChanged.old",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 217,
+      "line": 232,
       "symbol": "ListStateObserver.FrameChanged.new",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 223,
+      "line": 238,
       "symbol": "ListStateObserver.SelectionChanged.actions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 224,
+      "line": 239,
       "symbol": "ListStateObserver.SelectionChanged.positionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 226,
+      "line": 241,
       "symbol": "ListStateObserver.SelectionChanged.old",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
-      "line": 227,
+      "line": 242,
       "symbol": "ListStateObserver.SelectionChanged.new",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 248,
+      "symbol": "ListStateObserver.ItemReordered.actions",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 249,
+      "symbol": "ListStateObserver.ItemReordered.positionInfo",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 251,
+      "symbol": "ListStateObserver.ItemReordered.item",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 252,
+      "symbol": "ListStateObserver.ItemReordered.sections",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListStateObserver.swift",
+      "line": 254,
+      "symbol": "ListStateObserver.ItemReordered.result",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
@@ -2529,154 +2515,154 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 156,
+      "line": 159,
       "symbol": "ListView.debuggingIdentifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 162,
+      "line": 165,
       "symbol": "ListView.appearance",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 188,
+      "line": 191,
       "symbol": "ListView.scrollPositionInfo",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 201,
+      "line": 204,
       "symbol": "ListView.layout",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 206,
+      "line": 209,
       "symbol": "ListView.set(layout:animated:completion:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 211,
+      "line": 214,
       "symbol": "ListView.contentSize",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 219,
+      "line": 222,
       "symbol": "ListView.behavior",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 277,
+      "line": 280,
       "symbol": "ListView.scrollIndicatorInsets",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 385,
+      "line": 388,
       "symbol": "ListView.ScrollCompletion",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 619,
+      "line": 622,
       "symbol": "ListView.environment",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 625,
+      "line": 628,
       "symbol": "ListView.content",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 630,
+      "line": 633,
       "symbol": "ListView.setContent(animated:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 642,
+      "line": 645,
       "symbol": "ListView.set(source:initial:animated:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 667,
+      "line": 670,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 684,
+      "line": 687,
       "symbol": "ListView.configure(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 730,
+      "line": 733,
       "symbol": "ListView.frame",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 736,
+      "line": 739,
       "symbol": "ListView.bounds",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 784,
+      "line": 787,
       "symbol": "ListView.backgroundColor",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 790,
+      "line": 793,
       "symbol": "ListView.didMoveToWindow()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 799,
+      "line": 802,
       "symbol": "ListView.didMoveToSuperview()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 808,
+      "line": 811,
       "symbol": "ListView.layoutSubviews()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ListView/ListView.swift",
-      "line": 1199,
+      "line": 1213,
       "symbol": "ListView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
@@ -3048,22 +3034,43 @@
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
       "line": 21,
-      "symbol": "ReorderingActions.beginMoving()",
+      "symbol": "ReorderingActions.start()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
-      "line": 36,
+      "line": 44,
       "symbol": "ReorderingActions.moved(with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
-      "line": 45,
-      "symbol": "ReorderingActions.end()",
+      "line": 57,
+      "symbol": "ReorderingActions.end(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
+      "line": 72,
+      "symbol": "ReorderingActions.Result",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
+      "line": 73,
+      "symbol": "ReorderingActions.Result.finished",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/ReorderingActions.swift",
+      "line": 74,
+      "symbol": "ReorderingActions.Result.cancelled",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
@@ -3075,72 +3082,86 @@
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 59,
+      "line": 70,
       "symbol": "Section.layouts",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 65,
+      "line": 76,
       "symbol": "Section.Configure",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 67,
-      "symbol": "Section.init(_:layouts:header:footer:items:configure:)",
+      "line": 78,
+      "symbol": "Section.init(_:layouts:header:footer:reordering:items:configure:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 92,
+      "line": 145,
       "symbol": "Section.add(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 97,
+      "line": 150,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 102,
+      "line": 155,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 107,
+      "line": 160,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 116,
+      "line": 169,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 121,
+      "line": 174,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"
     },
     {
       "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
-      "line": 126,
+      "line": 179,
       "symbol": "Section.+=(_:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/Section.swift",
+      "line": 197,
+      "symbol": "Section",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/ListableUI/Sources/Section/SectionReordering.swift",
+      "line": 24,
+      "symbol": "SectionReordering.CanReorder",
+      "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
