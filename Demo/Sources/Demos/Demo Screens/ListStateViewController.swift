@@ -37,8 +37,8 @@ final class ListStateViewController : ListViewController
             }
             
             observer.onVisibilityChanged { info in
-                print("Displayed: \(info.displayed.map { $0.identifier })")
-                print("Ended Display: \(info.endedDisplay.map { $0.identifier })")
+                print("Displayed: \(info.displayed.map { $0.anyIdentifier })")
+                print("Ended Display: \(info.endedDisplay.map { $0.anyIdentifier })")
             }
         }
     }
@@ -48,11 +48,11 @@ final class ListStateViewController : ListViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /// Example of how to use the `actions` within a reactive framwork like Combine or ReactiveSwift.
+        /// Example of how to use the `actions` within a reactive framework like Combine or ReactiveSwift.
         
         cancel = $index.sink { [weak self] value in
             self?.actions.scrolling.scrollTo(
-                item: Identifier<DemoItem>("Item #\(value)"),
+                item: DemoItem.identifier(with: "Item #\(value)"),
                 position: .init(position: .top, ifAlreadyVisible: .scrollToPosition),
                 animation: .default
             )

@@ -18,47 +18,67 @@ public final class ReorderingActions
         self.isMoving = false
     }
     
-    public func beginMoving() -> Bool
+    public func start() -> Bool
     {
+        guard let item = self.item else {
+            return false
+        }
+        
         guard self.isMoving == false else {
             return true
         }
         
-        self.isMoving = true
+        guard let delegate = self.delegate else {
+            return false
+        }
         
-        if let delegate = self.delegate, let item = self.item {
-            return delegate.beginInteractiveMovementFor(item: item)
+        if delegate.beginReorder(for: item) {
+            self.isMoving = true
+            
+            return true
         } else {
             return false
         }
     }
     
-    public func moved(with recognizer : UIPanGestureRecognizer)
+    public func moved(with recognizer : ItemReordering.GestureRecognizer)
     {
         guard self.isMoving else {
             return
         }
         
-        self.delegate?.updateInteractiveMovementTargetPosition(with: recognizer)
+        guard let item = self.item else {
+            return
+        }
+        
+        self.delegate?.updateReorderTargetPosition(with: recognizer, for: item)
     }
     
-    public func end()
+    public func end(_ result : Result)
     {
         guard self.isMoving else {
+            return
+        }
+        
+        guard let item = self.item else {
             return
         }
         
         self.isMoving = false
         
-        self.delegate?.endInteractiveMovement()
+        self.delegate?.endReorder(for: item, with: result)
+    }
+    
+    public enum Result {
+        case finished
+        case cancelled
     }
 }
 
 
 protocol ReorderingActionsDelegate : AnyObject
 {
-    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
-    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
-    func endInteractiveMovement()
-    func cancelInteractiveMovement()
+    func beginReorder(for item : AnyPresentationItemState) -> Bool
+    func updateReorderTargetPosition(with recognizer : ItemReordering.GestureRecognizer, for item : AnyPresentationItemState)
+    func endReorder(for item : AnyPresentationItemState, with result : ReorderingActions.Result)
 }

@@ -105,8 +105,8 @@ fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable {
 
 fileprivate struct TestItem : ItemContent, Equatable {
     
-    var identifier: Identifier<TestItem> {
-        .init()
+    var identifier: String {
+        ""
     }
     
     typealias ContentView = UIView

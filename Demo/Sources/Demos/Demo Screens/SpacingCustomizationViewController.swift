@@ -80,8 +80,8 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
     // MARK: BlueprintItemElement
     //
 
-    var identifier: Identifier<CardElement> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
 
     func element(with info : ApplyItemContentInfo) -> Element

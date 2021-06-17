@@ -185,8 +185,8 @@ fileprivate struct TestingItemContent : ItemContent {
     
     var color : UIColor
     
-    var identifier: Identifier<TestingItemContent> {
-        .init("testing")
+    var identifierValue: String {
+        ""
     }
     
     func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)

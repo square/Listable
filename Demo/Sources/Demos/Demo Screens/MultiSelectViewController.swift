@@ -41,8 +41,8 @@ fileprivate struct SelectableRow : BlueprintItemContent, Equatable {
     
     var text : String
     
-    var identifier: Identifier<SelectableRow> {
-        .init(self.text)
+    var identifierValue: String {
+        self.text
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {

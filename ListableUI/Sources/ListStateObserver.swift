@@ -126,6 +126,21 @@ public struct ListStateObserver {
     private(set) var onSelectionChanged : [OnSelectionChanged] = []
     
     //
+    // MARK: Responding To Reordered Items
+    //
+    
+    public typealias OnItemReordered = (ItemReordered) -> ()
+    
+    /// Registers a callback which will be called when an item in the list view is reordered by the user.
+    /// May be called multiple times in a row for reorder events which contain multiple items.
+    public mutating func onItemReordered(_ callback : @escaping OnItemReordered)
+    {
+        self.onItemReordered.append(callback)
+    }
+    
+    private(set) var onItemReordered : [OnItemReordered] = []
+    
+    //
     // MARK: Internal Methods
     //
     
@@ -156,14 +171,14 @@ public struct ListStateObserver {
 
 extension ListStateObserver
 {
-    /// Parameters available for `OnDidScroll` callbacks.
+    /// Parameters available for ``OnDidScroll`` callbacks.
     public struct DidScroll {
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
     }
     
     
-    /// Parameters available for `OnContentUpdated` callbacks.
+    /// Parameters available for ``OnContentUpdated`` callbacks.
     public struct ContentUpdated {
         
         public let hadChanges : Bool
@@ -198,7 +213,7 @@ extension ListStateObserver
     }
     
     
-    /// Parameters available for `OnVisibilityChanged` callbacks.
+    /// Parameters available for ``OnVisibilityChanged`` callbacks.
     public struct VisibilityChanged {
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
@@ -208,7 +223,7 @@ extension ListStateObserver
     }
     
     
-    /// Parameters available for `OnFrameChanged` callbacks.
+    /// Parameters available for ``OnFrameChanged`` callbacks.
     public struct FrameChanged {
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
@@ -218,12 +233,24 @@ extension ListStateObserver
     }
     
     
-    /// Parameters available for `OnSelectionChanged` callbacks.
+    /// Parameters available for ``OnSelectionChanged`` callbacks.
     public struct SelectionChanged {
         public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
 
         public let old : Set<AnyIdentifier>
         public let new : Set<AnyIdentifier>
+    }
+    
+    
+    /// Parameters available for ``OnItemReordered`` callbacks.
+    public struct ItemReordered {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+        
+        public let item : AnyItem
+        public let sections : [Section]
+        
+        public let result : ItemReordering.Result
     }
 }

@@ -398,7 +398,7 @@ final class TableListLayout : ListLayout
     typealias LayoutAppearance = TableAppearance
     
     static var defaults: ListLayoutDefaults {
-        .init(itemInsertAndRemoveAnimations: .top)
+        .init(itemInsertAndRemoveAnimations: .fade)
     }
     
     var layoutAppearance: TableAppearance

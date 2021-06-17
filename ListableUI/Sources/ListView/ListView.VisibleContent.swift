@@ -57,12 +57,12 @@ extension ListView
                     Info.HeaderFooter(kind: $0.kind, indexPath: $0.indexPath)
                 }),
                 items: Set(self.items.map {
-                    Info.Item(identifier: $0.item.anyModel.identifier, indexPath: $0.indexPath)
+                    Info.Item(identifier: $0.item.anyModel.anyIdentifier, indexPath: $0.indexPath)
                 })
             )
         }
         
-        func updateVisibleViews(with environment : ListEnvironment)
+        func updateVisibleViews(with environment : ListEnvironment, animated : Bool)
         {
             // Perform Updates Of Visible Headers & Footers
             
@@ -72,8 +72,16 @@ extension ListView
             
             // Perform Updates Of Visible Items
             
-            self.items.forEach {
-                $0.item.applyToVisibleCell(with: environment)
+            let update = {
+                self.items.forEach {
+                    $0.item.applyToVisibleCell(with: environment)
+                }
+            }
+            
+            if animated {
+                UIView.animate(withDuration: 0.2, animations: update)
+            } else {
+                update()
             }
         }
         

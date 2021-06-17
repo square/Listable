@@ -79,6 +79,17 @@ public protocol AnyListLayout : AnyObject
     )
     
     func setZIndexes()
+    
+    //
+    // MARK: Configuring Reordering
+    //
+    
+    func adjust(
+        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
+        originalAttributes : ListContentLayoutAttributes,
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    )
 }
 
 
@@ -100,6 +111,15 @@ public extension AnyListLayout
         
         self.content.footer.zIndex = 1
         self.content.overscrollFooter.zIndex = 0
+    }
+    
+    func adjust(
+        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
+        originalAttributes : ListContentLayoutAttributes,
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    ) {
+        // Nothing. Just a default implementation.
     }
 }
 

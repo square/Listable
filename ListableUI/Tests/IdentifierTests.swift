@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import ListableUI
+@testable import ListableUI
 
 
 class IdentifierTests: XCTestCase
@@ -14,13 +14,13 @@ class IdentifierTests: XCTestCase
     func test_debugDescription()
     {
         XCTAssertEqual(
-            Identifier<TestingType>("The Value").debugDescription,
-            "Identifier<TestingType>: \"The Value\""
+            Identifier<TestingType, String>("The Value").debugDescription,
+            "Identifier<TestingType, String>: \"The Value\""
         )
         
         XCTAssertEqual(
-            Identifier<TestingType>(123).debugDescription,
-            "Identifier<TestingType>: 123"
+            Identifier<TestingType, Int>(123).debugDescription,
+            "Identifier<TestingType, Int>: 123"
         )
     }
 }

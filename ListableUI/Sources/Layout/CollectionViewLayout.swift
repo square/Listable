@@ -28,6 +28,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         }
     }
     
+    private(set) var isReordering : Bool = false
+    
     private func applyAppearance()
     {
         guard self.collectionView != nil else {
@@ -109,7 +111,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Private Properties
     //
     
-    var layout : AnyListLayout
+    private(set) var layout : AnyListLayout
     
     private var previousLayout : AnyListLayout
     private var changesDuringCurrentUpdate : UpdateItems
@@ -163,21 +165,21 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         // Handle Moved Items
         
-        if
-            let from = context.previousIndexPathsForInteractivelyMovingItems,
-            let to = context.targetIndexPathsForInteractivelyMovingItems
-        {
-            let from = from[0]
-            let to = to[0]
+        self.isReordering = context.interactiveMoveAction != nil
+        
+        if let action = context.interactiveMoveAction {
             
-            let item = self.layout.content.item(at: from)
-            item.liveIndexPath = to
-                    
-            self.layout.content.move(from: from, to: to)
-            
-            if from != to {
-                context.performedInteractiveMove = true
-                self.layout.content.reindexLiveIndexPaths()
+            switch action {
+            case .inProgress(let info):
+                if info.from != info.to {
+                    self.layout.content.move(from: info.from, to: info.to)
+                }
+
+            case .complete(_):
+                break
+
+            case .cancelled(let info):
+                self.layout.content.move(from: info.from, to: info.to)
             }
         }
         
@@ -190,22 +192,63 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.neededLayoutType.merge(with: context)
     }
     
+    override func invalidationContext(
+        forInteractivelyMovingItems targetIndexPaths: [IndexPath],
+        withTargetPosition targetPosition: CGPoint,
+        previousIndexPaths: [IndexPath],
+        previousPosition: CGPoint
+    ) -> UICollectionViewLayoutInvalidationContext
+    {
+        let context = super.invalidationContext(
+            forInteractivelyMovingItems: targetIndexPaths,
+            withTargetPosition: targetPosition,
+            previousIndexPaths: previousIndexPaths,
+            previousPosition: previousPosition
+        ) as! InvalidationContext
+
+        context.interactiveMoveAction = .inProgress(
+            .init(
+                from: previousIndexPaths,
+                fromPosition: previousPosition,
+                to: targetIndexPaths,
+                toPosition: targetPosition
+            )
+        )
+        
+        return context
+    }
+    
     override func invalidationContextForEndingInteractiveMovementOfItems(
         toFinalIndexPaths indexPaths: [IndexPath],
         previousIndexPaths: [IndexPath],
         movementCancelled: Bool
     ) -> UICollectionViewLayoutInvalidationContext
     {
-        listablePrecondition(movementCancelled == false, "Cancelling moves is currently not supported.")
-        
-        self.layout.content.reindexLiveIndexPaths()
-        self.layout.content.reindexDelegateProvidedIndexPaths()
-                                
-        return super.invalidationContextForEndingInteractiveMovementOfItems(
+        let context = super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
             previousIndexPaths: previousIndexPaths,
             movementCancelled: movementCancelled
-        )
+        ) as! InvalidationContext
+        
+        context.interactiveMoveAction = {
+            if movementCancelled {
+                 return .cancelled(
+                    .init(
+                        from: previousIndexPaths,
+                        to: indexPaths
+                    )
+                )
+            } else {
+                return .complete(
+                    .init(
+                        from: previousIndexPaths,
+                        to: indexPaths
+                    )
+                )
+            }
+        }()
+                                
+        return context
     }
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool
@@ -217,7 +260,42 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         var viewPropertiesChanged : Bool = false
         
-        var performedInteractiveMove : Bool = false
+        var interactiveMoveAction : InteractiveMoveAction? = nil
+        
+        enum InteractiveMoveAction {
+            case inProgress(InProgress)
+            case complete(Complete)
+            case cancelled(Cancelled)
+            
+            var shouldRelayout : Bool {
+                switch self {
+                case .inProgress(let info):
+                    return info.from != info.to
+                case .complete(_):
+                    return false
+                case .cancelled(_):
+                    return true
+                }
+            }
+            
+            struct InProgress {
+                var from : [IndexPath]
+                var fromPosition : CGPoint
+                
+                var to : [IndexPath]
+                var toPosition : CGPoint
+            }
+            
+            struct Complete {
+                var from : [IndexPath]
+                var to : [IndexPath]
+            }
+            
+            struct Cancelled {
+                var from : [IndexPath]
+                var to : [IndexPath]
+            }
+        }
     }
     
     //
@@ -234,7 +312,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             let context = context as! InvalidationContext
             
             let requeryDataSourceCounts = context.invalidateEverything || context.invalidateDataSourceCounts
-            let needsRelayout = context.viewPropertiesChanged || context.performedInteractiveMove
+            let needsRelayout = context.viewPropertiesChanged || context.interactiveMoveAction?.shouldRelayout ?? false
             
             if requeryDataSourceCounts {
                 self.merge(with: .rebuild)
@@ -293,7 +371,9 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         self.performLayoutUpdate()
         
-        self.delegate.listViewLayoutDidLayoutContents()
+        if self.isReordering == false {
+            self.delegate.listViewLayoutDidLayoutContents()
+        }
     }
     
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem])
@@ -413,7 +493,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             let item = self.layout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
             
-            var properties = ItemInsertAndRemoveAnimations.Attributes(attributes)
+            var properties = ListContentLayoutAttributes(attributes)
             item.insertAndRemoveAnimations.onInsert(&properties)
             properties.apply(to: attributes)
 
@@ -439,7 +519,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             let item = self.previousLayout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
             
-            var properties = ItemInsertAndRemoveAnimations.Attributes(attributes)
+            var properties = ListContentLayoutAttributes(attributes)
             item.insertAndRemoveAnimations.onRemoval(&properties)
             properties.apply(to: attributes)
 
@@ -485,14 +565,38 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: UICollectionViewLayout Methods: Moving Items
     //
     
-    override func layoutAttributesForInteractivelyMovingItem(at indexPath: IndexPath, withTargetPosition position: CGPoint) -> UICollectionViewLayoutAttributes
+    override func targetIndexPath(
+        forInteractivelyMovingItem previousIndexPath: IndexPath,
+        withPosition position: CGPoint
+    ) -> IndexPath {
+        
+        /// TODO: The default implementation provided by `UICollectionView` does not work correctly
+        /// when trying to move an item to the end of a section, or when trying to move an item into an
+        /// empty section. We should add casing that allows moving into the section in these cases.
+        
+        return super.targetIndexPath(forInteractivelyMovingItem: previousIndexPath, withPosition: position)
+    }
+    
+    override func layoutAttributesForInteractivelyMovingItem(
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    ) -> UICollectionViewLayoutAttributes
     {
-        let defaultAttributes = self.layout.content.layoutAttributes(at: indexPath)
-        let attributes = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
+        let original = self.layout.content.layoutAttributes(at: indexPath)
+        let current = super.layoutAttributesForInteractivelyMovingItem(at: indexPath, withTargetPosition: position)
         
-        attributes.center.x = defaultAttributes.center.x
+        var currentAttributes = ListContentLayoutAttributes(current)
         
-        return attributes
+        self.layout.adjust(
+            layoutAttributesForReorderingItem: &currentAttributes,
+            originalAttributes: ListContentLayoutAttributes(original),
+            at: indexPath,
+            withTargetPosition: position
+        )
+        
+        currentAttributes.apply(to: current)
+        
+        return current
     }
 }
 

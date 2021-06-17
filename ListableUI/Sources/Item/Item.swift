@@ -8,7 +8,7 @@
 
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : AnyIdentifier
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -21,7 +21,10 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var swipeActions : SwipeActionsConfiguration?
 
-    public var reordering : Reordering?
+    public typealias OnWasReordered = (Self, ItemReordering.Result) -> ()
+    
+    public var reordering : ItemReordering?
+    public var onWasReordered : OnWasReordered?
         
     public var onDisplay : OnDisplay.Callback?
     public var onEndDisplay : OnEndDisplay.Callback?
@@ -60,7 +63,8 @@ public struct Item<Content:ItemContent> : AnyItem
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
-        reordering : Reordering? = nil,
+        reordering : ItemReordering? = nil,
+        onWasReordered : OnWasReordered? = nil,
         onDisplay : OnDisplay.Callback? = nil,
         onEndDisplay : OnEndDisplay.Callback? = nil,
         onSelect : OnSelect.Callback? = nil,
@@ -111,8 +115,9 @@ public struct Item<Content:ItemContent> : AnyItem
         } else {
             self.swipeActions = nil
         }
-                
+        
         self.reordering = reordering
+        self.onWasReordered = onWasReordered
                 
         self.onDisplay = onDisplay
         self.onEndDisplay = onEndDisplay
@@ -128,9 +133,26 @@ public struct Item<Content:ItemContent> : AnyItem
         self.reuseIdentifier = .identifier(for: Content.self)
         
         self.identifier = self.content.identifier
+        
+        #if DEBUG
+        precondition(
+            self.identifier.value == self.content.identifierValue,
+            
+            """
+            `\(String(describing: Content.self)).identifierValue` is not stable: When requested twice, \
+            the value changed from `\(self.identifier.value)` to `\(self.content.identifierValue)`. In \
+            order for Listable to perform correct and efficient updates to your content, your `identifierValue` \
+            must be stable. See the documentation on `ItemContent.identifierValue` for suggestions.
+            """
+        )
+        #endif
     }
     
     // MARK: AnyItem
+    
+    public var anyIdentifier : AnyIdentifier {
+        self.identifier
+    }
     
     public var anyContent: Any {
         self.content

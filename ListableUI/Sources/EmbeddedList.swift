@@ -93,8 +93,8 @@ public struct EmbeddedList : ItemContent
         
     public typealias ContentView = ListView
     
-    public var identifier: Identifier<EmbeddedList> {
-        return .init(self.contentIdentifier)
+    public var identifierValue: AnyHashable {
+        return self.contentIdentifier
     }
     
     public func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)

@@ -63,8 +63,8 @@ fileprivate struct TestContent : ItemContent, Equatable
     
     typealias ContentView = UIView
     
-    var identifier: Identifier<TestContent> {
-        .init(self.value)
+    var identifierValue: String {
+        self.value
     }
     
     func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}

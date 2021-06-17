@@ -128,6 +128,8 @@ public protocol HeaderFooterContent
 
 /// Information about the current state of the content, which is passed to `apply(to:for:with:)`
 /// during configuration and preparation for display.
+///
+/// TODO: Rename to `ApplyHeaderFooterContext`
 public struct ApplyHeaderFooterContentInfo
 {
     /// The environment of the containing list.

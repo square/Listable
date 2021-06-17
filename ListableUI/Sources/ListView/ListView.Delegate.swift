@@ -12,6 +12,7 @@ extension ListView
     {
         unowned var view : ListView!
         unowned var presentationState : PresentationState!
+        unowned var layoutManager : LayoutManager!
         
         private let itemMeasurementCache = ReusableViewCache()
         private let headerFooterMeasurementCache = ReusableViewCache()
@@ -91,7 +92,7 @@ extension ListView
             
             let old = self.oldSelectedItems
             
-            let new = Set(self.presentationState.selectedItems.map(\.anyModel.identifier))
+            let new = Set(self.presentationState.selectedItems.map(\.anyModel.anyIdentifier))
             
             guard old != new else {
                 return
@@ -180,30 +181,73 @@ extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath,
-            toProposedIndexPath proposedIndexPath: IndexPath  
+            targetIndexPathForMoveFromItemAt from: IndexPath,
+            toProposedIndexPath to: IndexPath
         ) -> IndexPath
         {
-            if originalIndexPath != proposedIndexPath {
-                // TODO: Validate
-                // let item = self.presentationState.item(at: originalIndexPath)
-                
-                if originalIndexPath.section == proposedIndexPath.section {
-                    self.view.storage.moveItem(from: originalIndexPath, to: proposedIndexPath)
-                    
-                    return proposedIndexPath
-                } else {
-                    return originalIndexPath
-                }
-            } else {
-                return proposedIndexPath
+            ///
+            /// **Note**: We do not use either `from` or `to` index paths passed to this method to
+            /// index into the `presentationState`'s content – it has not yet been updated
+            /// to reflect the move, because the move has not yet been committed. The `from` parameter
+            /// is instead reflecting the current `UICollectionViewLayout`'s state – which will not match
+            /// the data source / `presentationState`.
+            ///
+            /// Instead, read the `stateForItem(at:)` off of the `layoutManager`. This will reflect
+            /// the right index path.
+            ///
+            /// iOS 15 resolves this issue, by introducing
+            /// ```
+            /// func collectionView(
+            ///     _ collectionView: UICollectionView,
+            ///     targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath,
+            ///     atCurrentIndexPath currentIndexPath: IndexPath,
+            ///     toProposedIndexPath proposedIndexPath: IndexPath
+            /// ) -> IndexPath
+            /// ```
+            /// Which passes the **original** index path, allowing a direct index into your data source.
+            /// Alas, we do not yet support only iOS 15 and later, so, here we are.
+            ///
+            
+            guard from != to else {
+                return from
             }
+            
+            let item = self.layoutManager.stateForItem(at: from)
+            
+            // An item is not reorderable if it has no reordering config.
+            guard let reordering = item.anyModel.reordering else {
+                return from
+            }
+            
+            // If we're moving the item back to its original position,
+            // allow regardless of any other rules.
+            if to == item.activeReorderEventInfo?.originalIndexPath {
+                return to
+            }
+            
+            // Finally, perform validation based on item and section validations.
+            
+            let fromSection = self.presentationState.sections[from.section]
+            let toSection = self.presentationState.sections[to.section]
+            
+            return reordering.destination(
+                from: from,
+                fromSection: fromSection,
+                to: to,
+                toSection: toSection
+            )
         }
         
         // MARK: CollectionViewLayoutDelegate
         
         func listViewLayoutUpdatedItemPositions()
         {
+            /// During reordering; our index paths will not match the index paths of the collection view;
+            /// our index paths are not updated until the move is committed.
+            if self.layoutManager.collectionViewLayout.isReordering {
+                return
+            }
+            
             self.view.setPresentationStateItemPositions()
         }
         

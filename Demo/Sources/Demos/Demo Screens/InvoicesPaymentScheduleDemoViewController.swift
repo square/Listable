@@ -288,12 +288,12 @@ fileprivate struct ToggleRow : BlueprintItemContent
         })
     }
     
-    var identifier: Identifier<ToggleRow> {
-        return .init(self.content.text)
+    var identifierValue: String {
+        self.content.text
     }
     
     func isEquivalent(to other: ToggleRow) -> Bool {
-        return self.content == other.content
+        self.content == other.content
     }
 }
 
@@ -339,13 +339,13 @@ fileprivate struct SegmentedControlRow : BlueprintItemContent
         return self.control
     }
     
-    var identifier: Identifier<SegmentedControlRow> {
-        return .init(self.id)
+    var identifierValue: String {
+        self.id
     }
     
     func isEquivalent(to other: SegmentedControlRow) -> Bool
     {
-        return true
+        true
     }
 }
 
@@ -404,8 +404,8 @@ fileprivate struct AmountRow : BlueprintItemContent
         return box
     }
     
-    var identifier: Identifier<AmountRow> {
-        return .init(self.content.title)
+    var identifierValue: String {
+        self.content.title
     }
     
     func isEquivalent(to other: AmountRow) -> Bool
@@ -425,8 +425,8 @@ fileprivate struct ButtonRow : BlueprintItemContent
         fatalError()
     }
     
-    var identifier: Identifier<ButtonRow> {
-        return .init(self.text)
+    var identifierValue: String {
+        self.text
     }
     
     func isEquivalent(to other: ButtonRow) -> Bool

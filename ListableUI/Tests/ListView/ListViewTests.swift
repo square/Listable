@@ -214,8 +214,8 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var content : AnyHashable
     
-    var identifier: Identifier<TestContent> {
-        return .init(self.content)
+    var identifierValue: AnyHashable {
+        self.content
     }
     
     func apply(
