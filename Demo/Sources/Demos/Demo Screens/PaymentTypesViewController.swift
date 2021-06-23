@@ -55,9 +55,9 @@ final class PaymentTypesViewController : ListViewController {
     }
     
     private func save(with info : ListStateObserver.ItemReordered) {
-        let main = info.sections.first { $0.identifier == Section.identifier(for: SectionID.main) }!
-        let more = info.sections.first { $0.identifier == Section.identifier(for: SectionID.more) }!
-        let disabled = info.sections.first { $0.identifier == Section.identifier(for: SectionID.disabled) }!
+        let main = info.sections.first { $0.identifier == Section.identifier(with: SectionID.main) }!
+        let more = info.sections.first { $0.identifier == Section.identifier(with: SectionID.more) }!
+        let disabled = info.sections.first { $0.identifier == Section.identifier(with: SectionID.disabled) }!
         
         let mainItems : [PaymentTypeRow] = main.filtered(to: PaymentTypeRow.self).map { row in
             var row = row

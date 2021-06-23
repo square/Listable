@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.22.2] - 2021-06-23
+
+### Fixed
+
+- Fixed `identifier(for:)` on `Section` to match name of `identifier(with:)` on `ItemContent`.
+
 # [0.22.1] - 2021-06-22
 
 ### Fixed

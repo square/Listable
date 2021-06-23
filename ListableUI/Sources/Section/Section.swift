@@ -197,7 +197,7 @@ public struct Section
 public extension Section {
     
     /// Provides a new identifier for a ``Section``, with the given underlying value.
-    static func identifier<Value:Hashable>(for value : Value) -> Identifier {
+    static func identifier<Value:Hashable>(with value : Value) -> Identifier {
         Identifier(value)
     }
 }
