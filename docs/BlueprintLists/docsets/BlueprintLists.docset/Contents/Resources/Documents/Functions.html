@@ -284,7 +284,7 @@ a single place, without needing to define an entirely new type.</p>
 <p>If your item is to be used in more than one place, it is recommended that you
 create a <code><a href="Protocols/BlueprintItemContent.html">BlueprintItemContent</a></code> struct to share logic to avoid duplicate code.</p>
 <h3 id='example' class='heading'>Example</h3>
-<pre class="highlight swift"><code><span class="kt">ElementItem</span><span class="p">(</span><span class="n">podcast</span><span class="p">,</span> <span class="nv">id</span><span class="p">:</span> <span class="err">\</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="kt">ElementItem</span><span class="p">(</span><span class="n">podcast</span><span class="p">,</span> <span class="nv">id</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span> <span class="k">in</span>
     <span class="n">lhs</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">rhs</span><span class="o">.</span><span class="n">value</span>
 <span class="p">}</span> <span class="nv">element</span><span class="p">:</span> <span class="p">{</span> <span class="n">podcast</span><span class="p">,</span> <span class="n">info</span> <span class="k">in</span>
     <span class="kt">PodcastElement</span><span class="p">(</span><span class="nv">podcast</span><span class="p">:</span> <span class="n">podcast</span><span class="p">)</span>
@@ -347,7 +347,7 @@ a single place, without needing to define an entirely new type.</p>
 <p>If your item is to be used in more than one place, it is recommended that you
 create a <code><a href="Protocols/BlueprintItemContent.html">BlueprintItemContent</a></code> struct to share logic to avoid duplicate code.</p>
 <h3 id='example' class='heading'>Example</h3>
-<pre class="highlight swift"><code><span class="kt">ElementItem</span><span class="p">(</span><span class="n">podcast</span><span class="p">,</span> <span class="nv">id</span><span class="p">:</span> <span class="err">\</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span> <span class="n">podcast</span><span class="p">,</span> <span class="n">info</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="kt">ElementItem</span><span class="p">(</span><span class="n">podcast</span><span class="p">,</span> <span class="nv">id</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span> <span class="n">podcast</span><span class="p">,</span> <span class="n">info</span> <span class="k">in</span>
     <span class="kt">PodcastElement</span><span class="p">(</span><span class="nv">podcast</span><span class="p">:</span> <span class="n">podcast</span><span class="p">)</span>
 <span class="p">}</span> <span class="nv">background</span><span class="p">:</span> <span class="p">{</span> <span class="n">podcast</span><span class="p">,</span> <span class="n">info</span> <span class="k">in</span>
     <span class="kt">Box</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>

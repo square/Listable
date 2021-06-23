@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.22.1] - 2021-06-22
+
+### Fixed
+
+- Fixed `Identifiable` conformance for `ItemContent`.
+
 # [0.22.0] - 2021-06-22
 
 ### Misc
@@ -398,8 +404,9 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.22.0...HEAD
-[0.21.0]: https://github.com/kyleve/Listable/compare/0.21...0.22.0
+[Main]: https://github.com/kyleve/Listable/compare/0.22.1...HEAD
+[0.22.1]: https://github.com/kyleve/Listable/compare/0.22.0...0.22.1
+[0.22.0]: https://github.com/kyleve/Listable/compare/0.21.0...0.22.0
 [0.21.0]: https://github.com/kyleve/Listable/compare/0.20.2...0.21.0
 [0.20.2]: https://github.com/kyleve/Listable/compare/0.20.1...0.20.2
 [0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1

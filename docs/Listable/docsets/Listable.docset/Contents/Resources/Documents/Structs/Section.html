@@ -969,7 +969,7 @@ the identifiers (or other properties), off of your items in order to commit the 
 event to your backing data store.</p>
 <pre class="highlight swift"><code><span class="n">item</span><span class="o">.</span><span class="n">onWasReordered</span> <span class="o">=</span> <span class="p">{</span> <span class="n">item</span><span class="p">,</span> <span class="n">reorder</span> <span class="k">in</span>
     <span class="k">let</span> <span class="nv">items</span> <span class="o">=</span> <span class="n">reorder</span><span class="o">.</span><span class="n">toSection</span><span class="o">.</span><span class="nf">filtered</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">MyContent</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
-    <span class="n">controller</span><span class="o">.</span><span class="nf">setItemOrders</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">items</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">model</span><span class="p">))</span>
+    <span class="n">controller</span><span class="o">.</span><span class="nf">setItemOrders</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">items</span><span class="o">.</span><span class="nf">map</span><span class="p">(\</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">model</span><span class="p">))</span>
 <span class="p">}</span>
 </code></pre>
 
@@ -1006,7 +1006,7 @@ the identifiers (or other properties), off of your items in order to commit the 
 event to your backing data store.</p>
 <pre class="highlight swift"><code><span class="n">item</span><span class="o">.</span><span class="n">onWasReordered</span> <span class="o">=</span> <span class="p">{</span> <span class="n">item</span><span class="p">,</span> <span class="n">reorder</span> <span class="k">in</span>
     <span class="n">reorder</span><span class="o">.</span><span class="n">toSection</span><span class="o">.</span><span class="nf">filtered</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">MyContent</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">items</span> <span class="k">in</span>
-        <span class="n">controller</span><span class="o">.</span><span class="nf">setItemOrders</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">items</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">model</span><span class="p">))</span>
+        <span class="n">controller</span><span class="o">.</span><span class="nf">setItemOrders</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">items</span><span class="o">.</span><span class="nf">map</span><span class="p">(\</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">model</span><span class="p">))</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
