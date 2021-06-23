@@ -6,7 +6,7 @@ set -euxo pipefail
 # Find the sourcekitten binary embedded in jazzy
 sourcekitten=`gem contents jazzy | grep 'bin/sourcekitten$' | head -1`
 
-destination="platform=iOS Simulator,name=iPhone 11"
+destination="generic/platform=iOS Simulator"
 
 $sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme ListableUI -destination "$destination" > docs/JSON/ListableUI.json
 $sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme BlueprintUILists -destination "$destination" > docs/JSON/BlueprintUILists.json

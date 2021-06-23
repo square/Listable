@@ -69,11 +69,11 @@ public struct ListReorderGesture : Element
         ElementContent(child: self.element)
     }
     
-    public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
+    public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
     {
         return ViewDescription(View.self) { config in
             config.builder = {
-                View(frame: bounds, wrapping: self)
+                View(frame: context.bounds, wrapping: self)
             }
             
             config.apply { view in

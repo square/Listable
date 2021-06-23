@@ -165,8 +165,7 @@ struct Toggle : Element {
         return ElementContent(layout: Layout())
     }
     
-    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
-    {
+    func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription? {
         return ViewDescription(ToggleView.self) { config in
             config.builder = {
                 return ToggleView()
