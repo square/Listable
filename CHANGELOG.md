@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.22.0] - 2021-06-22
+
+### Misc
+
+- Listable now depends on Blueprint `0.27.0` which has major breaking changes. There are no public changes to Listable, except public interfaces determined by Blueprint protocol conformance.
+
 # [0.21.0] - 2021-06-17
 
 ### Fixed
@@ -392,7 +398,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.21.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.22.0...HEAD
+[0.21.0]: https://github.com/kyleve/Listable/compare/0.21...0.22.0
 [0.21.0]: https://github.com/kyleve/Listable/compare/0.20.2...0.21.0
 [0.20.2]: https://github.com/kyleve/Listable/compare/0.20.1...0.20.2
 [0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1
