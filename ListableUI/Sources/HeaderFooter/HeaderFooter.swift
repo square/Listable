@@ -57,6 +57,12 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
     }
     
+    // MARK: AnyHeaderFooter
+    
+    public var anyContent: Any {
+        self.content
+    }
+    
     // MARK: AnyHeaderFooter_Internal
     
     public func apply(
