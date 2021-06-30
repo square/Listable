@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ListContentLayoutAttributes Structure Reference</title>
+    <title>DefaultHeaderFooterProperties Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ListContentLayoutAttributes" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/DefaultHeaderFooterProperties" class="dashAnchor"></a>
 
-    <a title="ListContentLayoutAttributes Structure Reference"></a>
+    <a title="DefaultHeaderFooterProperties Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" />
-      ListContentLayoutAttributes Structure Reference
+      DefaultHeaderFooterProperties Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -580,16 +580,23 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ListContentLayoutAttributes</h1>
+            <h1>DefaultHeaderFooterProperties</h1>
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListContentLayoutAttributes</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DefaultHeaderFooterProperties</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Content.html">Content</a></span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt"><a href="../Structs/Content.html">Content</a></span> <span class="p">:</span> <span class="kt"><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></span></code></pre>
 
                 </div>
               </div>
-            <p>A struct-based version of many of the properties available on <code>UICollectionViewLayoutAttributes</code>,
-allowing configuration of properties for custom layouts, appearance animations, etc.</p>
+            <p>Allows specifying default properties to apply to a header / footer when it is initialized,
+if those values are not provided to the initializer.
+Only non-nil values are used – if you do not want to provide a default value,
+simply leave the property nil.</p>
+
+<p>The order of precedence used when assigning values is:
+1) The value passed to the initializer.
+2) The value from <code>defaultHeaderFooterProperties</code> on the contained <code><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code>, if non-nil.
+3) A standard, default value.</p>
 
           </div>
         </section>
@@ -597,119 +604,13 @@ allowing configuration of properties for custom layouts, appearance animations, 
         <section class="section">
           <div class="section-content">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Sizing%20%26%20Position"></a>
-                <a name="//apple_ref/swift/Section/Sizing &amp; Position" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Sizing%20%26%20Position"></a>
-                  <h3 class="section-name"><p>Sizing &amp; Position</p>
-</h3>
-                </div>
-              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV4sizeSo6CGSizeVvp"></a>
-                    <a name="//apple_ref/swift/Property/size" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV4sizeSo6CGSizeVvp">size</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The size of the represented item when it is laid out.
-Setting this property changes the value of the <code><a href="../Structs/ListContentLayoutAttributes.html#/s:10ListableUI27ListContentLayoutAttributesV5frameSo6CGRectVvp">frame</a></code> property.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">size</span><span class="p">:</span> <span class="kt">CGSize</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV6centerSo7CGPointVvp"></a>
-                    <a name="//apple_ref/swift/Property/center" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV6centerSo7CGPointVvp">center</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The center of the item when it is laid out, in the coordinate space of the outer list.
-Setting this property changes the value of the <code><a href="../Structs/ListContentLayoutAttributes.html#/s:10ListableUI27ListContentLayoutAttributesV5frameSo6CGRectVvp">frame</a></code> property.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">center</span><span class="p">:</span> <span class="kt">CGPoint</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV5frameSo6CGRectVvp"></a>
-                    <a name="//apple_ref/swift/Property/frame" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV5frameSo6CGRectVvp">frame</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The frame of the item when it is laid out, in the coordinate space of the outer list.
-Setting this property changes the value of the <code><a href="../Structs/ListContentLayoutAttributes.html#/s:10ListableUI27ListContentLayoutAttributesV4sizeSo6CGSizeVvp">size</a></code> and <code><a href="../Structs/ListContentLayoutAttributes.html#/s:10ListableUI27ListContentLayoutAttributesV6centerSo7CGPointVvp">center</a></code> properties.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Transforms%20%26%20Layout"></a>
-                <a name="//apple_ref/swift/Section/Transforms &amp; Layout" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transforms%20%26%20Layout"></a>
-                  <h3 class="section-name"><p>Transforms &amp; Layout</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV9transformSo17CGAffineTransformVvp"></a>
-                    <a name="//apple_ref/swift/Property/transform" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV9transformSo17CGAffineTransformVvp">transform</a>
+                    <a name="/s:10ListableUI29DefaultHeaderFooterPropertiesV6sizingAA6SizingOSgvp"></a>
+                    <a name="//apple_ref/swift/Property/sizing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29DefaultHeaderFooterPropertiesV6sizingAA6SizingOSgvp">sizing</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -724,7 +625,7 @@ Setting this property changes the value of the <code><a href="../Structs/ListCon
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">transform</span><span class="p">:</span> <span class="kt">CGAffineTransform</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sizing</span><span class="p">:</span> <span class="kt"><a href="../Enums/Sizing.html">Sizing</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -734,9 +635,9 @@ Setting this property changes the value of the <code><a href="../Structs/ListCon
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV11transform3DSo13CATransform3DVvp"></a>
-                    <a name="//apple_ref/swift/Property/transform3D" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV11transform3DSo13CATransform3DVvp">transform3D</a>
+                    <a name="/s:10ListableUI29DefaultHeaderFooterPropertiesV7layoutsAA0dE7LayoutsVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/layouts" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29DefaultHeaderFooterPropertiesV7layoutsAA0dE7LayoutsVSgvp">layouts</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -751,7 +652,7 @@ Setting this property changes the value of the <code><a href="../Structs/ListCon
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">transform3D</span><span class="p">:</span> <span class="kt">CATransform3D</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">layouts</span><span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooterLayouts.html">HeaderFooterLayouts</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -761,9 +662,9 @@ Setting this property changes the value of the <code><a href="../Structs/ListCon
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV5alpha12CoreGraphics7CGFloatVvp"></a>
-                    <a name="//apple_ref/swift/Property/alpha" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV5alpha12CoreGraphics7CGFloatVvp">alpha</a>
+                    <a name="/s:10ListableUI29DefaultHeaderFooterPropertiesV6sizing7layoutsACyxGAA6SizingOSg_AA0dE7LayoutsVSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(sizing:layouts:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29DefaultHeaderFooterPropertiesV6sizing7layoutsACyxGAA6SizingOSg_AA0dE7LayoutsVSgtcfc">init(sizing:<wbr>layouts:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -778,114 +679,10 @@ Setting this property changes the value of the <code><a href="../Structs/ListCon
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">alpha</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV6zIndexSivp"></a>
-                    <a name="//apple_ref/swift/Property/zIndex" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV6zIndexSivp">zIndex</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">zIndex</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initialization"></a>
-                <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Initialization"></a>
-                  <h3 class="section-name"><p>Initialization</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesVyACSo016UICollectionVieweF0Ccfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesVyACSo016UICollectionVieweF0Ccfc">init(_:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">attributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Writing%20Values"></a>
-                <a name="//apple_ref/swift/Section/Writing Values" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Writing%20Values"></a>
-                  <h3 class="section-name"><p>Writing Values</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI27ListContentLayoutAttributesV5apply2toySo016UICollectionVieweF0C_tF"></a>
-                    <a name="//apple_ref/swift/Method/apply(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI27ListContentLayoutAttributesV5apply2toySo016UICollectionVieweF0C_tF">apply(to:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">attributes</span><span class="p">:</span> <span class="kt">UICollectionViewLayoutAttributes</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">sizing</span> <span class="p">:</span> <span class="kt"><a href="../Enums/Sizing.html">Sizing</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">layouts</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooterLayouts.html">HeaderFooterLayouts</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
