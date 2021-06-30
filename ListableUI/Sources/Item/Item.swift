@@ -77,44 +77,14 @@ public struct Item<Content:ItemContent> : AnyItem
         assertIsValueType(Content.self)
         
         self.content = content
-                
-        if let sizing = sizing {
-            self.sizing = sizing
-        } else if let sizing = content.defaultItemProperties.sizing {
-            self.sizing = sizing
-        } else {
-            self.sizing = .thatFits(.init(.atLeast(.default)))
-        }
         
-        if let layouts = layouts {
-            self.layouts = layouts
-        } else if let layouts = content.defaultItemProperties.layouts {
-            self.layouts = layouts
-        } else {
-            self.layouts = ItemLayouts()
-        }
+        let defaults = self.content.defaultItemProperties
         
-        if let selectionStyle = selectionStyle {
-            self.selectionStyle = selectionStyle
-        } else if let selectionStyle = content.defaultItemProperties.selectionStyle {
-            self.selectionStyle = selectionStyle
-        } else {
-            self.selectionStyle = .notSelectable
-        }
-        
-        if let insertAndRemoveAnimations = insertAndRemoveAnimations {
-            self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        } else if let insertAndRemoveAnimations = content.defaultItemProperties.insertAndRemoveAnimations {
-            self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        }
-        
-        if let swipeActions = swipeActions {
-            self.swipeActions = swipeActions
-        } else if let swipeActions = content.defaultItemProperties.swipeActions {
-            self.swipeActions = swipeActions
-        } else {
-            self.swipeActions = nil
-        }
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
+        self.layouts = finalValue(from: layouts, defaults.layouts, .init())
+        self.selectionStyle = finalValue(from: selectionStyle, defaults.selectionStyle, .notSelectable)
+        self.insertAndRemoveAnimations = finalValue(from: insertAndRemoveAnimations, defaults.insertAndRemoveAnimations, nil)
+        self.swipeActions = finalValue(from: swipeActions, defaults.swipeActions, nil)
         
         self.reordering = reordering
         self.onWasReordered = onWasReordered
@@ -201,5 +171,21 @@ extension Item : SignpostLoggable
             identifier: self.debuggingIdentifier,
             instanceIdentifier: self.identifier.debugDescription
         )
+    }
+}
+
+
+private func finalValue<Value>(
+    from provided : Value?,
+    _ contentDefault : Value?,
+    _ default : @autoclosure () -> Value
+) -> Value
+{
+    if let value = provided {
+        return value
+    } else if let value = contentDefault {
+        return value
+    } else {
+        return `default`()
     }
 }

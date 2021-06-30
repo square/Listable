@@ -38,7 +38,7 @@ struct AutoLayoutContent : ItemContent, Equatable {
         header + detail
     }
     
-    var defaultItemProperties: DefaultItemProperties<Self> {
+    var defaultItemProperties: DefaultProperties {
         .init(
             sizing: .autolayout()
         )

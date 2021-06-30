@@ -315,9 +315,12 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     // MARK: Default Item Properties
     //
     
+    typealias DefaultProperties = DefaultItemProperties<Self>
+
+    
     /// Default values to assign to various properties on the `Item` which wraps
     /// this `ItemContent`, if those values are not passed to the `Item` initializer.
-    var defaultItemProperties : DefaultItemProperties<Self> { get }
+    var defaultItemProperties : DefaultProperties { get }
     
     //
     // MARK: Applying To Displayed View
@@ -539,7 +542,7 @@ public extension ItemContent
 /// empty instance that does not provide any defaults.
 public extension ItemContent
 {
-    var defaultItemProperties : DefaultItemProperties<Self> {
+    var defaultItemProperties : DefaultProperties {
         .init()
     }
 }

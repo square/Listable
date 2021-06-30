@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Introduce `defaultHeaderFooterProperties` on `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/304), to allow specifying default values for a `HeaderFooter` when values are not passed to the initializer.
+
 ### Removed
 
 ### Changed
