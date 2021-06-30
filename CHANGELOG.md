@@ -4,8 +4,6 @@
 
 ### Added
 
-- [Introduce `defaultHeaderFooterProperties` on `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/304), to allow specifying default values for a `HeaderFooter` when values are not passed to the initializer.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.23.0] - 2021-06-29
+
+### Added
+
+- [Introduce `defaultHeaderFooterProperties` on `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/304), to allow specifying default values for a `HeaderFooter` when values are not passed to the initializer.
 
 # [0.22.2] - 2021-06-23
 
@@ -412,7 +416,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.22.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.23.0...HEAD
+[0.23.0]: https://github.com/kyleve/Listable/compare/0.22.2...0.23.0
 [0.22.2]: https://github.com/kyleve/Listable/compare/0.22.1...0.22.2
 [0.22.1]: https://github.com/kyleve/Listable/compare/0.22.0...0.22.1
 [0.22.0]: https://github.com/kyleve/Listable/compare/0.21.0...0.22.0
