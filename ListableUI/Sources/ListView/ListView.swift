@@ -684,7 +684,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.configure(with: description)
     }
     
-    public func configure(with properties : ListProperties)
+    public func configure(with properties : ListProperties, overrides : ListEnvironment = .empty)
     {
         let animated = properties.animatesChanges
         
@@ -698,7 +698,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         self.stateObserver = properties.stateObserver
         
-        self.environment = properties.environment
+        self.environment = properties.environment.merged(prioritizing: overrides)
         
         self.set(layout: properties.layout, animated: animated)
         

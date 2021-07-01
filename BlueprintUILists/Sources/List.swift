@@ -76,79 +76,42 @@ public struct List : Element
     //
         
     public var content : ElementContent {
-        ElementContent { size, env in
-            ListContent(
-                properties: self.properties,
-                sizing: self.sizing,
-                environment: env
-            )
-        }
-    }
-    
-    public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription? {
-        nil
-    }
-}
-
-
-extension List {
-    
-    fileprivate struct ListContent : Element {
-        
-        var properties : ListProperties
-        var sizing : ListSizing
-        
-        init(
-            properties : ListProperties,
-            sizing : ListSizing,
-            environment : Environment
-        ) {
-            var properties = properties
+        switch self.sizing {
+        case .fillParent:
+            return ElementContent { context -> CGSize in
+                context.constraint.maximum
+            }
             
-            properties.environment.blueprintEnvironment = environment
-            
-            self.properties = properties
-            self.sizing = sizing
-        }
-        
-        // MARK: Element
-            
-        public var content : ElementContent {
-            switch self.sizing {
-            case .fillParent:
-                return ElementContent { constraint -> CGSize in
-                    constraint.maximum
-                }
-                
-            case .measureContent(let key, let limit):
-                return ElementContent(
-                    measurementCachingKey: {
-                        if let key = key {
-                            return MeasurementCachingKey(type: Self.self, input: key)
-                        } else {
-                            return nil
-                        }
-                    }()
-                ) { constraint -> CGSize in
-                    ListView.contentSize(
-                        in: constraint.maximum,
-                        for: self.properties,
-                        itemLimit: limit
-                    )
-                }
+        case .measureContent(let key, let limit):
+            return ElementContent(
+                measurementCachingKey: {
+                    if let key = key {
+                        return MeasurementCachingKey(type: Self.self, input: key)
+                    } else {
+                        return nil
+                    }
+                }()
+            ) { context -> CGSize in
+                ListView.contentSize(
+                    in: context.constraint.maximum,
+                    for: self.properties,
+                    itemLimit: limit
+                )
             }
         }
-        
-        public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
-        {
-            ListView.describe { config in
-                config.builder = {
-                    ListView(frame: context.bounds, appearance: self.properties.appearance)
-                }
-                
-                config.apply { listView in
-                    listView.configure(with: self.properties)
-                }
+    }
+    
+    public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
+    {
+        ListView.describe { config in
+            config.builder = {
+                ListView(frame: context.bounds, appearance: self.properties.appearance)
+            }
+            
+            config.apply { listView in
+                listView.configure(with: self.properties, overrides: ListEnvironment {
+                    $0.blueprintEnvironment = context.environment
+                })
             }
         }
     }

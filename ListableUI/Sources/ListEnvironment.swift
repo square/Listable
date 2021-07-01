@@ -46,6 +46,10 @@ public struct ListEnvironment {
     /// A default "empty" environment, with no values overridden.
     /// Each key will return its default value.
     public static let empty = ListEnvironment()
+    
+    public init(_ configure : (inout ListEnvironment) -> () = { _ in }) {
+        configure(&self)
+    }
 
     /// Gets or sets an environment value by its key.
     public subscript<Key>(key: Key.Type) -> Key.Value where Key: ListEnvironmentKey {
@@ -61,6 +65,14 @@ public struct ListEnvironment {
         set {
             values[ObjectIdentifier(key)] = newValue
         }
+    }
+    
+    public func merged(prioritizing other : ListEnvironment) -> ListEnvironment {
+        var copy = self
+        
+        copy.values.merge(other.values) { lhs, rhs in return rhs }
+        
+        return copy
     }
     
     private var values: [ObjectIdentifier: Any] = [:]
