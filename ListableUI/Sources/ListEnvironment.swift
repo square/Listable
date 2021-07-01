@@ -67,14 +67,6 @@ public struct ListEnvironment {
         }
     }
     
-    public func merged(prioritizing other : ListEnvironment) -> ListEnvironment {
-        var copy = self
-        
-        copy.values.merge(other.values) { lhs, rhs in return rhs }
-        
-        return copy
-    }
-    
     private var values: [ObjectIdentifier: Any] = [:]
 }
 

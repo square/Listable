@@ -94,7 +94,11 @@ public struct List : Element
             ) { context -> CGSize in
                 ListView.contentSize(
                     in: context.constraint.maximum,
-                    for: self.properties,
+                    
+                    for: self.properties.modified {
+                        $0.environment.blueprintEnvironment = context.environment
+                    },
+                    
                     itemLimit: limit
                 )
             }
@@ -109,8 +113,8 @@ public struct List : Element
             }
             
             config.apply { listView in
-                listView.configure(with: self.properties, overrides: ListEnvironment {
-                    $0.blueprintEnvironment = context.environment
+                listView.configure(with: self.properties.modified {
+                    $0.environment.blueprintEnvironment = context.environment
                 })
             }
         }
