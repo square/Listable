@@ -627,22 +627,23 @@ public final class ListView : UIView, KeyboardObserverDelegate
     
     public var content : Content {
         get { return self.storage.allContent }
-        set { self.setContent(animated: false, newValue) }
+        set { self.setContent(animated: false, newValue, completion: { _ in }) }
     }
     
-    public func setContent(animated : Bool = false, _ content : Content)
+    public func setContent(animated : Bool = false, _ content : Content, completion : @escaping (Bool) -> ())
     {
         self.set(
             source: StaticSource(with: content),
             initial: StaticSource.State(),
-            animated: animated
+            animated: animated,
+            completion: completion
         )
     }
     
     private var sourceChangedTimer : ReloadTimer? = nil
     
     @discardableResult
-    public func set<Source:ListViewSource>(source : Source, initial : Source.State, animated : Bool = false) -> StateAccessor<Source.State>
+    public func set<Source:ListViewSource>(source : Source, initial : Source.State, animated : Bool = false, completion : @escaping (Bool) -> ()) -> StateAccessor<Source.State>
     {
         self.sourcePresenter.discard()
         
@@ -652,19 +653,74 @@ public final class ListView : UIView, KeyboardObserverDelegate
             
             self.sourceChangedTimer = ReloadTimer {
                 self.sourceChangedTimer = nil
-                self.setContentFromSource(animated: true)
+                self.setContentFromSource(animated: true, completion: completion)
             }
         })
         
         self.sourcePresenter = sourcePresenter
         
-        self.setContentFromSource(animated: animated)
+        self.setContentFromSource(animated: animated, completion: completion)
         
         return StateAccessor(get: {
             sourcePresenter.state
         }, set: {
             sourcePresenter.state = $0
         })
+    }
+    
+    let queue : OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        
+        return queue
+    }()
+    
+    final class AsyncOperation : Operation {
+        
+        private(set) var body : (@escaping () -> ()) -> ()
+        
+        init(_ body : @escaping (@escaping () -> ()) -> ()) {
+            self.body = body
+        }
+        
+        override var isAsynchronous: Bool {
+            true
+        }
+        
+        override var isExecuting : Bool {
+            self._isExecuting
+        }
+        
+        override var isFinished : Bool {
+            self._isFinished
+        }
+        
+        private var _isExecuting : Bool = false
+        private var _isFinished : Bool = false
+        
+        override func start() {
+            OperationQueue.main.addOperation {
+                self.willChangeValue(for: \.isExecuting)
+                
+                self._isExecuting = true
+                self._isFinished = false
+                
+                self.didChangeValue(for: \.isExecuting)
+                
+                self.body(self.setCompleted)
+            }
+        }
+        
+        func setCompleted() {
+            self.willChangeValue(for: \.isExecuting)
+            self.willChangeValue(for: \.isFinished)
+            
+            _isExecuting = false
+            _isFinished = true
+            
+            self.didChangeValue(for: \.isExecuting)
+            self.didChangeValue(for: \.isFinished)
+        }
     }
     
     public func configure(with configure : ListProperties.Configure)
@@ -686,26 +742,30 @@ public final class ListView : UIView, KeyboardObserverDelegate
     
     public func configure(with properties : ListProperties)
     {
-        let animated = properties.animatesChanges
-        
-        self.appearance = properties.appearance
-        self.behavior = properties.behavior
-        self.autoScrollAction = properties.autoScrollAction
-        self.scrollIndicatorInsets = properties.scrollIndicatorInsets
-        self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
-        self.debuggingIdentifier = properties.debuggingIdentifier
-        self.actions = properties.actions
+        let operation = AsyncOperation { completion in
+            let animated = properties.animatesChanges
+            
+            self.appearance = properties.appearance
+            self.behavior = properties.behavior
+            self.autoScrollAction = properties.autoScrollAction
+            self.scrollIndicatorInsets = properties.scrollIndicatorInsets
+            self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
+            self.debuggingIdentifier = properties.debuggingIdentifier
+            self.actions = properties.actions
 
-        self.stateObserver = properties.stateObserver
+            self.stateObserver = properties.stateObserver
+            
+            self.environment = properties.environment
+            
+            self.set(layout: properties.layout, animated: animated)
+            
+            self.setContent(animated: animated, properties.content, completion: { _ in completion() })
+        }
         
-        self.environment = properties.environment
-        
-        self.set(layout: properties.layout, animated: animated)
-        
-        self.setContent(animated: animated, properties.content)
+        queue.addOperation(operation)
     }
     
-    private func setContentFromSource(animated : Bool = false)
+    private func setContentFromSource(animated : Bool = false, completion : @escaping (Bool) -> ())
     {
         let oldIdentifier = self.storage.allContent.identifier
         self.storage.allContent = self.sourcePresenter.reloadContent()
@@ -713,7 +773,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         let identifierChanged = oldIdentifier != newIdentifier
         
-        self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
+        self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged), completion: completion)
     }
     
     //

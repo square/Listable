@@ -33,7 +33,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         
         self.listView.behavior.keyboardDismissMode = .interactive
         
-        self.listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.SearchState())
+        self.listView.set(source: Source(dictionary: EnglishDictionary.dictionary), initial: Source.SearchState(), completion: { _ in })
         
         self.view = self.listView
         
