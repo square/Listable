@@ -78,22 +78,14 @@ public struct List : Element
     public var content : ElementContent {
         switch self.sizing {
         case .fillParent:
-            return ElementContent { context -> CGSize in
-                context.constraint.maximum
+            return ElementContent { size, _ -> CGSize in
+                size.maximum
             }
             
-        case .measureContent(let key, let limit):
-            return ElementContent(
-                measurementCachingKey: {
-                    if let key = key {
-                        return MeasurementCachingKey(type: Self.self, input: key)
-                    } else {
-                        return nil
-                    }
-                }()
-            ) { context -> CGSize in
+        case .measureContent(let limit):
+            return ElementContent { size, context -> CGSize in
                 ListView.contentSize(
-                    in: context.constraint.maximum,
+                    in: size.maximum,
                     
                     for: self.properties.modified {
                         $0.environment.blueprintEnvironment = context.environment
