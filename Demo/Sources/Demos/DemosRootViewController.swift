@@ -237,6 +237,13 @@ public final class DemosRootViewController : ListViewController
                 onSelect : { _ in
                     self.push(SpacingCustomizationViewController())
             })
+
+            section += Item(
+                DemoItem(text: "Mosaic Layout"),
+                selectionStyle: .selectable(),
+                onSelect : { _ in
+                    self.push(MosaicViewController())
+            })
         }
         
         list("selection-state") { section in

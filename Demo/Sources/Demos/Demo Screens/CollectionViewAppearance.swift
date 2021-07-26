@@ -34,6 +34,17 @@ extension LayoutDescription
             )
         }
     }
+    
+    static func mosaicDemo(columns: Int, rows: MosaicAppearance.Layout.Rows) -> Self {
+        .mosaic {
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
+                itemSpacing: 20,
+                columns: columns,
+                rows: rows
+            )
+        }
+    }
 }
 
 
