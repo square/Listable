@@ -162,9 +162,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         let context = context as! InvalidationContext
         
         // Handle Moved Items
-        
-        self.isReordering = context.interactiveMoveAction != nil
-        
+                
         if let action = context.interactiveMoveAction {
             
             switch action {
@@ -229,6 +227,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         previousPosition: CGPoint
     ) -> UICollectionViewLayoutInvalidationContext
     {
+        self.isReordering = true
+        
         let context = super.invalidationContext(
             forInteractivelyMovingItems: targetIndexPaths,
             withTargetPosition: targetPosition,
@@ -254,6 +254,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         movementCancelled: Bool
     ) -> UICollectionViewLayoutInvalidationContext
     {
+        self.isReordering = false
+        
         let context = super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
             previousIndexPaths: previousIndexPaths,
@@ -391,9 +393,12 @@ final class CollectionViewLayout : UICollectionViewLayout
             let shouldLayout = size.isEmpty == false
             
             switch self.neededLayoutType {
-            case .none: return true
-            case .relayout: self.performLayout()
-            case .rebuild: self.performRebuild(andLayout: shouldLayout)
+            case .none:
+                return true
+            case .relayout:
+                self.performLayout()
+            case .rebuild:
+                self.performRebuild(andLayout: shouldLayout)
             }
             
             return true
