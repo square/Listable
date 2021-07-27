@@ -97,6 +97,16 @@ internal extension ListView
                 return
             }
             
+            ///
+            /// Mark us as queuing for re-orders, to prevent destructive edits which could break the collection
+            /// view's layout while the re-order event settles.
+            ///
+            /// Later on, the call to `listViewShouldEndQueueingEditsForReorder` will set this value to false.
+            ///
+            /// See `sendEndQueuingEditsAfterDelay` for a more in-depth explanation.
+            ///
+            self.view.updateQueue.isQueuingForReorderEvent = true
+            
             /// Perform the change in our data source.
             
             self.storage.moveItem(from: from, to: to)
