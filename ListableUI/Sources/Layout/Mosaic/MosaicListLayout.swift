@@ -94,7 +94,7 @@ extension MosaicAppearance {
         public let origin: Origin
         public let size: Size
         
-        public struct Origin {
+        public struct Origin: Equatable {
             public let x: Int
             public let y: Int
             
@@ -106,9 +106,9 @@ extension MosaicAppearance {
             }
         }
 
-        public struct Size {
+        public struct Size: Equatable {
             
-            public enum TileSize {
+            public enum TileSize: Equatable {
                 case single
                 case double
                 
@@ -159,7 +159,6 @@ extension MosaicAppearance {
         
         
         func frame(pageSize: CGSize, pagePadding: UIEdgeInsets, itemSpacing: CGFloat, columns: Int, rows: Layout.Rows) -> CGRect {
-            
             let pageIndex = self.pageIndex(rows: rows)
             
             let totalHorizontalItemSpacing = itemSpacing * CGFloat(columns - 1) + pagePadding.left + pagePadding.right
@@ -169,8 +168,10 @@ extension MosaicAppearance {
             var tileHeight: CGFloat
             let oneByOneTile : CGSize
             
+            let localYOrigin: Int
             switch rows {
             case .rows(let rowCount):
+                localYOrigin = origin.y % rowCount
                 let totalVerticalItemSpacing = itemSpacing * CGFloat(rowCount - 1) + pagePadding.top + pagePadding.bottom
                 let availableHeight = pageSize.height - totalVerticalItemSpacing
                 
@@ -188,16 +189,16 @@ extension MosaicAppearance {
 
                 oneByOneTile = CGSize(width: availableWidth / CGFloat(columns), height: availableHeight / CGFloat(rowCount))
             case .infinite:
+                localYOrigin = origin.y
                 oneByOneTile = CGSize(width: availableWidth / CGFloat(columns), height: availableWidth / CGFloat(columns))
                 tileHeight = availableWidth / CGFloat(columns) * size.height.value
             }
-            
+
             tileHeight += (size.height.value - 1) * itemSpacing
             
-            let interPageSpacing = CGFloat(pageIndex) * pagePadding.top + pagePadding.top
-            
             let realX: CGFloat = CGFloat(origin.x) * oneByOneTile.width + itemSpacing * CGFloat(origin.x)
-            let realY: CGFloat = CGFloat(origin.y) * oneByOneTile.height + itemSpacing * CGFloat(origin.y) + interPageSpacing
+            let pageY = CGFloat(pageIndex) * pageSize.height
+            let realY: CGFloat = pageY + CGFloat(localYOrigin) * oneByOneTile.height + itemSpacing * CGFloat(localYOrigin) + pagePadding.top
             
             return CGRect(x: realX + pagePadding.left, y: realY, width: tileWidth, height: tileHeight)
         }
@@ -231,7 +232,7 @@ final class MosaicListLayout : ListLayout
     var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: self.layoutAppearance.layout.rows != .infinite,
-            contentInsetAdjustmentBehavior: .never,
+            contentInsetAdjustmentBehavior: .automatic,
             allowsBounceVertical: true,
             allowsBounceHorizontal: false,
             allowsVerticalScrollIndicator: true,
