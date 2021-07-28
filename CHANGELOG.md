@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.23.1] - 2021-07-26
+
+### Fixed
+
+- [Fix two reordering crashes](https://github.com/kyleve/Listable/pull/308), which could happen when 1) a reorder signal resulted in an immediate deletion at the end of the list, and 2) a crash during scrolling during a reorder event.
+
 # [0.23.0] - 2021-06-29
 
 ### Added
