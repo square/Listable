@@ -1,5 +1,5 @@
 //
-//  MosaicListLayoutTests.swift
+//  RetailGridListLayoutTests.swift
 //  ListableUI-Unit-Tests
 //
 //  Created by Gabriel Hernandez Ontiveros on 2021-07-27.
@@ -11,21 +11,21 @@ import Snapshot
 @testable import ListableUI
 
 
-class MosaicAppearanceTests : XCTestCase
+class RetailGridAppearanceTests : XCTestCase
 {
     func test_init()
     {
-        let appearance = MosaicAppearance()
+        let appearance = RetailGridAppearance()
         
-        XCTAssertEqual(appearance.layout, MosaicAppearance.Layout())
+        XCTAssertEqual(appearance.layout, RetailGridAppearance.Layout())
     }
 }
 
-class MosaicAppearance_LayoutTests : XCTestCase
+class RetailGridAppearance_LayoutTests : XCTestCase
 {
     func test_init()
     {
-        let layout = MosaicAppearance.Layout()
+        let layout = RetailGridAppearance.Layout()
 
         XCTAssertEqual(layout.padding, .zero)
         XCTAssertEqual(layout.itemSpacing, .zero)
@@ -33,21 +33,9 @@ class MosaicAppearance_LayoutTests : XCTestCase
         XCTAssertEqual(layout.rows, .infinite)
 
     }
-    
-    func test_width()
-    {
-        self.testcase("No width constraint") {
-            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .noConstraint))
-        }
-        
-        self.testcase("Has width constraint") {
-            XCTAssertEqual(100.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .fixed(100.0)))
-            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .atMost(200.0)))
-        }
-    }
 }
 
-class MosaicListLayoutTests : XCTestCase
+class RetailGridListLayoutTests : XCTestCase
 {
     func test_layout_infiniteScoll()
     {
@@ -69,13 +57,13 @@ class MosaicListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func list(columns: Int, rows: MosaicAppearance.Layout.Rows) -> ListView
+    func list(columns: Int, rows: RetailGridAppearance.Layout.Rows) -> ListView
     {
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
         listView.configure { list in
 
-            list.layout = .mosaic {
+            list.layout = .retailGrid {
                 $0.layout = .init(
                     padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10),
                     itemSpacing: 10,
@@ -84,26 +72,26 @@ class MosaicListLayoutTests : XCTestCase
                 )
             }
             
-            list += Section("mosaic") { section in
+            list += Section("RetailGrid") { section in
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1))) {
-                    $0.layouts.mosaic = MosaicAppearance.ItemLayout(
+                    $0.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                         origin: .init(x: 0, y: 0), size: .single
                     )
                 }
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2))) {
-                    $0.layouts.mosaic = MosaicAppearance.ItemLayout(
+                    $0.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                         origin: .init(x: 1, y: 0), size: .tall
                     )
                 }
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.3))) {
-                    $0.layouts.mosaic = MosaicAppearance.ItemLayout(
+                    $0.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                         origin: .init(x: 0, y: 1), size: .single
                     )
                 }
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.4))) {
-                    $0.layouts.mosaic = MosaicAppearance.ItemLayout(
+                    $0.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                         origin: .init(x: 0, y: 2), size: .wide
                     )
                 }

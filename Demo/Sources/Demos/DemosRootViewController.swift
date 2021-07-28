@@ -239,10 +239,10 @@ public final class DemosRootViewController : ListViewController
             })
 
             section += Item(
-                DemoItem(text: "Mosaic Layout"),
+                DemoItem(text: "Retail Grid Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(MosaicViewController())
+                    self.push(RetailGridViewController())
             })
         }
         

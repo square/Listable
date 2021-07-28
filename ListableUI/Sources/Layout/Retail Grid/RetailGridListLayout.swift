@@ -1,5 +1,5 @@
 //
-//  MosaicListLayout.swift
+//  RetailGridListLayout.swift
 //  ListableUI
 //
 //  Created by Gabriel Hernandez Ontiveros on 2021-07-23.
@@ -9,14 +9,14 @@ import Foundation
 
 extension LayoutDescription
 {
-    public static func mosaic(_ configure : @escaping (inout MosaicAppearance) -> () = { _ in }) -> Self
+    public static func retailGrid(_ configure : @escaping (inout RetailGridAppearance) -> () = { _ in }) -> Self
     {
-        MosaicListLayout.describe(appearance: configure)
+        RetailGridListLayout.describe(appearance: configure)
     }
 }
 
 
-public struct MosaicAppearance : ListLayoutAppearance
+public struct RetailGridAppearance : ListLayoutAppearance
 {
     public var layout : Layout
     
@@ -26,7 +26,7 @@ public struct MosaicAppearance : ListLayoutAppearance
     
     public var stickySectionHeaders : Bool = false
     
-    public static var `default`: MosaicAppearance {
+    public static var `default`: RetailGridAppearance {
         return self.init()
     }
     
@@ -87,7 +87,7 @@ public struct MosaicAppearance : ListLayoutAppearance
 }
 
 
-extension MosaicAppearance {
+extension RetailGridAppearance {
     
     public struct ItemLayout : ItemLayoutsValue {
         
@@ -207,22 +207,22 @@ extension MosaicAppearance {
 
 
 extension ItemLayouts {
-    public var mosaic : MosaicAppearance.ItemLayout {
-        get { self[MosaicAppearance.ItemLayout.self] }
-        set { self[MosaicAppearance.ItemLayout.self] = newValue }
+    public var retailGrid : RetailGridAppearance.ItemLayout {
+        get { self[RetailGridAppearance.ItemLayout.self] }
+        set { self[RetailGridAppearance.ItemLayout.self] = newValue }
     }
 }
 
 
-final class MosaicListLayout : ListLayout
+final class RetailGridListLayout : ListLayout
 {
-    typealias LayoutAppearance = MosaicAppearance
+    typealias LayoutAppearance = RetailGridAppearance
     
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .scaleDown)
     }
     
-    var layoutAppearance: MosaicAppearance
+    var layoutAppearance: RetailGridAppearance
  
     let appearance : Appearance
     let behavior : Behavior
@@ -245,7 +245,7 @@ final class MosaicListLayout : ListLayout
     //
     
     init(
-        layoutAppearance: MosaicAppearance,
+        layoutAppearance: RetailGridAppearance,
         appearance: Appearance,
         behavior: Behavior,
         content: ListLayoutContent
@@ -277,7 +277,7 @@ final class MosaicListLayout : ListLayout
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             section.items.forEach { item in
 
-                let frame = item.layouts.mosaic.frame(
+                let frame = item.layouts.retailGrid.frame(
                     pageSize: viewSize,
                     pagePadding: layout.padding,
                     itemSpacing: layout.itemSpacing,
