@@ -60,9 +60,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.stateObserver = ListStateObserver()
         
         self.collectionView.isPrefetchingEnabled = false
-                
-        self.collectionView.dataSource = self.dataSource
+        
         self.collectionView.delegate = self.delegate
+        self.collectionView.dataSource = self.dataSource
         
         // Super init.
         
@@ -70,12 +70,15 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         // Associate ourselves with our child objects.
 
+        self.dataSource.view = self
         self.dataSource.presentationState = self.storage.presentationState
+        self.dataSource.storage = self.storage
         self.dataSource.environment = self.environment
         self.dataSource.liveCells = self.liveCells
         
         self.delegate.view = self
         self.delegate.presentationState = self.storage.presentationState
+        self.delegate.layoutManager = self.layoutManager
         
         self.keyboardObserver.add(delegate: self)
                 
@@ -187,14 +190,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     public var scrollPositionInfo : ListScrollPositionInfo {
         let visibleItems = Set(self.visibleContent.items.map { item in
-            item.item.anyModel.identifier
+            item.item.anyModel.anyIdentifier
         })
         
         return ListScrollPositionInfo(
             scrollView: self.collectionView,
             visibleItems: visibleItems,
-            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.identifier) } ?? false,
-            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.identifier) } ?? false
+            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.anyIdentifier) } ?? false,
+            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.anyIdentifier) } ?? false
         )
     }
     
@@ -397,7 +400,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     ) -> Bool
     {
         self.scrollTo(
-            item: item.identifier,
+            item: item.anyIdentifier,
             position: position,
             animation: animation,
             completion: completion
@@ -681,25 +684,36 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.configure(with: description)
     }
     
+    let updateQueue = ListChangesQueue()
+    
     public func configure(with properties : ListProperties)
     {
-        let animated = properties.animatesChanges
+        /// We enqueue these changes into the update queue to ensure they are not applied
+        /// before it is safe to do so. Currently, "safe" means "during the application of a reorder".
+        ///
+        /// See `CollectionViewLayout.sendEndQueuingEditsAfterDelay()` for more.
         
-        self.appearance = properties.appearance
-        self.behavior = properties.behavior
-        self.autoScrollAction = properties.autoScrollAction
-        self.scrollIndicatorInsets = properties.scrollIndicatorInsets
-        self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
-        self.debuggingIdentifier = properties.debuggingIdentifier
-        self.actions = properties.actions
+        self.updateQueue.add { [weak self] in
+            guard let self = self else { return }
+            
+            let animated = properties.animatesChanges
+            
+            self.appearance = properties.appearance
+            self.behavior = properties.behavior
+            self.autoScrollAction = properties.autoScrollAction
+            self.scrollIndicatorInsets = properties.scrollIndicatorInsets
+            self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
+            self.debuggingIdentifier = properties.debuggingIdentifier
+            self.actions = properties.actions
 
-        self.stateObserver = properties.stateObserver
-        
-        self.environment = properties.environment
-        
-        self.set(layout: properties.layout, animated: animated)
-        
-        self.setContent(animated: animated, properties.content)
+            self.stateObserver = properties.stateObserver
+            
+            self.environment = properties.environment
+            
+            self.set(layout: properties.layout, animated: animated)
+            
+            self.setContent(animated: animated, properties.content)
+        }
     }
     
     private func setContentFromSource(animated : Bool = false)
@@ -820,7 +834,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     //
     
     internal func setPresentationStateItemPositions()
-    {
+    {        
         self.storage.presentationState.forEachItem { indexPath, item in
             item.itemPosition = self.collectionViewLayout.positionForItem(at: indexPath)
         }
@@ -923,7 +937,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
         }
 
-        let updateCallbacks = UpdateCallbacks(.queue)
+        let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
         
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
@@ -1159,7 +1173,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
         
         if changes.hasIndexAffectingChanges {
-            self.cancelInteractiveMovement()
+            
+            if self.hasInProgressReorders {
+                print(
+                    """
+                    LISTABLE WARNING: Reordering while applying an update diff that has changes which affect index \
+                    path stability is currently experimental, and will likely crash. A fix is planned, but this \
+                    warning is here so you know what to expect.
+                    """
+                )
+            }
+            
+            self.cancelAllInProgressReorders()
         }
         
         self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
@@ -1185,7 +1210,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     movedHint: { $0.identifier != $1.identifier }
                 ),
                 item: .init(
-                    identifier: { $0.identifier },
+                    identifier: { $0.anyIdentifier },
                     updated: { $0.anyIsEquivalent(to: $1) == false },
                     movedHint: { $0.anyWasMoved(comparedTo: $1) }
                 )
@@ -1232,30 +1257,65 @@ extension ListView : ReorderingActionsDelegate
     // MARK: Internal - Moving Items
     //
     
-    func beginInteractiveMovementFor(item : AnyPresentationItemState) -> Bool
+    func beginReorder(for item : AnyPresentationItemState) -> Bool
     {
         guard let indexPath = self.storage.presentationState.indexPath(for: item) else {
             return false
         }
         
-        return self.collectionView.beginInteractiveMovementForItem(at: indexPath)
+        if self.collectionView.beginInteractiveMovementForItem(at: indexPath) {
+            item.beginReorder(from: indexPath, with: self.environment)
+            
+            return true
+        } else {
+            return false
+        }
     }
     
-    func updateInteractiveMovementTargetPosition(with recognizer : UIPanGestureRecognizer)
+    func updateReorderTargetPosition(
+        with recognizer : ItemReordering.GestureRecognizer,
+        for item : AnyPresentationItemState
+    )
     {
-        let position = recognizer.location(in: self.collectionView)
+        guard let position = recognizer.reorderPosition(in: self.collectionView) else {
+            return
+        }
         
         self.collectionView.updateInteractiveMovementTargetPosition(position)
     }
     
-    func endInteractiveMovement()
+    func endReorder(for item : AnyPresentationItemState, with result : ReorderingActions.Result)
     {
-        self.collectionView.endInteractiveMovement()
+        item.endReorder(with: self.environment, result: result)
+        
+        switch result {
+        case .finished:
+            self.collectionView.endInteractiveMovement()
+        case .cancelled:
+            self.collectionView.cancelInteractiveMovement()
+        }
     }
     
-    func cancelInteractiveMovement()
-    {
+    func cancelAllInProgressReorders() {
+        
+        self.storage.presentationState.forEachItem { _, item in
+            item.endReorder(with: self.environment, result: .cancelled)
+        }
+        
         self.collectionView.cancelInteractiveMovement()
+    }
+    
+    private var hasInProgressReorders : Bool {
+        
+        for section in self.storage.presentationState.sections {
+            for item in section.items {
+                if item.isReordering {
+                    return true
+                }
+            }
+        }
+        
+        return false
     }
 }
 

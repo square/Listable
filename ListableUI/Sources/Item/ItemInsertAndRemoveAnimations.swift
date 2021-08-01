@@ -10,7 +10,7 @@ import UIKit
 
 public struct ItemInsertAndRemoveAnimations
 {
-    public typealias Prepare = (inout Attributes) -> ()
+    public typealias Prepare = (inout ListContentLayoutAttributes) -> ()
     
     public var onInsert : Prepare
     public var onRemoval : Prepare
@@ -27,68 +27,6 @@ public struct ItemInsertAndRemoveAnimations
     {
         self.onInsert = attributes
         self.onRemoval = attributes
-    }
-    
-    public struct Attributes
-    {
-        public var bounds: CGRect
-        public var center: CGPoint
-        
-        public var transform: CGAffineTransform
-        public var transform3D: CATransform3D
-
-        public var alpha: CGFloat
-
-        public var zIndex: Int
-        
-        public var frame: CGRect {
-            get {
-                CGRect(
-                    x: self.center.x - (self.bounds.width / 2.0),
-                    y: self.center.y - (self.bounds.height / 2.0),
-                    width: self.bounds.width,
-                    height: self.bounds.height
-                )
-            }
-            
-            set {
-                self.center = CGPoint(
-                    x: newValue.origin.x + (newValue.width / 2.0),
-                    y: newValue.origin.y + (newValue.height / 2.0)
-                )
-                
-                self.bounds = CGRect(
-                    origin: .zero,
-                    size: newValue.size
-                )
-            }
-        }
-        
-        init(_ attributes : UICollectionViewLayoutAttributes)
-        {
-            self.bounds = attributes.bounds
-            self.center = attributes.center
-            
-            self.transform = attributes.transform
-            self.transform3D = attributes.transform3D
-            
-            self.alpha = attributes.alpha
-            
-            self.zIndex = attributes.zIndex
-        }
-        
-        func apply(to attributes : UICollectionViewLayoutAttributes)
-        {
-            attributes.bounds = self.bounds
-            attributes.center = self.center
-            
-            attributes.transform3D = self.transform3D
-            attributes.transform = self.transform
-            
-            attributes.alpha = self.alpha
-            
-            attributes.zIndex = self.zIndex
-        }
     }
 }
 

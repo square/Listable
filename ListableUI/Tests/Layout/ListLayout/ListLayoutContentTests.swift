@@ -15,38 +15,37 @@ class ListLayoutContentTests : XCTestCase
     func test_all()
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .listHeader,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .listFooter,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let overscroll = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .overscrollFooter,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let items : [ListLayoutContent.ItemInfo] = (0...1).map { index in
             .init(
-                delegateProvidedIndexPath: IndexPath(item: index, section: 0),
-                liveIndexPath: IndexPath(item: index, section: 0),
-                layouts: .init(),
+                state: PresentationState.ItemState(Item(TestItem())),
+                indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
         }
                 
         let section = ListLayoutContent.SectionInfo(
-            layouts: .init(),
+            state: PresentationState.SectionState(Section("1", items: items.map(\.state.anyModel))),
             header: nil,
             footer: nil,
             items: items
@@ -82,6 +81,90 @@ class ListLayoutContentTests : XCTestCase
     {
         /// This method only calls through to the section version, which is tested by `test_setContentsFrame` below.
     }
+    
+    func test_move() {
+        
+        let presentationState = PresentationState { content in
+            
+            content += Section("1") { section in
+                section += TestItem()
+                section += TestItem()
+                section += TestItem()
+            }
+            
+            content += Section("2") { section in
+                section += TestItem()
+                section += TestItem()
+                section += TestItem()
+            }
+        }
+                
+        self.testcase("no-op") {
+            let content = presentationState.toListLayoutContent()
+            
+            // Moving to the same index path should be a no-op.
+            
+            content.move(
+                from: [IndexPath(item: 2, section: 0)],
+                to: [IndexPath(item: 2, section: 0)]
+            )
+            
+            XCTAssertEqual(content.sections[0].items.count, 3)
+            XCTAssertEqual(content.sections[1].items.count, 3)
+        }
+        
+        self.testcase("moving single") {
+            let content = presentationState.toListLayoutContent()
+
+            // Moving should re-index the index paths as well.
+            
+            content.move(
+                from: [IndexPath(item: 2, section: 0)],
+                to: [IndexPath(item: 3, section: 1)]
+            )
+            
+            XCTAssertEqual(content.sections[0].items.count, 2)
+            XCTAssertEqual(content.sections[1].items.count, 4)
+            
+            XCTAssertEqual(content.sections[1].items[3].indexPath, IndexPath(item: 3, section: 1))
+            
+            // Note that the underlying presentation state should NOT be updated in this case.
+            // That is because the move has not yet been committed; only the view layer is updated.
+            
+            XCTAssertEqual(content.sections[0].state.items.count, 3)
+            XCTAssertEqual(content.sections[1].state.items.count, 3)
+        }
+        
+        self.testcase("moving multiple") {
+            let content = presentationState.toListLayoutContent()
+
+            // Ensure moving items uses the index paths in a stable way,
+            // by applying removes + adds in the correct order (removals
+            // last to first, additions first to last by index path).
+            
+            content.move(
+                from: [
+                    IndexPath(item: 0, section: 0),
+                    IndexPath(item: 2, section: 0),
+                ],
+                to: [
+                    IndexPath(item: 3, section: 1),
+                    IndexPath(item: 1, section: 1)
+                ]
+            )
+            
+            XCTAssertEqual(content.sections[0].items.count, 1)
+            XCTAssertTrue(presentationState.sections[0].items[1] === content.sections[0].items[0].state)
+            
+            XCTAssertEqual(content.sections[1].items.count, 5)
+            XCTAssertTrue(presentationState.sections[1].items[0] === content.sections[1].items[0].state)
+            XCTAssertTrue(presentationState.sections[0].items[2] === content.sections[1].items[1].state)
+            XCTAssertTrue(presentationState.sections[1].items[1] === content.sections[1].items[2].state)
+            
+            XCTAssertTrue(presentationState.sections[0].items[0] === content.sections[1].items[3].state)
+            XCTAssertTrue(presentationState.sections[1].items[2] === content.sections[1].items[4].state)
+        }
+    }
 }
 
 
@@ -90,24 +173,23 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
     func test_all()
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .sectionHeader,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .sectionHeader,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let items : [ListLayoutContent.ItemInfo] = (0...1).map { index in
             .init(
-                delegateProvidedIndexPath: IndexPath(item: index, section: 0),
-                liveIndexPath: IndexPath(item: index, section: 0),
-                layouts: .init(),
+                state: PresentationState.ItemState(Item(TestItem())),
+                indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
@@ -116,7 +198,7 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
         // Shouldn't include header or footer if they are empty.
         
         let section1 = ListLayoutContent.SectionInfo(
-            layouts: .init(),
+            state: PresentationState.SectionState(Section("1", items: items.map(\.state.anyModel))),
             header: nil,
             footer: nil,
             items: items
@@ -127,7 +209,7 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
         // Should include header and footer if they are populated.
         
         let section2 = ListLayoutContent.SectionInfo(
-            layouts: .init(),
+            state: PresentationState.SectionState(Section("1", items: items.map(\.state.anyModel))),
             header: header,
             footer: footer,
             items: items
@@ -139,31 +221,30 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
     func test_setContentsFrame()
     {
         let header = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .sectionHeader,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let footer = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .sectionHeader,
-            layouts: .init(),
             isPopulated: true,
             measurer: { _ in .zero }
         )
         
         let items : [ListLayoutContent.ItemInfo] = (0...1).map { index in
             .init(
-                delegateProvidedIndexPath: IndexPath(item: index, section: 0),
-                liveIndexPath: IndexPath(item: index, section: 0),
-                layouts: .init(),
+                state: PresentationState.ItemState(Item(TestItem())),
+                indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
                 measurer: { _ in .zero }
             )
         }
                 
         let section = ListLayoutContent.SectionInfo(
-            layouts: .init(),
+            state: PresentationState.SectionState(Section("1", items: items.map(\.state.anyModel))),
             header: header,
             footer: footer,
             items: items
@@ -253,3 +334,36 @@ fileprivate func AssertListLayoutContentItemEqual(
     }
 }
 
+
+fileprivate struct TestItem : ItemContent, Equatable {
+    
+    var identifierValue: String {
+        ""
+    }
+    
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView {
+        UIView(frame: frame)
+    }
+    
+    func apply(to views: ItemContentViews<TestItem>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
+}
+
+
+fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable {
+    
+    typealias ContentView = UIView
+    
+    static func createReusableContentView(frame: CGRect) -> UIView {
+        UIView(frame: frame)
+    }
+    
+    func apply(
+        to views: HeaderFooterContentViews<Self>,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
+    ) {
+        // Nothing.
+    }
+}

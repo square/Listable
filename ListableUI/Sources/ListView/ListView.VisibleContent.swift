@@ -57,7 +57,7 @@ extension ListView
                     Info.HeaderFooter(kind: $0.kind, indexPath: $0.indexPath)
                 }),
                 items: Set(self.items.map {
-                    Info.Item(identifier: $0.item.anyModel.identifier, indexPath: $0.indexPath)
+                    Info.Item(identifier: $0.item.anyModel.anyIdentifier, indexPath: $0.indexPath)
                 })
             )
         }

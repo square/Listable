@@ -342,7 +342,9 @@ fileprivate struct TestContent : ItemContent, Equatable
     var value : String
     var updates : [String] = []
     
-    var identifier: Identifier<TestContent> = .init("")
+    var identifierValue: String {
+        ""
+    }
     
     func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
     
@@ -433,27 +435,4 @@ fileprivate struct TestContent : ItemContent, Equatable
             self.wasDeselected_calls.append(())
         }
     }
-}
-
-
-fileprivate class ItemContentCoordinatorDelegateMock : ItemContentCoordinatorDelegate
-{
-    var coordinatorUpdated_calls = [AnyItem]()
-    
-    func coordinatorUpdated(for item: AnyItem)
-    {
-        self.coordinatorUpdated_calls.append(item)
-    }
-}
-
-
-fileprivate class ReorderingActionsDelegateMock : ReorderingActionsDelegate
-{
-    func beginInteractiveMovementFor(item: AnyPresentationItemState) -> Bool { true }
-    
-    func updateInteractiveMovementTargetPosition(with recognizer: UIPanGestureRecognizer) {}
-    
-    func endInteractiveMovement() {}
-    
-    func cancelInteractiveMovement() {}
 }

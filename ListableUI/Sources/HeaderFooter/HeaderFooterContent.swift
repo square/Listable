@@ -43,7 +43,23 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 1) `BackgroundView`
 ///
 public protocol HeaderFooterContent
-{    
+{
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func isEquivalent(to other : Self) -> Bool
+    
+    //
+    // MARK: Default Properties
+    //
+    
+    typealias DefaultProperties = DefaultHeaderFooterProperties<Self>
+    
+    /// Default values to assign to various properties on the `HeaderFooter` which wraps
+    /// this `HeaderFooterContent`, if those values are not passed to the `HeaderFooter` initializer.
+    var defaultHeaderFooterProperties : DefaultProperties { get }
+    
     //
     // MARK: Applying To Displayed View
     //
@@ -61,12 +77,6 @@ public protocol HeaderFooterContent
     ///
     /// See ``ReappliesToVisibleView`` for a full discussion.
     var reappliesToVisibleView: ReappliesToVisibleView { get }
-    
-    //
-    // MARK: Tracking Changes
-    //
-    
-    func isEquivalent(to other : Self) -> Bool
     
     //
     // MARK: Creating & Providing Content Views
@@ -136,6 +146,8 @@ public protocol HeaderFooterContent
 
 /// Information about the current state of the content, which is passed to `apply(to:for:with:)`
 /// during configuration and preparation for display.
+///
+/// TODO: Rename to `ApplyHeaderFooterContext`
 public struct ApplyHeaderFooterContentInfo
 {
     /// The environment of the containing list.
@@ -188,10 +200,21 @@ public extension HeaderFooterContent where Self.BackgroundView == UIView
     }
 }
 
+
 public extension HeaderFooterContent where Self.PressedBackgroundView == UIView
 {
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
     {
         PressedBackgroundView(frame: frame)
+    }
+}
+
+
+/// Provide a default implementation of `defaultHeaderFooterProperties` which returns an
+/// empty instance that does not provide any defaults.
+public extension HeaderFooterContent
+{
+    var defaultHeaderFooterProperties : DefaultProperties {
+        .init()
     }
 }

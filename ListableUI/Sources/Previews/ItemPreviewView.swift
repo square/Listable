@@ -47,7 +47,7 @@ public final class ItemPreviewView : UIView {
     /// Creates a preview for the given item and parameters, and then lays out the preview view.
     public convenience init(
         with width : CGFloat = UIScreen.main.bounds.width,
-        state : ItemState = .init(isSelected: false, isHighlighted: false),
+        state : ItemState = .init(isSelected: false, isHighlighted: false, isReordering: false),
         appearance : ItemPreviewAppearance = .init(),
         item : AnyItem
     ) {
@@ -64,7 +64,7 @@ public final class ItemPreviewView : UIView {
     /// This method changes the view's size; you dont need to resize the view after setting an item.
     public func update(
         with width : CGFloat = UIScreen.main.bounds.width,
-        state : ItemState = .init(isSelected: false, isHighlighted: false),
+        state : ItemState = .init(isSelected: false, isHighlighted: false, isReordering: false),
         appearance : ItemPreviewAppearance = .init(),
         item : AnyItem
     ) {

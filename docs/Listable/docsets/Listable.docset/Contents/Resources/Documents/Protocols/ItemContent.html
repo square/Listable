@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-    
+
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,22 +23,22 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (45% documented)
+         (48% documented)
       </p>
-    
+
       <p class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -106,6 +106,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ReorderingActions.html">ReorderingActions</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ReorderingActions/Result.html">– Result</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/SourceState.html">SourceState</a>
@@ -322,6 +325,9 @@
                 <a class="nav-group-task-link" href="../Structs/Content.html">Content</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DefaultHeaderFooterProperties.html">DefaultHeaderFooterProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/DefaultItemProperties.html">DefaultItemProperties</a>
               </li>
               <li class="nav-group-task">
@@ -394,9 +400,6 @@
                 <a class="nav-group-task-link" href="../Structs/ItemInsertAndRemoveAnimations.html">ItemInsertAndRemoveAnimations</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ItemInsertAndRemoveAnimations/Attributes.html">– Attributes</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ItemLayouts.html">ItemLayouts</a>
               </li>
               <li class="nav-group-task">
@@ -409,6 +412,18 @@
                 <a class="nav-group-task-link" href="../Structs/ItemPreviewAppearance.html">ItemPreviewAppearance</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ItemReordering.html">ItemReordering</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ItemReordering/Sections.html">– Sections</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ItemReordering/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ItemReordering/GestureRecognizer.html">– GestureRecognizer</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ItemState.html">ItemState</a>
               </li>
               <li class="nav-group-task">
@@ -416,6 +431,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/LayoutDescription.html">LayoutDescription</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListContentLayoutAttributes.html">ListContentLayoutAttributes</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
@@ -475,6 +493,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/SelectionChanged.html">– SelectionChanged</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/ItemReordered.html">– ItemReordered</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/LocalizedItemCollator.html">LocalizedItemCollator</a>
               </li>
               <li class="nav-group-task">
@@ -493,15 +514,6 @@
                 <a class="nav-group-task-link" href="../Structs/RefreshControl/Title.html">– Title</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Reordering.html">Reordering</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Reordering/Sections.html">– Sections</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/Reordering/Result.html">– Result</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ScrollPosition.html">ScrollPosition</a>
               </li>
               <li class="nav-group-task">
@@ -515,6 +527,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SectionLayouts.html">SectionLayouts</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SectionReordering.html">SectionReordering</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SwipeAction.html">SwipeAction</a>
@@ -568,21 +583,21 @@
             <h1>ItemContent</h1>
               <div class="declaration">
                 <div class="language">
-                  
+
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContent</span></code></pre>
 
                 </div>
               </div>
-            <p>An <code>ItemContent</code> is a type used to provide the content of an <code><a href="../Structs/Item.html">Item</a></code>
-in a listable section.</p>
+            <p>An <code>ItemContent</code> is a type used to provide the content of an <code><a href="../Structs/Item.html">Item</a></code> in a list section.</p>
 
 <p>A <code>ItemContent</code> that displays text might look like this:</p>
 <pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span><span class="p">,</span> <span class="kt">Equatable</span>
 <span class="p">{</span>
     <span class="k">var</span> <span class="nv">text</span> <span class="p">:</span> <span class="kt">String</span>
+    <span class="k">var</span> <span class="nv">id</span> <span class="p">:</span> <span class="kt">UUID</span>
 
-    <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">MyItemContent</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">identifierValue</span><span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">id</span>
     <span class="p">}</span>
 
     <span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span> <span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">MyContentView</span> <span class="p">{</span>
@@ -623,9 +638,9 @@ z-index 1) <code>BackgroundView</code></p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ItemContentP10identifierAA10IdentifierCyxGvp"></a>
-                    <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP10identifierAA10IdentifierCyxGvp">identifier</a>
+                    <a name="/s:10ListableUI11ItemContentP15IdentifierValueQa"></a>
+                    <a name="//apple_ref/swift/Alias/IdentifierValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -633,21 +648,353 @@ z-index 1) <code>BackgroundView</code></p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Identifies the content across updates to the list. This value must remain the same,
-otherwise the content will be considered a new item, and the old one removed from the list.</p>
+                        <p>A <code>Hashable</code> type which is returned from <code>ItemContent/identifierValue-swift.property</code>,
+which is used to identify the <code>ItemContent</code> when it put into a list.</p>
 
-<p>Does not have to be globally unique – the list will make a &ldquo;best guess&rdquo; if there are multiple items
-with the same identifier. However, diffing of changes will be more correct with a unique identifier.</p>
+<p>The <code>ItemContent/identifierValue-swift.property</code> is used to unique the item,
+control its lifetime, and identify it across update operations.</p>
 
-<p>If you&rsquo;re backing your content with some sort of client or server-provided data, consider using its
-server or client UUID here, or some other unique identifier from the underlying data model.</p>
+<p>See <code>ItemContent/identifierValue-swift.property</code> for more.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt"><a href="../Classes/Identifier.html">Identifier</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">IdentifierValue</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP15identifierValue010IdentifierF0Qzvp"></a>
+                    <a name="//apple_ref/swift/Property/identifierValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP15identifierValue010IdentifierF0Qzvp">identifierValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used to unique the item, control its lifetime, and identify it across update operations.</p>
+<h3 id='identifier-stability' class='heading'>Identifier Stability</h3>
+
+<p>This value must be stable. Changing the <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10identifierAA10IdentifierCyx0F5ValueQzGvp">identifier</a></code> will mean that the list will think
+the item has been removed from the list (and a new one inserted), which can cause
+undesired animations or other undesired behavior when a new view is created and inserted.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Wrong; will change every time the item is accessed.</span>
+        <span class="kt">UUID</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">contentID</span> <span class="o">=</span> <span class="kt">UUID</span><span class="p">()</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Also wrong, will change every time the item is built.</span>
+        <span class="k">self</span><span class="o">.</span><span class="nf">contentID</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span> <span class="c1">// Conforms to Hashable</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Wrong! This will change the value of the identifier</span>
+        <span class="c1">// any time any value within our content changes.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">model</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Still wrong! Same as above, but with reflection. You should</span>
+        <span class="c1">// never used a reflecting or describing method to generate an identifier.</span>
+
+        <span class="kt">String</span><span class="p">(</span><span class="n">describing</span><span class="o">/</span><span class="nv">reflecting</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+         <span class="c1">// ✅ Good! Stable across updates.</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">serverID</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Identifier stability is especially important with items that embed interactive controls, like buttons, sliders,
+text fields, etc. The identifier of the control should be stable and <strong>independent of the value
+the control is currently representing</strong>. Including the value the control is currently representing
+in the identifier will cause the list to repeatedly re-create the control, removing the old item and inserting the new one.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MySearchBarRow</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">searchText</span> <span class="p">:</span> <span class="kt">String</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Wrong; identifier will change every time the search text changes.</span>
+        <span class="n">searchText</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MySearchBarRow</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">searchText</span> <span class="p">:</span> <span class="kt">String</span>
+    <span class="k">let</span> <span class="nv">id</span> <span class="p">:</span> <span class="kt">String</span> <span class="c1">// Something like "item-search".</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="c1">// ✅ Good! Stable across updates.</span>
+        <span class="n">id</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='identifier-uniqueness' class='heading'>Identifier Uniqueness</h3>
+
+<p>While identifiers do need to be <em>stable</em>, they do not need to be globally unique – the list will make a
+&ldquo;best guess&rdquo; if there are multiple items with the same identifier. However, diffing of changes
+will be more visually correct with a unique identifier.</p>
+
+<p>If you are backing your content with some sort of client or server-provided data, consider using its
+server or client UUID here, or some other stable unique identifier from the underlying data model.</p>
+
+<p>Generally, try to use the most stable ID you have access to. Sometimes this will be a server or client ID
+as mentioned above. For something without the concept of identity, consider providing a value
+based on what the content represents (eg, a row title like &ldquo;Settings&rdquo;).</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Likely wrong. If entered by the user,</span>
+        <span class="c1">// there could be many items with this name,</span>
+        <span class="c1">// or multiple items with no name at all, leading</span>
+        <span class="c1">// to identifier collisions.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">name</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">setting</span> <span class="p">:</span> <span class="kt">Setting</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="c1">// 🤔 Probably good enough! Since this item</span>
+        <span class="c1">// represents a setting in a settings screen,</span>
+        <span class="c1">// returning the title of the row is likely</span>
+        <span class="c1">// unique enough to guarantee stability.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">setting</span><span class="o">.</span><span class="n">name</span> <span class="c1">// Something like "Location Services".</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span> <span class="p">{</span>
+        <span class="c1">// ✅ Good! Very unique.</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">serverID</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<h3 id='identifier-leverages-the-type-system' class='heading'>Identifier Leverages The Type System</h3>
+
+<p>Your <code>ItemContent/identifierValue-swift.property</code> gets wrapped up in an <code>Identifier&lt;YourItemContent, IdentifierValue&gt;</code>
+when it used by the list to unique the item, control its lifetime, and identify it across update operations.  This
+additional type information is used to further unique the identifier. You do not need to provide any
+additional type-salting and uniquing information in your <code>ItemContent/identifierValue-swift.property</code> besides the value from your content.</p>
+
+<p>Even once the <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></code> is type-erased to <code><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></code>, this type information is retained:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">first</span> <span class="p">:</span> <span class="kt">AnyIdentifier</span> <span class="o">=</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">MyThing</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"a-value"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">second</span> <span class="p">:</span> <span class="kt">AnyIdentifier</span> <span class="o">=</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">MyOtherThing</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"a-value"</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">isEqual</span> <span class="o">=</span> <span class="n">first</span> <span class="o">==</span> <span class="n">second</span> <span class="c1">// false</span>
+</code></pre>
+
+<p>In practical terms, this means that your <code>ItemContent/identifierValue-swift.property</code> implementation should be:</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Not needed: Type information will be encoded into the Identifier.</span>
+        <span class="s">"MyItemContent-</span><span class="se">\(</span><span class="n">model</span><span class="o">.</span><span class="n">serverID</span><span class="se">)</span><span class="s">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MySearchBarRow</span> <span class="p">:</span> <span class="kt">ItemContent</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">model</span> <span class="p">:</span> <span class="kt">Model</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="n">searchText</span> <span class="p">{</span>
+        <span class="c1">// ✅ Good! No need for the string interpolation.</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">serverID</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">identifierValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Tracking%20Changes"></a>
+                <a name="//apple_ref/swift/Section/Tracking Changes" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Tracking%20Changes"></a>
+                  <h3 class="section-name"><p>Tracking Changes</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF"></a>
+                    <a name="//apple_ref/swift/Method/isEquivalent(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF">isEquivalent(to:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used by the list to determine when the content of the item has changed; in order to
+remeasure the item and re-layout the list.</p>
+
+<p>You should return <code>false</code> from this method when any content within your item that
+affects visual appearance or layout (and in particular, sizing) changes. When the list
+receives <code>false</code> back from this method, it will invalidate any cached sizing it has stored
+for the item, and re-measure + re-layout the content.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span><span class="p">,</span> <span class="kt">Equatable</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">UUID</span>
+    <span class="k">var</span> <span class="nv">title</span> <span class="p">:</span> <span class="kt">String</span>
+    <span class="k">var</span> <span class="nv">detail</span> <span class="p">:</span> <span class="kt">String</span>
+    <span class="k">var</span> <span class="nv">theme</span> <span class="p">:</span> <span class="kt">MyTheme</span>
+    <span class="k">var</span> <span class="nv">onTapDetail</span> <span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">()</span>
+
+    <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="kt">MyItemContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Missing checks for title and detail.</span>
+        <span class="c1">// If they change, they likely affect sizing,</span>
+        <span class="c1">// which would result in incorrect item sizing.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">theme</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="kt">MyItemContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="c1">// 🚫 Missing check for theme.</span>
+        <span class="c1">// If the theme changed; its likely that the device's</span>
+        <span class="c1">// accessibility settings changed; dark mode was enabled,</span>
+        <span class="c1">// etc. All of these can affect the appearance or sizing</span>
+        <span class="c1">// of the item.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">title</span> <span class="o">&amp;&amp;</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">detail</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">detail</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="kt">MyItemContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="c1">// ✅ Checking all parameters which can affect appearance + layout.</span>
+        <span class="c1">// Not checking identifierValue or onTapDetail, since they do not affect appearance + layout.</span>
+
+        <span class="k">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">theme</span> <span class="o">&amp;&amp;</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">title</span> <span class="o">&amp;&amp;</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">detail</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">detail</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MyItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span><span class="p">,</span> <span class="kt">Equatable</span> <span class="p">{</span>
+    <span class="c1">// ✅ Nothing else needed!</span>
+    <span class="c1">// `Equatable` conformance provides `isEquivalent(to:) for free!`</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='note' class='heading'>Note</h4>
+
+<p>If your <code>ItemContent</code> conforms to <code>Equatable</code>, there is a default
+implementation of this method which simply returns <code>self == other</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP8wasMoved10comparedToSbx_tF"></a>
+                    <a name="//apple_ref/swift/Method/wasMoved(comparedTo:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP8wasMoved10comparedToSbx_tF">wasMoved(comparedTo:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Used by the list view to determine move events during an update&rsquo;s diff operation.</p>
+
+<p>This function should return <code>true</code> if the content&rsquo;s sort changed based on the old value passed into the function.
+For example, if your content is sorted based on an <code>updatedAt</code> <code>Date</code> parameter, you would implement
+this method as follows:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">wasMoved</span><span class="p">(</span><span class="n">comparedTo</span> <span class="nv">other</span> <span class="p">:</span> <span class="kt">MyContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">updatedAt</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">updatedAt</span>
+<span class="p">}</span>
+</code></pre>
+<h4 id='note' class='heading'>Note</h4>
+
+<p>There is a default implementation of this method which calls <code>isEquivalent == false</code>. Unless
+your list has an extremely high amount of ordering churn, you should not need to implement this method.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">wasMoved</span><span class="p">(</span><span class="n">comparedTo</span> <span class="nv">other</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -670,6 +1017,33 @@ server or client UUID here, or some other unique identifier from the underlying 
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI11ItemContentP17DefaultPropertiesa"></a>
+                    <a name="//apple_ref/swift/Alias/DefaultProperties" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP17DefaultPropertiesa">DefaultProperties</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">DefaultProperties</span> <span class="o">=</span> <span class="kt"><a href="../Structs/DefaultItemProperties.html">DefaultItemProperties</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI11ItemContentP07defaultC10PropertiesAA07DefaultcF0VyxGvp"></a>
                     <a name="//apple_ref/swift/Property/defaultItemProperties" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI11ItemContentP07defaultC10PropertiesAA07DefaultcF0VyxGvp">defaultItemProperties</a>
@@ -689,13 +1063,13 @@ this <code>ItemContent</code>, if those values are not passed to the <code><a hr
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-                        
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">defaultItemProperties</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultItemProperties.html">DefaultItemProperties</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">defaultItemProperties</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP17DefaultPropertiesa">DefaultProperties</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -743,91 +1117,6 @@ content into the passed in views.</p>
     <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt"><a href="../Enums/ApplyReason.html">ApplyReason</a></span><span class="p">,</span>
     <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a></span>
 <span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Tracking%20Changes"></a>
-                <a name="//apple_ref/swift/Section/Tracking Changes" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Tracking%20Changes"></a>
-                  <h3 class="section-name"><p>Tracking Changes</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP8wasMoved10comparedToSbx_tF"></a>
-                    <a name="//apple_ref/swift/Method/wasMoved(comparedTo:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP8wasMoved10comparedToSbx_tF">wasMoved(comparedTo:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Return true if the content&rsquo;s sort changed based on the old value passed into the function.</p>
-
-<p>The list view uses the value of this method to be more intelligent about what has moved within the list.</p>
-<h2 id='note' class='heading'>Note</h2>
-
-<p>There is a default implementation of this method which simply calls <code>isEquivalent</code>.</p>
-
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">wasMoved</span><span class="p">(</span><span class="n">comparedTo</span> <span class="nv">other</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF"></a>
-                    <a name="//apple_ref/swift/Method/isEquivalent(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP12isEquivalent2toSbx_tF">isEquivalent(to:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Return false if the content&rsquo; changed based on the old value passed into the function.</p>
-
-<p>If this method returns false, the row representing the content is reloaded.</p>
-<h2 id='note' class='heading'>Note</h2>
-
-<p>There is a default implementation of this method when <code>ItemContent</code> conforms to <code>Equatable</code>
-which returns <code>self == other</code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -941,129 +1230,6 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP0D4ViewQa">ContentView</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Content%20Coordination"></a>
-                <a name="//apple_ref/swift/Section/Content Coordination" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Content%20Coordination"></a>
-                  <h3 class="section-name"><p>Content Coordination</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP11CoordinatorQa"></a>
-                    <a name="//apple_ref/swift/Alias/Coordinator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP11CoordinatorQa">Coordinator</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The coordinator type to use to manage the live state of the <code><a href="../Structs/Item.html">Item</a></code> and <code>ItemContent</code>,
-if you need to update content based on signals such as notifications, view state, appearance state,
-etc.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Coordinator</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContentCoordinator.html">ItemContentCoordinator</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/DefaultItemContentCoordinator.html">DefaultItemContentCoordinator</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="k">where</span> <span class="k">Self</span> <span class="o">==</span> <span class="k">Self</span><span class="o">.</span><span class="kt">Coordinator</span><span class="o">.</span><span class="kt">ItemContentType</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP18CoordinatorActionsa"></a>
-                    <a name="//apple_ref/swift/Alias/CoordinatorActions" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP18CoordinatorActionsa">CoordinatorActions</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The actions passed to the coordinator.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">CoordinatorActions</span> <span class="o">=</span> <span class="kt"><a href="../Classes/ItemContentCoordinatorActions.html">ItemContentCoordinatorActions</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP15CoordinatorInfoa"></a>
-                    <a name="//apple_ref/swift/Alias/CoordinatorInfo" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP15CoordinatorInfoa">CoordinatorInfo</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The info passed to the coordinator.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">CoordinatorInfo</span> <span class="o">=</span> <span class="kt"><a href="../Classes/ItemContentCoordinatorInfo.html">ItemContentCoordinatorInfo</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP15makeCoordinator7actions4info0F0QzAA0cdF7ActionsCyxG_AA0cdF4InfoCyxGtF"></a>
-                    <a name="//apple_ref/swift/Method/makeCoordinator(actions:info:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP15makeCoordinator7actions4info0F0QzAA0cdF7ActionsCyxG_AA0cdF4InfoCyxGtF">makeCoordinator(actions:<wbr>info:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates a new coordinator with the provided actions and info.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">makeCoordinator</span><span class="p">(</span><span class="nv">actions</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP18CoordinatorActionsa">CoordinatorActions</a></span><span class="p">,</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15CoordinatorInfoa">CoordinatorInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP11CoordinatorQa">Coordinator</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1218,13 +1384,240 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Content%20Coordination"></a>
+                <a name="//apple_ref/swift/Section/Content Coordination" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Content%20Coordination"></a>
+                  <h3 class="section-name"><p>Content Coordination</p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP11CoordinatorQa"></a>
+                    <a name="//apple_ref/swift/Alias/Coordinator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP11CoordinatorQa">Coordinator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The coordinator type to use to manage the live state of the <code><a href="../Structs/Item.html">Item</a></code> and <code>ItemContent</code>,
+if you need to update content based on signals such as notifications, view state, appearance state,
+etc.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Coordinator</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContentCoordinator.html">ItemContentCoordinator</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/DefaultItemContentCoordinator.html">DefaultItemContentCoordinator</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="k">where</span> <span class="k">Self</span> <span class="o">==</span> <span class="k">Self</span><span class="o">.</span><span class="kt">Coordinator</span><span class="o">.</span><span class="kt">ItemContentType</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP18CoordinatorActionsa"></a>
+                    <a name="//apple_ref/swift/Alias/CoordinatorActions" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP18CoordinatorActionsa">CoordinatorActions</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The actions passed to the coordinator.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">CoordinatorActions</span> <span class="o">=</span> <span class="kt"><a href="../Classes/ItemContentCoordinatorActions.html">ItemContentCoordinatorActions</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP15CoordinatorInfoa"></a>
+                    <a name="//apple_ref/swift/Alias/CoordinatorInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP15CoordinatorInfoa">CoordinatorInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The info passed to the coordinator.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">CoordinatorInfo</span> <span class="o">=</span> <span class="kt"><a href="../Classes/ItemContentCoordinatorInfo.html">ItemContentCoordinatorInfo</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP15makeCoordinator7actions4info0F0QzAA0cdF7ActionsCyxG_AA0cdF4InfoCyxGtF"></a>
+                    <a name="//apple_ref/swift/Method/makeCoordinator(actions:info:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP15makeCoordinator7actions4info0F0QzAA0cdF7ActionsCyxG_AA0cdF4InfoCyxGtF">makeCoordinator(actions:<wbr>info:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new coordinator with the provided actions and info.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">makeCoordinator</span><span class="p">(</span><span class="nv">actions</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP18CoordinatorActionsa">CoordinatorActions</a></span><span class="p">,</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15CoordinatorInfoa">CoordinatorInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP11CoordinatorQa">Coordinator</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentPAAE10Identifiera"></a>
+                    <a name="//apple_ref/swift/Alias/Identifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The <code>Identifier</code> type for the item.</p>
+
+<p>For example, if your <code>ItemContent</code> was <code>MyContent</code>, and your <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a></code> was <code>UUID</code>,
+this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">Identifier</span> <span class="o">=</span> <span class="kt">ListableUI</span><span class="o">.</span><span class="kt">Identifier</span><span class="o">&lt;</span><span class="k">Self</span><span class="p">,</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentPAAE10identifierAA10IdentifierCyx0F5ValueQzGvp"></a>
+                    <a name="//apple_ref/swift/Property/identifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentPAAE10identifierAA10IdentifierCyx0F5ValueQzGvp">identifier</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></code> for the item.</p>
+
+<p>For example, if your <code>ItemContent</code> was <code>MyContent</code>, and your <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a></code> was <code>UUID</code>,
+this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentPAAE10identifier4withAA10IdentifierCyx0G5ValueQzGAI_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/identifier(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentPAAE10identifier4withAA10IdentifierCyx0G5ValueQzGAI_tFZ">identifier(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></code> with the provided value.</p>
+
+<p>This method allows creating an <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></code> in a type safe manner; enforcing that the
+<code>Represented</code> and <code>Value</code> parameters are of the correct type for the <code>ItemContent</code>:</p>
+<pre class="highlight swift"><code><span class="kt">MyItem</span><span class="o">.</span><span class="nf">identifier</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="s">"my-id"</span><span class="p">)</span> <span class="c1">// ✅ OK</span>
+<span class="kt">MyItem</span><span class="o">.</span><span class="nf">identifier</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>       <span class="c1">// 🚫 Error: MyItem's IdentifierValue is String.</span>
+</code></pre>
+
+<p>You can also read the identifier via  <code>ItemContent/identifier</code>, <code>Item/identifier</code> or <code>AnyItem/anyIdentifier</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">identifier</span><span class="p">(</span><span class="n">with</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15IdentifierValueQa">IdentifierValue</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10Identifiera">Identifier</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
 
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-03-30)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-06-29)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

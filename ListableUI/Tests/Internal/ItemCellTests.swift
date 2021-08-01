@@ -60,8 +60,8 @@ fileprivate struct TestItemContent : ItemContent, Equatable
 {
     // MARK: ItemElement
     
-    var identifier: Identifier<TestItemContent> {
-        return .init("Test")
+    var identifierValue: String {
+        ""
     }
     
     func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
@@ -127,8 +127,8 @@ class ItemElementCell_LiveCells_Tests : XCTestCase
 
     private struct TestContent : ItemContent, Equatable {
         
-        var identifier: Identifier<TestContent> {
-            .init()
+        var identifierValue: String {
+            ""
         }
         
         static func createReusableContentView(frame: CGRect) -> UIView {

@@ -11,9 +11,11 @@ import Foundation
 public final class UpdateCallbacks {
     
     let executionType : ExecutionType
+    let wantsAnimations : Bool
     
-    init(_ executionType : ExecutionType) {
+    init(_ executionType : ExecutionType, wantsAnimations : Bool) {
         self.executionType = executionType
+        self.wantsAnimations = wantsAnimations
     }
     
     deinit {
@@ -31,6 +33,14 @@ public final class UpdateCallbacks {
         switch self.executionType {
         case .immediate: call()
         case .queue: self.calls.append(call)
+        }
+    }
+    
+    func performAnimation(_ animations : @escaping () -> ()) {
+        if self.wantsAnimations {
+            UIView.animate(withDuration: 0.2, animations: animations)
+        } else {
+            animations()
         }
     }
     

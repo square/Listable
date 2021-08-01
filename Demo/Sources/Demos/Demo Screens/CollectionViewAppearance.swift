@@ -85,17 +85,33 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
 {
     var text : String
     
-    var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+    var identifierValue: String {
+        return self.text
     }
 
     typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
-        Label(text: self.text) {
-            $0.font = .systemFont(ofSize: 16.0, weight: .medium)
-            $0.color = info.state.isActive ? .white : .darkGray
+        Row { row in
+            row.verticalAlignment = .center
+            
+            row.add(child: Label(text: self.text) {
+                $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+                $0.color = info.state.isActive ? .white : .darkGray
+            })
+            
+            row.addFlexible(child: Spacer(width: 1.0))
+            
+            if info.isReorderable {
+                row.addFixed(
+                    child: Image(
+                        image: UIImage(named: "ReorderControl"),
+                        contentMode: .center
+                    )
+                        .listReorderGesture(with: info.reorderingActions)
+                )
+            }
         }
         .inset(horizontal: 15.0, vertical: 10.0)
         .accessibility(label: self.text, traits: [.button])
@@ -106,7 +122,12 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
         Box(
             backgroundColor: .white,
             cornerStyle: .rounded(radius: 8.0),
-            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
+            shadowStyle: .simple(
+                radius: info.state.isReordering ? 5.0 : 2.0,
+                opacity: info.state.isReordering ? 0.5 : 0.15,
+                offset: .init(width: 0.0, height: 1.0),
+                color: .black
+            )
         )
     }
     
@@ -144,15 +165,16 @@ struct Toggle : Element {
         return ElementContent(layout: Layout())
     }
     
-    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
-    {
+    func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription? {
         return ViewDescription(ToggleView.self) { config in
             config.builder = {
                 return ToggleView()
             }
             
             config.apply { toggle in
-                toggle.isOn = self.isOn
+                if toggle.isOn != self.isOn {
+                    toggle.setOn(self.isOn, animated: UIView.inheritedAnimationDuration > 0.0)
+                }
                 toggle.onToggle = self.onToggle
             }
         }
@@ -166,7 +188,7 @@ struct Toggle : Element {
         {
             super.init(frame: frame)
             
-            self.addTarget(self, action: #selector(toggled), for: .valueChanged)
+            self.addTarget(self, action: #selector(didToggleValue), for: .valueChanged)
         }
         
         @available(*, unavailable)
@@ -174,7 +196,7 @@ struct Toggle : Element {
             fatalError()
         }
         
-        @objc func toggled()
+        @objc func didToggleValue()
         {
             self.onToggle(self.isOn)
         }

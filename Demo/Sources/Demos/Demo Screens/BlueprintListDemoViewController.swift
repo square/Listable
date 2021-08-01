@@ -59,12 +59,14 @@ final class BlueprintListDemoViewController : UIViewController
                 
                 section += podcasts.map { podcast in
                     
-                    Item(podcast, identifier: \.name) { _, _ in
+                    ElementItem(podcast, id: \.name) { _, _ in
                         PodcastElement(podcast: podcast)
                     } background: { _, _ in
                         Box(backgroundColor: .white, cornerStyle: .square)
                     } selectedBackground: { _, _ in
                         Box(backgroundColor: .lightGray, cornerStyle: .square)
+                    } configure: {
+                        $0.insertAndRemoveAnimations = .scaleUp
                     }
                 }
             }

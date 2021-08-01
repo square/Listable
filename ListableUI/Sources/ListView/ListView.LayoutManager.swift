@@ -22,6 +22,10 @@ extension ListView
             self.collectionView = collectionView
         }
         
+        func stateForItem(at indexPath: IndexPath) -> AnyPresentationItemState {
+            self.collectionViewLayout.layout.content.item(at: indexPath).state
+        }
+        
         func set(layout : LayoutDescription, animated : Bool, completion : @escaping () -> ())
         {
             if self.collectionViewLayout.layoutDescription.configuration.isSameLayoutType(as: layout.configuration) {

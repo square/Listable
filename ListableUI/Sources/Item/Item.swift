@@ -8,7 +8,7 @@
 
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : AnyIdentifier
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -21,7 +21,10 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var swipeActions : SwipeActionsConfiguration?
 
-    public var reordering : Reordering?
+    public typealias OnWasReordered = (Self, ItemReordering.Result) -> ()
+    
+    public var reordering : ItemReordering?
+    public var onWasReordered : OnWasReordered?
         
     public var onDisplay : OnDisplay.Callback?
     public var onEndDisplay : OnEndDisplay.Callback?
@@ -60,7 +63,8 @@ public struct Item<Content:ItemContent> : AnyItem
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
-        reordering : Reordering? = nil,
+        reordering : ItemReordering? = nil,
+        onWasReordered : OnWasReordered? = nil,
         onDisplay : OnDisplay.Callback? = nil,
         onEndDisplay : OnEndDisplay.Callback? = nil,
         onSelect : OnSelect.Callback? = nil,
@@ -73,46 +77,17 @@ public struct Item<Content:ItemContent> : AnyItem
         assertIsValueType(Content.self)
         
         self.content = content
-                
-        if let sizing = sizing {
-            self.sizing = sizing
-        } else if let sizing = content.defaultItemProperties.sizing {
-            self.sizing = sizing
-        } else {
-            self.sizing = .thatFits(.init(.atLeast(.default)))
-        }
         
-        if let layouts = layouts {
-            self.layouts = layouts
-        } else if let layouts = content.defaultItemProperties.layouts {
-            self.layouts = layouts
-        } else {
-            self.layouts = ItemLayouts()
-        }
+        let defaults = self.content.defaultItemProperties
         
-        if let selectionStyle = selectionStyle {
-            self.selectionStyle = selectionStyle
-        } else if let selectionStyle = content.defaultItemProperties.selectionStyle {
-            self.selectionStyle = selectionStyle
-        } else {
-            self.selectionStyle = .notSelectable
-        }
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
+        self.layouts = finalValue(from: layouts, defaults.layouts, .init())
+        self.selectionStyle = finalValue(from: selectionStyle, defaults.selectionStyle, .notSelectable)
+        self.insertAndRemoveAnimations = finalValue(from: insertAndRemoveAnimations, defaults.insertAndRemoveAnimations, nil)
+        self.swipeActions = finalValue(from: swipeActions, defaults.swipeActions, nil)
         
-        if let insertAndRemoveAnimations = insertAndRemoveAnimations {
-            self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        } else if let insertAndRemoveAnimations = content.defaultItemProperties.insertAndRemoveAnimations {
-            self.insertAndRemoveAnimations = insertAndRemoveAnimations
-        }
-        
-        if let swipeActions = swipeActions {
-            self.swipeActions = swipeActions
-        } else if let swipeActions = content.defaultItemProperties.swipeActions {
-            self.swipeActions = swipeActions
-        } else {
-            self.swipeActions = nil
-        }
-                
         self.reordering = reordering
+        self.onWasReordered = onWasReordered
                 
         self.onDisplay = onDisplay
         self.onEndDisplay = onEndDisplay
@@ -128,9 +103,26 @@ public struct Item<Content:ItemContent> : AnyItem
         self.reuseIdentifier = .identifier(for: Content.self)
         
         self.identifier = self.content.identifier
+        
+        #if DEBUG
+        precondition(
+            self.identifier.value == self.content.identifierValue,
+            
+            """
+            `\(String(describing: Content.self)).identifierValue` is not stable: When requested twice, \
+            the value changed from `\(self.identifier.value)` to `\(self.content.identifierValue)`. In \
+            order for Listable to perform correct and efficient updates to your content, your `identifierValue` \
+            must be stable. See the documentation on `ItemContent.identifierValue` for suggestions.
+            """
+        )
+        #endif
     }
     
     // MARK: AnyItem
+    
+    public var anyIdentifier : AnyIdentifier {
+        self.identifier
+    }
     
     public var anyContent: Any {
         self.content
@@ -183,5 +175,21 @@ extension Item : SignpostLoggable
             identifier: self.debuggingIdentifier,
             instanceIdentifier: self.identifier.debugDescription
         )
+    }
+}
+
+
+private func finalValue<Value>(
+    from provided : Value?,
+    _ contentDefault : Value?,
+    _ default : @autoclosure () -> Value
+) -> Value
+{
+    if let value = provided {
+        return value
+    } else if let value = contentDefault {
+        return value
+    } else {
+        return `default`()
     }
 }

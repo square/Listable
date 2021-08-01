@@ -38,8 +38,8 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
     
     var showBottomBar : Bool = false
     
-    var identifier: Identifier<PodcastElement> {
-        .init(podcast.name)
+    var identifierValue: String {
+        self.podcast.name
     }
     
     func element(with info: ApplyItemContentInfo) -> Element

@@ -85,7 +85,7 @@ public struct List : Element
         }
     }
     
-    public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription? {
+    public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription? {
         nil
     }
 }
@@ -139,11 +139,11 @@ extension List {
             }
         }
         
-        public func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
+        public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
         {
             ListView.describe { config in
                 config.builder = {
-                    ListView(frame: bounds, appearance: self.properties.appearance)
+                    ListView(frame: context.bounds, appearance: self.properties.appearance)
                 }
                 
                 config.apply { listView in

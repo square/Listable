@@ -56,8 +56,8 @@ fileprivate struct CollatedContent : Equatable, ItemContent, LocalizedCollatable
     
     var text : String
     
-    var identifier: Identifier<CollatedContent> {
-        .init(self.text)
+    var identifierValue: String {
+        self.text
     }
     
     func apply(to views: ItemContentViews<CollatedContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {

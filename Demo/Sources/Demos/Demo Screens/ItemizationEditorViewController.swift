@@ -239,8 +239,8 @@ struct ChoiceItem : BlueprintItemContent, Equatable
         return box
     }
     
-    var identifier: Identifier<ChoiceItem> {
-        return .init(self.title)
+    var identifierValue : String {
+        self.title
     }
 }
 
@@ -263,8 +263,8 @@ struct ToggleItem : BlueprintItemContent
         return self.content == other.content
     }
     
-    var identifier: Identifier<ToggleItem> {
-        return .init(self.content.title)
+    var identifierValue: String {
+        self.content.title
     }
     
     func element(with info: ApplyItemContentInfo) -> Element

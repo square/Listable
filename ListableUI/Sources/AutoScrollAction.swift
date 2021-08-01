@@ -89,8 +89,8 @@ extension AutoScrollAction
         
         func destination(with content : Content) -> AnyIdentifier? {
             switch self {
-            case .firstItem: return content.firstItem?.identifier
-            case .lastItem: return content.lastItem?.identifier
+            case .firstItem: return content.firstItem?.anyIdentifier
+            case .lastItem: return content.lastItem?.anyIdentifier
             case .item(let identifier): return identifier
             }
         }
