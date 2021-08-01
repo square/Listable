@@ -45,8 +45,8 @@ fileprivate struct Content : BlueprintItemContent, Equatable {
     
     var title : String
     
-    var identifier: Identifier<Content> {
-        .init(self.title)
+    var identifierValue : String {
+        self.title
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {
@@ -89,7 +89,7 @@ fileprivate struct Label : UIViewElement {
         return UILabel()
     }
     
-    func updateUIView(_ view: UILabel) {
+    func updateUIView(_ view: UILabel, with context: UIViewElementContext) {
         view.text = self.text
     }
 }

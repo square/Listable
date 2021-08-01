@@ -493,8 +493,8 @@ fileprivate struct ReapplyContent : ItemContent
         self.title == other.title
     }
     
-    var identifier: Identifier<ReapplyContent> {
-        return .init(self.id)
+    var identifierValue: AnyHashable {
+        self.id
     }
     
     func apply(

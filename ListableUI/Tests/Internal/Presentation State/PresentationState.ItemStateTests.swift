@@ -23,7 +23,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         let initial = Item(TestContent(value: "initial"))
         
-        let callbacks = UpdateCallbacks(.immediate)
+        let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
         
         let state = PresentationState.ItemState(
             with: initial,
@@ -68,7 +68,7 @@ class PresentationState_ItemStateTests : XCTestCase
         ])
     }
     
-    func test_setNew()
+    func test_set_new()
     {
         self.testcase("Only update isSelected if the selectionStyle changes") {
             let dependencies = ItemStateDependencies(
@@ -82,7 +82,7 @@ class PresentationState_ItemStateTests : XCTestCase
                 selectionStyle: .selectable(isSelected: false)
             )
             
-            let callbacks = UpdateCallbacks(.immediate)
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
             
             let state = PresentationState.ItemState(
                 with: initial,
@@ -134,7 +134,7 @@ class PresentationState_ItemStateTests : XCTestCase
                 selectionStyle: .selectable(isSelected: true)
             )
             
-            let callbacks = UpdateCallbacks(.immediate)
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
         
             for reason in PresentationState.ItemUpdateReason.allCases {
                 switch reason {
@@ -240,7 +240,7 @@ class PresentationState_ItemStateTests : XCTestCase
         
         let item = Item(TestContent(value: "initial"))
         
-        let callbacks = UpdateCallbacks(.immediate)
+        let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
         
         let state = PresentationState.ItemState(
             with: item,
