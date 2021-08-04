@@ -70,6 +70,14 @@ public protocol HeaderFooterContent
         with info : ApplyHeaderFooterContentInfo
     )
     
+    ///
+    /// Called to prepare the view for reuse, when it is about to be recycled, ahead of
+    /// being reused to display another `HeaderFooterContent` in the list.
+    ///
+    /// If you need to unwire any callbacks, or stop animations; you should do so in this method.
+    ///
+    func prepareViewsForReuse(_ views : HeaderFooterContentViews<Self>)
+    
     //
     // MARK: Creating & Providing Content Views
     //
@@ -159,8 +167,21 @@ public struct HeaderFooterContentViews<Content:HeaderFooterContent>
     
     /// The background view of the content that's displayed while a press is active.
     public var pressed : Content.PressedBackgroundView
+    
+    init(view : HeaderFooterContentView<Content>) {
+        self.content = view.content
+        self.background = view.background
+        self.pressed = view.pressedBackground
+    }
 }
 
+
+public extension HeaderFooterContent {
+    
+    func prepareViewsForReuse(_ views : HeaderFooterContentViews<Self>) {
+        // Default implementation does nothing.
+    }
+}
 
 ///
 /// If your `HeaderFooterContent` is `Equatable`, you do not need to provide an `isEquivalent` method.

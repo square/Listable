@@ -8,7 +8,7 @@
 import UIKit
 
 
-final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
+final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView, SupplementaryContainerViewContentView
 {
     //
     // MARK: Properties
@@ -19,6 +19,8 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
     var onTap : OnTap? = nil {
         didSet { self.updateIsTappable() }
     }
+    
+    var onPrepareForReuse : (() -> ())?
     
     let content : Content.ContentView
     let background : Content.BackgroundView
@@ -86,6 +88,15 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         self.content.frame = self.bounds
         self.background.frame = self.bounds
         self.pressedBackground.frame = self.bounds
+    }
+    
+    //
+    // MARK: SupplementaryContainerViewContentView
+    //
+    
+    func prepareForReuse() {
+        self.onPrepareForReuse?()
+        self.onPrepareForReuse = nil
     }
     
     //

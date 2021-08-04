@@ -338,6 +338,14 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
         with info : ApplyItemContentInfo
     )
     
+    ///
+    /// Called to prepare the view for reuse, when it is about to be recycled, ahead of
+    /// being reused to display another `ItemContent` in the list.
+    ///
+    /// If you need to unwire any callbacks, or stop animations; you should do so in this method.
+    ///
+    func prepareViewsForReuse(_ views : ItemContentViews<Self>)
+    
     //
     // MARK: Creating & Providing Swipe Action Views
     //
@@ -442,6 +450,12 @@ public struct ItemContentViews<Content:ItemContent>
     /// The selected background view of the content.
     /// Displayed when the content is highlighted or selected.
     public var selectedBackground : Content.SelectedBackgroundView
+    
+    init(cell : ItemCell<Content>) {
+        self.content = cell.contentContainer.contentView
+        self.background = cell.background
+        self.selectedBackground = cell.selectedBackground
+    }
 }
 
 
@@ -544,6 +558,14 @@ public extension ItemContent
 {
     var defaultItemProperties : DefaultProperties {
         .init()
+    }
+}
+
+
+public extension ItemContent {
+    
+    func prepareViewsForReuse(_ views : ItemContentViews<Self>) {
+        // Default implementation does nothing.
     }
 }
 

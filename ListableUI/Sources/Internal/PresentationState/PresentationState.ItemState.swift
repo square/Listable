@@ -254,6 +254,11 @@ extension PresentationState
                 environment: environment
             )
             
+            cell.onPrepareForReuse = { [weak self] in
+                // TODO: Make making `ItemContentViews` easier.
+                self?.model.content.prepareViewsForReuse(ItemContentViews(cell: cell))
+            }
+            
             return cell
         }
         
@@ -276,7 +281,7 @@ extension PresentationState
             // Apply Model State
             
             self.model.content.apply(
-                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+                to: ItemContentViews(cell: cell),
                 for: reason,
                 with: applyInfo
             )

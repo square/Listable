@@ -28,6 +28,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     let background : Content.BackgroundView
     let selectedBackground : Content.SelectedBackgroundView
     
+    var onPrepareForReuse : (() -> ())?
+    
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
@@ -54,6 +56,15 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     @available(*, unavailable)
     required init?(coder: NSCoder) { listableFatal() }
+    
+    // MARK: UICollectionViewCell
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.onPrepareForReuse?()
+        self.onPrepareForReuse = nil
+    }
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {

@@ -16,7 +16,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
         in cache : ReusableViewCache,
         frame : CGRect,
         environment : ListEnvironment
-    ) -> UIView
+    ) -> SupplementaryContainerViewContentView
     
     func enqueueReusableHeaderFooterView(_ view : UIView, in cache : ReusableViewCache)
     
@@ -104,7 +104,7 @@ extension PresentationState
             in cache : ReusableViewCache,
             frame : CGRect,
             environment : ListEnvironment
-        ) -> UIView
+        ) -> SupplementaryContainerViewContentView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
                 HeaderFooterContentView<Content>(frame: frame)
@@ -115,6 +115,10 @@ extension PresentationState
                 for: .willDisplay,
                 with: .init(environment: environment)
             )
+            
+            view.onPrepareForReuse = { [weak self] in
+                self?.model.content.prepareViewsForReuse(.init(view: view))
+            }
             
             return view
         }
@@ -131,11 +135,7 @@ extension PresentationState
         ) {
             let view = view as! HeaderFooterContentView<Content>
             
-            let views = HeaderFooterContentViews<Content>(
-                content: view.content,
-                background: view.background,
-                pressed: view.pressedBackground
-            )
+            let views = HeaderFooterContentViews(view: view)
             
             view.onTap = self.model.onTap.map { onTap in { [weak self] in
                     guard let self = self else { return }
@@ -194,14 +194,8 @@ extension PresentationState
                     create: {
                         return HeaderFooterContentView<Content>(frame: .zero)
                 }, { view in
-                    let views = HeaderFooterContentViews<Content>(
-                        content: view.content,
-                        background: view.background,
-                        pressed: view.pressedBackground
-                    )
-                    
                     self.model.content.apply(
-                        to: views,
+                        to: HeaderFooterContentViews(view: view),
                         for: .willDisplay,
                         with: .init(environment: environment)
                     )

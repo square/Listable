@@ -73,15 +73,9 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         with info : ApplyHeaderFooterContentInfo
     ) {
         let view = anyView as! HeaderFooterContentView<Content>
-        
-        let views = HeaderFooterContentViews<Content>(
-            content: view.content,
-            background: view.background,
-            pressed: view.pressedBackground
-        )
-        
+                
         self.content.apply(
-            to: views,
+            to: HeaderFooterContentViews(view: view),
             for: reason,
             with: info
         )

@@ -106,7 +106,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     var environment : ListEnvironment!
     var reuseCache : ReusableViewCache!
     
-    private(set) var content : UIView? {
+    private(set) var content : SupplementaryContainerViewContentView? {
         didSet {
             if let old = oldValue {
                 old.removeFromSuperview()
@@ -176,6 +176,8 @@ final class SupplementaryContainerView : UICollectionReusableView
     {
         super.prepareForReuse()
         
+        self.content?.prepareForReuse()
+        
         self.headerFooter = nil
     }
     
@@ -226,4 +228,9 @@ final class SupplementaryContainerView : UICollectionReusableView
             content.frame = self.bounds
         }
     }
+}
+
+protocol SupplementaryContainerViewContentView : UIView {
+    
+    func prepareForReuse()
 }
