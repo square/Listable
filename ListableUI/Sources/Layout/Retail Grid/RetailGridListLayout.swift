@@ -46,7 +46,10 @@ public struct RetailGridAppearance : ListLayoutAppearance
         
         public enum Rows : Equatable {
             case rows(Int)
-            case infinite
+            // Height:Width tile ratio.
+            case infinite(tileAspectRatio: CGFloat)
+            
+            public static var infinite = Rows.infinite(tileAspectRatio: 9.0/16.0)
         }
         
         public init(
@@ -188,10 +191,11 @@ extension RetailGridAppearance {
                 }
 
                 oneByOneTile = CGSize(width: availableWidth / CGFloat(columns), height: availableHeight / CGFloat(rowCount))
-            case .infinite:
+            case .infinite(let ratio):
                 localYOrigin = origin.y
-                oneByOneTile = CGSize(width: availableWidth / CGFloat(columns), height: availableWidth / CGFloat(columns))
-                tileHeight = availableWidth / CGFloat(columns) * size.height.value
+                oneByOneTile = CGSize(width: availableWidth / CGFloat(columns), height: availableWidth / CGFloat(columns) * ratio)
+                
+                tileHeight = availableWidth / CGFloat(columns) * size.height.value * ratio
             }
 
             tileHeight += (size.height.value - 1) * itemSpacing
