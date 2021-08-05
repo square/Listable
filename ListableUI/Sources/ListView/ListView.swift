@@ -457,7 +457,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 } else {
                     self.collectionView.scrollToItem(
                         at: toIndexPath,
-                        at: position.position.UICollectionViewScrollPosition,
+                        at: position.position.toUICollectionViewScrollPosition(for: self.collectionViewLayout.layout.direction),
                         animated: false
                     )
                 }
