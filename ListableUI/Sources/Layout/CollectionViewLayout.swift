@@ -161,12 +161,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         let view = self.collectionView!
         let context = context as! InvalidationContext
         
-        super.invalidateLayout(with: context)
-        
         // Handle Moved Items
-        
-        self.isReordering = context.interactiveMoveAction != nil
-        
+                
         if let action = context.interactiveMoveAction {
             
             switch action {
@@ -176,12 +172,15 @@ final class CollectionViewLayout : UICollectionViewLayout
                 }
 
             case .complete(_):
-                break
+                self.sendEndQueuingEditsAfterDelay()
 
             case .cancelled(let info):
                 self.layout.content.move(from: info.from, to: info.to)
+                self.sendEndQueuingEditsAfterDelay()
             }
         }
+        
+        super.invalidateLayout(with: context)
         
         // Handle View Width Changing
         
@@ -192,6 +191,35 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.neededLayoutType.merge(with: context)
     }
     
+    private func sendEndQueuingEditsAfterDelay() {
+        
+        ///
+        /// Hello! Welcome to the source code. You're probably wondering why this perform after runloop hack is here.
+        ///
+        /// Well, it is because `UICollectionView` does not play well with removals that occur synchronously
+        /// as a result of a reorder being messaged.
+        ///
+        /// Please, consider the following:
+        ///
+        /// 1) A user begins dragging an item.
+        /// 2) They drop the item at the last point in the list; (2,1). The collection view records this index path (2,1).
+        /// 3) Via `collectionView(_:moveItemAt:to:)`, we notify the observer(s) of the change.
+        /// 4) Synchronously via that notification, they remove the item at (2,0), moving the item now at (2,1) to (2,0).
+        ///
+        /// Unfortunately, this causes `super.invalidateLayout(with: context)` to then fail with an invalid
+        /// index path; because it seems to take one runloop to let the reorder "settle" through the collection view –
+        /// most notably, the `context.targetIndexPathsForInteractivelyMovingItems` contains an
+        /// invalid index path – the item which was previously at (2,1) is still there, when it should now be at (2,0).
+        ///
+        /// So thus, we queue updates a runloop to let the collection view figure its internal state out before we begin
+        /// processing any further updates 🥴.
+        /// 
+        
+        OperationQueue.main.addOperation {
+            self.delegate.listViewShouldEndQueueingEditsForReorder()
+        }
+    }
+    
     override func invalidationContext(
         forInteractivelyMovingItems targetIndexPaths: [IndexPath],
         withTargetPosition targetPosition: CGPoint,
@@ -199,6 +227,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         previousPosition: CGPoint
     ) -> UICollectionViewLayoutInvalidationContext
     {
+        self.isReordering = true
+        
         let context = super.invalidationContext(
             forInteractivelyMovingItems: targetIndexPaths,
             withTargetPosition: targetPosition,
@@ -224,6 +254,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         movementCancelled: Bool
     ) -> UICollectionViewLayoutInvalidationContext
     {
+        self.isReordering = false
+        
         let context = super.invalidationContextForEndingInteractiveMovementOfItems(
             toFinalIndexPaths: indexPaths,
             previousIndexPaths: previousIndexPaths,
@@ -361,9 +393,12 @@ final class CollectionViewLayout : UICollectionViewLayout
             let shouldLayout = size.isEmpty == false
             
             switch self.neededLayoutType {
-            case .none: return true
-            case .relayout: self.performLayout()
-            case .rebuild: self.performRebuild(andLayout: shouldLayout)
+            case .none:
+                return true
+            case .relayout:
+                self.performLayout()
+            case .rebuild:
+                self.performRebuild(andLayout: shouldLayout)
             }
             
             return true
@@ -641,6 +676,8 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     ) -> ListLayoutContent
     
     func listViewLayoutDidLayoutContents()
+    
+    func listViewShouldEndQueueingEditsForReorder()
 }
 
 

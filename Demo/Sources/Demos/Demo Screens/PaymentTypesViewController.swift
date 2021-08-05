@@ -16,6 +16,7 @@ final class PaymentTypesViewController : ListViewController {
         
         list.layout = .table { table in
             table.layout.interSectionSpacingWithNoFooter = 10.0
+            table.layout.padding.bottom = 100
         }
         
         let types = self.types
@@ -48,9 +49,15 @@ final class PaymentTypesViewController : ListViewController {
             
             section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.disabled.title))
             
+            section.reordering.minItemCount = 0
+            
             section += types.filter { $0.isEnabled == false }
             .sorted { $0.sortOrder < $1.sortOrder }
             .map(makeItem(with:))
+            
+            if section.items.isEmpty {
+                section += EmptyRow()
+            }
         }
     }
     
@@ -128,6 +135,25 @@ fileprivate struct PaymentTypeHeader : BlueprintHeaderFooterContent, Equatable {
     var elementRepresentation: Element {
         Label(text: title) {
             $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+        }
+        .inset(uniform: 15.0)
+    }
+    
+    var background: Element? {
+        Box(backgroundColor: .white)
+    }
+}
+
+fileprivate struct EmptyRow : BlueprintItemContent, Equatable {
+    
+    var identifierValue: String {
+        ""
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        Label(text: "No Contents") {
+            $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+            $0.color = .lightGray
         }
         .inset(uniform: 15.0)
     }

@@ -261,9 +261,12 @@ extension ListView
             )
         }
         
-        func listViewLayoutDidLayoutContents()
-        {
+        func listViewLayoutDidLayoutContents() {
             self.view.visibleContent.update(with: self.view)
+        }
+        
+        func listViewShouldEndQueueingEditsForReorder() {
+            self.view.updateQueue.isQueuingForReorderEvent = false
         }
 
         // MARK: UIScrollViewDelegate

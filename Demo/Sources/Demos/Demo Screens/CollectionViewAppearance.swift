@@ -188,7 +188,7 @@ struct Toggle : Element {
         {
             super.init(frame: frame)
             
-            self.addTarget(self, action: #selector(toggled), for: .valueChanged)
+            self.addTarget(self, action: #selector(didToggleValue), for: .valueChanged)
         }
         
         @available(*, unavailable)
@@ -196,7 +196,7 @@ struct Toggle : Element {
             fatalError()
         }
         
-        @objc func toggled()
+        @objc func didToggleValue()
         {
             self.onToggle(self.isOn)
         }
