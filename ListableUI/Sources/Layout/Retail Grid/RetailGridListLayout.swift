@@ -232,7 +232,7 @@ final class RetailGridListLayout : ListLayout
     var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: self.layoutAppearance.layout.rows != .infinite,
-            contentInsetAdjustmentBehavior: .automatic,
+            contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: true,
             allowsBounceHorizontal: false,
             allowsVerticalScrollIndicator: true,
@@ -279,7 +279,7 @@ final class RetailGridListLayout : ListLayout
 
                 let frame = item.layouts.retailGrid.frame(
                     pageSize: viewSize,
-                    pagePadding: layout.padding,
+                    pagePadding: layout.padding + context.safeAreaInsets,
                     itemSpacing: layout.itemSpacing,
                     columns: layout.columns,
                     rows: layout.rows
@@ -293,11 +293,15 @@ final class RetailGridListLayout : ListLayout
             }
         }
         
-        if scrollViewProperties.isPagingEnabled {
+        if self.layoutAppearance.layout.rows != .infinite {
             let pages = (lastContentMaxY / viewSize.height).rounded(.up)
             lastContentMaxY = pages * viewSize.height
         }
 
         self.content.contentSize = CGSize(width: viewSize.width, height: lastContentMaxY)
     }
+}
+
+private func + (lhs: UIEdgeInsets, rhs: UIEdgeInsets) -> UIEdgeInsets {
+    return UIEdgeInsets(top: lhs.top + rhs.top, left: lhs.left + rhs.left, bottom: lhs.bottom + rhs.bottom, right: lhs.right + rhs.right)
 }
