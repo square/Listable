@@ -65,7 +65,7 @@ extension PresentationState
         ) {
             if self.state !== state {
                 self.state = state
-                self.visibleContainer?.headerFooter = self.state
+                self.visibleContainer?.headerFooter = state
             } else {
                 if let state = state, let new = new {
                     state.set(
@@ -87,20 +87,6 @@ extension PresentationState
         func didEndDisplay()
         {
             self.visibleContainer = nil
-        }
-        
-        // TODO: Needed?
-        func applyToVisibleView(with environment : ListEnvironment)
-        {
-            guard let view = visibleContainer?.content, let state = self.state else {
-                return
-            }
-            
-            state.applyTo(
-                view: view,
-                for: .wasUpdated,
-                with: .init(environment: environment)
-            )
         }
     }
     

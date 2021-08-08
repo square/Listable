@@ -73,7 +73,8 @@ public protocol HeaderFooterContent
     /// When the `HeaderFooterContent` is on screen, controls how and when to apply updates
     /// to the view.
     ///
-    /// Defaults to ``ReappliesToVisibleView/always``.
+    /// Defaults to ``ReappliesToVisibleView/always`` for regular `HeaderFooterContent`,
+    /// and ``ReappliesToVisibleView/ifNotEquivalent`` for `Equatable` content.
     ///
     /// See ``ReappliesToVisibleView`` for a full discussion.
     var reappliesToVisibleView: ReappliesToVisibleView { get }
@@ -179,15 +180,17 @@ public extension HeaderFooterContent {
 }
 
 
-///
-/// If your `HeaderFooterContent` is `Equatable`, you do not need to provide an `isEquivalent` method.
-/// This default implementation will be provided for you.
-///
+/// If your `HeaderFooterContent` is `Equatable`, you do not need to
+/// provide `isEquivalent` or `reappliesToVisibleView`. They are instead based
+/// on the `Equatable` implementation of the content itself.
 public extension HeaderFooterContent where Self:Equatable
 {    
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
+    func isEquivalent(to other : Self) -> Bool {
+        self == other
+    }
+    
+    var reappliesToVisibleView: ReappliesToVisibleView {
+        .ifNotEquivalent
     }
 }
 

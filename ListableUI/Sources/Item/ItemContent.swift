@@ -341,7 +341,8 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     /// When the `ItemContent` is on screen, controls how and when to apply updates
     /// to the view.
     ///
-    /// Defaults to ``ReappliesToVisibleView/always``.
+    /// Defaults to ``ReappliesToVisibleView/always`` for regular `ItemContent`,
+    /// and ``ReappliesToVisibleView/ifNotEquivalent`` for `Equatable` content.
     ///
     /// See ``ReappliesToVisibleView`` for a full discussion.
     var reappliesToVisibleView : ReappliesToVisibleView { get }
@@ -482,12 +483,17 @@ public struct ApplyItemContentInfo
 }
 
 
-/// Provide a default implementation of `isEquivalent(to:)` if the `ItemContent` is `Equatable`.
+/// If your `ItemContent` is `Equatable`, you do not need to
+/// provide `isEquivalent` or `reappliesToVisibleView`. They are instead based
+/// on the `Equatable` implementation of the content itself.
 public extension ItemContent where Self:Equatable
 {
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
+    func isEquivalent(to other : Self) -> Bool {
+        self == other
+    }
+    
+    var reappliesToVisibleView : ReappliesToVisibleView {
+        .ifNotEquivalent
     }
 }
 

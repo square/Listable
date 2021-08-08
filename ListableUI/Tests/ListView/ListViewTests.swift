@@ -208,7 +208,7 @@ class ListViewTests: XCTestCase
         view.collectionView.layoutIfNeeded()
     }
     
-    func test_ReappliesToVisibleView() {
+    func test_reappliesToVisibleView() {
         
         self.testcase("always") {
             let view = ListView()
