@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ListActions Class Reference</title>
+    <title>ReappliesToVisibleView Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Class/ListActions" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/ReappliesToVisibleView" class="dashAnchor"></a>
 
-    <a title="ListActions Class Reference"></a>
+    <a title="ReappliesToVisibleView Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" />
-      ListActions Class Reference
+      ReappliesToVisibleView Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -583,57 +583,52 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ListActions</h1>
+            <h1>ReappliesToVisibleView</h1>
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListActions</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ReappliesToVisibleView</span></code></pre>
 
                 </div>
               </div>
-            <p><code>ListActions</code> is an type that you can use to gain access to actions to perform on a <code>List</code>
-(for example, scrolling to a given item in the list) when used when you otherwise do
-not have a reference to the underlying list view (for example, when using <code><a href="../Classes/ListViewController.html">ListViewController</a></code> or <code>BlueprintUILists</code>).</p>
+            <p>A rule to determine when an <code><a href="../Protocols/ItemContent.html">ItemContent</a></code> or <code><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code> should be re-applied
+to the visible view currently representing the content on screen. If the content is not on
+screen, then no application is done regardless of the rule (because there is no view).</p>
 
-<p>You also gain access to a <code>ListActions</code> instance when using <code><a href="../Structs/ListStateObserver.html">ListStateObserver</a></code>, in each registered callback.</p>
+<p>The default value is <code>ReappliesToVisibleView/always</code>.  You may want to change the value to
+<code>ReappliesToVisibleView/ifNotEquivalent</code> if applying your content is expensive. However,
+keep in mind that your <code>isEquivalent(to:)</code> method will then need to check any potentially embedded references
+to objects, eg references in a callback closure, to ensure a reference does not become out of date:</p>
+<pre class="highlight swift"><code> <span class="kd">struct</span> <span class="kt">MyContent</span> <span class="p">:</span> <span class="kt">BlueprintItemContent</span> <span class="p">{</span>
 
-<p>You usually use <code>ListActions</code> by keeping an instance on your view controller,
-and then assign it when providing list content. Once the list is updated with the content,
-the <code>ListActions</code> will be registered with the list to perform actions.</p>
+    <span class="k">var</span> <span class="nv">theme</span> <span class="p">:</span> <span class="kt">MyTheme</span>
+    <span class="k">var</span> <span class="nv">title</span> <span class="p">:</span> <span class="kt">String</span>
+    <span class="k">var</span> <span class="nv">myController</span> <span class="p">:</span> <span class="kt">MyController</span>
 
-<p>A <code>ListActions</code> behaviors are split into internal sub-objects, such as <code>Scrolling</code> and <code>ViewControllerTransitioning</code>.
-You can pass these separate objects around if your code invokes actions from several different places.</p>
-
-<p>Only one <code>ListActions</code> can be registered in a list at a time. If you register a new one, it replaces the last one,
-and any actions performed on the last instance become no-ops.</p>
-<h2 id='example' class='heading'>Example</h2>
-<pre class="highlight swift"><code><span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListStateViewController</span> <span class="p">:</span> <span class="kt">ListViewController</span>
-<span class="p">{</span>
-    <span class="c1">// Owned by the view controller.</span>
-    <span class="k">let</span> <span class="nv">actions</span> <span class="o">=</span> <span class="kt">ListActions</span><span class="p">()</span>
-
-    <span class="k">override</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="nv">list</span> <span class="p">:</span> <span class="k">inout</span> <span class="kt">ListProperties</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">list</span><span class="o">.</span><span class="n">appearance</span> <span class="o">=</span> <span class="o">.</span><span class="n">myAppearance</span>
-        <span class="n">list</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="o">.</span><span class="n">myLayout</span>
-
-        <span class="c1">// Registered with list here.</span>
-        <span class="n">list</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">actions</span>
-
-        <span class="n">list</span><span class="o">.</span><span class="n">stateObserver</span> <span class="o">=</span> <span class="kt">ListStateObserver</span> <span class="p">{</span> <span class="n">reader</span> <span class="k">in</span>
-            <span class="n">reader</span><span class="o">.</span><span class="n">onDidScroll</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
-                <span class="c1">// Perform an action based on scrolling.</span>
-            <span class="p">}</span>
+    <span class="kd">func</span> <span class="nf">element</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span> <span class="p">{</span>
+        <span class="kt">MyLabel</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="nv">style</span><span class="p">:</span> <span class="n">theme</span><span class="o">.</span><span class="n">labelStyle</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">inset</span><span class="p">(</span><span class="nv">uniform</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">onLongPress</span> <span class="p">{</span>
+            <span class="n">myController</span><span class="o">.</span><span class="nf">didLongPress</span><span class="p">()</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">performScrollTo</span><span class="p">(</span><span class="nv">item</span> <span class="p">:</span> <span class="kt">AnyItem</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// Used here to scroll to an item.</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">scrolling</span><span class="o">.</span><span class="nf">scrollTo</span><span class="p">(</span><span class="nv">item</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="nv">position</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">position</span><span class="p">:</span> <span class="o">.</span><span class="n">top</span><span class="p">),</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="n">theme</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">theme</span> <span class="o">&amp;&amp;</span>
+        <span class="n">title</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">title</span> <span class="o">&amp;&amp;</span>
+        <span class="n">myController</span> <span class="o">===</span> <span class="n">other</span><span class="o">.</span><span class="n">myController</span>
     <span class="p">}</span>
-<span class="p">}</span>
+ <span class="p">}</span>
 </code></pre>
+<h3 id='note' class='heading'>Note</h3>
+
+<p>When using <code>.ifNotEquivalent</code> it is not recommended that your content holds onto closures
+directly – there is no way for you to check them for equivalency, and thus, only the <code>.always</code>
+application method will be correct. Instead, model callbacks explicitly by taking in an object or
+class-bound protocol that you can then perform callbacks on, so you can compare the identity of the object.</p>
+
+<p>Further, for tappable items in a list, leverage <code>Item/onSelect-swift.property</code> on your <code><a href="../Structs/Item.html">Item</a></code>,
+instead of implementing tappable items manually (which is a common source of callback closures in item content).</p>
 
           </div>
         </section>
@@ -645,9 +640,9 @@ and any actions performed on the last instance become no-ops.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC9scrollingAC9ScrollingCvp"></a>
-                    <a name="//apple_ref/swift/Property/scrolling" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC9scrollingAC9ScrollingCvp">scrolling</a>
+                    <a name="/s:10ListableUI22ReappliesToVisibleViewO6alwaysyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/always" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI22ReappliesToVisibleViewO6alwaysyA2CmF">always</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -655,14 +650,14 @@ and any actions performed on the last instance become no-ops.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Actions which allow scrolling to individual items in a list.</p>
+                        <p>The visible view will always be re-applied during updates, regardless of the result of <code>ItemContent/isEquivalent(to:)</code>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">scrolling</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListActions/Scrolling.html">Scrolling</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">always</span></code></pre>
 
                         </div>
                       </div>
@@ -672,9 +667,9 @@ and any actions performed on the last instance become no-ops.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC27viewControllerTransitioningAC04ViewfG0Cvp"></a>
-                    <a name="//apple_ref/swift/Property/viewControllerTransitioning" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC27viewControllerTransitioningAC04ViewfG0Cvp">viewControllerTransitioning</a>
+                    <a name="/s:10ListableUI22ReappliesToVisibleViewO15ifNotEquivalentyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/ifNotEquivalent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI22ReappliesToVisibleViewO15ifNotEquivalentyA2CmF">ifNotEquivalent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -682,97 +677,14 @@ and any actions performed on the last instance become no-ops.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Actions which allow hooking up your list to the view controller transitioning APIs.</p>
+                        <p>The visible view will only have its contents re-applied during updates if <code>ItemContent/isEquivalent(to:)</code> returns false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">viewControllerTransitioning</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListActions/ViewControllerTransitioning.html">ViewControllerTransitioning</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ListActionsCACycfc"></a>
-                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsCACycfc">init()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates and returns an actions object which can be registered with a list view.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ListActionsC9ScrollingC"></a>
-                    <a name="//apple_ref/swift/Class/Scrolling" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC">Scrolling</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Provides access to scrolling actions within a list view.</p>
-
-                        <a href="../Classes/ListActions/Scrolling.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Scrolling</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ListActionsC27ViewControllerTransitioningC"></a>
-                    <a name="//apple_ref/swift/Class/ViewControllerTransitioning" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC27ViewControllerTransitioningC">ViewControllerTransitioning</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Provides access to view controller transitioning options in a list.</p>
-
-                        <a href="../Classes/ListActions/ViewControllerTransitioning.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ViewControllerTransitioning</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">ifNotEquivalent</span></code></pre>
 
                         </div>
                       </div>
