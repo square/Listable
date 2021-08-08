@@ -937,7 +937,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
         }
 
-        let updateCallbacks = UpdateCallbacks(.queue)
+        let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
         
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
@@ -949,6 +949,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             presentationState.update(
                 with: diff,
                 slice: visibleSlice,
+                reason: .wasUpdated,
                 dependencies: dependencies,
                 updateCallbacks: updateCallbacks,
                 loggable: self
@@ -1169,8 +1170,6 @@ public final class ListView : UIView, KeyboardObserverDelegate
             changes.movedItems.forEach {
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
-            
-            self.visibleContent.updateVisibleViews(with: self.environment, animated: animated)
         }
         
         if changes.hasIndexAffectingChanges {

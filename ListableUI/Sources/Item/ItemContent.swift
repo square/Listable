@@ -338,6 +338,14 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
         with info : ApplyItemContentInfo
     )
     
+    /// When the `ItemContent` is on screen, controls how and when to apply updates
+    /// to the view.
+    ///
+    /// Defaults to ``ReappliesToVisibleView/always``.
+    ///
+    /// See ``ReappliesToVisibleView`` for a full discussion.
+    var reappliesToVisibleView : ReappliesToVisibleView { get }
+    
     //
     // MARK: Creating & Providing Swipe Action Views
     //
@@ -474,12 +482,11 @@ public struct ApplyItemContentInfo
 }
 
 
-/// Provide a default implementation of `isEquivalent(to:)` if the `ItemContent` is `Equatable`.
 public extension ItemContent where Self:Equatable
 {
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
+    /// If your `ItemContent` is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
+    func isEquivalent(to other : Self) -> Bool {
+        self == other
     }
 }
 
@@ -534,6 +541,15 @@ public extension ItemContent
     func wasMoved(comparedTo other : Self) -> Bool
     {
         return self.isEquivalent(to: other) == false
+    }
+}
+
+
+/// Provide a default implementation of `reappliesToVisibleView` which returns `.always`.
+public extension ItemContent
+{
+    var reappliesToVisibleView : ReappliesToVisibleView {
+        .always
     }
 }
 

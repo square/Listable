@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied. 
+
 ### Removed
 
 ### Changed

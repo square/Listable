@@ -14,6 +14,8 @@ public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
     
     var sizing : Sizing { get set }
     var layouts : HeaderFooterLayouts { get set }
+    
+    var reappliesToVisibleView: ReappliesToVisibleView { get }
 }
 
 
