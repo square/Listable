@@ -12,7 +12,7 @@ extension PresentationState {
     
     convenience init(_ content : (inout Content) -> () = { _ in }) {
         self.init(
-            content: Content(with: content),
+            forMeasuringOnlyWith: Content(with: content),
             environment: .empty,
             itemMeasurementCache: .init(),
             headerFooterMeasurementCache: .init()
@@ -35,7 +35,7 @@ extension PresentationState.SectionState {
                 coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
                 environmentProvider: { .empty }
             ),
-            updateCallbacks: UpdateCallbacks(.immediate),
+            updateCallbacks: UpdateCallbacks(.immediate, wantsAnimations: false),
             performsContentCallbacks: true
         )
     }
@@ -60,7 +60,7 @@ extension PresentationState.ItemState {
                 coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
                 environmentProvider: { .empty }
             ),
-            updateCallbacks: UpdateCallbacks(.immediate),
+            updateCallbacks: UpdateCallbacks(.immediate, wantsAnimations: false),
             performsContentCallbacks: true
         )
     }

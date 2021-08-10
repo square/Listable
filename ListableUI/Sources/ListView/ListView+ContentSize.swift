@@ -50,7 +50,7 @@ extension ListView
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
         let presentationState = PresentationState(
-            content: {
+            forMeasuringOnlyWith: {
                 if let limit = itemLimit {
                     return properties.content.sliceTo(indexPath: IndexPath(item: 0, section: 0), plus: limit).content
                 } else {

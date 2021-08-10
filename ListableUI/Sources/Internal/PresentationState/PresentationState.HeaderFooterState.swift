@@ -26,9 +26,16 @@ protocol AnyPresentationHeaderFooterState : AnyObject
         with info : ApplyHeaderFooterContentInfo
     )
 
-    func setNew(headerFooter anyHeaderFooter : AnyHeaderFooter)
+    func set(
+        new : AnyHeaderFooter,
+        reason : ApplyReason,
+        visibleView : UIView?,
+        updateCallbacks : UpdateCallbacks,
+        info : ApplyHeaderFooterContentInfo
+    )
     
     func resetCachedSizes()
+    
     func size(
         for info : Sizing.MeasureInfo,
         cache : ReusableViewCache,
@@ -41,21 +48,36 @@ extension PresentationState
 {
     final class HeaderFooterViewStatePair
     {
-        var state : AnyPresentationHeaderFooterState? {
-            didSet {
-                guard oldValue !== self.state else {
-                    return
-                }
-                
-                guard let container = self.visibleContainer else {
-                    return
-                }
-                
-                container.headerFooter = self.state
-            }
-        }
+        private(set) var state : AnyPresentationHeaderFooterState?
         
         private(set) var visibleContainer : SupplementaryContainerView?
+        
+        init(state : AnyPresentationHeaderFooterState?) {
+            self.state = state
+        }
+        
+        func update(
+            with state : AnyPresentationHeaderFooterState?,
+            new: AnyHeaderFooter?,
+            reason: ApplyReason,
+            updateCallbacks : UpdateCallbacks,
+            environment: ListEnvironment
+        ) {
+            if self.state !== state {
+                self.state = state
+                self.visibleContainer?.headerFooter = state
+            } else {
+                if let state = state, let new = new {
+                    state.set(
+                        new: new,
+                        reason: reason,
+                        visibleView: self.visibleContainer?.content,
+                        updateCallbacks: updateCallbacks,
+                        info: .init(environment: environment)
+                    )
+                }
+            }
+        }
         
         func willDisplay(view : SupplementaryContainerView)
         {
@@ -65,19 +87,6 @@ extension PresentationState
         func didEndDisplay()
         {
             self.visibleContainer = nil
-        }
-        
-        func applyToVisibleView(with environment : ListEnvironment)
-        {
-            guard let view = visibleContainer?.content, let state = self.state else {
-                return
-            }
-            
-            state.applyTo(
-                view: view,
-                for: .wasUpdated,
-                with: .init(environment: environment)
-            )
         }
     }
     
@@ -147,16 +156,32 @@ extension PresentationState
             self.model.content.apply(to: views, for: reason, with: info)
         }
         
-        func setNew(headerFooter anyHeaderFooter: AnyHeaderFooter)
-        {
-            let oldModel = self.model
+        func set(
+            new : AnyHeaderFooter,
+            reason : ApplyReason,
+            visibleView : UIView?,
+            updateCallbacks : UpdateCallbacks,
+            info : ApplyHeaderFooterContentInfo
+        ) {
+            let old = self.model
             
-            self.model = anyHeaderFooter as! HeaderFooter<Content>
+            self.model = new as! HeaderFooter<Content>
             
-            let isEquivalent = self.model.anyIsEquivalent(to: oldModel)
+            let isEquivalent = self.model.anyIsEquivalent(to: old)
+            
+            let wantsReapplication = self.model.reappliesToVisibleView.shouldReapply(
+                comparing: old.reappliesToVisibleView,
+                isEquivalent: isEquivalent
+            )
             
             if isEquivalent == false {
                 self.resetCachedSizes()
+            }
+            
+            if let view = visibleView, wantsReapplication {
+                updateCallbacks.performAnimation {
+                    self.applyTo(view: view, for: reason, with: info)
+                }
             }
         }
         
@@ -202,7 +227,7 @@ extension PresentationState
                     
                     self.model.content.apply(
                         to: views,
-                        for: .willDisplay,
+                        for: .measurement,
                         with: .init(environment: environment)
                     )
                     

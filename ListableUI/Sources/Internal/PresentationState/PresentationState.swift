@@ -16,9 +16,9 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
-    var header : HeaderFooterViewStatePair = .init()
-    var footer : HeaderFooterViewStatePair = .init()
-    var overscrollFooter : HeaderFooterViewStatePair = .init()
+    var header : HeaderFooterViewStatePair = .init(state: nil)
+    var footer : HeaderFooterViewStatePair = .init(state: nil)
+    var overscrollFooter : HeaderFooterViewStatePair = .init(state: nil)
     
     var sections : [PresentationState.SectionState]
     
@@ -49,7 +49,7 @@ final class PresentationState
     }
     
     init(
-        content : Content,
+        forMeasuringOnlyWith content : Content,
         environment : ListEnvironment,
         itemMeasurementCache : ReusableViewCache,
         headerFooterMeasurementCache : ReusableViewCache
@@ -65,29 +65,29 @@ final class PresentationState
             }
         }()
         
-        self.header.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.header,
-            performsContentCallbacks: false
-        )
+        /// Note: We are passing `performsContentCallbacks:false` because this
+        /// initializer is only used for one-pass measurement provided by ``ListView/contentSize(in:for:itemLimit:)``.
         
-        self.footer.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.footer,
+        self.header = .init(state: SectionState.newHeaderFooterState(
+            with: content.header,
             performsContentCallbacks: false
-        )
+        ))
         
-        self.overscrollFooter.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.overscrollFooter,
+        self.footer = .init(state: SectionState.newHeaderFooterState(
+            with: content.footer,
             performsContentCallbacks: false
-        )
+        ))
+        
+        self.overscrollFooter = .init(state: SectionState.newHeaderFooterState(
+            with: content.overscrollFooter,
+            performsContentCallbacks: false
+        ))
         
         self.sections = content.sections.map { section in
             SectionState(
                 with: section,
                 dependencies: .init(reorderingDelegate: nil, coordinatorDelegate: nil, environmentProvider: { environment }),
-                updateCallbacks: .init(.immediate),
+                updateCallbacks: .init(.immediate, wantsAnimations: false),
                 performsContentCallbacks: false
             )
         }
@@ -260,6 +260,7 @@ final class PresentationState
     func update(
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         slice : Content.Slice,
+        reason: ApplyReason,
         dependencies: ItemStateDependencies,
         updateCallbacks : UpdateCallbacks,
         loggable : SignpostLoggable?
@@ -274,22 +275,42 @@ final class PresentationState
         
         self.contentIdentifier = slice.content.identifier
         
-        self.header.state = SectionState.headerFooterState(
-            with: self.header.state,
+        let environment = dependencies.environmentProvider()
+        
+        self.header.update(
+            with: SectionState.headerFooterState(
+                current: self.header.state,
+                new: slice.content.header,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.header,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
-        self.footer.state = SectionState.headerFooterState(
-            with: self.footer.state,
+        self.footer.update(
+            with: SectionState.headerFooterState(
+                current: self.footer.state,
+                new: slice.content.footer,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.footer,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
-        self.overscrollFooter.state = SectionState.headerFooterState(
-            with: self.overscrollFooter.state,
+        self.overscrollFooter.update(
+            with: SectionState.headerFooterState(
+                current: self.overscrollFooter.state,
+                new: slice.content.overscrollFooter,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.overscrollFooter,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
         self.sections = diff.changes.transform(
@@ -307,16 +328,20 @@ final class PresentationState
             },
             moved: { old, new, changes, section in
                 section.update(
-                    with: old, new:new,
+                    with: old,
+                    new: new,
                     changes: changes,
+                    reason: reason,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
             },
             noChange: { old, new, changes, section in
                 section.update(
-                    with: old, new: new,
+                    with: old,
+                    new: new,
                     changes: changes,
+                    reason: reason,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )

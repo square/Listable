@@ -12,6 +12,18 @@
 
 # Past Releases
 
+# [0.24.0] - 2021-08-07
+
+### Added
+
+- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied. 
+
+# [0.23.2] - 2021-08-05
+
+### Fixed
+
+- [Ensure that scroll actions work](https://github.com/kyleve/Listable/pull/311) with horizontal lists.
+
 # [0.23.1] - 2021-07-26
 
 ### Fixed
@@ -422,7 +434,10 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.23.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.24.0...HEAD
+[0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
+[0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
+[0.23.1]: https://github.com/kyleve/Listable/compare/0.23.0...0.23.1
 [0.23.0]: https://github.com/kyleve/Listable/compare/0.22.2...0.23.0
 [0.22.2]: https://github.com/kyleve/Listable/compare/0.22.1...0.22.2
 [0.22.1]: https://github.com/kyleve/Listable/compare/0.22.0...0.22.1

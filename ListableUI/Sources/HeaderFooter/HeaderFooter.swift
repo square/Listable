@@ -65,6 +65,10 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         self.content
     }
     
+    public var reappliesToVisibleView: ReappliesToVisibleView {
+        self.content.reappliesToVisibleView
+    }
+    
     // MARK: AnyHeaderFooter_Internal
     
     public func apply(

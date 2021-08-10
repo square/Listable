@@ -49,11 +49,20 @@ extension ScrollPosition
         /// Scroll the item to the bottom of the list.
         case bottom
         
-        var UICollectionViewScrollPosition : UICollectionView.ScrollPosition {
-            switch self {
-            case .top: return .top
-            case .centered: return .centeredVertically
-            case .bottom: return .bottom
+        func toUICollectionViewScrollPosition(for direction : LayoutDirection) -> UICollectionView.ScrollPosition {
+            switch direction {
+            case .vertical:
+                switch self {
+                case .top: return .top
+                case .centered: return .centeredVertically
+                case .bottom: return .bottom
+                }
+            case .horizontal:
+                switch self {
+                case .top: return .left
+                case .centered: return .centeredHorizontally
+                case .bottom: return .right
+                }
             }
         }
     }
