@@ -28,13 +28,16 @@ public protocol ListLayout : AnyListLayout
 public struct ListLayoutLayoutContext : Equatable {
     
     public var viewBounds : CGRect
+    public var safeAreaInsets : UIEdgeInsets
     
-    init(viewBounds : CGRect) {
+    init(viewBounds : CGRect, safeAreaInsets : UIEdgeInsets) {
         self.viewBounds = viewBounds
+        self.safeAreaInsets = safeAreaInsets
     }
     
     init(_ collectionView : UICollectionView) {
         self.viewBounds = collectionView.bounds
+        self.safeAreaInsets = collectionView.safeAreaInsets
     }
 }
 

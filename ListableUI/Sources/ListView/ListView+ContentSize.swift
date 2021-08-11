@@ -79,7 +79,7 @@ extension ListView
 
         layout.layout(
             delegate: nil,
-            in: .init(viewBounds: CGRect(origin: .zero, size: fittingSize))
+            in: .init(viewBounds: CGRect(origin: .zero, size: fittingSize), safeAreaInsets: .zero)
         )
         
         /// 3) Constrain the measurement to the `fittingSize`.
