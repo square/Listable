@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Added support for `.horizontal` `.table` layouts](https://github.com/kyleve/Listable/pull/314). To get a horizontal table; just set the `layout.direction = .horizontal` when configuring your list's layout. Additionally, some properties were renamed from left/right to leading/trailing to better reflect they can now be on the left/top and right/bottom of a list view, respectively.
+
 ### Removed
 
 ### Changed

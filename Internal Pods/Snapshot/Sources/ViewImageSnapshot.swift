@@ -22,7 +22,7 @@ public struct ViewImageSnapshot<ViewType:UIView> : SnapshotOutputFormat
     public static var outputInfo : SnapshotOutputInfo {
         return SnapshotOutputInfo(
             directoryName: "Images",
-            fileExtension: "snapshot.png"
+            fileExtension: "png"
         )
     }
     

@@ -22,7 +22,11 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
-        .table {
+        self.demoLayout()
+    }
+    
+    static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
+        return .table {
             $0.layout = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
                 width: .atMost(600.0),
@@ -32,6 +36,10 @@ extension LayoutDescription
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
             )
+            
+            $0.stickySectionHeaders = true
+            
+            configure(&$0)
         }
     }
 }
