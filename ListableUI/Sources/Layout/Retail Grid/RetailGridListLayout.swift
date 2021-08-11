@@ -75,17 +75,6 @@ public struct RetailGridAppearance : ListLayoutAppearance
             block(&edited)
             self = edited
         }
-        
-        internal static func width(
-            with width : CGFloat,
-            padding : HorizontalPadding,
-            constraint : WidthConstraint
-        ) -> CGFloat
-        {
-            let paddedWidth = width - padding.left - padding.right
-            
-            return constraint.clamp(paddedWidth)
-        }
     }
 }
 
