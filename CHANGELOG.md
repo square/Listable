@@ -4,8 +4,6 @@
 
 ### Added
 
-- [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.25.0] - 2021-08-12
+
+### Added
+
+- [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
 
 # [0.24.0] - 2021-08-07
 
@@ -436,7 +440,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.24.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.25.0...HEAD
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
 [0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
 [0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
 [0.23.1]: https://github.com/kyleve/Listable/compare/0.23.0...0.23.1
