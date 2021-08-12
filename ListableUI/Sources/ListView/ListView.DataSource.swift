@@ -67,6 +67,7 @@ internal extension ListView
             
             container.headerFooter = {
                 switch SupplementaryKind(rawValue: kind)! {
+                case .listContainerHeader: return self.presentationState.containerHeader.state
                 case .listHeader: return self.presentationState.header.state
                 case .listFooter: return self.presentationState.footer.state
                 case .sectionHeader: return self.presentationState.sections[indexPath.section].header.state

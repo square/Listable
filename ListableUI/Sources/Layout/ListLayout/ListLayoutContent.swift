@@ -11,7 +11,8 @@ import Foundation
 public final class ListLayoutContent
 {
     var contentSize : CGSize
-        
+    
+    let containerHeader : SupplementaryItemInfo
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
     
@@ -39,14 +40,16 @@ public final class ListLayoutContent
     {
         self.contentSize = .zero
         
-        self.header = SupplementaryItemInfo.empty(.listHeader)
-        self.footer = SupplementaryItemInfo.empty(.listFooter)
-        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter)
+        self.containerHeader = .empty(.listContainerHeader)
+        self.header = .empty(.listHeader)
+        self.footer = .empty(.listFooter)
+        self.overscrollFooter = .empty(.overscrollFooter)
         
         self.sections = []
     }
     
     init(
+        containerHeader : SupplementaryItemInfo?,
         header : SupplementaryItemInfo?,
         footer : SupplementaryItemInfo?,
         overscrollFooter : SupplementaryItemInfo?,
@@ -54,6 +57,7 @@ public final class ListLayoutContent
     ) {
         self.contentSize = .zero
         
+        self.containerHeader = containerHeader ?? .empty(.listContainerHeader)
         self.header = header ?? .empty(.listHeader)
         self.footer = footer ?? .empty(.listFooter)
         self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter)
@@ -81,6 +85,7 @@ public final class ListLayoutContent
         let section = self.sections[indexPath.section]
         
         switch SupplementaryKind(rawValue: kind)! {
+        case .listContainerHeader: return self.containerHeader.layoutAttributes(with: indexPath)
         case .listHeader: return self.header.layoutAttributes(with: indexPath)
         case .listFooter: return self.footer.layoutAttributes(with: indexPath)
             
@@ -105,6 +110,12 @@ public final class ListLayoutContent
         }
         
         var attributes = [UICollectionViewLayoutAttributes]()
+        
+        // Container Header
+        
+        if rect.intersects(self.containerHeader.visibleFrame) {
+            attributes.append(self.containerHeader.layoutAttributes(with: self.containerHeader.kind.indexPath(in: 0)))
+        }
         
         // List Header
         

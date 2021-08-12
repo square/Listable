@@ -110,6 +110,8 @@ class TableListLayoutTests : XCTestCase
                     lastSectionToFooterSpacing: 20.0
                 )
             }
+            
+            list.content.containerHeader = HeaderFooter(TestingHeaderFooterContent(color: .red), sizing: .fixed(height: 50.0))
 
             if includeHeader {
                 list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))

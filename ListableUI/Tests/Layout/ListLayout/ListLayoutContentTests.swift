@@ -14,6 +14,13 @@ class ListLayoutContentTests : XCTestCase
 {
     func test_all()
     {
+        let containerHeader = ListLayoutContent.SupplementaryItemInfo(
+            state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
+            kind: .listContainerHeader,
+            isPopulated: true,
+            measurer: { _ in .zero }
+        )
+        
         let header = ListLayoutContent.SupplementaryItemInfo(
             state: PresentationState.HeaderFooterState(HeaderFooter(TestHeaderFooter())),
             kind: .listHeader,
@@ -52,6 +59,7 @@ class ListLayoutContentTests : XCTestCase
         )
         
         let content1 = ListLayoutContent(
+            containerHeader: nil,
             header: nil,
             footer: nil,
             overscrollFooter: nil,
@@ -63,6 +71,7 @@ class ListLayoutContentTests : XCTestCase
         AssertListLayoutContentItemEqual(content1.all, section.all)
         
         let content2 = ListLayoutContent(
+            containerHeader: containerHeader,
             header: header,
             footer: footer,
             overscrollFooter: overscroll,

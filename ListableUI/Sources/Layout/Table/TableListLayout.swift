@@ -486,6 +486,32 @@ final class TableListLayout : ListLayout
         var lastContentMaxY : CGFloat = 0.0
         
         //
+        // Container Header
+        //
+        
+        performLayout(for: self.content.containerHeader) { header in
+            let hasContainerHeader = header.isPopulated
+            let headerWidth = header.layouts.table.width.merge(with: rootWidth)
+            let position = headerWidth.position(with: viewSize, defaultWidth: defaultWidth)
+            
+            let measureInfo = Sizing.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
+                direction: .vertical
+            )
+            
+            let height = header.measurer(measureInfo).height
+            
+            header.x = position.origin
+            header.size = CGSize(width: position.width, height: height)
+            header.y = lastContentMaxY
+            
+            if hasContainerHeader {
+                lastContentMaxY = header.defaultFrame.maxY
+            }
+        }
+        
+        //
         // Header
         //
         
@@ -498,7 +524,7 @@ final class TableListLayout : ListLayout
         }
         
         performLayout(for: self.content.header) { header in
-            let hasListHeader = self.content.header.isPopulated
+            let hasListHeader = header.isPopulated
             let headerWidth = header.layouts.table.width.merge(with: rootWidth)
             let position = headerWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
