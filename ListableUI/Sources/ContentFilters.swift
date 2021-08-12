@@ -31,6 +31,8 @@ public enum ContentFilters : Hashable, CaseIterable {
         ]
     }
     
+    /// If the list has a list-level container header.
+    case listContainerHeader
     /// If the list has a list-level header.
     case listHeader
     /// If the list has a list-level footer.

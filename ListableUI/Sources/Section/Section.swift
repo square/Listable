@@ -36,6 +36,7 @@ public struct Section
         
         for filter in filters {
             switch filter {
+            case .listContainerHeader: break
             case .listHeader: break
             case .listFooter: break
             case .overscrollFooter: break

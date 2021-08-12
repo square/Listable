@@ -70,6 +70,7 @@ class ListView_VisibleContentTests : XCTestCase
             
             ListView.VisibleContent.Info(
                 headerFooters: [
+                    .init(kind: .listContainerHeader, indexPath: IndexPath(item: 0, section: 0)),
                     .init(kind: .listHeader, indexPath: IndexPath(item: 0, section: 0)),
                     .init(kind: .sectionHeader, indexPath: IndexPath(item: 0, section: 0)),
                 ],

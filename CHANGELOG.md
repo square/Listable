@@ -4,6 +4,8 @@
 
 ### Added
 
+- [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
+
 ### Removed
 
 ### Changed

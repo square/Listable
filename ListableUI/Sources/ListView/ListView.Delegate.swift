@@ -152,6 +152,7 @@ extension ListView
             
             let headerFooter : PresentationState.HeaderFooterViewStatePair = {
                 switch kind {
+                case .listContainerHeader: return self.presentationState.containerHeader
                 case .listHeader: return self.presentationState.header
                 case .listFooter: return self.presentationState.footer
                 case .sectionHeader: return self.presentationState.sections[indexPath.section].header
