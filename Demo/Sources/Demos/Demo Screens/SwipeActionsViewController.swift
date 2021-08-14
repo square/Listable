@@ -41,7 +41,14 @@ final class SwipeActionsViewController: UIViewController  {
                 guard let self = self else { return }
                 
                 if #available(iOS 11, *) {
-                    $0.layout.padding = UIEdgeInsets(top: 0.0, left: self.view.safeAreaInsets.left, bottom: 0.0, right: self.view.safeAreaInsets.right)
+                    $0.bounds = .init(
+                        padding: UIEdgeInsets(
+                            top: 0.0,
+                            left: self.view.safeAreaInsets.left,
+                            bottom: 0.0,
+                            right: self.view.safeAreaInsets.right
+                        )
+                    )
                 }
             }
 

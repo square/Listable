@@ -1,6 +1,6 @@
 //
-//  ListSizing.swift
-//  Listable
+//  ListView+ContentSize.swift
+//  ListableUI
 //
 //  Created by Kyle Van Essen on 9/21/20.
 //
@@ -79,7 +79,11 @@ extension ListView
 
         layout.layout(
             delegate: nil,
-            in: .init(viewBounds: CGRect(origin: .zero, size: fittingSize), safeAreaInsets: .zero)
+            in: .init(
+                viewBounds: CGRect(origin: .zero, size: fittingSize),
+                safeAreaInsets: .zero,
+                environment: properties.environment
+            )
         )
         
         /// 3) Constrain the measurement to the `fittingSize`.

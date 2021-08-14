@@ -4,9 +4,13 @@
 
 ### Added
 
+- [You can now provide default list bounds for participating layouts](https://github.com/kyleve/Listable/pull/317) via the `environment.listContentBounds` property. This allows your containing screen, eg, to provide default bounds to ensure content lays out correctly. The `table` and `grid` layout types have been updated to read these content bounds.
+
 ### Removed
 
 ### Changed
+
+- [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
 
 ### Misc
 
@@ -102,7 +106,7 @@
 
 ### Changed
 
-- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `ListSizing` also moved to `BlueprintUILists`, as that is the only place it was used. 
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used. 
 
 # [0.19.0] - 2021-03-22
 
