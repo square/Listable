@@ -8,6 +8,8 @@
 
 ### Removed
 
+- [iOS 11 was deprecated](https://github.com/kyleve/Listable/pull/317).
+
 ### Changed
 
 - [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
