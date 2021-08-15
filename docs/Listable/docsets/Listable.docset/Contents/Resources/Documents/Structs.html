@@ -23,7 +23,7 @@
         <a class="header-link" href="index.html">
           Listable
         </a>
-         (48% documented)
+         (47% documented)
       </p>
 
       <p class="header-col--secondary">
@@ -168,6 +168,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/LayoutDirection.html">LayoutDirection</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/ListContentBoundsKey.html">ListContentBoundsKey</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Enums/ReappliesToVisibleView.html">ReappliesToVisibleView</a>
@@ -436,6 +439,12 @@
                 <a class="nav-group-task-link" href="Structs/LayoutDescription.html">LayoutDescription</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListContentBounds.html">ListContentBounds</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ListContentBounds/Context.html">– Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListContentLayoutAttributes.html">ListContentLayoutAttributes</a>
               </li>
               <li class="nav-group-task">
@@ -515,6 +524,15 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/RefreshControl/Title.html">– Title</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/RetailGridAppearance.html">RetailGridAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/RetailGridAppearance/Layout.html">– Layout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/RetailGridAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ScrollPosition.html">ScrollPosition</a>
@@ -706,6 +724,110 @@ value to the current <code>UITraitCollection</code>.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Content</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListContentBoundsV"></a>
+                    <a name="//apple_ref/swift/Struct/ListContentBounds" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListContentBoundsV">ListContentBounds</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>For participating layouts; allows controlling the padding around and width of content when it is laid out.</p>
+<pre class="highlight swift"><code><span class="err">┌──────────────────────────┐</span>    <span class="err">┌───────────────────────────────────────────┐</span>
+<span class="err">│</span>       <span class="n">padding</span><span class="o">.</span><span class="n">top</span>        <span class="err">│</span>    <span class="err">│</span>               <span class="n">padding</span><span class="o">.</span><span class="n">top</span>                 <span class="err">│</span>
+<span class="err">│</span> <span class="n">p</span> <span class="err">┌──────────────────┐</span> <span class="n">p</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">┌──────────────────┐</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">a</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">a</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">d</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">d</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">d</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">d</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">i</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">i</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">n</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">n</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">g</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">g</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>      <span class="n">width</span>       <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="o">.</span> <span class="err">│</span>                  <span class="err">│</span> <span class="o">.</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│◀────────────────▶│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">l</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">r</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">e</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">i</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">f</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">g</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span> <span class="n">t</span> <span class="err">│</span>                  <span class="err">│</span> <span class="n">h</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">│</span>                  <span class="err">│</span>            <span class="err">│</span>
+<span class="err">│</span>   <span class="err">└──────────────────┘</span> <span class="n">t</span> <span class="err">│</span>    <span class="err">│</span>           <span class="err">└──────────────────┘</span>            <span class="err">│</span>
+<span class="err">│</span>      <span class="n">padding</span><span class="o">.</span><span class="n">bottom</span>      <span class="err">│</span>    <span class="err">│</span>              <span class="n">padding</span><span class="o">.</span><span class="n">bottom</span>               <span class="err">│</span>
+<span class="err">└──────────────────────────┘</span>    <span class="err">└───────────────────────────────────────────┘</span>
+</code></pre>
+
+                        <a href="Structs/ListContentBounds.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListContentBounds</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI15ListEnvironmentV"></a>
+                    <a name="//apple_ref/swift/Struct/ListEnvironment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI15ListEnvironmentV">ListEnvironment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An environment of keys and values that are passed to every <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>
+during layout and measurement, to allow passing down data.</p>
+
+<p>This type is similar to the SwiftUI or Blueprint <code>Environment</code>, where you define a <code><a href="Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a></code>,
+and then provide a custom getter and setter to read and write the content:</p>
+<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MyLayoutTypeKey</span> <span class="p">:</span> <span class="kt">ListEnvironmentKey</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">defaultValue</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
+        <span class="o">.</span><span class="n">defaultLayout</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ListEnvironment</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">myLayoutType</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>You can retrieve the <code>ListEnvironment</code> through the <code>info</code> object passed in <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>&lsquo;s
+<code>apply(to:for:with:)</code> methods.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
+    <span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span>
+    <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span>
+<span class="p">)</span> <span class="p">{</span>
+   <span class="k">switch</span> <span class="n">info</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">myLayoutType</span> <span class="p">{</span>
+      <span class="o">...</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Structs/ListEnvironment.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEnvironment</span></code></pre>
 
                         </div>
                       </div>
@@ -1449,7 +1571,7 @@ allowing configuration of properties for custom layouts, appearance animations, 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListLayoutLayoutContext</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListLayoutLayoutContext</span></code></pre>
 
                         </div>
                       </div>
@@ -1659,6 +1781,34 @@ Edit the <code>PagedAppearance.monopic</code> file in this directory using Monod
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI20RetailGridAppearanceV"></a>
+                    <a name="//apple_ref/swift/Struct/RetailGridAppearance" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI20RetailGridAppearanceV">RetailGridAppearance</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/RetailGridAppearance.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RetailGridAppearance</span> <span class="p">:</span> <span class="kt"><a href="Protocols/ListLayoutAppearance.html">ListLayoutAppearance</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI15TableAppearanceV"></a>
                     <a name="//apple_ref/swift/Struct/TableAppearance" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI15TableAppearanceV">TableAppearance</a>
@@ -1759,64 +1909,6 @@ Edit the <code>TableAppearance.monopic</code> file in this directory using Monod
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">TableAppearance</span> <span class="p">:</span> <span class="kt"><a href="Protocols/ListLayoutAppearance.html">ListLayoutAppearance</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI15ListEnvironmentV"></a>
-                    <a name="//apple_ref/swift/Struct/ListEnvironment" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI15ListEnvironmentV">ListEnvironment</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An environment of keys and values that are passed to every <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>
-during layout and measurement, to allow passing down data.</p>
-
-<p>This type is similar to the SwiftUI or Blueprint <code>Environment</code>, where you define a <code><a href="Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a></code>,
-and then provide a custom getter and setter to read and write the content:</p>
-<pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MyLayoutTypeKey</span> <span class="p">:</span> <span class="kt">ListEnvironmentKey</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">defaultValue</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
-        <span class="o">.</span><span class="n">defaultLayout</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">extension</span> <span class="kt">ListEnvironment</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">myLayoutType</span> <span class="p">:</span> <span class="kt">MyLayoutType</span> <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="p">}</span>
-        <span class="k">set</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">MyLayoutTypeKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-
-<p>You can retrieve the <code>ListEnvironment</code> through the <code>info</code> object passed in <code><a href="Protocols/ItemContent.html">ItemContent</a></code> and <code><a href="Structs/HeaderFooter.html">HeaderFooter</a></code>&lsquo;s
-<code>apply(to:for:with:)</code> methods.</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
-    <span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span>
-    <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span>
-<span class="p">)</span> <span class="p">{</span>
-   <span class="k">switch</span> <span class="n">info</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">myLayoutType</span> <span class="p">{</span>
-      <span class="o">...</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-
-                        <a href="Structs/ListEnvironment.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListEnvironment</span></code></pre>
 
                         </div>
                       </div>
@@ -2305,7 +2397,7 @@ These are actions that are revealed when swiping on the cell.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-08-07)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-08-14)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
