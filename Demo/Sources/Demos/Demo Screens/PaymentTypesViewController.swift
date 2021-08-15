@@ -16,7 +16,9 @@ final class PaymentTypesViewController : ListViewController {
         
         list.layout = .table { table in
             table.layout.interSectionSpacingWithNoFooter = 10.0
-            table.layout.padding.bottom = 100
+            table.bounds = .init(
+                padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+            )
         }
         
         let types = self.types

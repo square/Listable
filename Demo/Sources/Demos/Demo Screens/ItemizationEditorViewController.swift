@@ -166,9 +166,12 @@ final class ItemizationEditorViewController : UIViewController
                 listFooterHeight: 100.0
             )
             
-            $0.layout = .init(
+            $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                width: .atMost(600.0),
+                width: .atMost(600.0)
+            )
+            
+            $0.layout = .init(
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 0.0,

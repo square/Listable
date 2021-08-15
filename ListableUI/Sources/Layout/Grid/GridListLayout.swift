@@ -18,6 +18,8 @@ extension LayoutDescription
 
 public struct GridAppearance : ListLayoutAppearance
 {
+    public var bounds : ListContentBounds?
+    
     public var sizing : Sizing
     public var layout : Layout
     
@@ -33,10 +35,12 @@ public struct GridAppearance : ListLayoutAppearance
     
     public init(
         stickySectionHeaders : Bool = true,
+        bounds : ListContentBounds? = nil,
         sizing : Sizing = Sizing(),
         layout : Layout = Layout()
     ) {
         self.stickySectionHeaders = stickySectionHeaders
+        self.bounds = bounds
         self.sizing = sizing
         self.layout = layout
     }
@@ -84,9 +88,6 @@ public struct GridAppearance : ListLayoutAppearance
 
     public struct Layout : Equatable
     {
-        public var padding : UIEdgeInsets
-        public var width : WidthConstraint
-
         public var interSectionSpacingWithNoFooter : CGFloat
         public var interSectionSpacingWithFooter : CGFloat
         
@@ -100,11 +101,7 @@ public struct GridAppearance : ListLayoutAppearance
             interSectionSpacingWithFooter : CGFloat = 0.0,
             sectionHeaderBottomSpacing : CGFloat = 0.0,
             itemToSectionFooterSpacing : CGFloat = 0.0
-        )
-        {
-            self.padding = padding
-            self.width = width
-            
+        ) {
             self.interSectionSpacingWithNoFooter = interSectionSpacingWithNoFooter
             self.interSectionSpacingWithFooter = interSectionSpacingWithFooter
             
@@ -254,7 +251,7 @@ final class GridListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView: UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     {
         
     }
@@ -263,6 +260,14 @@ final class GridListLayout : ListLayout
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
     ) {
+        let boundsContext = ListContentBounds.Context(
+            viewSize: context.viewBounds.size,
+            direction: self.direction
+        )
+        
+        let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
+        
+        
         let direction = self.layoutAppearance.direction
         let layout = self.layoutAppearance.layout
         let sizing = self.layoutAppearance.sizing
@@ -273,8 +278,8 @@ final class GridListLayout : ListLayout
         
         let rootWidth = TableAppearance.Layout.width(
             with: viewWidth,
-            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
-            constraint: layout.width
+            padding: HorizontalPadding(left: bounds.padding.left, right: bounds.padding.right),
+            constraint: bounds.width
         )
         
         //
@@ -312,12 +317,12 @@ final class GridListLayout : ListLayout
         
         switch direction {
         case .vertical:
-            lastSectionMaxY += layout.padding.top
-            lastContentMaxY += layout.padding.top
+            lastSectionMaxY += bounds.padding.top
+            lastContentMaxY += bounds.padding.top
             
         case .horizontal:
-            lastSectionMaxY += layout.padding.left
-            lastContentMaxY += layout.padding.left
+            lastSectionMaxY += bounds.padding.left
+            lastContentMaxY += bounds.padding.left
         }
         
         //
@@ -415,8 +420,8 @@ final class GridListLayout : ListLayout
         }
         
         switch direction {
-        case .vertical: lastContentMaxY += layout.padding.bottom
-        case .horizontal: lastContentMaxY += layout.padding.right
+        case .vertical: lastContentMaxY += bounds.padding.bottom
+        case .horizontal: lastContentMaxY += bounds.padding.right
         }
         
         //

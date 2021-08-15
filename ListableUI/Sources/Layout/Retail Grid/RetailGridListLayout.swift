@@ -254,7 +254,7 @@ final class RetailGridListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView: UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     {
         
     }

@@ -262,6 +262,10 @@ extension ListView
             )
         }
         
+        func listViewLayoutCurrentEnvironment() -> ListEnvironment {
+            self.view.environment
+        }
+        
         func listViewLayoutDidLayoutContents() {
             self.view.visibleContent.update(with: self.view)
         }

@@ -79,7 +79,7 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
     {
         blueprintView.element = List { list in
             list.layout = .table {
-                $0.layout.padding = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
+                $0.bounds = .init(padding: UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16))
                 $0.layout.itemSpacing = 10.0
             }
 

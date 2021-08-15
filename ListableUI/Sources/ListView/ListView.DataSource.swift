@@ -14,8 +14,6 @@ internal extension ListView
         unowned var presentationState : PresentationState!
         unowned var storage : ListView.Storage!
         unowned var liveCells : LiveCells!
-        
-        var environment : ListEnvironment!
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
         {
@@ -41,7 +39,7 @@ internal extension ListView
             let cell = item.dequeueAndPrepareCollectionViewCell(
                 in: collectionView,
                 for: indexPath,
-                environment: environment
+                environment: self.view.environment
             )
             
             cell.wasDequeued(with: self.liveCells)
@@ -62,7 +60,7 @@ internal extension ListView
                 for: kind,
                 at: indexPath,
                 reuseCache: self.headerFooterReuseCache,
-                environment: self.environment
+                environment: self.view.environment
             )
             
             container.headerFooter = {

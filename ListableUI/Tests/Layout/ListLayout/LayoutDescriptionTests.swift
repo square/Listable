@@ -120,7 +120,7 @@ private final class TestLayout : ListLayout
         self.content = content
     }
     
-    func updateLayout(in collectionView: UICollectionView) { }
+    func updateLayout(in context : ListLayoutLayoutContext) { }
     
     func layout(delegate: CollectionViewLayoutDelegate?, in context: ListLayoutLayoutContext) {}
 }

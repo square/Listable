@@ -35,7 +35,7 @@ class LayoutManagerTests : XCTestCase
         /// Setting the same layout type, but changing the description should change the inner ListLayout.
         
         let newLayout1 : LayoutDescription = .table {
-            $0.layout.padding = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+            $0.bounds = .init(padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0))
         }
         
         manager.set(layout: newLayout1, animated: false, completion: {})
