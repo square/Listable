@@ -4,6 +4,18 @@
 
 ### Added
 
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [0.26.0] - 2021-08-14
+
+### Added
+
 - [You can now provide default list bounds for participating layouts](https://github.com/kyleve/Listable/pull/317) via the `environment.listContentBounds` property. This allows your containing screen, eg, to provide default bounds to ensure content lays out correctly. The `table` and `grid` layout types have been updated to read these content bounds.
 
 ### Removed
@@ -13,10 +25,6 @@
 ### Changed
 
 - [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
-
-### Misc
-
-# Past Releases
 
 # [0.25.0] - 2021-08-12
 
@@ -446,7 +454,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.25.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.26.0...HEAD
+[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.26.0
 [0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
 [0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
 [0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2

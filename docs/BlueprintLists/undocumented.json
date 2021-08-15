@@ -27,6 +27,13 @@
       "symbol": "ElementItemContent.represented",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/List.Measurement.swift",
+      "line": 47,
+      "symbol": "List.Measurement",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/k/Desktop/Development/Listable5"
