@@ -75,7 +75,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     // MARK: Content
     //
     
-    weak var headerFooter : AnyPresentationHeaderFooterState? {
+    var headerFooter : AnyPresentationHeaderFooterState? {
         didSet {
             guard oldValue !== self.headerFooter else {
                 return
