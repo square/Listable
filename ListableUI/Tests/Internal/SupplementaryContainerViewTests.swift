@@ -89,7 +89,9 @@ class SupplementaryContainerViewTests: XCTestCase
         
         // Add a header
         
-        view.headerFooter = self.newHeaderFooter()
+        let header = self.newHeaderFooter()
+        
+        view.headerFooter = header
         view.sizeToFit()
         
         // Make sure the view is set

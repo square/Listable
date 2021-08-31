@@ -14,8 +14,8 @@ extension PresentationState
     {
         var model : Section
         
-        var header : HeaderFooterViewStatePair
-        var footer : HeaderFooterViewStatePair
+        let header : HeaderFooterViewStatePair
+        let footer : HeaderFooterViewStatePair
         
         var items : [AnyPresentationItemState]
         
