@@ -163,7 +163,7 @@ extension ListView
             
             headerFooter.willDisplay(view: container)
             
-            self.displayedSupplementaryItems[ObjectIdentifier(view)] = headerFooter
+            self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
         }
         
         func collectionView(
