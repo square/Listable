@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.author       = { 'Kyle' => 'k@squareup.com' }
   s.source       = { git: 'https://github.com/kyleve/Listable.git', tag: "#{s.version}" }
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
 
   s.swift_versions = ['5.0']
 

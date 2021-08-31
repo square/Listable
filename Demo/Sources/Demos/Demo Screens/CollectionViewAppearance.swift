@@ -23,9 +23,12 @@ extension LayoutDescription
 {
     static var demoLayout : Self {
         .table {
-            $0.layout = .init(
+            $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
-                width: .atMost(600.0),
+                width: .atMost(600.0)
+            )
+            
+            $0.layout = .init(
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,

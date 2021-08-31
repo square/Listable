@@ -53,8 +53,8 @@ public struct List : Element
     /// it will take up all the size it is given. You can change this to
     /// `.measureContent` to instead measure the optimal size.
     ///
-    /// See the `ListSizing` documentation for more.
-    public var sizing : ListSizing
+    /// See the `List.Measurement` documentation for more.
+    public var measurement : List.Measurement
     
     //
     // MARK: Initialization
@@ -63,10 +63,10 @@ public struct List : Element
     /// Create a new list, configured with the provided properties,
     /// configured with the provided `ListProperties` builder.
     public init(
-        sizing : ListSizing = .fillParent,
+        measurement : List.Measurement = .fillParent,
         configure : ListProperties.Configure
     ) {
-        self.sizing = sizing
+        self.measurement = measurement
         
         self.properties = .default(with: configure)
     }
@@ -79,7 +79,7 @@ public struct List : Element
         ElementContent { size, env in
             ListContent(
                 properties: self.properties,
-                sizing: self.sizing,
+                measurement: self.measurement,
                 environment: env
             )
         }
@@ -96,11 +96,11 @@ extension List {
     fileprivate struct ListContent : Element {
         
         var properties : ListProperties
-        var sizing : ListSizing
+        var measurement : List.Measurement
         
         init(
             properties : ListProperties,
-            sizing : ListSizing,
+            measurement : List.Measurement,
             environment : Environment
         ) {
             var properties = properties
@@ -108,13 +108,13 @@ extension List {
             properties.environment.blueprintEnvironment = environment
             
             self.properties = properties
-            self.sizing = sizing
+            self.measurement = measurement
         }
         
         // MARK: Element
             
         public var content : ElementContent {
-            switch self.sizing {
+            switch self.measurement {
             case .fillParent:
                 return ElementContent { constraint -> CGSize in
                     constraint.maximum

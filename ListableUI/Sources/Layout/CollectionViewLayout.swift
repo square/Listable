@@ -461,14 +461,19 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         let view = self.collectionView!
                 
+        let context = ListLayoutLayoutContext(
+            collectionView: view,
+            environment: self.delegate.listViewLayoutCurrentEnvironment()
+        )
+        
         self.layout.layout(
             delegate: self.delegate,
-            in: .init(view)
+            in: context
         )
         
         self.layout.content.setSectionContentsFrames()
             
-        self.layout.updateLayout(in: view)
+        self.layout.updateLayout(in: context)
         
         self.layout.setZIndexes()
         
@@ -482,9 +487,14 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         let view = self.collectionView!
         
+        let context = ListLayoutLayoutContext(
+            collectionView: view,
+            environment: self.delegate.listViewLayoutCurrentEnvironment()
+        )
+        
         self.layout.positionStickySectionHeadersIfNeeded(in: view)
         
-        self.layout.updateLayout(in: view)
+        self.layout.updateLayout(in: context)
     }
     
     //
@@ -674,6 +684,8 @@ public protocol CollectionViewLayoutDelegate : AnyObject
     func listLayoutContent(
         defaults: ListLayoutDefaults
     ) -> ListLayoutContent
+    
+    func listViewLayoutCurrentEnvironment() -> ListEnvironment
     
     func listViewLayoutDidLayoutContents()
     
