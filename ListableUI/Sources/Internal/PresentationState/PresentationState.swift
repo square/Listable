@@ -16,10 +16,10 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
-    var containerHeader : HeaderFooterViewStatePair
-    var header : HeaderFooterViewStatePair
-    var footer : HeaderFooterViewStatePair
-    var overscrollFooter : HeaderFooterViewStatePair
+    let containerHeader : HeaderFooterViewStatePair
+    let header : HeaderFooterViewStatePair
+    let footer : HeaderFooterViewStatePair
+    let overscrollFooter : HeaderFooterViewStatePair
     
     var sections : [PresentationState.SectionState]
     
