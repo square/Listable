@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [1.0.0] - 2021-08-19
+
+### Changed
+
+- [Updated version number to 1.0.0](https://github.com/kyleve/Listable/pull/320). This doesn't reflect any substantial API change; just that we'll begin using "real" semver going forward
+
 # [0.26.0] - 2021-08-14
 
 ### Added
@@ -454,7 +460,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.26.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/kyleve/Listable/compare/0.26.0...1.0.0
 [0.26.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.26.0
 [0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
 [0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
