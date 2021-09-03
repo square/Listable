@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.26.1] - 2021-09-03
+
+### Fixed
+
+- Includes fix for header reuse from 0.25.1.
+
 # [0.26.0] - 2021-08-14
 
 ### Added
@@ -454,8 +460,10 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.26.0...HEAD
-[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.26.0
+[Main]: https://github.com/kyleve/Listable/compare/0.26.1...HEAD
+[0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
+[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.25.1
 [0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
 [0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
 [0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
