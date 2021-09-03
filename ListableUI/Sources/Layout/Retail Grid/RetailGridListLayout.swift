@@ -44,6 +44,15 @@ public struct RetailGridAppearance : ListLayoutAppearance
         public var columns: Int
         public var rows: Rows
         
+        public var paged: Bool {
+            switch rows {
+            case .rows:
+                return true
+            default:
+                return false
+            }
+        }
+        
         public enum Rows : Equatable {
             case rows(Int)
             // Height:Width tile ratio.
@@ -224,7 +233,7 @@ final class RetailGridListLayout : ListLayout
     
     var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            isPagingEnabled: self.layoutAppearance.layout.rows != .infinite,
+            isPagingEnabled: self.layoutAppearance.layout.paged,
             contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: true,
             allowsBounceHorizontal: false,
@@ -286,7 +295,7 @@ final class RetailGridListLayout : ListLayout
             }
         }
         
-        if self.layoutAppearance.layout.rows != .infinite {
+        if self.layoutAppearance.layout.paged {
             let pages = (lastContentMaxY / viewSize.height).rounded(.up)
             lastContentMaxY = pages * viewSize.height
         }
