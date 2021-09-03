@@ -30,7 +30,7 @@ class RetailGridAppearance_LayoutTests : XCTestCase
         XCTAssertEqual(layout.padding, .zero)
         XCTAssertEqual(layout.itemSpacing, .zero)
         XCTAssertEqual(layout.columns, 1)
-        XCTAssertEqual(layout.rows, .infinite)
+        XCTAssertEqual(layout.rows, .infinite(tileAspectRatio: 1))
 
     }
 }
@@ -39,7 +39,7 @@ class RetailGridListLayoutTests : XCTestCase
 {
     func test_layout_infiniteScoll()
     {
-        let listView = self.list(columns: 2, rows: .infinite)
+        let listView = self.list(columns: 2, rows: .infinite(tileAspectRatio: 1))
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
 
