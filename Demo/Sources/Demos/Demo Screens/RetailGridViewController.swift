@@ -18,7 +18,7 @@ final class RetailGridViewController : ListViewController
             list.appearance = .demoAppearance
             
             if self.infiniteScollOn {
-                list.layout = .retailGridDemo(columns: 5, rows: .infinite)
+                list.layout = .retailGridDemo(columns: 5)
             } else {
                 list.layout = .retailGridDemo(columns: 5, rows: .rows(5))
             }
