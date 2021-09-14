@@ -8,6 +8,8 @@
 
 ### Changed
 
+- [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
+
 ### Misc
 
 # Past Releases

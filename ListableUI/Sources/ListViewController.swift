@@ -30,6 +30,15 @@ import Foundation
 open class ListViewController : UIViewController
 {
     //
+    // MARK: Configuration
+    //
+    
+    /// The default value for `clearsSelectionOnViewWillAppear` is true.
+    /// This parameter allows mirroring the `clearsSelectionOnViewWillAppear`
+    /// as available from `UITableViewController` or `UICollectionViewController`.
+    public var clearsSelectionOnViewWillAppear : Bool = true
+    
+    //
     // MARK: Methods To Override
     //
     
@@ -82,7 +91,7 @@ open class ListViewController : UIViewController
             self.configure(list: &list)
         }
     }
-    
+
     
     //
     // MARK: - Internal & Private Methods -
@@ -119,7 +128,9 @@ open class ListViewController : UIViewController
             self.hasViewAppeared = true
             self.reload(animated: false)
         } else {
-            self.listView?.clearSelectionDuringViewWillAppear(alongside: self.transitionCoordinator, animated: animated)
+            if self.clearsSelectionOnViewWillAppear {
+                self.listView?.clearSelectionDuringViewWillAppear(alongside: self.transitionCoordinator, animated: animated)
+            }
         }
     }
 }
@@ -140,7 +151,7 @@ public extension ListView {
     ///
     func clearSelectionDuringViewWillAppear(alongside coordinator: UIViewControllerTransitionCoordinator?, animated : Bool) {
         
-        guard case Behavior.SelectionMode.single(clearsSelectionOnViewWillAppear: true) = behavior.selectionMode else {
+        guard case Behavior.SelectionMode.single = behavior.selectionMode else {
             return
         }
 
