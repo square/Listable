@@ -41,7 +41,7 @@ final class ManualSelectionManagementViewController : ListViewController
     
     override func configure(list: inout ListProperties) {
         
-        list.behavior.selectionMode = .single(clearsSelectionOnViewWillAppear: false)
+        list.behavior.selectionMode = .single
         
         list.appearance = .demoAppearance
         list.layout = .demoLayout

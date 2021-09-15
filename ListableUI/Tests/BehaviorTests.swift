@@ -19,7 +19,7 @@ class BehaviorTests: XCTestCase
         XCTAssertEqual(behavior.keyboardDismissMode, .interactive)
         XCTAssertEqual(behavior.keyboardAdjustmentMode, .adjustsWhenVisible)
         
-        XCTAssertEqual(behavior.selectionMode, .single())
+        XCTAssertEqual(behavior.selectionMode, .single)
         
         XCTAssertEqual(behavior.underflow, Behavior.Underflow())
         
