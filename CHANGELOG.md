@@ -8,11 +8,15 @@
 
 ### Changed
 
-- [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
-
 ### Misc
 
 # Past Releases
+
+# [0.27.0] - 2021-09-15
+
+### Changed
+
+- [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
 
 # [0.26.1] - 2021-09-03
 
@@ -462,7 +466,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.26.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.27.0...HEAD
+[0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
 [0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
 [0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0
 [0.25.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.25.1
