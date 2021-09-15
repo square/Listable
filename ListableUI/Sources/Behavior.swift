@@ -105,21 +105,36 @@ extension Behavior
     }
     
     
+    /// When the content of the list takes up less space than the list itself (aka, an underflow), how
+    /// the layout of the list content should be adjusted.
     public struct Underflow : Equatable
     {
+        /// Is bouncing (aka rubber banding) enabled, even if the content is shorter than the scrolling axis of the list?
         public var alwaysBounce : Bool
+        
+        /// How to align the content during underflow.
         public var alignment : Alignment
         
-        public init(alwaysBounce : Bool = true, alignment : Alignment = .top)
-        {
+        /// Creates a new instance with the provided parameters.
+        public init(
+            alwaysBounce : Bool = true,
+            alignment : Alignment = .top
+        ) {
             self.alwaysBounce = alwaysBounce
             self.alignment = alignment
         }
         
+        /// When the content takes up less space than allotted to the list,
+        /// how should said content be aligned within that space.
         public enum Alignment : Equatable
         {
+            /// The content is aligned to the top of the list. This is the default and is generally standard.
             case top
+            
+            /// The content is centered within the available space.
             case center
+            
+            /// The content is aligned to the bottom.
             case bottom
             
             func offsetFor(contentHeight : CGFloat, viewHeight: CGFloat) -> CGFloat

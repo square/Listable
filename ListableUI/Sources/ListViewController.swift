@@ -10,7 +10,7 @@ import Foundation
 
 ///
 /// A class which provides an easy way to set up and display a `ListView`,
-/// The `ListViewController` itself manages setup and presentation of the list.
+/// The `ListViewController` itself manages setup and presentation of the `ListView`.
 ///
 /// As a consumer of the API, all you need to do is override one method:
 /// ```

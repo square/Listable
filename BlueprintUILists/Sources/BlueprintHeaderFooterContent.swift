@@ -74,8 +74,7 @@ where
     /// You usually provide this method alongside `pressedBackground`, if your header
     /// has an `onTap` handler.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// The default implementation of this method returns nil, and provides no background.
     ///
     var background : Element? { get }
@@ -83,8 +82,7 @@ where
     /// Optional. Create and return the Blueprint element used to represent the background of the content when it is pressed.
     /// You usually provide this method alongside `background`, if your header has an `onTap` handler.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
     ///
     var pressedBackground : Element? { get }

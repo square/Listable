@@ -86,19 +86,6 @@ public struct LocalizedItemCollator {
     // MARK: Public
     //
     
-    /// Collates and returns the set of items into `CollatedSection`s.
-    /// You may then convert these into list `Section`s, or for another use.
-    public static func collate(
-        collation : UILocalizedIndexedCollation = .current(),
-        items : [AnyLocalizedCollatableItem]
-    ) -> [CollatedSection]
-    {
-        Self.init(
-            collation: collation,
-            items: items
-        ).collated
-    }
-    
     /// Collates and returns the set of items into list `Sections`,
     /// allowing you to customize each `Section` via the provided `modify`
     /// closure.
@@ -127,6 +114,19 @@ public struct LocalizedItemCollator {
             
             return section
         }
+    }
+    
+    /// Collates and returns the set of items into `CollatedSection`s.
+    /// You may then convert these into list `Section`s, or for another use.
+    public static func collate(
+        collation : UILocalizedIndexedCollation = .current(),
+        items : [AnyLocalizedCollatableItem]
+    ) -> [CollatedSection]
+    {
+        Self.init(
+            collation: collation,
+            items: items
+        ).collated
     }
     
     //

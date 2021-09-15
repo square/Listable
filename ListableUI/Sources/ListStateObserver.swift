@@ -21,8 +21,7 @@ import Foundation
 /// You can register for each callback type multiple times – eg to split apart different pieces of
 /// functionality. Eg, two calls to `onDidScroll` registers two callbacks.
 ///
-/// Example
-/// -------
+/// ### Example
 /// ```
 /// ListStateObserver { observer in
 ///     observer.onDidScroll { info in
@@ -34,7 +33,9 @@ import Foundation
 ///     }
 /// }
 /// ```
-/// Note that the duration of performing all callbacks is logged to `os_signpost`. If you find that
+///
+/// ### Note
+/// The duration of performing all callbacks is logged to `os_signpost`. If you find that
 /// your application is running slowly, and you have registered `ListStateObserver` callbacks,
 /// use Instruments.app to see what callback is slow.
 ///
@@ -55,8 +56,9 @@ public struct ListStateObserver {
     /// Registers a callback which will be called when the list view is scrolled, or is
     /// scrolled to top.
     ///
-    /// **Note** This callback is called very frequently when the user is scrolling
-    /// the list. As such, make sure any work you do in the callback is efficient.
+    /// ### Important Note!
+    /// This callback is called very frequently when the user is scrolling the list (eg, every frame!).
+    /// As such, make sure any work you do in the callback is efficient.
     public mutating func onDidScroll( _ callback : @escaping OnDidScroll)
     {
         self.onDidScroll.append(callback)
@@ -73,7 +75,8 @@ public struct ListStateObserver {
     /// Registers a callback which will be called when the list view's content is updated
     /// due to a call to `setContent`.
     ///
-    /// **Note**: This method is called even if there were no actual changes made during the `setContent`
+    /// ### Note
+    /// This method is called even if there were no actual changes made during the `setContent`
     /// call. To see if there were changes, check the `hadChanges` property on `ContentUpdated`.
     public mutating func onContentUpdated( _ callback : @escaping OnContentUpdated)
     {
@@ -131,7 +134,7 @@ public struct ListStateObserver {
     
     public typealias OnItemReordered = (ItemReordered) -> ()
     
-    /// Registers a callback which will be called when an item in the list view is reordered by the user.
+    /// Registers a callback which will be called when an item in the list view is reordered by the customer.
     /// May be called multiple times in a row for reorder events which contain multiple items.
     public mutating func onItemReordered(_ callback : @escaping OnItemReordered)
     {
@@ -181,15 +184,31 @@ extension ListStateObserver
     /// Parameters available for ``OnContentUpdated`` callbacks.
     public struct ContentUpdated {
         
+        // If there were any changes included in this content update.
         public let hadChanges : Bool
+        
+        /// The insertions and removals in this change, if any.
         public let insertionsAndRemovals : InsertionsAndRemovals
         
+        /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
         public let actions : ListActions
+        
+        /// The current scroll position of the list.
         public let positionInfo : ListScrollPositionInfo
         
+        /// The insertions and removals, for both sections and items, applied to a list
+        /// as the result of an update.
+        ///
+        /// Note that if developers do not provide unique IDs across sections,
+        /// IDs will overlap for items across sections. Because `ChangedIDs`
+        /// contains a `Set`, two sections inserting (or removing) an item with an equal ID
+        /// will only be included in `ChangedIDs.inserted/removed` set once.
         public struct InsertionsAndRemovals {
 
+            /// The inserted and removed sections.
             public var sections : ChangedIDs
+            
+            /// The inserted and removed items.
             public var items : ChangedIDs
             
             init(diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>) {
@@ -205,8 +224,13 @@ extension ListStateObserver
                 )
             }
             
+            /// The changed IDs.
             public struct ChangedIDs {
+                
+                /// The inserted IDs.
                 public var inserted : Set<AnyIdentifier>
+                
+                /// The removed IDs.
                 public var removed : Set<AnyIdentifier>
             }
         }
@@ -215,42 +239,71 @@ extension ListStateObserver
     
     /// Parameters available for ``OnVisibilityChanged`` callbacks.
     public struct VisibilityChanged {
+        
+        /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
         public let actions : ListActions
+        
+        /// The current scroll position of the list.
         public let positionInfo : ListScrollPositionInfo
         
+        /// The items which were scrolled into view or otherwise became visible.
         public let displayed : [AnyItem]
+        
+        /// The items which were scrolled out of view or otherwise were removed from view.
         public let endedDisplay : [AnyItem]
     }
     
     
     /// Parameters available for ``OnFrameChanged`` callbacks.
     public struct FrameChanged {
+        
+        /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
         public let actions : ListActions
+        
+        /// The current scroll position of the list.
         public let positionInfo : ListScrollPositionInfo
 
+        /// The old frame within the bounds of the list.
         public let old : CGRect
+        
+        /// The new frame within the bounds of the list.
         public let new : CGRect
     }
     
     
     /// Parameters available for ``OnSelectionChanged`` callbacks.
     public struct SelectionChanged {
+        
+        /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
         public let actions : ListActions
+        
+        /// The current scroll position of the list.
         public let positionInfo : ListScrollPositionInfo
 
+        /// The previously selected items' identifiers.
         public let old : Set<AnyIdentifier>
+        
+        /// The newly selected items' identifiers.
         public let new : Set<AnyIdentifier>
     }
     
     
     /// Parameters available for ``OnItemReordered`` callbacks.
     public struct ItemReordered {
+        
+        /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
         public let actions : ListActions
+        
+        /// The current scroll position of the list.
         public let positionInfo : ListScrollPositionInfo
         
+        /// The item which was reordered by the customer.
         public let item : AnyItem
+        
+        /// The new state of all sections in the list.
         public let sections : [Section]
         
+        /// The detailed information about the reorder event. 
         public let result : ItemReordering.Result
     }
 }
