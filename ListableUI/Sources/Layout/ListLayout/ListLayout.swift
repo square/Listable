@@ -32,7 +32,7 @@ public struct ListLayoutLayoutContext {
     
     public var environment : ListEnvironment
     
-    init(
+    public init(
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
         environment : ListEnvironment
@@ -53,13 +53,13 @@ public struct ListLayoutLayoutContext {
     }
 }
 
-public extension ListLayout
+extension ListLayout
 {
-    var direction: LayoutDirection {
+    public var direction: LayoutDirection {
         self.layoutAppearance.direction
     }
     
-    var stickySectionHeaders: Bool {
+    public var stickySectionHeaders: Bool {
         self.layoutAppearance.stickySectionHeaders
     }
 }
@@ -108,9 +108,9 @@ public protocol AnyListLayout : AnyObject
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func setZIndexes()
+    public func setZIndexes()
     {
         self.content.header.zIndex = 5
         
@@ -128,7 +128,7 @@ public extension AnyListLayout
         self.content.overscrollFooter.zIndex = 0
     }
     
-    func adjust(
+    public func adjust(
         layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
         originalAttributes : ListContentLayoutAttributes,
         at indexPath: IndexPath,
@@ -139,9 +139,9 @@ public extension AnyListLayout
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
+    public func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
     {
         CGRect(
             x: collectionView.contentOffset.x + collectionView.safeAreaInsets.left,
@@ -153,9 +153,9 @@ public extension AnyListLayout
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
     {
         guard self.stickySectionHeaders else {
             return
@@ -182,7 +182,7 @@ public extension AnyListLayout
         }
     }
     
-    func updateOverscrollFooterPosition(in collectionView : UICollectionView)
+    public func updateOverscrollFooterPosition(in collectionView : UICollectionView)
     {
         guard self.direction == .vertical else {
             // Currently only supported for vertical layouts.
@@ -204,7 +204,7 @@ public extension AnyListLayout
         }
     }
     
-    func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
+    public func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
     {
         guard self.direction == .vertical else {
             // Currently only supported for vertical layouts.
