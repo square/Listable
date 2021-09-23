@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '12.0'
 
-  s.swift_versions = ['5.0']
+  s.swift_versions = ['5.4']
 
   s.source_files = 'ListableUI/Sources/**/*.{swift,h,m}'
 

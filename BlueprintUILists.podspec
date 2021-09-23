@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '12.0'
 
-  s.swift_versions = ['5.0']
+  s.swift_versions = ['5.4']
 
   s.dependency 'ListableUI'
   s.dependency 'BlueprintUI'
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
       test_spec.ios.resource_bundle = { 'BlueprintUIListsResources' => 'BlueprintUILists/Tests/Resources/**/*.*' }
 
       test_spec.framework = 'XCTest'
-      
+
       test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
 
       test_spec.requires_app_host = true
