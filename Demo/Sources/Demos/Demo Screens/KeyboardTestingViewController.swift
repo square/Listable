@@ -26,9 +26,7 @@ final class KeyboardTestingViewController : UIViewController
         }
         
         self.listView.configure { list in
-            list.content.overscrollFooter = HeaderFooter(
-                DemoHeader(title: "Thanks for using Listable!!")
-            )
+            list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
             
             list += Section("section") { section in
                 section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))

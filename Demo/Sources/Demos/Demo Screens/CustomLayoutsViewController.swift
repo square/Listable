@@ -31,7 +31,7 @@ final class CustomLayoutsViewController : UIViewController
 
             list += Section("default") { section in
                 
-                section.header = HeaderFooter(DemoHeader(title: "Some Rows"))
+                section.header = DemoHeader(title: "Some Rows")
                 
                 section += Item(
                     DemoItem(text: "Row 1"),

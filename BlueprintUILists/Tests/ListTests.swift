@@ -24,13 +24,13 @@ class ListTests : XCTestCase {
         
         view.element = List { list in
             
-            list.content.header = HeaderFooter(TestHeaderContent(wasCalled: callback))
-            list.content.footer = HeaderFooter(TestHeaderContent(wasCalled: callback))
+            list.content.header = TestHeaderContent(wasCalled: callback)
+            list.content.footer = TestHeaderContent(wasCalled: callback)
             
             list("section") { section in
                 
-                section.header = HeaderFooter(TestHeaderContent(wasCalled: callback))
-                section.footer = HeaderFooter(TestHeaderContent(wasCalled: callback))
+                section.header = TestHeaderContent(wasCalled: callback)
+                section.footer = TestHeaderContent(wasCalled: callback)
                 
                 section += TestItemContent(wasCalled: callback)
                 section += TestItemContent(wasCalled: callback)

@@ -130,12 +130,12 @@ extension PresentationState
         }
         
         static func newHeaderFooterState(
-            with new : AnyHeaderFooter?,
+            with new : AnyHeaderFooterConvertible?,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
             if let new = new {
-                return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
             } else {
                 return nil
             }
@@ -143,7 +143,7 @@ extension PresentationState
         
         static func headerFooterState(
             current : AnyPresentationHeaderFooterState?,
-            new : AnyHeaderFooter?,
+            new : AnyHeaderFooterConvertible?,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
@@ -154,14 +154,14 @@ extension PresentationState
                     if isSameType {
                         return current
                     } else {
-                        return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                        return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                     }
                 } else {
                     return nil
                 }
             } else {
                 if let new = new {
-                    return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                    return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                 } else {
                     return nil
                 }

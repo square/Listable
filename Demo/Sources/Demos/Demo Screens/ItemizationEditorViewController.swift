@@ -78,8 +78,8 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(SectionIdentifier.variations) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits())
-                section.footer = HeaderFooter(Footer(text: footerText), sizing: .thatFits())
+                section.header = Header(title: variationsTitle)
+                section.footer = Footer(text: footerText)
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
@@ -99,8 +99,8 @@ final class ItemizationEditorViewController : UIViewController
                     
                     section.layouts.table.columns = .init(count: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(Header(title: set.name), sizing: .thatFits())
-                    section.footer = HeaderFooter(Footer(text: "Choose modifiers"), sizing: .thatFits())
+                    section.header = Header(title: set.name)
+                    section.footer = Footer(text: "Choose modifiers")
                     
                     section += set.all.map { modifier in
                         Item(
@@ -119,7 +119,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(SectionIdentifier.discounts) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits())
+                section.header = Header(title: "Discounts")
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
@@ -135,7 +135,7 @@ final class ItemizationEditorViewController : UIViewController
             list += Section(SectionIdentifier.taxes) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits())
+                section.header = Header(title: "Taxes")
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
