@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.27.1] - 2021-09-28
+
+### Changed
+
+- [Change the default sizing of `Item` and `HeaderFooter`](https://github.com/kyleve/Listable/pull/331) to `.thatFits(.noConstraint)` from requiring the min from the layout. This is more common for self-sizing cells.
+
 # [0.27.0] - 2021-09-15
 
 ### Changed
@@ -466,7 +472,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.27.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.27.1...HEAD
+[0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
 [0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
 [0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
 [0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0

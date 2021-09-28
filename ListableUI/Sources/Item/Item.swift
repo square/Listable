@@ -80,7 +80,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         let defaults = self.content.defaultItemProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
         self.layouts = finalValue(from: layouts, defaults.layouts, .init())
         self.selectionStyle = finalValue(from: selectionStyle, defaults.selectionStyle, .notSelectable)
         self.insertAndRemoveAnimations = finalValue(from: insertAndRemoveAnimations, defaults.insertAndRemoveAnimations, nil)
