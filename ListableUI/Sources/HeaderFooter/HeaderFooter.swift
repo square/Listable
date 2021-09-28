@@ -51,7 +51,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         
         let defaults = self.content.defaultHeaderFooterProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
         self.layouts = finalValue(from: layouts, defaults.layouts, .init())
         
         self.onTap = onTap
