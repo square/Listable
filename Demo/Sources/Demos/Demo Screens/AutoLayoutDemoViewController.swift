@@ -35,11 +35,11 @@ struct AutoLayoutContent : ItemContent, Equatable {
     var header : String
     var detail : String
     
-    var identifier: Identifier<AutoLayoutContent> {
-        .init(header + detail)
+    var identifierValue: String {
+        header + detail
     }
     
-    var defaultItemProperties: DefaultItemProperties<Self> {
+    var defaultItemProperties: DefaultProperties {
         .init(
             sizing: .autolayout()
         )

@@ -16,9 +16,10 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
-    var header : HeaderFooterViewStatePair = .init()
-    var footer : HeaderFooterViewStatePair = .init()
-    var overscrollFooter : HeaderFooterViewStatePair = .init()
+    let containerHeader : HeaderFooterViewStatePair
+    let header : HeaderFooterViewStatePair
+    let footer : HeaderFooterViewStatePair
+    let overscrollFooter : HeaderFooterViewStatePair
     
     var sections : [PresentationState.SectionState]
     
@@ -38,6 +39,12 @@ final class PresentationState
     init()
     {
         self.refreshControl = nil
+        
+        self.containerHeader = .init(state: nil)
+        self.header = .init(state: nil)
+        self.footer = .init(state: nil)
+        self.overscrollFooter = .init(state: nil)
+        
         self.sections = []
         
         self.containsAllItems = true
@@ -49,7 +56,7 @@ final class PresentationState
     }
     
     init(
-        content : Content,
+        forMeasuringOnlyWith content : Content,
         environment : ListEnvironment,
         itemMeasurementCache : ReusableViewCache,
         headerFooterMeasurementCache : ReusableViewCache
@@ -65,29 +72,34 @@ final class PresentationState
             }
         }()
         
-        self.header.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.header,
-            performsContentCallbacks: false
-        )
+        /// Note: We are passing `performsContentCallbacks:false` because this
+        /// initializer is only used for one-pass measurement provided by ``ListView/contentSize(in:for:itemLimit:)``.
         
-        self.footer.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.footer,
+        self.containerHeader = .init(state: SectionState.newHeaderFooterState(
+            with: content.header,
             performsContentCallbacks: false
-        )
+        ))
         
-        self.overscrollFooter.state = SectionState.headerFooterState(
-            with: nil,
-            new: content.overscrollFooter,
+        self.header = .init(state: SectionState.newHeaderFooterState(
+            with: content.header,
             performsContentCallbacks: false
-        )
+        ))
+        
+        self.footer = .init(state: SectionState.newHeaderFooterState(
+            with: content.footer,
+            performsContentCallbacks: false
+        ))
+        
+        self.overscrollFooter = .init(state: SectionState.newHeaderFooterState(
+            with: content.overscrollFooter,
+            performsContentCallbacks: false
+        ))
         
         self.sections = content.sections.map { section in
             SectionState(
                 with: section,
                 dependencies: .init(reorderingDelegate: nil, coordinatorDelegate: nil, environmentProvider: { environment }),
-                updateCallbacks: .init(.immediate),
+                updateCallbacks: .init(.immediate, wantsAnimations: false),
                 performsContentCallbacks: false
             )
         }
@@ -102,7 +114,7 @@ final class PresentationState
     //
     
     var sectionModels : [Section] {
-        return self.sections.map { section in
+        self.sections.map { section in
             var sectionModel = section.model
             
             sectionModel.items = section.items.map {
@@ -136,6 +148,7 @@ final class PresentationState
     func headerFooter(of kind : SupplementaryKind, in section : Int) -> HeaderFooterViewStatePair
     {
         switch kind {
+        case .listContainerHeader: return self.containerHeader
         case .listHeader: return self.header
         case .listFooter: return self.footer
         case .sectionHeader: return self.sections[section].header
@@ -217,7 +230,9 @@ final class PresentationState
     @discardableResult
     func remove(at indexPath : IndexPath) -> AnyPresentationItemState
     {
-        return self.sections[indexPath.section].items.remove(at: indexPath.item)
+        let section = self.sections[indexPath.section]
+        
+        return section.removeItem(at: indexPath.item)
     }
     
     func remove(item itemToRemove : AnyPresentationItemState) -> IndexPath?
@@ -226,14 +241,16 @@ final class PresentationState
             return nil
         }
         
-        self.sections[indexPath.section].removeItem(at: indexPath.item)
+        self.remove(at: indexPath)
         
         return indexPath
     }
     
     func insert(item : AnyPresentationItemState, at indexPath : IndexPath)
     {
-        self.sections[indexPath.section].insert(item: item, at: indexPath.item)
+        let section = self.sections[indexPath.section]
+                
+        section.insert(item: item, at: indexPath.item)
     }
     
     //
@@ -256,6 +273,7 @@ final class PresentationState
     func update(
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         slice : Content.Slice,
+        reason: ApplyReason,
         dependencies: ItemStateDependencies,
         updateCallbacks : UpdateCallbacks,
         loggable : SignpostLoggable?
@@ -270,22 +288,54 @@ final class PresentationState
         
         self.contentIdentifier = slice.content.identifier
         
-        self.header.state = SectionState.headerFooterState(
-            with: self.header.state,
+        let environment = dependencies.environmentProvider()
+        
+        self.containerHeader.update(
+            with: SectionState.headerFooterState(
+                current: self.containerHeader.state,
+                new: slice.content.containerHeader,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
+            new: slice.content.containerHeader,
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
+        )
+        
+        self.header.update(
+            with: SectionState.headerFooterState(
+                current: self.header.state,
+                new: slice.content.header,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.header,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
-        self.footer.state = SectionState.headerFooterState(
-            with: self.footer.state,
+        self.footer.update(
+            with: SectionState.headerFooterState(
+                current: self.footer.state,
+                new: slice.content.footer,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.footer,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
-        self.overscrollFooter.state = SectionState.headerFooterState(
-            with: self.overscrollFooter.state,
+        self.overscrollFooter.update(
+            with: SectionState.headerFooterState(
+                current: self.overscrollFooter.state,
+                new: slice.content.overscrollFooter,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
             new: slice.content.overscrollFooter,
-            performsContentCallbacks: self.performsContentCallbacks
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
         )
         
         self.sections = diff.changes.transform(
@@ -303,16 +353,20 @@ final class PresentationState
             },
             moved: { old, new, changes, section in
                 section.update(
-                    with: old, new:new,
+                    with: old,
+                    new: new,
                     changes: changes,
+                    reason: reason,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
             },
             noChange: { old, new, changes, section in
                 section.update(
-                    with: old, new: new,
+                    with: old,
+                    new: new,
                     changes: changes,
+                    reason: reason,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
@@ -431,12 +485,24 @@ extension PresentationState
     ) -> ListLayoutContent
     {
         ListLayoutContent(
+            containerHeader: {
+                guard let header = self.containerHeader.state else { return nil }
+                
+                return .init(
+                    state: header,
+                    kind: .listContainerHeader,
+                    isPopulated: true,
+                    measurer: { info in
+                        header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                    }
+                )
+            }(),
             header: {
                 guard let header = self.header.state else { return nil }
                 
                 return .init(
+                    state: header,
                     kind: .listHeader,
-                    layouts: header.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -447,8 +513,8 @@ extension PresentationState
                 guard let footer = self.footer.state else { return nil }
                 
                 return .init(
+                    state: footer,
                     kind: .listFooter,
-                    layouts: footer.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -459,8 +525,8 @@ extension PresentationState
                 guard let footer = self.overscrollFooter.state else { return nil }
                 
                 return .init(
+                    state: footer,
                     kind: .overscrollFooter,
-                    layouts: footer.anyModel.layouts,
                     isPopulated: true,
                     measurer: { info in
                         footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -469,13 +535,13 @@ extension PresentationState
             }(),
             sections: self.sections.mapWithIndex { sectionIndex, _, section in
                 .init(
-                    layouts: section.model.layouts,
+                    state: section,
                     header: {
                         guard let header = section.header.state else { return nil }
                         
                         return .init(
+                            state: header,
                             kind: .sectionHeader,
-                            layouts: header.anyModel.layouts,
                             isPopulated: true,
                             measurer: { info in
                                 header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -486,8 +552,8 @@ extension PresentationState
                         guard let footer = section.footer.state else { return nil }
                         
                         return .init(
+                            state: footer,
                             kind: .sectionFooter,
-                            layouts: footer.anyModel.layouts,
                             isPopulated: true,
                             measurer: { info in
                                 footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
@@ -496,9 +562,8 @@ extension PresentationState
                     }(),
                     items: section.items.mapWithIndex { itemIndex, _, item in
                         .init(
-                            delegateProvidedIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
-                            liveIndexPath: IndexPath(item: itemIndex, section: sectionIndex),
-                            layouts: item.anyModel.layouts,
+                            state: item,
+                            indexPath: IndexPath(item: itemIndex, section: sectionIndex),
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
                             measurer: { info in
                                 item.size(for: info, cache: self.itemMeasurementCache, environment: environment)

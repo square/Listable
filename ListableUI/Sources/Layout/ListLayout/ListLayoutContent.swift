@@ -11,7 +11,8 @@ import Foundation
 public final class ListLayoutContent
 {
     var contentSize : CGSize
-        
+    
+    let containerHeader : SupplementaryItemInfo
     let header : SupplementaryItemInfo
     let footer : SupplementaryItemInfo
     
@@ -39,14 +40,16 @@ public final class ListLayoutContent
     {
         self.contentSize = .zero
         
-        self.header = SupplementaryItemInfo.empty(.listHeader)
-        self.footer = SupplementaryItemInfo.empty(.listFooter)
-        self.overscrollFooter = SupplementaryItemInfo.empty(.overscrollFooter)
+        self.containerHeader = .empty(.listContainerHeader)
+        self.header = .empty(.listHeader)
+        self.footer = .empty(.listFooter)
+        self.overscrollFooter = .empty(.overscrollFooter)
         
         self.sections = []
     }
     
     init(
+        containerHeader : SupplementaryItemInfo?,
         header : SupplementaryItemInfo?,
         footer : SupplementaryItemInfo?,
         overscrollFooter : SupplementaryItemInfo?,
@@ -54,6 +57,7 @@ public final class ListLayoutContent
     ) {
         self.contentSize = .zero
         
+        self.containerHeader = containerHeader ?? .empty(.listContainerHeader)
         self.header = header ?? .empty(.listHeader)
         self.footer = footer ?? .empty(.listFooter)
         self.overscrollFooter = overscrollFooter ?? .empty(.overscrollFooter)
@@ -81,6 +85,7 @@ public final class ListLayoutContent
         let section = self.sections[indexPath.section]
         
         switch SupplementaryKind(rawValue: kind)! {
+        case .listContainerHeader: return self.containerHeader.layoutAttributes(with: indexPath)
         case .listHeader: return self.header.layoutAttributes(with: indexPath)
         case .listFooter: return self.footer.layoutAttributes(with: indexPath)
             
@@ -106,6 +111,12 @@ public final class ListLayoutContent
         
         var attributes = [UICollectionViewLayoutAttributes]()
         
+        // Container Header
+        
+        if rect.intersects(self.containerHeader.visibleFrame) {
+            attributes.append(self.containerHeader.layoutAttributes(with: self.containerHeader.kind.indexPath(in: 0)))
+        }
+        
         // List Header
         
         if rect.intersects(self.header.visibleFrame) {
@@ -130,7 +141,7 @@ public final class ListLayoutContent
             
             for item in section.items {
                 if rect.intersects(item.frame) {
-                    attributes.append(item.layoutAttributes(with: item.liveIndexPath))
+                    attributes.append(item.layoutAttributes(with: item.indexPath))
                 }
             }
             
@@ -168,34 +179,47 @@ public final class ListLayoutContent
         }
     }
     
-    func reindexLiveIndexPaths()
+    func move(from : [IndexPath], to : [IndexPath])
     {
-        self.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.liveIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func reindexDelegateProvidedIndexPaths()
-    {
-        self.sections.forEachWithIndex { sectionIndex, _, section in
-            section.items.forEachWithIndex { itemIndex, _, item in
-                item.delegateProvidedIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
-            }
-        }
-    }
-    
-    func move(from : IndexPath, to : IndexPath)
-    {
+        precondition(from.count == to.count, "Counts did not match: \(from.count) vs \(to.count).")
+        
         guard from != to else {
             return
         }
         
-        let info = self.item(at: from)
+        struct Move {
+            let from : IndexPath
+            let to : IndexPath
+            let item : ItemInfo
+        }
         
-        self.sections[from.section].items.remove(at: from.item)
-        self.sections[to.section].items.insert(info, at: to.item)
+        let moves = zip(from, to).map { from, to in
+            Move(from: from, to: to, item: self.item(at: from))
+        }
+        
+        /// 1) Remove the moves backwards, so that the removals do not affect earlier indexes.
+        
+        moves.sorted { $0.from > $1.from }.forEach {
+            self.sections[$0.from.section].items.remove(at: $0.from.item)
+        }
+        
+        /// 2) In the opposite order, now add back the items in their new orders. This is done
+        /// in the opposite order so index paths remain stable.
+        
+        moves.sorted { $0.to < $1.to }.forEach {
+            self.sections[$0.to.section].items.insert($0.item, at: $0.to.item)
+        }
+        
+        self.reindexIndexPaths()
+    }
+    
+    private func reindexIndexPaths()
+    {
+        self.sections.forEachWithIndex { sectionIndex, _, section in
+            section.items.forEachWithIndex { itemIndex, _, item in
+                item.indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+            }
+        }
     }
     
     //
@@ -237,12 +261,16 @@ public extension ListLayoutContent
 {
     final class SectionInfo
     {
-        let layouts : SectionLayouts
+        let state : PresentationState.SectionState
         
         let header : SupplementaryItemInfo
         let footer : SupplementaryItemInfo
                 
         var items : [ItemInfo]
+        
+        var layouts : SectionLayouts {
+            self.state.model.layouts
+        }
         
         var all : [ListLayoutContentItem] {
             var all : [ListLayoutContentItem] = []
@@ -263,14 +291,14 @@ public extension ListLayoutContent
         private(set) var contentsFrame : CGRect
                 
         init(
-            layouts : SectionLayouts,
+            state : PresentationState.SectionState,
             header : SupplementaryItemInfo?,
             footer : SupplementaryItemInfo?,
             items : [ItemInfo]
         ) {
-            self.contentsFrame = .zero
+            self.state = state
             
-            self.layouts = layouts
+            self.contentsFrame = .zero
             
             self.header = header ?? .empty(.sectionHeader)
             self.footer = footer ?? .empty(.sectionFooter)
@@ -301,14 +329,15 @@ public extension ListLayoutContent
         static func empty(_ kind : SupplementaryKind) -> SupplementaryItemInfo
         {
             SupplementaryItemInfo(
+                state: nil,
                 kind: kind,
-                layouts: .init(),
                 isPopulated: false, measurer: { _ in .zero }
             )
         }
         
+        let state : AnyPresentationHeaderFooterState?
+        
         let kind : SupplementaryKind
-        let layouts : HeaderFooterLayouts
         let measurer : (Sizing.MeasureInfo) -> CGSize
                 
         let isPopulated : Bool
@@ -322,6 +351,10 @@ public extension ListLayoutContent
         var pinnedY : CGFloat? = nil
         
         var zIndex : Int = 0
+        
+        var layouts : HeaderFooterLayouts {
+            self.state?.anyModel.layouts ?? .init()
+        }
         
         var defaultFrame : CGRect {
             CGRect(
@@ -341,14 +374,13 @@ public extension ListLayoutContent
         }
         
         init(
+            state : AnyPresentationHeaderFooterState?,
             kind : SupplementaryKind,
-            layouts : HeaderFooterLayouts,
             isPopulated: Bool,
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
+            self.state = state
             self.kind = kind
-            
-            self.layouts = layouts
             self.isPopulated = isPopulated
             self.measurer = measurer
         }
@@ -367,11 +399,10 @@ public extension ListLayoutContent
 
     final class ItemInfo : ListLayoutContentItem
     {
-        var delegateProvidedIndexPath : IndexPath
-        var liveIndexPath : IndexPath
+        let state : AnyPresentationItemState
         
-        let layouts : ItemLayouts
-        
+        var indexPath : IndexPath
+                
         let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
         let measurer : (Sizing.MeasureInfo) -> CGSize
         
@@ -384,6 +415,10 @@ public extension ListLayoutContent
         
         var zIndex : Int = 0
         
+        var layouts : ItemLayouts {
+            self.state.anyModel.layouts
+        }
+        
         var frame : CGRect {
             CGRect(
                 origin: CGPoint(x: self.x, y: self.y),
@@ -392,19 +427,14 @@ public extension ListLayoutContent
         }
         
         init(
-            delegateProvidedIndexPath : IndexPath,
-            liveIndexPath : IndexPath,
-            layouts : ItemLayouts,
+            state : AnyPresentationItemState,
+            indexPath : IndexPath,
             insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
-            self.delegateProvidedIndexPath = delegateProvidedIndexPath
-            self.liveIndexPath = liveIndexPath
-                        
-            self.layouts = layouts
-            
+            self.state = state
+            self.indexPath = indexPath
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
-            
             self.measurer = measurer
         }
         

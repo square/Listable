@@ -27,7 +27,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 
     let background : Content.BackgroundView
     let selectedBackground : Content.SelectedBackgroundView
-
+    
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
@@ -38,7 +38,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.selectedBackground = Content.createReusableSelectedBackgroundView(frame: bounds)
         
         super.init(frame: frame)
-                
+            
         self.backgroundView = self.background
         self.selectedBackgroundView = self.selectedBackground
         
@@ -57,7 +57,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {
-        // Note – Please keep this comment in sync with the comment in SupplementaryContainerView.
+        /// **Note** – Please keep this comment in sync with the comment in SupplementaryContainerView.
         
         /**
          Listable already properly sizes each cell. We do not use self-sizing cells.

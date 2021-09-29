@@ -15,13 +15,14 @@ import ListableUI
 /// you instead provide Blueprint elements, and `Listable` handles mapping this to an underlying `BlueprintView`.
 ///
 /// A `BlueprintItemContent` that displays text might look like this:
-/// ```
+/// ```swift
 /// struct MyItemContent : BlueprintItemContent, Equatable
 /// {
 ///     var text : String
+///     var id : UUID
 ///
-///     var identifier: Identifier<MyItemContent> {
-///         return .init(self.text)
+///     var identifierValue: String {
+///         self.id
 ///     }
 ///
 ///     func element(with info : ApplyItemContentInfo) -> Element

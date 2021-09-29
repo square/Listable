@@ -42,8 +42,8 @@ final class PagedViewController : UIViewController
 
 fileprivate struct DemoElement : BlueprintItemContent, Equatable
 {
-    var identifier: Identifier<DemoElement> {
-        .init(self.color)
+    var identifierValue: UIColor {
+        self.color
     }
     
     var color : UIColor

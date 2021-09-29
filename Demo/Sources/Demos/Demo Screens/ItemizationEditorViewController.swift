@@ -186,9 +186,12 @@ final class ItemizationEditorViewController : UIViewController
                 listFooterHeight: 100.0
             )
             
-            $0.layout = .init(
+            $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                width: .atMost(600.0),
+                width: .atMost(600.0)
+            )
+            
+            $0.layout = .init(
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 0.0,
@@ -259,8 +262,8 @@ struct ChoiceItem : BlueprintItemContent, Equatable
         return box
     }
     
-    var identifier: Identifier<ChoiceItem> {
-        return .init(self.title)
+    var identifierValue : String {
+        self.title
     }
 }
 
@@ -283,8 +286,8 @@ struct ToggleItem : BlueprintItemContent
         return self.content == other.content
     }
     
-    var identifier: Identifier<ToggleItem> {
-        return .init(self.content.title)
+    var identifierValue: String {
+        self.content.title
     }
     
     func element(with info: ApplyItemContentInfo) -> Element

@@ -25,8 +25,10 @@ final class SpacingCustomizationViewController : UIViewController
         self.listView.configure { list in
             
             list.layout = .table {
+                
+                $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0))
+                
                 $0.layout.set {
-                    $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
                     $0.itemSpacing = 20.0
                     $0.interSectionSpacingWithFooter = 20.0
                     $0.interSectionSpacingWithNoFooter = 20.0
@@ -80,8 +82,8 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
     // MARK: BlueprintItemElement
     //
 
-    var identifier: Identifier<CardElement> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
 
     func element(with info : ApplyItemContentInfo) -> Element

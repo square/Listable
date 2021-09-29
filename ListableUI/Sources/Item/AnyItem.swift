@@ -10,7 +10,7 @@ import Foundation
 
 public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
 {
-    var identifier : AnyIdentifier { get }
+    var anyIdentifier : AnyIdentifier { get }
     
     var anyContent : Any { get }
     
@@ -22,7 +22,9 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
     var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }
     var swipeActions : SwipeActionsConfiguration? { get set }
     
-    var reordering : Reordering? { get set }
+    var reordering : ItemReordering? { get set }
+    
+    var reappliesToVisibleView: ReappliesToVisibleView { get }
 }
 
 

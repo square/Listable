@@ -14,7 +14,7 @@ class UpdateCallbacksTests : XCTestCase
     func test_add_and_perform() {
         
         self.testcase("shouldPerform is false") {
-            let callbacks = UpdateCallbacks(.immediate)
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
             
             var callCount : Int = 0
             
@@ -27,7 +27,7 @@ class UpdateCallbacksTests : XCTestCase
         }
         
         self.testcase("immediate") {
-            let callbacks = UpdateCallbacks(.immediate)
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
             
             var callCount : Int = 0
             
@@ -45,7 +45,7 @@ class UpdateCallbacksTests : XCTestCase
         }
         
         self.testcase("queued") {
-            let callbacks = UpdateCallbacks(.queue)
+            let callbacks = UpdateCallbacks(.queue, wantsAnimations: false)
             
             var callCount : Int = 0
             
@@ -60,6 +60,25 @@ class UpdateCallbacksTests : XCTestCase
             
             XCTAssertEqual(callCount, 1)
             XCTAssertEqual(callbacks.calls.count, 0)
+        }
+    }
+    
+    func test_performAnimation() {
+        
+        self.testcase("not animated") {
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: false)
+            
+            callbacks.performAnimation {
+                XCTAssertEqual(UIView.inheritedAnimationDuration, 0.0)
+            }
+        }
+        
+        self.testcase("animated") {
+            let callbacks = UpdateCallbacks(.immediate, wantsAnimations: true)
+            
+            callbacks.performAnimation {
+                XCTAssertEqual(UIView.inheritedAnimationDuration, 0.2)
+            }
         }
     }
 }

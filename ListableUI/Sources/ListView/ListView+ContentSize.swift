@@ -1,6 +1,6 @@
 //
-//  ListSizing.swift
-//  Listable
+//  ListView+ContentSize.swift
+//  ListableUI
 //
 //  Created by Kyle Van Essen on 9/21/20.
 //
@@ -50,7 +50,7 @@ extension ListView
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
         let presentationState = PresentationState(
-            content: {
+            forMeasuringOnlyWith: {
                 if let limit = itemLimit {
                     return properties.content.sliceTo(indexPath: IndexPath(item: 0, section: 0), plus: limit).content
                 } else {
@@ -79,7 +79,11 @@ extension ListView
 
         layout.layout(
             delegate: nil,
-            in: .init(viewBounds: CGRect(origin: .zero, size: fittingSize))
+            in: .init(
+                viewBounds: CGRect(origin: .zero, size: fittingSize),
+                safeAreaInsets: .zero,
+                environment: properties.environment
+            )
         )
         
         /// 3) Constrain the measurement to the `fittingSize`.

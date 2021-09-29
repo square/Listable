@@ -36,7 +36,12 @@ protocol AnyPresentationItemState : AnyObject
     
     func applyToVisibleCell(with environment : ListEnvironment)
         
-    func setNew(item anyItem : AnyItem, reason : PresentationState.ItemUpdateReason, updateCallbacks : UpdateCallbacks)
+    func set(
+        new : AnyItem,
+        reason : PresentationState.ItemUpdateReason,
+        updateCallbacks : UpdateCallbacks,
+        environment : ListEnvironment
+    )
     
     func willDisplay(cell : UICollectionViewCell, in collectionView : UICollectionView, for indexPath : IndexPath)
     func didEndDisplay()
@@ -54,7 +59,13 @@ protocol AnyPresentationItemState : AnyObject
         environment : ListEnvironment
     ) -> CGSize
     
-    func moved(with result : Reordering.Result)
+    func beginReorder(from originalIndexPath : IndexPath, with environment: ListEnvironment)
+    func endReorder(with environment: ListEnvironment, result : ReorderingActions.Result)
+    func performDidReorder(with result : ItemReordering.Result) -> Bool
+    
+    var isReordering : Bool { get }
+    
+    var activeReorderEventInfo : PresentationState.ActiveReorderEventInfo? { get }
 }
 
 
@@ -81,6 +92,10 @@ extension PresentationState
         case updateFromList
         case updateFromItemCoordinator
         case noChange
+    }
+    
+    public struct ActiveReorderEventInfo {
+        var originalIndexPath : IndexPath
     }
     
     final class ItemState<Content:ItemContent> : AnyPresentationItemState
@@ -160,10 +175,16 @@ extension PresentationState
                     return
                 }
                 
-                self.setNew(item: new, reason: .updateFromItemCoordinator, updateCallbacks: UpdateCallbacks(.immediate))
+                let environment = dependencies.environmentProvider()
+                
+                self.set(
+                    new: new,
+                    reason: .updateFromItemCoordinator,
+                    updateCallbacks: UpdateCallbacks(.immediate, wantsAnimations: true),
+                    environment: environment
+                )
                 
                 animation.perform {
-                    self.applyToVisibleCell(with: dependencies.environmentProvider())
                     delegate.coordinatorUpdated(for: self.anyModel)
                 }
             }
@@ -235,7 +256,7 @@ extension PresentationState
             
             // Theme cell & apply content.
             
-            let itemState = ListableUI.ItemState(cell: cell)
+            let itemState = ListableUI.ItemState(cell: cell, isReordering: false)
             
             self.applyTo(
                 cell: cell,
@@ -258,7 +279,8 @@ extension PresentationState
             let applyInfo = ApplyItemContentInfo(
                 state: itemState,
                 position: self.itemPosition,
-                reordering: self.reorderingActions,
+                reorderingActions: self.reorderingActions,
+                isReorderable: self.model.reordering != nil,
                 environment: environment
             )
             
@@ -286,16 +308,21 @@ extension PresentationState
             
             self.applyTo(
                 cell: cell,
-                itemState: .init(cell: cell),
+                itemState: .init(cell: cell, isReordering: self.isReordering),
                 reason: .wasUpdated,
                 environment: environment
             )
         }
         
-        func setNew(item anyItem: AnyItem, reason: ItemUpdateReason, updateCallbacks : UpdateCallbacks)
+        func set(
+            new : AnyItem,
+            reason : PresentationState.ItemUpdateReason,
+            updateCallbacks : UpdateCallbacks,
+            environment : ListEnvironment
+        )
         {
             let old = self.model
-            let new = anyItem as! Item<Content>
+            let new = new as! Item<Content>
             
             self.storage.model = new
             
@@ -327,6 +354,17 @@ extension PresentationState
 
             if reason != .noChange {
                 self.resetCachedSizes()
+            }
+            
+            let wantsReapplication = self.model.reappliesToVisibleView.shouldReapply(
+                comparing: old.reappliesToVisibleView,
+                isEquivalent: reason == .noChange
+            )
+            
+            if wantsReapplication {
+                updateCallbacks.performAnimation {
+                    self.applyToVisibleCell(with: environment)
+                }
             }
         }
         
@@ -441,12 +479,12 @@ extension PresentationState
                     create: {
                         return ItemCell<Content>()
                 }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false)
+                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
                     
                     self.applyTo(
                         cell: cell,
                         itemState: itemState,
-                        reason: .willDisplay,
+                        reason: .measurement,
                         environment: environment
                     )
                     
@@ -461,10 +499,56 @@ extension PresentationState
             }
         }
         
-        func moved(with result : Reordering.Result)
-        {
-            self.model.reordering?.didReorder(result)
+        /// Called when the reordering event begins, to update the current visible cell
+        /// With any reorder-specific appearance options (like a drop shadow).
+        func beginReorder(from originalIndexPath : IndexPath, with environment: ListEnvironment) {
+            
+            if self.isReordering {
+                return
+            }
+            
+            self.activeReorderEventInfo = .init(
+                originalIndexPath: originalIndexPath
+            )
+            
+            UIView.animate(withDuration: 0.15) {
+                self.applyToVisibleCell(with: environment)
+            }
         }
+        
+        /// Called when the reordering event finishes or is cancelled, to update the
+        /// current visible cell to remove any reorder-specific appearance options (like a drop shadow).
+        func endReorder(with environment: ListEnvironment, result : ReorderingActions.Result) {
+            
+            guard self.isReordering else {
+                return
+            }
+            
+            self.activeReorderEventInfo = nil
+            
+            UIView.animate(withDuration: 0.15) {
+                self.applyToVisibleCell(with: environment)
+            }
+        }
+        
+        /// Invoked when a reorder completes successfully to notify
+        /// the consumer that the re-order event occurred.
+        func performDidReorder(with result : ItemReordering.Result) -> Bool
+        {
+            guard let callback = self.model.onWasReordered else {
+                return false
+            }
+            
+            callback(self.model, result)
+            
+            return true
+        }
+        
+        var isReordering : Bool {
+            self.activeReorderEventInfo != nil
+        }
+        
+        private(set) var activeReorderEventInfo : ActiveReorderEventInfo? = nil
     }
 }
 

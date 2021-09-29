@@ -168,7 +168,7 @@ struct Underflow : Equatable
 
 ### Self-Sizing Cells
 
-Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
+Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `List.Measurement` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
 
 ```swift
 public enum Sizing : Equatable
@@ -213,8 +213,8 @@ struct DemoItem : BlueprintItemContent, Equatable
     
     // ItemContent
     
-    var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+    var identifierValue: String {
+        return self.text
     }
     
     // BlueprintItemContent
@@ -288,7 +288,7 @@ An `Item` is what you add to a section to represent a row in a list. It contains
 ```swift
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : AnyIdentifier
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -299,7 +299,7 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var swipeActions : SwipeActions?
     
-    public var reordering : Reordering?
+    public var reordering : ItemReordering?
         
     public typealias OnSelect = (Content) -> ()
     public var onSelect : OnSelect?
@@ -344,7 +344,9 @@ To prepare the views for display, the `apply(to:for:with:)` method is called, wh
 ```swift
 public protocol ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierValue : Hashable
+
+    var identifierValue : IdentifierValue { get }
 
     func apply(
         to views : ItemContentViews<Self>,
@@ -586,7 +588,9 @@ Unless you are supporting highlighting and selection of your `ItemContent`, you 
 ```swift
 public protocol BlueprintItemContent : ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierValue : Hashable
+
+    var identifierValue : IdentifierValue { get }
 
     func wasMoved(comparedTo other : Self) -> Bool
     func isEquivalent(to other : Self) -> Bool
@@ -608,8 +612,8 @@ struct MyPerson : BlueprintItemContent, Equatable
     var name : String
     var phoneNumber : String
 
-    var identifier : Identifier<Self> {
-        .init(name)
+    var identifierValue : String {
+        self.name
     }
     
     func element(with info : ApplyItemContentInfo) -> Element {

@@ -110,6 +110,9 @@ public struct TableAppearance : ListLayoutAppearance
     
     public var stickySectionHeaders : Bool
     
+    /// The bounds of the content of the list, which can be optionally constrained.
+    public var bounds : ListContentBounds?
+    
     /// Default sizing attributes for content in the list.
     public var sizing : Sizing
     
@@ -123,10 +126,12 @@ public struct TableAppearance : ListLayoutAppearance
     /// Creates a new `TableAppearance` object.
     public init(
         stickySectionHeaders : Bool = true,
-        sizing : Sizing = Sizing(),
-        layout : Layout = Layout()
+        bounds : ListContentBounds? = nil,
+        sizing : Sizing = .init(),
+        layout : Layout = .init()
     ) {
         self.stickySectionHeaders = stickySectionHeaders
+        self.bounds = bounds
         self.sizing = sizing
         self.layout = layout
     }
@@ -285,11 +290,6 @@ extension TableAppearance
     /// Layout options for the list.
     public struct Layout : Equatable
     {
-        /// The padding to place around the outside of the content of the list.
-        public var padding : UIEdgeInsets
-        /// The width of the content of the list, which can be optionally constrained.
-        public var width : WidthConstraint
-        
         /// The spacing between the list header and the first section.
         /// Not applied if there is no list header.
         public var headerToFirstSectionSpacing : CGFloat
@@ -314,8 +314,6 @@ extension TableAppearance
                 
         /// Creates a new `Layout` with the provided options.
         public init(
-            padding : UIEdgeInsets = .zero,
-            width : WidthConstraint = .noConstraint,
             headerToFirstSectionSpacing : CGFloat = 0.0,
             interSectionSpacingWithNoFooter : CGFloat = 0.0,
             interSectionSpacingWithFooter : CGFloat = 0.0,
@@ -325,9 +323,6 @@ extension TableAppearance
             lastSectionToFooterSpacing : CGFloat = 0.0
         )
         {
-            self.padding = padding
-            self.width = width
-            
             self.headerToFirstSectionSpacing = headerToFirstSectionSpacing
             
             self.interSectionSpacingWithNoFooter = interSectionSpacingWithNoFooter
@@ -398,7 +393,7 @@ final class TableListLayout : ListLayout
     typealias LayoutAppearance = TableAppearance
     
     static var defaults: ListLayoutDefaults {
-        .init(itemInsertAndRemoveAnimations: .top)
+        .init(itemInsertAndRemoveAnimations: .fade)
     }
     
     var layoutAppearance: TableAppearance
@@ -444,7 +439,7 @@ final class TableListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView : UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     {
         
     }
@@ -453,20 +448,28 @@ final class TableListLayout : ListLayout
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
     ) {
+        let boundsContext = ListContentBounds.Context(
+            viewSize: context.viewBounds.size,
+            direction: self.direction
+        )
+        
+        let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
+        
         let layout = self.layoutAppearance.layout
+        
         let sizing = self.layoutAppearance.sizing
         
         let viewSize = context.viewBounds.size
         let viewWidth = context.viewBounds.width
         
         let rootWidth = CustomWidth.custom(CustomWidth.Custom(
-            padding: HorizontalPadding(left: layout.padding.left, right: layout.padding.right),
-            width: layout.width,
+            padding: HorizontalPadding(left: bounds.padding.left, right: bounds.padding.right),
+            width: bounds.width,
             alignment: .center
         ))
 
         let defaultWidth = rootWidth.position(with: viewSize, defaultWidth: viewSize.width).width
-                
+        
         //
         // Item Positioning
         //
@@ -486,19 +489,45 @@ final class TableListLayout : ListLayout
         var lastContentMaxY : CGFloat = 0.0
         
         //
+        // Container Header
+        //
+        
+        performLayout(for: self.content.containerHeader) { header in
+            let hasContainerHeader = header.isPopulated
+            let headerWidth = header.layouts.table.width.merge(with: rootWidth)
+            let position = headerWidth.position(with: viewSize, defaultWidth: defaultWidth)
+            
+            let measureInfo = Sizing.MeasureInfo(
+                sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
+                defaultSize: CGSize(width: 0.0, height: sizing.listHeaderHeight),
+                direction: .vertical
+            )
+            
+            let height = header.measurer(measureInfo).height
+            
+            header.x = position.origin
+            header.size = CGSize(width: position.width, height: height)
+            header.y = lastContentMaxY
+            
+            if hasContainerHeader {
+                lastContentMaxY = header.defaultFrame.maxY
+            }
+        }
+        
+        //
         // Header
         //
         
         switch direction {
         case .vertical:
-            lastContentMaxY += layout.padding.top
+            lastContentMaxY += bounds.padding.top
             
         case .horizontal:
-            lastContentMaxY += layout.padding.left
+            lastContentMaxY += bounds.padding.left
         }
         
         performLayout(for: self.content.header) { header in
-            let hasListHeader = self.content.header.isPopulated
+            let hasListHeader = header.isPopulated
             let headerWidth = header.layouts.table.width.merge(with: rootWidth)
             let position = headerWidth.position(with: viewSize, defaultWidth: defaultWidth)
             
@@ -713,8 +742,8 @@ final class TableListLayout : ListLayout
         }
         
         switch direction {
-        case .vertical: lastContentMaxY += layout.padding.bottom
-        case .horizontal: lastContentMaxY += layout.padding.right
+        case .vertical: lastContentMaxY += bounds.padding.bottom
+        case .horizontal: lastContentMaxY += bounds.padding.right
         }
         
         //

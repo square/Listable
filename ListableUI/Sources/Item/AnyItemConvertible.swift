@@ -8,6 +8,6 @@
 
 public protocol AnyItemConvertible {
     
-    func asItem() -> AnyItem
+    func toItem() -> AnyItem
 }
 

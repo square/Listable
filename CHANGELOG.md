@@ -12,6 +12,112 @@
 
 # Past Releases
 
+# [0.27.1] - 2021-09-28
+
+### Changed
+
+- [Change the default sizing of `Item` and `HeaderFooter`](https://github.com/kyleve/Listable/pull/331) to `.thatFits(.noConstraint)` from requiring the min from the layout. This is more common for self-sizing cells.
+
+# [0.27.0] - 2021-09-15
+
+### Changed
+
+- [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
+
+# [0.26.1] - 2021-09-03
+
+### Fixed
+
+- Includes fix for header reuse from 0.25.1.
+
+# [0.26.0] - 2021-08-14
+
+### Added
+
+- [You can now provide default list bounds for participating layouts](https://github.com/kyleve/Listable/pull/317) via the `environment.listContentBounds` property. This allows your containing screen, eg, to provide default bounds to ensure content lays out correctly. The `table` and `grid` layout types have been updated to read these content bounds.
+
+### Removed
+
+- [iOS 11 was deprecated](https://github.com/kyleve/Listable/pull/317).
+
+### Changed
+
+- [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
+
+# [0.25.0] - 2021-08-12
+
+### Added
+
+- [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
+
+# [0.24.0] - 2021-08-07
+
+### Added
+
+- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied. 
+
+# [0.23.2] - 2021-08-05
+
+### Fixed
+
+- [Ensure that scroll actions work](https://github.com/kyleve/Listable/pull/311) with horizontal lists.
+
+# [0.23.1] - 2021-07-26
+
+### Fixed
+
+- [Fix two reordering crashes](https://github.com/kyleve/Listable/pull/308), which could happen when 1) a reorder signal resulted in an immediate deletion at the end of the list, and 2) a crash during scrolling during a reorder event.
+
+# [0.23.0] - 2021-06-29
+
+### Added
+
+- [Introduce `defaultHeaderFooterProperties` on `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/304), to allow specifying default values for a `HeaderFooter` when values are not passed to the initializer.
+
+# [0.22.2] - 2021-06-23
+
+### Fixed
+
+- Fixed `identifier(for:)` on `Section` to match name of `identifier(with:)` on `ItemContent`.
+
+# [0.22.1] - 2021-06-22
+
+### Fixed
+
+- Fixed `Identifiable` conformance for `ItemContent`.
+
+# [0.22.0] - 2021-06-22
+
+### Misc
+
+- Listable now depends on Blueprint `0.27.0` which has major breaking changes. There are no public changes to Listable, except public interfaces determined by Blueprint protocol conformance.
+
+# [0.21.0] - 2021-06-17
+
+### Fixed
+
+- [When applying an update to visible views during content updates, the update now occurs within an animation block](https://github.com/kyleve/Listable/pull/292). This allows your view to inherit implicit animations more easily.
+
+### Added
+
+- [Reordering between multiple sections is now supported](https://github.com/kyleve/Listable/pull/292).
+- [Introduced type safe access to `Section` content following reorder events](https://github.com/kyleve/Listable/pull/292). See `Section.filtered`.
+- [`ListStateObserver.onItemReordered` was added](https://github.com/kyleve/Listable/pull/292) to observe reorder events at a list-wide level.
+- [`ListLayout` was extended](https://github.com/kyleve/Listable/pull/292) to allow customization of in-progress moves. Note that `ListLayout` is not yet public.
+
+### Changed
+
+- [`Reordering` has been renamed to `ItemReordering`, and a new `SectionReordering` has been introduced](https://github.com/kyleve/Listable/pull/292). This allows finer-grained control over validating reorder events at both the item level and section level.
+- [`ListReorderGesture` and `ItemReordering.GestureRecognizer` have been heavily refactored](https://github.com/kyleve/Listable/pull/292) to reduce visibility of internal state concerns.
+- [`Item.identifier` has been renamed to `Item.anyIdentifier`](https://github.com/kyleve/Listable/pull/292). The new `Item.identifier` property is now a fully type safe identifier.
+- [`ReorderingActions` was refactored](https://github.com/kyleve/Listable/pull/292) to expose less public state and ease use in UIView-backed list elements.
+- [`Identifier<Represented>` is now `Identifier<Represented, Value>`; eg `Identifier<MyContent, UUID>`](https://github.com/kyleve/Listable/pull/292). This is done to support reacting to reordering events in a more type safe manner, and to make `Identifier` creation more type safe. This is a large breaking change.
+- [Changed how `identifier`s for `ItemContent` are represented](https://github.com/kyleve/Listable/pull/292). `ItemContent` now returns a an identifier of a specific `IdentifierValue` (eg, `String`, `UUID`, etc), which is then assembled into an `Identifier` by the containing item. Additional APIs have been added for creating `Identifier`s in a more type safe manner. This is a large breaking change.
+
+### Misc
+
+- [The Blueprint-based shortcuts to create inline items and header footers have been renamed to `ElementItem` and `ElementHeaderFooter`](https://github.com/kyleve/Listable/pull/292).
+
 # [0.20.2] - 2021-04-19
 
 ### Fixed
@@ -28,7 +134,7 @@
 
 ### Changed
 
-- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `ListSizing` also moved to `BlueprintUILists`, as that is the only place it was used. 
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used. 
 
 # [0.19.0] - 2021-03-22
 
@@ -59,7 +165,7 @@ Example usage:
 
 ```
 listActions.scrolling.scrollToSection(
-  with: Identifier<Section>(id),
+  with: MyItem.identifier(with: id),
   sectionPosition: .top,
   scrollPosition: ScrollPosition(position: .centered)
 )
@@ -366,7 +472,21 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.20.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.27.1...HEAD
+[0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
+[0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
+[0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
+[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.25.1
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
+[0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
+[0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
+[0.23.1]: https://github.com/kyleve/Listable/compare/0.23.0...0.23.1
+[0.23.0]: https://github.com/kyleve/Listable/compare/0.22.2...0.23.0
+[0.22.2]: https://github.com/kyleve/Listable/compare/0.22.1...0.22.2
+[0.22.1]: https://github.com/kyleve/Listable/compare/0.22.0...0.22.1
+[0.22.0]: https://github.com/kyleve/Listable/compare/0.21.0...0.22.0
+[0.21.0]: https://github.com/kyleve/Listable/compare/0.20.2...0.21.0
 [0.20.2]: https://github.com/kyleve/Listable/compare/0.20.1...0.20.2
 [0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/kyleve/Listable/compare/0.19.0...0.20.0

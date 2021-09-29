@@ -22,9 +22,13 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         self.title = "Dictionary"
         
         self.listView.layout = .table {
+            
+            $0.bounds = .init(
+                padding: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0),
+                width: .atMost(600.0)
+            )
+            
             $0.layout.set {
-                $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0)
-                $0.width = .atMost(600.0)
                 $0.sectionHeaderBottomSpacing = 10.0
                 $0.itemSpacing = 7.0
                 $0.interSectionSpacingWithNoFooter = 10.0
@@ -46,7 +50,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     @objc func tappedScrollDown()
     {
         self.listView.scrollTo(
-            item: Identifier<WordRow>("clam"),
+            item: WordRow.identifier(with: "clam"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
             animation: .default
         )
@@ -55,7 +59,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     @objc func tappedScrollUp()
     {
         self.listView.scrollTo(
-            item: Identifier<WordRow>("aard-vark"),
+            item: WordRow.identifier(with: "aard-vark"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
             animation: .default
         )
@@ -147,8 +151,8 @@ fileprivate struct SearchBarElement : ItemContent
     
     // MARK: ItemElement
         
-    var identifier: Identifier<SearchBarElement> {
-        return .init("search")
+    var identifierValue: String {
+        "searchbar"
     }
     
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
@@ -192,8 +196,8 @@ fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable
         )
     }
     
-    var identifier: Identifier<SectionHeader> {
-        return .init(self.title)
+    var identifier: String {
+        self.title
     }
 }
 
@@ -225,8 +229,8 @@ fileprivate struct WordRow : BlueprintItemContent, Equatable
         )
     }
     
-    var identifier: Identifier<WordRow> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
 }
 

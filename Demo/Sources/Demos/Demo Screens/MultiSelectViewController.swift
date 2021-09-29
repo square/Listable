@@ -17,8 +17,9 @@ final class MultiSelectViewController : ListViewController
         list.behavior.selectionMode = .multiple
         
         list.layout = .table {
+            $0.bounds = .init(padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
+            
             $0.layout.itemSpacing = 10.0
-            $0.layout.padding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         }
         
         list.stateObserver.onSelectionChanged { change in
@@ -41,8 +42,8 @@ fileprivate struct SelectableRow : BlueprintItemContent, Equatable {
     
     var text : String
     
-    var identifier: Identifier<SelectableRow> {
-        .init(self.text)
+    var identifierValue: String {
+        self.text
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {

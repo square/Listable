@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
-    
+
     <script src="js/lunr.min.js" defer></script>
     <script src="js/typeahead.jquery.js" defer></script>
     <script src="js/jazzy.search.js" defer></script>
@@ -22,22 +22,22 @@
         <a class="header-link" href="index.html">
           BlueprintLists
         </a>
-         (93% documented)
+         (91% documented)
       </p>
-    
+
       <p class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </p>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="img/gh.png"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -50,24 +50,27 @@
       <nav class="navigation">
         <ul class="nav-groups">
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Enums/ListSizing.html">ListSizing</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Extensions/Element.html">Element</a>
               </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/HeaderFooter.html">HeaderFooter</a>
+                <a class="nav-group-task-link" href="Functions.html#/s:16BlueprintUILists19ElementHeaderFooter_7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_0aL00C0_pxcAnO_pSgxcAPxcyAMzXEtSQRzlF">ElementHeaderFooter(_:element:background:pressedBackground:configure:)</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/Item.html">Item</a>
+                <a class="nav-group-task-link" href="Functions.html#/s:16BlueprintUILists19ElementHeaderFooter_12isEquivalent7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_Sbx_xtc0aN00C0_pxcAoP_pSgxcAQxcyANzXEtlF">ElementHeaderFooter(_:isEquivalent:element:background:pressedBackground:configure:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:16BlueprintUILists11ElementItem_2id7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_G0aL00C0_px_AH05ApplydM4InfoVtcArS_pSgx_AUtcAVx_AUtcyANzXEtSQRzSHR_r0_lF">ElementItem(_:id:element:background:selectedBackground:configure:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:16BlueprintUILists11ElementItem_2id12isEquivalent7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_GSbx_xtc0aN00C0_px_AI05ApplydO4InfoVtcAsT_pSgx_AVtcAWx_AVtcyAOzXEtSHR_r0_lF">ElementItem(_:id:isEquivalent:element:background:selectedBackground:configure:)</a>
               </li>
             </ul>
           </li>
@@ -86,13 +89,16 @@
             <a class="nav-group-name-link" href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/BlueprintHeaderFooterContentWrapper.html">BlueprintHeaderFooterContentWrapper</a>
+                <a class="nav-group-task-link" href="Structs/ElementHeaderFooterContent.html">ElementHeaderFooterContent</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Structs/BlueprintItemContentWrapper.html">BlueprintItemContentWrapper</a>
+                <a class="nav-group-task-link" href="Structs/ElementItemContent.html">ElementItemContent</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/List.html">List</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/List/Measurement.html">– Measurement</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ListReorderGesture.html">ListReorderGesture</a>
@@ -116,7 +122,7 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            
+
             <p><strong>Note</strong> – Listable is still experimental :see_no_evil:. While it is shipping in <a href="https://squareup.com/us/en/point-of-sale">Square Point of Sale</a> in several places, we&rsquo;re still actively iterating on the API, and backfilling comprehensive tests. As such, expect things to break and change in the coming months.</p>
 <h1 id='listable' class='heading'>Listable</h1>
 
@@ -144,7 +150,7 @@
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Another Header"</span><span class="p">))</span>
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"The last row."</span><span class="p">)</span>
-    <span class="p">}</span>    
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 <h2 id='features' class='heading'>Features</h2>
@@ -164,7 +170,7 @@
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"This Is A Header"</span><span class="p">))</span>
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And here is a row"</span><span class="p">)</span>
-    <span class="p">}</span> 
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 
@@ -175,7 +181,7 @@
 
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And here is a row"</span><span class="p">)</span>
         <span class="n">section</span> <span class="o">+=</span> <span class="kt">DemoItem</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"Another row!"</span><span class="p">)</span>
-    <span class="p">}</span> 
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 
@@ -261,7 +267,7 @@
 </code></pre>
 <h3 id='self-sizing-cells' class='heading'>Self-Sizing Cells</h3>
 
-<p>Another common pain-point for standard <code>UITableViews</code> or <code>UICollectionViews</code> is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each <code>Item</code> has a <code>sizing</code> property, which can be set to any of the following values. <code>.default</code> pulls the default sizing of the item from the <code><a href="Enums/ListSizing.html">ListSizing</a></code> mentioned above, where as the <code>thatFits</code> and <code>autolayout</code> values size the item based on <code>sizeThatFits</code> and <code>systemLayoutSizeFitting</code>, respectively.</p>
+<p>Another common pain-point for standard <code>UITableViews</code> or <code>UICollectionViews</code> is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each <code>Item</code> has a <code>sizing</code> property, which can be set to any of the following values. <code>.default</code> pulls the default sizing of the item from the <code><a href="Structs/List/Measurement.html">List.Measurement</a></code> mentioned above, where as the <code>thatFits</code> and <code>autolayout</code> values size the item based on <code>sizeThatFits</code> and <code>systemLayoutSizeFitting</code>, respectively.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Sizing</span> <span class="p">:</span> <span class="kt">Equatable</span>
 <span class="p">{</span>
     <span class="k">case</span> <span class="err">`</span><span class="k">default</span><span class="err">`</span>
@@ -299,8 +305,8 @@
 
     <span class="c1">// ItemContent</span>
 
-    <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="kt">DemoItem</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">identifierValue</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">self</span><span class="o">.</span><span class="n">text</span>
     <span class="p">}</span>
 
     <span class="c1">// BlueprintItemContent</span>
@@ -365,7 +371,7 @@
 <p>An <code>Item</code> is what you add to a section to represent a row in a list. It contains your provided content (<code>ItemContent</code>), alongside things like sizing, layout customization, selection behavior, reordering behavior, and callbacks which are performed when an item is selected, displayed, etc.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt">Content</span><span class="p">:</span><span class="kt">ItemContent</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">AnyItem</span>
 <span class="p">{</span>
-    <span class="kd">public</span> <span class="k">var</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt">AnyIdentifier</span>
+    <span class="kd">public</span> <span class="k">var</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt">Content</span><span class="o">.</span><span class="kt">Identifier</span>
 
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">content</span> <span class="p">:</span> <span class="kt">Content</span>
 
@@ -376,7 +382,7 @@
 
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">swipeActions</span> <span class="p">:</span> <span class="kt">SwipeActions</span><span class="p">?</span>
 
-    <span class="kd">public</span> <span class="k">var</span> <span class="nv">reordering</span> <span class="p">:</span> <span class="kt">Reordering</span><span class="p">?</span>
+    <span class="kd">public</span> <span class="k">var</span> <span class="nv">reordering</span> <span class="p">:</span> <span class="kt">ItemReordering</span><span class="p">?</span>
 
     <span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnSelect</span> <span class="o">=</span> <span class="p">(</span><span class="kt">Content</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span>
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">onSelect</span> <span class="p">:</span> <span class="kt">OnSelect</span><span class="p">?</span>
@@ -415,7 +421,9 @@
 <p>To prepare the views for display, the <code>apply(to:for:with:)</code> method is called, which is where you push the content from your <code>ItemContent</code> onto the provided views.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContent</span>
 <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+    <span class="kd">associatedtype</span> <span class="kt">IdentifierValue</span> <span class="p">:</span> <span class="kt">Hashable</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">IdentifierValue</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span>
         <span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span>
@@ -487,7 +495,7 @@
     <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">views</span> <span class="p">:</span> <span class="kt">ItemContentViews</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">,</span> <span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>
-        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">detailLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">detail</span>        
+        <span class="n">views</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">detailLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">detail</span>
     <span class="p">}</span>
 
     <span class="kd">typealias</span> <span class="kt">ContentView</span> <span class="o">=</span> <span class="kt">View</span>
@@ -523,7 +531,7 @@
     <span class="n">list</span> <span class="o">+=</span> <span class="kt">Section</span><span class="p">(</span><span class="s">"section-1"</span><span class="p">)</span> <span class="p">{</span> <span class="n">section</span> <span class="k">in</span>
         <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoHeader</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"This Is A Header"</span><span class="p">))</span>
         <span class="n">section</span><span class="o">.</span><span class="n">footer</span> <span class="o">=</span> <span class="kt">HeaderFooter</span><span class="p">(</span><span class="kt">DemoFooter</span><span class="p">(</span><span class="nv">text</span><span class="p">:</span> <span class="s">"And this is a footer. Please check the EULA for details."</span><span class="p">))</span>
-    <span class="p">}</span> 
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 <h4 id='headerfootercontent' class='heading'>HeaderFooterContent</h4>
@@ -548,7 +556,7 @@
 
 <p>As is with <code>Item</code>, if your <code>HeaderFooterContent</code> is <code>Equatable</code>, you get <code>isEquivalent</code> for free.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">HeaderFooterContent</span> <span class="k">where</span> <span class="k">Self</span><span class="p">:</span><span class="kt">Equatable</span>
-<span class="p">{</span>    
+<span class="p">{</span>
     <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="k">self</span> <span class="o">==</span> <span class="n">other</span>
@@ -563,7 +571,7 @@
 
     <span class="kd">func</span> <span class="nf">apply</span><span class="p">(</span><span class="n">to</span> <span class="nv">view</span> <span class="p">:</span> <span class="kt">Appearance</span><span class="o">.</span><span class="kt">ContentView</span><span class="p">,</span> <span class="k">for</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">ApplyReason</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">view</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>       
+        <span class="n">view</span><span class="o">.</span><span class="n">titleLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">title</span>
     <span class="p">}</span>
 
     <span class="kd">typealias</span> <span class="kt">ContentView</span> <span class="o">=</span> <span class="kt">View</span>
@@ -593,7 +601,7 @@
 
 <p>However, section has many properties to allow for configuration. You can customize the layout, the number of and layout of columns, set the header and footer, and obviously provide items, via the <code>items</code> property, and via the many provided overrides of the <code>+=</code> operator.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Section</span>
-<span class="p">{</span>    
+<span class="p">{</span>
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">layout</span> <span class="p">:</span> <span class="kt">Layout</span>
     <span class="kd">public</span> <span class="k">var</span> <span class="nv">columns</span> <span class="p">:</span> <span class="kt">Columns</span>
 
@@ -629,7 +637,9 @@
 <p>Unless you are supporting highlighting and selection of your <code>ItemContent</code>, you do not need to provide implementations of <code>backgroundElement(:)</code> and <code>selectedBackgroundElement(:)</code> – they default to returning nil. Similar to <code>ItemContent</code>, <code>wasMoved(:)</code> and <code>isEquivalent(:)</code> are also provided based on <code>Equatable</code> conformance.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">BlueprintItemContent</span> <span class="p">:</span> <span class="kt">ItemContent</span>
 <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+    <span class="kd">associatedtype</span> <span class="kt">IdentifierValue</span> <span class="p">:</span> <span class="kt">Hashable</span>
+
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">IdentifierValue</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">wasMoved</span><span class="p">(</span><span class="n">comparedTo</span> <span class="nv">other</span> <span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
     <span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span> <span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
@@ -649,8 +659,8 @@
     <span class="k">var</span> <span class="nv">name</span> <span class="p">:</span> <span class="kt">String</span>
     <span class="k">var</span> <span class="nv">phoneNumber</span> <span class="p">:</span> <span class="kt">String</span>
 
-    <span class="k">var</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt">Identifier</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">identifierValue</span> <span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">name</span>
     <span class="p">}</span>
 
     <span class="kd">func</span> <span class="nf">element</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span> <span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span> <span class="p">{</span>
@@ -776,7 +786,7 @@ Etc..</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-04-19)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-08-14)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

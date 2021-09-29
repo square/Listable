@@ -43,7 +43,23 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 1) `BackgroundView`
 ///
 public protocol HeaderFooterContent
-{    
+{
+    //
+    // MARK: Tracking Changes
+    //
+    
+    func isEquivalent(to other : Self) -> Bool
+    
+    //
+    // MARK: Default Properties
+    //
+    
+    typealias DefaultProperties = DefaultHeaderFooterProperties<Self>
+    
+    /// Default values to assign to various properties on the `HeaderFooter` which wraps
+    /// this `HeaderFooterContent`, if those values are not passed to the `HeaderFooter` initializer.
+    var defaultHeaderFooterProperties : DefaultProperties { get }
+    
     //
     // MARK: Applying To Displayed View
     //
@@ -54,11 +70,13 @@ public protocol HeaderFooterContent
         with info : ApplyHeaderFooterContentInfo
     )
     
-    //
-    // MARK: Tracking Changes
-    //
-    
-    func isEquivalent(to other : Self) -> Bool
+    /// When the `HeaderFooterContent` is on screen, controls how and when to apply updates
+    /// to the view.
+    ///
+    /// Defaults to ``ReappliesToVisibleView/always``.
+    ///
+    /// See ``ReappliesToVisibleView`` for a full discussion.
+    var reappliesToVisibleView: ReappliesToVisibleView { get }
     
     //
     // MARK: Creating & Providing Content Views
@@ -128,6 +146,8 @@ public protocol HeaderFooterContent
 
 /// Information about the current state of the content, which is passed to `apply(to:for:with:)`
 /// during configuration and preparation for display.
+///
+/// TODO: Rename to `ApplyHeaderFooterContext`
 public struct ApplyHeaderFooterContentInfo
 {
     /// The environment of the containing list.
@@ -150,15 +170,20 @@ public struct HeaderFooterContentViews<Content:HeaderFooterContent>
 }
 
 
-///
-/// If your `HeaderFooterContent` is `Equatable`, you do not need to provide an `isEquivalent` method.
-/// This default implementation will be provided for you.
-///
+/// Provide a default implementation of `reappliesToVisibleView` which returns `.always`.
+public extension HeaderFooterContent {
+    
+    var reappliesToVisibleView: ReappliesToVisibleView {
+        .always
+    }
+}
+
+
 public extension HeaderFooterContent where Self:Equatable
-{    
-    func isEquivalent(to other : Self) -> Bool
-    {
-        return self == other
+{
+    /// If your `HeaderFooterContent` is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
+    func isEquivalent(to other : Self) -> Bool {
+        self == other
     }
 }
 
@@ -171,10 +196,21 @@ public extension HeaderFooterContent where Self.BackgroundView == UIView
     }
 }
 
+
 public extension HeaderFooterContent where Self.PressedBackgroundView == UIView
 {
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
     {
         PressedBackgroundView(frame: frame)
+    }
+}
+
+
+/// Provide a default implementation of `defaultHeaderFooterProperties` which returns an
+/// empty instance that does not provide any defaults.
+public extension HeaderFooterContent
+{
+    var defaultHeaderFooterProperties : DefaultProperties {
+        .init()
     }
 }

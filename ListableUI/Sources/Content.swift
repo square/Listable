@@ -21,8 +21,12 @@ public struct Content
     /// The refresh control, if any, associated with the list.
     public var refreshControl : RefreshControl?
     
+    /// A header provided by the container of the list, eg a nav-style "large header".
+    public var containerHeader : AnyHeaderFooter?
+    
     /// The header for the list, usually displayed before all other content.
     public var header : AnyHeaderFooter?
+    
     /// The footer for the list, usually displayed after all other content.
     public var footer : AnyHeaderFooter?
     
@@ -49,6 +53,10 @@ public struct Content
         
         for filter in filters {
             switch filter {
+            case .listContainerHeader:
+                if self.containerHeader != nil {
+                    return true
+                }
             case .listHeader:
                 if self.header != nil {
                     return true
@@ -96,6 +104,7 @@ public struct Content
     public init(
         identifier : AnyHashable? = nil,
         refreshControl : RefreshControl? = nil,
+        containerHeader : AnyHeaderFooter? = nil,
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
         overscrollFooter : AnyHeaderFooter? = nil,
@@ -105,6 +114,7 @@ public struct Content
         
         self.refreshControl = refreshControl
         
+        self.containerHeader = containerHeader
         self.header = header
         self.footer = footer
         
@@ -152,7 +162,7 @@ public struct Content
     {
         for (sectionIndex, section) in self.sections.enumerated() {
             for (itemIndex, item) in section.items.enumerated() {
-                if item.identifier == identifier {
+                if item.anyIdentifier == identifier {
                     return IndexPath(item: itemIndex, section: sectionIndex)
                 }
             }

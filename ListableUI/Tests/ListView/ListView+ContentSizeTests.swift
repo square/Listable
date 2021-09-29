@@ -89,8 +89,8 @@ fileprivate struct TestContent : ItemContent, Equatable
 {
     var title : String
     
-    var identifier: Identifier<TestContent> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
     
     func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}

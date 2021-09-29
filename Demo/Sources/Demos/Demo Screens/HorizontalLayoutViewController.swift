@@ -24,8 +24,10 @@ final class HorizontalLayoutViewController : UIViewController
         self.listView.configure { list in
             
             list.layout = .table {
+                
+                $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0))
+                
                 $0.layout.itemSpacing = 20.0
-                $0.layout.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
             }
             
             list.content.overscrollFooter = HeaderFooter(
@@ -140,8 +142,8 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
         .box(background: self.color, corners: .rounded(radius: 15.0))
     }
     
-    var identifier: Identifier<CardElement> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
     
 }

@@ -64,6 +64,8 @@ final class SupplementaryContainerView : UICollectionReusableView
         ) as! SupplementaryContainerView
         
         view.reuseCache = reuseCache
+        
+        // TODO: We need to also set this during on-screen updates; I don't think it's updated correctly now.
         view.environment = environment
         
         return view
@@ -73,7 +75,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     // MARK: Content
     //
     
-    var headerFooter : AnyPresentationHeaderFooterState? {
+    weak var headerFooter : AnyPresentationHeaderFooterState? {
         didSet {
             guard oldValue !== self.headerFooter else {
                 return
@@ -139,7 +141,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {
-        // Note – Please keep this comment in sync with the comment in ItemCell.
+        /// **Note** – Please keep this comment in sync with the comment in ItemCell.
         
         /**
          Listable already properly sizes each cell. We do not use self-sizing cells.

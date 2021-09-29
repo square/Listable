@@ -25,16 +25,31 @@ public protocol ListLayout : AnyListLayout
 }
 
 
-public struct ListLayoutLayoutContext : Equatable {
+public struct ListLayoutLayoutContext {
     
     public var viewBounds : CGRect
+    public var safeAreaInsets : UIEdgeInsets
     
-    init(viewBounds : CGRect) {
+    public var environment : ListEnvironment
+    
+    init(
+        viewBounds : CGRect,
+        safeAreaInsets : UIEdgeInsets,
+        environment : ListEnvironment
+    ) {
         self.viewBounds = viewBounds
+        self.safeAreaInsets = safeAreaInsets
+        self.environment = environment
     }
     
-    init(_ collectionView : UICollectionView) {
+    init(
+        collectionView : UICollectionView,
+        environment : ListEnvironment
+    ) {
         self.viewBounds = collectionView.bounds
+        self.safeAreaInsets = collectionView.safeAreaInsets
+        
+        self.environment = environment
     }
 }
 
@@ -71,7 +86,7 @@ public protocol AnyListLayout : AnyObject
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView : UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     
     func layout(
         delegate : CollectionViewLayoutDelegate?,
@@ -79,6 +94,17 @@ public protocol AnyListLayout : AnyObject
     )
     
     func setZIndexes()
+    
+    //
+    // MARK: Configuring Reordering
+    //
+    
+    func adjust(
+        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
+        originalAttributes : ListContentLayoutAttributes,
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    )
 }
 
 
@@ -100,6 +126,15 @@ public extension AnyListLayout
         
         self.content.footer.zIndex = 1
         self.content.overscrollFooter.zIndex = 0
+    }
+    
+    func adjust(
+        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
+        originalAttributes : ListContentLayoutAttributes,
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    ) {
+        // Nothing. Just a default implementation.
     }
 }
 
