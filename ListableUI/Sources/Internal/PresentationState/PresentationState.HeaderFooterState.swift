@@ -69,7 +69,7 @@ extension PresentationState
             } else {
                 if let state = state, let new = new {
                     state.set(
-                        new: new.toHeaderFooter(),
+                        new: new.asAnyHeaderFooter(),
                         reason: reason,
                         visibleView: self.visibleContainer?.content,
                         updateCallbacks: updateCallbacks,

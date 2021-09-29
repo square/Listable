@@ -135,7 +135,7 @@ extension PresentationState
         ) -> AnyPresentationHeaderFooterState?
         {
             if let new = new {
-                return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
             } else {
                 return nil
             }
@@ -154,14 +154,14 @@ extension PresentationState
                     if isSameType {
                         return current
                     } else {
-                        return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                        return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                     }
                 } else {
                     return nil
                 }
             } else {
                 if let new = new {
-                    return (new.toHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                    return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                 } else {
                     return nil
                 }

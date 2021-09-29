@@ -35,7 +35,7 @@ import Foundation
 public protocol AnyHeaderFooterConvertible {
     
     /// Converts the object into a type-erased `AnyHeaderFooter` instance.
-    func toHeaderFooter() -> AnyHeaderFooter
+    func asAnyHeaderFooter() -> AnyHeaderFooter
 }
 
 

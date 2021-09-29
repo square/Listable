@@ -183,7 +183,7 @@ public extension HeaderFooterContent {
     
     // MARK: AnyHeaderFooterConvertible
     
-    func toHeaderFooter() -> AnyHeaderFooter {
+    func asAnyHeaderFooter() -> AnyHeaderFooter {
         HeaderFooter(self)
     }
 }

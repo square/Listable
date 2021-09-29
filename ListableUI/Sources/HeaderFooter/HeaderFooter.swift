@@ -71,7 +71,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     // MARK: AnyHeaderFooterConvertible
     
-    public func toHeaderFooter() -> AnyHeaderFooter {
+    public func asAnyHeaderFooter() -> AnyHeaderFooter {
         self
     }
     
@@ -124,7 +124,7 @@ extension HeaderFooterContent {
     ///     section.header = MyHeaderContent(
     ///         title: "Hello, World!"
     ///     )
-    ///     .setting(
+    ///     .with(
     ///         sizing: .thatFits(.noConstraint),
     ///     )
     ///
@@ -133,7 +133,7 @@ extension HeaderFooterContent {
     ///    ...
     /// }
     /// ```
-    public func setting(
+    public func with(
         sizing : Sizing? = nil,
         layouts : HeaderFooterLayouts? = nil,
         onTap : HeaderFooter<Self>.OnTap? = nil

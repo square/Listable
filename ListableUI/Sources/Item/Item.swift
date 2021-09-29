@@ -177,7 +177,7 @@ extension ItemContent {
     /// ```
     /// Section("id") { section in
     ///     section += MyItemContent(name: "Listable")
-    ///                   .setting(
+    ///                   .with(
     ///                       sizing: .thatFits(.noConstraint),
     ///                       selectionStyle: .tappable
     ///                   )
@@ -187,7 +187,7 @@ extension ItemContent {
     ///    ...
     /// }
     /// ```
-    public func setting(
+    public func with(
         sizing : Sizing? = nil,
         layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
