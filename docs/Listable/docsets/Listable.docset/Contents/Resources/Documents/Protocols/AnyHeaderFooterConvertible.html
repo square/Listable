@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ListViewController Class Reference</title>
+    <title>AnyHeaderFooterConvertible Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Class/ListViewController" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Protocol/AnyHeaderFooterConvertible" class="dashAnchor"></a>
 
-    <a title="ListViewController Class Reference"></a>
+    <a title="AnyHeaderFooterConvertible Protocol Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" />
-      ListViewController Class Reference
+      AnyHeaderFooterConvertible Protocol Reference
     </p>
 
     <div class="content-wrapper">
@@ -604,31 +604,35 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ListViewController</h1>
+            <h1>AnyHeaderFooterConvertible</h1>
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">ListViewController</span> <span class="p">:</span> <span class="kt">UIViewController</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AnyHeaderFooterConvertible</span></code></pre>
 
                 </div>
               </div>
-            <p>A class which provides an easy way to set up and display a <code><a href="../Classes/ListView.html">ListView</a></code>,
-The <code>ListViewController</code> itself manages setup and presentation of the list.</p>
+            <p>A type which can be converted into a <code><a href="../Structs/HeaderFooter.html">HeaderFooter</a></code>, so you
+do not need to explicitly wrap / convert your <code><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code>
+in a <code><a href="../Structs/HeaderFooter.html">HeaderFooter</a></code> when providing an header or footer to a list or section:</p>
+<pre class="highlight swift"><code><span class="kt">Section</span><span class="p">(</span><span class="s">"id"</span><span class="p">)</span> <span class="p">{</span> <span class="n">section</span> <span class="k">in</span>
+    <span class="n">section</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kt">MyHeaderContent</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Hello, World!"</span><span class="p">)</span>
+<span class="p">}</span>
 
-<p>As a consumer of the API, all you need to do is override one method:</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="nv">list</span> <span class="p">:</span> <span class="k">inout</span> <span class="kt">ListProperties</span><span class="p">)</span> <span class="p">{</span>
-    <span class="o">...</span>
+<span class="kd">struct</span> <span class="kt">MyHeaderContent</span> <span class="p">:</span> <span class="kt">HeaderFooterContent</span> <span class="p">{</span>
+   <span class="k">var</span> <span class="nv">title</span> <span class="p">:</span> <span class="kt">String</span>
+   <span class="o">...</span>
 <span class="p">}</span>
 </code></pre>
 
-<p>In which you set up and configure the list as needed.</p>
+<p>Only two types conform to this protocol:</p>
+<h3 id='code-headerfooter-code' class='heading'><code><a href="../Structs/HeaderFooter.html">HeaderFooter</a></code></h3>
 
-<p>In order to reload the list when content changes or other display changes are required, call</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">reload</span><span class="p">(</span><span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span>
-</code></pre>
+<p>The <code><a href="../Structs/HeaderFooter.html">HeaderFooter</a></code> conformance simply returns self.</p>
+<h3 id='code-headerfootercontent-code' class='heading'><code><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code></h3>
 
-<p>Which will update the list with the new contents returned from your <code>configure</code> method.
-If the <code>ListViewController</code>&lsquo;s view is not loaded, this method has no effect.</p>
+<p>The <code><a href="../Protocols/HeaderFooterContent.html">HeaderFooterContent</a></code> conformance returns <code>HeaderFooter(self)</code>,
+utilizing the default values from the <code><a href="../Structs/HeaderFooter.html">HeaderFooter</a></code> initializer.</p>
 
           </div>
         </section>
@@ -636,22 +640,13 @@ If the <code>ListViewController</code>&lsquo;s view is not loaded, this method h
         <section class="section">
           <div class="section-content">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Configuration"></a>
-                <a name="//apple_ref/swift/Section/Configuration" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Configuration"></a>
-                  <h3 class="section-name"><p>Configuration</p>
-</h3>
-                </div>
-              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI18ListViewControllerC017clearsSelectionOnD10WillAppearSbvp"></a>
-                    <a name="//apple_ref/swift/Property/clearsSelectionOnViewWillAppear" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI18ListViewControllerC017clearsSelectionOnD10WillAppearSbvp">clearsSelectionOnViewWillAppear</a>
+                    <a name="/s:10ListableUI26AnyHeaderFooterConvertibleP02ascdE0AA0cdE0_pyF"></a>
+                    <a name="//apple_ref/swift/Method/asAnyHeaderFooter()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI26AnyHeaderFooterConvertibleP02ascdE0AA0cdE0_pyF">asAnyHeaderFooter()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -659,228 +654,14 @@ If the <code>ListViewController</code>&lsquo;s view is not loaded, this method h
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The default value for <code>clearsSelectionOnViewWillAppear</code> is true.
-This parameter allows mirroring the <code>clearsSelectionOnViewWillAppear</code>
-as available from <code>UITableViewController</code> or <code>UICollectionViewController</code>.</p>
+                        <p>Converts the object into a type-erased <code><a href="../Protocols/AnyHeaderFooter.html">AnyHeaderFooter</a></code> instance.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">clearsSelectionOnViewWillAppear</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Methods%20To%20Override"></a>
-                <a name="//apple_ref/swift/Section/Methods To Override" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Methods%20To%20Override"></a>
-                  <h3 class="section-name"><p>Methods To Override</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI18ListViewControllerC9configure4listyAA0C10PropertiesVz_tF"></a>
-                    <a name="//apple_ref/swift/Method/configure(list:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI18ListViewControllerC9configure4listyAA0C10PropertiesVz_tF">configure(list:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Override this method to configure your list how you&rsquo;d like to.
-The properties on <code><a href="../Structs/ListProperties.html">ListProperties</a></code> closely mirror those on <code><a href="../Classes/ListView.html">ListView</a></code>
-itself, allowing you to fully configure and work with a list without needing to maintain
-and manage the view instance yourself.</p>
-<h2 id='example' class='heading'>Example</h2>
-<pre class="highlight swift"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="nv">list</span> <span class="p">:</span> <span class="k">inout</span> <span class="kt">ListProperties</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">list</span><span class="o">.</span><span class="n">appearance</span> <span class="o">=</span> <span class="o">.</span><span class="n">myAppearance</span>
-
-    <span class="n">list</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="o">.</span><span class="n">table</span> <span class="p">{</span> <span class="n">appearance</span> <span class="k">in</span>
-        <span class="c1">// Configure the appearance.</span>
-    <span class="p">}</span>
-
-    <span class="n">list</span><span class="o">.</span><span class="n">stateObserver</span><span class="o">.</span><span class="n">onContentChanged</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
-        <span class="kt">MyLogger</span><span class="o">.</span><span class="nf">log</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="nf">list</span><span class="p">(</span><span class="s">"first-section"</span><span class="p">)</span> <span class="p">{</span> <span class="n">section</span> <span class="k">in</span>
-        <span class="n">section</span> <span class="o">+=</span> <span class="k">self</span><span class="o">.</span><span class="n">myPodcasts</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">podcast</span> <span class="k">in</span>
-            <span class="kt">PodcastItem</span><span class="p">(</span><span class="n">podcast</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-
-<p>You should not call super in your overridden implementation.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="nv">list</span><span class="p">:</span> <span class="k">inout</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Updating%20Content"></a>
-                <a name="//apple_ref/swift/Section/Updating Content" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Updating%20Content"></a>
-                  <h3 class="section-name"><p>Updating Content</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI18ListViewControllerC6reload8animatedySb_tF"></a>
-                    <a name="//apple_ref/swift/Method/reload(animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI18ListViewControllerC6reload8animatedySb_tF">reload(animated:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reload</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initialization"></a>
-                <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Initialization"></a>
-                  <h3 class="section-name"><p>Initialization</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@ListableUI@objc(cs)ListViewController(im)initWithNibName:bundle:"></a>
-                    <a name="//apple_ref/swift/Method/init(nibName:bundle:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@ListableUI@objc(cs)ListViewController(im)initWithNibName:bundle:">init(nibName:<wbr>bundle:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="nf">init</span><span class="p">(</span><span class="n">nibName</span> <span class="nv">nibNameOrNil</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="n">bundle</span> <span class="nv">nibBundleOrNil</span><span class="p">:</span> <span class="kt">Bundle</span><span class="p">?)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/UIViewController"></a>
-                <a name="//apple_ref/swift/Section/UIViewController" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/UIViewController"></a>
-                  <h3 class="section-name"><p>UIViewController</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@ListableUI@objc(cs)ListViewController(im)loadView"></a>
-                    <a name="//apple_ref/swift/Method/loadView()" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@ListableUI@objc(cs)ListViewController(im)loadView">loadView()</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">loadView</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@M@ListableUI@objc(cs)ListViewController(im)viewWillAppear:"></a>
-                    <a name="//apple_ref/swift/Method/viewWillAppear(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@M@ListableUI@objc(cs)ListViewController(im)viewWillAppear:">viewWillAppear(_:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">_</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asAnyHeaderFooter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/AnyHeaderFooter.html">AnyHeaderFooter</a></span></code></pre>
 
                         </div>
                       </div>
