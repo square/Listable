@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-LISTABLE_VERSION ||= '0.27.1'
+LISTABLE_VERSION ||= '0.28.0'

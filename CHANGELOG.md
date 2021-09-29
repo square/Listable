@@ -8,6 +8,14 @@
 
 ### Changed
 
+### Misc
+
+# Past Releases
+
+# [0.28.0] - 2021-09-28
+
+### Changed
+
 - [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
     
     ```swift
@@ -19,10 +27,6 @@
     ```swift
     section.header = HeaderFooter(MyHeaderContent(title: "Albums"))
     ```
-
-### Misc
-
-# Past Releases
 
 # [0.27.1] - 2021-09-28
 
@@ -484,7 +488,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.27.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.28.0...HEAD
+[0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
 [0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
 [0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
 [0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
