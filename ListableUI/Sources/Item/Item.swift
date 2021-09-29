@@ -168,6 +168,65 @@ public struct Item<Content:ItemContent> : AnyItem
 }
 
 
+extension ItemContent {
+    
+    /// Identical to `Item.init` which takes in an `ItemContent`,
+    /// except you can call this on the `ItemContent` itself, instead of wrapping it,
+    /// to avoid additional nesting, and to hoist your content up in your code.
+    ///
+    /// ```
+    /// Section("id") { section in
+    ///     section += MyItemContent(name: "Listable")
+    ///                   .with(
+    ///                       sizing: .thatFits(.noConstraint),
+    ///                       selectionStyle: .tappable
+    ///                   )
+    ///
+    /// struct MyItemContent : ItemContent {
+    ///    var name : String
+    ///    ...
+    /// }
+    /// ```
+    public func with(
+        sizing : Sizing? = nil,
+        layouts : ItemLayouts? = nil,
+        selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil,
+        reordering : ItemReordering? = nil,
+        onWasReordered : Item<Self>.OnWasReordered? = nil,
+        onDisplay : Item<Self>.OnDisplay.Callback? = nil,
+        onEndDisplay : Item<Self>.OnEndDisplay.Callback? = nil,
+        onSelect : Item<Self>.OnSelect.Callback? = nil,
+        onDeselect : Item<Self>.OnDeselect.Callback? = nil,
+        onInsert : Item<Self>.OnInsert.Callback? = nil,
+        onRemove : Item<Self>.OnRemove.Callback? = nil,
+        onMove : Item<Self>.OnMove.Callback? = nil,
+        onUpdate : Item<Self>.OnUpdate.Callback? = nil
+    ) -> Item<Self>
+    {
+        Item(
+            self,
+            sizing: sizing,
+            layouts: layouts,
+            selectionStyle: selectionStyle,
+            insertAndRemoveAnimations: insertAndRemoveAnimations,
+            swipeActions: swipeActions,
+            reordering: reordering,
+            onWasReordered: onWasReordered,
+            onDisplay: onDisplay,
+            onEndDisplay: onEndDisplay,
+            onSelect: onSelect,
+            onDeselect: onDeselect,
+            onInsert: onInsert,
+            onRemove: onRemove,
+            onMove: onMove,
+            onUpdate: onUpdate
+        )
+    }
+}
+
+
 extension Item : SignpostLoggable
 {
     var signpostInfo : SignpostLoggingInfo {

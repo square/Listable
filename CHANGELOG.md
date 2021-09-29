@@ -8,6 +8,18 @@
 
 ### Changed
 
+- [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
+    
+    ```swift
+    section.header = MyHeaderContent(title: "Albums")
+    ```
+    
+    Instead of:
+
+    ```swift
+    section.header = HeaderFooter(MyHeaderContent(title: "Albums"))
+    ```
+
 ### Misc
 
 # Past Releases

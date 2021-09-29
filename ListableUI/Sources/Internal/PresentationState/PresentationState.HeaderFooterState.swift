@@ -58,7 +58,7 @@ extension PresentationState
         
         func update(
             with state : AnyPresentationHeaderFooterState?,
-            new: AnyHeaderFooter?,
+            new: AnyHeaderFooterConvertible?,
             reason: ApplyReason,
             updateCallbacks : UpdateCallbacks,
             environment: ListEnvironment
@@ -69,7 +69,7 @@ extension PresentationState
             } else {
                 if let state = state, let new = new {
                     state.set(
-                        new: new,
+                        new: new.asAnyHeaderFooter(),
                         reason: reason,
                         visibleView: self.visibleContainer?.content,
                         updateCallbacks: updateCallbacks,

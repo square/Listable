@@ -26,15 +26,11 @@ public final class DemosRootViewController : ListViewController
         list.appearance = .demoAppearance
         list.layout = .demoLayout
         
-        list.content.overscrollFooter = HeaderFooter(
-            DemoHeader(title: "Thanks for using Listable!!")
-        )
+        list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
         
         list("list-view") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "List Views")
-            )
+            section.header = DemoHeader(title: "List Views")
             
             section += Item(
                 DemoItem(text: "Basic Demo"),
@@ -177,9 +173,7 @@ public final class DemosRootViewController : ListViewController
         
         list("coordinator") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "Item Coordinator")
-            )
+            section.header = DemoHeader(title: "Item Coordinator")
             
             section += Item(
                 DemoItem(text: "Expand / Collapse Items"),
@@ -199,9 +193,7 @@ public final class DemosRootViewController : ListViewController
         
         list("layouts") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "Other Layouts")
-            )
+            section.header = DemoHeader(title: "Other Layouts")
             
             section += Item(
                 DemoItem(text: "Grid Layout"),
@@ -248,9 +240,7 @@ public final class DemosRootViewController : ListViewController
         
         list("selection-state") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "List View Selection")
-            )
+            section.header = DemoHeader(title: "List View Selection")
 
             section += Item(
                 DemoItem(text: "Tappable Row"),
@@ -268,9 +258,7 @@ public final class DemosRootViewController : ListViewController
         
         list("collection-view") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "UICollectionViews")
-            )
+            section.header = DemoHeader(title: "UICollectionViews")
 
             section += Item(
                 DemoItem(text: "Flow Layout"),
@@ -282,9 +270,7 @@ public final class DemosRootViewController : ListViewController
         
         list("scroll-view") { section in
             
-            section.header = HeaderFooter(
-                DemoHeader(title: "UIScrollViews")
-            )
+            section.header = DemoHeader(title: "UIScrollViews")
             
             section += Item(
                 DemoItem(text: "Edges Playground"),
