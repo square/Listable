@@ -3,6 +3,7 @@
 ### Fixed
 
 ### Added
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
 
 ### Removed
 
