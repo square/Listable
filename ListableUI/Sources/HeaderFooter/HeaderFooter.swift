@@ -17,7 +17,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     public var sizing : Sizing
     public var layouts : HeaderFooterLayouts
     
-    public typealias OnTap = (Content) -> ()
+    public typealias OnTap = () -> ()
     public var onTap : OnTap?
     
     public var debuggingIdentifier : String? = nil

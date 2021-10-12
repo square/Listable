@@ -146,12 +146,7 @@ extension PresentationState
                 pressed: view.pressedBackground
             )
             
-            view.onTap = self.model.onTap.map { onTap in { [weak self] in
-                    guard let self = self else { return }
-                    
-                    onTap(self.model.content)
-                }
-            }
+            view.onTap = self.model.onTap
             
             self.model.content.apply(to: views, for: reason, with: info)
         }

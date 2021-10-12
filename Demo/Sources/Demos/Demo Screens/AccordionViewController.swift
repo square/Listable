@@ -23,7 +23,7 @@ final class AccordionViewController : ListViewController
                 
                 section.header = HeaderFooter(
                     AccordionHeader(text: "Section Header #\(sectionIndex)"),
-                    onTap: { _ in
+                    onTap: {
                         self.expandedSectionIndex = sectionIndex
                         self.reload(animated: true)
                     }
