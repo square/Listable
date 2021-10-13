@@ -9,6 +9,8 @@
 
 ### Changed
 
+- `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
+
 ### Misc
 
 # Past Releases
