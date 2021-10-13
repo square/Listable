@@ -3,17 +3,24 @@
 ### Fixed
 
 ### Added
-- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
 
 ### Removed
 
 ### Changed
 
-- `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
-
 ### Misc
 
 # Past Releases
+
+# [0.29.0] - 2021-10-13
+
+### Added
+
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
+
+### Changed
+
+- `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
 
 # [0.28.0] - 2021-09-28
 
@@ -491,7 +498,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.28.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.29.0...HEAD
+[0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
 [0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
 [0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
 [0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
