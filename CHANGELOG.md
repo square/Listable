@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
+
 ### Added
 
 ### Removed

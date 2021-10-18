@@ -147,6 +147,10 @@ extension PresentationState
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
+            /// Eagerly convert the header/footer to the correct final type, so the `type(of:)` check later
+            /// on in the function is comparing `HeaderFooter<Content>` types.
+            let new = new?.asAnyHeaderFooter()
+            
             if let current = current {
                 if let new = new {
                     let isSameType = type(of: current.anyModel) == type(of: new)
@@ -154,14 +158,14 @@ extension PresentationState
                     if isSameType {
                         return current
                     } else {
-                        return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                        return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                     }
                 } else {
                     return nil
                 }
             } else {
                 if let new = new {
-                    return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                    return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
                 } else {
                     return nil
                 }
