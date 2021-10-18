@@ -52,10 +52,6 @@ class ListViewTests: XCTestCase
         }
     }
     
-    func test_backing_view_lifetimes() {
-        
-    }
-    
     func test_changing_supplementary_views()
     {
         // Ensure that we can swap out a supplementary view without any other changes.
