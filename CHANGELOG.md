@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
-
 ### Added
 
 ### Removed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [0.29.1] - 2021-10-18
+
+### Fixed
+
+- Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
 
 # [0.29.0] - 2021-10-13
 
@@ -500,7 +504,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.29.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.29.1...HEAD
+[0.29.1]: https://github.com/kyleve/Listable/compare/0.29.0...0.29.1
 [0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
 [0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
 [0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
