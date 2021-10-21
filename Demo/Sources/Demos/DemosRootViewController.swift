@@ -28,7 +28,7 @@ public final class DemosRootViewController : ListViewController
         
         list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
         
-        list("list-view") { section in
+        list("list-view") {  [weak self] section in
             
             section.header = DemoHeader(title: "List Views")
             
@@ -36,7 +36,7 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Basic Demo"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(CollectionViewBasicDemoViewController())
+                    self?.push(CollectionViewBasicDemoViewController())
                 }
             )
             
@@ -44,14 +44,14 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Blueprint Integration"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(BlueprintListDemoViewController())
+                    self?.push(BlueprintListDemoViewController())
             })
 
             section += Item(
                 DemoItem(text: "Auto Scrolling (Bottom Pin)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(AutoScrollingViewController())
+                    self?.push(AutoScrollingViewController())
             })
             
             if #available(iOS 13.0, *) {
@@ -59,7 +59,7 @@ public final class DemosRootViewController : ListViewController
                     DemoItem(text: "List State & State Reader"),
                     selectionStyle: .selectable(),
                     onSelect: { _ in
-                        self.push(ListStateViewController())
+                        self?.push(ListStateViewController())
                     }
                 )
             }
@@ -68,91 +68,91 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Itemization Editor"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(ItemizationEditorViewController())
+                    self?.push(ItemizationEditorViewController())
             })
             
             section += Item(
                 DemoItem(text: "English Dictionary Search"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(CollectionViewDictionaryDemoViewController())
+                    self?.push(CollectionViewDictionaryDemoViewController())
             })
             
             section += Item(
                 DemoItem(text: "Keyboard Inset (Full Screen List)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(KeyboardTestingViewController())
+                    self?.push(KeyboardTestingViewController())
             })
             
             section += Item(
                 DemoItem(text: "Keyboard Inset (Appears Later)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(ListAppearsAfterKeyboardViewController())
+                    self?.push(ListAppearsAfterKeyboardViewController())
             })
             
             section += Item(
                 DemoItem(text: "Reordering"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(ReorderingViewController())
+                    self?.push(ReorderingViewController())
             })
             
             section += Item(
                 DemoItem(text: "Payment Types (Reordering)"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(PaymentTypesViewController())
+                    self?.push(PaymentTypesViewController())
             })
             
             section += Item(
                 DemoItem(text: "Multi-Select"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(MultiSelectViewController())
+                    self?.push(MultiSelectViewController())
             })
             
             section += Item(
                 DemoItem(text: "Invoices Payment Schedule"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(InvoicesPaymentScheduleDemoViewController())
+                    self?.push(InvoicesPaymentScheduleDemoViewController())
             })
 
             section += Item(
                 DemoItem(text: "Refresh Control"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(RefreshControlOffsetAdjustmentViewController())
+                    self?.push(RefreshControlOffsetAdjustmentViewController())
             })
             
             section += Item(
                 DemoItem(text: "Swipe Actions"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(SwipeActionsViewController())
+                    self?.push(SwipeActionsViewController())
             })
             
             section += Item(
                 DemoItem(text: "Localized Collation"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(LocalizedCollationViewController())
+                    self?.push(LocalizedCollationViewController())
             })
             
             section += Item(
                 DemoItem(text: "Item Insert & Remove Animations"),
                 selectionStyle: .selectable(),
                 onSelect: { _ in
-                    self.push(ItemInsertAndRemoveAnimationsViewController())
+                    self?.push(ItemInsertAndRemoveAnimationsViewController())
             })
 
             section += Item(
                 DemoItem(text: "Manual Selection Management"),
                 selectionStyle: .selectable(),
                 onSelect: { _ in
-                    self.push(ManualSelectionManagementViewController())
+                    self?.push(ManualSelectionManagementViewController())
                 }
             )
             
@@ -160,18 +160,18 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Accordion View"),
                 selectionStyle: .tappable,
                 onSelect: { _ in
-                    self.push(AccordionViewController())
+                    self?.push(AccordionViewController())
             })
             
             section += Item(
                 DemoItem(text: "Using Autolayout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(AutoLayoutDemoViewController())
+                    self?.push(AutoLayoutDemoViewController())
             })
         }
         
-        list("coordinator") { section in
+        list("coordinator") { [weak self] section in
             
             section.header = DemoHeader(title: "Item Coordinator")
             
@@ -179,19 +179,19 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Expand / Collapse Items"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(CoordinatorViewController())
+                    self?.push(CoordinatorViewController())
             })
             
             section += Item(
                 DemoItem(text: "Animating On Tap"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(OnTapItemAnimationViewController())
+                    self?.push(OnTapItemAnimationViewController())
             })
             
         }
         
-        list("layouts") { section in
+        list("layouts") { [weak self] section in
             
             section.header = DemoHeader(title: "Other Layouts")
             
@@ -199,46 +199,46 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Grid Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(CustomLayoutsViewController())
+                    self?.push(CustomLayoutsViewController())
             })
             
             section += Item(
                 DemoItem(text: "Paged Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(PagedViewController())
+                    self?.push(PagedViewController())
             })
             
             section += Item(
                 DemoItem(text: "Horizontal Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(HorizontalLayoutViewController())
+                    self?.push(HorizontalLayoutViewController())
             })
             
             section += Item(
                 DemoItem(text: "Width Customization"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(WidthCustomizationViewController())
+                    self?.push(WidthCustomizationViewController())
             })
 
             section += Item(
                 DemoItem(text: "Spacing Customization"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(SpacingCustomizationViewController())
+                    self?.push(SpacingCustomizationViewController())
             })
 
             section += Item(
                 DemoItem(text: "Retail Grid Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(RetailGridViewController())
+                    self?.push(RetailGridViewController())
             })
         }
         
-        list("selection-state") { section in
+        list("selection-state") { [weak self] section in
             
             section.header = DemoHeader(title: "List View Selection")
 
@@ -256,7 +256,7 @@ public final class DemosRootViewController : ListViewController
             )
         }
         
-        list("collection-view") { section in
+        list("collection-view") { [weak self] section in
             
             section.header = DemoHeader(title: "UICollectionViews")
 
@@ -264,11 +264,11 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Flow Layout"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(FlowLayoutViewController())
+                    self?.push(FlowLayoutViewController())
             })
         }
         
-        list("scroll-view") { section in
+        list("scroll-view") { [weak self] section in
             
             section.header = DemoHeader(title: "UIScrollViews")
             
@@ -276,7 +276,7 @@ public final class DemosRootViewController : ListViewController
                 DemoItem(text: "Edges Playground"),
                 selectionStyle: .selectable(),
                 onSelect : { _ in
-                    self.push(ScrollViewEdgesPlaygroundViewController())
+                    self?.push(ScrollViewEdgesPlaygroundViewController())
             })
         }
     }
