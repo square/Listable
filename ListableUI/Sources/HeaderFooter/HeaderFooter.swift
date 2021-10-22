@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
+import UIKit
+
 
 public typealias Header<Content:HeaderFooterContent> = HeaderFooter<Content>
 public typealias Footer<Content:HeaderFooterContent> = HeaderFooter<Content>

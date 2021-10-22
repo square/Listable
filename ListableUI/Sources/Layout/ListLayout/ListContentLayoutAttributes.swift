@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 6/9/21.
 //
 
+import UIKit
+
 
 ///
 /// A struct-based version of many of the properties available on `UICollectionViewLayoutAttributes`,
