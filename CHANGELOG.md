@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [0.29.3] - 2021-10-22
+
+### Fixed
+
+- Ensure we properly pass through the `ListEnvironment` when updating on-screen views.
+
 # [0.29.2] - 2021-10-21
 
 ### Fixed
@@ -510,7 +516,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.29.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.29.3...HEAD
+[0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3
 [0.29.2]: https://github.com/kyleve/Listable/compare/0.29.1...0.29.2
 [0.29.1]: https://github.com/kyleve/Listable/compare/0.29.0...0.29.1
 [0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
