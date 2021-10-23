@@ -65,7 +65,6 @@ final class SupplementaryContainerView : UICollectionReusableView
         
         view.reuseCache = reuseCache
         
-        // TODO: We need to also set this during on-screen updates; I don't think it's updated correctly now.
         view.environment = environment
         
         return view

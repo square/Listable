@@ -63,6 +63,8 @@ extension PresentationState
             updateCallbacks : UpdateCallbacks,
             environment: ListEnvironment
         ) {
+            self.visibleContainer?.environment = environment
+            
             if self.state !== state {
                 self.state = state
                 self.visibleContainer?.headerFooter = state
