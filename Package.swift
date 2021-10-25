@@ -33,12 +33,49 @@ let package = Package(
             ]
         ),
         .target(
+            name: "EnglishDictionary",
+            path: "Internal Pods/EnglishDictionary",
+            exclude: ["EnglishDictionary.podspec"],
+            resources: [
+                .process("Resources"),
+            ]
+        ),
+        .target(
+            name: "Snapshot",
+            path: "Internal Pods/Snapshot/Sources"
+        ),
+        .testTarget(
+            name: "SnapshotTests",
+            dependencies: ["Snapshot"],
+            path: "Internal Pods/Snapshot/Tests",
+            exclude: ["Snapshot Results"]
+        ),
+        .testTarget(
+            name: "ListableUITests",
+            dependencies: ["ListableUI", "EnglishDictionary", "Snapshot"],
+            path: "ListableUI/Tests",
+            exclude: [
+                "Layout/Paged/Snapshot Results",
+                "Layout/Retail Grid/Snapshot Results",
+                "Layout/Table/Snapshot Results",
+                "Previews/Snapshot Results",
+            ],
+            resources: [
+                .process("Resources"),
+            ]
+        ),
+        .target(
             name: "BlueprintUILists",
             dependencies: [
                 "ListableUI",
                 .product(name: "BlueprintUI", package: "Blueprint")
             ],
             path: "BlueprintUILists/Sources"
+        ),
+        .testTarget(
+            name: "BlueprintUIListsTests",
+            dependencies: ["BlueprintUILists"],
+            path: "BlueprintUILists/Tests"
         ),
     ],
     swiftLanguageVersions: [.v5]

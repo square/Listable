@@ -8,7 +8,16 @@
 import UIKit
 
 
-class BundleFinder : NSObject {}
+internal extension Bundle {
+    static var resources: Bundle {
+        #if SWIFT_PACKAGE
+        return .module
+        #else
+        let main = Bundle(for: EnglishDictionary.self)
+        return Bundle(url: main.url(forResource: "EnglishDictionaryResources", withExtension: "bundle")!)!
+        #endif
+    }
+}
 
 public class EnglishDictionary
 {
@@ -19,8 +28,7 @@ public class EnglishDictionary
     
     public init()
     {
-        let main = Bundle(for: EnglishDictionary.self)
-        let bundle = Bundle(url: main.url(forResource: "EnglishDictionaryResources", withExtension: "bundle")!)!
+        let bundle = Bundle.resources
         
         let stream = InputStream(url: bundle.url(forResource: "dictionary", withExtension: "json")!)!
         defer { stream.close() }
