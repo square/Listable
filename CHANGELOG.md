@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `ListLayout` and its associated types are now public, allowing you to make custom layouts. Note that these APIs are still experimental and subject to change.
+
 ### Misc
 
 # Past Releases
