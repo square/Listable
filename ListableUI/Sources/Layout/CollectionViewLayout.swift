@@ -213,7 +213,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         ///
         /// So thus, we queue updates a runloop to let the collection view figure its internal state out before we begin
         /// processing any further updates 🥴.
-        /// 
+        ///
         
         OperationQueue.main.addOperation {
             self.delegate.listViewShouldEndQueueingEditsForReorder()
@@ -634,17 +634,26 @@ final class CollectionViewLayout : UICollectionViewLayout
         at elementIndexPath: IndexPath
     ) -> UICollectionViewLayoutAttributes?
     {
+        let kind = SupplementaryKind(rawValue: elementKind)!
+        
         let attributes = super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
         
         guard let changes = self.changesDuringCurrentUpdate else {
             return attributes
         }
         
-        let wasDeleted = changes.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
-        
-        if wasDeleted == false {
-            attributes?.alpha = 1.0
+        if kind.isSectionSupplementary {
+            let wasDeleted = changes.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
+
+            if wasDeleted == false {
+                attributes?.alpha = 1.0
+            }
+        } else {
+            if changes.listSupplementaryState.had(for: kind) {
+                attributes?.alpha = 1.0
+            }
         }
+    
         
         return attributes
     }
