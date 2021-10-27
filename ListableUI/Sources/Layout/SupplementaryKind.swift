@@ -32,4 +32,15 @@ enum SupplementaryKind : String, CaseIterable
         case .overscrollFooter: return IndexPath(item: 0, section: 0)
         }
     }
+    
+    var isSectionSupplementary : Bool {
+        switch self {
+        case .listContainerHeader: return false
+        case .listHeader: return false
+        case .listFooter: return false
+        case .sectionHeader: return true
+        case .sectionFooter: return true
+        case .overscrollFooter: return false
+        }
+    }
 }

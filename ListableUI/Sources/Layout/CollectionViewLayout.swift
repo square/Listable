@@ -80,7 +80,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         self.previousLayout = self.layout
         
-        self.changesDuringCurrentUpdate = UpdateItems(with: [])
+        self.changesDuringCurrentUpdate = nil
         
         self.viewProperties = CollectionViewLayoutProperties()
         
@@ -114,7 +114,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     private(set) var layout : AnyListLayout
     
     private var previousLayout : AnyListLayout
-    private var changesDuringCurrentUpdate : UpdateItems
+    private var changesDuringCurrentUpdate : UpdateItems?
     private var viewProperties : CollectionViewLayoutProperties
     
     //
@@ -382,7 +382,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.prepare()
 
-        self.changesDuringCurrentUpdate = UpdateItems(with: [])
+        self.changesDuringCurrentUpdate = nil
                         
         let size = self.collectionView?.bounds.size ?? .zero
         
@@ -415,7 +415,10 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.prepare(forCollectionViewUpdates: updateItems)
         
-        self.changesDuringCurrentUpdate = UpdateItems(with: updateItems)
+        self.changesDuringCurrentUpdate = UpdateItems(
+            with: updateItems,
+            listSupplementaryState: .init(content: self.layout.content)
+        )
     }
     
     //
@@ -426,7 +429,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.finalizeCollectionViewUpdates()
         
-        self.changesDuringCurrentUpdate = UpdateItems(with: [])
+        self.changesDuringCurrentUpdate = nil
     }
     
     //
@@ -530,9 +533,17 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: UICollectionViewLayout Methods: Insertions & Removals
     //
 
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    override func initialLayoutAttributesForAppearingItem(
+        at itemIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
     {
-        let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
+        let standard = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+        
+        guard let changes = self.changesDuringCurrentUpdate else {
+            return standard
+        }
+        
+        let wasInserted = changes.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
         if wasInserted {
             let item = self.layout.content.item(at: itemIndexPath)
@@ -544,7 +555,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            let wasSectionInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: itemIndexPath.section))
+            let wasSectionInserted = changes.insertedSections.contains(.init(newIndex: itemIndexPath.section))
             
             let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
             
@@ -556,9 +567,17 @@ final class CollectionViewLayout : UICollectionViewLayout
         }
     }
 
-    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    override func finalLayoutAttributesForDisappearingItem(
+        at itemIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
     {
-        let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
+        let standard = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        
+        guard let changes = self.changesDuringCurrentUpdate else {
+            return standard
+        }
+        
+        let wasItemDeleted = changes.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
         
         if wasItemDeleted {
             let item = self.previousLayout.content.item(at: itemIndexPath)
@@ -570,7 +589,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            let wasSectionDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: itemIndexPath.section))
+            let wasSectionDeleted = changes.deletedSections.contains(.init(oldIndex: itemIndexPath.section))
             
             let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
             
@@ -582,22 +601,46 @@ final class CollectionViewLayout : UICollectionViewLayout
         }
     }
     
-    override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    override func initialLayoutAttributesForAppearingSupplementaryElement(
+        ofKind elementKind: String,
+        at elementIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
     {
-        let wasInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: elementIndexPath.section))
+        let kind = SupplementaryKind(rawValue: elementKind)!
+        
         let attributes = super.initialLayoutAttributesForAppearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
         
-        if wasInserted == false {
-            attributes?.alpha = 1.0
+        guard let changes = self.changesDuringCurrentUpdate else {
+            return attributes
+        }
+        
+        if kind.isSectionSupplementary {
+            let wasInserted = changes.insertedSections.contains(.init(newIndex: elementIndexPath.section))
+            
+            if wasInserted == false {
+                attributes?.alpha = 1.0
+            }
+        } else {
+            if changes.listSupplementaryState.had(for: kind) {
+                attributes?.alpha = 1.0
+            }
         }
         
         return attributes
     }
     
-    override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
+    override func finalLayoutAttributesForDisappearingSupplementaryElement(
+        ofKind elementKind: String,
+        at elementIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
     {
-        let wasDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
         let attributes = super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
+        
+        guard let changes = self.changesDuringCurrentUpdate else {
+            return attributes
+        }
+        
+        let wasDeleted = changes.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
         
         if wasDeleted == false {
             attributes?.alpha = 1.0
@@ -699,14 +742,18 @@ public protocol CollectionViewLayoutDelegate : AnyObject
 
 fileprivate struct UpdateItems : Equatable
 {
+    let listSupplementaryState : ListSupplementaryState
+    
     let insertedSections : Set<InsertSection>
     let deletedSections : Set<DeleteSection>
     
     let insertedItems : Set<InsertItem>
     let deletedItems : Set<DeleteItem>
     
-    init(with updateItems : [UICollectionViewUpdateItem])
+    init(with updateItems : [UICollectionViewUpdateItem], listSupplementaryState : ListSupplementaryState)
     {
+        self.listSupplementaryState = listSupplementaryState
+        
        var insertedSections = Set<InsertSection>()
        var deletedSections = Set<DeleteSection>()
 
@@ -746,6 +793,44 @@ fileprivate struct UpdateItems : Equatable
         
         self.insertedItems = insertedItems
         self.deletedItems = deletedItems
+    }
+    
+    struct ListSupplementaryState : Hashable {
+        
+        let hadContainerHeader : Bool
+        let hadHeader : Bool
+        let hadFooter : Bool
+        let hadOverscrollFooter : Bool
+        
+        init(content : ListLayoutContent) {
+            self.hadContainerHeader = content.containerHeader.isPopulated
+            self.hadHeader = content.header.isPopulated
+            self.hadFooter = content.footer.isPopulated
+            self.hadOverscrollFooter = content.overscrollFooter.isPopulated
+        }
+        
+        init(
+            hadContainerHeader: Bool,
+            hadHeader: Bool,
+            hadFooter: Bool,
+            hadOverscrollFooter: Bool
+        ) {
+            self.hadContainerHeader = hadContainerHeader
+            self.hadHeader = hadHeader
+            self.hadFooter = hadFooter
+            self.hadOverscrollFooter = hadOverscrollFooter
+        }
+     
+        func had(for kind: SupplementaryKind) -> Bool {
+            switch kind {
+            case .listContainerHeader: return self.hadContainerHeader
+            case .listHeader: return self.hadHeader
+            case .listFooter: return self.hadFooter
+            case .sectionHeader: return false
+            case .sectionFooter: return false
+            case .overscrollFooter: return self.hadOverscrollFooter
+            }
+        }
     }
     
     struct InsertSection : Hashable
