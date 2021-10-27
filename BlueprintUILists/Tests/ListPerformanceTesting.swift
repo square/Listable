@@ -85,7 +85,7 @@ fileprivate struct Label : UIViewElement {
     
     var text : String
     
-    static func makeUIView() -> UILabel {
+    func makeUIView() -> UILabel {
         return UILabel()
     }
     

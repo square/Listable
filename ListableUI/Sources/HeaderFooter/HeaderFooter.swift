@@ -17,7 +17,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     public var sizing : Sizing
     public var layouts : HeaderFooterLayouts
     
-    public typealias OnTap = (Content) -> ()
+    public typealias OnTap = () -> ()
     public var onTap : OnTap?
     
     public var debuggingIdentifier : String? = nil
@@ -51,7 +51,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         
         let defaults = self.content.defaultHeaderFooterProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
         self.layouts = finalValue(from: layouts, defaults.layouts, .init())
         
         self.onTap = onTap
@@ -67,6 +67,12 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     public var reappliesToVisibleView: ReappliesToVisibleView {
         self.content.reappliesToVisibleView
+    }
+    
+    // MARK: AnyHeaderFooterConvertible
+    
+    public func asAnyHeaderFooter() -> AnyHeaderFooter {
+        self
     }
     
     // MARK: AnyHeaderFooter_Internal
@@ -103,6 +109,42 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     public func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
     {
         return PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
+    }
+}
+
+
+extension HeaderFooterContent {
+    
+    /// Identical to `HeaderFooter.init` which takes in a `HeaderFooterContent`,
+    /// except you can call this on the `HeaderFooterContent` itself, instead of wrapping it,
+    /// to avoid additional nesting, and to hoist your content up in your code.
+    ///
+    /// ```
+    /// Section("id") { section in
+    ///     section.header = MyHeaderContent(
+    ///         title: "Hello, World!"
+    ///     )
+    ///     .with(
+    ///         sizing: .thatFits(.noConstraint),
+    ///     )
+    ///
+    /// struct MyHeaderContent : HeaderFooterContent {
+    ///    var title : String
+    ///    ...
+    /// }
+    /// ```
+    public func with(
+        sizing : Sizing? = nil,
+        layouts : HeaderFooterLayouts? = nil,
+        onTap : HeaderFooter<Self>.OnTap? = nil
+    ) -> HeaderFooter<Self>
+    {
+        HeaderFooter(
+            self,
+            sizing: sizing,
+            layouts: layouts,
+            onTap: onTap
+        )
     }
 }
 

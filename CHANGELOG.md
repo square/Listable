@@ -14,6 +14,56 @@
 
 # Past Releases
 
+# [0.29.3] - 2021-10-22
+
+### Fixed
+
+- Ensure we properly pass through the `ListEnvironment` when updating on-screen views.
+
+# [0.29.2] - 2021-10-21
+
+### Fixed
+
+- Fixed an erroneous `weak` reference in `SupplementaryContainerView` which lead to contents being deallocated too early – this is not actually needed. `HeaderFooterViewStatePair` holds the reference to the contained `AnyPresentationHeaderFooterState`, there are not direct strong references from `AnyPresentationHeaderFooterState` to `SupplementaryContainerView`.
+
+# [0.29.1] - 2021-10-18
+
+### Fixed
+
+- Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
+
+# [0.29.0] - 2021-10-13
+
+### Added
+
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
+
+### Changed
+
+- `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
+
+# [0.28.0] - 2021-09-28
+
+### Changed
+
+- [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
+    
+    ```swift
+    section.header = MyHeaderContent(title: "Albums")
+    ```
+    
+    Instead of:
+
+    ```swift
+    section.header = HeaderFooter(MyHeaderContent(title: "Albums"))
+    ```
+
+# [0.27.1] - 2021-09-28
+
+### Changed
+
+- [Change the default sizing of `Item` and `HeaderFooter`](https://github.com/kyleve/Listable/pull/331) to `.thatFits(.noConstraint)` from requiring the min from the layout. This is more common for self-sizing cells.
+
 # [0.27.0] - 2021-09-15
 
 ### Changed
@@ -468,7 +518,13 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.27.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.29.3...HEAD
+[0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3
+[0.29.2]: https://github.com/kyleve/Listable/compare/0.29.1...0.29.2
+[0.29.1]: https://github.com/kyleve/Listable/compare/0.29.0...0.29.1
+[0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
+[0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
+[0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
 [0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
 [0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
 [0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0

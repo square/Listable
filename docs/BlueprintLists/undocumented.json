@@ -1,40 +1,40 @@
 {
   "warnings": [
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
+      "file": "/Users/k/Desktop/Development/Listable4/BlueprintUILists/Sources/BlueprintHeaderFooterContent.swift",
       "line": 112,
       "symbol": "BlueprintHeaderFooterContent.apply(to:for:with:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/HeaderFooter.swift",
+      "file": "/Users/k/Desktop/Development/Listable4/BlueprintUILists/Sources/HeaderFooter.swift",
       "line": 123,
       "symbol": "ElementHeaderFooterContent.represented",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/HeaderFooter.swift",
+      "file": "/Users/k/Desktop/Development/Listable4/BlueprintUILists/Sources/HeaderFooter.swift",
       "line": 130,
       "symbol": "ElementHeaderFooterContent.isEquivalent(to:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/Item.swift",
+      "file": "/Users/k/Desktop/Development/Listable4/BlueprintUILists/Sources/Item.swift",
       "line": 129,
       "symbol": "ElementItemContent.represented",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/k/Desktop/Development/Listable5/BlueprintUILists/Sources/List.Measurement.swift",
+      "file": "/Users/k/Desktop/Development/Listable4/BlueprintUILists/Sources/List.Measurement.swift",
       "line": 47,
       "symbol": "List.Measurement",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/k/Desktop/Development/Listable5"
+  "source_directory": "/Users/k/Desktop/Development/Listable4"
 }

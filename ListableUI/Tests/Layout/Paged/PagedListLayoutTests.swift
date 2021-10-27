@@ -45,13 +45,13 @@ class PagedListLayoutTests : XCTestCase
                 $0.itemInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
             }
             
-            list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue))
-            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .green))
+            list.content.header = TestingHeaderFooterContent(color: .blue)
+            list.content.footer = TestingHeaderFooterContent(color: .green)
             
             list += Section("first") { section in
                 
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))
+                section.header = TestingHeaderFooterContent(color: .purple)
+                section.footer = TestingHeaderFooterContent(color: .red)
                 
                 section += TestingItemContent(color: .init(white: 0.0, alpha: 0.3))
                 section += TestingItemContent(color: .init(white: 0.0, alpha: 0.4))
@@ -60,8 +60,8 @@ class PagedListLayoutTests : XCTestCase
             
             list += Section("second") { section in
                 
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .purple))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .red))
+                section.header = TestingHeaderFooterContent(color: .purple)
+                section.footer = TestingHeaderFooterContent(color: .red)
                 
                 section += TestingItemContent(color: .init(white: 0.0, alpha: 0.6))
                 section += TestingItemContent(color: .init(white: 0.0, alpha: 0.7))
