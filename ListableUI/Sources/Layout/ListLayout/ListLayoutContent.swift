@@ -10,17 +10,17 @@ import Foundation
 
 public final class ListLayoutContent
 {
-    var contentSize : CGSize
+    public var contentSize : CGSize
     
-    let containerHeader : SupplementaryItemInfo
-    let header : SupplementaryItemInfo
-    let footer : SupplementaryItemInfo
+    public let containerHeader : SupplementaryItemInfo
+    public let header : SupplementaryItemInfo
+    public let footer : SupplementaryItemInfo
     
-    let overscrollFooter : SupplementaryItemInfo
+    public let overscrollFooter : SupplementaryItemInfo
     
-    let sections : [SectionInfo]
+    public let sections : [SectionInfo]
     
-    var all : [ListLayoutContentItem] {
+    public var all : [ListLayoutContentItem] {
         var all : [ListLayoutContentItem] = []
         
         if header.isPopulated {
@@ -247,7 +247,7 @@ public final class ListLayoutContent
 }
 
 
-protocol ListLayoutContentItem : AnyObject
+public protocol ListLayoutContentItem : AnyObject
 {
     var size : CGSize { get set }
     var x : CGFloat { get set }
@@ -257,18 +257,18 @@ protocol ListLayoutContentItem : AnyObject
 }
 
 
-public extension ListLayoutContent
+extension ListLayoutContent
 {
-    final class SectionInfo
+    public final class SectionInfo
     {
         let state : PresentationState.SectionState
         
-        let header : SupplementaryItemInfo
-        let footer : SupplementaryItemInfo
+        public let header : SupplementaryItemInfo
+        public let footer : SupplementaryItemInfo
                 
-        var items : [ItemInfo]
+        public internal(set) var items : [ItemInfo]
         
-        var layouts : SectionLayouts {
+        public var layouts : SectionLayouts {
             self.state.model.layouts
         }
         
@@ -324,7 +324,7 @@ public extension ListLayoutContent
         }
     }
 
-    final class SupplementaryItemInfo : ListLayoutContentItem
+    public final class SupplementaryItemInfo : ListLayoutContentItem
     {
         static func empty(_ kind : SupplementaryKind) -> SupplementaryItemInfo
         {
@@ -338,32 +338,33 @@ public extension ListLayoutContent
         let state : AnyPresentationHeaderFooterState?
         
         let kind : SupplementaryKind
-        let measurer : (Sizing.MeasureInfo) -> CGSize
+        public let measurer : (Sizing.MeasureInfo) -> CGSize
                 
-        let isPopulated : Bool
+        public let isPopulated : Bool
                         
-        var size : CGSize = .zero
+        public var size : CGSize = .zero
         
-        var x : CGFloat = .zero
+        public var x : CGFloat = .zero
         var pinnedX : CGFloat? = nil
         
-        var y : CGFloat = .zero
+        public var y : CGFloat = .zero
         var pinnedY : CGFloat? = nil
         
-        var zIndex : Int = 0
+        public var zIndex : Int = 0
         
-        var layouts : HeaderFooterLayouts {
+        public var layouts : HeaderFooterLayouts {
+            // TODO: Why the ?? here
             self.state?.anyModel.layouts ?? .init()
         }
         
-        var defaultFrame : CGRect {
+        public var defaultFrame : CGRect {
             CGRect(
                 origin: CGPoint(x: self.x, y: self.y),
                 size: self.size
             )
         }
         
-        var visibleFrame : CGRect {
+        public var visibleFrame : CGRect {
             CGRect(
                 origin: CGPoint(
                     x: self.pinnedX ?? self.x,
@@ -397,25 +398,25 @@ public extension ListLayoutContent
     }
     
 
-    final class ItemInfo : ListLayoutContentItem
+    public final class ItemInfo : ListLayoutContentItem
     {
         let state : AnyPresentationItemState
         
         var indexPath : IndexPath
                 
         let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
-        let measurer : (Sizing.MeasureInfo) -> CGSize
+        public let measurer : (Sizing.MeasureInfo) -> CGSize
         
-        var position : ItemPosition = .single
+        public var position : ItemPosition = .single
                 
-        var size : CGSize = .zero
+        public var size : CGSize = .zero
                 
-        var x : CGFloat = .zero
-        var y : CGFloat = .zero
+        public var x : CGFloat = .zero
+        public var y : CGFloat = .zero
         
-        var zIndex : Int = 0
+        public var zIndex : Int = 0
         
-        var layouts : ItemLayouts {
+        public var layouts : ItemLayouts {
             self.state.anyModel.layouts
         }
         
