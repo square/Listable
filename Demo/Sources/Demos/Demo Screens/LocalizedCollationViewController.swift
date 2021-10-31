@@ -22,7 +22,7 @@ final class LocalizedCollationViewController : ListViewController {
         }
         
         list += LocalizedItemCollator.sections(with: items) { collated, section in
-            section.header = HeaderFooter(DemoHeader(title: collated.title))
+            section.header = DemoHeader(title: collated.title)
         }
     }
 }

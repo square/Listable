@@ -133,11 +133,11 @@ extension Sizing
 {
     public struct MeasureInfo
     {
-        var sizeConstraint : CGSize
-        var defaultSize : CGSize
-        var direction : LayoutDirection
+        public var sizeConstraint : CGSize
+        public var defaultSize : CGSize
+        public var direction : LayoutDirection
         
-        init(
+        public init(
             sizeConstraint: CGSize,
             defaultSize: CGSize,
             direction: LayoutDirection
@@ -331,8 +331,13 @@ public enum CustomWidth : Equatable
     
     public struct Position : Equatable
     {
-        var origin : CGFloat
-        var width : CGFloat
+        public var origin : CGFloat
+        public var width : CGFloat
+        
+        public init(origin: CGFloat, width: CGFloat) {
+            self.origin = origin
+            self.width = width
+        }
     }
 }
 

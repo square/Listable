@@ -6,7 +6,6 @@
 //
 
 import BlueprintUI
-
 import ListableUI
 
 
@@ -18,13 +17,13 @@ import ListableUI
 /// on `ListView` itself.
 /// ```
 /// List { list in
-///     list.header = HeaderFooter(PodcastsHeader())
+///     list.header = PodcastsHeader()
 ///
 ///     let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
 ///
 ///     list += Section("podcasts") { section in
 ///
-///         section.header = HeaderFooter(PodcastsSectionHeader())
+///         section.header = PodcastsSectionHeader()
 ///
 ///         section += podcasts.map { podcast in
 ///             PodcastRow(podcast: podcast)

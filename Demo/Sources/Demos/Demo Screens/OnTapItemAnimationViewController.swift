@@ -52,14 +52,14 @@ fileprivate struct ItemRow : BlueprintItemContent, Equatable {
             
             row.addFlexible(child: Overlay { overlay in
                 overlay.add(
-                    Label(text: self.price) { label in
+                    child: Label(text: self.price) { label in
                         label.font = .systemFont(ofSize: 16.0, weight: .semibold)
                     }
                     .opacity(isShowingPrice ? 1 : 0)
                 )
                 
                 overlay.add(
-                    Label(text: self.onTapText) { label in
+                    child: Label(text: self.onTapText) { label in
                         label.font = .systemFont(ofSize: 16.0, weight: .semibold)
                     }
                     .opacity(isShowingPrice ? 0 : 1)

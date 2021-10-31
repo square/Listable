@@ -8,7 +8,7 @@
 import Foundation
 
 
-public protocol AnyHeaderFooter : AnyHeaderFooter_Internal
+public protocol AnyHeaderFooter : AnyHeaderFooterConvertible, AnyHeaderFooter_Internal
 {
     var anyContent : Any { get }
     

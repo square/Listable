@@ -26,13 +26,13 @@ class ListViewTests: XCTestCase
             
             listView?.configure { list in
                 
-                list.header = HeaderFooter(TestSupplementary())
-                list.footer = HeaderFooter(TestSupplementary())
-                list.overscrollFooter = HeaderFooter(TestSupplementary())
+                list.header = TestSupplementary()
+                list.footer = TestSupplementary()
+                list.overscrollFooter = TestSupplementary()
 
                 list("content") { section in
-                    section.header = HeaderFooter(TestSupplementary())
-                    section.footer = HeaderFooter(TestSupplementary())
+                    section.header = TestSupplementary()
+                    section.footer = TestSupplementary()
                     
                     section += TestContent(content: "1")
                     section += TestContent(content: "2")
@@ -65,7 +65,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section("a-section")
-            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
+            list.content.overscrollFooter = TestSupplementary()
         }
         
         listView.collectionView.contentOffset.y = 100
@@ -85,7 +85,7 @@ class ListViewTests: XCTestCase
             list.animatesChanges = false
             
             list += Section("a-section")
-            list.content.overscrollFooter = HeaderFooter(TestSupplementary())
+            list.content.overscrollFooter = TestSupplementary()
         }
         
         listView.collectionView.contentOffset.y = 100

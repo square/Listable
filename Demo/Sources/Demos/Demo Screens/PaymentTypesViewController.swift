@@ -29,7 +29,7 @@ final class PaymentTypesViewController : ListViewController {
         
         list += Section(SectionID.main) { section in
             
-            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.main.title))
+            section.header = PaymentTypeHeader(title: SectionID.main.title)
             
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain }
@@ -39,7 +39,7 @@ final class PaymentTypesViewController : ListViewController {
         
         list += Section(SectionID.more) { section in
             
-            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.more.title))
+            section.header = PaymentTypeHeader(title: SectionID.more.title)
             
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain == false }
@@ -49,7 +49,7 @@ final class PaymentTypesViewController : ListViewController {
         
         list += Section(SectionID.disabled) { section in
             
-            section.header = HeaderFooter(PaymentTypeHeader(title: SectionID.disabled.title))
+            section.header = PaymentTypeHeader(title: SectionID.disabled.title)
             
             section.reordering.minItemCount = 0
             

@@ -19,10 +19,10 @@ public struct Section
     public var identifier : Identifier
     
     /// The header, if any, associated with the section.
-    public var header : AnyHeaderFooter?
+    public var header : AnyHeaderFooterConvertible?
     
     /// The footer, if any, associated with the section.
-    public var footer : AnyHeaderFooter?
+    public var footer : AnyHeaderFooterConvertible?
     
     /// The items, if any, associated with the section.
     public var items : [AnyItem]
@@ -79,8 +79,8 @@ public struct Section
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
-        header : AnyHeaderFooter? = nil,
-        footer : AnyHeaderFooter? = nil,
+        header : AnyHeaderFooterConvertible? = nil,
+        footer : AnyHeaderFooterConvertible? = nil,
         reordering : SectionReordering = .init(),
         items : [AnyItemConvertible] = [],
         configure : Configure = { _ in }

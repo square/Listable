@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct ListLayoutAttributes : Equatable {
+struct ListLayoutAttributes : Equatable {
     
     var contentSize : CGSize
     

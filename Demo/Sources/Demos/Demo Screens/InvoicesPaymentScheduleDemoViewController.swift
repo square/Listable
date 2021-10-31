@@ -79,15 +79,9 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             if self.data.requestsInitialDeposit {
                 list += Section(SectionIdentifier.deposits) { section in
                     
-                    section.header = HeaderFooter(
-                        SectionHeader(text: "Deposit Request"),
-                        sizing: .thatFits()
-                    )
+                    section.header = SectionHeader(text: "Deposit Request")
                     
-                    section.footer = HeaderFooter(
-                        SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
-                        sizing: .thatFits()
-                    )
+                    section.footer = SectionFooter(text: "Request $10.00 deposit on $100.00 invoice.")
                     
                     section += Item(
                         SegmentedControlRow(id: "split-type") { control in
@@ -124,15 +118,9 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             if self.data.splitsIntoMilestones {
                 list += Section(SectionIdentifier.splits) { section in
                     
-                    section.header = HeaderFooter(
-                        SectionHeader(text: "Balance Split"),
-                        sizing: .thatFits()
-                    )
+                    section.header = SectionHeader(text: "Balance Split")
                     
-                    section.footer = HeaderFooter(
-                        SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
-                        sizing: .thatFits()
-                    )
+                    section.footer = SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments.")
                     
                     section += Item(
                         SegmentedControlRow(id: "split-type") { control in

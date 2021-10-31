@@ -30,7 +30,7 @@ enum BestPractices {
             
             list.header = ExampleHeader(title: "Welcome To My List")
             
-            list.footer = ExampleFooter(title: "There are many like it, but this one is mine.")
+            list.footer = ExampleFooter(text: "There are many like it, but this one is mine.")
         }
     }
 }
@@ -47,7 +47,7 @@ fileprivate struct ExampleHeader : Equatable, BlueprintHeaderFooterContent {
 
 fileprivate struct ExampleFooter : Equatable, BlueprintHeaderFooterContent {
     
-    var content : String
+    var text : String
     
     var elementRepresentation: Element {
         Empty()
@@ -57,10 +57,10 @@ fileprivate struct ExampleFooter : Equatable, BlueprintHeaderFooterContent {
 
 fileprivate struct ExampleContent : Equatable, BlueprintItemContent {
     
-    var name : String
+    var text : String
     
     var identifierValue : String {
-        name
+        text
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {
