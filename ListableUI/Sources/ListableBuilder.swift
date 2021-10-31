@@ -1,5 +1,5 @@
 //
-//  ContentBuilder.swift
+//  ListableBuilder.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 6/10/21.
@@ -13,9 +13,7 @@
 /// https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
 /// https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/
 ///
-/// TODO: Map does not work yet. I think I need to make array conform to AnyItemConvertible? But that didnt quite work...
-///
-@resultBuilder public enum ContentBuilder<ContentType> {
+@resultBuilder public enum ListableBuilder<ContentType> {
     
     /// The type of individual statement expressions in the transformed function.
     public typealias Expression = ContentType
@@ -45,6 +43,12 @@
     /// expressions to translate them into partial results.
     public static func buildExpression(_ expression: Expression) -> Component {
         [expression]
+    }
+    
+    /// If declared, provides contextual type information for statement
+    /// expressions to translate them into partial results.
+    public static func buildExpression(_ expression: [Expression]) -> Component {
+        expression
     }
 
     /// Enables support for `if` statements that do not have an `else`.

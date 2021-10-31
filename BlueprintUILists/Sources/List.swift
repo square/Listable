@@ -70,6 +70,20 @@ public struct List : Element
         self.properties = .default(with: configure)
     }
     
+    /// Create a new list, configured with the provided properties,
+    /// configured with the provided `ListProperties` builder.
+    public init(
+        measurement : List.Measurement = .fillParent,
+        configure : ListProperties.Configure = { _ in },
+        @ListableBuilder<Section> sections : () -> [Section]
+    ) {
+        self.measurement = measurement
+        
+        self.properties = .default(with: configure)
+        
+        self.properties.sections += sections()
+    }
+    
     //
     // MARK: Element
     //

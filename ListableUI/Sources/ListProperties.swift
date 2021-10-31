@@ -197,8 +197,10 @@ import Foundation
     // MARK: Result Builders, Etc.
     //
     
-    /// Allows directly setting properties on the list's content, without having to explicitly specify
-    /// the `.content` component. Eg, you can now replace:
+    /// Allows directly setting properties on the list's `Content`, without having to explicitly specify
+    /// the `.content` component.
+    ///
+    /// Eg, you can now replace:
     /// ```
     /// ListProperties { list in
     ///     list.content.header = ...
@@ -223,7 +225,7 @@ import Foundation
     ///
     ///
     public mutating func callAsFunction(
-        @ContentBuilder<Section> _ builder : () -> [Section]
+        @ListableBuilder<Section> _ builder : () -> [Section]
     ) {
         self.sections += builder()
     }

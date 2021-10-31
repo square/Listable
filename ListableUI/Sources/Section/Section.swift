@@ -101,24 +101,6 @@ public struct Section
     
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
-        configure : Configure = { _ in },
-        @ContentBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
-    ) {
-        self.identifier = Identifier(identifier)
-        
-        self.layouts = .init()
-        self.header = nil
-        self.footer = nil
-        self.reordering = .init()
-        self.items = []
-        
-        configure(&self)
-        
-        self.items = items().map { $0.toAnyItem() }
-    }
-    
-    public init<IdentifierValue:Hashable>(
-        _ identifier : IdentifierValue,
         configure : Configure
     ) {
         self.identifier = Identifier(identifier)
@@ -131,6 +113,24 @@ public struct Section
         
         configure(&self)
     }
+    
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        configure : Configure = { _ in },
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = .init()
+        self.header = nil
+        self.footer = nil
+        self.reordering = .init()
+        self.items = []
+        
+        configure(&self)
+        
+        self.items += items().map { $0.toAnyItem() }
+    }
 
     //
     // MARK: Building Content
@@ -138,7 +138,7 @@ public struct Section
     
     ///
     public mutating func callAsFunction(
-        @ContentBuilder<AnyItemConvertible> _ content : () -> [AnyItemConvertible]
+        @ListableBuilder<AnyItemConvertible> _ content : () -> [AnyItemConvertible]
     ) {
         self.items += content().map { $0.toAnyItem() }
     }
