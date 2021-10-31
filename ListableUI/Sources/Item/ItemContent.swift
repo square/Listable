@@ -440,7 +440,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
 
 public extension ItemContent {
     
-     func toItem() -> AnyItem {
+     func toAnyItem() -> AnyItem {
         Item(self)
     }
 }

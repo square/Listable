@@ -27,8 +27,7 @@ import Foundation
 /// ```
 /// In this example, the `list` parameter to the trailing closure is a `ListProperties` object.
 ///
-/// Other Uses
-/// ----------
+/// ### Other Uses
 /// You may even find using `ListProperties` useful if you do have a reference to the underlying `ListView`
 /// instance (eg in your own `UIViewController`).
 ///
@@ -220,7 +219,6 @@ import Foundation
         set { self.content[keyPath: keyPath] = newValue }
     }
     
-#if swift(>=5.4)
     ///
     ///
     ///
@@ -229,7 +227,6 @@ import Foundation
     ) {
         self.sections += builder()
     }
-#endif
     
     /// Allows streamlined creation of sections when building a list:
     /// ```

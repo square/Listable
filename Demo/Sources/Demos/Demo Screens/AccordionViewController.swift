@@ -19,21 +19,19 @@ final class AccordionViewController : ListViewController
         
         list {
             for sectionIndex in (1...10) {
-                Section(sectionIndex) { section in
-                    
-                    section.header = HeaderFooter(
+                Section(
+                    sectionIndex,
+                    header: HeaderFooter(
                         AccordionHeader(text: "Section Header #\(sectionIndex)"),
                         onTap: { _ in
                             self.expandedSectionIndex = sectionIndex
                             self.reload(animated: true)
                         }
                     )
-                    
-                    section {
-                        for itemIndex in (1...sectionIndex) {
-                            Item(AccordionRow(text: "Row #\(sectionIndex), \(itemIndex)")) {
-                                $0.insertAndRemoveAnimations = .fade
-                            }
+                ) {
+                    for itemIndex in (1...sectionIndex) {
+                        Item(AccordionRow(text: "Row #\(sectionIndex), \(itemIndex)")) {
+                            $0.insertAndRemoveAnimations = .fade
                         }
                     }
                 }

@@ -5,9 +5,6 @@
 //  Created by Kyle Van Essen on 6/10/21.
 //
 
-#if swift(>=5.4)
-
-
 ///
 /// Provides generic result builders to provide a SwiftUI-like DSL for building content.
 ///
@@ -73,9 +70,8 @@
         components.reduce(into: []) { $0 += $1 }
     }
 
-    /// If declared, this will be called on the partial result of an 'if
-    /// #available' block to allow the result builder to erase type
-    /// information.
+    /// If declared, this will be called on the partial result of an
+    /// `if #available` block to allow the result builder to erase type information.
     public static func buildLimitedAvailability(_ component: Component) -> Component {
         component
     }
@@ -86,5 +82,3 @@
         component
     }
 }
-
-#endif

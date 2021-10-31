@@ -82,7 +82,7 @@ public struct Section
         header : AnyHeaderFooter? = nil,
         footer : AnyHeaderFooter? = nil,
         reordering : SectionReordering = .init(),
-        items : [AnyItem] = [],
+        items : [AnyItemConvertible] = [],
         configure : Configure = { _ in }
     ) {
         self.identifier = Identifier(identifier)
@@ -94,18 +94,42 @@ public struct Section
         
         self.reordering = reordering
         
-        self.items = items
+        self.items = items.map { $0.toAnyItem() }
         
         configure(&self)
     }
     
-    public init<IdentifierType:Hashable>(
-        _ identifier : IdentifierType,
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        configure : Configure = { _ in },
         @ContentBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
     ) {
-        self.init(identifier)
-
-        self(items)
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = .init()
+        self.header = nil
+        self.footer = nil
+        self.reordering = .init()
+        self.items = []
+        
+        configure(&self)
+        
+        self.items = items().map { $0.toAnyItem() }
+    }
+    
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        configure : Configure
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = .init()
+        self.header = nil
+        self.footer = nil
+        self.reordering = .init()
+        self.items = []
+        
+        configure(&self)
     }
 
     //
@@ -116,7 +140,7 @@ public struct Section
     public mutating func callAsFunction(
         @ContentBuilder<AnyItemConvertible> _ content : () -> [AnyItemConvertible]
     ) {
-        self.items += content().map { $0.toItem() }
+        self.items += content().map { $0.toAnyItem() }
     }
     
     //

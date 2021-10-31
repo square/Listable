@@ -134,7 +134,7 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     
     // MARK: AnyItemConvertible
     
-    public func toItem() -> AnyItem {
+    public func toAnyItem() -> AnyItem {
         self
     }
     

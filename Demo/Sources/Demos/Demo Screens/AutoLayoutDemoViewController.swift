@@ -14,16 +14,18 @@ final class AutoLayoutDemoViewController : ListViewController {
     override func configure(list: inout ListProperties) {
      
         list {
-            Section("section") {
-                AutoLayoutContent(
-                    header: "Some header text",
-                    detail: "Some detail text"
-                )
-                
-                AutoLayoutContent(
-                    header: "Some header text",
-                    detail: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas odio urna, volutpat vitae volutpat quis, auctor ut purus. Pellentesque ac varius metus."
-                )
+            Section("section") { section in
+                section {
+                    AutoLayoutContent(
+                        header: "Some header text",
+                        detail: "Some detail text"
+                    )
+                    
+                    AutoLayoutContent(
+                        header: "Some header text",
+                        detail: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas odio urna, volutpat vitae volutpat quis, auctor ut purus. Pellentesque ac varius metus."
+                    )
+                }
             }
         }
     }
