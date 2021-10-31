@@ -87,7 +87,6 @@ enum BestPractices {
             
             /// Creating a second with `configure` syntax so we can add a header.
             Section("Second Section") { section in
-                
                 section.header = ExampleHeader(title: "This Is My Section")
                 section.footer = ExampleFooter(text: "Rules apply. Prohibited where void.")
             } items: {

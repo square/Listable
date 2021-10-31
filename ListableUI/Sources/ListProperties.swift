@@ -194,7 +194,7 @@ import Foundation
     }
     
     //
-    // MARK: Result Builders, Etc.
+    // MARK: Result Builders
     //
     
     /// Allows directly setting properties on the list's `Content`, without having to explicitly specify
@@ -222,13 +222,17 @@ import Foundation
     }
     
     ///
-    ///
+    /// TODO: Keep or remove depending on code review.
     ///
     public mutating func callAsFunction(
         @ListableBuilder<Section> _ builder : () -> [Section]
     ) {
         self.sections += builder()
     }
+    
+    //
+    // MARK: Adding Content
+    //
     
     /// Allows streamlined creation of sections when building a list:
     /// ```
@@ -244,10 +248,6 @@ import Foundation
     ) {
         self += Section(identifier, configure: configure)
     }
-    
-    //
-    // MARK: Adding Content
-    //
     
     /// Adds a new section to the `content`.
     public mutating func add(_ section : Section)
