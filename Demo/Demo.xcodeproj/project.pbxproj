@@ -57,6 +57,7 @@
 		0A07119224BA798400CDF65D /* ListStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateViewController.swift; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0A1306E6272F29B300F6DDDD /* BestPractices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestPractices.swift; sourceTree = "<group>"; };
+		0A1306EA272F762500F6DDDD /* TASKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TASKLIST.md; path = ../TASKLIST.md; sourceTree = "<group>"; };
 		0A49210324E5E11300D17038 /* AccordionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
 		0A5DC1A824F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAppearsAfterKeyboardViewController.swift; sourceTree = "<group>"; };
 		0A5F5CCE257EC2D7003CCE2C /* LocalizedCollationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedCollationViewController.swift; sourceTree = "<group>"; };
@@ -186,6 +187,7 @@
 			children = (
 				0A0E070323870A5700DDD27D /* README.md */,
 				0A87BA642463567B0047C3B5 /* CHANGELOG.md */,
+				0A1306EA272F762500F6DDDD /* TASKLIST.md */,
 				0AEB96C322FBCC1D00341DFF /* Sources */,
 				0AEB96E522FBCC5300341DFF /* Resources */,
 				0AEB96B022FBCBA500341DFF /* Demo */,
