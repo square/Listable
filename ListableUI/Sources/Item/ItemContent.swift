@@ -5,6 +5,9 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
+import UIKit
+
+
 ///
 /// An `ItemContent` is a type used to provide the content of an `Item` in a list section.
 ///
