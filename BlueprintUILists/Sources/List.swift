@@ -71,7 +71,7 @@ public struct List : Element
     }
     
     /// Create a new list, configured with the provided properties,
-    /// configured with the provided `ListProperties` builder.
+    /// configured with the provided `ListProperties` builder, and the provided `sections`.
     public init(
         measurement : List.Measurement = .fillParent,
         configure : ListProperties.Configure = { _ in },

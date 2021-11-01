@@ -8,6 +8,8 @@
 import Foundation
 
 
+/// A type-erased version of the `Item` struct, which is used by `Section` to
+/// create mixed-type content within a section's items.
 public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
 {
     var anyIdentifier : AnyIdentifier { get }

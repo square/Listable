@@ -74,8 +74,11 @@ public struct Section
     // MARK: Initialization
     //
     
+    /// Provides a mutable section for editing in an inline closure.
     public typealias Configure = (inout Section) -> ()
     
+    /// Creates a new section with all of the provided values, plus an optional
+    /// trailing closure to configure the section inline.
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
@@ -99,6 +102,7 @@ public struct Section
         configure(&self)
     }
     
+    /// Creates a new section with a trailing closure to configure the section inline.
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         configure : Configure
@@ -114,6 +118,7 @@ public struct Section
         configure(&self)
     }
     
+    /// Creates a new section with result builder-style APIs.
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
@@ -133,6 +138,7 @@ public struct Section
         self.footer = footer()
     }
     
+    /// Creates a new section with result builder-style APIs.
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],

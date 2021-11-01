@@ -18,6 +18,7 @@ public struct SwipeActionsConfiguration {
     /// Whether the first action is performed automatically with a full swipe.
     public var performsFirstActionWithFullSwipe : Bool
     
+    /// Creates a new configuration with the provided action.
     public init(
         performsFirstActionWithFullSwipe : Bool = false,
         action : SwipeAction
@@ -26,6 +27,7 @@ public struct SwipeActionsConfiguration {
         self.actions = [action]
     }
     
+    /// Creates a new configuration with the provided actions.
     public init(
         performsFirstActionWithFullSwipe : Bool = false,
         actions : [SwipeAction]
@@ -34,6 +36,7 @@ public struct SwipeActionsConfiguration {
         self.actions = actions
     }
     
+    /// Creates a new configuration with the provided actions.
     public init(
         performsFirstActionWithFullSwipe : Bool = false,
         @ListableBuilder<SwipeAction> actions : () -> [SwipeAction]
@@ -62,6 +65,7 @@ public struct SwipeAction {
 
     public var handler: Handler
     
+    /// Creates a new swipe action with the provided options.
     public init(
         title: String,
         backgroundColor: UIColor,
