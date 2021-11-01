@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added support for result builders when creating lists, sections, and swipe actions.
+
 ### Removed
 
 ### Changed
