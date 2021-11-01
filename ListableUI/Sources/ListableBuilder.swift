@@ -45,11 +45,6 @@
     public static func buildBlock(_ components: Component...) -> Component {
         components.reduce(into: []) { $0 += $1 }
     }
-    
-    // Todo: Do I need this?
-    public static func buildBlock(_ components: Expression...) -> Component {
-        components
-    }
 
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
     public static func buildExpression(_ expression: Expression) -> Component {
