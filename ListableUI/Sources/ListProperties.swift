@@ -150,7 +150,9 @@ import Foundation
     public typealias Configure = (inout ListProperties) -> ()
     
     /// An instance of `ListProperties` with sensible default values.
-    public static func `default`(with configure : Configure = { _ in }) -> Self {
+    public static func `default`(
+        with configure : Configure = { _ in }
+    ) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             layout: .table(),
@@ -221,15 +223,6 @@ import Foundation
         set { self.content[keyPath: keyPath] = newValue }
     }
     
-    ///
-    /// TODO: Keep or remove depending on code review.
-    ///
-    public mutating func callAsFunction(
-        @ListableBuilder<Section> _ builder : () -> [Section]
-    ) {
-        self.sections += builder()
-    }
-    
     //
     // MARK: Adding Content
     //
@@ -247,6 +240,20 @@ import Foundation
         configure : Section.Configure
     ) {
         self += Section(identifier, configure: configure)
+    }
+    
+    /// Adds the provided sections with the provided result builder.
+    ///
+    /// ```
+    /// list.add {
+    ///     Section("section1") { ... }
+    ///     Section("section2") { ... }
+    /// }
+    /// ```
+    public mutating func add(
+        @ListableBuilder<Section> sections : () -> [Section]
+    ) {
+        self.content.sections += sections()
     }
     
     /// Adds a new section to the `content`.

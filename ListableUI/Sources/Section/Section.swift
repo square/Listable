@@ -116,31 +116,38 @@ public struct Section
     
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
-        configure : Configure = { _ in },
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+        layouts : SectionLayouts = .init(),
+        reordering : SectionReordering = .init(),
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        header : () -> AnyHeaderFooterConvertible? = { nil },
+        footer : () -> AnyHeaderFooterConvertible? = { nil }
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = layouts
+        self.reordering = reordering
+        
+        self.items = items().map { $0.toAnyItem() }
+        
+        self.header = header()
+        self.footer = footer()
+    }
+    
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        header : () -> AnyHeaderFooterConvertible? = { nil },
+        footer : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.identifier = Identifier(identifier)
         
         self.layouts = .init()
-        self.header = nil
-        self.footer = nil
         self.reordering = .init()
-        self.items = []
         
-        configure(&self)
+        self.items = items().map { $0.toAnyItem() }
         
-        self.items += items().map { $0.toAnyItem() }
-    }
-
-    //
-    // MARK: Building Content
-    //
-    
-    ///
-    public mutating func callAsFunction(
-        @ListableBuilder<AnyItemConvertible> _ content : () -> [AnyItemConvertible]
-    ) {
-        self.items += content().map { $0.toAnyItem() }
+        self.header = header()
+        self.footer = footer()
     }
     
     //
@@ -209,6 +216,20 @@ public struct Section
     //
     // MARK: Adding & Removing Multiple Items
     //
+    
+    /// Adds the provided items with the provided result builder.
+    ///
+    /// ```
+    /// section.add {
+    ///     MyContent(text: "Person 1")
+    ///     MyContent(text: "Person 2")
+    /// }
+    /// ```
+    public mutating func add(
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+    ) {
+        self.items += items().map { $0.toAnyItem() }
+    }
     
     public static func += (lhs : inout Section, rhs : [AnyItem])
     {

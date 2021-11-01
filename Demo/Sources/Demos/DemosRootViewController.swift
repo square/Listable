@@ -238,7 +238,7 @@ public final class DemosRootViewController : ListViewController
             })
         }
         
-        list("selection-state") { [weak self] section in
+        list("selection-state") { section in
             
             section.header = DemoHeader(title: "List View Selection")
 
