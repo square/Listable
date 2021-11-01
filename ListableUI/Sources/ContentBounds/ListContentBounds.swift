@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 /// For participating layouts; allows controlling the padding around and width of content when it is laid out.
