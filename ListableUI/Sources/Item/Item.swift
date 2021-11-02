@@ -5,8 +5,21 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
-
-public struct Item<Content:ItemContent> : AnyItem
+///
+/// An `Item` is one of the core types deployed by Listable, allowing you to specify
+/// and control many of the behaviors, appearance options, and callbacks for interacting
+/// with rows within a list.
+///
+/// `Item` wraps an `ItemContent` struct (a protocol you implement to provide content),
+/// which drives the primary content of the row the `Item` displays.
+///
+/// If you are used to working with a collection view or table view, you can think of `ItemContent`
+/// as what you put in the `contentView` of your cell, and you can think of `Item` as all of the additional
+/// options of a row/cell: sizing, swipe to delete actions, reordering controls, callbacks, etc.
+///
+/// Once added to a section, `Item` is type erased to`AnyItem`,
+/// to allow for mixed collections of content within a section.
+public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
 {
     public var identifier : Content.Identifier
     
@@ -130,6 +143,12 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var reappliesToVisibleView: ReappliesToVisibleView {
         self.content.reappliesToVisibleView
+    }
+    
+    // MARK: AnyItemConvertible
+    
+    public func toAnyItem() -> AnyItem {
+        self
     }
     
     // MARK: AnyItem_Internal

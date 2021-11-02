@@ -83,32 +83,27 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
-        var actions: [SwipeAction] = []
-
-        if allowDeleting {
-            actions.append(
+        
+        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+            if allowDeleting {
                 SwipeAction(
                     title: "Delete",
                     backgroundColor: .systemRed,
-                    image: nil,
-                    handler: { [weak self] expandActions in
-                        self?.confirmDelete(item: item, expandActions: expandActions)
-                })
-            )
-        }
-
-        actions.append(
+                    image: nil
+                ) { [weak self] expandActions in
+                    self?.confirmDelete(item: item, expandActions: expandActions)
+                }
+            }
+            
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                image: nil,
-                handler: { [weak self] expandActions in
-                    self?.toggleSave(item: item)
-                    expandActions(false)
-            })
-        )
-
-        return SwipeActionsConfiguration(actions: actions, performsFirstActionWithFullSwipe: true)
+                image: nil
+            ) { [weak self] expandActions in
+                self?.toggleSave(item: item)
+                expandActions(false)
+            }
+        }
     }
 
     @objc private func addItem() {

@@ -40,7 +40,7 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent where Coordinator.ItemContentType == Self
+public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -442,6 +442,15 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     /// Creates a new coordinator with the provided actions and info.
     func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
 }
+
+
+public extension ItemContent {
+    
+     func toAnyItem() -> AnyItem {
+        Item(self)
+    }
+}
+
 
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
 public struct ItemContentViews<Content:ItemContent>

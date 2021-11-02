@@ -18,7 +18,7 @@ import UIKit
 /// on `ListView` itself.
 /// ```
 /// List { list in
-///     list.content.header = PodcastsHeader()
+///     list.header = PodcastsHeader()
 ///
 ///     let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
 ///
@@ -69,6 +69,20 @@ public struct List : Element
         self.measurement = measurement
         
         self.properties = .default(with: configure)
+    }
+    
+    /// Create a new list, configured with the provided properties,
+    /// configured with the provided `ListProperties` builder, and the provided `sections`.
+    public init(
+        measurement : List.Measurement = .fillParent,
+        configure : ListProperties.Configure = { _ in },
+        @ListableBuilder<Section> sections : () -> [Section]
+    ) {
+        self.measurement = measurement
+        
+        self.properties = .default(with: configure)
+        
+        self.properties.sections += sections()
     }
     
     //

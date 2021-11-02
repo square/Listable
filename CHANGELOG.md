@@ -4,6 +4,21 @@
 
 ### Added
 
+- Added support for result builders when creating lists, sections, and swipe actions:
+
+    ```swift
+    List {
+        Section("id") {
+            ExampleContent(text: "First Item")
+            ExampleContent(text: "Second Item")
+        } header: {
+            ExampleHeader(title: "This Is My Section")
+        } footer: {
+            ExampleFooter(text: "Rules apply. Prohibited where void.")
+        }
+    }
+    ```
+
 ### Removed
 
 ### Changed
