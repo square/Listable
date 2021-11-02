@@ -58,7 +58,7 @@ final class ItemizationEditorViewController : UIViewController
                 alwaysBounce: true,
                 alignment: .top
             )
-            
+        } sections: {
             let variationsTitle : String = {
                 if let selected = self.itemization.variations.selected.first {
                     return selected.name
@@ -75,7 +75,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }()
             
-            list += Section(SectionIdentifier.variations) { section in
+            Section(SectionIdentifier.variations) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
                 section.header = Header(title: variationsTitle)
@@ -94,7 +94,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
 
-            list += itemization.modifiers.map { set in
+            itemization.modifiers.map { set in
                 Section(SectionIdentifier.modifier(set.name)) { section in
                     
                     section.layouts.table.columns = .init(count: 2, spacing: 20.0)
@@ -116,7 +116,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(SectionIdentifier.discounts) { section in
+            Section(SectionIdentifier.discounts) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
                 section.header = Header(title: "Discounts")
@@ -132,7 +132,7 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(SectionIdentifier.taxes) { section in
+            Section(SectionIdentifier.taxes) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
                 section.header = Header(title: "Taxes")

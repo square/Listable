@@ -17,24 +17,24 @@ final class AccordionViewController : ListViewController
     
     override func configure(list: inout ListProperties) {
         
-        list += (1...10).map { sectionIndex in
-            
-            Section(sectionIndex) { section in
-                
-                section.header = HeaderFooter(
-                    AccordionHeader(text: "Section Header #\(sectionIndex)"),
-                    onTap: {
-                        self.expandedSectionIndex = sectionIndex
-                        self.reload(animated: true)
-                    }
-                )
-                
-                if expandedSectionIndex == sectionIndex {
-                    section += (1...sectionIndex).map { itemIndex in
-                        Item(AccordionRow(text: "Row #\(sectionIndex), \(itemIndex)")) {
-                            $0.insertAndRemoveAnimations = .fade
+        list.add {
+            for sectionIndex in 1...10 {
+                Section(sectionIndex) {
+                    if expandedSectionIndex == sectionIndex {
+                        for itemIndex in 1...sectionIndex {
+                            Item(AccordionRow(text: "Row #\(sectionIndex), \(itemIndex)")) {
+                                $0.insertAndRemoveAnimations = .fade
+                            }
                         }
                     }
+                } header: {
+                    HeaderFooter(
+                        AccordionHeader(text: "Section Header #\(sectionIndex)"),
+                        onTap: {
+                            self.expandedSectionIndex = sectionIndex
+                            self.reload(animated: true)
+                        }
+                    )
                 }
             }
         }

@@ -91,8 +91,8 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
                 }
             )
 
-            list += Section("section") { section in
-                section.items = (1 ... 100).map {
+            list += Section("section") {
+                (1 ... 100).map {
                     Item(
                         DemoItem(text: "Item \($0)")
                     )
