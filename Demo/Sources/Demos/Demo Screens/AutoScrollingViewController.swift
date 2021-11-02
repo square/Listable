@@ -85,13 +85,11 @@ final class AutoScrollingViewController : UIViewController
                 )
             }
 
-            let itemization = [
-                BottomPinnedItem(text: "Tax $2.00"),
-                BottomPinnedItem(text: "Discount $4.00"),
-                BottomPinnedItem(text: "Total $10.00"),
-            ]
-
-            list += Section("itemization", items: itemization.map { Item($0) })
+            list += Section("itemization") {
+                BottomPinnedItem(text: "Tax $2.00")
+                BottomPinnedItem(text: "Discount $4.00")
+                BottomPinnedItem(text: "Total $10.00")
+            }
         }
     }
 }

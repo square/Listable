@@ -28,13 +28,13 @@ final class PagedViewController : UIViewController
             list.layout = .paged {
                 $0.direction = .vertical
             }
-            
-            list += Section("first") { section in
-                section += DemoElement(color: .black)
-                section += DemoElement(color: .white)
-                section += DemoElement(color: .black)
-                section += DemoElement(color: .white)
-                section += DemoElement(color: .black)
+        } sections: {
+            Section("first") {
+                DemoElement(color: .black)
+                DemoElement(color: .white)
+                DemoElement(color: .black)
+                DemoElement(color: .white)
+                DemoElement(color: .black)
             }
         }
     }
