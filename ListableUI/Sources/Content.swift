@@ -315,6 +315,7 @@ public struct Content
         }
         
         return Slice(
+            identifier: self.identifier,
             containsAllItems: self.itemCount == sliced.itemCount,
             content: sliced
         )
@@ -328,17 +329,20 @@ extension Content
     {
         static let defaultCount : Int = 250
         
+        let identifier : AnyHashable?
         let containsAllItems : Bool
         let content : Content
         
-        init(containsAllItems : Bool, content : Content)
+        init(identifier : AnyHashable?, containsAllItems : Bool, content : Content)
         {
+            self.identifier = identifier
             self.containsAllItems = containsAllItems
             self.content = content
         }
         
         init()
         {
+            self.identifier = nil
             self.containsAllItems = true
             self.content = Content()
         }

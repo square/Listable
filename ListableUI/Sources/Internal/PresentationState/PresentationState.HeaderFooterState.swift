@@ -52,6 +52,10 @@ extension PresentationState
         
         private(set) var visibleContainer : SupplementaryContainerView?
         
+        var hasContent : Bool {
+            self.state != nil
+        }
+        
         init(state : AnyPresentationHeaderFooterState?) {
             self.state = state
         }

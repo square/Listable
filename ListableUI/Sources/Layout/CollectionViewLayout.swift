@@ -135,6 +135,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.invalidateLayout()
     }
     
+    var listSupplementaryChanges : ListSupplementaryChanges? = nil
+    
     private(set) var shouldAskForItemSizesDuringLayoutInvalidation : Bool = false
     
     func setShouldAskForItemSizesDuringLayoutInvalidation()
@@ -417,7 +419,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         
         self.changesDuringCurrentUpdate = UpdateItems(
             with: updateItems,
-            listSupplementaryState: .init(content: self.layout.content)
+            listSupplementaryChanges: self.listSupplementaryChanges! // TODO...
         )
     }
     
@@ -430,6 +432,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         super.finalizeCollectionViewUpdates()
         
         self.changesDuringCurrentUpdate = nil
+        self.listSupplementaryChanges = nil // TODO..
     }
     
     //
@@ -621,7 +624,12 @@ final class CollectionViewLayout : UICollectionViewLayout
                 attributes?.alpha = 1.0
             }
         } else {
-            if changes.listSupplementaryState.had(for: kind) {
+            switch changes.listSupplementaryChanges.changeType(for: kind) {
+            case .stable:
+                attributes?.alpha = 1.0
+            case .added:
+                attributes?.alpha = 0.0
+            case .removed:
                 attributes?.alpha = 1.0
             }
         }
@@ -649,8 +657,13 @@ final class CollectionViewLayout : UICollectionViewLayout
                 attributes?.alpha = 1.0
             }
         } else {
-            if changes.listSupplementaryState.had(for: kind) {
+            switch changes.listSupplementaryChanges.changeType(for: kind) {
+            case .stable:
                 attributes?.alpha = 1.0
+            case .added:
+                attributes?.alpha = 1.0
+            case .removed:
+                attributes?.alpha = 0.0
             }
         }
     
@@ -725,6 +738,47 @@ struct CollectionViewLayoutProperties : Equatable
  }
 
 
+struct ListSupplementaryChanges : Hashable {
+    
+    let containerHeader : ChangeType
+    let header : ChangeType
+    let footer : ChangeType
+    let overscrollFooter : ChangeType
+    
+    func changeType(for kind: SupplementaryKind) -> ChangeType {
+        switch kind {
+        case .listContainerHeader: return self.containerHeader
+        case .listHeader: return self.header
+        case .listFooter: return self.footer
+        case .sectionHeader: return .stable
+        case .sectionFooter: return .stable
+        case .overscrollFooter: return self.overscrollFooter
+        }
+    }
+    
+    enum ChangeType : Hashable {
+        case stable
+        case added
+        case removed
+        
+        // TODO: Test
+        static func type(with old : Bool, new : Any?) -> ChangeType {
+            if old && new != nil {
+                return .stable
+            } else if old == false, new == nil {
+                return .stable
+            } else if old == false && new != nil {
+                return .added
+            } else if old, new == nil {
+                return .removed
+            }
+            
+            fatalError("Above checks should be exhaustive: old: \(old), new: \(new != nil)")
+        }
+    }
+}
+
+
 //
 // MARK: Delegate For Layout Information
 //
@@ -751,7 +805,7 @@ public protocol CollectionViewLayoutDelegate : AnyObject
 
 fileprivate struct UpdateItems : Equatable
 {
-    let listSupplementaryState : ListSupplementaryState
+    let listSupplementaryChanges : ListSupplementaryChanges
     
     let insertedSections : Set<InsertSection>
     let deletedSections : Set<DeleteSection>
@@ -759,17 +813,17 @@ fileprivate struct UpdateItems : Equatable
     let insertedItems : Set<InsertItem>
     let deletedItems : Set<DeleteItem>
     
-    init(with updateItems : [UICollectionViewUpdateItem], listSupplementaryState : ListSupplementaryState)
+    init(with updateItems : [UICollectionViewUpdateItem], listSupplementaryChanges : ListSupplementaryChanges)
     {
-        self.listSupplementaryState = listSupplementaryState
-        
-       var insertedSections = Set<InsertSection>()
-       var deletedSections = Set<DeleteSection>()
+        self.listSupplementaryChanges = listSupplementaryChanges
+       
+        var insertedSections = Set<InsertSection>()
+        var deletedSections = Set<DeleteSection>()
 
-       var insertedItems = Set<InsertItem>()
-       var deletedItems = Set<DeleteItem>()
+        var insertedItems = Set<InsertItem>()
+        var deletedItems = Set<DeleteItem>()
 
-       for item in updateItems {
+        for item in updateItems {
             switch item.updateAction {
             case .insert:
                 let indexPath = item.indexPathAfterUpdate!
@@ -796,50 +850,12 @@ fileprivate struct UpdateItems : Equatable
             @unknown default: listableFatal()
             }
         }
-        
+
         self.insertedSections = insertedSections
         self.deletedSections = deletedSections
-        
+
         self.insertedItems = insertedItems
         self.deletedItems = deletedItems
-    }
-    
-    struct ListSupplementaryState : Hashable {
-        
-        let hadContainerHeader : Bool
-        let hadHeader : Bool
-        let hadFooter : Bool
-        let hadOverscrollFooter : Bool
-        
-        init(content : ListLayoutContent) {
-            self.hadContainerHeader = content.containerHeader.isPopulated
-            self.hadHeader = content.header.isPopulated
-            self.hadFooter = content.footer.isPopulated
-            self.hadOverscrollFooter = content.overscrollFooter.isPopulated
-        }
-        
-        init(
-            hadContainerHeader: Bool,
-            hadHeader: Bool,
-            hadFooter: Bool,
-            hadOverscrollFooter: Bool
-        ) {
-            self.hadContainerHeader = hadContainerHeader
-            self.hadHeader = hadHeader
-            self.hadFooter = hadFooter
-            self.hadOverscrollFooter = hadOverscrollFooter
-        }
-     
-        func had(for kind: SupplementaryKind) -> Bool {
-            switch kind {
-            case .listContainerHeader: return self.hadContainerHeader
-            case .listHeader: return self.hadHeader
-            case .listFooter: return self.hadFooter
-            case .sectionHeader: return false
-            case .sectionFooter: return false
-            case .overscrollFooter: return self.hadOverscrollFooter
-            }
-        }
     }
     
     struct InsertSection : Hashable

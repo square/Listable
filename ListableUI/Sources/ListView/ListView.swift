@@ -936,8 +936,31 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         let visibleSlice = self.newVisibleSlice(to: indexPath)
 
-        let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
-            ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
+        let diff : Diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
+            Diff(
+                sections: ListView.diffWith(
+                    old: presentationState.sectionModels,
+                    new: visibleSlice.content.sections
+                ),
+                listSupplementaryChanges: .init(
+                    containerHeader: .type(
+                        with: presentationState.containerHeader.hasContent,
+                        new: visibleSlice.content.containerHeader
+                    ),
+                    header: .type(
+                        with: presentationState.header.hasContent,
+                        new: visibleSlice.content.header
+                    ),
+                    footer: .type(
+                        with: presentationState.footer.hasContent,
+                        new: visibleSlice.content.footer
+                    ),
+                    overscrollFooter: .type(
+                        with: presentationState.overscrollFooter.hasContent,
+                        new: visibleSlice.content.overscrollFooter
+                    )
+                )
+            )
         }
 
         let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
@@ -950,7 +973,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             )
             
             presentationState.update(
-                with: diff,
+                with: diff.sections,
                 slice: visibleSlice,
                 reason: .wasUpdated,
                 dependencies: dependencies,
@@ -971,13 +994,21 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         // Update Collection View
         
-        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
+        self.performBatchUpdates(
+            with: diff,
+            animated: reason.animated,
+            updateBackingData: updateBackingData,
+            completion: callerCompletion
+        )
 
         // Update the offset of the scroll view to show the refresh control if needed
         presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
 
         // Perform any needed auto scroll actions.
-        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+        self.performAutoScrollAction(
+            with: diff.sections.changes.addedItemIdentifiers,
+            animated: reason.animated
+        )
 
         // Update info for new contents.
         
@@ -992,8 +1023,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         if case .contentChanged(_, _) = reason {
             ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
                 ListStateObserver.ContentUpdated(
-                    hadChanges: diff.changes.isEmpty == false,
-                    insertionsAndRemovals: .init(diff: diff),
+                    hadChanges: diff.sections.changes.isEmpty == false,
+                    insertionsAndRemovals: .init(diff: diff.sections),
                     actions: actions,
                     positionInfo: self.scrollPositionInfo
                 )
@@ -1136,7 +1167,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 
     private func performBatchUpdates(
-        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
+        with diff : Diff,
         animated: Bool,
         updateBackingData : @escaping () -> (),
         completion callerCompletion : @escaping (Bool) -> ()
@@ -1151,7 +1182,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         let view = self.collectionView
         
-        let changes = CollectionViewChanges(sectionChanges: diff.changes)
+        let changes = CollectionViewChanges(sectionChanges: diff.sections.changes)
             
         let batchUpdates = {
             updateBackingData()
@@ -1190,6 +1221,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
             self.cancelAllInProgressReorders()
         }
         
+        // TODO: Merge these two??
+        
+        self.collectionViewLayout.listSupplementaryChanges = diff.listSupplementaryChanges
+        
         self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
@@ -1219,6 +1254,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 )
             )
         )
+    }
+    
+    struct Diff {
+        let sections : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
+        
+        let listSupplementaryChanges : ListSupplementaryChanges
     }
 }
 

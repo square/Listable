@@ -13,8 +13,10 @@ final class PresentationState
     //
     // MARK: Properties
     //
+    
+    private(set) var identifier : AnyHashable?
         
-    var refreshControl : RefreshControlState?
+    private(set) var refreshControl : RefreshControlState?
     
     let containerHeader : HeaderFooterViewStatePair
     let header : HeaderFooterViewStatePair
@@ -61,6 +63,8 @@ final class PresentationState
         itemMeasurementCache : ReusableViewCache,
         headerFooterMeasurementCache : ReusableViewCache
     ) {
+        self.identifier = content.identifier
+        
         self.itemMeasurementCache = itemMeasurementCache
         self.headerFooterMeasurementCache = headerFooterMeasurementCache
         
@@ -113,13 +117,23 @@ final class PresentationState
     // MARK: Accessing Data
     //
     
+//    var toContent : Content {
+//        Content(
+//            identifier: self.identifier,
+//            refreshControl: self.refreshControl?.model,
+//            containerHeader: self.containerHeader.state?.anyModel,
+//            header: self.header.state?.anyModel,
+//            footer: self.footer.state?.anyModel,
+//            overscrollFooter: self.overscrollFooter.state?.anyModel,
+//            sections: self.sectionModels
+//        )
+//    }
+    
     var sectionModels : [Section] {
         self.sections.map { section in
             var sectionModel = section.model
             
-            sectionModel.items = section.items.map {
-                $0.anyModel
-            }
+            sectionModel.items = section.items.map(\.anyModel)
             
             return sectionModel
         }
@@ -283,6 +297,8 @@ final class PresentationState
         defer {
             SignpostLogger.log(.end, log: .updateContent, name: "Update Presentation State", for: loggable)
         }
+        
+        self.identifier = slice.identifier
         
         self.containsAllItems = slice.containsAllItems
         
