@@ -29,11 +29,13 @@ extension LayoutDescription
             )
             
             $0.layout = .init(
+                headerToFirstSectionSpacing: 15.0,
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
                 itemSpacing: 10.0,
-                itemToSectionFooterSpacing: 10.0
+                itemToSectionFooterSpacing: 10.0,
+                lastSectionToFooterSpacing: 15.0
             )
         }
     }

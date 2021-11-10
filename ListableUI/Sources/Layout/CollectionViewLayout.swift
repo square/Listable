@@ -384,7 +384,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.prepare()
 
-        self.changesDuringCurrentUpdate = nil
+        self.changesDuringCurrentUpdate = nil // TODO Why are we setting this to nil here?
                         
         let size = self.collectionView?.bounds.size ?? .zero
         

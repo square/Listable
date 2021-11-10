@@ -147,6 +147,13 @@ public final class DemosRootViewController : ListViewController
                 onSelect: { _ in
                     self?.push(ItemInsertAndRemoveAnimationsViewController())
             })
+            
+            section += Item(
+                DemoItem(text: "Verify List Supplementary Animations"),
+                selectionStyle: .selectable(),
+                onSelect: { _ in
+                    self?.push(VerifyListSupplementaryAnimationsViewController())
+            })
 
             section += Item(
                 DemoItem(text: "Manual Selection Management"),
