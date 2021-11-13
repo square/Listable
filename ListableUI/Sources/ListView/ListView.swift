@@ -319,7 +319,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     return 0.0
                     
                 case .overlapping(let frame):
-                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+                    return (self.bounds.size.height - frame.origin.y) - self.collectionView.adjustedContentInset.bottom
                 }
             }
         }()
