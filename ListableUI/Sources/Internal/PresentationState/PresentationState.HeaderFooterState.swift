@@ -11,6 +11,8 @@ import Foundation
 protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
+    
+    var safeAreaInsets : UIEdgeInsets { get set }
         
     func dequeueAndPrepareReusableHeaderFooterView(
         in cache : ReusableViewCache,
@@ -73,7 +75,10 @@ extension PresentationState
                         reason: reason,
                         visibleView: self.visibleContainer?.content,
                         updateCallbacks: updateCallbacks,
-                        info: .init(environment: environment)
+                        info: .init(
+                            safeAreaInsets: state.safeAreaInsets,
+                            environment: environment
+                        )
                     )
                 }
             }
@@ -99,6 +104,8 @@ extension PresentationState
                 
         init(_ model : HeaderFooter<Content>, performsContentCallbacks : Bool)
         {
+            self.safeAreaInsets = .zero
+            
             self.model = model
             self.performsContentCallbacks = performsContentCallbacks
         }
@@ -108,6 +115,8 @@ extension PresentationState
         var anyModel: AnyHeaderFooter {
             return self.model
         }
+        
+        var safeAreaInsets : UIEdgeInsets
                 
         func dequeueAndPrepareReusableHeaderFooterView(
             in cache : ReusableViewCache,
@@ -122,7 +131,10 @@ extension PresentationState
             self.applyTo(
                 view: view,
                 for: .willDisplay,
-                with: .init(environment: environment)
+                with: .init(
+                    safeAreaInsets: safeAreaInsets,
+                    environment: environment
+                )
             )
             
             return view
@@ -228,7 +240,10 @@ extension PresentationState
                     self.model.content.apply(
                         to: views,
                         for: .measurement,
-                        with: .init(environment: environment)
+                        with: .init(
+                            safeAreaInsets: safeAreaInsets,
+                            environment: environment
+                        )
                     )
                     
                     return self.model.sizing.measure(with: view, info: info)

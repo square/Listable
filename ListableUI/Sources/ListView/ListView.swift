@@ -759,6 +759,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
         }
     }
     
+    public override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        
+        print("Changed")
+    }
+    
     private func frameDidChange(from old : CGRect, to new : CGRect) {
         
         /// Set the frame explicitly, so that the layout can occur

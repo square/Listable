@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 9/21/20.
 //
 
+import UIKit
+
 
 extension ListView
 {
@@ -43,6 +45,7 @@ extension ListView
     ///
     public static func contentSize(
         in fittingSize : CGSize,
+        safeAreaInsets : UIEdgeInsets = .zero,
         for properties : ListProperties,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
     ) -> CGSize {
@@ -79,7 +82,10 @@ extension ListView
 
         layout.layout(
             delegate: nil,
-            in: .init(viewBounds: CGRect(origin: .zero, size: fittingSize))
+            in: .init(
+                viewBounds: CGRect(origin: .zero, size: fittingSize),
+                safeAreaInsets: safeAreaInsets
+            )
         )
         
         /// 3) Constrain the measurement to the `fittingSize`.

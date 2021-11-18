@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 public final class ListLayoutContent
@@ -168,6 +169,13 @@ public final class ListLayoutContent
         }
     }
     
+    func applyToBackingState() {
+        self.all.forEach {
+            // TODO: All doesn't include empties, so we could leave behind old `safeAreaInsets`.
+            $0.applyToBackingState()
+        }
+    }
+    
     func move(from : [IndexPath], to : [IndexPath])
     {
         precondition(from.count == to.count, "Counts did not match: \(from.count) vs \(to.count).")
@@ -243,6 +251,10 @@ protocol ListLayoutContentItem : AnyObject
     var y : CGFloat { get set }
     
     var zIndex : Int { get set }
+    
+    var safeAreaInsets : UIEdgeInsets { get set }
+    
+    func applyToBackingState()
 }
 
 
@@ -341,6 +353,12 @@ public extension ListLayoutContent
         
         var zIndex : Int = 0
         
+        var safeAreaInsets : UIEdgeInsets = .zero
+        
+        func applyToBackingState() {
+            self.state?.safeAreaInsets = self.safeAreaInsets
+        }
+        
         var layouts : HeaderFooterLayouts {
             self.state?.anyModel.layouts ?? .init()
         }
@@ -403,6 +421,12 @@ public extension ListLayoutContent
         var y : CGFloat = .zero
         
         var zIndex : Int = 0
+        
+        var safeAreaInsets : UIEdgeInsets = .zero
+        
+        func applyToBackingState() {
+            self.state.safeAreaInsets = self.safeAreaInsets
+        }
         
         var layouts : ItemLayouts {
             self.state.anyModel.layouts

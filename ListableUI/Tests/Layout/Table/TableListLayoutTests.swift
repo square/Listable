@@ -73,7 +73,8 @@ class TableListLayoutTests : XCTestCase
 {
     func test_layout_vertical_includingHeader()
     {
-        let listView = self.list(direction: .vertical, includeHeader: true)
+        let window = self.list(direction: .vertical, includeHeader: true)
+        let listView = window.testViewController.listView
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
@@ -83,7 +84,8 @@ class TableListLayoutTests : XCTestCase
 
     func test_layout_vertical_excludingHeader()
     {
-        let listView = self.list(direction: .vertical, includeHeader: false)
+        let window = self.list(direction: .vertical, includeHeader: false)
+        let listView = window.testViewController.listView
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
 
@@ -93,8 +95,9 @@ class TableListLayoutTests : XCTestCase
     
     func test_layout_horizontal_includingHeader()
     {
-        let listView = self.list(direction: .horizontal, includeHeader: true)
-        
+        let window = self.list(direction: .horizontal, includeHeader: true)
+        let listView = window.testViewController.listView
+
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
         snapshot.test(output: ViewImageSnapshot.self)
@@ -103,7 +106,8 @@ class TableListLayoutTests : XCTestCase
 
     func test_layout_horizontal_excludingHeader()
     {
-        let listView = self.list(direction: .horizontal, includeHeader: false)
+        let window = self.list(direction: .horizontal, includeHeader: false)
+        let listView = window.testViewController.listView
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
 
@@ -111,15 +115,38 @@ class TableListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func list(direction: LayoutDirection, includeHeader: Bool) -> ListView
+    fileprivate func list(direction: LayoutDirection, includeHeader: Bool) -> HostingWindow
     {
-        /// 200x200 so the layout will support both horizontal and vertical layouts.
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
+        let window = HostingWindow()
+        
+        let listView = window.testViewController.listView
+        
+        switch direction {
+        case .vertical:
+            window.testViewController.additionalSafeAreaInsets = UIEdgeInsets(
+                top: 0,
+                left: 50,
+                bottom: 0,
+                right: 60
+            )
+            
+        case .horizontal:
+            window.testViewController.additionalSafeAreaInsets = UIEdgeInsets(
+                top: 50,
+                left: 0,
+                bottom: 60,
+                right: 0
+            )
+        }
+        
+        window.makeKeyAndVisible()
         
         listView.configure { list in
 
             list.layout = .table {
                 $0.direction = direction
+                
+                $0.contentInsetAdjustmentBehavior = .never
                 
                 $0.layout = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
@@ -198,9 +225,34 @@ class TableListLayoutTests : XCTestCase
         
         listView.collectionView.layoutIfNeeded()
         
-        return listView
+        return window
+    }
+}
+
+
+fileprivate final class HostingWindow : UIWindow {
+    
+    let testViewController : TestViewController
+    
+    init() {
+        self.testViewController = TestViewController()
+        
+        super.init(frame: self.testViewController.view.frame)
+        
+        self.rootViewController = self.testViewController
     }
     
+    required init?(coder: NSCoder) { fatalError() }
+}
+
+fileprivate final class TestViewController : UIViewController {
+    
+    /// 200x200 so the layout will support both horizontal and vertical layouts.
+    let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
+    
+    override func loadView() {
+        self.view = listView
+    }
 }
 
 
@@ -214,16 +266,17 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
         with info: ApplyHeaderFooterContentInfo
     ) {
         views.content.backgroundColor = self.color
+        views.content.layoutSafeArea = info.safeAreaInsets
     }
     
     func isEquivalent(to other: TestingHeaderFooterContent) -> Bool {
         false
     }
     
-    typealias ContentView = UIView
+    typealias ContentView = SafeAreaView
     
-    static func createReusableContentView(frame: CGRect) -> UIView {
-        UIView(frame: frame)
+    static func createReusableContentView(frame: CGRect) -> SafeAreaView {
+        SafeAreaView(frame: frame)
     }
 }
 
@@ -239,15 +292,46 @@ fileprivate struct TestingItemContent : ItemContent {
     func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
     {
         views.content.backgroundColor = self.color
+        views.content.layoutSafeArea = info.safeAreaInsets
     }
     
     func isEquivalent(to other: TestingItemContent) -> Bool {
         false
     }
     
-    typealias ContentView = UIView
+    typealias ContentView = SafeAreaView
     
-    static func createReusableContentView(frame: CGRect) -> UIView {
-        UIView(frame: frame)
+    static func createReusableContentView(frame: CGRect) -> SafeAreaView {
+        SafeAreaView(frame: frame)
+    }
+}
+
+fileprivate final class SafeAreaView : UIView {
+    
+    let safeAreaView : UIView
+    
+    var layoutSafeArea : UIEdgeInsets = .zero {
+        didSet {
+            self.safeAreaView.isHidden = layoutSafeArea == .zero
+            self.setNeedsLayout()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        self.safeAreaView = UIView()
+        self.safeAreaView.backgroundColor = .black.withAlphaComponent(0.3)
+
+        super.init(frame: frame)
+        
+        self.addSubview(self.safeAreaView)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError() }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.safeAreaView.frame = self.bounds.inset(by: self.layoutSafeArea)
     }
 }

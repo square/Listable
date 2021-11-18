@@ -8,9 +8,14 @@
 
 extension Element {
     
-    func wrapInBlueprintEnvironmentFrom(environment : ListEnvironment) -> Element {
+    func adaptingEnvironment(
+        from environment : ListEnvironment,
+        safeAreaInsets : UIEdgeInsets
+    ) -> Element {
         self.adaptedEnvironment { env in
             env = environment.blueprintEnvironment
+            
+            env.safeAreaInsets = safeAreaInsets
         }
     }
 }

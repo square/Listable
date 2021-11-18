@@ -150,6 +150,10 @@ public protocol HeaderFooterContent
 /// TODO: Rename to `ApplyHeaderFooterContext`
 public struct ApplyHeaderFooterContentInfo
 {
+    /// The safe area as applied to the item. Note that only the safe area insets on the cross-axis will be
+    /// provided. Eg, if the list scrolls vertically, only the left and right safe areas are provided.
+    public var safeAreaInsets : UIEdgeInsets
+    
     /// The environment of the containing list.
     /// See `ListEnvironment` for usage information.
     public var environment : ListEnvironment

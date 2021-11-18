@@ -469,6 +469,10 @@ public struct ApplyItemContentInfo
     /// The position of the item within its section.
     public var position : ItemPosition
     
+    /// The safe area as applied to the item. Note that only the safe area insets on the cross-axis will be
+    /// provided. Eg, if the list scrolls vertically, only the left and right safe areas are provided.
+    public var safeAreaInsets : UIEdgeInsets
+    
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reorderingActions : ReorderingActions
     

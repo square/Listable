@@ -14,6 +14,7 @@ protocol AnyPresentationItemState : AnyObject
     func setAndPerform(isDisplayed: Bool)
     
     var itemPosition : ItemPosition { get set }
+    var safeAreaInsets : UIEdgeInsets { get set }
     
     var anyModel : AnyItem { get }
     
@@ -118,6 +119,7 @@ extension PresentationState
         let reorderingActions: ReorderingActions
         
         var itemPosition : ItemPosition
+        var safeAreaInsets : UIEdgeInsets
         
         let storage : Storage
         
@@ -129,6 +131,7 @@ extension PresentationState
         ) {
             self.reorderingActions = ReorderingActions()
             self.itemPosition = .single
+            self.safeAreaInsets = .zero
         
             self.cellRegistrationInfo = (ItemCell<Content>.self, model.reuseIdentifier.stringValue)
                         
@@ -279,6 +282,7 @@ extension PresentationState
             let applyInfo = ApplyItemContentInfo(
                 state: itemState,
                 position: self.itemPosition,
+                safeAreaInsets: self.safeAreaInsets,
                 reorderingActions: self.reorderingActions,
                 isReorderable: self.model.reordering != nil,
                 environment: environment

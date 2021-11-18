@@ -407,7 +407,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.performLayoutUpdate()
         
         if self.isReordering == false {
-            self.delegate.listViewLayoutDidLayoutContents()
+            self.layout.content.applyToBackingState()
+            self.delegate.listViewLayoutDidLayout(contents: self.layout.content)
         }
     }
     
@@ -471,6 +472,11 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.layout.updateLayout(in: view)
         
         self.layout.setZIndexes()
+        
+        self.layout.setSafeAreaInsets(
+            with: .init(view),
+            contentSize: self.layout.content.contentSize
+        )
         
         self.layout.updateOverscrollFooterPosition(in: view)
         self.layout.adjustPositionsForLayoutUnderflow(in: view)
@@ -675,7 +681,7 @@ public protocol CollectionViewLayoutDelegate : AnyObject
         defaults: ListLayoutDefaults
     ) -> ListLayoutContent
     
-    func listViewLayoutDidLayoutContents()
+    func listViewLayoutDidLayout(contents : ListLayoutContent)
     
     func listViewShouldEndQueueingEditsForReorder()
 }

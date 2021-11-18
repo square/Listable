@@ -236,4 +236,28 @@ extension LayoutDirection
         case .horizontal: return insets.right
         }
     }
+    
+    func safeAreaInsetsFor(
+        itemFrame : CGRect,
+        layoutBounds : CGRect,
+        viewSafeArea : UIEdgeInsets
+    ) -> UIEdgeInsets {
+        
+        let insetBounds = layoutBounds.inset(by: viewSafeArea)
+        
+        let appliedSafeArea = UIEdgeInsets(
+            top: max(0, insetBounds.origin.y - itemFrame.origin.y),
+            left: max(0, insetBounds.origin.x - itemFrame.origin.x),
+            bottom: max(0, itemFrame.maxY - insetBounds.maxY),
+            right: max(0, itemFrame.maxX - insetBounds.maxX)
+        )
+        
+        switch self {
+        case .vertical:
+            return UIEdgeInsets(top: 0, left: appliedSafeArea.left, bottom: 0, right: appliedSafeArea.right)
+            
+        case .horizontal:
+            return UIEdgeInsets(top: appliedSafeArea.top, left: 0, bottom: appliedSafeArea.bottom, right: 0)
+        }
+    }
 }

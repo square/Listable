@@ -28,13 +28,19 @@ public protocol ListLayout : AnyListLayout
 public struct ListLayoutLayoutContext : Equatable {
     
     public var viewBounds : CGRect
+    public var safeAreaInsets : UIEdgeInsets
     
-    init(viewBounds : CGRect) {
+    init(
+        viewBounds : CGRect,
+        safeAreaInsets : UIEdgeInsets
+    ) {
         self.viewBounds = viewBounds
+        self.safeAreaInsets = safeAreaInsets
     }
     
     init(_ collectionView : UICollectionView) {
         self.viewBounds = collectionView.bounds
+        self.safeAreaInsets = collectionView.safeAreaInsets
     }
 }
 
@@ -80,6 +86,8 @@ public protocol AnyListLayout : AnyObject
     
     func setZIndexes()
     
+    func setSafeAreaInsets(with context : ListLayoutLayoutContext, contentSize: CGSize)
+    
     //
     // MARK: Configuring Reordering
     //
@@ -111,6 +119,20 @@ public extension AnyListLayout
         
         self.content.footer.zIndex = 1
         self.content.overscrollFooter.zIndex = 0
+    }
+    
+    func setSafeAreaInsets(with context : ListLayoutLayoutContext, contentSize: CGSize)
+    {
+        self.content.all.forEach { item in
+            item.safeAreaInsets = direction.safeAreaInsetsFor(
+                itemFrame: CGRect(
+                    origin: CGPoint(x: item.x, y: item.y),
+                    size: item.size
+                ),
+                layoutBounds: CGRect(origin: .zero, size: contentSize),
+                viewSafeArea: context.safeAreaInsets
+            )
+        }
     }
     
     func adjust(

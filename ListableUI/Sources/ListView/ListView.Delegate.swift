@@ -261,7 +261,7 @@ extension ListView
             )
         }
         
-        func listViewLayoutDidLayoutContents() {
+        func listViewLayoutDidLayout(contents: ListLayoutContent) {
             self.view.visibleContent.update(with: self.view)
         }
         
