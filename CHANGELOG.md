@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- `precondition` error messages should now appear in crash reporting tools.
+
 ### Added
 
 ### Removed

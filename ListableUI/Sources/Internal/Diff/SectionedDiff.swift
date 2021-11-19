@@ -189,7 +189,7 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                 self.removedItemIdentifiers = []
             }
             
-            listablePrecondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
+            listableInternalPrecondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
         
         private static func allItemIDs(in sections : [Section], configuration : Configuration) -> Set<ItemIdentifier> {

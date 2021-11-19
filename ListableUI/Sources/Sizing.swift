@@ -103,7 +103,7 @@ public enum Sizing : Hashable
             }
         }()
         
-        self.validateMeasuredSize(size)
+        self.validateMeasuredSize(size, with: info)
         
         return CGSize(
             width: ceil(size.width),
@@ -111,7 +111,7 @@ public enum Sizing : Hashable
         )
     }
     
-    private func validateMeasuredSize(_ size : CGSize) {
+    private func validateMeasuredSize(_ size : CGSize, with info : MeasureInfo) {
         
         // Ensure we have a reasonably valid size for the cell.
         
@@ -119,12 +119,24 @@ public enum Sizing : Hashable
         
         precondition(
             size.height <= reasonableMaxDimension,
-            "The height of the view was outside of reasonable expectations, and this is likely programmer error. Height: \(size.height). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The height of the view was outside of reasonable expectations, and this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect.
+            
+            Height: \(size.height)
+            MeasureInfo: \(info)
+            """
         )
         
         precondition(
             size.width <= reasonableMaxDimension,
-            "The width of the view was outside of reasonable expectations, and this is likely programmer error. Width: \(size.width). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The width of the view was outside of reasonable expectations, and this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect.
+            
+            Width: \(size.width)
+            MeasureInfo: \(info)
+            """
         )
     }
 }
