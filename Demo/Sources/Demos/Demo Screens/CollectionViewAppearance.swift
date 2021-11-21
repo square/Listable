@@ -22,6 +22,10 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
+        self.demoLayout()
+    }
+    
+    static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
@@ -35,6 +39,10 @@ extension LayoutDescription
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
             )
+            
+            $0.stickySectionHeaders = true
+            
+            configure(&$0)
         }
     }
     

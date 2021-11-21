@@ -27,6 +27,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     var showsOverscrollFooter : Bool = true
     var showsSectionHeaders : Bool = true
+    var isVertical : Bool = true
     
     let listView = ListView()
     
@@ -36,6 +37,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             UIBarButtonItem(title: "UF", style: .plain, target: self, action: #selector(cycleUnderflow)),
             UIBarButtonItem(title: "OS", style: .plain, target: self, action: #selector(toggleOverscroll)),
             UIBarButtonItem(title: "SH", style: .plain, target: self, action: #selector(toggleSectionHeaders)),
+            UIBarButtonItem(title: "D", style: .plain, target: self, action: #selector(toggleDirection)),
             
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeItem)),
@@ -55,6 +57,10 @@ final class CollectionViewBasicDemoViewController : UIViewController
             
             if self.showsOverscrollFooter {
                 list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
+            }
+            
+            list.layout = .demoLayout {
+                $0.direction = self.isVertical ? .vertical : .horizontal
             }
             
             list.animatesChanges = animated
@@ -88,6 +94,13 @@ final class CollectionViewBasicDemoViewController : UIViewController
     @objc func toggleSectionHeaders()
     {
         self.showsSectionHeaders.toggle()
+        
+        self.updateTable(animated: true)
+    }
+    
+    @objc func toggleDirection()
+    {
+        self.isVertical.toggle()
         
         self.updateTable(animated: true)
     }

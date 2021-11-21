@@ -16,11 +16,11 @@ class SizingTests: XCTestCase
         // Given
         let parentWidth: CGFloat = 100
         let width: CGFloat = 80
-        let padding = HorizontalPadding(left: 7, right: 3)
+        let padding = HorizontalPadding(leading: 7, trailing: 3)
 
         // When: Left
         do {
-            let alignment = CustomWidth.Alignment.left
+            let alignment = CustomWidth.Alignment.leading
             let origin = alignment.originWith(parentWidth: parentWidth, width: width, padding: padding)
 
             // Should align left edge with left padding
@@ -38,7 +38,7 @@ class SizingTests: XCTestCase
 
         // When: Right
         do {
-            let alignment = CustomWidth.Alignment.right
+            let alignment = CustomWidth.Alignment.trailing
             let origin = alignment.originWith(parentWidth: parentWidth, width: width, padding: padding)
 
             // Should align right edge with right edge of width minus right padding

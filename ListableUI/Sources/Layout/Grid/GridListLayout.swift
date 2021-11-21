@@ -124,7 +124,7 @@ public struct GridAppearance : ListLayoutAppearance
             constraint : WidthConstraint
         ) -> CGFloat
         {
-            let paddedWidth = width - padding.left - padding.right
+            let paddedWidth = width - padding.leading - padding.trailing
             
             return constraint.clamp(paddedWidth)
         }
@@ -280,7 +280,7 @@ final class GridListLayout : ListLayout
         
         let rootWidth = TableAppearance.Layout.width(
             with: viewWidth,
-            padding: HorizontalPadding(left: bounds.padding.left, right: bounds.padding.right),
+            padding: HorizontalPadding(leading: bounds.padding.left, trailing: bounds.padding.right),
             constraint: bounds.width
         )
         
@@ -298,7 +298,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.header) { header in
             let hasListHeader = self.content.header.isPopulated
             
-            let position = header.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = header.layouts.grid.width.position(with: viewSize.width, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -333,7 +333,7 @@ final class GridListLayout : ListLayout
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
-            let sectionPosition = section.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
+            let sectionPosition = section.layouts.grid.width.position(with: viewSize.width, defaultWidth: rootWidth)
             
             //
             // Section Header
@@ -344,7 +344,7 @@ final class GridListLayout : ListLayout
             
             performLayout(for: section.header) { header in
                 let width = header.layouts.grid.width.merge(with: section.layouts.grid.width)
-                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
+                let position = width.position(with: viewSize.width, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
                     sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -392,7 +392,7 @@ final class GridListLayout : ListLayout
             
             performLayout(for: section.footer) { footer in
                 let width = footer.layouts.grid.width.merge(with: section.layouts.grid.width)
-                let position = width.position(with: viewSize, defaultWidth: sectionPosition.width)
+                let position = width.position(with: viewSize.width, defaultWidth: sectionPosition.width)
                 
                 let measureInfo = Sizing.MeasureInfo(
                     sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -433,7 +433,7 @@ final class GridListLayout : ListLayout
         performLayout(for: self.content.footer) { footer in
             let hasFooter = footer.isPopulated
             
-            let position = footer.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.grid.width.position(with: viewSize.width, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),
@@ -459,7 +459,7 @@ final class GridListLayout : ListLayout
                     
         performLayout(for: self.content.overscrollFooter) { footer in
 
-            let position = footer.layouts.grid.width.position(with: viewSize, defaultWidth: rootWidth)
+            let position = footer.layouts.grid.width.position(with: viewSize.width, defaultWidth: rootWidth)
             
             let measureInfo = Sizing.MeasureInfo(
                 sizeConstraint: CGSize(width: position.width, height: .greatestFiniteMagnitude),

@@ -24,10 +24,12 @@ final class HorizontalLayoutViewController : UIViewController
         self.listView.configure { list in
             
             list.layout = .table {
-                
-                $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0))
-                
                 $0.layout.itemSpacing = 20.0
+                
+                $0.bounds = .init(
+                    padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0),
+                    width: .atMost(600)
+                )
             }
             
             list.content.overscrollFooter = HeaderFooter(
@@ -41,58 +43,76 @@ final class HorizontalLayoutViewController : UIViewController
                     sizing: .fixed(height: 200)
                 )
                 
-                Item.list("carousel", sizing: .fixed(height: 200.0)) { horizontal in
+                Item.list("carousel-paged", sizing: .fixed(height: 200.0)) { horizontal in
                     
                     horizontal.layout = .paged {
                         $0.direction = .horizontal
                         $0.itemInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
                     }
 
-                    horizontal += Section(
-                        "cards",
-                        layouts: .init {
-                            $0.table.columns = .init(count: 2, spacing: 20.0)
-                        }
-                    ) {
+                    horizontal += Section("cards") {
+
                         Item(
-                            CardElement(title: "This is the first card", detail: "Isn't it neat?", color: .white(0.90)),
-                            sizing: .fixed(height: 300)
+                            CardElement(title: "This is the first card in a paged layout", detail: "Isn't it neat?", color: .white(0.90))
+                        )
+
+                        Item(
+                            CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85))
+                        )
+
+                        Item(
+                            CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80))
+                        )
+
+                        Item(
+                            CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75))
+                        )
+                    }
+                }
+                
+                Item.list("carousel-table", sizing: .fixed(height: 200.0)) { horizontal in
+                    
+                    horizontal.layout = .table {
+                        $0.direction = .horizontal
+                        
+                        $0.layout.itemSpacing = 20.0
+                        
+                        $0.bounds = .init(
+                            padding: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+                        )
+                    }
+
+                    horizontal += Section("cards") {
+
+                        Item(
+                            CardElement(title: "This is the first card in a table layout", detail: "Isn't it neat?", color: .white(0.90)),
+                            sizing: .fixed(width: 200)
                         )
 
                         Item(
                             CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85)),
-                            sizing: .fixed(height: 300)
+                            sizing: .fixed(width: 200)
                         )
 
                         Item(
                             CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80)),
-                            sizing: .fixed(height: 300)
+                            sizing: .fixed(width: 200)
                         )
 
                         Item(
                             CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75)),
-                            sizing: .fixed(height: 300)
-                        )
-
-                        Item(
-                            CardElement(title: "This is the fifth card", detail: "Isn't it neat?", color: .white(0.70)),
-                            sizing: .fixed(height: 300)
-                        )
-
-                        Item(
-                            CardElement(title: "This is the sixth card", detail: "Isn't it neat?", color: .white(0.65)),
-                            sizing: .fixed(height: 300)
+                            sizing: .fixed(width: 200)
                         )
                     }
                 }
                 
                 Item(
-                    CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.95)),
+                    CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
                 )
                 
                 Item(
-                    CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.95)),
+                    CardElement(title: "This is the fifth card", detail: "Isn't it neat?", color: .white(0.95)),
                     sizing: .fixed(height: 200)
                 )
             }
