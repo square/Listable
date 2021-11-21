@@ -19,8 +19,8 @@ final class CoordinatorViewController : UIViewController
         
         self.listView.configure { list in
             
-            list += Section("section") { section in
-                section += Podcast.podcasts.map {
+            list += Section("section") {
+                Podcast.podcasts.map {
                     Item(
                         PodcastElement(podcast: $0),
                         selectionStyle: .selectable(isSelected: false)

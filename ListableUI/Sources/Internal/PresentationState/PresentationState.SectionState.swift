@@ -14,8 +14,8 @@ extension PresentationState
     {
         var model : Section
         
-        var header : HeaderFooterViewStatePair
-        var footer : HeaderFooterViewStatePair
+        let header : HeaderFooterViewStatePair
+        let footer : HeaderFooterViewStatePair
         
         var items : [AnyPresentationItemState]
         
@@ -130,12 +130,12 @@ extension PresentationState
         }
         
         static func newHeaderFooterState(
-            with new : AnyHeaderFooter?,
+            with new : AnyHeaderFooterConvertible?,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
             if let new = new {
-                return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
             } else {
                 return nil
             }
@@ -143,10 +143,14 @@ extension PresentationState
         
         static func headerFooterState(
             current : AnyPresentationHeaderFooterState?,
-            new : AnyHeaderFooter?,
+            new : AnyHeaderFooterConvertible?,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
+            /// Eagerly convert the header/footer to the correct final type, so the `type(of:)` check later
+            /// on in the function is comparing `HeaderFooter<Content>` types.
+            let new = new?.asAnyHeaderFooter()
+            
             if let current = current {
                 if let new = new {
                     let isSameType = type(of: current.anyModel) == type(of: new)

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 public extension LayoutDescription
@@ -113,6 +114,9 @@ public struct TableAppearance : ListLayoutAppearance
     /// How the scroll view should adjust and apply the safe area of the view. Defaults to `.scrollableAxes`.
     public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
+    /// The bounds of the content of the list, which can be optionally constrained.
+    public var bounds : ListContentBounds?
+    
     /// Default sizing attributes for content in the list.
     public var sizing : Sizing
     
@@ -128,14 +132,14 @@ public struct TableAppearance : ListLayoutAppearance
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
         contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
-        sizing : Sizing = Sizing(),
-        layout : Layout = Layout()
+        bounds : ListContentBounds? = nil,
+        sizing : Sizing = .init(),
+        layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
-        
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
-        
+        self.bounds = bounds
         self.sizing = sizing
         self.layout = layout
     }
@@ -294,11 +298,6 @@ extension TableAppearance
     /// Layout options for the list.
     public struct Layout : Equatable
     {
-        /// The padding to place around the outside of the content of the list.
-        public var padding : UIEdgeInsets
-        /// The width of the content of the list, which can be optionally constrained.
-        public var width : WidthConstraint
-        
         /// The spacing between the list header and the first section.
         /// Not applied if there is no list header.
         public var headerToFirstSectionSpacing : CGFloat
@@ -323,8 +322,6 @@ extension TableAppearance
                 
         /// Creates a new `Layout` with the provided options.
         public init(
-            padding : UIEdgeInsets = .zero,
-            width : WidthConstraint = .noConstraint,
             headerToFirstSectionSpacing : CGFloat = 0.0,
             interSectionSpacingWithNoFooter : CGFloat = 0.0,
             interSectionSpacingWithFooter : CGFloat = 0.0,
@@ -334,9 +331,6 @@ extension TableAppearance
             lastSectionToFooterSpacing : CGFloat = 0.0
         )
         {
-            self.padding = padding
-            self.width = width
-            
             self.headerToFirstSectionSpacing = headerToFirstSectionSpacing
             
             self.interSectionSpacingWithNoFooter = interSectionSpacingWithNoFooter
@@ -453,7 +447,7 @@ final class TableListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView : UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     {
         
     }
@@ -508,17 +502,25 @@ final class TableListLayout : ListLayout
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
     ) {
+        let boundsContext = ListContentBounds.Context(
+            viewSize: context.viewBounds.size,
+            direction: self.direction
+        )
+        
+        let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
+        
         let layout = self.layoutAppearance.layout
+        
         let sizing = self.layoutAppearance.sizing
         
         let viewWidth = self.direction.width(for: context.viewBounds.size)
         
         let rootWidth = CustomWidth.custom(.init(
             padding: self.direction.switch(
-                vertical: HorizontalPadding(leading: layout.padding.left, trailing: layout.padding.right),
-                horizontal: HorizontalPadding(leading: layout.padding.top, trailing: layout.padding.bottom)
+                vertical: HorizontalPadding(leading: bounds.padding.left, trailing: bounds.padding.right),
+                horizontal: HorizontalPadding(leading: bounds.padding.top, trailing: bounds.padding.bottom)
             ),
-            width: layout.width,
+            width: bounds.width,
             alignment: .center
         ))
 
@@ -526,7 +528,7 @@ final class TableListLayout : ListLayout
             with: viewWidth,
             defaultWidth: viewWidth
         ).width
-                
+        
         //
         // Item Positioning
         //
@@ -539,13 +541,33 @@ final class TableListLayout : ListLayout
         
         delegate?.listViewLayoutUpdatedItemPositions()
         
+        var contentBottom : CGFloat = 0.0
+                
+        //
+        // Container Header
+        //
+        
+        self.layout(
+            headerFooter: self.content.containerHeader,
+            width: self.content.containerHeader.layouts.table.width.merge(with: rootWidth),
+            viewWidth: viewWidth,
+            defaultWidth: defaultWidth,
+            defaultHeight: sizing.listHeaderHeight,
+            contentBottom: contentBottom,
+            after: { headerFooter in
+                if headerFooter.isPopulated {
+                    contentBottom = self.direction.maxY(for: headerFooter.defaultFrame)
+                }
+            }
+        )
+        
         //
         // Set Frame Origins
         //
         
-        var contentBottom : CGFloat = self.direction.switch(
-            vertical: layout.padding.top,
-            horizontal: layout.padding.left
+        contentBottom += self.direction.switch(
+            vertical: bounds.padding.top,
+            horizontal: bounds.padding.left
         )
         
         //
@@ -769,8 +791,8 @@ final class TableListLayout : ListLayout
         )
         
         contentBottom += self.direction.switch(
-            vertical: layout.padding.bottom,
-            horizontal: layout.padding.right
+            vertical: bounds.padding.bottom,
+            horizontal: bounds.padding.right
         )
         
         //

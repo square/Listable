@@ -10,6 +10,7 @@
 		0A02B2F42675E14600B3501B /* PaymentTypesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A02B2F32675E14600B3501B /* PaymentTypesViewController.swift */; };
 		0A07119324BA798400CDF65D /* ListStateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A07119224BA798400CDF65D /* ListStateViewController.swift */; };
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
+		0A1306E7272F29B300F6DDDD /* BestPractices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1306E6272F29B300F6DDDD /* BestPractices.swift */; };
 		0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49210324E5E11300D17038 /* AccordionViewController.swift */; };
 		0A5DC1A924F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5DC1A824F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift */; };
 		0A5F5CCF257EC2D7003CCE2C /* LocalizedCollationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5F5CCE257EC2D7003CCE2C /* LocalizedCollationViewController.swift */; };
@@ -47,6 +48,7 @@
 		2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8804642490844A003BB351 /* SpacingCustomizationViewController.swift */; };
 		397F72040272B0B12CAD9AEE /* Pods_Test_Targets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF78F98F7ED38C2DC8078110 /* Pods_Test_Targets.framework */; };
 		B223A33A769988911ED5C0E1 /* Pods_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C03134338F55F7FD12551D /* Pods_Demo.framework */; };
+		F818D40626AB5F3B005D5A12 /* RetailGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		0A02B2F32675E14600B3501B /* PaymentTypesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTypesViewController.swift; sourceTree = "<group>"; };
 		0A07119224BA798400CDF65D /* ListStateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStateViewController.swift; sourceTree = "<group>"; };
 		0A0E070323870A5700DDD27D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		0A1306E6272F29B300F6DDDD /* BestPractices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestPractices.swift; sourceTree = "<group>"; };
+		0A1306EA272F762500F6DDDD /* TASKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TASKLIST.md; path = ../TASKLIST.md; sourceTree = "<group>"; };
 		0A49210324E5E11300D17038 /* AccordionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
 		0A5DC1A824F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAppearsAfterKeyboardViewController.swift; sourceTree = "<group>"; };
 		0A5F5CCE257EC2D7003CCE2C /* LocalizedCollationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedCollationViewController.swift; sourceTree = "<group>"; };
@@ -98,6 +102,7 @@
 		C9EC890C0D683F6A704AB9ED /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		CF78F98F7ED38C2DC8078110 /* Pods_Test_Targets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Test_Targets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0E11D5AA6E2508505BEE4FC /* Pods-Test Targets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test Targets.release.xcconfig"; path = "Target Support Files/Pods-Test Targets/Pods-Test Targets.release.xcconfig"; sourceTree = "<group>"; };
+		F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetailGridViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +130,7 @@
 			children = (
 				0AA4D9AD248064A300CF95A5 /* DemosRootViewController.swift */,
 				0ADC3B3424907C80008DF2C0 /* XcodePreviewDemo.swift */,
+				0A1306E6272F29B300F6DDDD /* BestPractices.swift */,
 				0AA4D9CA248064AE00CF95A5 /* Demo Screens */,
 			);
 			path = Demos;
@@ -162,6 +168,7 @@
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
 				0AC839A425EEAD110055CEF5 /* OnTapItemAnimationViewController.swift */,
+				F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */,
 			);
 			path = "Demo Screens";
 			sourceTree = "<group>";
@@ -180,6 +187,7 @@
 			children = (
 				0A0E070323870A5700DDD27D /* README.md */,
 				0A87BA642463567B0047C3B5 /* CHANGELOG.md */,
+				0A1306EA272F762500F6DDDD /* TASKLIST.md */,
 				0AEB96C322FBCC1D00341DFF /* Sources */,
 				0AEB96E522FBCC5300341DFF /* Resources */,
 				0AEB96B022FBCBA500341DFF /* Demo */,
@@ -295,7 +303,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1110;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "Kyle Van Essen";
 				TargetAttributes = {
 					0AE8554D2390933100F2E245 = {
@@ -459,10 +467,12 @@
 				0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */,
 				0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */,
 				0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */,
+				0A1306E7272F29B300F6DDDD /* BestPractices.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
 				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,
 				0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
+				F818D40626AB5F3B005D5A12 /* RetailGridViewController.swift in Sources */,
 				0ACF96D624A0094D0090EAC4 /* ItemInsertAndRemoveAnimationsViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0ADC3B3524907C80008DF2C0 /* XcodePreviewDemo.swift in Sources */,
@@ -578,7 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -635,7 +645,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

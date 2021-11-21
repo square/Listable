@@ -99,10 +99,10 @@ extension ItemCell {
             setNeedsLayout()
         }
 
-        public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, reason: ApplyReason) {
+        public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: Content.SwipeActionsView.Style, reason: ApplyReason) {
             if swipeConfiguration == nil {
 
-                let swipeView = Content.SwipeActionsView(didPerformAction: self.didPerformAction)
+                let swipeView = Content.SwipeActionsView(style: style, didPerformAction: self.didPerformAction)
 
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true

@@ -64,6 +64,7 @@ final class SupplementaryContainerView : UICollectionReusableView
         ) as! SupplementaryContainerView
         
         view.reuseCache = reuseCache
+        
         view.environment = environment
         
         return view

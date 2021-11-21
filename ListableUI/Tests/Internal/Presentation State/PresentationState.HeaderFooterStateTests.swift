@@ -13,3 +13,8 @@ class PresentationState_HeaderFooterStateTests : XCTestCase
 {
     
 }
+
+class PresentationState_HeaderFooterViewStatePairTests : XCTestCase {
+    
+    
+}

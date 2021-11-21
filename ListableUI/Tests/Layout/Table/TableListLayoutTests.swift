@@ -46,8 +46,6 @@ class TableAppearance_LayoutTests : XCTestCase
     {
         let layout = TableAppearance.Layout()
         
-        XCTAssertEqual(layout.padding, UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0))
-        XCTAssertEqual(layout.width, .noConstraint)
         XCTAssertEqual(layout.interSectionSpacingWithNoFooter, 0.0)
         XCTAssertEqual(layout.interSectionSpacingWithFooter, 0.0)
         XCTAssertEqual(layout.sectionHeaderBottomSpacing, 0.0)
@@ -119,11 +117,15 @@ class TableListLayoutTests : XCTestCase
         listView.configure { list in
 
             list.layout = .table {
+                
                 $0.direction = direction
                 
-                $0.layout = .init(
+                $0.bounds = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
-                    width: .noConstraint,
+                    width: .noConstraint
+                )
+                
+                $0.layout = .init(
                     headerToFirstSectionSpacing: 10.0,
                     interSectionSpacingWithNoFooter: 15.0,
                     interSectionSpacingWithFooter: 20.0,
@@ -133,12 +135,14 @@ class TableListLayoutTests : XCTestCase
                     lastSectionToFooterSpacing: 20.0
                 )
             }
+            
+            list.content.containerHeader = HeaderFooter(TestingHeaderFooterContent(color: .red), sizing: .fixed(width: 50.0, height: 50.0))
 
             if includeHeader {
-                list.content.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 50.0, height: 50.0))
+                list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 50.0, height: 50.0))
             }
 
-            list.content.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 70.0, height: 70.0))
+            list.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 70.0, height: 70.0))
             
             list += Section("first") { section in
                 section.layouts.table.customInterSectionSpacing = 30

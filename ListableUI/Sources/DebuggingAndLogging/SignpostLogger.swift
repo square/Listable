@@ -92,22 +92,20 @@ struct SignpostLogger {
             return
         }
         
-        if #available(iOS 12.0, *) {
-            if let loggable = loggable {
-                os_signpost(
-                    type.toSignpostType,
-                    log: log,
-                    name: name,
-                    "%{public}s",
-                    Self.debuggingIdentifier(for: loggable)
-                )
-            } else {
-                os_signpost(
-                    type.toSignpostType,
-                    log: log,
-                    name: name
-                )
-            }
+        if let loggable = loggable {
+            os_signpost(
+                type.toSignpostType,
+                log: log,
+                name: name,
+                "%{public}s",
+                Self.debuggingIdentifier(for: loggable)
+            )
+        } else {
+            os_signpost(
+                type.toSignpostType,
+                log: log,
+                name: name
+            )
         }
     }
     
@@ -116,7 +114,6 @@ struct SignpostLogger {
         case event
         case end
         
-        @available(iOS 12.0, *)
         var toSignpostType : OSSignpostType {
             switch self {
             case .begin: return .begin

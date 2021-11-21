@@ -73,7 +73,6 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.dataSource.view = self
         self.dataSource.presentationState = self.storage.presentationState
         self.dataSource.storage = self.storage
-        self.dataSource.environment = self.environment
         self.dataSource.liveCells = self.liveCells
         
         self.delegate.view = self
@@ -320,7 +319,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     return 0.0
                     
                 case .overlapping(let frame):
-                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+                    return (self.bounds.size.height - frame.origin.y) - self.collectionView.adjustedContentInset.bottom
                 }
             }
         }()
@@ -619,11 +618,15 @@ public final class ListView : UIView, KeyboardObserverDelegate
     // MARK: Setting & Getting Content
     //
     
-    public var environment : ListEnvironment {
-        didSet {
-            self.dataSource.environment = self.environment
-        }
-    }
+    /// The environment associated with the list, which is used to pass data through to
+    /// the list's layout, or through to items, headers/footers, etc.
+    ///
+    /// If you have used SwiftUI's environment, Listable's environment is similar.
+    ///
+    /// ### Note
+    /// Setting the environment, or a property on the environment, does **not** force a re-layout
+    /// of the list view. The newly provided environment values will be used during the next update.
+    public var environment : ListEnvironment
     
     public var content : Content {
         get { return self.storage.allContent }

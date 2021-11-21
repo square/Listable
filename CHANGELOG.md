@@ -14,6 +14,117 @@
 
 # Past Releases
 
+# [0.30.1] - 2021-11-16
+
+### Fixed
+
+- Fix keyboard inset calculations by using `adjustedContentInset`.
+
+# [0.30.0] - 2021-11-02
+
+### Added
+
+- Added support for result builders when creating lists, sections, and swipe actions:
+
+    ```swift
+    List {
+        Section("id") {
+            ExampleContent(text: "First Item")
+            ExampleContent(text: "Second Item")
+        } header: {
+            ExampleHeader(title: "This Is My Section")
+        } footer: {
+            ExampleFooter(text: "Rules apply. Prohibited where void.")
+        }
+    }
+    ```
+
+### Changed
+
+- `ListLayout` and its associated types are now public, allowing you to make custom layouts. Note that these APIs are still experimental and subject to change.
+
+# [0.29.3] - 2021-10-22
+
+### Fixed
+
+- Ensure we properly pass through the `ListEnvironment` when updating on-screen views.
+
+# [0.29.2] - 2021-10-21
+
+### Fixed
+
+- Fixed an erroneous `weak` reference in `SupplementaryContainerView` which lead to contents being deallocated too early – this is not actually needed. `HeaderFooterViewStatePair` holds the reference to the contained `AnyPresentationHeaderFooterState`, there are not direct strong references from `AnyPresentationHeaderFooterState` to `SupplementaryContainerView`.
+
+# [0.29.1] - 2021-10-18
+
+### Fixed
+
+- Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
+
+# [0.29.0] - 2021-10-13
+
+### Added
+
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
+
+### Changed
+
+- `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
+
+# [0.28.0] - 2021-09-28
+
+### Changed
+
+- [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
+    
+    ```swift
+    section.header = MyHeaderContent(title: "Albums")
+    ```
+    
+    Instead of:
+
+    ```swift
+    section.header = HeaderFooter(MyHeaderContent(title: "Albums"))
+    ```
+
+# [0.27.1] - 2021-09-28
+
+### Changed
+
+- [Change the default sizing of `Item` and `HeaderFooter`](https://github.com/kyleve/Listable/pull/331) to `.thatFits(.noConstraint)` from requiring the min from the layout. This is more common for self-sizing cells.
+
+# [0.27.0] - 2021-09-15
+
+### Changed
+
+- [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
+
+# [0.26.1] - 2021-09-03
+
+### Fixed
+
+- Includes fix for header reuse from 0.25.1.
+
+# [0.26.0] - 2021-08-14
+
+### Added
+
+- [You can now provide default list bounds for participating layouts](https://github.com/kyleve/Listable/pull/317) via the `environment.listContentBounds` property. This allows your containing screen, eg, to provide default bounds to ensure content lays out correctly. The `table` and `grid` layout types have been updated to read these content bounds.
+
+### Removed
+
+- [iOS 11 was deprecated](https://github.com/kyleve/Listable/pull/317).
+
+### Changed
+
+- [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
+
+# [0.25.0] - 2021-08-12
+
+### Added
+
+- [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
+
 # [0.24.0] - 2021-08-07
 
 ### Added
@@ -98,7 +209,7 @@
 
 ### Changed
 
-- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `ListSizing` also moved to `BlueprintUILists`, as that is the only place it was used. 
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used. 
 
 # [0.19.0] - 2021-03-22
 
@@ -436,7 +547,20 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.24.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/0.30.1...HEAD
+[0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
+[0.30.0]: https://github.com/kyleve/Listable/compare/0.29.3...0.30.0
+[0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3
+[0.29.2]: https://github.com/kyleve/Listable/compare/0.29.1...0.29.2
+[0.29.1]: https://github.com/kyleve/Listable/compare/0.29.0...0.29.1
+[0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
+[0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
+[0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
+[0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
+[0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
+[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.25.1
+[0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
 [0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
 [0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
 [0.23.1]: https://github.com/kyleve/Listable/compare/0.23.0...0.23.1

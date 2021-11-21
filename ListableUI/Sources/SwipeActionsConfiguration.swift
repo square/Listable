@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 /// Use SwipeActionsConfiguration to configure an item with SwipeActions.
@@ -18,13 +19,31 @@ public struct SwipeActionsConfiguration {
     /// Whether the first action is performed automatically with a full swipe.
     public var performsFirstActionWithFullSwipe : Bool
     
-    public init(action : SwipeAction, performsFirstActionWithFullSwipe : Bool = false) {
-        self.init(actions: [action], performsFirstActionWithFullSwipe: performsFirstActionWithFullSwipe)
+    /// Creates a new configuration with the provided action.
+    public init(
+        performsFirstActionWithFullSwipe : Bool = false,
+        action : SwipeAction
+    ) {
+        self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
+        self.actions = [action]
     }
     
-    public init(actions : [SwipeAction], performsFirstActionWithFullSwipe : Bool = false) {
-        self.actions = actions
+    /// Creates a new configuration with the provided actions.
+    public init(
+        performsFirstActionWithFullSwipe : Bool = false,
+        actions : [SwipeAction]
+    ) {
         self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
+        self.actions = actions
+    }
+    
+    /// Creates a new configuration with the provided actions.
+    public init(
+        performsFirstActionWithFullSwipe : Bool = false,
+        @ListableBuilder<SwipeAction> actions : () -> [SwipeAction]
+    ) {
+        self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
+        self.actions = actions()
     }
 }
 
@@ -47,7 +66,13 @@ public struct SwipeAction {
 
     public var handler: Handler
     
-    public init(title: String, backgroundColor: UIColor, image: UIImage? = nil, handler: @escaping Handler) {
+    /// Creates a new swipe action with the provided options.
+    public init(
+        title: String,
+        backgroundColor: UIColor,
+        image: UIImage? = nil,
+        handler: @escaping Handler
+    ) {
         self.title = title
         self.backgroundColor = backgroundColor
         self.image = image

@@ -41,7 +41,7 @@ final class ManualSelectionManagementViewController : ListViewController
     
     override func configure(list: inout ListProperties) {
         
-        list.behavior.selectionMode = .single(clearsSelectionOnViewWillAppear: false)
+        list.behavior.selectionMode = .single
         
         list.appearance = .demoAppearance
         list.layout = .demoLayout
@@ -51,7 +51,7 @@ final class ManualSelectionManagementViewController : ListViewController
             section += (1...10).map { index in
                 Item(DemoItem(text: "\(index)")) { item in
                     item.selectionStyle = .selectable(isSelected: index == selectedIndex)
-                    
+    
                     item.onSelect = { _ in
                         self.selectedIndex = index
                         self.reload(animated: true)

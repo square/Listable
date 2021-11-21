@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 7/22/19.
 //
 
+import UIKit
+
 
 /// A class used to manage the "live" / mutable state of the visible items in the list,
 /// which is persistent across diffs of content (instances are only created or destroyed when an item enters or leaves the list).
@@ -16,9 +18,10 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
-    var header : HeaderFooterViewStatePair = .init(state: nil)
-    var footer : HeaderFooterViewStatePair = .init(state: nil)
-    var overscrollFooter : HeaderFooterViewStatePair = .init(state: nil)
+    let containerHeader : HeaderFooterViewStatePair
+    let header : HeaderFooterViewStatePair
+    let footer : HeaderFooterViewStatePair
+    let overscrollFooter : HeaderFooterViewStatePair
     
     var sections : [PresentationState.SectionState]
     
@@ -38,6 +41,12 @@ final class PresentationState
     init()
     {
         self.refreshControl = nil
+        
+        self.containerHeader = .init(state: nil)
+        self.header = .init(state: nil)
+        self.footer = .init(state: nil)
+        self.overscrollFooter = .init(state: nil)
+        
         self.sections = []
         
         self.containsAllItems = true
@@ -67,6 +76,11 @@ final class PresentationState
         
         /// Note: We are passing `performsContentCallbacks:false` because this
         /// initializer is only used for one-pass measurement provided by ``ListView/contentSize(in:for:itemLimit:)``.
+        
+        self.containerHeader = .init(state: SectionState.newHeaderFooterState(
+            with: content.header,
+            performsContentCallbacks: false
+        ))
         
         self.header = .init(state: SectionState.newHeaderFooterState(
             with: content.header,
@@ -136,6 +150,7 @@ final class PresentationState
     func headerFooter(of kind : SupplementaryKind, in section : Int) -> HeaderFooterViewStatePair
     {
         switch kind {
+        case .listContainerHeader: return self.containerHeader
         case .listHeader: return self.header
         case .listFooter: return self.footer
         case .sectionHeader: return self.sections[section].header
@@ -276,6 +291,18 @@ final class PresentationState
         self.contentIdentifier = slice.content.identifier
         
         let environment = dependencies.environmentProvider()
+        
+        self.containerHeader.update(
+            with: SectionState.headerFooterState(
+                current: self.containerHeader.state,
+                new: slice.content.containerHeader,
+                performsContentCallbacks: self.performsContentCallbacks
+            ),
+            new: slice.content.containerHeader,
+            reason: reason,
+            updateCallbacks: updateCallbacks,
+            environment: environment
+        )
         
         self.header.update(
             with: SectionState.headerFooterState(
@@ -460,6 +487,18 @@ extension PresentationState
     ) -> ListLayoutContent
     {
         ListLayoutContent(
+            containerHeader: {
+                guard let header = self.containerHeader.state else { return nil }
+                
+                return .init(
+                    state: header,
+                    kind: .listContainerHeader,
+                    isPopulated: true,
+                    measurer: { info in
+                        header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                    }
+                )
+            }(),
             header: {
                 guard let header = self.header.state else { return nil }
                 

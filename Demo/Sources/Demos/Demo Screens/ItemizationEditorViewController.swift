@@ -58,7 +58,7 @@ final class ItemizationEditorViewController : UIViewController
                 alwaysBounce: true,
                 alignment: .top
             )
-            
+        } sections: {
             let variationsTitle : String = {
                 if let selected = self.itemization.variations.selected.first {
                     return selected.name
@@ -75,11 +75,11 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }()
             
-            list += Section(SectionIdentifier.variations) { section in
+            Section(SectionIdentifier.variations) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: variationsTitle), sizing: .thatFits())
-                section.footer = HeaderFooter(Footer(text: footerText), sizing: .thatFits())
+                section.header = Header(title: variationsTitle)
+                section.footer = Footer(text: footerText)
                 
                 section += self.itemization.variations.all.map { variation in
                     Item(
@@ -94,13 +94,13 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
 
-            list += itemization.modifiers.map { set in
+            itemization.modifiers.map { set in
                 Section(SectionIdentifier.modifier(set.name)) { section in
                     
                     section.layouts.table.columns = .init(count: 2, spacing: 20.0)
                     
-                    section.header = HeaderFooter(Header(title: set.name), sizing: .thatFits())
-                    section.footer = HeaderFooter(Footer(text: "Choose modifiers"), sizing: .thatFits())
+                    section.header = Header(title: set.name)
+                    section.footer = Footer(text: "Choose modifiers")
                     
                     section += set.all.map { modifier in
                         Item(
@@ -116,10 +116,10 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(SectionIdentifier.discounts) { section in
+            Section(SectionIdentifier.discounts) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Discounts"), sizing: .thatFits())
+                section.header = Header(title: "Discounts")
                 
                 section += self.availableOptions.allDiscounts.map { discount in
                     ToggleItem(content: .init(title: discount.name, detail: "$0.00", isOn: self.itemization.has(discount))) { isOn in
@@ -132,10 +132,10 @@ final class ItemizationEditorViewController : UIViewController
                 }
             }
             
-            list += Section(SectionIdentifier.taxes) { section in
+            Section(SectionIdentifier.taxes) { section in
                 
                 section.layouts.table.columns = .init(count: 2, spacing: 20.0)
-                section.header = HeaderFooter(Header(title: "Taxes"), sizing: .thatFits())
+                section.header = Header(title: "Taxes")
                 
                 section += self.availableOptions.allTaxes.map { tax in
                     ToggleItem(content: .init(title: tax.name, detail: "$0.00", isOn: self.itemization.has(tax))) { isOn in
@@ -166,9 +166,12 @@ final class ItemizationEditorViewController : UIViewController
                 listFooterHeight: 100.0
             )
             
-            $0.layout = .init(
+            $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
-                width: .atMost(600.0),
+                width: .atMost(600.0)
+            )
+            
+            $0.layout = .init(
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 0.0,

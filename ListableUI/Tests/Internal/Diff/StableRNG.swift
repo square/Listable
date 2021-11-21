@@ -7,12 +7,21 @@
 
 import Foundation
 
+internal extension Bundle {
+    static var resources: Bundle {
+        #if SWIFT_PACKAGE
+        return .module
+        #else
+        let main = Bundle(for: ArrayDiffTests.self)
+        return Bundle(url: main.url(forResource: "ListableUITestsResources", withExtension: "bundle")!)!
+        #endif
+    }
+}
 
 struct StableRNG : RandomNumberGenerator
 {
     private static let numbers : [UInt64] = {
-        let main = Bundle(for: ArrayDiffTests.self)
-        let bundle = Bundle(url: main.url(forResource: "ListableUITestsResources", withExtension: "bundle")!)!
+        let bundle = Bundle.resources
         
         let url = bundle.url(forResource: "random_numbers", withExtension: "json")!
                 

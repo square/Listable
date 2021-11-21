@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 6/4/20.
 //
 
+import UIKit
+
 
 public extension LayoutDescription
 {
@@ -145,7 +147,7 @@ final class PagedListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
-    func updateLayout(in collectionView : UICollectionView)
+    func updateLayout(in context : ListLayoutLayoutContext)
     {
         // Nothing needed.
     }

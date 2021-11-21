@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 11/19/19.
 //
 
+import UIKit
+
 
 internal extension ListView
 {
@@ -14,8 +16,6 @@ internal extension ListView
         unowned var presentationState : PresentationState!
         unowned var storage : ListView.Storage!
         unowned var liveCells : LiveCells!
-        
-        var environment : ListEnvironment!
 
         func numberOfSections(in collectionView: UICollectionView) -> Int
         {
@@ -41,7 +41,7 @@ internal extension ListView
             let cell = item.dequeueAndPrepareCollectionViewCell(
                 in: collectionView,
                 for: indexPath,
-                environment: environment
+                environment: self.view.environment
             )
             
             cell.wasDequeued(with: self.liveCells)
@@ -62,11 +62,12 @@ internal extension ListView
                 for: kind,
                 at: indexPath,
                 reuseCache: self.headerFooterReuseCache,
-                environment: self.environment
+                environment: self.view.environment
             )
             
             container.headerFooter = {
                 switch SupplementaryKind(rawValue: kind)! {
+                case .listContainerHeader: return self.presentationState.containerHeader.state
                 case .listHeader: return self.presentationState.header.state
                 case .listFooter: return self.presentationState.footer.state
                 case .sectionHeader: return self.presentationState.sections[indexPath.section].header.state

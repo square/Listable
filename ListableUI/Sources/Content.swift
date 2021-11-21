@@ -5,6 +5,7 @@
 //  Created by Kyle Van Essen on 6/21/19.
 //
 
+import UIKit
 
 
 public struct Content
@@ -21,14 +22,18 @@ public struct Content
     /// The refresh control, if any, associated with the list.
     public var refreshControl : RefreshControl?
     
+    /// A header provided by the container of the list, eg a nav-style "large header".
+    public var containerHeader : AnyHeaderFooterConvertible?
+    
     /// The header for the list, usually displayed before all other content.
-    public var header : AnyHeaderFooter?
+    public var header : AnyHeaderFooterConvertible?
+    
     /// The footer for the list, usually displayed after all other content.
-    public var footer : AnyHeaderFooter?
+    public var footer : AnyHeaderFooterConvertible?
     
     /// The overscroll footer for the list, which is displayed below the bottom bounds of the visible frame,
     /// so it is only visible if the user manually scrolls the list up to make it visible.
-    public var overscrollFooter : AnyHeaderFooter?
+    public var overscrollFooter : AnyHeaderFooterConvertible?
     
     /// All sections in the list.
     public var sections : [Section]
@@ -49,6 +54,10 @@ public struct Content
         
         for filter in filters {
             switch filter {
+            case .listContainerHeader:
+                if self.containerHeader != nil {
+                    return true
+                }
             case .listHeader:
                 if self.header != nil {
                     return true
@@ -96,15 +105,17 @@ public struct Content
     public init(
         identifier : AnyHashable? = nil,
         refreshControl : RefreshControl? = nil,
-        header : AnyHeaderFooter? = nil,
-        footer : AnyHeaderFooter? = nil,
-        overscrollFooter : AnyHeaderFooter? = nil,
+        containerHeader : AnyHeaderFooterConvertible? = nil,
+        header : AnyHeaderFooterConvertible? = nil,
+        footer : AnyHeaderFooterConvertible? = nil,
+        overscrollFooter : AnyHeaderFooterConvertible? = nil,
         sections : [Section] = []
     ) {
         self.identifier = identifier
         
         self.refreshControl = refreshControl
         
+        self.containerHeader = containerHeader
         self.header = header
         self.footer = footer
         

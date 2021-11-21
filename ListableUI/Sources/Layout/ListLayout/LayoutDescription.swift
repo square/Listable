@@ -53,10 +53,10 @@ public struct LayoutDescription
 }
 
 
-public extension ListLayout
+extension ListLayout
 {
     /// Creates a new layout description for a list layout, with the provided optional layout configuration.
-    static func describe(
+    public static func describe(
         appearance : @escaping (inout Self.LayoutAppearance) -> () = { _ in }
     ) -> LayoutDescription
     {
@@ -70,15 +70,15 @@ public extension ListLayout
 
 extension LayoutDescription
 {
-    struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration
+    public struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration
     {
-        let layoutType : LayoutType.Type
+        public let layoutType : LayoutType.Type
         
-        let configure : (inout LayoutType.LayoutAppearance) -> ()
+        public let configure : (inout LayoutType.LayoutAppearance) -> ()
         
         // MARK: AnyLayoutDescriptionConfiguration
         
-        func createEmptyLayout(
+        public func createEmptyLayout(
             appearance : Appearance,
             behavior: Behavior
         ) -> AnyListLayout

@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 11/19/19.
 //
 
+import UIKit
+
 
 extension ListView
 {
@@ -152,6 +154,7 @@ extension ListView
             
             let headerFooter : PresentationState.HeaderFooterViewStatePair = {
                 switch kind {
+                case .listContainerHeader: return self.presentationState.containerHeader
                 case .listHeader: return self.presentationState.header
                 case .listFooter: return self.presentationState.footer
                 case .sectionHeader: return self.presentationState.sections[indexPath.section].header
@@ -162,7 +165,7 @@ extension ListView
             
             headerFooter.willDisplay(view: container)
             
-            self.displayedSupplementaryItems[ObjectIdentifier(view)] = headerFooter
+            self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
         }
         
         func collectionView(
@@ -259,6 +262,10 @@ extension ListView
                 defaults: defaults,
                 environment: self.view.environment
             )
+        }
+        
+        func listViewLayoutCurrentEnvironment() -> ListEnvironment {
+            self.view.environment
         }
         
         func listViewLayoutDidLayoutContents() {

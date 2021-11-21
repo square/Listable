@@ -22,9 +22,13 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
         self.title = "Dictionary"
         
         self.listView.layout = .table {
+            
+            $0.bounds = .init(
+                padding: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0),
+                width: .atMost(600.0)
+            )
+            
             $0.layout.set {
-                $0.padding = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 20.0, right: 20.0)
-                $0.width = .atMost(600.0)
                 $0.sectionHeaderBottomSpacing = 10.0
                 $0.itemSpacing = 7.0
                 $0.interSectionSpacingWithNoFooter = 10.0
@@ -105,7 +109,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 return Section(letter.letter) { section in
                     
                     // Set the header.
-                    section.header = HeaderFooter(SectionHeader(title: letter.letter))
+                    section.header = SectionHeader(title: letter.letter)
                     
                     // Only include word rows that pass the filter.
                     section += letter.words.compactMap { word in

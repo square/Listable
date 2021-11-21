@@ -8,7 +8,7 @@ Listable is a declarative list framework for iOS, which allows you to concisely 
 self.listView.setContent { list in
     list += Section("section-1") { section in
         
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
         section += DemoItem(text: "And here is another row.")
@@ -25,7 +25,7 @@ self.listView.setContent { list in
 
     list += Section("section-2") { section in
         
-        section.header = HeaderFooter(with: DemoHeader(title: "Another Header"))
+        section.header = DemoHeader(title: "Another Header")
         
         section += DemoItem(text: "The last row.")
     }    
@@ -51,7 +51,7 @@ And then push in new content, so there  is one row with one section:
 ```swift
 self.listView.setContent { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
     } 
@@ -63,7 +63,7 @@ This new section will be animated into place. If you then insert another row:
 ```swift
 self.listView.setContent { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
         section += DemoItem(text: "Another row!")
@@ -168,7 +168,7 @@ struct Underflow : Equatable
 
 ### Self-Sizing Cells
 
-Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
+Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `List.Measurement` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
 
 ```swift
 public enum Sizing : Equatable
@@ -465,8 +465,8 @@ You set headers and footers on sections via the `header` and `footer` parameter.
 ```swift
 self.listView.configure { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(DemoHeader(title: "This Is A Header"))
-        section.footer = HeaderFooter(DemoFooter(text: "And this is a footer. Please check the EULA for details."))
+        section.header = DemoHeader(title: "This Is A Header")
+        section.footer = DemoFooter(text: "And this is a footer. Please check the EULA for details.")
     } 
 }
 ```
