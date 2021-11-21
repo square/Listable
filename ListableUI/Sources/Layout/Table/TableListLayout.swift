@@ -460,9 +460,7 @@ final class TableListLayout : ListLayout
         defaultHeight : CGFloat,
         contentBottom : CGFloat,
         after : (ListLayoutContent.SupplementaryItemInfo) -> ()
-    ) {
-        // Determines the position of the content within the list.
-        
+    ) {        
         let position = width.position(
             with: viewWidth,
             defaultWidth: defaultWidth

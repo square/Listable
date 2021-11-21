@@ -244,7 +244,7 @@ extension AnyListLayout
         }
         
         // Provide additional adjustment.
-        
+                
         self.direction.mutate(self.content.header, vertical: \.y, horizontal: \.x) {
             $0 += additionalOffset
         }

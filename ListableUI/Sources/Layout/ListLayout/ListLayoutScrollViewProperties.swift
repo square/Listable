@@ -83,10 +83,20 @@ public struct ListLayoutScrollViewProperties
 }
 
 
+/// Constants indicating how safe area insets are added to the adjusted content inset.
+/// Mirrors `UIScrollView.ContentInsetAdjustmentBehavior`.
 public enum ContentInsetAdjustmentBehavior : Equatable {
+    
+    /// Applies the inset from a UIKit navigation bar or tab bar.
     case automatic
+    
+    /// Applies the safe area inset for the scrollable axes.
     case scrollableAxes
+    
+    /// Applies no safe area inset.
     case never
+    
+    /// Applies all safe area insets.
     case always
     
     var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
