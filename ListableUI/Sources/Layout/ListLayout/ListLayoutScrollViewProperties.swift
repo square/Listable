@@ -22,7 +22,7 @@ public struct ListLayoutScrollViewProperties
     
     public init(
         isPagingEnabled: Bool,
-        contentInsetAdjustmentBehavior: ListLayoutScrollViewProperties.ContentInsetAdjustmentBehavior,
+        contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior,
         allowsBounceVertical : Bool,
         allowsBounceHorizontal : Bool,
         allowsVerticalScrollIndicator : Bool,
@@ -80,20 +80,21 @@ public struct ListLayoutScrollViewProperties
             view.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator
         }
     }
+}
+
+
+public enum ContentInsetAdjustmentBehavior : Equatable {
+    case automatic
+    case scrollableAxes
+    case never
+    case always
     
-    public enum ContentInsetAdjustmentBehavior : Equatable {
-        case automatic
-        case scrollableAxes
-        case never
-        case always
-        
-        var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
-            switch self {
-            case .automatic: return .automatic
-            case .scrollableAxes: return .scrollableAxes
-            case .never: return .never
-            case .always: return .always
-            }
+    var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
+        switch self {
+        case .automatic: return .automatic
+        case .scrollableAxes: return .scrollableAxes
+        case .never: return .never
+        case .always: return .always
         }
     }
 }

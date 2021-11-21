@@ -110,7 +110,8 @@ public struct TableAppearance : ListLayoutAppearance
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
-    public var contentInsetAdjustmentBehavior : ListLayoutScrollViewProperties.ContentInsetAdjustmentBehavior
+    /// How the scroll view should adjust and apply the safe area of the view. Defaults to `.scrollableAxes`.
+    public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
     /// Default sizing attributes for content in the list.
     public var sizing : Sizing
@@ -126,13 +127,15 @@ public struct TableAppearance : ListLayoutAppearance
     public init(
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
-        contentInsetAdjustmentBehavior : ListLayoutScrollViewProperties.ContentInsetAdjustmentBehavior = .automatic,
+        contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
         sizing : Sizing = Sizing(),
         layout : Layout = Layout()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
+        
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
+        
         self.sizing = sizing
         self.layout = layout
     }
