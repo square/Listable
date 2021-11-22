@@ -10,8 +10,8 @@ public final class ReorderingActions
 {
     public private(set) var isMoving : Bool
     
-    internal weak var item : AnyPresentationItemState?
-    internal weak var delegate : ReorderingActionsDelegate?
+    weak var item : AnyPresentationItemState?
+    weak var delegate : ReorderingActionsDelegate?
     
     init()
     {
@@ -68,8 +68,12 @@ public final class ReorderingActions
         
         self.delegate?.endReorder(for: item, with: result)
     }
+}
+
+
+extension ReorderingActions {
     
-    public enum Result {
+    public enum Result : Equatable {
         case finished
         case cancelled
     }

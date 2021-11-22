@@ -15,12 +15,17 @@ import UIKit
 public enum Sizing : Hashable
 {
     /// The default size from the list's appearance is used. The size is not dynamic at all.
+    ///
+    /// ### ⚠️ Warning ⚠️
+    /// You usually do not want to use this option. If your views contain any dynamically sizing
+    /// content (eg text that responds to accessibility sizes), using this value will result in
+    /// mis-sized or cut-off content.
+    ///
     case `default`
     
     /// Fixes the size to the absolute value passed in.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// This option takes in both a size and a width. However, for standard list views,
     /// only the height is used. The width is provided for when custom layouts are used,
     /// which may allow sizing for other types of layouts, eg, grids.
@@ -31,8 +36,7 @@ public enum Sizing : Hashable
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
     /// If you do not specify a constraint, `.noConstraint` is used.
     ///
-    /// Example
-    /// -------
+    /// ### Example
     /// If you would like to use `sizeThatFits` to size an item, but would like to enforce a minimum size,
     /// you would do something similar to the following:
     ///
@@ -45,12 +49,24 @@ public enum Sizing : Hashable
     /// ```
     case thatFits(Constraint = .noConstraint)
     
+    /// Sizes the item by calling `sizeThatFits` on its underlying view type.
+    /// The passed in constraints are used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
+    ///
+    /// See `case thatFits(Constraint = .noConstraint)` for a full discussion.
+    static func thatFits(
+        width: Constraint.Axis = .noConstraint,
+        height: Constraint.Axis = .noConstraint
+    ) -> Self
+    {
+        .thatFits(.init(width: width, height: height))
+    }
+    
     /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
     /// If you do not specify a constraint, `.noConstraint` is used.
     ///
-    /// Example
-    /// -------
+    /// ### Example
     /// If you would like to use `systemLayoutSizeFitting` to size an item, but would like to enforce a minimum size,
     /// you would do something similar to the following:
     ///
@@ -62,6 +78,19 @@ public enum Sizing : Hashable
     /// .autolayout(.init(.atLeast(.fixed(50))))
     /// ```
     case autolayout(Constraint = .noConstraint)
+    
+    /// Sizes the item by calling `systemLayoutSizeFitting` on its underlying view type.
+    /// The passed in constraints are used to clamp the size to a minimum, maximum, or range.
+    /// If you do not specify a constraint, `.noConstraint` is used.
+    ///
+    /// See `case autolayout(Constraint = .noConstraint)` for a full discussion.
+    static func autolayout(
+        width: Constraint.Axis = .noConstraint,
+        height: Constraint.Axis = .noConstraint
+    ) -> Self
+    {
+        .thatFits(.init(width: width, height: height))
+    }
     
     /// Measures the given view with the provided options.
     /// The returned value is `ceil()`'d to round up to the next full integer value.
@@ -149,11 +178,21 @@ extension Sizing
         }
     }
     
+    /// Describes the range of values that are acceptable for both
+    /// the width and the height of content within a list.
+    ///
+    /// Usually, for layouts like a table, only the axis that matches the current
+    /// `LayoutDirection` will be used. Eg, if your table layout is laying out
+    /// vertically, only the `height` axis will be used.
     public struct Constraint : Hashable
     {
+        /// Describes the range of acceptable width values.
         public var width : Axis
+        
+        /// Describes the range of acceptable height values.
         public var height : Axis
         
+        /// Applies no constraints to the measurement in either axis.
         public static var noConstraint : Constraint {
             Constraint(
                 width: .noConstraint,
@@ -161,12 +200,14 @@ extension Sizing
             )
         }
         
+        /// Creates a new constraint with the provided value for both axes.
         public init(_ value : Axis)
         {
             self.width = value
             self.height = value
         }
         
+        /// Creates a new constraint with the provided width and height axes.
         public init(
             width : Axis,
             height : Axis
@@ -175,6 +216,7 @@ extension Sizing
             self.height = height
         }
         
+        /// Clamps the provided size, falling back to the provided default if the measurement calls for a default value.
         public func clamp(_ value : CGSize, with defaultSize : CGSize) -> CGSize
         {
             return CGSize(
@@ -183,20 +225,36 @@ extension Sizing
             )
         }
         
+        /// Describes the range of values that are acceptable for one dimension
+        /// in a `Constraint`, eg width or height.
         public enum Axis : Hashable
         {
+            /// No constraint is applied to any measurement.
             case noConstraint
             
+            /// Any returned measurement must be at least this value. If it is smaller than
+            /// this value, then this value will be returned instead.
             case atLeast(Value)
+            
+            /// Any returned measurement can be at least this large. If it is larger than
+            /// this value, then this value is returned instead.
             case atMost(CGFloat)
             
+            /// Any returned measurement must be within the provided range. If it is smaller
+            /// or larger than the provided range, the range is used to clamp the value.
             case within(Value, CGFloat)
             
+            /// Describes either a default value (eg, a default row height) from a
+            /// layout, or an explicit value.
             public enum Value : Hashable
             {
+                /// Represents a default value (eg, a default row height) from a layout.
                 case `default`
+                
+                /// Represents an explicit value, like 44pt.
                 case fixed(CGFloat)
                 
+                /// Returns either the provided default, or the fixed value.
                 public func value(with defaultHeight : CGFloat) -> CGFloat
                 {
                     switch self {
@@ -206,6 +264,7 @@ extension Sizing
                 }
             }
             
+            /// Clamps the provided value by the `Axis'` underlying value.
             public func clamp(_ value : CGFloat, with defaultValue : CGFloat) -> CGFloat
             {
                 switch self {
@@ -220,12 +279,19 @@ extension Sizing
 }
 
 
+/// Describes the range of acceptable values for a width.
 public enum WidthConstraint : Equatable
 {
+    /// There is no limit to a width, it can be as wide as possible.
     case noConstraint
+    
+    /// The width must be exactly this value.
     case fixed(CGFloat)
+    
+    /// The width can be at most, this value. Any value larger will be clamped.
     case atMost(CGFloat)
     
+    /// Clamps the provided value based on our underlying value.
     public func clamp(_ value : CGFloat) -> CGFloat
     {
         switch self {
@@ -237,10 +303,16 @@ public enum WidthConstraint : Equatable
 }
 
 
+/// Specifies a custom width for an item or header in a list.
 public enum CustomWidth : Equatable
 {
+    /// The default width from the layout is used.
     case `default`
+    
+    /// The width will fill all available space.
     case fill
+    
+    /// A custom width and/or alignment.
     case custom(Custom)
     
     public func merge(with parent : CustomWidth) -> CustomWidth
