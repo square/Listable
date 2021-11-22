@@ -135,7 +135,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
             }
         }
         .inset(horizontal: 15.0, vertical: 13.0)
-        .accessibility(label: self.text, traits: [.button])
+        .accessibilityElement(label: self.text, value: nil, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
