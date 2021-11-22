@@ -19,10 +19,10 @@ public struct Section
     public var identifier : Identifier
     
     /// The header, if any, associated with the section.
-    public var header : AnyHeaderFooter?
+    public var header : AnyHeaderFooterConvertible?
     
     /// The footer, if any, associated with the section.
-    public var footer : AnyHeaderFooter?
+    public var footer : AnyHeaderFooterConvertible?
     
     /// The items, if any, associated with the section.
     public var items : [AnyItem]
@@ -74,18 +74,20 @@ public struct Section
     // MARK: Initialization
     //
     
+    /// Provides a mutable section for editing in an inline closure.
     public typealias Configure = (inout Section) -> ()
     
+    /// Creates a new section with all of the provided values, plus an optional
+    /// trailing closure to configure the section inline.
     public init<IdentifierValue:Hashable>(
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
-        header : AnyHeaderFooter? = nil,
-        footer : AnyHeaderFooter? = nil,
+        header : AnyHeaderFooterConvertible? = nil,
+        footer : AnyHeaderFooterConvertible? = nil,
         reordering : SectionReordering = .init(),
-        items : [AnyItem] = [],
+        items : [AnyItemConvertible] = [],
         configure : Configure = { _ in }
-        )
-    {
+    ) {
         self.identifier = Identifier(identifier)
         
         self.layouts = layouts
@@ -95,9 +97,63 @@ public struct Section
         
         self.reordering = reordering
         
-        self.items = items
+        self.items = items.map { $0.toAnyItem() }
         
         configure(&self)
+    }
+    
+    /// Creates a new section with a trailing closure to configure the section inline.
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        configure : Configure
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = .init()
+        self.header = nil
+        self.footer = nil
+        self.reordering = .init()
+        self.items = []
+        
+        configure(&self)
+    }
+    
+    /// Creates a new section with result builder-style APIs.
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        layouts : SectionLayouts = .init(),
+        reordering : SectionReordering = .init(),
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        header : () -> AnyHeaderFooterConvertible? = { nil },
+        footer : () -> AnyHeaderFooterConvertible? = { nil }
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = layouts
+        self.reordering = reordering
+        
+        self.items = items().map { $0.toAnyItem() }
+        
+        self.header = header()
+        self.footer = footer()
+    }
+    
+    /// Creates a new section with result builder-style APIs.
+    public init<IdentifierValue:Hashable>(
+        _ identifier : IdentifierValue,
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        header : () -> AnyHeaderFooterConvertible? = { nil },
+        footer : () -> AnyHeaderFooterConvertible? = { nil }
+    ) {
+        self.identifier = Identifier(identifier)
+        
+        self.layouts = .init()
+        self.reordering = .init()
+        
+        self.items = items().map { $0.toAnyItem() }
+        
+        self.header = header()
+        self.footer = footer()
     }
     
     //
@@ -166,6 +222,20 @@ public struct Section
     //
     // MARK: Adding & Removing Multiple Items
     //
+    
+    /// Adds the provided items with the provided result builder.
+    ///
+    /// ```
+    /// section.add {
+    ///     MyContent(text: "Person 1")
+    ///     MyContent(text: "Person 2")
+    /// }
+    /// ```
+    public mutating func add(
+        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+    ) {
+        self.items += items().map { $0.toAnyItem() }
+    }
     
     public static func += (lhs : inout Section, rhs : [AnyItem])
     {

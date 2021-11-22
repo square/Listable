@@ -319,7 +319,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     return 0.0
                     
                 case .overlapping(let frame):
-                    return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
+                    return (self.bounds.size.height - frame.origin.y) - self.collectionView.adjustedContentInset.bottom
                 }
             }
         }()
@@ -384,6 +384,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
     // MARK: Public - Scrolling To Sections & Items
     //
     
+    /// TODO: The below functions do not yet work for horizontal lists.
+    /// A pass needs to be done to change math and offsets based on the `LayoutDirection`
+    /// of the current layout.
+    
     public typealias ScrollCompletion = (Bool) -> ()
     
     ///
@@ -406,6 +410,28 @@ public final class ListView : UIView, KeyboardObserverDelegate
         )
     }
     
+    private var hasLoggedHorizontalScrollToWarning : Bool = false
+    
+    private func logHorizontalScrollToWarning() {
+        
+        guard self.collectionViewLayout.layout.direction == .horizontal else { return }
+        
+        if self.hasLoggedHorizontalScrollToWarning { return }
+        
+        self.hasLoggedHorizontalScrollToWarning = true
+        
+        print(
+        """
+        Hello! It looks like you are using one of the `scrollTo...` family of APIs.
+        
+        These have not yet been updated to support `.horizontal` layouts, and thus, will
+        likely not work as expected.
+        
+        Please let us know you're looking for this feature in #listable on Slack.
+        """
+        )
+    }
+    
     ///
     /// Scrolls to the item with the provided identifier, with the provided positioning.
     /// If there is more than one item with the same identifier, the list scrolls to the first.
@@ -419,6 +445,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool
     {
+        self.logHorizontalScrollToWarning()
+        
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
@@ -493,6 +521,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool
     {
+        self.logHorizontalScrollToWarning()
+        
         let storageContent = storage.allContent
 
         // Make sure the section identifier is valid.
@@ -566,6 +596,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool {
         
+        self.logHorizontalScrollToWarning()
+        
         // The rect we scroll to must have an area – an empty rect will result in no scrolling.
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
         
@@ -585,6 +617,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         animation: ViewAnimation = .none,
         completion : @escaping ScrollCompletion = { _ in }
     ) -> Bool {
+        
+        self.logHorizontalScrollToWarning()
 
         // Make sure we have a valid last index path.
 

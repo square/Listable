@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 /// Represents a standard UIKit refresh control that is shown at the top

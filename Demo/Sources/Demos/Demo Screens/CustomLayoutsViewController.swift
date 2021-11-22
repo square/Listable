@@ -29,39 +29,15 @@ final class CustomLayoutsViewController : UIViewController
             list.appearance = .demoAppearance
             list.layout = .demoLayout
 
-            list += Section("default") { section in
-                
-                section.header = HeaderFooter(DemoHeader(title: "Some Rows"))
-                
-                section += Item(
-                    DemoItem(text: "Row 1"),
-                    sizing: .thatFits()
-                )
-                
-                section += Item(
-                    DemoItem(text: "Row 2"),
-                    sizing: .thatFits()
-                )
-                
-                section += Item(
-                    DemoItem(text: "Row 3"),
-                    sizing: .thatFits()
-                )
-                
-                section += Item(
-                    DemoItem(text: "Row 4"),
-                    sizing: .thatFits()
-                )
-                
-                section += Item(
-                    DemoItem(text: "Row 5"),
-                    sizing: .thatFits()
-                )
-                
-                section += Item(
-                    DemoItem(text: "Row 6"),
-                    sizing: .thatFits()
-                )
+            list += Section("default") {
+                DemoItem(text: "Row 1")
+                DemoItem(text: "Row 2")
+                DemoItem(text: "Row 3")
+                DemoItem(text: "Row 4")
+                DemoItem(text: "Row 5")
+                DemoItem(text: "Row 6")
+            } header: {
+                DemoHeader(title: "Some Rows")
             }
         }
     }

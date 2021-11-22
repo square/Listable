@@ -6,8 +6,8 @@
 //
 
 import BlueprintUI
-
 import ListableUI
+import UIKit
 
 
 ///
@@ -18,13 +18,13 @@ import ListableUI
 /// on `ListView` itself.
 /// ```
 /// List { list in
-///     list.content.header = HeaderFooter(PodcastsHeader())
+///     list.header = PodcastsHeader()
 ///
 ///     let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
 ///
 ///     list += Section("podcasts") { section in
 ///
-///         section.header = HeaderFooter(PodcastsSectionHeader())
+///         section.header = PodcastsSectionHeader()
 ///
 ///         section += podcasts.map { podcast in
 ///             PodcastRow(podcast: podcast)
@@ -69,6 +69,20 @@ public struct List : Element
         self.measurement = measurement
         
         self.properties = .default(with: configure)
+    }
+    
+    /// Create a new list, configured with the provided properties,
+    /// configured with the provided `ListProperties` builder, and the provided `sections`.
+    public init(
+        measurement : List.Measurement = .fillParent,
+        configure : ListProperties.Configure = { _ in },
+        @ListableBuilder<Section> sections : () -> [Section]
+    ) {
+        self.measurement = measurement
+        
+        self.properties = .default(with: configure)
+        
+        self.properties.sections += sections()
     }
     
     //

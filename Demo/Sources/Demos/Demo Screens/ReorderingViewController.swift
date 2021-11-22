@@ -40,7 +40,7 @@ final class ReorderingViewController : ListViewController
         }
         
         list += Section("1") { section in
-            section.header = HeaderFooter(DemoHeader(title: "First Section"))
+            section.header = DemoHeader(title: "First Section")
             
             section.layouts.table.columns = .init(count: 2, spacing: 15.0)
             
@@ -62,7 +62,7 @@ final class ReorderingViewController : ListViewController
         }
         
         list += Section("2") { section in
-            section.header = HeaderFooter(DemoHeader(title: "Second Section"))
+            section.header = DemoHeader(title: "Second Section")
             
             section += Item(DemoItem(text: "1,0  Row")) { item in
                 item.reordering = ItemReordering(sections: .all)
@@ -75,7 +75,7 @@ final class ReorderingViewController : ListViewController
         }
         
         list += Section("3") { section in
-            section.header = HeaderFooter(DemoHeader(title: "Third Section"))
+            section.header = DemoHeader(title: "Third Section")
             
             section += Item(DemoItem(text: "2,0  Row (Can't Move)")) { item in
                 

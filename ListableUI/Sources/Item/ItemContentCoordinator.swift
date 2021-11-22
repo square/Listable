@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 5/19/20.
 //
 
+import Foundation
+
 
 ///
 /// A type which lets you interactively manage the contents of an `Item` or `ItemContent`

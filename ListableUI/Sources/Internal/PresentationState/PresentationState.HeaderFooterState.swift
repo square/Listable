@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 protocol AnyPresentationHeaderFooterState : AnyObject
@@ -58,18 +59,20 @@ extension PresentationState
         
         func update(
             with state : AnyPresentationHeaderFooterState?,
-            new: AnyHeaderFooter?,
+            new: AnyHeaderFooterConvertible?,
             reason: ApplyReason,
             updateCallbacks : UpdateCallbacks,
             environment: ListEnvironment
         ) {
+            self.visibleContainer?.environment = environment
+            
             if self.state !== state {
                 self.state = state
                 self.visibleContainer?.headerFooter = state
             } else {
                 if let state = state, let new = new {
                     state.set(
-                        new: new,
+                        new: new.asAnyHeaderFooter(),
                         reason: reason,
                         visibleView: self.visibleContainer?.content,
                         updateCallbacks: updateCallbacks,
@@ -146,12 +149,7 @@ extension PresentationState
                 pressed: view.pressedBackground
             )
             
-            view.onTap = self.model.onTap.map { onTap in { [weak self] in
-                    guard let self = self else { return }
-                    
-                    onTap(self.model.content)
-                }
-            }
+            view.onTap = self.model.onTap
             
             self.model.content.apply(to: views, for: reason, with: info)
         }

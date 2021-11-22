@@ -22,6 +22,10 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
+        self.demoLayout()
+    }
+    
+    static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
@@ -35,6 +39,10 @@ extension LayoutDescription
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
             )
+            
+            $0.stickySectionHeaders = true
+            
+            configure(&$0)
         }
     }
     
@@ -66,13 +74,13 @@ struct DemoHeader : BlueprintHeaderFooterContent, Equatable
     
     var elementRepresentation: Element {
         Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+            $0.font = .systemFont(ofSize: 21.0, weight: .bold)
         }
-        .inset(horizontal: 15.0, vertical: 10.0)
+        .inset(horizontal: 15.0, vertical: 15.0)
         .box(
             background: .white,
             corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
+            shadow: .simple(radius: 1.0, opacity: 0.15, offset: CGSize(width: 0, height: 1), color: .black)
         )
     }
 }
@@ -83,13 +91,12 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
     
     var elementRepresentation: Element {
         Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+            $0.font = .systemFont(ofSize: 21.0, weight: .bold)
         }
         .inset(horizontal: 15.0, vertical: 30.0)
         .box(
             background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
+            corners: .rounded(radius: 10.0)
         )
     }
 }
@@ -111,7 +118,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
             row.verticalAlignment = .center
             
             row.add(child: Label(text: self.text) {
-                $0.font = .systemFont(ofSize: 16.0, weight: .medium)
+                $0.font = .systemFont(ofSize: 17.0, weight: .medium)
                 $0.color = info.state.isActive ? .white : .darkGray
             })
             
@@ -127,21 +134,15 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
                 )
             }
         }
-        .inset(horizontal: 15.0, vertical: 10.0)
-        .accessibility(label: self.text, traits: [.button])
+        .inset(horizontal: 15.0, vertical: 13.0)
+        .accessibilityElement(label: self.text, value: nil, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
             backgroundColor: .white,
-            cornerStyle: .rounded(radius: 8.0),
-            shadowStyle: .simple(
-                radius: info.state.isReordering ? 5.0 : 2.0,
-                opacity: info.state.isReordering ? 0.5 : 0.15,
-                offset: .init(width: 0.0, height: 1.0),
-                color: .black
-            )
+            cornerStyle: .rounded(radius: 8.0)
         )
     }
     

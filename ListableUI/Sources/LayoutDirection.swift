@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 11/10/19.
 //
 
+import UIKit
+
 
 ///
 /// Describes the given direction / axis that a layout uses when flowing its content.
@@ -88,6 +90,35 @@ extension LayoutDirection
         case .vertical: return vertical()
         case .horizontal: return horizontal()
         }
+    }
+    
+    /// When writing a layout, use this method to perform differing actions based on
+    /// the direction. The passed autoclosures will only be evaluated if they are for the current direction.
+    public func `switch`(vertical : () -> (), horizontal : () -> ()) {
+        switch self {
+        case .vertical: vertical()
+        case .horizontal: horizontal()
+        }
+    }
+    
+    public func mutate<Root, Value>(
+        _ root : Root,
+        vertical: ReferenceWritableKeyPath<Root, Value>,
+        horizontal: ReferenceWritableKeyPath<Root, Value>,
+        mutate : (inout Value) -> ()
+    ) {
+        self.switch(
+            vertical: {
+                var value = root[keyPath: vertical]
+                mutate(&value)
+                root[keyPath: vertical] = value
+            },
+            horizontal: {
+                var value = root[keyPath: horizontal]
+                mutate(&value)
+                root[keyPath: horizontal] = value
+            }
+        )
     }
 }
 

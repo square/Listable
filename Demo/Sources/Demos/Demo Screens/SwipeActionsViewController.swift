@@ -16,7 +16,7 @@ final class SwipeActionsViewController: UIViewController  {
 
     private var allowDeleting: Bool = true
 
-    private var items = (0..<20).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
+    private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
 
     override func loadView() {
         self.title = "Swipe Actions"
@@ -52,10 +52,29 @@ final class SwipeActionsViewController: UIViewController  {
                 }
             }
 
-            list += Section("items") { section in
+            list += Section("standardSwipeActionItems") { section in
+                section.header = DemoHeader(title: "Standard Style Swipable Items")
                 section += self.items.map { item in
                     Item(
-                        SwipeActionsDemoItem(item: item),
+                        SwipeActionsDemoItem(item: item, swipeActionsStyle: .default),
+                        swipeActions: self.makeSwipeActions(for: item)
+                    )
+                }
+            }
+
+            list += Section("customSwipeActionItems") { section in
+                section.header = DemoHeader(title: "Custom Style Swipable Items")
+                section += self.items.map { item in
+                    Item(
+                        SwipeActionsDemoItem(
+                            item: item,
+                            swipeActionsStyle:
+                                .init(
+                                    actionShape: .rectangle(cornerRadius: 8),
+                                    interActionSpacing: 8,
+                                    containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
+                                )
+                        ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
                 }
@@ -64,32 +83,27 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
-        var actions: [SwipeAction] = []
-
-        if allowDeleting {
-            actions.append(
+        
+        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+            if allowDeleting {
                 SwipeAction(
                     title: "Delete",
                     backgroundColor: .systemRed,
-                    image: nil,
-                    handler: { [weak self] expandActions in
-                        self?.confirmDelete(item: item, expandActions: expandActions)
-                })
-            )
-        }
-
-        actions.append(
+                    image: nil
+                ) { [weak self] expandActions in
+                    self?.confirmDelete(item: item, expandActions: expandActions)
+                }
+            }
+            
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                image: nil,
-                handler: { [weak self] expandActions in
-                    self?.toggleSave(item: item)
-                    expandActions(false)
-            })
-        )
-
-        return SwipeActionsConfiguration(actions: actions, performsFirstActionWithFullSwipe: true)
+                image: nil
+            ) { [weak self] expandActions in
+                self?.toggleSave(item: item)
+                expandActions(false)
+            }
+        }
     }
 
     @objc private func addItem() {
@@ -128,6 +142,7 @@ final class SwipeActionsViewController: UIViewController  {
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
         var item: SwipeActionItem
+        var swipeActionsStyle: DefaultSwipeActionsView.Style
 
         var identifierValue: Int {
             self.item.identifier
@@ -164,7 +179,7 @@ final class SwipeActionsViewController: UIViewController  {
                 let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
                 column.add(growPriority: 0, shrinkPriority: 0, child: separator)
             }
-            .accessibility(label: "Swipeable item", value: item.title)
+            .accessibilityElement(label: "Swipeable Item", value: item.title, traits: [.button])
         }
     }
 

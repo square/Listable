@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
+import UIKit
+
 
 public typealias HeaderContent = HeaderFooterContent
 public typealias FooterContent = HeaderFooterContent
@@ -42,7 +44,7 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 2) `PressedBackgroundView` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
 /// z-Index 1) `BackgroundView`
 ///
-public protocol HeaderFooterContent
+public protocol HeaderFooterContent : AnyHeaderFooterConvertible
 {
     //
     // MARK: Tracking Changes
@@ -175,6 +177,16 @@ public extension HeaderFooterContent {
     
     var reappliesToVisibleView: ReappliesToVisibleView {
         .always
+    }
+}
+
+
+public extension HeaderFooterContent {
+    
+    // MARK: AnyHeaderFooterConvertible
+    
+    func asAnyHeaderFooter() -> AnyHeaderFooter {
+        HeaderFooter(self)
     }
 }
 

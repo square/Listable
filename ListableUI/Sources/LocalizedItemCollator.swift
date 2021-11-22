@@ -64,8 +64,8 @@ public protocol AnyLocalizedCollatableItem : AnyItem {
 ///         /// You are passed a pre-populated section on which you may
 ///         /// customize the header and footer, or mutate the content.
 ///
-///         section.header = HeaderFooter(DemoHeader(title: collated.title))
-///         section.footer = HeaderFooter(DemoFooter(title: collated.title))
+///         section.header = DemoHeader(title: collated.title)
+///         section.footer = DemoFooter(title: collated.title)
 ///     }
 /// }
 ///
@@ -93,8 +93,8 @@ public struct LocalizedItemCollator {
     /// ```
     /// List { list in
     ///     list += LocalizedItemCollator.sections(with: items) { collated, section in
-    ///         section.header = HeaderFooter(DemoHeader(title: collated.title))
-    ///         section.footer = HeaderFooter(DemoFooter(title: collated.title))
+    ///         section.header = DemoHeader(title: collated.title)
+    ///         section.footer = DemoFooter(title: collated.title)
     ///     }
     /// }
     ///

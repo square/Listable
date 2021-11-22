@@ -5,6 +5,9 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
+import UIKit
+
+
 ///
 /// An `ItemContent` is a type used to provide the content of an `Item` in a list section.
 ///
@@ -37,7 +40,7 @@
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent where Coordinator.ItemContentType == Self
+public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -353,7 +356,10 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
     /// The view type to use to render swipe actions (delete, etc) for this content.
     /// A default implementation, which matches `UITableView`, is provided.
     associatedtype SwipeActionsView: ItemContentSwipeActionsView = DefaultSwipeActionsView
-    
+
+    /// Specify a swipe action style for this content.
+    var swipeActionsStyle: SwipeActionsView.Style { get }
+
     //
     // MARK: Creating & Providing Content Views
     //
@@ -438,6 +444,14 @@ public protocol ItemContent where Coordinator.ItemContentType == Self
 }
 
 
+public extension ItemContent {
+    
+     func toAnyItem() -> AnyItem {
+        Item(self)
+    }
+}
+
+
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
 public struct ItemContentViews<Content:ItemContent>
 {
@@ -481,6 +495,11 @@ public struct ApplyItemContentInfo
     public var environment : ListEnvironment
 }
 
+public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
+    var swipeActionsStyle: SwipeActionsView.Style {
+        return .default
+    }
+}
 
 public extension ItemContent where Self:Equatable
 {
@@ -599,10 +618,12 @@ public extension ItemContent where BackgroundView == UIView
 /// If you do so, you're completely responsible for creating and laying out the actions,
 /// as well as updating the layout based on the swipe state.
 public protocol ItemContentSwipeActionsView: UIView {
+    /// Swipe action styles (e.g. `standard`, `grouped`, etc.) that are supported by the view.
+    associatedtype Style: Equatable
 
     var swipeActionsWidth: CGFloat { get }
 
-    init(didPerformAction: @escaping SwipeAction.CompletionHandler)
+    init(style: Style, didPerformAction: @escaping SwipeAction.CompletionHandler)
 
     func apply(actions: SwipeActionsConfiguration)
 

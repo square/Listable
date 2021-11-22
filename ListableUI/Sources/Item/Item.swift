@@ -5,8 +5,21 @@
 //  Created by Kyle Van Essen on 8/10/19.
 //
 
-
-public struct Item<Content:ItemContent> : AnyItem
+///
+/// An `Item` is one of the core types deployed by Listable, allowing you to specify
+/// and control many of the behaviors, appearance options, and callbacks for interacting
+/// with rows within a list.
+///
+/// `Item` wraps an `ItemContent` struct (a protocol you implement to provide content),
+/// which drives the primary content of the row the `Item` displays.
+///
+/// If you are used to working with a collection view or table view, you can think of `ItemContent`
+/// as what you put in the `contentView` of your cell, and you can think of `Item` as all of the additional
+/// options of a row/cell: sizing, swipe to delete actions, reordering controls, callbacks, etc.
+///
+/// Once added to a section, `Item` is type erased to`AnyItem`,
+/// to allow for mixed collections of content within a section.
+public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
 {
     public var identifier : Content.Identifier
     
@@ -80,7 +93,7 @@ public struct Item<Content:ItemContent> : AnyItem
         
         let defaults = self.content.defaultItemProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.init(.atLeast(.default))))
+        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
         self.layouts = finalValue(from: layouts, defaults.layouts, .init())
         self.selectionStyle = finalValue(from: selectionStyle, defaults.selectionStyle, .notSelectable)
         self.insertAndRemoveAnimations = finalValue(from: insertAndRemoveAnimations, defaults.insertAndRemoveAnimations, nil)
@@ -132,6 +145,12 @@ public struct Item<Content:ItemContent> : AnyItem
         self.content.reappliesToVisibleView
     }
     
+    // MARK: AnyItemConvertible
+    
+    public func toAnyItem() -> AnyItem {
+        self
+    }
+    
     // MARK: AnyItem_Internal
     
     public func anyIsEquivalent(to other : AnyItem) -> Bool
@@ -163,6 +182,65 @@ public struct Item<Content:ItemContent> : AnyItem
             dependencies: dependencies,
             updateCallbacks: updateCallbacks,
             performsContentCallbacks : performsContentCallbacks
+        )
+    }
+}
+
+
+extension ItemContent {
+    
+    /// Identical to `Item.init` which takes in an `ItemContent`,
+    /// except you can call this on the `ItemContent` itself, instead of wrapping it,
+    /// to avoid additional nesting, and to hoist your content up in your code.
+    ///
+    /// ```
+    /// Section("id") { section in
+    ///     section += MyItemContent(name: "Listable")
+    ///                   .with(
+    ///                       sizing: .thatFits(.noConstraint),
+    ///                       selectionStyle: .tappable
+    ///                   )
+    ///
+    /// struct MyItemContent : ItemContent {
+    ///    var name : String
+    ///    ...
+    /// }
+    /// ```
+    public func with(
+        sizing : Sizing? = nil,
+        layouts : ItemLayouts? = nil,
+        selectionStyle : ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil,
+        reordering : ItemReordering? = nil,
+        onWasReordered : Item<Self>.OnWasReordered? = nil,
+        onDisplay : Item<Self>.OnDisplay.Callback? = nil,
+        onEndDisplay : Item<Self>.OnEndDisplay.Callback? = nil,
+        onSelect : Item<Self>.OnSelect.Callback? = nil,
+        onDeselect : Item<Self>.OnDeselect.Callback? = nil,
+        onInsert : Item<Self>.OnInsert.Callback? = nil,
+        onRemove : Item<Self>.OnRemove.Callback? = nil,
+        onMove : Item<Self>.OnMove.Callback? = nil,
+        onUpdate : Item<Self>.OnUpdate.Callback? = nil
+    ) -> Item<Self>
+    {
+        Item(
+            self,
+            sizing: sizing,
+            layouts: layouts,
+            selectionStyle: selectionStyle,
+            insertAndRemoveAnimations: insertAndRemoveAnimations,
+            swipeActions: swipeActions,
+            reordering: reordering,
+            onWasReordered: onWasReordered,
+            onDisplay: onDisplay,
+            onEndDisplay: onEndDisplay,
+            onSelect: onSelect,
+            onDeselect: onDeselect,
+            onInsert: onInsert,
+            onRemove: onRemove,
+            onMove: onMove,
+            onUpdate: onUpdate
         )
     }
 }

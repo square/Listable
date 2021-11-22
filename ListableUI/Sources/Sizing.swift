@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 ///
@@ -162,11 +163,11 @@ extension Sizing
 {
     public struct MeasureInfo
     {
-        var sizeConstraint : CGSize
-        var defaultSize : CGSize
-        var direction : LayoutDirection
+        public var sizeConstraint : CGSize
+        public var defaultSize : CGSize
+        public var direction : LayoutDirection
         
-        init(
+        public init(
             sizeConstraint: CGSize,
             defaultSize: CGSize,
             direction: LayoutDirection
@@ -323,24 +324,24 @@ public enum CustomWidth : Equatable
         }
     }
     
-    public func position(with viewSize : CGSize, defaultWidth : CGFloat) -> Position
+    public func position(with viewWidth : CGFloat, defaultWidth : CGFloat) -> Position
     {
         switch self {
         case .default:
             return Position(
-                origin: round((viewSize.width - defaultWidth) / 2.0),
+                origin: round((viewWidth - defaultWidth) / 2.0),
                 width: defaultWidth
             )
             
         case .fill:
             return Position(
                 origin: 0.0,
-                width: viewSize.width
+                width: viewWidth
             )
             
         case .custom(let custom):
             return custom.position(
-                with: viewSize
+                with: viewWidth
             )
         }
     }
@@ -362,17 +363,17 @@ public enum CustomWidth : Equatable
             self.alignment = alignment
         }
         
-        public func position(with viewSize : CGSize) -> Position
+        public func position(with viewWidth : CGFloat) -> Position
         {
             let width = TableAppearance.Layout.width(
-                with: viewSize.width,
+                with: viewWidth,
                 padding: self.padding,
                 constraint: self.width
             )
             
             return Position(
                 origin: self.alignment.originWith(
-                    parentWidth: viewSize.width,
+                    parentWidth: viewWidth,
                     width: width,
                     padding: self.padding
                 ),
@@ -383,50 +384,55 @@ public enum CustomWidth : Equatable
     
     public enum Alignment : Equatable
     {
-        case left
+        case leading
         case center
-        case right
+        case trailing
         
         public func originWith(parentWidth : CGFloat, width : CGFloat, padding : HorizontalPadding) -> CGFloat
         {
             switch self {
-            case .left:
-                return padding.left
+            case .leading:
+                return padding.leading
             case .center:
-                let availableWidth = parentWidth - (padding.left + padding.right)
-                return round((availableWidth - width) / 2.0) + padding.left
-            case .right:
-                return parentWidth - width - padding.right
+                let availableWidth = parentWidth - (padding.leading + padding.trailing)
+                return round((availableWidth - width) / 2.0) + padding.leading
+            case .trailing:
+                return parentWidth - width - padding.trailing
             }
         }
     }
     
     public struct Position : Equatable
     {
-        var origin : CGFloat
-        var width : CGFloat
+        public var origin : CGFloat
+        public var width : CGFloat
+        
+        public init(origin: CGFloat, width: CGFloat) {
+            self.origin = origin
+            self.width = width
+        }
     }
 }
 
 
 public struct HorizontalPadding : Equatable
 {
-    public var left : CGFloat
-    public var right : CGFloat
+    public var leading : CGFloat
+    public var trailing : CGFloat
     
     public static var zero : HorizontalPadding {
-        return HorizontalPadding(left: 0.0, right: 0.0)
+        return HorizontalPadding(uniform: 0.0)
     }
     
-    public init(left : CGFloat = 0.0, right : CGFloat = 0.0)
+    public init(leading : CGFloat = 0.0, trailing : CGFloat = 0.0)
     {
-        self.left = left
-        self.right = right
+        self.leading = leading
+        self.trailing = trailing
     }
     
     public init(uniform : CGFloat = 0.0)
     {
-        self.left = uniform
-        self.right = uniform
+        self.leading = uniform
+        self.trailing = uniform
     }
 }

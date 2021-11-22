@@ -1,4 +1,4 @@
-  # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
+  # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
   # https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
 
 
@@ -9,14 +9,57 @@ on:
 
 jobs:
 
+  ios_15:
+    name: iOS 15
+
+    runs-on: macos-11
+
+    steps:
+      - name: Switch To Xcode 13.1
+        run: sudo xcode-select -switch /Applications/Xcode_13.1.app
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Run Tests
+        run: Scripts/run_ios15_tests.sh
+
   ios_14:
     name: iOS 14
 
-    runs-on: macos-10.15
+    runs-on: macos-11
 
     steps:
-      - name: Switch To Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+      - name: Switch To Xcode 12.5.1
+        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -56,11 +99,11 @@ jobs:
   ios_13:
     name: iOS 13
 
-    runs-on: macos-10.15
+    runs-on: macos-11
 
     steps:
-      - name: Switch To Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+      - name: Switch To Xcode 12.5.1
+        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
 
       - name: Checkout Repository
         uses: actions/checkout@v1
@@ -103,11 +146,11 @@ jobs:
   ios_12:
     name: iOS 12
 
-    runs-on: macos-10.15
+    runs-on: macos-11
 
     steps:
-      - name: Switch To Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.2.app
+      - name: Switch To Xcode 12.5.1
+        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
 
       - name: Checkout Repository
         uses: actions/checkout@v1

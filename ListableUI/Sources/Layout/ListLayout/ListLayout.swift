@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 public protocol ListLayout : AnyListLayout
@@ -32,7 +33,7 @@ public struct ListLayoutLayoutContext {
     
     public var environment : ListEnvironment
     
-    init(
+    public init(
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
         environment : ListEnvironment
@@ -53,13 +54,13 @@ public struct ListLayoutLayoutContext {
     }
 }
 
-public extension ListLayout
+extension ListLayout
 {
-    var direction: LayoutDirection {
+    public var direction: LayoutDirection {
         self.layoutAppearance.direction
     }
     
-    var stickySectionHeaders: Bool {
+    public var stickySectionHeaders: Bool {
         self.layoutAppearance.stickySectionHeaders
     }
 }
@@ -108,9 +109,9 @@ public protocol AnyListLayout : AnyObject
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func setZIndexes()
+    public func setZIndexes()
     {
         self.content.header.zIndex = 5
         
@@ -128,7 +129,7 @@ public extension AnyListLayout
         self.content.overscrollFooter.zIndex = 0
     }
     
-    func adjust(
+    public func adjust(
         layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
         originalAttributes : ListContentLayoutAttributes,
         at indexPath: IndexPath,
@@ -139,9 +140,9 @@ public extension AnyListLayout
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
+    public func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
     {
         CGRect(
             x: collectionView.contentOffset.x + collectionView.safeAreaInsets.left,
@@ -153,9 +154,9 @@ public extension AnyListLayout
 }
 
 
-public extension AnyListLayout
+extension AnyListLayout
 {
-    func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
     {
         guard self.stickySectionHeaders else {
             return
@@ -164,64 +165,72 @@ public extension AnyListLayout
         let visibleContentFrame = self.visibleContentFrame(for: collectionView)
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            let sectionMaxY = section.contentsFrame.maxY
+            let sectionBottom = self.direction.maxY(for: section.contentsFrame)
             
             let header = section.header
             
-            if header.defaultFrame.origin.y < visibleContentFrame.origin.y {
+            let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
+            let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
+            
+            if headerOrigin < visibleContentOrigin {
                 
                 // Make sure the pinned origin stays within the section's frame.
                 
-                header.pinnedY = min(
-                    visibleContentFrame.origin.y,
-                    sectionMaxY - header.size.height
+                self.direction.switch(
+                    vertical: {
+                        header.pinnedY = min(
+                            visibleContentFrame.origin.y,
+                            sectionBottom - header.size.height
+                        )
+                    },
+                    horizontal: {
+                        header.pinnedX = min(
+                            visibleContentFrame.origin.x,
+                            sectionBottom - header.size.width
+                        )
+                    }
                 )
             } else {
                 header.pinnedY = nil
+                header.pinnedX = nil
             }
         }
     }
     
-    func updateOverscrollFooterPosition(in collectionView : UICollectionView)
+    public func updateOverscrollFooterPosition(in collectionView : UICollectionView)
     {
-        guard self.direction == .vertical else {
-            // Currently only supported for vertical layouts.
-            return
-        }
-        
         let footer = self.content.overscrollFooter
                 
-        let contentHeight = self.content.contentSize.height
-        let viewHeight = collectionView.contentFrame.size.height
+        let contentHeight = self.direction.height(for: self.content.contentSize)
+        let viewHeight = self.direction.height(for: collectionView.contentFrame.size)
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
         if contentHeight >= viewHeight {
-            footer.y = contentHeight + collectionView.contentInset.bottom + collectionView.safeAreaInsets.bottom
+            footer.y = self.direction.switch(
+                vertical: contentHeight + collectionView.contentInset.bottom + collectionView.safeAreaInsets.bottom,
+                horizontal: contentHeight + collectionView.contentInset.right + collectionView.safeAreaInsets.right
+            )
         } else {
-            footer.y = viewHeight - collectionView.contentInset.top - collectionView.safeAreaInsets.top
+            footer.y = self.direction.switch(
+                vertical: viewHeight - collectionView.contentInset.top - collectionView.safeAreaInsets.top,
+                horizontal: viewHeight - collectionView.contentInset.left - collectionView.safeAreaInsets.left
+            )
         }
     }
     
-    func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
+    public func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
     {
-        guard self.direction == .vertical else {
-            // Currently only supported for vertical layouts.
-            return
-        }
-        
         // Take into account the safe area, since that pushes content alignment down within our view.
         
-        let safeAreaInsets : CGFloat = {
-            switch self.direction {
-            case .vertical: return collectionView.safeAreaInsets.top + collectionView.safeAreaInsets.bottom
-            case .horizontal: return collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right
-            }
-        }()
-        
-        let contentHeight = self.content.contentSize.height
-        let viewHeight = collectionView.bounds.height
+        let safeAreaInsets : CGFloat = self.direction.switch(
+            vertical: collectionView.safeAreaInsets.top + collectionView.safeAreaInsets.bottom,
+            horizontal: collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right
+        )
+
+        let contentHeight = self.direction.height(for: self.content.contentSize)
+        let viewHeight = self.direction.height(for: collectionView.bounds.size)
         
         let additionalOffset = self.behavior.underflow.alignment.offsetFor(
             contentHeight: contentHeight,
@@ -235,13 +244,29 @@ public extension AnyListLayout
         }
         
         // Provide additional adjustment.
+                
+        self.direction.mutate(self.content.header, vertical: \.y, horizontal: \.x) {
+            $0 += additionalOffset
+        }
+        
+        self.direction.mutate(self.content.footer, vertical: \.y, horizontal: \.x) {
+            $0 += additionalOffset
+        }
         
         for section in self.content.sections {
-            section.header.y += additionalOffset
-            section.footer.y += additionalOffset
+            
+            self.direction.mutate(section.header, vertical: \.y, horizontal: \.x) {
+                $0 += additionalOffset
+            }
+            
+            self.direction.mutate(section.footer, vertical: \.y, horizontal: \.x) {
+                $0 += additionalOffset
+            }
             
             for item in section.items {
-                item.y += additionalOffset
+                self.direction.mutate(item, vertical: \.y, horizontal: \.x) {
+                    $0 += additionalOffset
+                }
             }
         }
     }

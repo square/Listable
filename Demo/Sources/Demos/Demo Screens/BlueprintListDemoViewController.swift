@@ -48,17 +48,11 @@ final class BlueprintListDemoViewController : UIViewController
     
     func reloadData()
     {
-        self.blueprintView.element = List { list in
-            let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-            
-            list += Section("podcasts") { section in
+        self.blueprintView.element = List {
+            Section("podcasts") {
+                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
                 
-                guard self.showingData else {
-                    return
-                }
-                
-                section += podcasts.map { podcast in
-                    
+                for podcast in podcasts {
                     ElementItem(podcast, id: \.name) { _, _ in
                         PodcastElement(podcast: podcast)
                     } background: { _, _ in

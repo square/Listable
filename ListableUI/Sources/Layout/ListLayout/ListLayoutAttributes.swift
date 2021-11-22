@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import UIKit
 
 
-public struct ListLayoutAttributes : Equatable {
+struct ListLayoutAttributes : Equatable {
     
     var contentSize : CGSize
     
