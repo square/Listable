@@ -41,14 +41,40 @@ import Foundation
 ///
 public struct LayoutDescription
 {
-    let configuration : AnyLayoutDescriptionConfiguration
+    public typealias Provider = (Context) -> AnyLayoutDescriptionConfiguration
+    
+    private let provider : Provider
     
     /// Creates a new layout description for the provided layout type, with the provided optional layout configuration.
     public init<LayoutType:ListLayout>(
         layoutType : LayoutType.Type,
         appearance configure : @escaping (inout LayoutType.LayoutAppearance) -> () = { _ in }
     ) {
-        self.configuration = Configuration(layoutType: layoutType, configure: configure)
+        self.provider = { _ in Configuration(layoutType: layoutType, configure: configure) }
+    }
+    
+    /// Allows providing a layout which varies based on the context the list is currently being laid out in, eg based
+    /// on the view or viewport size.
+    /// ```
+    /// list.layout = .responsive { context in
+    ///
+    /// }
+    /// ```
+    public static func responsive(_ provider : @escaping (Context) -> LayoutDescription) -> LayoutDescription {
+        Self.init(
+            provider: { context in
+                provider(context).provider(context)
+            }
+        )
+    }
+    
+    /// Creates a new layout description with the given provider.
+    init(provider : @escaping Provider) {
+        self.provider = provider
+    }
+    
+    func layout(with context : Context) -> AnyLayoutDescriptionConfiguration {
+        self.provider(context)
     }
 }
 
@@ -70,6 +96,25 @@ extension ListLayout
 
 extension LayoutDescription
 {
+    public struct Context : Equatable {
+        
+        public var viewSize : CGSize
+        public var viewportSize : CGSize
+        
+        public init(
+            viewSize: CGSize,
+            viewportSize: CGSize
+        ) {
+            self.viewSize = viewSize
+            self.viewportSize = viewportSize
+        }
+        
+        public init(view : UIView) {
+            self.viewSize = view.bounds.size
+            self.viewportSize = view.viewportSize
+        }
+    }
+    
     public struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration
     {
         public let layoutType : LayoutType.Type
@@ -153,4 +198,34 @@ public protocol AnyLayoutDescriptionConfiguration
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
 
     func isSameLayoutType(as other : AnyLayoutDescriptionConfiguration) -> Bool
+}
+
+
+fileprivate extension UIView {
+    
+    var viewportSize : CGSize {
+        if let window = window {
+            return window.bounds.size
+        }
+        
+        if let topView = topmostSuperview {
+            return topView.bounds.size
+        }
+        
+        return UIScreen.main.bounds.size
+    }
+    
+    private var topmostSuperview : UIView? {
+        var view = self.superview
+        
+        while true {
+            if view == nil {
+                return view
+            } else {
+                view = view?.superview
+            }
+        }
+        
+        return nil
+    }
 }
