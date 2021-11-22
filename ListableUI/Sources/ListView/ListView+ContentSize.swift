@@ -47,8 +47,8 @@ extension ListView
         in fittingSize : CGSize,
         for properties : ListProperties,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
-    ) -> CGSize {
-        
+    ) -> MeasuredListSize
+    {
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
         let presentationState = PresentationState(
@@ -92,9 +92,27 @@ extension ListView
         
         let size = layout.content.contentSize
         
-        return CGSize(
-            width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
-            height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
+        return .init(
+            contentSize: CGSize(
+                width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
+                height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
+            ),
+            naturalWidth: layout.content.naturalContentWidth
         )
+    }
+}
+
+
+public struct MeasuredListSize : Equatable {
+    
+    public var contentSize : CGSize
+    public var naturalWidth : CGFloat?
+    
+    public init(
+        contentSize: CGSize,
+        naturalWidth: CGFloat?
+    ) {
+        self.contentSize = contentSize
+        self.naturalWidth = naturalWidth
     }
 }

@@ -69,6 +69,10 @@ extension List {
         ///     Note that this value must be unique within the entire blueprint view – so please provide a sufficiently unique value,
         ///     or measurement collisions will occur (one element's measurement being used for another) for duplicate keys.
         ///
+        ///     - horizontalFill: Defaults to `fillParent`. How the width of the element should be calculated. If the
+        ///     provided value is `.natural`, the width returned will be as wide as needed to display the widest element,
+        ///     within the `itemLimit`.
+        ///
         ///     - itemLimit: When measuring the list, how many items should be measured to determine the height. Defaults
         ///     to 50, which is usually enough to fill the `fittingSize`. If you truly want to determine the entire height of all of
         ///     the content in the list, set this to `nil` (but you should rarely need to do this). The lower this value, the less
@@ -77,7 +81,38 @@ extension List {
         ///
         case measureContent(
             cacheKey : AnyHashable? = nil,
+            horizontalFill : FillRule = .fillParent,
+            verticalFill : FillRule = .fillParent,
             itemLimit : Int? = ListView.defaultContentSizeItemLimit
         )
+        
+        var needsMeasurement : Bool {
+            switch self {
+            case .fillParent:
+                return false
+            case .measureContent(_, let horizontalFill, let verticalFill, _):
+                return horizontalFill.needsMeasurement || verticalFill.needsMeasurement
+            }
+        }
+    }
+}
+
+
+extension List.Measurement {
+    
+    public enum FillRule : Equatable {
+        
+        case fillParent
+        
+        case natural
+        
+        var needsMeasurement : Bool {
+            switch self {
+            case .fillParent:
+                return false
+            case .natural:
+                return true
+            }
+        }
     }
 }

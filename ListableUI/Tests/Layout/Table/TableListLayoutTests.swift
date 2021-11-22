@@ -69,6 +69,22 @@ class TableAppearance_LayoutTests : XCTestCase
 
 class TableListLayoutTests : XCTestCase
 {
+    func test_naturalWidth_vertical() {
+        let list = self.listProperties(direction: .vertical, includeHeader: true)
+        
+        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list)
+        
+        XCTAssertEqual(size.naturalWidth, 130.0)
+    }
+    
+    func test_naturalWidth_horizontal() {
+        let list = self.listProperties(direction: .horizontal, includeHeader: true)
+        
+        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list)
+        
+        XCTAssertEqual(size.naturalWidth, 110.0)
+    }
+    
     func test_layout_vertical_includingHeader()
     {
         let listView = self.list(direction: .vertical, includeHeader: true)
@@ -114,8 +130,17 @@ class TableListLayoutTests : XCTestCase
         /// 200x200 so the layout will support both horizontal and vertical layouts.
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
-        listView.configure { list in
-
+        listView.configure(
+            with: self.listProperties(direction: direction, includeHeader: includeHeader)
+        )
+        
+        listView.collectionView.layoutIfNeeded()
+        
+        return listView
+    }
+    
+    func listProperties(direction : LayoutDirection, includeHeader : Bool) -> ListProperties {
+        ListProperties.default { list in
             list.layout = .table {
                 
                 $0.direction = direction
@@ -137,18 +162,18 @@ class TableListLayoutTests : XCTestCase
             }
             
             list.content.containerHeader = HeaderFooter(TestingHeaderFooterContent(color: .red), sizing: .fixed(width: 50.0, height: 50.0))
-
+            
             if includeHeader {
                 list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 50.0, height: 50.0))
             }
-
+            
             list.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 70.0, height: 70.0))
             
             list += Section("first") { section in
                 section.layouts.table.customInterSectionSpacing = 30
                 
                 section.layouts.table.width = .fill
-
+                
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
                 section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
                 
@@ -199,10 +224,6 @@ class TableListLayoutTests : XCTestCase
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 20.0, height: 20.0))
             }
         }
-        
-        listView.collectionView.layoutIfNeeded()
-        
-        return listView
     }
     
 }

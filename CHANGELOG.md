@@ -6,6 +6,8 @@
 
 - [Added support for `.horizontal` `.table` layouts](https://github.com/kyleve/Listable/pull/314). To get a horizontal table; just set the `layout.direction = .horizontal` when configuring your list's layout. Additionally, some properties were renamed from left/right to leading/trailing to better reflect they can now be on the left/top and right/bottom of a list view, respectively.
 
+- `ListView.contentSize` will now also provide access to the natural width of a layout if the layout supports natural width calculation. This is useful, for example, to show a `.table` layout in a popover – you can now know how wide to render the popover.
+
 ### Removed
 
 ### Changed

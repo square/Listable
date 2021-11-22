@@ -27,8 +27,8 @@ class ListView_ContentSizeTests : XCTestCase
         /// for some reason break after a few passes (eg due to measurement view cache reuse).
         
         let section = Section("section") { section in
-            section += Item(TestContent(title: "first item"), sizing: .fixed(width: 200, height: 50))
-            section += Item(TestContent(title: "second item"), sizing: .fixed(width: 200, height: 50))
+            section += Item(TestContent(title: "first item"), sizing: .fixed(width: 100, height: 50))
+            section += Item(TestContent(title: "second item"), sizing: .fixed(width: 150, height: 50))
             section += Item(TestContent(title: "third item"), sizing: .fixed(width: 200, height: 50))
         }
         
@@ -42,8 +42,12 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 100.0, height: 0.0), for: properties),
-                    CGSize(width: 100.0, height: 150.0)
+                    ListView.contentSize(in: CGSize(width: 300.0, height: 0.0), for: properties),
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 300.0, height: 150.0),
+                        naturalWidth: 200.0
+                    )
                 )
             }
             
@@ -60,7 +64,11 @@ class ListView_ContentSizeTests : XCTestCase
                                 
                 XCTAssertEqual(
                     ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties),
-                    CGSize(width: 100.0, height: 300.0)
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 100.0, height: 300.0),
+                        naturalWidth: nil
+                    )
                 )
             }
             
@@ -77,7 +85,11 @@ class ListView_ContentSizeTests : XCTestCase
                 
                 XCTAssertEqual(
                     ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties),
-                    CGSize(width: 300.0, height: 100.0)
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 300.0, height: 100.0),
+                        naturalWidth: nil
+                    )
                 )
             }
         }
