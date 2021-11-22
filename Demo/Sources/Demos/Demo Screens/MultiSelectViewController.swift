@@ -50,7 +50,7 @@ fileprivate struct SelectableRow : BlueprintItemContent, Equatable {
         Label(text: self.text) {
             $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
         }
-        .inset(uniform: 20.0)
+        .inset(horizontal: 20.0, vertical: info.state.isSelected ? 30.0 : 20.0)
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element? {

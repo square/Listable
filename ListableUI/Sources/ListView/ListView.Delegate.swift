@@ -67,13 +67,20 @@ extension ListView
             
             self.performOnSelectChanged()
             
-            if item.anyModel.selectionStyle == .tappable {
+            switch item.anyModel.selectionStyle {
+            case .notSelectable: break
+                
+            case .tappable:
                 item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
                 item.applyToVisibleCell(with: self.view.environment)
                 
-                self.performOnSelectChanged()
+            case .selectable:
+                item.resetCachedSizes()
+                view.performLayoutForUserDrivenSelectionChanged()
             }
+            
+            self.performOnSelectChanged()
         }
         
         func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
@@ -82,6 +89,15 @@ extension ListView
             
             item.set(isSelected: false, performCallbacks: true)
             item.applyToVisibleCell(with: self.view.environment)
+            
+            switch item.anyModel.selectionStyle {
+                
+            case .notSelectable: break
+            case .tappable: break
+            case .selectable:
+                item.resetCachedSizes()
+                view.performLayoutForUserDrivenSelectionChanged()
+            }
             
             self.performOnSelectChanged()
         }

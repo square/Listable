@@ -117,15 +117,6 @@ public extension BlueprintHeaderFooterContent
         views.content.element = self.elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
         views.background.element = self.background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
         views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        
-        /// `BlueprintView` does not update its content until the next layout cycle.
-        /// Force that layout cycle within this method if we're updating an already on-screen
-        /// `ItemContent`, to ensure that we inherit any animation blocks we may be within.
-        if reason == .wasUpdated {
-            views.content.layoutIfNeeded()
-            views.background.layoutIfNeeded()
-            views.pressed.layoutIfNeeded()
-        }
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView {

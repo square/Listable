@@ -479,7 +479,11 @@ extension PresentationState
                     create: {
                         return ItemCell<Content>()
                 }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+                    let itemState = ListableUI.ItemState(
+                        isSelected: self.isSelected,
+                        isHighlighted: false,
+                        isReordering: false
+                    )
                     
                     self.applyTo(
                         cell: cell,

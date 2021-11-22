@@ -1134,6 +1134,17 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         return true
     }
+    
+    internal func performLayoutForUserDrivenSelectionChanged() {
+        
+        let view = self.collectionView
+
+        self.layoutManager.collectionViewLayout.setNeedsRelayout()
+        
+        UIView.animate(withDuration: 0.2) {
+            view.layoutIfNeeded()
+        }
+    }
 
     private func performBatchUpdates(
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
