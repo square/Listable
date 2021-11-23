@@ -12,6 +12,8 @@
 
 ### Changed
 
+- `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
+
 ### Misc
 
 # Past Releases
