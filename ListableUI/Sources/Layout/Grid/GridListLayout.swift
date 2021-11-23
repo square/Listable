@@ -20,10 +20,11 @@ extension LayoutDescription
 
 public struct GridAppearance : ListLayoutAppearance
 {
-    public var bounds : ListContentBounds?
+    // MARK: ListLayoutAppearance
     
-    public var sizing : Sizing
-    public var layout : Layout
+    public static var `default`: GridAppearance {
+        return self.init()
+    }
     
     public var direction: LayoutDirection {
         .vertical
@@ -31,9 +32,25 @@ public struct GridAppearance : ListLayoutAppearance
     
     public var stickySectionHeaders : Bool
     
-    public static var `default`: GridAppearance {
-        return self.init()
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: false,
+            contentInsetAdjustmentBehavior: .scrollableAxes,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: true,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: true
+        )
     }
+    
+    // MARK: Properties
+    
+    public var bounds : ListContentBounds?
+    
+    public var sizing : Sizing
+    public var layout : Layout
+    
+    // MARK: Initialization
     
     public init(
         stickySectionHeaders : Bool = true,
@@ -220,17 +237,6 @@ final class GridListLayout : ListLayout
     let behavior : Behavior
     
     let content : ListLayoutContent
-            
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: .automatic,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
-            allowsVerticalScrollIndicator: true,
-            allowsHorizontalScrollIndicator: true
-        )
-    }
     
     //
     // MARK: Initialization
@@ -264,6 +270,7 @@ final class GridListLayout : ListLayout
     ) {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
+            safeAreaInsets: context.safeAreaInsets,
             direction: self.direction
         )
         
