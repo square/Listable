@@ -55,8 +55,8 @@ public struct LayoutDescription
     ///
     /// Calling this method is relatively inexpensive – it does not create an instance
     /// of the backing list layout.
-    public var standardLayoutProperties : ListLayoutAppearanceProperties {
-        configuration.listLayoutAppearanceProperties()
+    public var layoutAppearanceProperties : ListLayoutAppearanceProperties {
+        configuration.layoutAppearanceProperties()
     }
 }
 
@@ -119,7 +119,7 @@ extension LayoutDescription
             )
         }
         
-        public func listLayoutAppearanceProperties() -> ListLayoutAppearanceProperties {
+        public func layoutAppearanceProperties() -> ListLayoutAppearanceProperties {
             var layoutAppearance = LayoutType.LayoutAppearance.default
             self.configure(&layoutAppearance)
             
@@ -165,7 +165,7 @@ public protocol AnyLayoutDescriptionConfiguration
         content : (ListLayoutDefaults) -> ListLayoutContent
     ) -> AnyListLayout
     
-    func listLayoutAppearanceProperties() -> ListLayoutAppearanceProperties
+    func layoutAppearanceProperties() -> ListLayoutAppearanceProperties
     
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
 

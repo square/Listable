@@ -63,6 +63,10 @@ extension ListLayout
     public var stickySectionHeaders: Bool {
         self.layoutAppearance.stickySectionHeaders
     }
+    
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        self.layoutAppearance.scrollViewProperties
+    }
 }
 
 
@@ -76,12 +80,12 @@ public protocol AnyListLayout : AnyObject
     var behavior : Behavior { get }
     
     var content : ListLayoutContent { get }
-            
-    var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
     var direction : LayoutDirection { get }
     
     var stickySectionHeaders : Bool { get }
+    
+    var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
     //
     // MARK: Performing Layouts
