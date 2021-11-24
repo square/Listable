@@ -97,7 +97,7 @@ public struct Section
         
         self.reordering = reordering
         
-        self.items = items.map { $0.toAnyItem() }
+        self.items = items.flattenToAnyItems()
         
         configure(&self)
     }
@@ -132,7 +132,7 @@ public struct Section
         self.layouts = layouts
         self.reordering = reordering
         
-        self.items = items().map { $0.toAnyItem() }
+        self.items = items().flattenToAnyItems()
         
         self.header = header()
         self.footer = footer()
@@ -150,7 +150,7 @@ public struct Section
         self.layouts = .init()
         self.reordering = .init()
         
-        self.items = items().map { $0.toAnyItem() }
+        self.items = items().flattenToAnyItems()
         
         self.header = header()
         self.footer = footer()
@@ -234,7 +234,7 @@ public struct Section
     public mutating func add(
         @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
     ) {
-        self.items += items().map { $0.toAnyItem() }
+        self.items += items().flattenToAnyItems()
     }
     
     public static func += (lhs : inout Section, rhs : [AnyItem])

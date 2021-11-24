@@ -147,8 +147,8 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     
     // MARK: AnyItemConvertible
     
-    public func toAnyItem() -> AnyItem {
-        self
+    public func toAnyItem() -> [AnyItem] {
+        [self]
     }
     
     // MARK: AnyItem_Internal

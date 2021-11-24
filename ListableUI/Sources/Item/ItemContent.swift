@@ -446,8 +446,8 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
 
 public extension ItemContent {
     
-     func toAnyItem() -> AnyItem {
-        Item(self)
+     func toAnyItem() -> [AnyItem] {
+        [Item(self)]
     }
 }
 

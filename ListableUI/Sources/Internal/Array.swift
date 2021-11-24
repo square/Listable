@@ -60,3 +60,4 @@ extension Array
         return mapped
     }
 }
+

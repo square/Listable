@@ -32,7 +32,14 @@
 ///
 public protocol AnyItemConvertible {
     
-    /// Converts the object into a type-erased `AnyItem` instance.
-    func toAnyItem() -> AnyItem
+    /// Converts the object into a type-erased  list of `AnyItem`s.
+    func toAnyItem() -> [AnyItem]
 }
 
+
+extension Array where Element == AnyItemConvertible {
+    
+    func flattenToAnyItems() -> [AnyItem] {
+        self.map { $0.toAnyItem() }.flatMap { $0 }
+    }
+}
