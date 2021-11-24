@@ -82,18 +82,3 @@ extension ListChangesQueue {
     }
 }
 
-
-fileprivate extension Array {
-    
-    mutating func popFirst() -> Element? {
-        guard self.isEmpty == false else {
-            return nil
-        }
-        
-        let first = self[0]
-        
-        self.remove(at: 0)
-        
-        return first
-    }
-}

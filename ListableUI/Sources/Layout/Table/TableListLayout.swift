@@ -167,20 +167,43 @@ extension TableAppearance
         public var itemToSectionFooterSpacing : CGFloat?
         
         public var width : CustomWidth
+        
+        public var columnGrouping : ColumnGrouping?
             
         public init(
             itemSpacing : CGFloat? = nil,
             itemToSectionFooterSpacing : CGFloat? = nil,
-            width : CustomWidth = .default
+            width : CustomWidth = .default,
+            columnGrouping : ColumnGrouping? = nil
         ) {
             self.itemSpacing = itemSpacing
             self.itemSpacing = itemSpacing
             
             self.width = width
+            
+            self.columnGrouping = columnGrouping
         }
         
         public static var defaultValue : Self {
             Self.init()
+        }
+        
+        public struct ColumnGrouping : Equatable {
+            
+            public var groupingIdentifier : AnyHashable
+            
+            public var distribution : CGFloat
+            public var spacing : CGFloat?
+            
+            public init(
+                groupingIdentifier: AnyHashable,
+                distribution: CGFloat = 1.0,
+                spacing: CGFloat? = nil
+            ) {
+                self.groupingIdentifier = groupingIdentifier
+                self.distribution = distribution
+                self.spacing = spacing
+            }
         }
     }
     
@@ -227,16 +250,22 @@ extension TableAppearance
         public struct Columns : Equatable
         {
             public var count : Int
-            public var spacing : CGFloat
+            public var spacing : CGFloat?
             
             public static var one : Columns {
                 return Columns(count: 1, spacing: 0.0)
             }
             
-            public init(count : Int = 1, spacing : CGFloat = 0.0)
+            public init(
+                count : Int,
+                spacing : CGFloat? = nil
+            )
             {
                 precondition(count >= 1, "Columns must be greater than or equal to 1.")
-                precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
+                
+                if let spacing = spacing {
+                    precondition(spacing >= 0.0, "Spacing must be greater than or equal to 0.")
+                }
                 
                 self.count = count
                 self.spacing = spacing
@@ -325,6 +354,8 @@ extension TableAppearance
         public var sectionHeaderBottomSpacing : CGFloat
         /// The spacing between individual items within a section in a list.
         public var itemSpacing : CGFloat
+        /// When showing columns, the horizontal spacing between each item.
+        public var columnSpacing : CGFloat
         /// The spacing between the last item in the section and the footer.
         /// Not applied if there is no section footer.
         public var itemToSectionFooterSpacing : CGFloat
@@ -340,6 +371,7 @@ extension TableAppearance
             interSectionSpacingWithFooter : CGFloat = 0.0,
             sectionHeaderBottomSpacing : CGFloat = 0.0,
             itemSpacing : CGFloat = 0.0,
+            columnSpacing: CGFloat = 0.0,
             itemToSectionFooterSpacing : CGFloat = 0.0,
             lastSectionToFooterSpacing : CGFloat = 0.0
         )
@@ -351,6 +383,7 @@ extension TableAppearance
             
             self.sectionHeaderBottomSpacing = sectionHeaderBottomSpacing
             self.itemSpacing = itemSpacing
+            self.columnSpacing = columnSpacing
             self.itemToSectionFooterSpacing = itemToSectionFooterSpacing
             
             self.lastSectionToFooterSpacing = lastSectionToFooterSpacing
@@ -635,6 +668,20 @@ final class TableListLayout : ListLayout
             //
             
             if section.layouts.table.columns.count == 1 {
+                
+                let groupedRows = TableAppearance.ItemLayout.ColumnGrouping.grouping(items: section.items)
+                
+                groupedRows.forEachWithIndex { rowIndex, isLast, items in
+                    
+                    precondition(items.isEmpty == false, "Cannot have an empty row group.")
+                    
+                    if items.count == 1 {
+                        
+                    } else {
+                        
+                    }
+                }
+                
                 section.items.forEachWithIndex { itemIndex, isLast, item in
                     
                     let width = item.layouts.table.width.merge(with: sectionWidth)
@@ -678,9 +725,12 @@ final class TableListLayout : ListLayout
                     }
                 }
             } else {
-                let itemWidth = round((sectionPosition.width - (section.layouts.table.columns.spacing * CGFloat(section.layouts.table.columns.count - 1))) / CGFloat(section.layouts.table.columns.count))
+                let sectionLayout = section.layouts.table
+                let columnSpacing = sectionLayout.columns.spacing ?? layout.columnSpacing
                 
-                let groupedItems = section.layouts.table.columns.group(values: section.items)
+                let itemWidth = round((sectionPosition.width - (columnSpacing * CGFloat(sectionLayout.columns.count - 1))) / CGFloat(sectionLayout.columns.count))
+                
+                let groupedItems = sectionLayout.columns.group(values: section.items)
                 
                 groupedItems.forEachWithIndex { rowIndex, isLast, row in
                     var maxHeight : CGFloat = 0.0
@@ -720,7 +770,7 @@ final class TableListLayout : ListLayout
                         maxItemSpacing = max(itemSpacing, maxItemSpacing)
                         maxItemToSectionFooterSpacing = max(itemToSectionFooterSpacing, maxItemToSectionFooterSpacing)
                         
-                        columnXOrigin += (itemWidth + section.layouts.table.columns.spacing)
+                        columnXOrigin += (itemWidth + columnSpacing)
                     }
                     
                     contentBottom += maxHeight
@@ -863,7 +913,11 @@ fileprivate extension ListLayoutContent.SectionInfo
         }
     }
     
-    private static func grouped(items : [ListLayoutContent.ItemInfo], groupingHeight : CGFloat, appearance : TableAppearance) -> [[ListLayoutContent.ItemInfo]]
+    private static func grouped(
+        items : [ListLayoutContent.ItemInfo],
+        groupingHeight : CGFloat,
+        appearance : TableAppearance
+    ) -> [[ListLayoutContent.ItemInfo]]
     {
         var all = [[ListLayoutContent.ItemInfo]]()
         var current = [ListLayoutContent.ItemInfo]()
@@ -888,6 +942,43 @@ fileprivate extension ListLayoutContent.SectionInfo
         }
         
         return all
+    }
+}
+
+
+extension TableAppearance.ItemLayout.ColumnGrouping {
+    
+    static func grouping(items : [ListLayoutContent.ItemInfo]) -> [[ListLayoutContent.ItemInfo]] {
+        
+        if items.isEmpty { return [[]] }
+        
+        var items = items
+                
+        var rows = [[items.removeFirst()]]
+                
+        while items.isEmpty == false {
+            let item = items.removeFirst()
+            
+            var lastRow = rows.removeLast()
+            let lastItem = lastRow.last!
+            
+            let lastColumnGrouping = lastItem.layouts.table.columnGrouping
+            let columnGrouping = item.layouts.table.columnGrouping
+            
+            let lastID = lastColumnGrouping?.groupingIdentifier
+            let ID = columnGrouping?.groupingIdentifier
+            
+            if lastID == nil, ID == nil {
+                rows.append([item])
+            } else if lastID == ID {
+                lastRow.append(item)
+                rows.append(lastRow)
+            } else {
+                rows.append([item])
+            }
+        }
+        
+        return rows
     }
 }
 
