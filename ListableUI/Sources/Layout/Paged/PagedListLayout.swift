@@ -53,6 +53,8 @@ public extension LayoutDescription
 /// ```
 public struct PagedAppearance : ListLayoutAppearance
 {
+    // MARK: ListLayoutAppearance
+    
     public static var `default`: PagedAppearance {
         Self.init()
     }
@@ -61,6 +63,19 @@ public struct PagedAppearance : ListLayoutAppearance
     public var direction: LayoutDirection
     
     public let stickySectionHeaders: Bool = false
+    
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: self.pagingSize == .view,
+            contentInsetAdjustmentBehavior: .never,
+            allowsBounceVertical: false,
+            allowsBounceHorizontal: false,
+            allowsVerticalScrollIndicator: self.showsScrollIndicators,
+            allowsHorizontalScrollIndicator: self.showsScrollIndicators
+        )
+    }
+    
+    // MARK: Properties
     
     /// If scroll indicators should be visible along the scrollable axis.
     public var showsScrollIndicators : Bool
@@ -114,17 +129,6 @@ final class PagedListLayout : ListLayout
     let appearance: Appearance
     let behavior: Behavior
     let content: ListLayoutContent
-            
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: self.layoutAppearance.pagingSize == .view,
-            contentInsetAdjustmentBehavior: .never,
-            allowsBounceVertical: false,
-            allowsBounceHorizontal: false,
-            allowsVerticalScrollIndicator: self.layoutAppearance.showsScrollIndicators,
-            allowsHorizontalScrollIndicator: self.layoutAppearance.showsScrollIndicators
-        )
-    }
     
     //
     // MARK: Initialization

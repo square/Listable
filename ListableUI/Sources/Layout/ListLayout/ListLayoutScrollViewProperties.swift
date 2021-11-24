@@ -8,7 +8,7 @@
 import UIKit
 
 
-public struct ListLayoutScrollViewProperties
+public struct ListLayoutScrollViewProperties : Equatable
 {
     public var isPagingEnabled : Bool
     
