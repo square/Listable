@@ -90,15 +90,20 @@ extension ListContentBounds {
         /// The size of the view in question.
         public var viewSize : CGSize
         
+        /// The safe area applied to the view.
+        public var safeAreaInsets : UIEdgeInsets
+        
         /// The layout direction.
         public var direction : LayoutDirection
         
         /// Creates a new context to use in the `ListEnvironment`'s `listContentBounds`.
         public init(
             viewSize: CGSize,
+            safeAreaInsets : UIEdgeInsets,
             direction: LayoutDirection
         ) {
             self.viewSize = viewSize
+            self.safeAreaInsets = safeAreaInsets
             self.direction = direction
         }
     }

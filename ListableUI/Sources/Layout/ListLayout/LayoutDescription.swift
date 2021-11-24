@@ -50,6 +50,14 @@ public struct LayoutDescription
     ) {
         self.configuration = Configuration(layoutType: layoutType, configure: configure)
     }
+    
+    /// Returns the standard layout properties, which apply to any kind of list layout.
+    ///
+    /// Calling this method is relatively inexpensive – it does not create an instance
+    /// of the backing list layout.
+    public var layoutAppearanceProperties : ListLayoutAppearanceProperties {
+        configuration.layoutAppearanceProperties()
+    }
 }
 
 
@@ -111,6 +119,13 @@ extension LayoutDescription
             )
         }
         
+        public func layoutAppearanceProperties() -> ListLayoutAppearanceProperties {
+            var layoutAppearance = LayoutType.LayoutAppearance.default
+            self.configure(&layoutAppearance)
+            
+            return .init(layoutAppearance)
+        }
+        
         public func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
         {
             let layout = anyLayout as! LayoutType
@@ -149,6 +164,8 @@ public protocol AnyLayoutDescriptionConfiguration
         behavior: Behavior,
         content : (ListLayoutDefaults) -> ListLayoutContent
     ) -> AnyListLayout
+    
+    func layoutAppearanceProperties() -> ListLayoutAppearanceProperties
     
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
 

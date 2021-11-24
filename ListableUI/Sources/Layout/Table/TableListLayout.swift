@@ -105,14 +105,31 @@ public extension LayoutDescription
 /// ```
 public struct TableAppearance : ListLayoutAppearance
 {
+    // MARK: ListLayoutAppearance
+    
+    public static var `default`: TableAppearance {
+        return self.init()
+    }
+    
     /// How the layout should flow, either horizontally or vertically.
     public var direction: LayoutDirection
     
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
-    /// How the scroll view should adjust and apply the safe area of the view. Defaults to `.scrollableAxes`.
-    public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
+    /// The properties applied to the scroll view backing the list.
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: false,
+            contentInsetAdjustmentBehavior: .scrollableAxes,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: true,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: true
+        )
+    }
+    
+    // MARK: Properties
     
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
@@ -123,22 +140,18 @@ public struct TableAppearance : ListLayoutAppearance
     /// Layout attributes for content in the list.
     public var layout : Layout
     
-    public static var `default`: TableAppearance {
-        return self.init()
-    }
+    // MARK: Initialization
         
     /// Creates a new `TableAppearance` object.
     public init(
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
-        contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
         bounds : ListContentBounds? = nil,
         sizing : Sizing = .init(),
         layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
-        self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
         self.bounds = bounds
         self.sizing = sizing
         self.layout = layout
@@ -414,17 +427,6 @@ final class TableListLayout : ListLayout
     let behavior : Behavior
     
     let content : ListLayoutContent
-            
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: self.layoutAppearance.contentInsetAdjustmentBehavior,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
-            allowsVerticalScrollIndicator: true,
-            allowsHorizontalScrollIndicator: true
-        )
-    }
         
     //
     // MARK: Initialization
@@ -502,6 +504,7 @@ final class TableListLayout : ListLayout
     ) {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
+            safeAreaInsets: context.safeAreaInsets,
             direction: self.direction
         )
         
