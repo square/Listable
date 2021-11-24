@@ -59,5 +59,11 @@ extension Array
         
         return mapped
     }
+    
+    mutating func popFirst() -> Element? {
+        if self.isEmpty { return nil }
+        
+        return self.removeFirst()
+    }
 }
 
