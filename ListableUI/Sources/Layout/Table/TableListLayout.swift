@@ -169,6 +169,8 @@ extension TableAppearance
         public var width : CustomWidth
         
         public var columnGrouping : ColumnGrouping?
+        
+        var columnGroupingIdentifier : UInt?
             
         public init(
             itemSpacing : CGFloat? = nil,
@@ -190,17 +192,13 @@ extension TableAppearance
         
         public struct ColumnGrouping : Equatable {
             
-            public var groupingIdentifier : AnyHashable
-            
-            public var distribution : CGFloat
+            public var distribution : CGFloat?
             public var spacing : CGFloat?
             
             public init(
-                groupingIdentifier: AnyHashable,
                 distribution: CGFloat = 1.0,
                 spacing: CGFloat? = nil
             ) {
-                self.groupingIdentifier = groupingIdentifier
                 self.distribution = distribution
                 self.spacing = spacing
             }
@@ -669,7 +667,7 @@ final class TableListLayout : ListLayout
             
             if section.layouts.table.columns.count == 1 {
                 
-                let groupedRows = TableAppearance.ItemLayout.ColumnGrouping.grouping(items: section.items)
+                let groupedRows = TableColumnGroup.grouping(items: section.items)
                 
                 groupedRows.forEachWithIndex { rowIndex, isLast, items in
                     
@@ -946,7 +944,7 @@ fileprivate extension ListLayoutContent.SectionInfo
 }
 
 
-extension TableAppearance.ItemLayout.ColumnGrouping {
+extension TableColumnGroup {
     
     static func grouping(items : [ListLayoutContent.ItemInfo]) -> [[ListLayoutContent.ItemInfo]] {
         
@@ -962,11 +960,8 @@ extension TableAppearance.ItemLayout.ColumnGrouping {
             var lastRow = rows.removeLast()
             let lastItem = lastRow.last!
             
-            let lastColumnGrouping = lastItem.layouts.table.columnGrouping
-            let columnGrouping = item.layouts.table.columnGrouping
-            
-            let lastID = lastColumnGrouping?.groupingIdentifier
-            let ID = columnGrouping?.groupingIdentifier
+            let lastID = lastItem.layouts.table.columnGroupingIdentifier
+            let ID = item.layouts.table.columnGroupingIdentifier
             
             if lastID == nil, ID == nil {
                 rows.append([item])

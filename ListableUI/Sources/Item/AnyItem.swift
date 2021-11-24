@@ -18,7 +18,7 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
     
     var sizing : Sizing { get set }
     
-    var layouts : ItemLayouts { get }
+    var layouts : ItemLayouts { get set }
     
     var selectionStyle : ItemSelectionStyle { get set }
     var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }

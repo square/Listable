@@ -65,5 +65,13 @@ extension Array
         
         return self.removeFirst()
     }
+    
+    mutating func mutateEach(_ edit : (inout Element) -> ()) {
+        self = self.map { original in
+            var copy = original
+            edit(&copy)
+            return copy
+        }
+    }
 }
 
