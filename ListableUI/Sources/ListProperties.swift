@@ -197,7 +197,7 @@ import UIKit
     }
     
     //
-    // MARK: Result Builders
+    // MARK: Adding Content
     //
     
     /// Allows directly setting properties on the list's `Content`, without having to explicitly specify
@@ -223,10 +223,6 @@ import UIKit
         get { self.content[keyPath: keyPath] }
         set { self.content[keyPath: keyPath] = newValue }
     }
-    
-    //
-    // MARK: Adding Content
-    //
     
     /// Allows streamlined creation of sections when building a list:
     /// ```

@@ -10,7 +10,7 @@ import UIKit
 
 public extension LayoutDescription
 {
-    static func paged(_ configure : @escaping (inout PagedAppearance) -> () = { _ in }) -> Self
+    static func paged(_ configure : (inout PagedAppearance) -> () = { _ in }) -> Self
     {
         PagedListLayout.describe(appearance: configure)
     }

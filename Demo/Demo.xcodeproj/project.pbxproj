@@ -12,13 +12,13 @@
 		0A0E070423870A5700DDD27D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A0E070323870A5700DDD27D /* README.md */; };
 		0A1306E7272F29B300F6DDDD /* BestPractices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1306E6272F29B300F6DDDD /* BestPractices.swift */; };
 		0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A49210324E5E11300D17038 /* AccordionViewController.swift */; };
+		0A57BA2D274FFCE000A118BD /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A57BA2C274FFCE000A118BD /* FlowLayoutViewController.swift */; };
 		0A5DC1A924F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5DC1A824F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift */; };
 		0A5F5CCF257EC2D7003CCE2C /* LocalizedCollationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5F5CCE257EC2D7003CCE2C /* LocalizedCollationViewController.swift */; };
 		0A66420B254A317A007F6B2F /* AutoLayoutDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A66420A254A317A007F6B2F /* AutoLayoutDemoViewController.swift */; };
 		0A793B5824E4B53500850139 /* ManualSelectionManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A793B5724E4B53500850139 /* ManualSelectionManagementViewController.swift */; };
 		0A87BA652463567B0047C3B5 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 0A87BA642463567B0047C3B5 /* CHANGELOG.md */; };
-		0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */; };
-		0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */; };
+		0AA4D9BA248064A300CF95A5 /* SystemFlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9A9248064A200CF95A5 /* SystemFlowLayoutViewController.swift */; };
 		0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */; };
 		0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */; };
 		0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */; };
@@ -59,13 +59,13 @@
 		0A1306E6272F29B300F6DDDD /* BestPractices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestPractices.swift; sourceTree = "<group>"; };
 		0A1306EA272F762500F6DDDD /* TASKLIST.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = TASKLIST.md; path = ../TASKLIST.md; sourceTree = "<group>"; };
 		0A49210324E5E11300D17038 /* AccordionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
+		0A57BA2C274FFCE000A118BD /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0A5DC1A824F6FD4200DC7C14 /* ListAppearsAfterKeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAppearsAfterKeyboardViewController.swift; sourceTree = "<group>"; };
 		0A5F5CCE257EC2D7003CCE2C /* LocalizedCollationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedCollationViewController.swift; sourceTree = "<group>"; };
 		0A66420A254A317A007F6B2F /* AutoLayoutDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLayoutDemoViewController.swift; sourceTree = "<group>"; };
 		0A793B5724E4B53500850139 /* ManualSelectionManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualSelectionManagementViewController.swift; sourceTree = "<group>"; };
 		0A87BA642463567B0047C3B5 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
-		0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLayoutsViewController.swift; sourceTree = "<group>"; };
-		0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
+		0AA4D9A9248064A200CF95A5 /* SystemFlowLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemFlowLayoutViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AA248064A200CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewEdgesPlaygroundViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AB248064A300CF95A5 /* KeyboardTestingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardTestingViewController.swift; sourceTree = "<group>"; };
 		0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlueprintListDemoViewController.swift; sourceTree = "<group>"; };
@@ -146,9 +146,9 @@
 				0AA4D9B2248064A300CF95A5 /* CollectionViewAppearance.swift */,
 				0AA4D9B8248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift */,
 				0AA4D9B6248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift */,
+				0A57BA2C274FFCE000A118BD /* FlowLayoutViewController.swift */,
 				0AA4D9B0248064A300CF95A5 /* CoordinatorViewController.swift */,
-				0AA4D9A8248064A200CF95A5 /* CustomLayoutsViewController.swift */,
-				0AA4D9A9248064A200CF95A5 /* FlowLayoutViewController.swift */,
+				0AA4D9A9248064A200CF95A5 /* SystemFlowLayoutViewController.swift */,
 				0AA4D9B1248064A300CF95A5 /* HorizontalLayoutViewController.swift */,
 				0AA4D9AF248064A300CF95A5 /* InvoicesPaymentScheduleDemoViewController.swift */,
 				0ACF96D524A0094D0090EAC4 /* ItemInsertAndRemoveAnimationsViewController.swift */,
@@ -450,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AA4D9BE248064A300CF95A5 /* DemosRootViewController.swift in Sources */,
+				0A57BA2D274FFCE000A118BD /* FlowLayoutViewController.swift in Sources */,
 				0AA4D9C2248064A300CF95A5 /* HorizontalLayoutViewController.swift in Sources */,
 				1F46FB6B26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift in Sources */,
 				0AA4D9C6248064A300CF95A5 /* SwipeActionsViewController.swift in Sources */,
@@ -466,7 +467,6 @@
 				0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */,
 				0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */,
 				0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */,
-				0AA4D9B9248064A300CF95A5 /* CustomLayoutsViewController.swift in Sources */,
 				0A1306E7272F29B300F6DDDD /* BestPractices.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
 				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,
@@ -480,7 +480,7 @@
 				0A02B2F42675E14600B3501B /* PaymentTypesViewController.swift in Sources */,
 				0AA4D9C4248064A300CF95A5 /* ItemizationEditorViewController.swift in Sources */,
 				0A5F5CCF257EC2D7003CCE2C /* LocalizedCollationViewController.swift in Sources */,
-				0AA4D9BA248064A300CF95A5 /* FlowLayoutViewController.swift in Sources */,
+				0AA4D9BA248064A300CF95A5 /* SystemFlowLayoutViewController.swift in Sources */,
 				0AC2A1962489F93E00779459 /* PagedViewController.swift in Sources */,
 				0AA4D9C5248064A300CF95A5 /* AutoScrollingViewController.swift in Sources */,
 			);

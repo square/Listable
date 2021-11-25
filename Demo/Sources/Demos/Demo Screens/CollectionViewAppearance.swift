@@ -71,16 +71,43 @@ extension UIColor
 struct DemoHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
+    var detail : String?
+    
+    var useMonospacedTitleFont : Bool
+ 
+    init(
+        title: String,
+        detail : String? = nil,
+        useMonospacedTitleFont: Bool = false
+    ) {
+        self.title = title
+        self.detail = detail
+        self.useMonospacedTitleFont = useMonospacedTitleFont
+    }
     
     var elementRepresentation: Element {
-        Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 21.0, weight: .bold)
+        Column(alignment: .fill, minimumSpacing: 10.0) {
+            Label(text: self.title) {
+                if #available(iOS 13.0, *), useMonospacedTitleFont {
+                    $0.font = .monospacedSystemFont(ofSize: 21.0, weight: .semibold)
+                } else {
+                    $0.font = .systemFont(ofSize: 21.0, weight: .semibold)
+                }
+            }
+            
+            if let detail = detail {
+                Label(text: detail) {
+                    $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+                    $0.color = .lightGray
+                }
+                .constrainedTo(width: .atMost(600))
+                .aligned(vertically: .fill, horizontally: .leading)
+            }
         }
         .inset(horizontal: 15.0, vertical: 15.0)
         .box(
             background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 1.0, opacity: 0.15, offset: CGSize(width: 0, height: 1), color: .black)
+            corners: .rounded(radius: 10.0)
         )
     }
 }
