@@ -11,7 +11,7 @@ import UIKit
 
 extension LayoutDescription
 {
-    public static func retailGrid(_ configure : @escaping (inout RetailGridAppearance) -> () = { _ in }) -> Self
+    public static func retailGrid(_ configure : (inout RetailGridAppearance) -> () = { _ in }) -> Self
     {
         RetailGridListLayout.describe(appearance: configure)
     }

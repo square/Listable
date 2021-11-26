@@ -11,7 +11,7 @@ import UIKit
 
 public extension LayoutDescription
 {
-    static func table(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self
+    static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
     {
         TableListLayout.describe(appearance: configure)
     }
@@ -23,11 +23,6 @@ public extension LayoutDescription
 ///
 /// The below diagram shows where each of the properties on the `TableAppearance.Layout` values are
 /// applied when laying out the list.
-///
-/// Note
-/// ----
-/// Do not edit this ASCII diagram directly.
-/// Edit the `TableAppearance.monopic` file in this directory using Monodraw.
 /// ```
 /// ┌─────────────────────────────────────────────────────────────────┐
 /// │                          padding.top                            │
@@ -598,6 +593,8 @@ final class TableListLayout : ListLayout
         //
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
+            
+            if section.all.isEmpty { return }
             
             let sectionWidth = section.layouts.table.width.merge(with: rootWidth)
             

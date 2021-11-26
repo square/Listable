@@ -8,11 +8,17 @@
 
 - Expose `layoutAppearanceProperties` on `LayoutDescription`, to access standard layout appearance properties without creating an instance of the backing layout.
 
+- The `.flow` layout type has been added, to support flow and grid style layouts.
+
 ### Removed
+
+- The `.experimental_grid` layout type has been removed; it is replaced by `.flow`.
 
 ### Changed
 
 - `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
+
+- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
 
 ### Misc
 

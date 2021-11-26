@@ -46,9 +46,15 @@ public struct LayoutDescription
     /// Creates a new layout description for the provided layout type, with the provided optional layout configuration.
     public init<LayoutType:ListLayout>(
         layoutType : LayoutType.Type,
-        appearance configure : @escaping (inout LayoutType.LayoutAppearance) -> () = { _ in }
+        appearance configure : (inout LayoutType.LayoutAppearance) -> () = { _ in }
     ) {
-        self.configuration = Configuration(layoutType: layoutType, configure: configure)
+        var layoutAppearance = LayoutType.LayoutAppearance.default
+        configure(&layoutAppearance)
+        
+        self.configuration = Configuration(
+            layoutType: layoutType,
+            layoutAppearance: layoutAppearance
+        )
     }
     
     /// Returns the standard layout properties, which apply to any kind of list layout.
@@ -65,7 +71,7 @@ extension ListLayout
 {
     /// Creates a new layout description for a list layout, with the provided optional layout configuration.
     public static func describe(
-        appearance : @escaping (inout Self.LayoutAppearance) -> () = { _ in }
+        appearance : (inout Self.LayoutAppearance) -> () = { _ in }
     ) -> LayoutDescription
     {
         return LayoutDescription(
@@ -82,7 +88,7 @@ extension LayoutDescription
     {
         public let layoutType : LayoutType.Type
         
-        public let configure : (inout LayoutType.LayoutAppearance) -> ()
+        public let layoutAppearance : LayoutType.LayoutAppearance
         
         // MARK: AnyLayoutDescriptionConfiguration
         
@@ -91,10 +97,7 @@ extension LayoutDescription
             behavior: Behavior
         ) -> AnyListLayout
         {
-            var layoutAppearance = LayoutType.LayoutAppearance.default
-            self.configure(&layoutAppearance)
-            
-            return LayoutType(
+            LayoutType(
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
@@ -108,11 +111,8 @@ extension LayoutDescription
             content : (ListLayoutDefaults) -> ListLayoutContent
         ) -> AnyListLayout
         {
-            var layoutAppearance = LayoutType.LayoutAppearance.default
-            self.configure(&layoutAppearance)
-            
-            return LayoutType(
-                layoutAppearance: layoutAppearance,
+            LayoutType(
+                layoutAppearance: self.layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
                 content: content(LayoutType.defaults)
@@ -120,10 +120,7 @@ extension LayoutDescription
         }
         
         public func layoutAppearanceProperties() -> ListLayoutAppearanceProperties {
-            var layoutAppearance = LayoutType.LayoutAppearance.default
-            self.configure(&layoutAppearance)
-            
-            return .init(layoutAppearance)
+            .init(self.layoutAppearance)
         }
         
         public func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
@@ -131,11 +128,7 @@ extension LayoutDescription
             let layout = anyLayout as! LayoutType
             let old = layout.layoutAppearance
             
-            var new = old
-            
-            self.configure(&new)
-            
-            return old != new
+            return old != self.layoutAppearance
         }
         
         public func isSameLayoutType(as anyOther : AnyLayoutDescriptionConfiguration) -> Bool

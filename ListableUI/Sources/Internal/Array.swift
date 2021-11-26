@@ -59,4 +59,23 @@ extension Array
         
         return mapped
     }
+    
+    /// Pops all of the items passing the given `predicate` from the beginning of the array.
+    /// If there are no passing elements at the beginning, or the array is empty, an empty array is returned.
+    mutating func popPassing(_ predicate : (Element) -> Bool) -> [Element] {
+                
+        for index in self.indices {
+            if predicate(self[index]) == false {
+                let popped = self[0..<index]
+                self.removeSubrange(0..<index)
+                
+                return Array(popped)
+            }
+        }
+        
+        let all = self
+        self.removeAll()
+        
+        return all
+    }
 }
