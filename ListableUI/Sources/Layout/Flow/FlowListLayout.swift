@@ -977,7 +977,6 @@ final class FlowListLayout : ListLayout {
         
         let measureInfo = Sizing.MeasureInfo(
             sizeConstraint: self.direction.size(for: CGSize(width: position.width, height: .greatestFiniteMagnitude)),
-            defaultSize: .zero,
             direction: self.direction
         )
         
@@ -1028,7 +1027,6 @@ extension FlowAppearance.ItemSizing {
                         height: .greatestFiniteMagnitude
                     )
                 ),
-                defaultSize: .zero,
                 direction: direction
             )
             
