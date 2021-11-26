@@ -228,6 +228,7 @@ extension TableAppearance
         /// Overrides the calculated spacing after this section
         public var customInterSectionSpacing : CGFloat?
         
+        // TODO: Remove
         public var columns : Columns
         
         public init(
