@@ -158,14 +158,6 @@ final class ItemizationEditorViewController : UIViewController
         .table {
             $0.stickySectionHeaders = false
             
-            $0.sizing = .init(
-                itemHeight: 70.0,
-                sectionHeaderHeight: 50.0,
-                sectionFooterHeight: 50.0,
-                listHeaderHeight: 100.0,
-                listFooterHeight: 100.0
-            )
-            
             $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 30.0, bottom: 30.0, right: 30.0),
                 width: .atMost(600.0)

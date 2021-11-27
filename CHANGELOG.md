@@ -14,6 +14,8 @@
 
 - The `.experimental_grid` layout type has been removed; it is replaced by `.flow`.
 
+- Default sizes have been removed. Please ensure your elements correctly implement `sizeThatFits`, or use fixed sizes.
+
 ### Changed
 
 - `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
