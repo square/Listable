@@ -18,6 +18,8 @@ public struct Content
     /// You don't need to set this value – but if you do, and change it to another value,
     /// the list will reload without animation.
     public var identifier : AnyHashable?
+    
+    public var sizingTemplates : TemplateSizes
 
     /// The refresh control, if any, associated with the list.
     public var refreshControl : RefreshControl?
@@ -112,6 +114,8 @@ public struct Content
         sections : [Section] = []
     ) {
         self.identifier = identifier
+        
+        self.sizingTemplates = .init()
         
         self.refreshControl = refreshControl
         
@@ -319,6 +323,21 @@ public struct Content
             containsAllItems: self.itemCount == sliced.itemCount,
             content: sliced
         )
+    }
+}
+
+
+extension Content {
+    
+    public struct TemplateSizes {
+        private var templates : [Sizing.Template : AnyItem] = [:]
+        
+        public mutating func add(
+            _ key : SizingTemplateKey.Type,
+            using provider : () -> AnyItemConvertible
+        ) {
+            self.templates[.init(key: key)] = provider().toAnyItem()
+        }
     }
 }
 

@@ -23,6 +23,12 @@ public enum Sizing : Hashable
     ///
     case fixed(width : CGFloat = 0.0, height : CGFloat = 0.0)
     
+    case fromTemplate(Template)
+    
+    public static func from(template key : SizingTemplateKey.Type) -> Self {
+        .fromTemplate(.init(key: key))
+    }
+    
     /// Sizes the item by calling `sizeThatFits` on its underlying view type.
     /// The passed in constraint is used to clamp the size to a minimum, maximum, or range.
     /// If you do not specify a constraint, `.noConstraint` is used.
@@ -147,8 +153,23 @@ public enum Sizing : Hashable
 }
 
 
+public protocol SizingTemplateKey {}
+
+
 extension Sizing
 {
+    public struct Template : Hashable {
+        public let key : SizingTemplateKey.Type
+        
+        public static func == (lhs : Self, rhs : Self) -> Bool {
+            lhs.key == rhs.key
+        }
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(ObjectIdentifier(key))
+        }
+    }
+    
     public struct MeasureInfo
     {
         public var sizeConstraint : CGSize
