@@ -347,10 +347,44 @@ extension FlowAppearance {
     /// Controls the layout parameters for a given `Item` when it is displayed within a `.flow` layout.
     public struct ItemLayout : Equatable, ItemLayoutsValue
     {
-        public init() {}
+        /// How to calculate the width of the item within the section.
+        public var width : Width
+        
+        public init(
+            width : Width = .natural
+        ) {
+            self.width = width
+        }
         
         public static var defaultValue : Self {
             Self.init()
+        }
+        
+        /// Controls how to determine the width of the items within a row.
+        ///
+        /// ```
+        /// ┌───────────────────────────────────┐
+        /// │┌────────────┐ ┌────────────┐      │
+        /// ││            │ │            │      │
+        /// ││  .natural  │ │  .natural  │      │
+        /// ││            │ │            │      │
+        /// │└────────────┘ └────────────┘      │
+        /// │┌────────────────────────────────┐ │
+        /// ││            .fillRow            │ │
+        /// │└────────────────────────────────┘ │
+        /// │┌────────────┐ ┌────────────┐      │
+        /// ││            │ │            │      │
+        /// ││  .natural  │ │  .natural  │      │
+        /// ││            │ │            │      │
+        /// │└────────────┘ └────────────┘      │
+        /// └───────────────────────────────────┘
+        /// ```
+        public enum Width : Equatable {
+            /// The standard with from the item will be used.
+            case natural
+            
+            /// The full width of the section will be used by the item.
+            case fillRow
         }
     }
     
@@ -1035,31 +1069,43 @@ extension FlowAppearance.ItemSizing {
             return item.measurer(measureInfo)
         }
         
-        switch self {
+        switch item.layouts.flow.width {
         case .natural:
-            return measure(in: maxWidth)
-            
-        case .fixed(let fixed):
-            let size = measure(in: fixed)
-            
-            return direction.switch {
-                CGSize(width: fixed, height: size.height)
-            } horizontal: {
-                CGSize(width: size.width, height: fixed)
+            switch self {
+            case .natural:
+                return measure(in: maxWidth)
+                
+            case .fixed(let fixed):
+                let size = measure(in: fixed)
+                
+                return direction.switch {
+                    CGSize(width: fixed, height: size.height)
+                } horizontal: {
+                    CGSize(width: size.width, height: fixed)
+                }
+                
+            case .columns(let columns):
+                precondition(columns >= 1, "Must provide one or more columns.")
+                
+                let totalSpacing = itemSpacing * CGFloat(columns - 1)
+                let columnWidth = floor((maxWidth - totalSpacing) / CGFloat(columns))
+                
+                let size = measure(in: columnWidth)
+                
+                return direction.switch {
+                    CGSize(width: columnWidth, height: size.height)
+                } horizontal: {
+                    CGSize(width: size.width, height: columnWidth)
+                }
             }
             
-        case .columns(let columns):
-            precondition(columns >= 1, "Must provide one or more columns.")
-            
-            let totalSpacing = itemSpacing * CGFloat(columns - 1)
-            let columnWidth = floor((maxWidth - totalSpacing) / CGFloat(columns))
-            
-            let size = measure(in: columnWidth)
+        case .fillRow:
+            let size = measure(in: maxWidth)
             
             return direction.switch {
-                CGSize(width: columnWidth, height: size.height)
+                CGSize(width: maxWidth, height: size.height)
             } horizontal: {
-                CGSize(width: size.width, height: columnWidth)
+                CGSize(width: size.width, height: maxWidth)
             }
         }
     }

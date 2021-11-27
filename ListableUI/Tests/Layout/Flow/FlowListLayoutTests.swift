@@ -89,6 +89,30 @@ class FlowListLayoutTests : XCTestCase
                     )
                 }
                 
+                Section("fill rows") {
+                    
+                    for index in 1...7 {
+                        let index = CGFloat(index)
+                        
+                        if index == 3.0 {
+                            for _ in 1...2 {
+                                Item(
+                                    TestingItemContent(color: .brown),
+                                    sizing: .fixed(width: 30.0, height: 30.0),
+                                    layouts: .init {
+                                        $0.flow.width = .fillRow
+                                    }
+                                )
+                            }
+                        } else {
+                            Item(
+                                TestingItemContent(color: .init(white: 0.0, alpha: 0.1)),
+                                sizing: .fixed(width: 120.0, height: 120.0)
+                            )
+                        }
+                    }
+                }
+                
                 for (underflow, _) in FlowAppearance.RowUnderflowAlignment.allTestCases {
                     Section("\(underflow)") { section in
                         section.layouts.flow.rowUnderflowAlignment = underflow
