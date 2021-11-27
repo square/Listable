@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,27 +23,27 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (48% documented)
+         (58% documented)
       </p>
-
-      <p class="header-col--secondary">
+    
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
-
+      </div>
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       LayoutDirection Enumeration Reference
     </p>
 
@@ -150,6 +150,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ContentInsetAdjustmentBehavior.html">ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/CustomWidth.html">CustomWidth</a>
@@ -358,22 +361,28 @@
                 <a class="nav-group-task-link" href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance.html">GridAppearance</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance.html">FlowAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemSizing.html">– ItemSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Layout.html">– Layout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowUnderflowAlignment.html">– RowUnderflowAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/ItemLayout.html">– ItemLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowItemsAlignment.html">– RowItemsAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/SectionLayout.html">– SectionLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/SectionLayout.html">– SectionLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/Spacings.html">– Spacings</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
@@ -469,6 +478,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -479,9 +491,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
@@ -610,7 +619,7 @@
             <h1>LayoutDirection</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">LayoutDirection</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
 
                 </div>
@@ -783,6 +792,66 @@ the direction. The passed autoclosures will only be evaluated if they are for th
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI15LayoutDirectionO6switch8vertical10horizontalyyyXE_yyXEtF"></a>
+                    <a name="//apple_ref/swift/Method/switch(vertical:horizontal:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI15LayoutDirectionO6switch8vertical10horizontalyyyXE_yyXEtF">switch(vertical:<wbr>horizontal:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When writing a layout, use this method to perform differing actions based on
+the direction. The passed autoclosures will only be evaluated if they are for the current direction.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="err">`</span><span class="k">switch</span><span class="err">`</span><span class="p">(</span><span class="nv">vertical</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(),</span> <span class="nv">horizontal</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI15LayoutDirectionO6mutate_8vertical10horizontalADyx_s24ReferenceWritableKeyPathCyxq_GAIyq_zXEtr0_lF"></a>
+                    <a name="//apple_ref/swift/Method/mutate(_:vertical:horizontal:mutate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI15LayoutDirectionO6mutate_8vertical10horizontalADyx_s24ReferenceWritableKeyPathCyxq_GAIyq_zXEtr0_lF">mutate(_:<wbr>vertical:<wbr>horizontal:<wbr>mutate:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">mutate</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">root</span> <span class="p">:</span> <span class="kt">Root</span><span class="p">,</span>
+    <span class="nv">vertical</span><span class="p">:</span> <span class="kt">ReferenceWritableKeyPath</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">horizontal</span><span class="p">:</span> <span class="kt">ReferenceWritableKeyPath</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">mutate</span> <span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">Value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -791,7 +860,7 @@ the direction. The passed autoclosures will only be evaluated if they are for th
                 <a name="//apple_ref/swift/Section/Creating &amp; Reading Values" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Creating%20%26%20Reading%20Values"></a>
-                  <h3 class="section-name"><p>Creating &amp; Reading Values</p>
+                  <h3 class="section-name"><span>Creating &amp; Reading Values</span>
 </h3>
                 </div>
               </div>
@@ -1112,9 +1181,8 @@ the direction. The passed autoclosures will only be evaluated if they are for th
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-11-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>
