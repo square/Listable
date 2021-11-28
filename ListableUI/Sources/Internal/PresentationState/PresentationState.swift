@@ -58,7 +58,7 @@ final class PresentationState
     }
     
     init(
-        forMeasuringOnlyWith content : Content,
+        forMeasuringOrTestsWith content : Content,
         environment : ListEnvironment,
         itemMeasurementCache : ReusableViewCache,
         headerFooterMeasurementCache : ReusableViewCache
@@ -75,7 +75,8 @@ final class PresentationState
         }()
         
         /// Note: We are passing `performsContentCallbacks:false` because this
-        /// initializer is only used for one-pass measurement provided by ``ListView/contentSize(in:for:itemLimit:)``.
+        /// initializer is only used for one-pass measurement provided by ``ListView/contentSize(in:for:itemLimit:)``,
+        /// as well as for testing purposes.
         
         self.containerHeader = .init(state: SectionState.newHeaderFooterState(
             with: content.header,
