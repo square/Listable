@@ -30,20 +30,18 @@ public struct ViewIteration<ViewType:UIView> : SnapshotIteration
 
 public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
 {
+    public let name : String
     public let size : CGSize
     
-    public init(size: CGSize)
+    public init(name: String = "Snapshot", size: CGSize)
     {
+        self.name = name
         self.size = size
     }
     
     // MARK: SnapshotIteration
     
     public typealias RenderingFormat = ViewType
-    
-    public var name : String {
-        return "\(self.size.width) x \(self.size.height)"
-    }
     
     public func prepare(render : ViewType) -> ViewType
     {

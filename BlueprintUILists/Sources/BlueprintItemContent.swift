@@ -68,7 +68,6 @@ public protocol BlueprintItemContent : ItemContent
     ///
     /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
     /// based on the current state of the item.
-    ///
     func element(with info : ApplyItemContentInfo) -> Element
     
     /// Optional. Create and return the Blueprint element used to represent the background of the content.
@@ -78,10 +77,8 @@ public protocol BlueprintItemContent : ItemContent
     /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
     /// based on the current state of the item.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// The default implementation of this method returns nil, and provides no background.
-    ///
     func backgroundElement(with info : ApplyItemContentInfo) -> Element?
     
     /// Optional. Create and return the Blueprint element used to represent the background of the content when it is selected or highlighted.
@@ -90,10 +87,8 @@ public protocol BlueprintItemContent : ItemContent
     /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
     /// based on the current state of the item.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
-    ///
     func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
 }
 

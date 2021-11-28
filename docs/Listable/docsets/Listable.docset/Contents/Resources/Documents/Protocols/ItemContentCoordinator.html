@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,27 +23,27 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (48% documented)
+         (58% documented)
       </p>
-
-      <p class="header-col--secondary">
+    
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
-
+      </div>
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       ItemContentCoordinator Protocol Reference
     </p>
 
@@ -150,6 +150,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ContentInsetAdjustmentBehavior.html">ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/CustomWidth.html">CustomWidth</a>
@@ -358,22 +361,28 @@
                 <a class="nav-group-task-link" href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance.html">GridAppearance</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance.html">FlowAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemSizing.html">– ItemSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Layout.html">– Layout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowUnderflowAlignment.html">– RowUnderflowAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/ItemLayout.html">– ItemLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowItemsAlignment.html">– RowItemsAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/SectionLayout.html">– SectionLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/SectionLayout.html">– SectionLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/Spacings.html">– Spacings</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
@@ -469,6 +478,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -479,9 +491,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
@@ -610,7 +619,7 @@
             <h1>ItemContentCoordinator</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContentCoordinator</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
@@ -726,7 +735,7 @@ need to provide implementations for the methods relevant to you.</p>
                 <a name="//apple_ref/swift/Section/Actions &amp; Info" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Actions%20%26%20Info"></a>
-                  <h3 class="section-name"><p>Actions &amp; Info</p>
+                  <h3 class="section-name"><span>Actions &amp; Info</span>
 </h3>
                 </div>
               </div>
@@ -793,7 +802,7 @@ need to provide implementations for the methods relevant to you.</p>
                 <a name="//apple_ref/swift/Section/Instance Lifecycle" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Instance%20Lifecycle"></a>
-                  <h3 class="section-name"><p>Instance Lifecycle</p>
+                  <h3 class="section-name"><span>Instance Lifecycle</span>
 </h3>
                 </div>
               </div>
@@ -819,7 +828,7 @@ need to provide implementations for the methods relevant to you.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -856,7 +865,7 @@ the item, or its entire section, being removed from the list.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -893,7 +902,7 @@ order changing.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -929,7 +938,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -950,7 +959,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                 <a name="//apple_ref/swift/Section/Visibility &amp; View Lifecycle" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Visibility%20%26%20View%20Lifecycle"></a>
-                  <h3 class="section-name"><p>Visibility &amp; View Lifecycle</p>
+                  <h3 class="section-name"><span>Visibility &amp; View Lifecycle</span>
 </h3>
                 </div>
               </div>
@@ -976,7 +985,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1010,7 +1019,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1031,7 +1040,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                 <a name="//apple_ref/swift/Section/Selection &amp; Highlight Lifecycle" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Selection%20%26%20Highlight%20Lifecycle"></a>
-                  <h3 class="section-name"><p>Selection &amp; Highlight Lifecycle</p>
+                  <h3 class="section-name"><span>Selection &amp; Highlight Lifecycle</span>
 </h3>
                 </div>
               </div>
@@ -1057,7 +1066,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1091,7 +1100,7 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1112,9 +1121,8 @@ reported as changed via its <code>isEquivalent(to:)</code> method.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-11-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>

@@ -16,16 +16,14 @@ import BlueprintUI
 /// Most arguments on this method are not required – you must only
 /// provide an input and an element provider.
 ///
-/// Note
-/// ----
+/// ### Note
 /// This initializer is helpful if you have to nest an existing element that needs to be used in
 /// a single place, without needing to define an entirely new type.
 ///
 /// If your header or footer is to be used in more than one place, it is recommended that you
 /// create a `BlueprintHeaderFooterContent` struct to share logic to avoid duplicate code.
 ///
-/// Example
-/// -------
+/// ### Example
 /// ```
 /// section.header = ElementHeaderFooter(album) { lhs, rhs in
 ///     lhs.value != rhs.value

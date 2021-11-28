@@ -123,9 +123,6 @@ extension EmbeddedList
     /// enum, because several of those values do not make sense for embedded lists.
     public enum Sizing : Equatable
     {
-        /// Falls back to the default sizing of `Item`s in the list view.
-        case `default`
-        
         /// A fixed size item with the given width or height.
         ///
         /// Note: Depending on the list layout type, only one of width or height may be used.
@@ -134,7 +131,6 @@ extension EmbeddedList
         
         var toStandardSizing : ListableUI.Sizing {
             switch self {
-            case .default: return .default
             case .fixed(let w, let h): return .fixed(width: w, height: h)
             }
         }

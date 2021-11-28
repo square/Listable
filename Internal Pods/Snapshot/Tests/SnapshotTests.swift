@@ -115,8 +115,8 @@ class SnapshotTests : XCTestCase
     func test_image_and_text_output()
     {
         let iterations = [
-            SizedViewIteration(size: CGSize(width: 200.0, height: 200.0)),
-            SizedViewIteration(size: CGSize(width: 300.0, height: 300.0)),
+            SizedViewIteration(name: "200x200", size: CGSize(width: 200.0, height: 200.0)),
+            SizedViewIteration(name: "300x300", size: CGSize(width: 300.0, height: 300.0)),
         ]
         
         let snapshot = Snapshot(for: iterations) { iteration in

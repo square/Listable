@@ -18,6 +18,7 @@ public final class DemosRootViewController : ListViewController
     }
     
     func push(_ viewController : UIViewController) {
+        DemoNavigationController.setPushedDemo(viewController)
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -211,10 +212,10 @@ public final class DemosRootViewController : ListViewController
             Section("layouts") { [weak self] in
                 
                 Item(
-                    DemoItem(text: "Grid Layout"),
+                    DemoItem(text: "Flow Layout"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
-                        self?.push(CustomLayoutsViewController())
+                        self?.push(FlowLayoutViewController())
                     }
                 )
                 
@@ -282,10 +283,10 @@ public final class DemosRootViewController : ListViewController
             Section("collection-view") { [weak self] in
 
                 Item(
-                    DemoItem(text: "Flow Layout"),
+                    DemoItem(text: "System Flow Layout"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
-                        self?.push(FlowLayoutViewController())
+                        self?.push(SystemFlowLayoutViewController())
                     }
                 )
             } header: {

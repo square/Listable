@@ -22,6 +22,10 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
+        self.demoLayout()
+    }
+    
+    static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
@@ -35,6 +39,10 @@ extension LayoutDescription
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
             )
+            
+            $0.stickySectionHeaders = true
+            
+            configure(&$0)
         }
     }
     
@@ -63,16 +71,43 @@ extension UIColor
 struct DemoHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
+    var detail : String?
+    
+    var useMonospacedTitleFont : Bool
+ 
+    init(
+        title: String,
+        detail : String? = nil,
+        useMonospacedTitleFont: Bool = false
+    ) {
+        self.title = title
+        self.detail = detail
+        self.useMonospacedTitleFont = useMonospacedTitleFont
+    }
     
     var elementRepresentation: Element {
-        Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 21.0, weight: .bold)
+        Column(alignment: .fill, minimumSpacing: 10.0) {
+            Label(text: self.title) {
+                if #available(iOS 13.0, *), useMonospacedTitleFont {
+                    $0.font = .monospacedSystemFont(ofSize: 21.0, weight: .semibold)
+                } else {
+                    $0.font = .systemFont(ofSize: 21.0, weight: .semibold)
+                }
+            }
+            
+            if let detail = detail {
+                Label(text: detail) {
+                    $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+                    $0.color = .lightGray
+                }
+                .constrainedTo(width: .atMost(600))
+                .aligned(vertically: .fill, horizontally: .leading)
+            }
         }
         .inset(horizontal: 15.0, vertical: 15.0)
         .box(
             background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 1.0, opacity: 0.15, offset: CGSize(width: 0, height: 1), color: .black)
+            corners: .rounded(radius: 10.0)
         )
     }
 }
@@ -127,7 +162,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
             }
         }
         .inset(horizontal: 15.0, vertical: 13.0)
-        .accessibility(label: self.text, traits: [.button])
+        .accessibilityElement(label: self.text, value: nil, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?

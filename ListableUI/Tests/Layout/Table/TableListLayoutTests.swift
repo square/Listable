@@ -17,25 +17,7 @@ class TableAppearanceTests : XCTestCase
     {
         let appearance = TableAppearance()
         
-        XCTAssertEqual(appearance.sizing, TableAppearance.Sizing())
         XCTAssertEqual(appearance.layout, TableAppearance.Layout())
-    }
-}
-
-
-class TableAppearance_SizingTests : XCTestCase
-{
-    func test_init()
-    {
-        let sizing = TableAppearance.Sizing()
-        
-        XCTAssertEqual(sizing.itemHeight, 50.0)
-        XCTAssertEqual(sizing.sectionHeaderHeight, 60.0)
-        XCTAssertEqual(sizing.sectionFooterHeight, 40.0)
-        XCTAssertEqual(sizing.listHeaderHeight, 60.0)
-        XCTAssertEqual(sizing.listFooterHeight, 60.0)
-        XCTAssertEqual(sizing.overscrollFooterHeight, 60.0)
-        XCTAssertEqual(sizing.itemPositionGroupingHeight, 0.0)
     }
 }
 
@@ -56,12 +38,12 @@ class TableAppearance_LayoutTests : XCTestCase
     func test_width()
     {
         self.testcase("No width constraint") {
-            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .noConstraint))
+            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(leading: 50.0, trailing: 40.0), constraint: .noConstraint))
         }
         
         self.testcase("Has width constraint") {
-            XCTAssertEqual(100.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .fixed(100.0)))
-            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(left: 50.0, right: 40.0), constraint: .atMost(200.0)))
+            XCTAssertEqual(100.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(leading: 50.0, trailing: 40.0), constraint: .fixed(100.0)))
+            XCTAssertEqual(110.0, TableAppearance.Layout.width(with: 200.0, padding: HorizontalPadding(leading: 50.0, trailing: 40.0), constraint: .atMost(200.0)))
         }
     }
 }
@@ -71,7 +53,7 @@ class TableListLayoutTests : XCTestCase
 {
     func test_layout_vertical_includingHeader()
     {
-        let listView = self.list(includeHeader: true)
+        let listView = self.list(direction: .vertical, includeHeader: true)
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
@@ -81,7 +63,7 @@ class TableListLayoutTests : XCTestCase
 
     func test_layout_vertical_excludingHeader()
     {
-        let listView = self.list(includeHeader: false)
+        let listView = self.list(direction: .vertical, includeHeader: false)
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
 
@@ -89,13 +71,36 @@ class TableListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func list(includeHeader: Bool) -> ListView
+    func test_layout_horizontal_includingHeader()
     {
+        let listView = self.list(direction: .horizontal, includeHeader: true)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+
+    func test_layout_horizontal_excludingHeader()
+    {
+        let listView = self.list(direction: .horizontal, includeHeader: false)
+
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    func list(direction: LayoutDirection, includeHeader: Bool) -> ListView
+    {
+        /// 200x200 so the layout will support both horizontal and vertical layouts.
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
         listView.configure { list in
 
             list.layout = .table {
+                
+                $0.direction = direction
                 
                 $0.bounds = .init(
                     padding: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0),
@@ -113,43 +118,67 @@ class TableListLayoutTests : XCTestCase
                 )
             }
             
-            list.content.containerHeader = HeaderFooter(TestingHeaderFooterContent(color: .red), sizing: .fixed(height: 50.0))
+            list.content.containerHeader = HeaderFooter(TestingHeaderFooterContent(color: .red), sizing: .fixed(width: 50.0, height: 50.0))
 
             if includeHeader {
-                list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 50.0))
+                list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 50.0, height: 50.0))
             }
 
-            list.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(height: 70.0))
+            list.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 70.0, height: 70.0))
             
             list += Section("first") { section in
                 section.layouts.table.customInterSectionSpacing = 30
-
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))
                 
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 20.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.3)), sizing: .fixed(height: 20.0))
+                section.layouts.table.width = .fill
+
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 20.0, height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 20.0, height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.3)), sizing: .fixed(width: 20.0, height: 20.0))
             }
             
             list += Section("second") { section in
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 40.0))
                 
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 30.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 40.0))
+                section.layouts.table.width = .custom(
+                    .init(
+                        padding: .init(leading: 10, trailing: 50),
+                        width: .fixed(100),
+                        alignment: .leading
+                    )
+                )
+                
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 30.0, height: 30.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 40.0, height: 40.0))
             }
             
             list += Section("third") { section in
-                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(height: 30.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
                 
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 10.0, height: 10.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 20.0, height: 20.0))
             }
             
             list += Section("fourth") { section in
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(height: 10.0))
-                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(height: 20.0))
+                section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
+                
+                section.layouts.table.columns = .init(count: 2, spacing: 10.0)
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 50.0, height: 50.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 70.0, height: 70.0))
+                
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 70.0, height: 70.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 50.0, height: 50.0))
+            }
+            
+            list += Section("fifth") { section in
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 10.0, height: 10.0))
+                section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 20.0, height: 20.0))
             }
         }
         

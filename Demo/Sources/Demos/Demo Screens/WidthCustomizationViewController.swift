@@ -59,7 +59,7 @@ final class WidthCustomizationViewController : UIViewController
                 section.layouts.table.width = .custom(.init(
                     padding: HorizontalPadding(uniform: 10.0),
                     width: .atMost(200.0),
-                    alignment: .left
+                    alignment: .leading
                     )
                 )
                 
@@ -78,7 +78,7 @@ final class WidthCustomizationViewController : UIViewController
                         $0.table.width = .custom(.init(
                             padding: HorizontalPadding(uniform: 10.0),
                             width: .atMost(200.0),
-                            alignment: .left
+                            alignment: .leading
                             )
                         )
                     }
@@ -104,7 +104,7 @@ final class WidthCustomizationViewController : UIViewController
                         $0.table.width = .custom(.init(
                             padding: HorizontalPadding(uniform: 10.0),
                             width: .atMost(200.0),
-                            alignment: .right
+                            alignment: .trailing
                             )
                         )
                     }

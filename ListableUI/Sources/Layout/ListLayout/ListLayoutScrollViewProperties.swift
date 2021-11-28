@@ -8,7 +8,7 @@
 import UIKit
 
 
-public struct ListLayoutScrollViewProperties
+public struct ListLayoutScrollViewProperties : Equatable
 {
     public var isPagingEnabled : Bool
     
@@ -22,7 +22,7 @@ public struct ListLayoutScrollViewProperties
     
     public init(
         isPagingEnabled: Bool,
-        contentInsetAdjustmentBehavior: ListLayoutScrollViewProperties.ContentInsetAdjustmentBehavior,
+        contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior,
         allowsBounceVertical : Bool,
         allowsBounceHorizontal : Bool,
         allowsVerticalScrollIndicator : Bool,
@@ -80,20 +80,31 @@ public struct ListLayoutScrollViewProperties
             view.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator
         }
     }
+}
+
+
+/// Constants indicating how safe area insets are added to the adjusted content inset.
+/// Mirrors `UIScrollView.ContentInsetAdjustmentBehavior`.
+public enum ContentInsetAdjustmentBehavior : Equatable {
     
-    public enum ContentInsetAdjustmentBehavior : Equatable {
-        case automatic
-        case scrollableAxes
-        case never
-        case always
-        
-        var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
-            switch self {
-            case .automatic: return .automatic
-            case .scrollableAxes: return .scrollableAxes
-            case .never: return .never
-            case .always: return .always
-            }
+    /// Applies the inset from a UIKit navigation bar or tab bar.
+    case automatic
+    
+    /// Applies the safe area inset for the scrollable axes.
+    case scrollableAxes
+    
+    /// Applies no safe area inset.
+    case never
+    
+    /// Applies all safe area insets.
+    case always
+    
+    var toUIScrollViewValue : UIScrollView.ContentInsetAdjustmentBehavior {
+        switch self {
+        case .automatic: return .automatic
+        case .scrollableAxes: return .scrollableAxes
+        case .never: return .never
+        case .always: return .always
         }
     }
 }
