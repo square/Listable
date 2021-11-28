@@ -132,27 +132,29 @@ public enum Sizing : Hashable
         
         // Ensure we have a reasonably valid size for the cell.
         
-        let reasonableMaxDimension : CGFloat = 10_000
+        let reasonableMaxDimension : CGFloat = 5_000
         
         precondition(
             size.height <= reasonableMaxDimension,
             """
-            The height of the view was outside of reasonable expectations, and this is likely \
-            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect.
+            The height of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the width of the containing list view has been squished to only be a few points wide.
             
-            Height: \(size.height)
-            MeasureInfo: \(info)
+            Invalid Height: \(size.height)
+            Measurement Constraint: \(info.sizeConstraint)
             """
         )
         
         precondition(
             size.width <= reasonableMaxDimension,
             """
-            The width of the view was outside of reasonable expectations, and this is likely \
-            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect.
+            The width of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the height of the containing list view has been squished to only be a few points tall.
             
-            Width: \(size.width)
-            MeasureInfo: \(info)
+            Invalid Width: \(size.width)
+            Measurement Constraint: \(info.sizeConstraint)
             """
         )
     }

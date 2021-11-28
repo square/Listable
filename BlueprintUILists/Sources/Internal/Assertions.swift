@@ -1,6 +1,6 @@
 //
 //  Assertions.swift
-//  ListableUI
+//  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 1/10/20.
 //
@@ -8,12 +8,17 @@
 import Foundation
 
 
-func listableInternalFatal(_ message: @autoclosure () -> String = String(), file: StaticString = #file, line: UInt = #line) -> Never
+@inline(__always)
+func listableInternalFatal(
+    _ message: @autoclosure () -> String = String(),
+    file: StaticString = #file,
+    line: UInt = #line
+) -> Never
 {
     fatalError(
         """
-        LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#ui-systems) know:
-
+        LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#listable) know:
+        
         \(message())
         """,
         
@@ -22,13 +27,18 @@ func listableInternalFatal(_ message: @autoclosure () -> String = String(), file
     )
 }
 
-func listableInternalPrecondition(_ condition: @autoclosure () -> Bool, _ message: @autoclosure () -> String = String(), file: StaticString = #file, line: UInt = #line)
-{
+@inline(__always)
+func listableInternalPrecondition(
+    _ condition: @autoclosure () -> Bool,
+    _ message: @autoclosure () -> String = String(),
+    file: StaticString = #file,
+    line: UInt = #line
+) {
     precondition(
         condition(),
         
         """
-        LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#ui-systems) know:
+        LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#listable) know:
         
         \(message())
         """,
@@ -41,6 +51,7 @@ func listableInternalPrecondition(_ condition: @autoclosure () -> Bool, _ messag
 
 /// By default, `precondition` error messages are not included in release builds. We would like that!
 /// https://bugs.swift.org/browse/SR-905
+@inline(__always)
 func precondition(
     _ condition: @autoclosure () -> Bool,
     _ message: @autoclosure () -> String = String(),
@@ -54,6 +65,7 @@ func precondition(
 
 /// By default, `preconditionFailure` error messages are not included in release builds. We would like that!
 /// https://bugs.swift.org/browse/SR-905
+@inline(__always)
 public func preconditionFailure(
     _ message: @autoclosure () -> String = String(),
     file: StaticString = #file,
