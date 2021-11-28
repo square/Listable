@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- `precondition` error messages should now appear in crash reporting tools.
-
 ### Added
 
 - [Added support for `.horizontal` `.table` layouts](https://github.com/kyleve/Listable/pull/314). To get a horizontal table; just set the `layout.direction = .horizontal` when configuring your list's layout. Additionally, some properties were renamed from left/right to leading/trailing to better reflect they can now be on the left/top and right/bottom of a list view, respectively.
@@ -23,6 +21,8 @@
 - `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
 
 - The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
+
+- `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
 
 ### Misc
 
