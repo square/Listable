@@ -120,7 +120,7 @@ public enum Sizing : Hashable
             }
         }()
         
-        self.validateMeasuredSize(size)
+        self.validateMeasuredSize(size, with: info)
         
         return CGSize(
             width: ceil(size.width),
@@ -128,20 +128,34 @@ public enum Sizing : Hashable
         )
     }
     
-    private func validateMeasuredSize(_ size : CGSize) {
+    private func validateMeasuredSize(_ size : CGSize, with info : MeasureInfo) {
         
         // Ensure we have a reasonably valid size for the cell.
         
-        let reasonableMaxDimension : CGFloat = 10_000
+        let reasonableMaxDimension : CGFloat = 5_000
         
         precondition(
             size.height <= reasonableMaxDimension,
-            "The height of the view was outside of reasonable expectations, and this is likely programmer error. Height: \(size.height). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The height of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the width of the containing list view has been squished to only be a few points wide.
+            
+            Invalid Height: \(size.height)
+            Measurement Constraint: \(info.sizeConstraint)
+            """
         )
         
         precondition(
             size.width <= reasonableMaxDimension,
-            "The width of the view was outside of reasonable expectations, and this is likely programmer error. Width: \(size.width). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The width of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the height of the containing list view has been squished to only be a few points tall.
+            
+            Invalid Width: \(size.width)
+            Measurement Constraint: \(info.sizeConstraint)
+            """
         )
     }
 }

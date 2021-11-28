@@ -22,6 +22,8 @@
 
 - The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
 
+- `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
+
 ### Misc
 
 # Past Releases
