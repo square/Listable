@@ -132,6 +132,8 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// Controls the sizing / measurement of items within the flow layout.
     public var itemSizing : ItemSizing
     
+    public var onDidEndDragging : OnDidEndDragging
+    
     /// Controls the padding and maximum width of the flow layout.
     public var bounds : ListContentBounds?
     
@@ -142,10 +144,11 @@ public struct FlowAppearance : ListLayoutAppearance {
     public init(
         direction: LayoutDirection = .vertical,
         stickySectionHeaders: Bool? = nil,
-        bounds : ListContentBounds? = nil,
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
         rowItemsAlignment : RowItemsAlignment = .top,
         itemSizing : ItemSizing = .natural,
+        onDidEndDragging : OnDidEndDragging = .default,
+        bounds : ListContentBounds? = nil,
         spacings : Spacings = .init()
     ) {
         self.direction = direction
@@ -160,13 +163,15 @@ public struct FlowAppearance : ListLayoutAppearance {
                 }
             }
         }()
-        
-        self.bounds = bounds
-        
+                
         self.rowUnderflowAlignment = rowUnderflowAlignment
         self.rowItemsAlignment = rowItemsAlignment
         
         self.itemSizing = itemSizing
+        
+        self.onDidEndDragging = onDidEndDragging
+        
+        self.bounds = bounds
         
         self.spacings = spacings
     }
@@ -174,6 +179,11 @@ public struct FlowAppearance : ListLayoutAppearance {
 
 
 extension FlowAppearance {
+    
+    public enum OnDidEndDragging : Equatable {
+        case `default`
+        case adjustsScrollToShowFullTargetRow
+    }
     
     /// Controls how items in a row are measured and sized.
     public enum ItemSizing : Equatable {

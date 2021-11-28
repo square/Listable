@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 
-public extension LayoutDescription
+extension LayoutDescription
 {
-    static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
+    public static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
     {
         TableListLayout.describe(appearance: configure)
     }
@@ -131,6 +131,8 @@ public struct TableAppearance : ListLayoutAppearance
     /// items are spaced 2pts apart, the items will be in a new group.
     public var itemPositionGroupingHeight : CGFloat
     
+    public var onDidEndDragging : OnDidEndDragging
+    
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
     
@@ -144,12 +146,14 @@ public struct TableAppearance : ListLayoutAppearance
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
         itemPositionGroupingHeight : CGFloat = 0.0,
+        onDidEndDragging : OnDidEndDragging = .default,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
+        self.onDidEndDragging = onDidEndDragging
         self.bounds = bounds
         self.layout = layout
     }
@@ -254,7 +258,11 @@ extension TableAppearance
         }
     }
     
-    
+    public enum OnDidEndDragging : Equatable {
+        case `default`
+        case adjustsScrollToShowFullTargetItem
+    }
+        
     /// Layout options for the list.
     public struct Layout : Equatable
     {
@@ -767,6 +775,24 @@ final class TableListLayout : ListLayout
         //
         
         self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+    }
+    
+    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
+        
+        guard layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetItem else {
+            return nil
+        }
+        
+        guard let item = self.firstFullyVisibleItem(
+            after: targetContentOffset,
+            velocity: velocity
+        ) else {
+            return nil
+        }
+        
+        print("indexPath: \(item.indexPath)")
+        
+        return nil
     }
     
     private func setItemPositions()

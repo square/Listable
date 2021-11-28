@@ -75,6 +75,8 @@ final class HorizontalLayoutViewController : UIViewController
                     horizontal.layout = .table {
                         $0.direction = .horizontal
                         
+                        $0.onDidEndDragging = .adjustsScrollToShowFullTargetItem
+                        
                         $0.layout.itemSpacing = 20.0
                         
                         $0.bounds = .init(

@@ -332,5 +332,20 @@ extension ListView
                 )
             }
         }
+        
+        func scrollViewWillEndDragging(
+            _ scrollView: UIScrollView,
+            withVelocity velocity: CGPoint,
+            targetContentOffset: UnsafeMutablePointer<CGPoint>
+        ) {
+            let adjusted = layoutManager.layout.adjust(
+                targetContentOffset: targetContentOffset.pointee,
+                with: velocity
+            )
+            
+            if let adjusted = adjusted {
+                targetContentOffset.pointee = adjusted
+            }
+        }
     }
 }

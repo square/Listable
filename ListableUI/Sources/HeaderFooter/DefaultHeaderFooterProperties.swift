@@ -24,9 +24,16 @@ public struct DefaultHeaderFooterProperties<Content:HeaderFooterContent>
     
     public init(
         sizing : Sizing? = nil,
-        layouts : HeaderFooterLayouts? = nil
+        layouts : HeaderFooterLayouts? = nil,
+        configure : (inout Self) -> () = { _ in }
     ) {
         self.sizing = sizing
         self.layouts = layouts
+        
+        configure(&self)
+    }
+    
+    public static func defaults(with configure : (inout Self) -> () = { _ in }) -> Self {
+        .init(configure: configure)
     }
 }

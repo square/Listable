@@ -33,12 +33,19 @@ public struct DefaultItemProperties<Content:ItemContent>
         layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil
+        swipeActions : SwipeActionsConfiguration? = nil,
+        configure : (inout Self) -> () = { _ in }
     ) {
         self.sizing = sizing
         self.layouts = layouts
         self.selectionStyle = selectionStyle
         self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.swipeActions = swipeActions
+        
+        configure(&self)
+    }
+    
+    public static func defaults(with configure : (inout Self) -> () = { _ in }) -> Self {
+        .init(configure: configure)
     }
 }

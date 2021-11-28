@@ -110,6 +110,12 @@ public protocol AnyListLayout : AnyObject
         at indexPath: IndexPath,
         withTargetPosition position: CGPoint
     )
+    
+    //
+    // MARK: Adjusting Target Content Offset
+    //
+    
+    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint?
 }
 
 
@@ -117,6 +123,8 @@ extension AnyListLayout
 {
     public func setZIndexes()
     {
+        self.content.containerHeader.zIndex = 6
+        
         self.content.header.zIndex = 5
         
         self.content.sections.forEachWithIndex { sectionIndex, _, section in
@@ -141,6 +149,11 @@ extension AnyListLayout
     ) {
         // Nothing. Just a default implementation.
     }
+    
+    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
+        // Nothing. Just a default implementation.
+        return nil
+    }
 }
 
 
@@ -155,16 +168,10 @@ extension AnyListLayout
             height: collectionView.bounds.size.height
         )
     }
-}
-
-
-extension AnyListLayout
-{
+    
     public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
     {
-        guard self.stickySectionHeaders else {
-            return
-        }
+        guard self.stickySectionHeaders else { return }
         
         let visibleContentFrame = self.visibleContentFrame(for: collectionView)
         
@@ -272,6 +279,50 @@ extension AnyListLayout
                     $0 += additionalOffset
                 }
             }
+        }
+    }
+    
+    /// For the given content offset and velocity, returns the index path of the first item.
+    public func firstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> ListLayoutContent.ContentItem? {
+        
+        let rect : CGRect = self.rectForFindingFirstFullyVisibleItem(
+            after: contentOffset,
+            velocity: velocity
+        )
+
+        let items = self.content.content(
+            in: rect,
+            alwaysIncludeOverscroll: false
+        )
+        
+        let sorted = items.sorted {
+            $0.indexPath < $1.indexPath
+        }
+        
+        let velocity = direction.y(for: velocity)
+        
+        if velocity <= 0 {
+            
+        } else {
+            
+        }
+        
+        fatalError()
+    }
+    
+    func rectForFindingFirstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> CGRect {
+        
+        /// The height used here doesn't really matter; it just needs to be
+        /// tall enough to make sure we end up with at least one overlapping item.
+        
+        let velocity = direction.y(for: velocity)
+        let height : CGFloat = 500
+        let heightOffset = velocity < 0 ? -height : 0
+    
+        return direction.switch {
+            return CGRect(x: 0, y: contentOffset.y - heightOffset, width: content.contentSize.width, height: height)
+        } horizontal: {
+            return CGRect(x: contentOffset.x - heightOffset, y: 0, width: height, height: content.contentSize.height)
         }
     }
 }
