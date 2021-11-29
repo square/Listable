@@ -10,6 +10,8 @@
 
 - The `.flow` layout type has been added, to support flow and grid style layouts.
 
+- `ListView.contentSize` will now also provide access to the natural width of a layout if the layout supports natural width calculation. This is useful, for example, to show a `.table` layout in a popover – you can now know how wide to render the popover.
+
 ### Removed
 
 - The `.experimental_grid` layout type has been removed; it is replaced by `.flow`.

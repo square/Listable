@@ -2,6 +2,17 @@
   ▿ contentSize: (200.0, 995.0)
     - width: 200.0
     - height: 995.0
+  ▿ naturalContentWidth: Optional(130.0)
+    - some: 130.0
+  ▿ containerHeader: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (20.0, 0.0, 140.0, 50.0)))
+    ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+      ▿ frame: (20.0, 0.0, 140.0, 50.0)
+        ▿ origin: (20.0, 0.0)
+          - x: 20.0
+          - y: 0.0
+        ▿ size: (140.0, 50.0)
+          - width: 140.0
+          - height: 50.0
   ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (20.0, 60.0, 140.0, 50.0)))
     ▿ some: ListableUI.ListLayoutAttributes.Supplementary
       ▿ frame: (20.0, 60.0, 140.0, 50.0)

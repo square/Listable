@@ -47,6 +47,62 @@ class ListTests : XCTestCase {
         // Expecting one call for every header, footer, and item's content, background, and pressed background.
         XCTAssertEqual(callCount, 36)
     }
+    
+    func test_size() {
+        let constraint = SizeConstraint(width: .atMost(1234), height: .atMost(1234))
+        
+        XCTAssertEqual(
+            List.ListContent.size(
+                with: .init(
+                    contentSize: CGSize(width: 1200, height: 1000),
+                    naturalWidth: 900
+                ),
+            in: constraint,
+            horizontalFill: .fillParent,
+            verticalFill: .fillParent
+            ),
+            CGSize(width: 1234, height: 1234)
+        )
+        
+        XCTAssertEqual(
+            List.ListContent.size(
+                with: .init(
+                    contentSize: CGSize(width: 1200, height: 1000),
+                    naturalWidth: 900
+                ),
+                in: constraint,
+                horizontalFill: .natural,
+                verticalFill: .fillParent
+            ),
+            CGSize(width: 900, height: 1234)
+        )
+        
+        XCTAssertEqual(
+            List.ListContent.size(
+                with: .init(
+                    contentSize: CGSize(width: 1200, height: 1000),
+                    naturalWidth: nil
+                ),
+                in: constraint,
+                horizontalFill: .natural,
+                verticalFill: .fillParent
+            ),
+            CGSize(width: 1200, height: 1234)
+        )
+        
+        XCTAssertEqual(
+            List.ListContent.size(
+                with: .init(
+                    contentSize: CGSize(width: 1200, height: 1000),
+                    naturalWidth: 900
+                ),
+                in: constraint,
+                horizontalFill: .natural,
+                verticalFill: .natural
+            ),
+            CGSize(width: 900, height: 1000)
+        )
+    }
 }
 
 

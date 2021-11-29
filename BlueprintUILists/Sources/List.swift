@@ -50,8 +50,8 @@ public struct List : Element
     
     /// How the `List` is measured when the element is laid out
     /// by Blueprint.  Defaults to `.fillParent`, which means
-    /// it will take up all the size it is given. You can change this to
-    /// `.measureContent` to instead measure the optimal size.
+    /// it will take up all the height it is given. You can change this to
+    /// `.measureContent` to instead measure the optimal height.
     ///
     /// See the `List.Measurement` documentation for more.
     public var measurement : List.Measurement
@@ -107,7 +107,7 @@ public struct List : Element
 
 extension List {
     
-    fileprivate struct ListContent : Element {
+    struct ListContent : Element {
         
         var properties : ListProperties
         var measurement : List.Measurement
@@ -122,19 +122,25 @@ extension List {
             properties.environment.blueprintEnvironment = environment
             
             self.properties = properties
-            self.measurement = measurement
+            
+            if measurement.needsMeasurement {
+                self.measurement = measurement
+            } else {
+                self.measurement = .fillParent
+            }
         }
         
         // MARK: Element
             
         public var content : ElementContent {
+            
             switch self.measurement {
             case .fillParent:
                 return ElementContent { constraint -> CGSize in
                     constraint.maximum
                 }
                 
-            case .measureContent(let key, let limit):
+            case .measureContent(let key, let horizontalFill, let verticalFill, let limit):
                 return ElementContent(
                     measurementCachingKey: {
                         if let key = key {
@@ -144,10 +150,17 @@ extension List {
                         }
                     }()
                 ) { constraint -> CGSize in
-                    ListView.contentSize(
+                    let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
                         itemLimit: limit
+                    )
+                    
+                    return Self.size(
+                        with: measurements,
+                        in: constraint,
+                        horizontalFill: horizontalFill,
+                        verticalFill: verticalFill
                     )
                 }
             }
@@ -164,6 +177,37 @@ extension List {
                     listView.configure(with: self.properties)
                 }
             }
+        }
+        
+        static func size(
+            with size : MeasuredListSize,
+            in constraint : SizeConstraint,
+            horizontalFill : Measurement.FillRule,
+            verticalFill : Measurement.FillRule
+        ) -> CGSize
+        {
+            let width : CGFloat = {
+                switch horizontalFill {
+                case .fillParent:
+                    return constraint.maximum.width
+                case .natural:
+                    return size.naturalWidth ?? size.contentSize.width
+                }
+            }()
+            
+            let height : CGFloat = {
+                switch verticalFill {
+                case .fillParent:
+                    return constraint.maximum.width
+                case .natural:
+                    return size.contentSize.height
+                }
+            }()
+            
+            return CGSize(
+                width: width,
+                height: height
+            )
         }
     }
 }
