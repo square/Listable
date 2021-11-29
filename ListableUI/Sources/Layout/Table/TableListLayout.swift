@@ -404,6 +404,10 @@ final class TableListLayout : ListLayout
     // MARK: Performing Layouts
     //
     
+    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
+        self.layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetItem
+    }
+    
     func updateLayout(in context : ListLayoutLayoutContext)
     {
         
@@ -775,24 +779,6 @@ final class TableListLayout : ListLayout
         //
         
         self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
-    }
-    
-    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
-        
-        guard layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetItem else {
-            return nil
-        }
-        
-        guard let item = self.firstFullyVisibleItem(
-            after: targetContentOffset,
-            velocity: velocity
-        ) else {
-            return nil
-        }
-        
-        print("indexPath: \(item.indexPath)")
-        
-        return nil
     }
     
     private func setItemPositions()

@@ -19,44 +19,88 @@ final class AnyListLayoutTests : XCTestCase {
             
     func test_firstFullyVisibleItem_after_velocity() {
         
-        self.testcase("vertical, forward") {
-            let layout = layoutForVisibleTests(direction: .vertical)
-
-            XCTAssertEqual(
-                layout.firstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 0),
-                    velocity: CGPoint(x: 0, y: 1)
-                )?.defaultFrame,
-                CGRect(x: 0, y: 0, width: 200, height: 100)
-            )
+        self.testcase("vertical") {
+            self.testcase("forward") {
+                let layout = layoutForVisibleTests(direction: .vertical)
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: 0, y: 1)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 0, width: 200, height: 100)
+                )
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 0, y: 50),
+                        velocity: CGPoint(x: 0, y: 1)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 100, width: 200, height: 100)
+                )
+            }
             
-            XCTAssertEqual(
-                layout.firstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 50),
-                    velocity: CGPoint(x: 0, y: 1)
-                )?.defaultFrame,
-                CGRect(x: 0, y: 100, width: 200, height: 100)
-            )
+            self.testcase("backward") {
+                let layout = layoutForVisibleTests(direction: .vertical)
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 0, y: 150),
+                        velocity: CGPoint(x: 0, y: -1)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 0, width: 200, height: 100)
+                )
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 0, y: 250),
+                        velocity: CGPoint(x: 0, y: -1)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 100, width: 200, height: 100)
+                )
+            }
         }
         
-        self.testcase("vertical, backward") {
-            let layout = layoutForVisibleTests(direction: .vertical)
+        self.testcase("horizontal") {
+            self.testcase("forward") {
+                let layout = layoutForVisibleTests(direction: .horizontal)
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: 1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 0, width: 100, height: 200)
+                )
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 50, y: 0),
+                        velocity: CGPoint(x: 1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 100, y: 0, width: 100, height: 200)
+                )
+            }
             
-            XCTAssertEqual(
-                layout.firstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 150),
-                    velocity: CGPoint(x: 0, y: -1)
-                )?.defaultFrame,
-                CGRect(x: 0, y: 0, width: 200, height: 100)
-            )
-            
-            XCTAssertEqual(
-                layout.firstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 250),
-                    velocity: CGPoint(x: 0, y: -1)
-                )?.defaultFrame,
-                CGRect(x: 0, y: 100, width: 200, height: 100)
-            )
+            self.testcase("backward") {
+                let layout = layoutForVisibleTests(direction: .horizontal)
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 150, y: 0),
+                        velocity: CGPoint(x: -1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 0, y: 0, width: 100, height: 200)
+                )
+                
+                XCTAssertEqual(
+                    layout.firstFullyVisibleItem(
+                        after: CGPoint(x: 250, y: 0),
+                        velocity: CGPoint(x: -1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 100, y: 0, width: 100, height: 200)
+                )
+            }
         }
     }
     

@@ -124,7 +124,7 @@ public protocol AnyListLayout : AnyObject
     // MARK: Adjusting Target Content Offset
     //
     
-    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint?
+    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool
 }
 
 
@@ -178,9 +178,8 @@ extension AnyListLayout
         // Nothing. Just a default implementation.
     }
     
-    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
-        // Nothing. Just a default implementation.
-        return nil
+    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
+        false
     }
 }
 
@@ -314,10 +313,38 @@ extension AnyListLayout
             }
         }
     }
-    
-    /// For the given content offset and velocity, returns the index path of the first item.
-    public func firstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> ListLayoutContent.ContentItem? {
+}
+
+
+extension AnyListLayout
+{
+    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
         
+        guard self.shouldAdjustTargetContentOffsetOnDidEndScrolling() else { return nil }
+        
+        let (scrollDirection, item) = self.firstFullyVisibleItem(
+            after: targetContentOffset,
+            velocity: velocity
+        )
+        
+        guard scrollDirection == .forward else { return nil }
+        
+        guard let item = item else { return nil }
+        
+        return direction.switch {
+            // TODO: Include left padding here...
+            CGPoint(x: targetContentOffset.x, y: item.leadingEdge)
+        } horizontal: {
+            CGPoint(x: item.leadingEdge, y: targetContentOffset.y)
+        }
+
+    }
+    
+    func firstFullyVisibleItem(
+        after contentOffset : CGPoint,
+        velocity : CGPoint
+    ) -> (ScrollDirection, AdjustTargetContentOffsetItem?)
+    {
         let rect : CGRect = self.rectForFindingFirstFullyVisibleItem(
             after: contentOffset,
             velocity: velocity
@@ -329,28 +356,31 @@ extension AnyListLayout
             in: rect,
             alwaysIncludeOverscroll: false,
             includeUnpopulated: false
-        ).sorted {
-            switch scrollDirection {
-            case .forward:
-                return direction.minY(for: $0.defaultFrame) < direction.minY(for: $1.defaultFrame)
-            case .backward:
-                return direction.maxY(for: $0.defaultFrame) > direction.maxY(for: $1.defaultFrame)
+        ).map { item in
+            AdjustTargetContentOffsetItem(
+                item: item,
+                leadingEdge: scrollDirection.leadingRectEdge(
+                    with: direction,
+                    for: item.defaultFrame
+                )
+            )
+        }.sorted { lhs, rhs in
+            scrollDirection.ifForward {
+                direction.minY(for: lhs.item.defaultFrame) < direction.minY(for: rhs.item.defaultFrame)
+            } ifBackward: {
+                direction.maxY(for: lhs.item.defaultFrame) > direction.maxY(for: rhs.item.defaultFrame)
             }
         }
 
-        return items.first { item in
-            let leadingEdge = scrollDirection.leadingRectEdge(
-                with: direction,
-                for: item.defaultFrame
-            )
-            
-            switch scrollDirection {
-            case .forward:
-                return leadingEdge >= direction.y(for: contentOffset)
-            case .backward:
-                return leadingEdge <= direction.y(for: contentOffset)
+        let firstItem = items.first { item in
+            return scrollDirection.ifForward {
+                item.leadingEdge >= direction.y(for: contentOffset)
+            } ifBackward: {
+                item.leadingEdge <= direction.y(for: contentOffset)
             }
         }
+        
+        return (scrollDirection, firstItem)
     }
     
     func rectForFindingFirstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> CGRect {
@@ -372,6 +402,14 @@ extension AnyListLayout
 }
 
 
+struct AdjustTargetContentOffsetItem {
+    
+    var item : ListLayoutContent.ContentItem
+    
+    var leadingEdge : CGFloat
+}
+
+
 enum ScrollDirection : Equatable {
     case forward
     case backward
@@ -385,14 +423,17 @@ enum ScrollDirection : Equatable {
     }
     
     func leadingRectEdge(with direction : LayoutDirection, for rect : CGRect) -> CGFloat {
-        // TODO: is this backwards??
-        switch self {
-        case .forward:
-            return direction.minY(for: rect)
-        case .backward:
-            return direction.maxY(for: rect)
+        self.ifForward {
+            direction.minY(for: rect)
+        } ifBackward: {
+            direction.maxY(for: rect)
         }
     }
     
-    
+    func ifForward<Value>(_ ifForward : () -> Value, ifBackward : () -> Value) -> Value {
+        switch self {
+        case .forward: return ifForward()
+        case .backward: return ifBackward()
+        }
+    }
 }

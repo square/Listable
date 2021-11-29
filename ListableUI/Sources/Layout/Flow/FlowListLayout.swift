@@ -587,6 +587,10 @@ final class FlowListLayout : ListLayout {
         /// No updates needed outside the regular `layout` method.
     }
     
+    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
+        self.layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetRow
+    }
+    
     func layout(
         delegate: CollectionViewLayoutDelegate?,
         in context: ListLayoutLayoutContext

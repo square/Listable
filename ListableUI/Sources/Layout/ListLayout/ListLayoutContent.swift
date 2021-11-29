@@ -311,31 +311,6 @@ public protocol ListLayoutContentItem : AnyObject
 
 extension ListLayoutContent
 {
-    public enum ContentItem {
-        
-        case item(ListLayoutContent.ItemInfo, UICollectionViewLayoutAttributes)
-        
-        case supplementary(ListLayoutContent.SupplementaryItemInfo, UICollectionViewLayoutAttributes)
-        
-        public var collectionViewLayoutAttributes : UICollectionViewLayoutAttributes {
-            switch self {
-            case .item(_, let attributes): return attributes
-            case .supplementary(_, let attributes): return attributes
-            }
-        }
-        
-        public var indexPath : IndexPath {
-            self.collectionViewLayoutAttributes.indexPath
-        }
-        
-        public var defaultFrame : CGRect {
-            switch self {
-            case .item(let item, _): return item.frame
-            case .supplementary(let supplementary, _): return supplementary.defaultFrame
-            }
-        }
-    }
-    
     public final class SectionInfo
     {
         let state : PresentationState.SectionState
@@ -523,6 +498,31 @@ extension ListLayoutContent
             attributes.zIndex = self.zIndex
             
             return attributes
+        }
+    }
+    
+    enum ContentItem {
+        
+        case item(ListLayoutContent.ItemInfo, UICollectionViewLayoutAttributes)
+        
+        case supplementary(ListLayoutContent.SupplementaryItemInfo, UICollectionViewLayoutAttributes)
+        
+        public var collectionViewLayoutAttributes : UICollectionViewLayoutAttributes {
+            switch self {
+            case .item(_, let attributes): return attributes
+            case .supplementary(_, let attributes): return attributes
+            }
+        }
+        
+        public var indexPath : IndexPath {
+            self.collectionViewLayoutAttributes.indexPath
+        }
+        
+        public var defaultFrame : CGRect {
+            switch self {
+            case .item(let item, _): return item.frame
+            case .supplementary(let supplementary, _): return supplementary.defaultFrame
+            }
         }
     }
 }
