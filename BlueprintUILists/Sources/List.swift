@@ -107,7 +107,7 @@ public struct List : Element
 
 extension List {
     
-    fileprivate struct ListContent : Element {
+    struct ListContent : Element {
         
         var properties : ListProperties
         var measurement : List.Measurement
@@ -150,32 +150,18 @@ extension List {
                         }
                     }()
                 ) { constraint -> CGSize in
-                    
-                    let size = ListView.contentSize(
+                    let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
                         itemLimit: limit
                     )
                     
-                    let width : CGFloat = {
-                        switch horizontalFill {
-                        case .fillParent:
-                            return constraint.maximum.width
-                        case .natural:
-                            return size.naturalWidth ?? size.contentSize.width
-                        }
-                    }()
-                    
-                    let height : CGFloat = {
-                        switch verticalFill {
-                        case .fillParent:
-                            return constraint.maximum.width
-                        case .natural:
-                            return size.contentSize.height
-                        }
-                    }()
-                    
-                    return CGSize(width: width, height: height)
+                    return Self.size(
+                        with: measurements,
+                        in: constraint,
+                        horizontalFill: horizontalFill,
+                        verticalFill: verticalFill
+                    )
                 }
             }
         }
@@ -191,6 +177,37 @@ extension List {
                     listView.configure(with: self.properties)
                 }
             }
+        }
+        
+        static func size(
+            with size : MeasuredListSize,
+            in constraint : SizeConstraint,
+            horizontalFill : Measurement.FillRule,
+            verticalFill : Measurement.FillRule
+        ) -> CGSize
+        {
+            let width : CGFloat = {
+                switch horizontalFill {
+                case .fillParent:
+                    return constraint.maximum.width
+                case .natural:
+                    return size.naturalWidth ?? size.contentSize.width
+                }
+            }()
+            
+            let height : CGFloat = {
+                switch verticalFill {
+                case .fillParent:
+                    return constraint.maximum.width
+                case .natural:
+                    return size.contentSize.height
+                }
+            }()
+            
+            return CGSize(
+                width: width,
+                height: height
+            )
         }
     }
 }

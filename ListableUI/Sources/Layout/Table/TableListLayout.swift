@@ -779,9 +779,9 @@ final class TableListLayout : ListLayout
         self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
         
         self.content.naturalContentWidth = self.direction.switch {
-            return content.maxMeasuredValue(for: \.width) + bounds.padding.right + bounds.padding.left
+            content.maxMeasuredValue(for: \.width) + bounds.padding.right + bounds.padding.left
         } horizontal: {
-            return content.maxMeasuredValue(for: \.width) + bounds.padding.top + bounds.padding.bottom
+            content.maxMeasuredValue(for: \.height) + bounds.padding.top + bounds.padding.bottom
         }
     }
     
