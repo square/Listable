@@ -69,9 +69,19 @@ extension ListView
 }
 
 
+/// Provides sizing and width information about the measurement of a list's content.
 public struct MeasuredListSize : Equatable {
     
+    /// The content size of the list.
     public var contentSize : CGSize
+    
+    /// If it supports it, this value will contain the "natural" width of the list's
+    /// content. For example, if you give a table layout 1000pts of width to lay out, but
+    /// its content only requires 200pts of width to lay out, this value will be 200pt.
+    ///
+    /// ### Note
+    /// Not all layouts support or provide a natural width. For example, a `.flow` layout
+    /// cannot provide a natural width because it takes up as much space as it as given.
     public var naturalWidth : CGFloat?
     
     public init(
