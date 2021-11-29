@@ -35,15 +35,7 @@ public extension Item where Content == EmbeddedList
         configure : ListProperties.Configure
     ) -> Item<EmbeddedList>
     {
-        Item(
-            EmbeddedList(identifier: identifier, configure: configure),
-            
-            sizing: sizing.toStandardSizing,
-            
-            layouts: .init {
-                $0.table = .init(width: .fill)
-            }
-        )
+        Item(EmbeddedList(identifier: identifier, sizing:sizing, configure: configure))
     }
 }
 
@@ -57,22 +49,29 @@ public extension Item where Content == EmbeddedList
 /// Internal TODO: This should use a coordinator to manage the scroll position of the contained list
 /// during cell reuse.
 ///
-public struct EmbeddedList : ItemContent
+public struct EmbeddedList : ItemContent, KeyPathEquivalentContent
 {
     //
     // MARK: Public Properties
     //
     
-    public var properties : ListProperties
     public var contentIdentifier : AnyHashable
+    
+    public var sizing : EmbeddedList.Sizing
+    
+    public var properties : ListProperties
     
     //
     // MARK: Initialization
     //
     
-    public init<Identifier:Hashable>(identifier : Identifier, configure : ListProperties.Configure)
-    {
+    public init<Identifier:Hashable>(
+        identifier : Identifier,
+        sizing : EmbeddedList.Sizing,
+        configure : ListProperties.Configure
+    ) {
         self.contentIdentifier = AnyHashable(identifier)
+        self.sizing = sizing
         
         self.properties = ListProperties(
             animatesChanges: true,
@@ -104,14 +103,22 @@ public struct EmbeddedList : ItemContent
         views.content.configure(with: self.properties)
     }
     
-    public func isEquivalent(to other: EmbeddedList) -> Bool
-    {
-        return false
+    public static func isEquivalent(using comparisons: inout KeyPathEquivalent<EmbeddedList>) {
+        comparisons.add(\.sizing)
     }
     
     public static func createReusableContentView(frame : CGRect) -> ListView
     {
         ListView(frame: frame)
+    }
+    
+    public var defaultItemProperties: DefaultProperties {
+        .init(
+            sizing: sizing.toStandardSizing,
+            layouts: .init {
+                $0.table = .init(width: .fill)
+            }
+        )
     }
 }
 
