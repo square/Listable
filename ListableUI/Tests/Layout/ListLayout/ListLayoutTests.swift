@@ -17,143 +17,242 @@ final class ListLayoutTests : XCTestCase
 
 final class AnyListLayoutTests : XCTestCase {
             
-    func test_firstFullyVisibleItem_after_velocity() {
+    func test_onDidEndDraggingTargetContentOffset_for_velocity() {
         
         self.testcase("vertical") {
+            let layout = layoutForVisibleTests(direction: .vertical)
+            
             self.testcase("forward") {
-                let layout = layoutForVisibleTests(direction: .vertical)
-                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 0, y: 0),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 0),
                         velocity: CGPoint(x: 0, y: 1)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 0, width: 200, height: 100)
+                    ),
+                    CGPoint(x: 0, y: 0.0)
                 )
                 
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 0, y: 50),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 100),
                         velocity: CGPoint(x: 0, y: 1)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 100, width: 200, height: 100)
+                    ),
+                    CGPoint(x: 0, y: 100.0)
                 )
             }
             
             self.testcase("backward") {
-                let layout = layoutForVisibleTests(direction: .vertical)
-                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 0, y: 150),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 0),
                         velocity: CGPoint(x: 0, y: -1)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 0, width: 200, height: 100)
+                    ),
+                    nil
                 )
                 
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 0, y: 250),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 100),
                         velocity: CGPoint(x: 0, y: -1)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 100, width: 200, height: 100)
+                    ),
+                    CGPoint(x: 0, y: 0)
                 )
             }
         }
         
         self.testcase("horizontal") {
+            let layout = layoutForVisibleTests(direction: .horizontal)
+
             self.testcase("forward") {
-                let layout = layoutForVisibleTests(direction: .horizontal)
-                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 0, y: 0),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 0),
                         velocity: CGPoint(x: 1, y: 0)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 0, width: 100, height: 200)
+                    ),
+                    CGPoint(x: 0.0, y: 0.0)
                 )
                 
+                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 50, y: 0),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 100, y: 0),
                         velocity: CGPoint(x: 1, y: 0)
-                    )?.defaultFrame,
-                    CGRect(x: 100, y: 0, width: 100, height: 200)
+                    ),
+                    CGPoint(x: 100, y: 0.0)
                 )
             }
-            
+
             self.testcase("backward") {
-                let layout = layoutForVisibleTests(direction: .horizontal)
-                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 150, y: 0),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 0, y: 0),
                         velocity: CGPoint(x: -1, y: 0)
-                    )?.defaultFrame,
-                    CGRect(x: 0, y: 0, width: 100, height: 200)
+                    ),
+                    nil
                 )
                 
+                
                 XCTAssertEqual(
-                    layout.firstFullyVisibleItem(
-                        after: CGPoint(x: 250, y: 0),
+                    layout.onDidEndDraggingTargetContentOffset(
+                        for: CGPoint(x: 100, y: 0),
                         velocity: CGPoint(x: -1, y: 0)
-                    )?.defaultFrame,
-                    CGRect(x: 100, y: 0, width: 100, height: 200)
+                    ),
+                    CGPoint(x: 0.0, y: 0.0)
                 )
             }
         }
     }
     
-    func test_rectForFindingFirstFullyVisibleItem_after_velocity() {
-
+    func test_itemToScrollToOnDidEndDragging_after_velocity() {
+        
         self.testcase("vertical") {
             let layout = layoutForVisibleTests(direction: .vertical)
-
-            XCTAssertEqual(
-                layout.rectForFindingFirstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 100),
-                    velocity: CGPoint(x: 0, y: 1)
-                ),
-                CGRect(x: 0, y: 100, width: 200, height: 1000)
-            )
             
-            XCTAssertEqual(
-                layout.rectForFindingFirstFullyVisibleItem(
-                    after: CGPoint(x: 0, y: 100),
-                    velocity: CGPoint(x: 0, y: -1)
-                ),
-                CGRect(x: 0, y: -900, width: 200, height: 1000)
-            )
+            self.testcase("forward") {
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: 0, y: 1)
+                    )?.defaultFrame,
+                    CGRect(x: 20, y: 10, width: 140, height: 100)
+                )
+                
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 50),
+                        velocity: CGPoint(x: 0, y: 1)
+                    )?.defaultFrame,
+                    CGRect(x: 20, y: 110, width: 140, height: 100)
+                )
+            }
+            
+            self.testcase("backward") {
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: 0, y: -1)
+                    )?.defaultFrame,
+                    nil
+                )
+                
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 350),
+                        velocity: CGPoint(x: 0, y: -1)
+                    )?.defaultFrame,
+                    CGRect(x: 20, y: 310, width: 140, height: 100)
+                )
+            }
         }
         
         self.testcase("horizontal") {
             let layout = layoutForVisibleTests(direction: .horizontal)
             
-            XCTAssertEqual(
-                layout.rectForFindingFirstFullyVisibleItem(
-                    after: CGPoint(x: 100, y: 0),
-                    velocity: CGPoint(x: 1, y: 0)
-                ),
-                CGRect(x: 100, y: 0, width: 1000, height: 200)
-            )
+            self.testcase("forward") {
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: 1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 20, y: 10, width: 100, height: 160)
+                )
+                
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 50, y: 0),
+                        velocity: CGPoint(x: 1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 120, y: 10, width: 100, height: 160)
+                )
+            }
             
-            XCTAssertEqual(
-                layout.rectForFindingFirstFullyVisibleItem(
-                    after: CGPoint(x: 100, y: 0),
-                    velocity: CGPoint(x: -1, y: 0)
-                ),
-                CGRect(x: -900, y: 0, width: 1000, height: 200)
-            )
+            self.testcase("backward") {
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 0),
+                        velocity: CGPoint(x: -1, y: 0)
+                    )?.defaultFrame,
+                    nil
+                )
+                
+                XCTAssertEqual(
+                    layout.itemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 350, y: 0),
+                        velocity: CGPoint(x: -1, y: 0)
+                    )?.defaultFrame,
+                    CGRect(x: 320, y: 10, width: 100, height: 160)
+                )
+            }
         }
-        
     }
     
-    private func layoutForVisibleTests(direction: LayoutDirection) -> AnyListLayout {
+    func test_rectForFindingItemToScrollToOnDidEndDragging_after_velocity() {
+
+        self.testcase("vertical") {
+            let layout = layoutForVisibleTests(direction: .vertical)
+
+            self.testcase("forward") {
+                XCTAssertEqual(
+                    layout.rectForFindingItemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 100),
+                        velocity: CGPoint(x: 0, y: 1)
+                    ),
+                    CGRect(x: 0, y: 100, width: 200, height: 1000)
+                )
+            }
+            
+            self.testcase("backward") {
+                XCTAssertEqual(
+                    layout.rectForFindingItemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 0, y: 100),
+                        velocity: CGPoint(x: 0, y: -1)
+                    ),
+                    CGRect(x: 0, y: -900, width: 200, height: 1000)
+                )
+            }
+        }
+        
+        self.testcase("horizontal") {
+            let layout = layoutForVisibleTests(direction: .horizontal)
+            
+            self.testcase("forward") {
+                XCTAssertEqual(
+                    layout.rectForFindingItemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 100, y: 0),
+                        velocity: CGPoint(x: 1, y: 0)
+                    ),
+                    CGRect(x: 100, y: 0, width: 1000, height: 200)
+                )
+            }
+            
+            self.testcase("backward") {
+                XCTAssertEqual(
+                    layout.rectForFindingItemToScrollToOnDidEndDragging(
+                        after: CGPoint(x: 100, y: 0),
+                        velocity: CGPoint(x: -1, y: 0)
+                    ),
+                    CGRect(x: -900, y: 0, width: 1000, height: 200)
+                )
+            }
+        }
+    }
+    
+    private func layoutForVisibleTests(
+        direction: LayoutDirection,
+        adjustsContentOffset : Bool = true
+    ) -> AnyListLayout {
         
         let list : ListProperties = .default { list in
             
             list.layout = .table {
                 $0.direction = direction
+                
+                $0.bounds = .init(
+                    padding: UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
+                )
+                
+                if adjustsContentOffset {
+                    $0.onDidEndDragging = .adjustsScrollToShowFullTargetItem
+                }
             }
             
             list.add {

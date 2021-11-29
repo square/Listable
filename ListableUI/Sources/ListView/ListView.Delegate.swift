@@ -338,14 +338,14 @@ extension ListView
             withVelocity velocity: CGPoint,
             targetContentOffset: UnsafeMutablePointer<CGPoint>
         ) {
-            let adjusted = layoutManager.layout.adjust(
-                targetContentOffset: targetContentOffset.pointee,
-                with: velocity
-            )
-            
-            if let adjusted = adjusted {
-                targetContentOffset.pointee = adjusted
+            guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
+                for: scrollView.contentOffset,
+                velocity: velocity
+            ) else {
+                return
             }
+            
+            targetContentOffset.pointee = target
         }
     }
 }

@@ -68,6 +68,7 @@ final class LayoutDescriptionTests : XCTestCase
             
             ListLayoutAppearanceProperties(
                 direction: .horizontal,
+                bounds: nil,
                 stickySectionHeaders: false,
                 scrollViewProperties: .init(
                     isPagingEnabled: false,
@@ -110,6 +111,10 @@ private struct TestLayoutAppearance : ListLayoutAppearance
         allowsVerticalScrollIndicator: true,
         allowsHorizontalScrollIndicator: true
     )
+    
+    var bounds: ListContentBounds? {
+        nil
+    }
     
     var anotherValue : String
 }

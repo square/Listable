@@ -43,6 +43,8 @@ public struct RetailGridAppearance : ListLayoutAppearance
         )
     }
     
+    public let bounds: ListContentBounds? = nil
+    
     // MARK: Properties
     
     public var layout : Layout

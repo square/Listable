@@ -75,6 +75,8 @@ public struct PagedAppearance : ListLayoutAppearance
         )
     }
     
+    public let bounds: ListContentBounds? = nil
+    
     // MARK: Properties
     
     /// If scroll indicators should be visible along the scrollable axis.

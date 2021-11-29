@@ -76,6 +76,10 @@ extension ListLayout
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         self.layoutAppearance.scrollViewProperties
     }
+    
+    public var bounds : ListContentBounds? {
+        self.layoutAppearance.bounds
+    }
 }
 
 
@@ -91,6 +95,8 @@ public protocol AnyListLayout : AnyObject
     var content : ListLayoutContent { get }
     
     var direction : LayoutDirection { get }
+    
+    var bounds : ListContentBounds? { get }
     
     var stickySectionHeaders : Bool { get }
     
@@ -318,122 +324,99 @@ extension AnyListLayout
 
 extension AnyListLayout
 {
-    func adjust(targetContentOffset : CGPoint, with velocity : CGPoint) -> CGPoint? {
-        
+    func onDidEndDraggingTargetContentOffset(
+        for targetContentOffset : CGPoint,
+        velocity : CGPoint
+    ) -> CGPoint?
+    {
         guard self.shouldAdjustTargetContentOffsetOnDidEndScrolling() else { return nil }
         
-        let (scrollDirection, item) = self.firstFullyVisibleItem(
+        guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
             velocity: velocity
-        )
+        ) else {
+            return nil
+        }
         
-        guard scrollDirection == .forward else { return nil }
+        let leadingEdge = direction.minY(for: item.defaultFrame)
         
-        guard let item = item else { return nil }
+        let padding = self.bounds?.padding ?? .zero
         
         return direction.switch {
-            // TODO: Include left padding here...
-            CGPoint(x: targetContentOffset.x, y: item.leadingEdge)
+            CGPoint(x: 0.0, y: leadingEdge - padding.top)
         } horizontal: {
-            CGPoint(x: item.leadingEdge, y: targetContentOffset.y)
+            CGPoint(x: leadingEdge - padding.left, y: 0.0)
         }
-
     }
     
-    func firstFullyVisibleItem(
+    func itemToScrollToOnDidEndDragging(
         after contentOffset : CGPoint,
         velocity : CGPoint
-    ) -> (ScrollDirection, AdjustTargetContentOffsetItem?)
+    ) -> ListLayoutContent.ContentItem?
     {
-        let rect : CGRect = self.rectForFindingFirstFullyVisibleItem(
+        let rect : CGRect = self.rectForFindingItemToScrollToOnDidEndDragging(
             after: contentOffset,
             velocity: velocity
         )
-
-        let scrollDirection = ScrollDirection(velocity: direction.y(for: velocity))
+        
+        let scrollDirection = ScrollVelocityDirection(direction.y(for: velocity))
         
         let items = self.content.content(
             in: rect,
             alwaysIncludeOverscroll: false,
             includeUnpopulated: false
-        ).map { item in
-            AdjustTargetContentOffsetItem(
-                item: item,
-                leadingEdge: scrollDirection.leadingRectEdge(
-                    with: direction,
-                    for: item.defaultFrame
-                )
-            )
-        }.sorted { lhs, rhs in
-            scrollDirection.ifForward {
-                direction.minY(for: lhs.item.defaultFrame) < direction.minY(for: rhs.item.defaultFrame)
-            } ifBackward: {
-                direction.maxY(for: lhs.item.defaultFrame) > direction.maxY(for: rhs.item.defaultFrame)
+        ).sorted { lhs, rhs in
+            switch scrollDirection {
+            case .forward:
+                return direction.minY(for: lhs.defaultFrame) < direction.minY(for: rhs.defaultFrame)
+            case .backward:
+                return direction.maxY(for: lhs.defaultFrame) > direction.maxY(for: rhs.defaultFrame)
             }
         }
 
-        let firstItem = items.first { item in
-            return scrollDirection.ifForward {
-                item.leadingEdge >= direction.y(for: contentOffset)
-            } ifBackward: {
-                item.leadingEdge <= direction.y(for: contentOffset)
+        return items.first { item in
+            let edge = direction.minY(for: item.defaultFrame)
+            let offset = direction.y(for: contentOffset)
+            
+            switch scrollDirection {
+            case .forward:
+                return edge >= offset
+            case .backward:
+                return edge <= offset
             }
         }
-        
-        return (scrollDirection, firstItem)
     }
     
-    func rectForFindingFirstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> CGRect {
+    func rectForFindingItemToScrollToOnDidEndDragging(
+        after contentOffset : CGPoint,
+        velocity : CGPoint
+    ) -> CGRect {
         
         /// The height used here doesn't really matter; it just needs to be
         /// tall enough to make sure we end up with at least one overlapping item,
         /// and thus we'll assume most layouts have at least one item in 1,000pts.
         
-        let scrollDirection = ScrollDirection(velocity: direction.y(for: velocity))
         let height : CGFloat = 1_000
-        let heightOffset = scrollDirection == .backward ? height : 0
+        let scrollDirection = ScrollVelocityDirection(direction.y(for: velocity))
+        let offset : CGFloat = scrollDirection == .backward ? 1_000 : 0
     
         return direction.switch {
-            return CGRect(x: 0, y: contentOffset.y - heightOffset, width: content.contentSize.width, height: height)
+            CGRect(x: 0, y: contentOffset.y - offset, width: content.contentSize.width, height: height)
         } horizontal: {
-            return CGRect(x: contentOffset.x - heightOffset, y: 0, width: height, height: content.contentSize.height)
+            CGRect(x: contentOffset.x - offset, y: 0, width: height, height: content.contentSize.height)
         }
     }
 }
 
-
-struct AdjustTargetContentOffsetItem {
-    
-    var item : ListLayoutContent.ContentItem
-    
-    var leadingEdge : CGFloat
-}
-
-
-enum ScrollDirection : Equatable {
+enum ScrollVelocityDirection {
     case forward
     case backward
     
-    init(velocity : CGFloat) {
+    init(_ velocity : CGFloat) {
         if velocity >= 0 {
             self = .forward
         } else {
             self = .backward
-        }
-    }
-    
-    func leadingRectEdge(with direction : LayoutDirection, for rect : CGRect) -> CGFloat {
-        self.ifForward {
-            direction.minY(for: rect)
-        } ifBackward: {
-            direction.maxY(for: rect)
-        }
-    }
-    
-    func ifForward<Value>(_ ifForward : () -> Value, ifBackward : () -> Value) -> Value {
-        switch self {
-        case .forward: return ifForward()
-        case .backward: return ifBackward()
         }
     }
 }
