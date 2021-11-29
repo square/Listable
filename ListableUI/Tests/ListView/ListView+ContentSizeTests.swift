@@ -19,11 +19,7 @@ class ListView_ContentSizeTests : XCTestCase
         /// 1) Ensure that both horizontal and vertical layouts work; the implementation for sizing
         /// their measurement views is different.
         ///
-        /// 2) Switching out the underlying layout type ensures that we are properly updating the
-        /// layout on the underlying static measurement view. If there are issues here;
-        /// latter tests after the first one will likely fail.
-        ///
-        /// 3) We loop over the cases to ensure the measurement is reported reliably; eg it doesn't
+        /// 2) We loop over the cases to ensure the measurement is reported reliably; eg it doesn't
         /// for some reason break after a few passes (eg due to measurement view cache reuse).
         
         let section = Section("section") { section in

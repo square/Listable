@@ -104,4 +104,20 @@ class ArrayTests: XCTestCase
             var value : Int?
         }
     }
+    
+    func test_popPassing() {
+        var array : [Int] = [1, 1, 2, 2, 3, 3]
+        
+        XCTAssertEqual(array.popPassing { $0 == 1 }, [1, 1])
+        XCTAssertEqual(array, [2, 2, 3, 3])
+        
+        XCTAssertEqual(array.popPassing { $0 == 2 }, [2, 2])
+        XCTAssertEqual(array, [3, 3])
+        
+        XCTAssertEqual(array.popPassing { $0 == 3 }, [3, 3])
+        XCTAssertEqual(array, [])
+        
+        XCTAssertEqual(array.popPassing { _ in XCTFail(); return false; }, [])
+        XCTAssertEqual(array, [])
+    }
 }

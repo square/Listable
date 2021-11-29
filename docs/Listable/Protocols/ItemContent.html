@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,27 +23,27 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (48% documented)
+         (58% documented)
       </p>
-
-      <p class="header-col--secondary">
+    
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
-
+      </div>
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       ItemContent Protocol Reference
     </p>
 
@@ -150,6 +150,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ContentInsetAdjustmentBehavior.html">ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/CustomWidth.html">CustomWidth</a>
@@ -358,22 +361,28 @@
                 <a class="nav-group-task-link" href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance.html">GridAppearance</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance.html">FlowAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemSizing.html">– ItemSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Layout.html">– Layout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowUnderflowAlignment.html">– RowUnderflowAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/ItemLayout.html">– ItemLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowItemsAlignment.html">– RowItemsAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/SectionLayout.html">– SectionLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/SectionLayout.html">– SectionLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/Spacings.html">– Spacings</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
@@ -469,6 +478,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -479,9 +491,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
@@ -610,7 +619,7 @@
             <h1>ItemContent</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ItemContent</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyItemConvertible.html">AnyItemConvertible</a></span></code></pre>
 
                 </div>
@@ -657,7 +666,7 @@ z-index 1) <code>BackgroundView</code></p>
                 <a name="//apple_ref/swift/Section/Identification" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Identification"></a>
-                  <h3 class="section-name"><p>Identification</p>
+                  <h3 class="section-name"><span>Identification</span>
 </h3>
                 </div>
               </div>
@@ -675,13 +684,13 @@ z-index 1) <code>BackgroundView</code></p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A <code>Hashable</code> type which is returned from <code>ItemContent/identifierValue-swift.property</code>,
+                        <p>A <code>Hashable</code> type which is returned from <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15identifierValue010IdentifierF0Qzvp">identifierValue</a></code>,
 which is used to identify the <code>ItemContent</code> when it put into a list.</p>
 
-<p>The <code>ItemContent/identifierValue-swift.property</code> is used to unique the item,
+<p>The <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15identifierValue010IdentifierF0Qzvp">identifierValue</a></code> is used to unique the item,
 control its lifetime, and identify it across update operations.</p>
 
-<p>See <code>ItemContent/identifierValue-swift.property</code> for more.</p>
+<p>See <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP15identifierValue010IdentifierF0Qzvp">identifierValue</a></code> for more.</p>
 
                       </div>
                       <div class="declaration">
@@ -898,7 +907,7 @@ additional type-salting and uniquing information in your <code>ItemContent/ident
                 <a name="//apple_ref/swift/Section/Tracking Changes" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Tracking%20Changes"></a>
-                  <h3 class="section-name"><p>Tracking Changes</p>
+                  <h3 class="section-name"><span>Tracking Changes</span>
 </h3>
                 </div>
               </div>
@@ -1015,7 +1024,7 @@ your list has an extremely high amount of ordering churn, you should not need to
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1036,7 +1045,7 @@ your list has an extremely high amount of ordering churn, you should not need to
                 <a name="//apple_ref/swift/Section/Default Item Properties" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Default%20Item%20Properties"></a>
-                  <h3 class="section-name"><p>Default Item Properties</p>
+                  <h3 class="section-name"><span>Default Item Properties</span>
 </h3>
                 </div>
               </div>
@@ -1090,7 +1099,7 @@ this <code>ItemContent</code>, if those values are not passed to the <code><a hr
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1111,7 +1120,7 @@ this <code>ItemContent</code>, if those values are not passed to the <code><a hr
                 <a name="//apple_ref/swift/Section/Applying To Displayed View" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Applying%20To%20Displayed%20View"></a>
-                  <h3 class="section-name"><p>Applying To Displayed View</p>
+                  <h3 class="section-name"><span>Applying To Displayed View</span>
 </h3>
                 </div>
               </div>
@@ -1169,14 +1178,14 @@ content into the passed in views.</p>
                         <p>When the <code>ItemContent</code> is on screen, controls how and when to apply updates
 to the view.</p>
 
-<p>Defaults to <code>ReappliesToVisibleView/always</code>.</p>
+<p>Defaults to <code><a href="../Enums/ReappliesToVisibleView.html#/s:10ListableUI22ReappliesToVisibleViewO6alwaysyA2CmF">always</a></code>.</p>
 
 <p>See <code><a href="../Enums/ReappliesToVisibleView.html">ReappliesToVisibleView</a></code> for a full discussion.</p>
 
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1197,7 +1206,7 @@ to the view.</p>
                 <a name="//apple_ref/swift/Section/Creating &amp; Providing Swipe Action Views" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Creating%20%26%20Providing%20Swipe%20Action%20Views"></a>
-                  <h3 class="section-name"><p>Creating &amp; Providing Swipe Action Views</p>
+                  <h3 class="section-name"><span>Creating &amp; Providing Swipe Action Views</span>
 </h3>
                 </div>
               </div>
@@ -1265,7 +1274,7 @@ A default implementation, which matches <code>UITableView</code>, is provided.</
                 <a name="//apple_ref/swift/Section/Creating &amp; Providing Content Views" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Creating%20%26%20Providing%20Content%20Views"></a>
-                  <h3 class="section-name"><p>Creating &amp; Providing Content Views</p>
+                  <h3 class="section-name"><span>Creating &amp; Providing Content Views</span>
 </h3>
                 </div>
               </div>
@@ -1337,7 +1346,7 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                 <a name="//apple_ref/swift/Section/Creating &amp; Providing Background Views" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Creating%20%26%20Providing%20Background%20Views"></a>
-                  <h3 class="section-name"><p>Creating &amp; Providing Background Views</p>
+                  <h3 class="section-name"><span>Creating &amp; Providing Background Views</span>
 </h3>
                 </div>
               </div>
@@ -1483,7 +1492,7 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                 <a name="//apple_ref/swift/Section/Content Coordination" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Content%20Coordination"></a>
-                  <h3 class="section-name"><p>Content Coordination</p>
+                  <h3 class="section-name"><span>Content Coordination</span>
 </h3>
                 </div>
               </div>
@@ -1674,7 +1683,7 @@ to avoid additional nesting, and to hoist your content up in your code.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1777,7 +1786,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
 <span class="kt">MyItem</span><span class="o">.</span><span class="nf">identifier</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>       <span class="c1">// 🚫 Error: MyItem's IdentifierValue is String.</span>
 </code></pre>
 
-<p>You can also read the identifier via  <code>ItemContent/identifier</code>, <code>Item/identifier</code> or <code>AnyItem/anyIdentifier</code>.</p>
+<p>You can also read the identifier via  <code><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentPAAE10identifierAA10IdentifierCyx0F5ValueQzGvp">identifier</a></code>, <code><a href="../Structs/Item.html#/s:10ListableUI4ItemV10identifierAA10IdentifierCyx0E5ValueQzGvp">identifier</a></code> or <code><a href="../Protocols/AnyItem.html#/s:10ListableUI7AnyItemP13anyIdentifierAA0cF0Cvp">anyIdentifier</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -1799,7 +1808,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
                 <a name="//apple_ref/swift/Section/Available where `Self:Equatable`" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Available%20where%20%60Self%3AEquatable%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Self:Equatable</code></p>
+                  <h3 class="section-name"><span>Available where <code>Self:Equatable</code></span>
 </h3>
                 </div>
               </div>
@@ -1820,7 +1829,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <h4>Default Implementation</h4>
                       <div class="default_impl abstract">
@@ -1846,9 +1855,8 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-11-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>

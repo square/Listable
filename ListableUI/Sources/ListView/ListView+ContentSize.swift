@@ -26,16 +26,16 @@ extension ListView
     /// content within the given `fittingSize`.
     ///
     /// - parameters:
-    ///     - fittingSize: The size that the content should be measured in. This is the maximum
+    ///    - fittingSize: The size that the content should be measured in. This is the maximum
     ///     size that will be returned from this method.
-    ///     - properties: The `ListProperties` which describe the content of the list.
-    ///     - itemLimit: How many items from the content should be measured. The lower this number
+    ///    - properties: The `ListProperties` which describe the content of the list.
+    ///    - safeAreaInsets: The safe area to include when performing the layout.
+    ///    - itemLimit: How many items from the content should be measured. The lower this number
     ///     (if lower then the count of items in the content), the faster this call will be, at the expense of a smaller
     ///     measurement size. If you know your `fittingSize` is constrained to, eg, the height of a device,
     ///     then relying on the default value of 50 is usually fine.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// This method attempts to be efficient – it does not allocate a `ListView` – instead it creates a layout,
     /// and presentation state – a subset of a usual list. It also re-uses measurement views across method calls
     /// (via static view caching) to further reduce allocations and improve speed and efficiency. Nevertheless,
@@ -46,49 +46,15 @@ extension ListView
     public static func contentSize(
         in fittingSize : CGSize,
         for properties : ListProperties,
+        safeAreaInsets : UIEdgeInsets = .zero,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
     ) -> MeasuredListSize
     {
-        /// 1) Create an instance of presentation state and the layout we can use to measure the list.
-        
-        let presentationState = PresentationState(
-            forMeasuringOnlyWith: {
-                if let limit = itemLimit {
-                    return properties.content.sliceTo(indexPath: IndexPath(item: 0, section: 0), plus: limit).content
-                } else {
-                    return properties.content
-                }
-            }(),
-            environment: properties.environment,
-            itemMeasurementCache: Self.itemMeasurementCache,
-            headerFooterMeasurementCache: Self.headerFooterMeasurementCache
+        let layout = properties.makeLayout(
+            in: fittingSize,
+            safeAreaInsets: safeAreaInsets,
+            itemLimit: itemLimit
         )
-        
-        /// 2) Create the layout used to measure the content.
-        
-        let layout = properties.layout.configuration.createPopulatedLayout(
-            appearance: properties.appearance,
-            behavior: properties.behavior,
-            content: { _ in
-                presentationState.toListLayoutContent(
-                    defaults: .init(itemInsertAndRemoveAnimations: .fade),
-                    environment: properties.environment
-                )
-            }
-        )
-        
-        /// 2b) Measure the content.
-
-        layout.layout(
-            delegate: nil,
-            in: .init(
-                viewBounds: CGRect(origin: .zero, size: fittingSize),
-                safeAreaInsets: .zero,
-                environment: properties.environment
-            )
-        )
-        
-        /// 3) Constrain the measurement to the `fittingSize`.
         
         let size = layout.content.contentSize
         

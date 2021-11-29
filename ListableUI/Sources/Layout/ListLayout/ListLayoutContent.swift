@@ -370,7 +370,6 @@ extension ListLayoutContent
         public var zIndex : Int = 0
         
         public var layouts : HeaderFooterLayouts {
-            // TODO: Why the ?? here
             self.state?.anyModel.layouts ?? .init()
         }
         

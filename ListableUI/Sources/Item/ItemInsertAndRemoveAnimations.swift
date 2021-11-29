@@ -12,19 +12,27 @@ public struct ItemInsertAndRemoveAnimations
 {
     public typealias Prepare = (inout ListContentLayoutAttributes) -> ()
     
+    public var name : String
+    
     public var onInsert : Prepare
     public var onRemoval : Prepare
     
     public init(
+        name : String,
         onInsert : @escaping Prepare,
         onRemoval : @escaping Prepare
     ) {
+        self.name = name
         self.onInsert = onInsert
         self.onRemoval = onRemoval
     }
     
-    public init(attributes : @escaping Prepare)
-    {
+    public init(
+        name : String,
+        attributes : @escaping Prepare
+    ) {
+        self.name = name
+        
         self.onInsert = attributes
         self.onRemoval = attributes
     }
@@ -34,7 +42,8 @@ public struct ItemInsertAndRemoveAnimations
 public extension ItemInsertAndRemoveAnimations
 {
     static var fade : Self {
-                Self(
+        Self(
+            name: "fade",
             onInsert: {
                 $0.alpha = 0.0
             },
@@ -46,6 +55,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var right : Self {
         Self(
+            name: "right",
             onInsert: {
                 $0.frame.origin.x += $0.frame.width
                 $0.alpha = 0.0
@@ -59,6 +69,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var left : Self {
         Self(
+            name: "left",
             onInsert: {
                 $0.frame.origin.x -= $0.frame.width
                 $0.alpha = 0.0
@@ -72,6 +83,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var top : Self {
         Self(
+            name: "top",
             onInsert: {
                 $0.frame.origin.y -= $0.frame.height
                 $0.alpha = 0.0
@@ -85,6 +97,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var bottom : Self {
         Self(
+            name: "bottom",
             onInsert: {
                 $0.frame.origin.y += $0.frame.height
                 $0.alpha = 0.0
@@ -98,6 +111,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var scaleDown : Self {
         Self(
+            name: "scaleDown",
             onInsert: {
                 $0.transform = CGAffineTransform.identity.scaledBy(x: 0.5, y: 0.5)
                 $0.alpha = 0.0
@@ -111,6 +125,7 @@ public extension ItemInsertAndRemoveAnimations
     
     static var scaleUp : Self {
         Self(
+            name: "scaleUp",
             onInsert: {
                 $0.transform = CGAffineTransform.identity.scaledBy(x: 1.5, y: 1.5)
                 $0.alpha = 0.0

@@ -11,7 +11,7 @@ import UIKit
 
 public extension LayoutDescription
 {
-    static func table(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self
+    static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
     {
         TableListLayout.describe(appearance: configure)
     }
@@ -23,11 +23,6 @@ public extension LayoutDescription
 ///
 /// The below diagram shows where each of the properties on the `TableAppearance.Layout` values are
 /// applied when laying out the list.
-///
-/// Note
-/// ----
-/// Do not edit this ASCII diagram directly.
-/// Edit the `TableAppearance.monopic` file in this directory using Monodraw.
 /// ```
 /// ┌─────────────────────────────────────────────────────────────────┐
 /// │                          padding.top                            │
@@ -105,42 +100,57 @@ public extension LayoutDescription
 /// ```
 public struct TableAppearance : ListLayoutAppearance
 {
+    // MARK: ListLayoutAppearance
+    
+    public static var `default`: TableAppearance {
+        return self.init()
+    }
+    
     /// How the layout should flow, either horizontally or vertically.
     public var direction: LayoutDirection
     
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
-    /// How the scroll view should adjust and apply the safe area of the view. Defaults to `.scrollableAxes`.
-    public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
+    /// The properties applied to the scroll view backing the list.
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: false,
+            contentInsetAdjustmentBehavior: .scrollableAxes,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: true,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: true
+        )
+    }
+    
+    // MARK: Properties
+    
+    /// When providing the `ItemPosition` for items in a list, specifies the max spacing
+    /// for items to be considered in the same group. For example, if this value is 1, and
+    /// items are spaced 2pts apart, the items will be in a new group.
+    public var itemPositionGroupingHeight : CGFloat
     
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
     
-    /// Default sizing attributes for content in the list.
-    public var sizing : Sizing
-    
     /// Layout attributes for content in the list.
     public var layout : Layout
     
-    public static var `default`: TableAppearance {
-        return self.init()
-    }
+    // MARK: Initialization
         
     /// Creates a new `TableAppearance` object.
     public init(
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
-        contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
+        itemPositionGroupingHeight : CGFloat = 0.0,
         bounds : ListContentBounds? = nil,
-        sizing : Sizing = .init(),
         layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
-        self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
+        self.itemPositionGroupingHeight = itemPositionGroupingHeight
         self.bounds = bounds
-        self.sizing = sizing
         self.layout = layout
     }
 }
@@ -241,56 +251,6 @@ extension TableAppearance
                 
                 return grouped
             }
-        }
-    }
-    
-    /// Sizing options for the list.
-    public struct Sizing : Equatable
-    {
-        /// The default height for items in a list.
-        public var itemHeight : CGFloat
-        
-        /// The default height for section headers in a list.
-        public var sectionHeaderHeight : CGFloat
-        /// The default height for section footer in a list.
-        public var sectionFooterHeight : CGFloat
-        
-        /// The default height for the list's header.
-        public var listHeaderHeight : CGFloat
-        /// The default height for the list's footer.
-        public var listFooterHeight : CGFloat
-        /// The default height for the list's overscroll footer.
-        public var overscrollFooterHeight : CGFloat
-        
-        /// When providing the `ItemPosition` for items in a list, specifies the max spacing
-        /// for items to be considered in the same group. For example, if this value is 1, and
-        /// items are spaced 2pts apart, the items will be in a new group.
-        public var itemPositionGroupingHeight : CGFloat
-            
-        public init(
-            itemHeight : CGFloat = 50.0,
-            sectionHeaderHeight : CGFloat = 60.0,
-            sectionFooterHeight : CGFloat = 40.0,
-            listHeaderHeight : CGFloat = 60.0,
-            listFooterHeight : CGFloat = 60.0,
-            overscrollFooterHeight : CGFloat = 60.0,
-            itemPositionGroupingHeight : CGFloat = 0.0
-        )
-        {
-            self.itemHeight = itemHeight
-            self.sectionHeaderHeight = sectionHeaderHeight
-            self.sectionFooterHeight = sectionFooterHeight
-            self.listHeaderHeight = listHeaderHeight
-            self.listFooterHeight = listFooterHeight
-            self.overscrollFooterHeight = overscrollFooterHeight
-            self.itemPositionGroupingHeight = itemPositionGroupingHeight
-        }
-        
-        public mutating func set(with block: (inout Sizing) -> ())
-        {
-            var edited = self
-            block(&edited)
-            self = edited
         }
     }
     
@@ -414,17 +374,6 @@ final class TableListLayout : ListLayout
     let behavior : Behavior
     
     let content : ListLayoutContent
-            
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: self.layoutAppearance.contentInsetAdjustmentBehavior,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
-            allowsVerticalScrollIndicator: true,
-            allowsHorizontalScrollIndicator: true
-        )
-    }
         
     //
     // MARK: Initialization
@@ -457,7 +406,6 @@ final class TableListLayout : ListLayout
         width : CustomWidth,
         viewWidth : CGFloat,
         defaultWidth : CGFloat,
-        defaultHeight : CGFloat,
         contentBottom : CGFloat,
         after : (ListLayoutContent.SupplementaryItemInfo) -> ()
     ) {        
@@ -469,8 +417,12 @@ final class TableListLayout : ListLayout
         // The constraints we'll use to measure the content.
         
         let measureInfo = Sizing.MeasureInfo(
-            sizeConstraint: self.direction.size(for: CGSize(width: position.width, height: .greatestFiniteMagnitude)),
-            defaultSize: self.direction.size(for: CGSize(width: 0.0, height: defaultHeight)),
+            sizeConstraint: self.direction.size(
+                for: CGSize(
+                    width: position.width,
+                    height: .greatestFiniteMagnitude
+                )
+            ),
             direction: self.direction
         )
         
@@ -504,14 +456,13 @@ final class TableListLayout : ListLayout
     ) {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
+            safeAreaInsets: context.safeAreaInsets,
             direction: self.direction
         )
         
         let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
         
         let layout = self.layoutAppearance.layout
-        
-        let sizing = self.layoutAppearance.sizing
         
         let viewWidth = self.direction.width(for: context.viewBounds.size)
         
@@ -556,7 +507,6 @@ final class TableListLayout : ListLayout
             width: self.content.containerHeader.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            defaultHeight: sizing.listHeaderHeight,
             contentBottom: contentBottom,
             after: { headerFooter in
                 if headerFooter.isPopulated {
@@ -583,7 +533,6 @@ final class TableListLayout : ListLayout
             width: self.content.header.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            defaultHeight: sizing.listHeaderHeight,
             contentBottom: contentBottom,
             after: { headerFooter in
                 if headerFooter.isPopulated {
@@ -601,6 +550,8 @@ final class TableListLayout : ListLayout
         //
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
+            
+            if section.all.isEmpty { return }
             
             let sectionWidth = section.layouts.table.width.merge(with: rootWidth)
             
@@ -620,7 +571,6 @@ final class TableListLayout : ListLayout
                 width: section.header.layouts.table.width.merge(with: sectionWidth),
                 viewWidth: viewWidth,
                 defaultWidth: sectionPosition.width,
-                defaultHeight: sizing.sectionHeaderHeight,
                 contentBottom: contentBottom,
                 after: { header in
                     if header.isPopulated {
@@ -648,8 +598,12 @@ final class TableListLayout : ListLayout
                     )
                     
                     let measureInfo = Sizing.MeasureInfo(
-                        sizeConstraint: self.direction.size(for: CGSize(width: itemPosition.width, height: .greatestFiniteMagnitude)),
-                        defaultSize: self.direction.size(for: CGSize(width: 0.0, height: sizing.itemHeight)),
+                        sizeConstraint: self.direction.size(
+                            for: CGSize(
+                                width: itemPosition.width,
+                                height: .greatestFiniteMagnitude
+                            )
+                        ),
                         direction: self.direction
                     )
                     
@@ -707,8 +661,12 @@ final class TableListLayout : ListLayout
                         )
                                                 
                         let measureInfo = Sizing.MeasureInfo(
-                            sizeConstraint: self.direction.size(for: CGSize(width: itemWidth, height: .greatestFiniteMagnitude)),
-                            defaultSize: self.direction.size(for: CGSize(width: 0.0, height: sizing.itemHeight)),
+                            sizeConstraint: self.direction.size(
+                                for: CGSize(
+                                    width: itemWidth,
+                                    height: .greatestFiniteMagnitude
+                                )
+                            ),
                             direction: self.direction
                         )
                                                 
@@ -751,7 +709,6 @@ final class TableListLayout : ListLayout
                 width: section.footer.layouts.table.width.merge(with: sectionWidth),
                 viewWidth: viewWidth,
                 defaultWidth: sectionPosition.width,
-                defaultHeight: sizing.sectionFooterHeight,
                 contentBottom: contentBottom,
                 after: { footer in
                     if footer.isPopulated {
@@ -789,7 +746,6 @@ final class TableListLayout : ListLayout
             width: self.content.footer.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            defaultHeight: sizing.listFooterHeight,
             contentBottom: contentBottom,
             after: { footer in
                 if footer.isPopulated {
@@ -812,7 +768,6 @@ final class TableListLayout : ListLayout
             width: self.content.overscrollFooter.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            defaultHeight: sizing.overscrollFooterHeight,
             contentBottom: contentBottom,
             after: { _ in }
         )
@@ -846,7 +801,7 @@ fileprivate extension ListLayoutContent.SectionInfo
         if self.layouts.table.columns.count == 1 {
             let groups = ListLayoutContent.SectionInfo.grouped(
                 items: self.items,
-                groupingHeight: appearance.sizing.itemPositionGroupingHeight,
+                groupingHeight: appearance.itemPositionGroupingHeight,
                 appearance: appearance
             )
             

@@ -115,7 +115,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { listableFatal() }
+    required init?(coder: NSCoder) { listableInternalFatal() }
     
     //
     // MARK: Internal Properties

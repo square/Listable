@@ -68,7 +68,7 @@ public final class ItemPreviewView : UIView {
         appearance : ItemPreviewAppearance = .init(),
         item : AnyItem
     ) {
-        listablePrecondition(width > 0, "Must provide a non-zero width.")
+        listableInternalPrecondition(width > 0, "Must provide a non-zero width.")
         
         /// Lists do not layout and size if their frame is empty.
         /// Start with a placeholder size to allow layout.
@@ -96,7 +96,7 @@ public final class ItemPreviewView : UIView {
         let indexPath = IndexPath(item: 0, section: 0)
         
         guard let cell = self.listView.collectionView.cellForItem(at: indexPath) else {
-            listableFatal("Internal Error: Could not find index path for 'ItemPreviewView's content.")
+            listableInternalFatal("Internal Error: Could not find index path for 'ItemPreviewView's content.")
         }
         
         let presentationState = self.listView.storage.presentationState.item(at: indexPath)

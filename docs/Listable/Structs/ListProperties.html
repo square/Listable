@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,27 +23,27 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (48% documented)
+         (58% documented)
       </p>
-
-      <p class="header-col--secondary">
+    
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
-
+      </div>
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       ListProperties Structure Reference
     </p>
 
@@ -150,6 +150,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ContentInsetAdjustmentBehavior.html">ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/CustomWidth.html">CustomWidth</a>
@@ -358,22 +361,28 @@
                 <a class="nav-group-task-link" href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance.html">GridAppearance</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance.html">FlowAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemSizing.html">– ItemSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Layout.html">– Layout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowUnderflowAlignment.html">– RowUnderflowAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/ItemLayout.html">– ItemLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowItemsAlignment.html">– RowItemsAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/SectionLayout.html">– SectionLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/SectionLayout.html">– SectionLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/Spacings.html">– Spacings</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
@@ -469,6 +478,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -479,9 +491,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
@@ -610,7 +619,7 @@
             <h1>ListProperties</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">@dynamicMemberLookup</span>
 <span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListProperties</span></code></pre>
 
@@ -654,7 +663,7 @@ and eases in testability.</p>
                 <a name="//apple_ref/swift/Section/Animated Changes" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Animated%20Changes"></a>
-                  <h3 class="section-name"><p>Animated Changes</p>
+                  <h3 class="section-name"><span>Animated Changes</span>
 </h3>
                 </div>
               </div>
@@ -695,7 +704,7 @@ Defaults to <code>true</code> if <code>ListProperties</code> is created inside a
                 <a name="//apple_ref/swift/Section/List Content" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/List%20Content"></a>
-                  <h3 class="section-name"><p>List Content</p>
+                  <h3 class="section-name"><span>List Content</span>
 </h3>
                 </div>
               </div>
@@ -774,7 +783,7 @@ Note that you do not need to reference <code>list.content</code> to add sections
                 <a name="//apple_ref/swift/Section/Layout &amp; Appearance" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Layout%20%26%20Appearance"></a>
-                  <h3 class="section-name"><p>Layout &amp; Appearance</p>
+                  <h3 class="section-name"><span>Layout &amp; Appearance</span>
 </h3>
                 </div>
               </div>
@@ -879,7 +888,7 @@ a <code>list</code> with different configuration options, assign it here.</p>
                 <a name="//apple_ref/swift/Section/Behavior" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Behavior"></a>
-                  <h3 class="section-name"><p>Behavior</p>
+                  <h3 class="section-name"><span>Behavior</span>
 </h3>
                 </div>
               </div>
@@ -925,7 +934,7 @@ they may be overridden by the provided <code><a href="../Structs/ListProperties.
                 <a name="//apple_ref/swift/Section/Reading State &amp; Performing Actions" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Reading%20State%20%26%20Performing%20Actions"></a>
-                  <h3 class="section-name"><p>Reading State &amp; Performing Actions</p>
+                  <h3 class="section-name"><span>Reading State &amp; Performing Actions</span>
 </h3>
                 </div>
               </div>
@@ -1030,7 +1039,7 @@ of the view.</p>
                 <a name="//apple_ref/swift/Section/Identifiers" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Identifiers"></a>
-                  <h3 class="section-name"><p>Identifiers</p>
+                  <h3 class="section-name"><span>Identifiers</span>
 </h3>
                 </div>
               </div>
@@ -1098,7 +1107,7 @@ you can observe through Instruments.app.</p>
                 <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Initialization"></a>
-                  <h3 class="section-name"><p>Initialization</p>
+                  <h3 class="section-name"><span>Initialization</span>
 </h3>
                 </div>
               </div>
@@ -1200,11 +1209,11 @@ you can observe through Instruments.app.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Result%20Builders"></a>
-                <a name="//apple_ref/swift/Section/Result Builders" class="dashAnchor"></a>
+                <a name="/Adding%20Content"></a>
+                <a name="//apple_ref/swift/Section/Adding Content" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Result%20Builders"></a>
-                  <h3 class="section-name"><p>Result Builders</p>
+                  <a class="section-name-link" href="#/Adding%20Content"></a>
+                  <h3 class="section-name"><span>Adding Content</span>
 </h3>
                 </div>
               </div>
@@ -1253,19 +1262,6 @@ the <code><a href="../Structs/ListProperties.html#/s:10ListableUI14ListPropertie
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Adding%20Content"></a>
-                <a name="//apple_ref/swift/Section/Adding Content" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Adding%20Content"></a>
-                  <h3 class="section-name"><p>Adding Content</p>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -1425,7 +1421,7 @@ the <code><a href="../Structs/ListProperties.html#/s:10ListableUI14ListPropertie
                 <a name="//apple_ref/swift/Section/Modifying Content" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Modifying%20Content"></a>
-                  <h3 class="section-name"><p>Modifying Content</p>
+                  <h3 class="section-name"><span>Modifying Content</span>
 </h3>
                 </div>
               </div>
@@ -1492,9 +1488,8 @@ the <code><a href="../Structs/ListProperties.html#/s:10ListableUI14ListPropertie
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-11-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>

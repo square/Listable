@@ -17,25 +17,7 @@ class TableAppearanceTests : XCTestCase
     {
         let appearance = TableAppearance()
         
-        XCTAssertEqual(appearance.sizing, TableAppearance.Sizing())
         XCTAssertEqual(appearance.layout, TableAppearance.Layout())
-    }
-}
-
-
-class TableAppearance_SizingTests : XCTestCase
-{
-    func test_init()
-    {
-        let sizing = TableAppearance.Sizing()
-        
-        XCTAssertEqual(sizing.itemHeight, 50.0)
-        XCTAssertEqual(sizing.sectionHeaderHeight, 60.0)
-        XCTAssertEqual(sizing.sectionFooterHeight, 40.0)
-        XCTAssertEqual(sizing.listHeaderHeight, 60.0)
-        XCTAssertEqual(sizing.listFooterHeight, 60.0)
-        XCTAssertEqual(sizing.overscrollFooterHeight, 60.0)
-        XCTAssertEqual(sizing.itemPositionGroupingHeight, 0.0)
     }
 }
 

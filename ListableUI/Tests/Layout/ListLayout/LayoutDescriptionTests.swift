@@ -55,6 +55,32 @@ final class LayoutDescriptionTests : XCTestCase
         XCTAssertEqual(description2.configuration.shouldRebuild(layout: layout), true)
     }
     
+    func test_layoutAppearanceProperties()
+    {
+        let description = TestLayout.describe {
+            $0.direction = .horizontal
+            
+            $0.stickySectionHeaders = false
+        }
+        
+        XCTAssertEqual(
+            description.layoutAppearanceProperties,
+            
+            ListLayoutAppearanceProperties(
+                direction: .horizontal,
+                stickySectionHeaders: false,
+                scrollViewProperties: .init(
+                    isPagingEnabled: false,
+                    contentInsetAdjustmentBehavior: .automatic,
+                    allowsBounceVertical: true,
+                    allowsBounceHorizontal: true,
+                    allowsVerticalScrollIndicator: true,
+                    allowsHorizontalScrollIndicator: true
+                )
+            )
+        )
+    }
+    
     func test_isSameLayoutType()
     {
         let description1 = TableListLayout.describe()
@@ -76,6 +102,15 @@ private struct TestLayoutAppearance : ListLayoutAppearance
     
     var stickySectionHeaders: Bool = true
     
+    var scrollViewProperties: ListLayoutScrollViewProperties = .init(
+        isPagingEnabled: false,
+        contentInsetAdjustmentBehavior: .automatic,
+        allowsBounceVertical: true,
+        allowsBounceHorizontal: true,
+        allowsVerticalScrollIndicator: true,
+        allowsHorizontalScrollIndicator: true
+    )
+    
     var anotherValue : String
 }
 
@@ -94,17 +129,6 @@ private final class TestLayout : ListLayout
     var behavior: Behavior
     
     var content: ListLayoutContent
-    
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: .automatic,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
-            allowsVerticalScrollIndicator: true,
-            allowsHorizontalScrollIndicator: true
-        )
-    }
 
     init(
         layoutAppearance: TestLayoutAppearance,

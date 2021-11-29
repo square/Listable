@@ -73,7 +73,7 @@
 
     /// Enables support for 'for..in' loops by combining the results of all iterations into a single result.
     public static func buildArray(_ components: [Component]) -> Component {
-        components.reduce(into: []) { $0 += $1 }
+        components.flatMap { $0 }
     }
 
     /// If declared, this will be called on the partial result of an `if #available` block to allow the result builder to erase type information.

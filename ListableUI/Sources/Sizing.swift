@@ -14,15 +14,6 @@ import UIKit
 ///
 public enum Sizing : Hashable
 {
-    /// The default size from the list's appearance is used. The size is not dynamic at all.
-    ///
-    /// ### ⚠️ Warning ⚠️
-    /// You usually do not want to use this option. If your views contain any dynamically sizing
-    /// content (eg text that responds to accessibility sizes), using this value will result in
-    /// mis-sized or cut-off content.
-    ///
-    case `default`
-    
     /// Fixes the size to the absolute value passed in.
     ///
     /// ### Note
@@ -98,16 +89,13 @@ public enum Sizing : Hashable
     {
         let size : CGSize = {
             switch self {
-            case .default:
-                return info.defaultSize
-                
             case .fixed(let width, let height):
                 return CGSize(width: width, height: height)
                 
             case .thatFits(let constraint):
                 let size = view.sizeThatFits(info.sizeConstraint)
                 
-                return constraint.clamp(size, with: info.defaultSize)
+                return constraint.clamp(size)
                 
             case .autolayout(let constraint):
                 
@@ -128,11 +116,11 @@ public enum Sizing : Hashable
                     }
                 }()
 
-                return constraint.clamp(size, with: info.defaultSize)
+                return constraint.clamp(size)
             }
         }()
         
-        self.validateMeasuredSize(size)
+        self.validateMeasuredSize(size, with: info)
         
         return CGSize(
             width: ceil(size.width),
@@ -140,20 +128,34 @@ public enum Sizing : Hashable
         )
     }
     
-    private func validateMeasuredSize(_ size : CGSize) {
+    private func validateMeasuredSize(_ size : CGSize, with info : MeasureInfo) {
         
         // Ensure we have a reasonably valid size for the cell.
         
-        let reasonableMaxDimension : CGFloat = 10_000
+        let reasonableMaxDimension : CGFloat = 5_000
         
         precondition(
             size.height <= reasonableMaxDimension,
-            "The height of the view was outside of reasonable expectations, and this is likely programmer error. Height: \(size.height). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The height of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the width of the containing list view has been squished to only be a few points wide.
+            
+            Invalid Height: \(size.height)
+            Measurement Constraint: \(info.sizeConstraint)
+            """
         )
         
         precondition(
             size.width <= reasonableMaxDimension,
-            "The width of the view was outside of reasonable expectations, and this is likely programmer error. Width: \(size.width). Your sizeThatFits or autolayout constraints are likely incorrect."
+            """
+            The width of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
+            the height of the containing list view has been squished to only be a few points tall.
+            
+            Invalid Width: \(size.width)
+            Measurement Constraint: \(info.sizeConstraint)
+            """
         )
     }
 }
@@ -164,16 +166,13 @@ extension Sizing
     public struct MeasureInfo
     {
         public var sizeConstraint : CGSize
-        public var defaultSize : CGSize
         public var direction : LayoutDirection
         
         public init(
             sizeConstraint: CGSize,
-            defaultSize: CGSize,
             direction: LayoutDirection
         ) {
             self.sizeConstraint = sizeConstraint
-            self.defaultSize = defaultSize
             self.direction = direction
         }
     }
@@ -217,11 +216,11 @@ extension Sizing
         }
         
         /// Clamps the provided size, falling back to the provided default if the measurement calls for a default value.
-        public func clamp(_ value : CGSize, with defaultSize : CGSize) -> CGSize
+        public func clamp(_ value : CGSize) -> CGSize
         {
             return CGSize(
-                width: self.width.clamp(value.width, with: defaultSize.width),
-                height: self.height.clamp(value.height, with: defaultSize.height)
+                width: self.width.clamp(value.width),
+                height: self.height.clamp(value.height)
             )
         }
         
@@ -234,7 +233,7 @@ extension Sizing
             
             /// Any returned measurement must be at least this value. If it is smaller than
             /// this value, then this value will be returned instead.
-            case atLeast(Value)
+            case atLeast(CGFloat)
             
             /// Any returned measurement can be at least this large. If it is larger than
             /// this value, then this value is returned instead.
@@ -242,36 +241,16 @@ extension Sizing
             
             /// Any returned measurement must be within the provided range. If it is smaller
             /// or larger than the provided range, the range is used to clamp the value.
-            case within(Value, CGFloat)
-            
-            /// Describes either a default value (eg, a default row height) from a
-            /// layout, or an explicit value.
-            public enum Value : Hashable
-            {
-                /// Represents a default value (eg, a default row height) from a layout.
-                case `default`
-                
-                /// Represents an explicit value, like 44pt.
-                case fixed(CGFloat)
-                
-                /// Returns either the provided default, or the fixed value.
-                public func value(with defaultHeight : CGFloat) -> CGFloat
-                {
-                    switch self {
-                    case .`default`: return defaultHeight
-                    case .fixed(let fixed): return fixed
-                    }
-                }
-            }
+            case within(CGFloat, CGFloat)
             
             /// Clamps the provided value by the `Axis'` underlying value.
-            public func clamp(_ value : CGFloat, with defaultValue : CGFloat) -> CGFloat
+            public func clamp(_ value : CGFloat) -> CGFloat
             {
                 switch self {
                 case .noConstraint: return value
-                case .atLeast(let minimum): return max(minimum.value(with: defaultValue), value)
+                case .atLeast(let minimum): return max(minimum, value)
                 case .atMost(let maximum): return min(maximum, value)
-                case .within(let minimum, let maximum): return max(minimum.value(with: defaultValue), min(maximum, value))
+                case .within(let minimum, let maximum): return max(minimum, min(maximum, value))
                 }
             }
         }

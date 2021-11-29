@@ -6,11 +6,25 @@
 
 - [Added support for `.horizontal` `.table` layouts](https://github.com/kyleve/Listable/pull/314). To get a horizontal table; just set the `layout.direction = .horizontal` when configuring your list's layout. Additionally, some properties were renamed from left/right to leading/trailing to better reflect they can now be on the left/top and right/bottom of a list view, respectively.
 
+- Expose `layoutAppearanceProperties` on `LayoutDescription`, to access standard layout appearance properties without creating an instance of the backing layout.
+
+- The `.flow` layout type has been added, to support flow and grid style layouts.
+
 - `ListView.contentSize` will now also provide access to the natural width of a layout if the layout supports natural width calculation. This is useful, for example, to show a `.table` layout in a popover – you can now know how wide to render the popover.
 
 ### Removed
 
+- The `.experimental_grid` layout type has been removed; it is replaced by `.flow`.
+
+- Default sizes have been removed. Please ensure your elements correctly implement `sizeThatFits`, or use fixed sizes.
+
 ### Changed
+
+- `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
+
+- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
+
+- `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
 
 ### Misc
 

@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -23,27 +23,27 @@
         <a class="header-link" href="../index.html">
           Listable
         </a>
-         (48% documented)
+         (58% documented)
       </p>
-
-      <p class="header-col--secondary">
+    
+      <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
-      </p>
-
+      </div>
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
-            <img class="header-icon" src="../img/gh.png"/>
+            <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
-      <img class="carat" src="../img/carat.png" />
+      <img class="carat" src="../img/carat.png" alt=""/>
       AutoScrollAction Enumeration Reference
     </p>
 
@@ -150,6 +150,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ContentInsetAdjustmentBehavior.html">ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/CustomWidth.html">CustomWidth</a>
@@ -358,22 +361,28 @@
                 <a class="nav-group-task-link" href="../Structs/EmbeddedList/Sizing.html">– Sizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance.html">GridAppearance</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance.html">FlowAppearance</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Sizing.html">– Sizing</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemSizing.html">– ItemSizing</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/Layout.html">– Layout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowUnderflowAlignment.html">– RowUnderflowAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/ItemLayout.html">– ItemLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/RowItemsAlignment.html">– RowItemsAlignment</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/ItemLayout.html">– ItemLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/GridAppearance/SectionLayout.html">– SectionLayout</a>
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/HeaderFooterLayout.html">– HeaderFooterLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/SectionLayout.html">– SectionLayout</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/FlowAppearance/Spacings.html">– Spacings</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
@@ -469,6 +478,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutDefaults.html">ListLayoutDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -479,9 +491,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties/ContentInsetAdjustmentBehavior.html">– ContentInsetAdjustmentBehavior</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
@@ -610,7 +619,7 @@
             <h1>AutoScrollAction</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">AutoScrollAction</span></code></pre>
 
                 </div>
@@ -698,7 +707,7 @@ which will be called when the item is inserted, to give you a chance to confirm 
 action. The <code><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></code> passed to your closure provides the current state of the list,
 including visible content edges and visible items. If you do not pass a <code>shouldPerform</code> closure,
 the action will be performed on insert.</p>
-<h2 id='example' class='heading'>Example</h2>
+<h3 id='example' class='heading'>Example</h3>
 <pre class="highlight swift"><code><span class="c1">// ID of item which should trigger a scroll event (eg the last item in the list).</span>
 <span class="k">let</span> <span class="nv">identifier</span> <span class="o">=</span> <span class="n">myItem</span><span class="o">.</span><span class="n">identifier</span>
 
@@ -709,7 +718,7 @@ the action will be performed on insert.</p>
     <span class="nv">animation</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span>
 <span class="p">)</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
    <span class="c1">// Only scroll to the item if the bottom of the list is already visible.</span>
-   <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">isLastItemVisible</span>
+   <span class="n">state</span><span class="o">.</span><span class="n">isLastItemVisible</span>
 <span class="p">}</span> <span class="nv">didPerform</span> <span class="p">:</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
     <span class="c1">// Called when the scroll action occurs.</span>
 <span class="p">}</span>
@@ -730,6 +739,86 @@ the action will be performed on insert.</p>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>destination</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Where the list should scroll to on insert. If not specified, the value passed to <code>onInsertOf</code> will be used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onInsertOf</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The identifier which should trigger the action.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The position to scroll the list to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The animation type to perform. Note: Will only animate if the list update itself is animated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>shouldPerform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block which lets you control if the auto scroll action should be performed based on the state of the list.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didPerform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block which is called when the action is performed. If the item causing insertion is inserted multiple times,
+this block will be called multiple times.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -798,9 +887,8 @@ the action will be performed on insert.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external">Kyle</a>. All rights reserved. (Last updated: 2021-11-02)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
-</div>
 </html>

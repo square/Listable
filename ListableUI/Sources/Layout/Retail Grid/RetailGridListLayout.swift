@@ -11,7 +11,7 @@ import UIKit
 
 extension LayoutDescription
 {
-    public static func retailGrid(_ configure : @escaping (inout RetailGridAppearance) -> () = { _ in }) -> Self
+    public static func retailGrid(_ configure : (inout RetailGridAppearance) -> () = { _ in }) -> Self
     {
         RetailGridListLayout.describe(appearance: configure)
     }
@@ -20,17 +20,34 @@ extension LayoutDescription
 
 public struct RetailGridAppearance : ListLayoutAppearance
 {
-    public var layout : Layout
+    // MARK: ListLayoutAppearance
     
+    public static var `default`: RetailGridAppearance {
+        return self.init()
+    }
+        
     public var direction: LayoutDirection {
         .vertical
     }
     
     public var stickySectionHeaders : Bool = false
     
-    public static var `default`: RetailGridAppearance {
-        return self.init()
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        .init(
+            isPagingEnabled: self.layout.isPaged,
+            contentInsetAdjustmentBehavior: .never,
+            allowsBounceVertical: true,
+            allowsBounceHorizontal: false,
+            allowsVerticalScrollIndicator: true,
+            allowsHorizontalScrollIndicator: false
+        )
     }
+    
+    // MARK: Properties
+    
+    public var layout : Layout
+    
+    // MARK: Initialization
     
     public init(
         layout : Layout = Layout()
@@ -230,17 +247,6 @@ final class RetailGridListLayout : ListLayout
     let behavior : Behavior
     
     let content : ListLayoutContent
-    
-    var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            isPagingEnabled: self.layoutAppearance.layout.isPaged,
-            contentInsetAdjustmentBehavior: .never,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: false,
-            allowsVerticalScrollIndicator: true,
-            allowsHorizontalScrollIndicator: false
-        )
-    }
     
     //
     // MARK: Initialization

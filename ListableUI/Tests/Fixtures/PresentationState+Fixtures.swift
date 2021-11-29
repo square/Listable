@@ -12,7 +12,7 @@ extension PresentationState {
     
     convenience init(_ content : (inout Content) -> () = { _ in }) {
         self.init(
-            forMeasuringOnlyWith: Content(with: content),
+            forMeasuringOrTestsWith: Content(with: content),
             environment: .empty,
             itemMeasurementCache: .init(),
             headerFooterMeasurementCache: .init()
