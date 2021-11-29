@@ -99,11 +99,19 @@ public final class ListLayoutContent
     
     func layoutAttributes(in rect: CGRect, alwaysIncludeOverscroll : Bool) -> [UICollectionViewLayoutAttributes] {
         self
-            .content(in: rect, alwaysIncludeOverscroll: alwaysIncludeOverscroll)
+            .content(
+                in: rect,
+                alwaysIncludeOverscroll: alwaysIncludeOverscroll,
+                includeUnpopulated: true
+            )
             .map(\.collectionViewLayoutAttributes)
     }
     
-    func content(in rect: CGRect, alwaysIncludeOverscroll : Bool) -> [ListLayoutContent.ContentItem]
+    func content(
+        in rect: CGRect,
+        alwaysIncludeOverscroll : Bool,
+        includeUnpopulated: Bool
+    ) -> [ListLayoutContent.ContentItem]
     {
         /**
          Supplementary items are technically attached to index paths. Eg, list headers
@@ -116,9 +124,13 @@ public final class ListLayoutContent
         
         var attributes = [ListLayoutContent.ContentItem]()
         
+        func include(_ supplementary : ListLayoutContent.SupplementaryItemInfo) -> Bool {
+            return includeUnpopulated || supplementary.isPopulated
+        }
+        
         // Container Header
         
-        if rect.intersects(self.containerHeader.visibleFrame) {
+        if rect.intersects(self.containerHeader.visibleFrame) && include(self.containerHeader) {
             attributes.append(
                 .supplementary(
                     self.containerHeader,
@@ -129,7 +141,7 @@ public final class ListLayoutContent
         
         // List Header
         
-        if rect.intersects(self.header.visibleFrame) {
+        if rect.intersects(self.header.visibleFrame) && include(self.header) {
             attributes.append(
                 .supplementary(
                     self.header,
@@ -148,7 +160,7 @@ public final class ListLayoutContent
             
             // Section Header
             
-            if rect.intersects(section.header.visibleFrame) {
+            if rect.intersects(section.header.visibleFrame) && include(section.header) {
                 attributes.append(
                     .supplementary(
                         section.header,
@@ -172,7 +184,7 @@ public final class ListLayoutContent
             
             // Section Footer
             
-            if rect.intersects(section.footer.visibleFrame) {
+            if rect.intersects(section.footer.visibleFrame) && include(section.footer) {
                 attributes.append(
                     .supplementary(
                         section.footer,
@@ -184,7 +196,7 @@ public final class ListLayoutContent
         
         // List Footer
         
-        if rect.intersects(self.footer.visibleFrame) {
+        if rect.intersects(self.footer.visibleFrame) && include(self.footer) {
             attributes.append(
                 .supplementary(
                     self.footer,
@@ -195,7 +207,7 @@ public final class ListLayoutContent
         
         // Overscroll Footer
         
-        if alwaysIncludeOverscroll || rect.intersects(self.overscrollFooter.visibleFrame) {
+        if alwaysIncludeOverscroll || (rect.intersects(self.overscrollFooter.visibleFrame) && include(self.overscrollFooter)) {
             // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
             // Instead, just return it all the time to ensure the collection view will display it when needed.
             attributes.append(

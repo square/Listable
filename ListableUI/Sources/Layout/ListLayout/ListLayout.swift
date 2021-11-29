@@ -30,16 +30,22 @@ public struct ListLayoutLayoutContext {
     
     public var viewBounds : CGRect
     public var safeAreaInsets : UIEdgeInsets
+    public var contentInset : UIEdgeInsets
+    public var adjustedContentInset : UIEdgeInsets
     
     public var environment : ListEnvironment
     
     public init(
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
+        contentInset : UIEdgeInsets,
+        adjustedContentInset : UIEdgeInsets,
         environment : ListEnvironment
     ) {
         self.viewBounds = viewBounds
         self.safeAreaInsets = safeAreaInsets
+        self.contentInset = contentInset
+        self.adjustedContentInset = adjustedContentInset
         self.environment = environment
     }
     
@@ -49,10 +55,13 @@ public struct ListLayoutLayoutContext {
     ) {
         self.viewBounds = collectionView.bounds
         self.safeAreaInsets = collectionView.safeAreaInsets
+        self.contentInset = collectionView.contentInset
+        self.adjustedContentInset = collectionView.adjustedContentInset
         
         self.environment = environment
     }
 }
+
 
 extension ListLayout
 {
@@ -121,6 +130,25 @@ public protocol AnyListLayout : AnyObject
 
 extension AnyListLayout
 {
+    func performLayout(
+        with delegate : CollectionViewLayoutDelegate?,
+        in context : ListLayoutLayoutContext
+    ) {
+        self.layout(
+            delegate: delegate,
+            in: context
+        )
+        
+        self.content.setSectionContentsFrames()
+        
+        self.updateLayout(in: context)
+        
+        self.setZIndexes()
+        
+        self.updateOverscrollFooterPosition(in: context)
+        self.adjustPositionsForLayoutUnderflow(in: context)
+    }
+    
     public func setZIndexes()
     {
         self.content.containerHeader.zIndex = 6
@@ -169,6 +197,8 @@ extension AnyListLayout
         )
     }
     
+    // TODO: This should take in a `context` so we can call it in layout tests too,
+    // when not using a collection view.
     public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
     {
         guard self.stickySectionHeaders else { return }
@@ -208,40 +238,43 @@ extension AnyListLayout
         }
     }
     
-    public func updateOverscrollFooterPosition(in collectionView : UICollectionView)
+    public func updateOverscrollFooterPosition(in context : ListLayoutLayoutContext)
     {
+        /// TODO: This method should be using `adjustedContentInset`,
+        /// not the safe area and content inset directly.
+        
         let footer = self.content.overscrollFooter
                 
         let contentHeight = self.direction.height(for: self.content.contentSize)
-        let viewHeight = self.direction.height(for: collectionView.contentFrame.size)
+        let viewHeight = self.direction.height(for: context.viewBounds.inset(by: context.adjustedContentInset).size)
         
         // Overscroll positioning is done after we've sized the layout, because the overscroll footer does not actually
         // affect any form of layout or sizing. It appears only once the scroll view has been scrolled outside of its normal bounds.
         
         if contentHeight >= viewHeight {
             footer.y = self.direction.switch(
-                vertical: contentHeight + collectionView.contentInset.bottom + collectionView.safeAreaInsets.bottom,
-                horizontal: contentHeight + collectionView.contentInset.right + collectionView.safeAreaInsets.right
+                vertical: contentHeight + context.contentInset.bottom + context.safeAreaInsets.bottom,
+                horizontal: contentHeight + context.contentInset.right + context.safeAreaInsets.right
             )
         } else {
             footer.y = self.direction.switch(
-                vertical: viewHeight - collectionView.contentInset.top - collectionView.safeAreaInsets.top,
-                horizontal: viewHeight - collectionView.contentInset.left - collectionView.safeAreaInsets.left
+                vertical: viewHeight - context.contentInset.top - context.safeAreaInsets.top,
+                horizontal: viewHeight - context.contentInset.left - context.safeAreaInsets.left
             )
         }
     }
     
-    public func adjustPositionsForLayoutUnderflow(in collectionView : UICollectionView)
+    public func adjustPositionsForLayoutUnderflow(in context : ListLayoutLayoutContext)
     {
         // Take into account the safe area, since that pushes content alignment down within our view.
         
         let safeAreaInsets : CGFloat = self.direction.switch(
-            vertical: collectionView.safeAreaInsets.top + collectionView.safeAreaInsets.bottom,
-            horizontal: collectionView.safeAreaInsets.left + collectionView.safeAreaInsets.right
+            vertical: context.safeAreaInsets.top + context.safeAreaInsets.bottom,
+            horizontal: context.safeAreaInsets.left + context.safeAreaInsets.right
         )
 
         let contentHeight = self.direction.height(for: self.content.contentSize)
-        let viewHeight = self.direction.height(for: collectionView.bounds.size)
+        let viewHeight = self.direction.height(for: context.viewBounds.size)
         
         let additionalOffset = self.behavior.underflow.alignment.offsetFor(
             contentHeight: contentHeight,
@@ -290,34 +323,45 @@ extension AnyListLayout
             velocity: velocity
         )
 
+        let scrollDirection = ScrollDirection(velocity: direction.y(for: velocity))
+        
         let items = self.content.content(
             in: rect,
-            alwaysIncludeOverscroll: false
-        )
-        
-        let sorted = items.sorted {
-            $0.indexPath < $1.indexPath
+            alwaysIncludeOverscroll: false,
+            includeUnpopulated: false
+        ).sorted {
+            switch scrollDirection {
+            case .forward:
+                return direction.minY(for: $0.defaultFrame) < direction.minY(for: $1.defaultFrame)
+            case .backward:
+                return direction.maxY(for: $0.defaultFrame) > direction.maxY(for: $1.defaultFrame)
+            }
         }
-        
-        let velocity = direction.y(for: velocity)
-        
-        if velocity <= 0 {
+
+        return items.first { item in
+            let leadingEdge = scrollDirection.leadingRectEdge(
+                with: direction,
+                for: item.defaultFrame
+            )
             
-        } else {
-            
+            switch scrollDirection {
+            case .forward:
+                return leadingEdge >= direction.y(for: contentOffset)
+            case .backward:
+                return leadingEdge <= direction.y(for: contentOffset)
+            }
         }
-        
-        fatalError()
     }
     
     func rectForFindingFirstFullyVisibleItem(after contentOffset : CGPoint, velocity : CGPoint) -> CGRect {
         
         /// The height used here doesn't really matter; it just needs to be
-        /// tall enough to make sure we end up with at least one overlapping item.
+        /// tall enough to make sure we end up with at least one overlapping item,
+        /// and thus we'll assume most layouts have at least one item in 1,000pts.
         
-        let velocity = direction.y(for: velocity)
-        let height : CGFloat = 500
-        let heightOffset = velocity < 0 ? -height : 0
+        let scrollDirection = ScrollDirection(velocity: direction.y(for: velocity))
+        let height : CGFloat = 1_000
+        let heightOffset = scrollDirection == .backward ? height : 0
     
         return direction.switch {
             return CGRect(x: 0, y: contentOffset.y - heightOffset, width: content.contentSize.width, height: height)
@@ -325,4 +369,30 @@ extension AnyListLayout
             return CGRect(x: contentOffset.x - heightOffset, y: 0, width: height, height: content.contentSize.height)
         }
     }
+}
+
+
+enum ScrollDirection : Equatable {
+    case forward
+    case backward
+    
+    init(velocity : CGFloat) {
+        if velocity >= 0 {
+            self = .forward
+        } else {
+            self = .backward
+        }
+    }
+    
+    func leadingRectEdge(with direction : LayoutDirection, for rect : CGRect) -> CGFloat {
+        // TODO: is this backwards??
+        switch self {
+        case .forward:
+            return direction.minY(for: rect)
+        case .backward:
+            return direction.maxY(for: rect)
+        }
+    }
+    
+    
 }
