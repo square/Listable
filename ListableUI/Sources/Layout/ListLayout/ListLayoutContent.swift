@@ -39,9 +39,9 @@ public final class ListLayoutContent
         return all
     }
     
-    public func maxMeasuredValue(for keyPath : KeyPath<CGSize, CGFloat>) -> CGFloat {
+    public func maxValue(for keyPath : KeyPath<ListLayoutContentItem, CGFloat>) -> CGFloat {
         self.all.reduce(0) { value, item in
-            max(value, item.measuredSize[keyPath: keyPath])
+            max(value, item[keyPath: keyPath])
         }
     }
     
