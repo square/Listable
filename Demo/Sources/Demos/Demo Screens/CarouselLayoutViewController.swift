@@ -40,9 +40,12 @@ final class CarouselLayoutViewController : ListViewController {
                     
                     list.add {
                         Section("colors") {
-                            for color in Self.colors {
-                                ColorItem(color: color)
-                                    .with(sizing: .fixed(width: 75, height: 75))
+                            for (color, emoji) in Self.colors {
+                                ColorItem(color: color, emoji: emoji)
+                                    .with(
+                                        sizing: .fixed(width: 75, height: 75),
+                                        selectionStyle: .selectable(isSelected: false)
+                                    )
                             }
                         }
                     }
@@ -59,25 +62,29 @@ final class CarouselLayoutViewController : ListViewController {
                         
                         $0.layout.itemSpacing = 10.0
                     }
-                    
+                                        
                     list.add {
                         Section("colors") {
-                            for color in Self.colors {
-                                ColorItem(color: color)
-                                    .with(sizing: .fixed(width: 150))
+                            for (color, emoji) in Self.colors {
+                                ColorItem(color: color, emoji: emoji)
+                                    .with(
+                                        sizing: .fixed(width: 150),
+                                        selectionStyle: .selectable(isSelected: false)
+                                    )
                             }
                         }
                     }
                 }
                 
-                Item.list("tags", sizing: .fixed(height: 300)) { list in
+                Item.list("tags", sizing: .fixed(height: 500)) { list in
+                    
+                    list.behavior.selectionMode = .multiple
                     
                     list.layout = .flow {
-                        $0.direction = .horizontal
                         
                         $0.bounds = .init(padding: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
                         
-                        $0.pagingBehavior = .firstVisibleItemEdge
+                        $0.width = .scrolls(width: .atMost(2000))
                         
                         $0.spacings.itemSpacing = 10.0
                         $0.spacings.rowSpacing = 10
@@ -87,6 +94,9 @@ final class CarouselLayoutViewController : ListViewController {
                         Section("colors") {
                             for tag in Self.tagNames {
                                 TagItem(text: tag)
+                                    .with(
+                                        selectionStyle: .selectable(isSelected: false)
+                                    )
                             }
                         }
                     }
@@ -95,16 +105,16 @@ final class CarouselLayoutViewController : ListViewController {
         }
     }
     
-    private static let colors : [UIColor] = Array(
+    private static let colors : [(UIColor, String)] = Array(
         repeating: [
-            .systemRed,
-            .systemGreen,
-            .systemBlue,
-            .systemOrange,
-            .systemYellow,
-            .systemPink,
-            .systemPurple,
-            .systemTeal,
+            (.systemRed, "😀"),
+            (.systemGreen, "😗"),
+            (.systemBlue, "🤓"),
+            (.systemOrange, "🥺"),
+            (.systemYellow, "🥵"),
+            (.systemPink, "😵‍💫"),
+            (.systemPurple, "🤠"),
+            (.systemTeal, "🥴"),
         ],
         count: 30
     ).flatMap { $0 }
@@ -121,16 +131,21 @@ final class CarouselLayoutViewController : ListViewController {
 fileprivate struct ColorItem : BlueprintItemContent, Equatable {
     
     var color : UIColor
+    var emoji : String
     
     var identifierValue: UIColor {
         color
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {
-        Box(
-            backgroundColor: color,
-            cornerStyle: .rounded(radius: 10),
-            shadowStyle: .simple(radius: 3, opacity: 0.15, offset: .init(width: 0, height: 1), color: .black)
+        Label(text: emoji) {
+            $0.font = .systemFont(ofSize: 40.0, weight: .regular)
+        }
+        .centered()
+        .box(
+            background: color,
+            corners: .rounded(radius: 10),
+            shadow: .simple(radius: 3, opacity: 0.15, offset: .init(width: 0, height: 1), color: .black)
         )
     }
 }
@@ -146,12 +161,13 @@ fileprivate struct TagItem : BlueprintItemContent, Equatable {
     func element(with info: ApplyItemContentInfo) -> Element {
         Label(text: text) {
             $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
+            $0.color = info.state.isSelected ? .white : .darkGray
         }
         .inset(horizontal: 20, vertical: 10)
         .box(
-            background: .white,
+            background: info.state.isSelected ? .darkGray : .white,
             corners: .capsule,
-            borders: .solid(color: .lightGray, width: 1),
+            borders: .solid(color: info.state.isSelected ? .black : .lightGray, width: 1),
             shadow: .simple(radius: 3, opacity: 0.15, offset: .init(width: 0, height: 1), color: .black)
         )
     }

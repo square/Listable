@@ -114,11 +114,25 @@ public struct FlowAppearance : ListLayoutAppearance {
     
     /// The properties of the backing `UIScrollView`.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
+        
+        let allowsBounceVertical : Bool = self.direction.switch {
+            self.width == .withinBounds
+        } horizontal: {
+            false
+        }
+        
+        let allowsBounceHorizontal : Bool = self.direction.switch {
+            false
+        } horizontal: {
+            self.width == .withinBounds
+        }
+
+        
+        return .init(
             isPagingEnabled: false,
             contentInsetAdjustmentBehavior: .scrollableAxes,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
+            allowsBounceVertical: allowsBounceVertical,
+            allowsBounceHorizontal: allowsBounceHorizontal,
             allowsVerticalScrollIndicator: true,
             allowsHorizontalScrollIndicator: true
         )
@@ -138,6 +152,8 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// Controls the padding and maximum width of the flow layout.
     public var bounds : ListContentBounds?
     
+    public var width : Width
+    
     /// Controls the spacing between headers, footers, sections, and items in the flow layout.
     public var spacings : Spacings
     
@@ -149,8 +165,8 @@ public struct FlowAppearance : ListLayoutAppearance {
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
         rowItemsAlignment : RowItemsAlignment = .top,
         itemSizing : ItemSizing = .natural,
-        
-        bounds : ListContentBounds? = nil,
+        bounds: ListContentBounds? = nil,
+        width : Width = .withinBounds,
         spacings : Spacings = .init()
     ) {
         self.direction = direction
@@ -174,6 +190,7 @@ public struct FlowAppearance : ListLayoutAppearance {
         self.itemSizing = itemSizing
         
         self.bounds = bounds
+        self.width = width
         
         self.spacings = spacings
     }
@@ -181,6 +198,31 @@ public struct FlowAppearance : ListLayoutAppearance {
 
 
 extension FlowAppearance {
+    
+    public enum Width : Equatable {
+        
+        case withinBounds
+        
+        case scrolls(width: MaxWidth)
+        
+        public enum MaxWidth : Equatable {
+            
+            case atMost(CGFloat)
+            
+            var value : CGFloat {
+                switch self {
+                case .atMost(let value): return value
+                }
+            }
+        }
+        
+        func maxRowWidth(with sectionWidth : CGFloat) -> CGFloat {
+            switch self {
+            case .withinBounds: return sectionWidth
+            case .scrolls(let width): return max(sectionWidth, width.value)
+            }
+        }
+    }
     
     /// Controls how items in a row are measured and sized.
     public enum ItemSizing : Equatable {
@@ -727,9 +769,11 @@ final class FlowListLayout : ListLayout {
             // the available items to the end of each row, and then making a new row
             // below that one once it is full.
             
+            let maxRowWidth = layoutAppearance.width.maxRowWidth(with: sectionPosition.width)
+            
             let rows = self.rows(
                 with: section.items,
-                maxWidth: sectionPosition.width
+                maxWidth: maxRowWidth
             )
             
             var lastRowItemSpacing = spacings.itemSpacing
@@ -832,7 +876,24 @@ final class FlowListLayout : ListLayout {
         // Remaining Calculations
         //
         
-        self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+        switch layoutAppearance.width {
+        case .withinBounds:
+            self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+            
+        case .scrolls:
+            let maxX : CGFloat = self.content.all.reduce(0.0) { maxX, item in
+                max(maxX, direction.maxX(for: item.defaultFrame))
+            }
+            
+            let padding = layoutAppearance.bounds?.padding ?? .zero
+            
+            switch direction {
+            case .vertical:
+                self.content.contentSize = CGSize(width: maxX + padding.right, height: contentBottom)
+            case .horizontal:
+                self.content.contentSize = CGSize(width: maxX + padding.bottom, height: contentBottom)
+            }
+        }
     }
     
     /// Sets the x value for each item in a row, returning the item spacing used for the row.

@@ -324,6 +324,14 @@ public protocol ListLayoutContentItem : AnyObject
 }
 
 
+extension ListLayoutContentItem {
+    
+    public var defaultFrame : CGRect {
+        CGRect(x: x, y: y, width: size.width, height: size.height)
+    }
+}
+
+
 extension ListLayoutContent
 {
     public final class SectionInfo
@@ -423,13 +431,6 @@ extension ListLayoutContent
         
         public var layouts : HeaderFooterLayouts {
             self.state?.anyModel.layouts ?? .init()
-        }
-        
-        public var defaultFrame : CGRect {
-            CGRect(
-                origin: CGPoint(x: self.x, y: self.y),
-                size: self.size
-            )
         }
         
         public var visibleFrame : CGRect {
