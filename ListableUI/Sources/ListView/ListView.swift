@@ -456,7 +456,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         return self.preparePresentationStateForScroll(to: toIndexPath) {
             let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
-            let isAlreadyVisible = self.collectionView.contentFrame.contains(itemFrame)
+            let isAlreadyVisible = self.collectionView.visibleContentFrame.contains(itemFrame)
 
             // If the item is already visible and that's good enough, return.
 
@@ -630,7 +630,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         return self.preparePresentationStateForScroll(to: toIndexPath)  {
             let contentHeight = self.collectionViewLayout.collectionViewContentSize.height
-            let contentFrameHeight = self.collectionView.contentFrame.height
+            let contentFrameHeight = self.collectionView.visibleContentFrame.height
 
             guard contentHeight > contentFrameHeight else {
                 return
@@ -1089,13 +1089,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
     {
         // If the item is already visible and that's good enough, return.
 
-        let isAlreadyVisible = collectionView.contentFrame.contains(targetFrame)
+        let isAlreadyVisible = collectionView.visibleContentFrame.contains(targetFrame)
         if isAlreadyVisible && scrollPosition.ifAlreadyVisible == .doNothing {
             return
         }
 
         let topInset = collectionView.adjustedContentInset.top
-        let contentFrameHeight = collectionView.contentFrame.height
+        let contentFrameHeight = collectionView.visibleContentFrame.height
         let adjustedOriginY = targetFrame.origin.y - topInset
 
         var resultOffset = collectionView.contentOffset

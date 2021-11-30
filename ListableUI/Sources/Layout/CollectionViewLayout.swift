@@ -466,19 +466,10 @@ final class CollectionViewLayout : UICollectionViewLayout
             environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
         
-        self.layout.layout(
-            delegate: self.delegate,
+        self.layout.performLayout(
+            with: self.delegate,
             in: context
         )
-        
-        self.layout.content.setSectionContentsFrames()
-            
-        self.layout.updateLayout(in: context)
-        
-        self.layout.setZIndexes()
-        
-        self.layout.updateOverscrollFooterPosition(in: view)
-        self.layout.adjustPositionsForLayoutUnderflow(in: view)
                 
         self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
     }

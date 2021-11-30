@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 
-public extension LayoutDescription
+extension LayoutDescription
 {
-    static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
+    public static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
     {
         TableListLayout.describe(appearance: configure)
     }
@@ -112,6 +112,9 @@ public struct TableAppearance : ListLayoutAppearance
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
+    
     /// The properties applied to the scroll view backing the list.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -143,12 +146,14 @@ public struct TableAppearance : ListLayoutAppearance
     public init(
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
+        pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
+        self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
         self.bounds = bounds
         self.layout = layout
@@ -253,8 +258,7 @@ extension TableAppearance
             }
         }
     }
-    
-    
+        
     /// Layout options for the list.
     public struct Layout : Equatable
     {

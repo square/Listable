@@ -55,15 +55,61 @@ extension ListProperties {
         
         /// 2b) Measure the content.
         
-        layout.layout(
-            delegate: nil,
+        layout.performLayout(
+            with: nil,
             in: .init(
                 viewBounds: CGRect(origin: .zero, size: fittingSize),
                 safeAreaInsets: safeAreaInsets,
+                contentInset: .zero,
+                adjustedContentInset: .listAdjustedContentInset(
+                    with: layout.scrollViewProperties.contentInsetAdjustmentBehavior,
+                    direction: layout.direction,
+                    safeAreaInsets: safeAreaInsets,
+                    contentInset: .zero
+                ),
                 environment: self.environment
             )
         )
         
         return layout
+    }
+}
+
+extension UIEdgeInsets {
+    
+    /// Because `ListProperties.makeLayout(...)` does not deal with an actual
+    /// `UIScrollView`, we need to calculate `adjustedContentInset` ourselves,
+    /// to pass to `layout.performLayout(...)`.
+    static func listAdjustedContentInset(
+        with contentInsetAdjustmentBehaviour : ContentInsetAdjustmentBehavior,
+        direction : LayoutDirection,
+        safeAreaInsets : UIEdgeInsets,
+        contentInset : UIEdgeInsets
+    ) -> UIEdgeInsets
+    {
+        switch contentInsetAdjustmentBehaviour {
+        case .automatic, .always:
+            return safeAreaInsets + contentInset
+            
+        case .scrollableAxes:
+            switch direction {
+            case .vertical:
+                return UIEdgeInsets(
+                    top: safeAreaInsets.top + contentInset.top,
+                    left: 0,
+                    bottom: safeAreaInsets.bottom + contentInset.bottom,
+                    right: 0
+                )
+            case .horizontal:
+                return UIEdgeInsets(
+                    top: 0,
+                    left: safeAreaInsets.left + contentInset.left,
+                    bottom: 0,
+                    right: safeAreaInsets.right + contentInset.right
+                )
+            }
+        case .never:
+            return .zero
+        }
     }
 }

@@ -17,6 +17,10 @@ extension ListView
                 
         private(set) var collectionViewLayout : CollectionViewLayout
         
+        var layout : AnyListLayout {
+            collectionViewLayout.layout
+        }
+        
         init(layout collectionViewLayout : CollectionViewLayout, collectionView : UICollectionView)
         {
             self.collectionViewLayout = collectionViewLayout

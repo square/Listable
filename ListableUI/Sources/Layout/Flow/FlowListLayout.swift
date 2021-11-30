@@ -109,6 +109,9 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.
     public var stickySectionHeaders: Bool
     
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
+    
     /// The properties of the backing `UIScrollView`.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -142,10 +145,12 @@ public struct FlowAppearance : ListLayoutAppearance {
     public init(
         direction: LayoutDirection = .vertical,
         stickySectionHeaders: Bool? = nil,
-        bounds : ListContentBounds? = nil,
+        pagingBehavior : ListPagingBehavior = .none,
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
         rowItemsAlignment : RowItemsAlignment = .top,
         itemSizing : ItemSizing = .natural,
+        
+        bounds : ListContentBounds? = nil,
         spacings : Spacings = .init()
     ) {
         self.direction = direction
@@ -161,12 +166,14 @@ public struct FlowAppearance : ListLayoutAppearance {
             }
         }()
         
-        self.bounds = bounds
-        
+        self.pagingBehavior = pagingBehavior
+                
         self.rowUnderflowAlignment = rowUnderflowAlignment
         self.rowItemsAlignment = rowItemsAlignment
         
         self.itemSizing = itemSizing
+        
+        self.bounds = bounds
         
         self.spacings = spacings
     }

@@ -52,21 +52,16 @@ final class HorizontalLayoutViewController : UIViewController
 
                     horizontal += Section("cards") {
 
-                        Item(
-                            CardElement(title: "This is the first card in a paged layout", detail: "Isn't it neat?", color: .white(0.90))
-                        )
-
-                        Item(
-                            CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85))
-                        )
-
-                        Item(
-                            CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80))
-                        )
-
-                        Item(
-                            CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75))
-                        )
+                        for index in 1...20 {
+                            Item(
+                                CardElement(
+                                    title: "This card #\(index)",
+                                    detail: "",
+                                    color: index % 2 == 0 ? .white(0.90) : .white(0.80)
+                                ),
+                                sizing: .fixed(width: 200)
+                            )
+                        }
                     }
                 }
                 
@@ -74,6 +69,8 @@ final class HorizontalLayoutViewController : UIViewController
                     
                     horizontal.layout = .table {
                         $0.direction = .horizontal
+                        
+                        $0.pagingBehavior = .firstVisibleItemEdge
                         
                         $0.layout.itemSpacing = 20.0
                         
@@ -83,26 +80,16 @@ final class HorizontalLayoutViewController : UIViewController
                     }
 
                     horizontal += Section("cards") {
-
-                        Item(
-                            CardElement(title: "This is the first card in a table layout", detail: "Isn't it neat?", color: .white(0.90)),
-                            sizing: .fixed(width: 200)
-                        )
-
-                        Item(
-                            CardElement(title: "This is the second card", detail: "Isn't it neat?", color: .white(0.85)),
-                            sizing: .fixed(width: 200)
-                        )
-
-                        Item(
-                            CardElement(title: "This is the third card", detail: "Isn't it neat?", color: .white(0.80)),
-                            sizing: .fixed(width: 200)
-                        )
-
-                        Item(
-                            CardElement(title: "This is the fourth card", detail: "Isn't it neat?", color: .white(0.75)),
-                            sizing: .fixed(width: 200)
-                        )
+                        for index in 1...20 {
+                            Item(
+                                CardElement(
+                                    title: "This card #\(index)",
+                                    detail: "",
+                                    color: index % 2 == 0 ? .white(0.90) : .white(0.80)
+                                ),
+                                sizing: .fixed(width: 200)
+                            )
+                        }
                     }
                 }
                 

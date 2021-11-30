@@ -64,6 +64,8 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public let stickySectionHeaders: Bool = false
     
+    public let pagingBehavior: ListPagingBehavior = .none
+    
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: self.pagingSize == .view,
@@ -74,6 +76,8 @@ public struct PagedAppearance : ListLayoutAppearance
             allowsHorizontalScrollIndicator: self.showsScrollIndicators
         )
     }
+    
+    public let bounds: ListContentBounds? = nil
     
     // MARK: Properties
     

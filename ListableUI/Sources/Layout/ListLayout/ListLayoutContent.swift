@@ -107,7 +107,21 @@ public final class ListLayoutContent
         }
     }
     
-    func layoutAttributes(in rect: CGRect, alwaysIncludeOverscroll : Bool) -> [UICollectionViewLayoutAttributes]
+    func layoutAttributes(in rect: CGRect, alwaysIncludeOverscroll : Bool) -> [UICollectionViewLayoutAttributes] {
+        self
+            .content(
+                in: rect,
+                alwaysIncludeOverscroll: alwaysIncludeOverscroll,
+                includeUnpopulated: true
+            )
+            .map(\.collectionViewLayoutAttributes)
+    }
+    
+    func content(
+        in rect: CGRect,
+        alwaysIncludeOverscroll : Bool,
+        includeUnpopulated: Bool
+    ) -> [ListLayoutContent.ContentItem]
     {
         /**
          Supplementary items are technically attached to index paths. Eg, list headers
@@ -116,22 +130,34 @@ public final class ListLayoutContent
          unless there's at least one section – the collection view will not have anything to
          attach them to, and will then crash.
          */
-        guard self.sections.isEmpty == false else {
-            return []
-        }
+        if self.sections.isEmpty { return [] }
         
-        var attributes = [UICollectionViewLayoutAttributes]()
+        var attributes = [ListLayoutContent.ContentItem]()
+        
+        func include(_ supplementary : ListLayoutContent.SupplementaryItemInfo) -> Bool {
+            return includeUnpopulated || supplementary.isPopulated
+        }
         
         // Container Header
         
-        if rect.intersects(self.containerHeader.visibleFrame) {
-            attributes.append(self.containerHeader.layoutAttributes(with: self.containerHeader.kind.indexPath(in: 0)))
+        if rect.intersects(self.containerHeader.visibleFrame) && include(self.containerHeader) {
+            attributes.append(
+                .supplementary(
+                    self.containerHeader,
+                    self.containerHeader.layoutAttributes(with: self.containerHeader.kind.indexPath(in: 0))
+                )
+            )
         }
         
         // List Header
         
-        if rect.intersects(self.header.visibleFrame) {
-            attributes.append(self.header.layoutAttributes(with: self.header.kind.indexPath(in: 0)))
+        if rect.intersects(self.header.visibleFrame) && include(self.header) {
+            attributes.append(
+                .supplementary(
+                    self.header,
+                    self.header.layoutAttributes(with: self.header.kind.indexPath(in: 0))
+                )
+            )
         }
         
         // Sections
@@ -144,37 +170,62 @@ public final class ListLayoutContent
             
             // Section Header
             
-            if rect.intersects(section.header.visibleFrame) {
-                attributes.append(section.header.layoutAttributes(with: section.header.kind.indexPath(in: sectionIndex)))
+            if rect.intersects(section.header.visibleFrame) && include(section.header) {
+                attributes.append(
+                    .supplementary(
+                        section.header,
+                        section.header.layoutAttributes(with: section.header.kind.indexPath(in: sectionIndex))
+                    )
+                )
             }
             
             // Items
             
             for item in section.items {
                 if rect.intersects(item.frame) {
-                    attributes.append(item.layoutAttributes(with: item.indexPath))
+                    attributes.append(
+                        .item(
+                            item,
+                            item.layoutAttributes(with: item.indexPath)
+                        )
+                    )
                 }
             }
             
             // Section Footer
             
-            if rect.intersects(section.footer.visibleFrame) {
-                attributes.append(section.footer.layoutAttributes(with: section.footer.kind.indexPath(in: sectionIndex)))
+            if rect.intersects(section.footer.visibleFrame) && include(section.footer) {
+                attributes.append(
+                    .supplementary(
+                        section.footer,
+                        section.footer.layoutAttributes(with: section.footer.kind.indexPath(in: sectionIndex))
+                    )
+                )
             }
         }
         
         // List Footer
         
-        if rect.intersects(self.footer.visibleFrame) {
-            attributes.append(self.footer.layoutAttributes(with: self.footer.kind.indexPath(in: 0)))
+        if rect.intersects(self.footer.visibleFrame) && include(self.footer) {
+            attributes.append(
+                .supplementary(
+                    self.footer,
+                    self.footer.layoutAttributes(with: self.footer.kind.indexPath(in: 0))
+                )
+            )
         }
         
         // Overscroll Footer
         
-        if alwaysIncludeOverscroll || rect.intersects(self.overscrollFooter.visibleFrame) {
+        if alwaysIncludeOverscroll || (rect.intersects(self.overscrollFooter.visibleFrame) && include(self.overscrollFooter)) {
             // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
             // Instead, just return it all the time to ensure the collection view will display it when needed.
-            attributes.append(self.overscrollFooter.layoutAttributes(with: self.overscrollFooter.kind.indexPath(in: 0)))
+            attributes.append(
+                .supplementary(
+                    self.overscrollFooter,
+                    self.overscrollFooter.layoutAttributes(with: self.overscrollFooter.kind.indexPath(in: 0))
+                )
+            )
         }
         
         return attributes
@@ -260,6 +311,7 @@ public final class ListLayoutContent
 }
 
 
+// TODO: Consider `AnyListLayoutContentItem`
 public protocol ListLayoutContentItem : AnyObject
 {
     var measuredSize : CGSize { get set }
@@ -465,6 +517,31 @@ extension ListLayoutContent
             attributes.zIndex = self.zIndex
             
             return attributes
+        }
+    }
+    
+    enum ContentItem {
+        
+        case item(ListLayoutContent.ItemInfo, UICollectionViewLayoutAttributes)
+        
+        case supplementary(ListLayoutContent.SupplementaryItemInfo, UICollectionViewLayoutAttributes)
+        
+        public var collectionViewLayoutAttributes : UICollectionViewLayoutAttributes {
+            switch self {
+            case .item(_, let attributes): return attributes
+            case .supplementary(_, let attributes): return attributes
+            }
+        }
+        
+        public var indexPath : IndexPath {
+            self.collectionViewLayoutAttributes.indexPath
+        }
+        
+        public var defaultFrame : CGRect {
+            switch self {
+            case .item(let item, _): return item.frame
+            case .supplementary(let supplementary, _): return supplementary.defaultFrame
+            }
         }
     }
 }

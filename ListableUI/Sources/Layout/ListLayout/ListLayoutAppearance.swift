@@ -14,7 +14,11 @@ public protocol ListLayoutAppearance : Equatable
     
     var direction : LayoutDirection { get }
     
+    var bounds : ListContentBounds? { get }
+    
     var stickySectionHeaders : Bool { get }
+    
+    var pagingBehavior : ListPagingBehavior { get }
     
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
 }
@@ -25,22 +29,30 @@ public protocol ListLayoutAppearance : Equatable
 public struct ListLayoutAppearanceProperties : Equatable {
         
     public let direction : LayoutDirection
+    public let bounds : ListContentBounds?
     public let stickySectionHeaders : Bool
+    public let pagingBehavior : ListPagingBehavior
     public let scrollViewProperties : ListLayoutScrollViewProperties
     
     public init(
         direction: LayoutDirection,
+        bounds : ListContentBounds?,
         stickySectionHeaders: Bool,
+        pagingBehavior : ListPagingBehavior,
         scrollViewProperties : ListLayoutScrollViewProperties
     ) {
         self.direction = direction
+        self.bounds = bounds
         self.stickySectionHeaders = stickySectionHeaders
+        self.pagingBehavior = pagingBehavior
         self.scrollViewProperties = scrollViewProperties
     }
     
     public init<Appearance:ListLayoutAppearance>(_ appearance : Appearance) {
         self.direction = appearance.direction
+        self.bounds = appearance.bounds
         self.stickySectionHeaders = appearance.stickySectionHeaders
+        self.pagingBehavior = appearance.pagingBehavior
         self.scrollViewProperties = appearance.scrollViewProperties
     }
 }
