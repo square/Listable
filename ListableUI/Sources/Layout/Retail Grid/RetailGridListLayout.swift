@@ -32,6 +32,8 @@ public struct RetailGridAppearance : ListLayoutAppearance
     
     public var stickySectionHeaders : Bool = false
     
+    public let pagingBehavior: ListPagingBehavior = .none
+    
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: self.layout.isPaged,

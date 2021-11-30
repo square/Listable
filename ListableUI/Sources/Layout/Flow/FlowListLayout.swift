@@ -109,6 +109,9 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.
     public var stickySectionHeaders: Bool
     
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
+    
     /// The properties of the backing `UIScrollView`.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -132,8 +135,6 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// Controls the sizing / measurement of items within the flow layout.
     public var itemSizing : ItemSizing
     
-    public var onDidEndDragging : OnDidEndDragging
-    
     /// Controls the padding and maximum width of the flow layout.
     public var bounds : ListContentBounds?
     
@@ -144,10 +145,11 @@ public struct FlowAppearance : ListLayoutAppearance {
     public init(
         direction: LayoutDirection = .vertical,
         stickySectionHeaders: Bool? = nil,
+        pagingBehavior : ListPagingBehavior = .none,
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
         rowItemsAlignment : RowItemsAlignment = .top,
         itemSizing : ItemSizing = .natural,
-        onDidEndDragging : OnDidEndDragging = .default,
+        
         bounds : ListContentBounds? = nil,
         spacings : Spacings = .init()
     ) {
@@ -163,13 +165,13 @@ public struct FlowAppearance : ListLayoutAppearance {
                 }
             }
         }()
+        
+        self.pagingBehavior = pagingBehavior
                 
         self.rowUnderflowAlignment = rowUnderflowAlignment
         self.rowItemsAlignment = rowItemsAlignment
         
         self.itemSizing = itemSizing
-        
-        self.onDidEndDragging = onDidEndDragging
         
         self.bounds = bounds
         
@@ -179,11 +181,6 @@ public struct FlowAppearance : ListLayoutAppearance {
 
 
 extension FlowAppearance {
-    
-    public enum OnDidEndDragging : Equatable {
-        case `default`
-        case adjustsScrollToShowFullTargetRow
-    }
     
     /// Controls how items in a row are measured and sized.
     public enum ItemSizing : Equatable {
@@ -585,10 +582,6 @@ final class FlowListLayout : ListLayout {
     
     func updateLayout(in context: ListLayoutLayoutContext) {
         /// No updates needed outside the regular `layout` method.
-    }
-    
-    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
-        self.layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetRow
     }
     
     func layout(

@@ -299,6 +299,7 @@ public final class ListLayoutContent
 }
 
 
+// TODO: Consider `AnyListLayoutContentItem`
 public protocol ListLayoutContentItem : AnyObject
 {
     var size : CGSize { get set }

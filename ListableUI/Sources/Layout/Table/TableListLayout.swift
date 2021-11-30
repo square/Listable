@@ -112,6 +112,9 @@ public struct TableAppearance : ListLayoutAppearance
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
+    
     /// The properties applied to the scroll view backing the list.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -131,8 +134,6 @@ public struct TableAppearance : ListLayoutAppearance
     /// items are spaced 2pts apart, the items will be in a new group.
     public var itemPositionGroupingHeight : CGFloat
     
-    public var onDidEndDragging : OnDidEndDragging
-    
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
     
@@ -145,15 +146,15 @@ public struct TableAppearance : ListLayoutAppearance
     public init(
         direction : LayoutDirection = .vertical,
         stickySectionHeaders : Bool = true,
+        pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
-        onDidEndDragging : OnDidEndDragging = .default,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
         self.direction = direction
         self.stickySectionHeaders = stickySectionHeaders
+        self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
-        self.onDidEndDragging = onDidEndDragging
         self.bounds = bounds
         self.layout = layout
     }
@@ -256,11 +257,6 @@ extension TableAppearance
                 return grouped
             }
         }
-    }
-    
-    public enum OnDidEndDragging : Equatable {
-        case `default`
-        case adjustsScrollToShowFullTargetItem
     }
         
     /// Layout options for the list.
@@ -403,10 +399,6 @@ final class TableListLayout : ListLayout
     //
     // MARK: Performing Layouts
     //
-    
-    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
-        self.layoutAppearance.onDidEndDragging == .adjustsScrollToShowFullTargetItem
-    }
     
     func updateLayout(in context : ListLayoutLayoutContext)
     {

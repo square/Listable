@@ -64,6 +64,8 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public let stickySectionHeaders: Bool = false
     
+    public let pagingBehavior: ListPagingBehavior = .none
+    
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: self.pagingSize == .view,

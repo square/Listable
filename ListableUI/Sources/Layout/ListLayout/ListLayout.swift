@@ -69,16 +69,20 @@ extension ListLayout
         self.layoutAppearance.direction
     }
     
+    public var bounds : ListContentBounds? {
+        self.layoutAppearance.bounds
+    }
+    
     public var stickySectionHeaders: Bool {
         self.layoutAppearance.stickySectionHeaders
     }
     
-    public var scrollViewProperties: ListLayoutScrollViewProperties {
-        self.layoutAppearance.scrollViewProperties
+    public var pagingBehavior: ListPagingBehavior {
+        self.layoutAppearance.pagingBehavior
     }
     
-    public var bounds : ListContentBounds? {
-        self.layoutAppearance.bounds
+    public var scrollViewProperties: ListLayoutScrollViewProperties {
+        self.layoutAppearance.scrollViewProperties
     }
 }
 
@@ -99,6 +103,8 @@ public protocol AnyListLayout : AnyObject
     var bounds : ListContentBounds? { get }
     
     var stickySectionHeaders : Bool { get }
+    
+    var pagingBehavior : ListPagingBehavior { get }
     
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
     
@@ -125,12 +131,6 @@ public protocol AnyListLayout : AnyObject
         at indexPath: IndexPath,
         withTargetPosition position: CGPoint
     )
-    
-    //
-    // MARK: Adjusting Target Content Offset
-    //
-    
-    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool
 }
 
 
@@ -182,10 +182,6 @@ extension AnyListLayout
         withTargetPosition position: CGPoint
     ) {
         // Nothing. Just a default implementation.
-    }
-    
-    func shouldAdjustTargetContentOffsetOnDidEndScrolling() -> Bool {
-        false
     }
 }
 
@@ -329,7 +325,7 @@ extension AnyListLayout
         velocity : CGPoint
     ) -> CGPoint?
     {
-        guard self.shouldAdjustTargetContentOffsetOnDidEndScrolling() else { return nil }
+        guard self.pagingBehavior == .firstVisibleItemEdge else { return nil }
         
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
@@ -408,7 +404,8 @@ extension AnyListLayout
     }
 }
 
-enum ScrollVelocityDirection {
+
+fileprivate enum ScrollVelocityDirection {
     case forward
     case backward
     

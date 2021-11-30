@@ -19,6 +19,18 @@ final class AnyListLayoutTests : XCTestCase {
             
     func test_onDidEndDraggingTargetContentOffset_for_velocity() {
         
+        self.testcase("no paging") {
+            let layout = layoutForVisibleTests(direction: .vertical, pagingBehavior: .none)
+            
+            XCTAssertEqual(
+                layout.onDidEndDraggingTargetContentOffset(
+                    for: CGPoint(x: 0, y: 0),
+                       velocity: CGPoint(x: 0, y: 1)
+                ),
+                nil
+            )
+        }
+        
         self.testcase("vertical") {
             let layout = layoutForVisibleTests(direction: .vertical)
             
@@ -238,7 +250,7 @@ final class AnyListLayoutTests : XCTestCase {
     
     private func layoutForVisibleTests(
         direction: LayoutDirection,
-        adjustsContentOffset : Bool = true
+        pagingBehavior : ListPagingBehavior = .firstVisibleItemEdge
     ) -> AnyListLayout {
         
         let list : ListProperties = .default { list in
@@ -250,9 +262,7 @@ final class AnyListLayoutTests : XCTestCase {
                     padding: UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
                 )
                 
-                if adjustsContentOffset {
-                    $0.onDidEndDragging = .adjustsScrollToShowFullTargetItem
-                }
+                $0.pagingBehavior = pagingBehavior
             }
             
             list.add {

@@ -228,7 +228,7 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
-                    DemoItem(text: "Carousel Layout"),
+                    DemoItem(text: "Carousel-Style Layouts"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(CarouselLayoutViewController())

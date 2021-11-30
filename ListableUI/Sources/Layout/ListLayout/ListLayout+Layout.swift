@@ -77,6 +77,9 @@ extension ListProperties {
 
 extension UIEdgeInsets {
     
+    /// Because `ListProperties.makeLayout(...)` does not deal with an actual
+    /// `UIScrollView`, we need to calculate `adjustedContentInset` ourselves,
+    /// to pass to `layout.performLayout(...)`.
     static func listAdjustedContentInset(
         with contentInsetAdjustmentBehaviour : ContentInsetAdjustmentBehavior,
         direction : LayoutDirection,
