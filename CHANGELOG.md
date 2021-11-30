@@ -10,6 +10,8 @@
 
 - The `.flow` layout type has been added, to support flow and grid style layouts.
 
+- Added `.pagingBehaviour` to `.table` and `.flow` style layouts, which allows implementing carousel-style layouts, by enabling scroll paging alongside item boundaries.
+
 ### Removed
 
 - The `.experimental_grid` layout type has been removed; it is replaced by `.flow`.
