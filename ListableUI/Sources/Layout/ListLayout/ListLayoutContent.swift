@@ -13,6 +13,8 @@ public final class ListLayoutContent
 {
     public var contentSize : CGSize
     
+    public var naturalContentWidth : CGFloat?
+    
     public let containerHeader : SupplementaryItemInfo
     public let header : SupplementaryItemInfo
     public let footer : SupplementaryItemInfo
@@ -37,9 +39,16 @@ public final class ListLayoutContent
         return all
     }
     
+    public func maxValue(for keyPath : KeyPath<ListLayoutContentItem, CGFloat>) -> CGFloat {
+        self.all.reduce(0) { value, item in
+            max(value, item[keyPath: keyPath])
+        }
+    }
+    
     init()
     {
         self.contentSize = .zero
+        self.naturalContentWidth = nil
         
         self.containerHeader = .empty(.listContainerHeader)
         self.header = .empty(.listHeader)
@@ -57,6 +66,7 @@ public final class ListLayoutContent
         sections : [SectionInfo]
     ) {
         self.contentSize = .zero
+        self.naturalContentWidth = nil
         
         self.containerHeader = containerHeader ?? .empty(.listContainerHeader)
         self.header = header ?? .empty(.listHeader)
@@ -281,6 +291,8 @@ public final class ListLayoutContent
     var layoutAttributes : ListLayoutAttributes {
         ListLayoutAttributes(
             contentSize: self.contentSize,
+            naturalContentWidth : self.naturalContentWidth,
+            containerHeader: self.containerHeader.isPopulated ? .init(frame: self.containerHeader.defaultFrame) : nil,
             header: self.header.isPopulated ? .init(frame: self.header.defaultFrame) : nil,
             footer: self.footer.isPopulated ? .init(frame: self.footer.defaultFrame) : nil,
             overscrollFooter: self.overscrollFooter.isPopulated ? .init(frame: self.overscrollFooter.defaultFrame) : nil,
@@ -302,6 +314,8 @@ public final class ListLayoutContent
 // TODO: Consider `AnyListLayoutContentItem`
 public protocol ListLayoutContentItem : AnyObject
 {
+    var measuredSize : CGSize { get set }
+    
     var size : CGSize { get set }
     var x : CGFloat { get set }
     var y : CGFloat { get set }
@@ -395,6 +409,8 @@ extension ListLayoutContent
                 
         public let isPopulated : Bool
                         
+        public var measuredSize : CGSize = .zero
+        
         public var size : CGSize = .zero
         
         public var x : CGFloat = .zero
@@ -461,6 +477,8 @@ extension ListLayoutContent
         
         public var position : ItemPosition = .single
                 
+        public var measuredSize : CGSize = .zero
+        
         public var size : CGSize = .zero
                 
         public var x : CGFloat = .zero

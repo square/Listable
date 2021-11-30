@@ -48,7 +48,7 @@ extension ListView
         for properties : ListProperties,
         safeAreaInsets : UIEdgeInsets = .zero,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
-    ) -> CGSize
+    ) -> MeasuredListSize
     {
         let layout = properties.makeLayout(
             in: fittingSize,
@@ -58,9 +58,37 @@ extension ListView
         
         let size = layout.content.contentSize
         
-        return CGSize(
-            width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
-            height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
+        return .init(
+            contentSize: CGSize(
+                width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
+                height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
+            ),
+            naturalWidth: layout.content.naturalContentWidth
         )
+    }
+}
+
+
+/// Provides sizing and width information about the measurement of a list's content.
+public struct MeasuredListSize : Equatable {
+    
+    /// The content size of the list.
+    public var contentSize : CGSize
+    
+    /// If it supports it, this value will contain the "natural" width of the list's
+    /// content. For example, if you give a table layout 1000pts of width to lay out, but
+    /// its content only requires 200pts of width to lay out, this value will be 200pt.
+    ///
+    /// ### Note
+    /// Not all layouts support or provide a natural width. For example, a `.flow` layout
+    /// cannot provide a natural width because it takes up as much space as it as given.
+    public var naturalWidth : CGFloat?
+    
+    public init(
+        contentSize: CGSize,
+        naturalWidth: CGFloat?
+    ) {
+        self.contentSize = contentSize
+        self.naturalWidth = naturalWidth
     }
 }

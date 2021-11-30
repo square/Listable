@@ -134,7 +134,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { listableFatal() }
+    required init?(coder: NSCoder) { listableInternalFatal() }
     
     // MARK: UICollectionReusableView
     

@@ -12,7 +12,9 @@ import UIKit
 struct ListLayoutAttributes : Equatable {
     
     var contentSize : CGSize
+    var naturalContentWidth : CGFloat?
     
+    var containerHeader : Supplementary?
     var header : Supplementary?
     var footer : Supplementary?
     var overscrollFooter : Supplementary?

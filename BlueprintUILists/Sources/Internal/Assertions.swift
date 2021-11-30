@@ -1,6 +1,6 @@
 //
 //  Assertions.swift
-//  ListableUI
+//  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 1/10/20.
 //
@@ -18,7 +18,7 @@ func listableInternalFatal(
     fatalError(
         """
         LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#listable) know:
-
+        
         \(message())
         """,
         

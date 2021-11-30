@@ -224,7 +224,7 @@ extension ItemReordering {
                 self.onEnd?(.cancelled)
                 self.initialCenter = nil
                 
-            @unknown default: listableFatal()
+            @unknown default: listableInternalFatal()
             }
         }
     }

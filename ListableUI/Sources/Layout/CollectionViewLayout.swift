@@ -91,7 +91,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { listableFatal() }
+    required init?(coder: NSCoder) { listableInternalFatal() }
     
     //
     // MARK: Querying The Layout
@@ -728,7 +728,7 @@ fileprivate struct UpdateItems : Equatable
             case .reload: break
             case .none: break
                 
-            @unknown default: listableFatal()
+            @unknown default: listableInternalFatal()
             }
         }
         

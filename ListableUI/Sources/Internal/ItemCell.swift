@@ -53,7 +53,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     }
     
     @available(*, unavailable)
-    required init?(coder: NSCoder) { listableFatal() }
+    required init?(coder: NSCoder) { listableInternalFatal() }
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
     {

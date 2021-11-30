@@ -118,7 +118,7 @@ fileprivate extension ListReorderGesture
         
         @available(*, unavailable)
         required init?(coder aDecoder: NSCoder) {
-            listableFatal()
+            listableInternalFatal()
         }
     }
 }

@@ -25,7 +25,7 @@ final class ReusableViewCache
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
-        listablePrecondition(views.contains { $0 === view } == false, "Cannot push a view which is already in the cache.")
+        listableInternalPrecondition(views.contains { $0 === view } == false, "Cannot push a view which is already in the cache.")
         
         views.append(view)
         

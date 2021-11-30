@@ -434,6 +434,8 @@ final class TableListLayout : ListLayout
 
         let size = headerFooter.measurer(measureInfo)
         
+        headerFooter.measuredSize = size
+        
         // Write the measurement and position out to the header/footer.
         
         self.direction.switch(
@@ -493,6 +495,10 @@ final class TableListLayout : ListLayout
         self.setItemPositions()
         
         delegate?.listViewLayoutUpdatedItemPositions()
+        
+        //
+        // Sizing
+        //
         
         var contentBottom : CGFloat = 0.0
                 
@@ -607,6 +613,8 @@ final class TableListLayout : ListLayout
                     
                     let size = item.measurer(measureInfo)
                     
+                    item.measuredSize = size
+                    
                     self.direction.switch(
                         vertical: {
                             item.x = itemPosition.origin
@@ -667,6 +675,8 @@ final class TableListLayout : ListLayout
                         )
                                                 
                         let size = item.measurer(measureInfo)
+                        
+                        item.measuredSize = size
                         
                         let height = self.direction.switch(vertical: size.height, horizontal: size.width)
                         
@@ -771,6 +781,12 @@ final class TableListLayout : ListLayout
         //
         
         self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+        
+        self.content.naturalContentWidth = self.direction.switch {
+            content.maxValue(for: \.measuredSize.width) + bounds.padding.right + bounds.padding.left
+        } horizontal: {
+            content.maxValue(for: \.measuredSize.height) + bounds.padding.top + bounds.padding.bottom
+        }
     }
     
     private func setItemPositions()
