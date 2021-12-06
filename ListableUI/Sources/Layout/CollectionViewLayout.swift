@@ -520,6 +520,14 @@ final class CollectionViewLayout : UICollectionViewLayout
     //
     // MARK: UICollectionViewLayout Methods: Insertions & Removals
     //
+    
+    private func animations(for item : ListLayoutContent.ItemInfo) -> ItemInsertAndRemoveAnimations {
+        if UIAccessibility.isReduceMotionEnabled {
+            return .fade
+        } else {
+            return item.insertAndRemoveAnimations
+        }
+    }
 
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
@@ -528,9 +536,10 @@ final class CollectionViewLayout : UICollectionViewLayout
         if wasInserted {
             let item = self.layout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
+            let animations = self.animations(for: item)
             
             var properties = ListContentLayoutAttributes(attributes)
-            item.insertAndRemoveAnimations.onInsert(&properties)
+            animations.onInsert(&properties)
             properties.apply(to: attributes)
 
             return attributes
@@ -554,9 +563,10 @@ final class CollectionViewLayout : UICollectionViewLayout
         if wasItemDeleted {
             let item = self.previousLayout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
+            let animations = self.animations(for: item)
             
             var properties = ListContentLayoutAttributes(attributes)
-            item.insertAndRemoveAnimations.onRemoval(&properties)
+            animations.onRemoval(&properties)
             properties.apply(to: attributes)
 
             return attributes
