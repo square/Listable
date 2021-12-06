@@ -854,16 +854,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
         let view = self.collectionView
         let state = self.storage.presentationState
         
+        // TODO: Do I need to do the same layout invalidation here too?
+        
         removed.forEach {
             let item = state.item(at: $0)
             view.deselectItem(at: $0, animated: animated)
-            item.applyToVisibleCell(with: self.environment)
+            item.applyToVisibleCell(with: self.environment, reason: .selectionChanged)
         }
         
         added.forEach {
             let item = state.item(at: $0)
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
-            item.applyToVisibleCell(with: self.environment)
+            item.applyToVisibleCell(with: self.environment, reason: .selectionChanged)
         }
     }
     
@@ -952,7 +954,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             presentationState.update(
                 with: diff,
                 slice: visibleSlice,
-                reason: .wasUpdated,
+                reason: .wasUpdated, // TODO: Remove this param??
                 dependencies: dependencies,
                 updateCallbacks: updateCallbacks,
                 loggable: self

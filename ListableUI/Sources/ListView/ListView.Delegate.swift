@@ -34,14 +34,14 @@ extension ListView
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell(with: self.view.environment)
+            item.applyToVisibleCell(with: self.view.environment, reason: .highlightStatusChanged)
         }
         
         func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath)
         {
             let item = self.presentationState.item(at: indexPath)
             
-            item.applyToVisibleCell(with: self.view.environment)
+            item.applyToVisibleCell(with: self.view.environment, reason: .highlightStatusChanged)
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool
@@ -63,7 +63,7 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: true, performCallbacks: true)
-            item.applyToVisibleCell(with: self.view.environment)
+            item.applyToVisibleCell(with: self.view.environment, reason: .selectionChanged)
             
             self.performOnSelectChanged()
             
@@ -73,7 +73,7 @@ extension ListView
             case .tappable:
                 item.set(isSelected: false, performCallbacks: true)
                 collectionView.deselectItem(at: indexPath, animated: true)
-                item.applyToVisibleCell(with: self.view.environment)
+                item.applyToVisibleCell(with: self.view.environment, reason: .selectionChanged)
                 
             case .selectable:
                 item.resetCachedSizes()
@@ -88,7 +88,7 @@ extension ListView
             let item = self.presentationState.item(at: indexPath)
             
             item.set(isSelected: false, performCallbacks: true)
-            item.applyToVisibleCell(with: self.view.environment)
+            item.applyToVisibleCell(with: self.view.environment, reason: .selectionChanged)
             
             switch item.anyModel.selectionStyle {
                 

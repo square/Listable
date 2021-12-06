@@ -16,6 +16,15 @@ public enum ApplyReason : Hashable
     /// If your updates can contain animated transitions, you should animate this update.
     case wasUpdated
     
+    /// The selection state of the given item changed.
+    case selectionChanged
+    
+    /// Used when the highlight state of an item changes.
+    case highlightStatusChanged
+    
+    /// Used when reordering of an item begins or ends.
+    case reorderingStatusChanged
+    
     /// The item is being measured to perform the layout of the list. Update should be performed with no animation.
     case measurement
     
@@ -26,6 +35,9 @@ public enum ApplyReason : Hashable
         switch self {
         case .willDisplay: return false
         case .wasUpdated: return true
+        case .selectionChanged: return true
+        case .highlightStatusChanged: return true
+        case .reorderingStatusChanged: return true
         case .measurement: return false
         }
     }

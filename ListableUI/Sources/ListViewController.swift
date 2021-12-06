@@ -165,7 +165,7 @@ public extension ListView {
             // No transition coordinator is available – we should just deselect return in this case.
             item.set(isSelected: false, performCallbacks: true)
             collectionView.deselectItem(at: indexPath, animated: animated)
-            item.applyToVisibleCell(with: self.environment)
+            item.applyToVisibleCell(with: self.environment, reason: .selectionChanged)
 
             return
         }
@@ -173,12 +173,12 @@ public extension ListView {
         coordinator.animate(alongsideTransition: { _ in
             item.set(isSelected: false, performCallbacks: true)
             self.collectionView.deselectItem(at: indexPath, animated: true)
-            item.applyToVisibleCell(with: self.environment)
+            item.applyToVisibleCell(with: self.environment, reason: .selectionChanged)
         }, completion: { context in
             if context.isCancelled {
                 item.set(isSelected: true, performCallbacks: false)
                 self.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: [])
-                item.applyToVisibleCell(with: self.environment)
+                item.applyToVisibleCell(with: self.environment, reason: .selectionChanged)
             }
         })
     }

@@ -34,7 +34,7 @@ protocol AnyPresentationItemState : AnyObject
         environment : ListEnvironment
     )
     
-    func applyToVisibleCell(with environment : ListEnvironment)
+    func applyToVisibleCell(with environment : ListEnvironment, reason: ApplyReason)
         
     func set(
         new : AnyItem,
@@ -300,7 +300,7 @@ extension PresentationState
             }
         }
         
-        func applyToVisibleCell(with environment : ListEnvironment)
+        func applyToVisibleCell(with environment : ListEnvironment, reason: ApplyReason)
         {
             guard let cell = self.storage.state.visibleCell else {
                 return
@@ -309,7 +309,7 @@ extension PresentationState
             self.applyTo(
                 cell: cell,
                 itemState: .init(cell: cell, isReordering: self.isReordering),
-                reason: .wasUpdated,
+                reason: reason,
                 environment: environment
             )
         }
@@ -363,7 +363,7 @@ extension PresentationState
             
             if wantsReapplication {
                 updateCallbacks.performAnimation {
-                    self.applyToVisibleCell(with: environment)
+                    self.applyToVisibleCell(with: environment, reason: .wasUpdated)
                 }
             }
         }
@@ -515,8 +515,8 @@ extension PresentationState
                 originalIndexPath: originalIndexPath
             )
             
-            UIView.animate(withDuration: 0.15) {
-                self.applyToVisibleCell(with: environment)
+            UIView.animate(withDuration: 0.2) {
+                self.applyToVisibleCell(with: environment, reason: .reorderingStatusChanged)
             }
         }
         
@@ -530,8 +530,8 @@ extension PresentationState
             
             self.activeReorderEventInfo = nil
             
-            UIView.animate(withDuration: 0.15) {
-                self.applyToVisibleCell(with: environment)
+            UIView.animate(withDuration: 0.2) {
+                self.applyToVisibleCell(with: environment, reason: .reorderingStatusChanged)
             }
         }
         
