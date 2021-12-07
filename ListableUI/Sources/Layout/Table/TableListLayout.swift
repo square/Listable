@@ -119,7 +119,7 @@ public struct TableAppearance : ListLayoutAppearance
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: .scrollableAxes,
+            contentInsetAdjustmentBehavior: self.contentInsetAdjustmentBehavior,
             allowsBounceVertical: true,
             allowsBounceHorizontal: true,
             allowsVerticalScrollIndicator: true,
@@ -133,6 +133,9 @@ public struct TableAppearance : ListLayoutAppearance
     /// for items to be considered in the same group. For example, if this value is 1, and
     /// items are spaced 2pts apart, the items will be in a new group.
     public var itemPositionGroupingHeight : CGFloat
+    
+    /// How to adjust the safe area insets of the list view.
+    public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
@@ -148,6 +151,7 @@ public struct TableAppearance : ListLayoutAppearance
         stickySectionHeaders : Bool = true,
         pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
+        contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
@@ -155,6 +159,7 @@ public struct TableAppearance : ListLayoutAppearance
         self.stickySectionHeaders = stickySectionHeaders
         self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
+        self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
         self.bounds = bounds
         self.layout = layout
     }

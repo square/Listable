@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [1.0.1] - 2021-12-06
+
+### Added
+
+- You may now set the `contentInsetAdjustmentBehavior` on `.table` layouts. This is useful when presenting in a sheet, to more directly control the safe area inset.
+
 # [1.0.0] - 2021-12-06
 
 ### Fixed
@@ -577,7 +583,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/1.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/1.0.1...HEAD
+[1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
 [0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
 [0.30.0]: https://github.com/kyleve/Listable/compare/0.29.3...0.30.0
