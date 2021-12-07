@@ -34,6 +34,13 @@
       "symbol": "List.Measurement",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/k/Desktop/Development/Listable1/BlueprintUILists/Sources/List.Measurement.swift",
+      "line": 103,
+      "symbol": "List.Measurement",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/k/Desktop/Development/Listable1"

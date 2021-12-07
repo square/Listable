@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-    
+
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (58% documented)
       </p>
-    
+
       <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </div>
-    
+
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-    
+
     </header>
 
     <p class="breadcrumbs">
@@ -179,6 +179,9 @@
                 <a class="nav-group-task-link" href="../Enums/ListContentBoundsKey.html">ListContentBoundsKey</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/ListPagingBehavior.html">ListPagingBehavior</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ListableBuilder.html">ListableBuilder</a>
               </li>
               <li class="nav-group-task">
@@ -234,10 +237,7 @@
             <a class="nav-group-name-link" href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Functions.html#/s:10ListableUI13listableFatal_4file4lines5NeverOSSyXK_s12StaticStringVSutF">listableFatal(_:file:line:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Functions.html#/s:10ListableUI20listablePrecondition__4file4lineySbyXK_SSyXKs12StaticStringVSutF">listablePrecondition(_:_:file:line:)</a>
+                <a class="nav-group-task-link" href="../Functions.html#/s:10ListableUI19preconditionFailure_4file4lines5NeverOSSyXK_s12StaticStringVSutF">preconditionFailure(_:file:line:)</a>
               </li>
             </ul>
           </li>
@@ -529,6 +529,9 @@
                 <a class="nav-group-task-link" href="../Structs/LocalizedItemCollator/CollatedSection.html">– CollatedSection</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/MeasuredListSize.html">MeasuredListSize</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/PagedAppearance.html">PagedAppearance</a>
               </li>
               <li class="nav-group-task">
@@ -586,9 +589,6 @@
                 <a class="nav-group-task-link" href="../Structs/TableAppearance/SectionLayout.html">– SectionLayout</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/TableAppearance/Sizing.html">– Sizing</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/TableAppearance/Layout.html">– Layout</a>
               </li>
             </ul>
@@ -619,12 +619,16 @@
             <h1>ItemInsertAndRemoveAnimations</h1>
               <div class="declaration">
                 <div class="language">
-                  
+
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ItemInsertAndRemoveAnimations</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>Controls the animations that are displayed when an item is inserted into, or removed from, a list.</p>
+<h3 id='note' class='heading'>Note</h3>
+
+<p>If <code>UIAccessibility.isReduceMotionEnabled</code> is <code>true</code>, animations will fall
+back to a <code>.fade</code> style animation when displayed by the list view.</p>
 
           </div>
         </section>
@@ -654,6 +658,33 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Prepare</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt"><a href="../Structs/ListContentLayoutAttributes.html">ListContentLayoutAttributes</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI29ItemInsertAndRemoveAnimationsV4nameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29ItemInsertAndRemoveAnimationsV4nameSSvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -717,9 +748,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI29ItemInsertAndRemoveAnimationsV02onD00H7RemovalACyAA27ListContentLayoutAttributesVzc_yAGzctcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(onInsert:onRemoval:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI29ItemInsertAndRemoveAnimationsV02onD00H7RemovalACyAA27ListContentLayoutAttributesVzc_yAGzctcfc">init(onInsert:<wbr>onRemoval:<wbr>)</a>
+                    <a name="/s:10ListableUI29ItemInsertAndRemoveAnimationsV4name02onD00I7RemovalACSS_yAA27ListContentLayoutAttributesVzcyAHzctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(name:onInsert:onRemoval:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29ItemInsertAndRemoveAnimationsV4name02onD00I7RemovalACSS_yAA27ListContentLayoutAttributesVzcyAHzctcfc">init(name:<wbr>onInsert:<wbr>onRemoval:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -735,6 +766,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">name</span> <span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">onInsert</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ItemInsertAndRemoveAnimations.html#/s:10ListableUI29ItemInsertAndRemoveAnimationsV7Preparea">Prepare</a></span><span class="p">,</span>
     <span class="nv">onRemoval</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ItemInsertAndRemoveAnimations.html#/s:10ListableUI29ItemInsertAndRemoveAnimationsV7Preparea">Prepare</a></span>
 <span class="p">)</span></code></pre>
@@ -747,9 +779,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI29ItemInsertAndRemoveAnimationsV10attributesACyAA27ListContentLayoutAttributesVzc_tcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(attributes:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI29ItemInsertAndRemoveAnimationsV10attributesACyAA27ListContentLayoutAttributesVzc_tcfc">init(attributes:<wbr>)</a>
+                    <a name="/s:10ListableUI29ItemInsertAndRemoveAnimationsV4name10attributesACSS_yAA27ListContentLayoutAttributesVzctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(name:attributes:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI29ItemInsertAndRemoveAnimationsV4name10attributesACSS_yAA27ListContentLayoutAttributesVzctcfc">init(name:<wbr>attributes:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -764,7 +796,10 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">attributes</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ItemInsertAndRemoveAnimations.html#/s:10ListableUI29ItemInsertAndRemoveAnimationsV7Preparea">Prepare</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">name</span> <span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">attributes</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ItemInsertAndRemoveAnimations.html#/s:10ListableUI29ItemInsertAndRemoveAnimationsV7Preparea">Prepare</a></span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -968,7 +1003,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-11-26)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-12-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
