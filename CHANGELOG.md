@@ -2,6 +2,20 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [1.0.0] - 2021-12-06
+
+### Fixed
+
 - Insert and removal animations for items now respect `UIAccessibility.isReduceMotionEnabled`, falling back to `.fade` if `isReduceMotionEnabled` is true.
 
 ### Added
@@ -26,13 +40,9 @@
 
 - `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
 
-- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
+- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription` functions no longer take an escaping closure.
 
 - `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
-
-### Misc
-
-# Past Releases
 
 # [0.30.1] - 2021-11-16
 
@@ -567,7 +577,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.30.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
 [0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
 [0.30.0]: https://github.com/kyleve/Listable/compare/0.29.3...0.30.0
 [0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3
