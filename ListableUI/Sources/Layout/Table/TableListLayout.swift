@@ -120,8 +120,8 @@ public struct TableAppearance : ListLayoutAppearance
         .init(
             isPagingEnabled: false,
             contentInsetAdjustmentBehavior: self.contentInsetAdjustmentBehavior,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
+            allowsBounceVertical: self.bounceOnUnderflow,
+            allowsBounceHorizontal: self.bounceOnUnderflow,
             allowsVerticalScrollIndicator: true,
             allowsHorizontalScrollIndicator: true
         )
@@ -136,6 +136,8 @@ public struct TableAppearance : ListLayoutAppearance
     
     /// How to adjust the safe area insets of the list view.
     public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
+    
+    public var bounceOnUnderflow : Bool
     
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
@@ -152,6 +154,7 @@ public struct TableAppearance : ListLayoutAppearance
         pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
         contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
+        bounceOnUnderflow : Bool = true,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
@@ -160,6 +163,7 @@ public struct TableAppearance : ListLayoutAppearance
         self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
+        self.bounceOnUnderflow = bounceOnUnderflow
         self.bounds = bounds
         self.layout = layout
     }

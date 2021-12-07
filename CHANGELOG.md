@@ -18,6 +18,8 @@
 
 - You may now set the `contentInsetAdjustmentBehavior` on `.table` layouts. This is useful when presenting in a sheet, to more directly control the safe area inset.
 
+- You can now control underflow bounce behavior on `.table` layouts, via `bounceOnUnderflow`.
+
 # [1.0.0] - 2021-12-06
 
 ### Fixed
