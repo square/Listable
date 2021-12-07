@@ -46,7 +46,7 @@ extension ListView
     public static func contentSize(
         in fittingSize : CGSize,
         for properties : ListProperties,
-        safeAreaInsets : UIEdgeInsets = .zero,
+        safeAreaInsets : UIEdgeInsets,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
     ) -> MeasuredListSize
     {

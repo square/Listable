@@ -38,7 +38,7 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 300.0, height: 0.0), for: properties),
+                    ListView.contentSize(in: CGSize(width: 300.0, height: 0.0), for: properties, safeAreaInsets: .zero),
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 300.0, height: 150.0),
@@ -59,7 +59,7 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties),
+                    ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties, safeAreaInsets: .zero),
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 100.0, height: 300.0),
@@ -80,7 +80,7 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties),
+                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties, safeAreaInsets: .zero),
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 300.0, height: 100.0),

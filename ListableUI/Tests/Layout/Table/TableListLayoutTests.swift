@@ -54,7 +54,7 @@ class TableListLayoutTests : XCTestCase
     func test_naturalWidth_vertical() {
         let list = self.listProperties(direction: .vertical, includeHeader: true)
         
-        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list)
+        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list, safeAreaInsets: .zero)
         
         XCTAssertEqual(size.naturalWidth, 130.0)
     }
@@ -62,7 +62,7 @@ class TableListLayoutTests : XCTestCase
     func test_naturalWidth_horizontal() {
         let list = self.listProperties(direction: .horizontal, includeHeader: true)
         
-        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list)
+        let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list, safeAreaInsets: .zero)
         
         XCTAssertEqual(size.naturalWidth, 110.0)
     }

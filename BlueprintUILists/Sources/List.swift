@@ -153,6 +153,7 @@ extension List {
                     let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
+                        safeAreaInsets: .zero,
                         itemLimit: limit
                     )
                     
