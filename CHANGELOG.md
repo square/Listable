@@ -8,11 +8,19 @@
 
 ### Changed
 
-- When measuring a `List` in an unconstrained size constraint, and `.fillParent` is passed, a better assertion message is provided.
-
 ### Misc
 
 # Past Releases
+
+# [1.0.2] - 2021-12-14
+
+### Changed
+
+- When measuring a `List` in an unconstrained size constraint, and `.fillParent` is passed, a better assertion message is provided.
+
+### Fixed
+
+- Ensure that `.fillParent` `List` measurements returns the right height.
 
 # [1.0.1] - 2021-12-06
 
@@ -587,7 +595,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/1.0.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/1.0.2...HEAD
+[1.0.2]: https://github.com/kyleve/Listable/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
 [0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
