@@ -8,6 +8,8 @@
 
 ### Changed
 
+- When measuring a `List` in an unconstrained size constraint, and `.fillParent` is passed, a better assertion message is provided.
+
 ### Misc
 
 # Past Releases
