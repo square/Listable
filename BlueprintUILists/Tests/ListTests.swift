@@ -49,7 +49,7 @@ class ListTests : XCTestCase {
     }
     
     func test_size() {
-        let constraint = SizeConstraint(width: .atMost(1234), height: .atMost(1234))
+        let constraint = SizeConstraint(width: .atMost(1234), height: .atMost(1235))
         
         XCTAssertEqual(
             List.ListContent.size(
@@ -61,7 +61,7 @@ class ListTests : XCTestCase {
             horizontalFill: .fillParent,
             verticalFill: .fillParent
             ),
-            CGSize(width: 1234, height: 1234)
+            CGSize(width: 1234, height: 1235)
         )
         
         XCTAssertEqual(
@@ -74,7 +74,7 @@ class ListTests : XCTestCase {
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
-            CGSize(width: 900, height: 1234)
+            CGSize(width: 900, height: 1235)
         )
         
         XCTAssertEqual(
@@ -87,7 +87,7 @@ class ListTests : XCTestCase {
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
-            CGSize(width: 1200, height: 1234)
+            CGSize(width: 1200, height: 1235)
         )
         
         XCTAssertEqual(
