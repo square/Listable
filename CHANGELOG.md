@@ -8,11 +8,15 @@
 
 ### Changed
 
-- The signature of `ListLayout.layout(delegate:in:)` has been changed to return a `ListLayoutResult` value, to make it clearer which values must be provided as the output of a layout.
-
 ### Misc
 
 # Past Releases
+
+# [2.0.0] - 2021-12-15
+
+### Changed
+
+- The signature of `ListLayout.layout(delegate:in:)` has been changed to return a `ListLayoutResult` value, to make it clearer which values must be provided as the output of a layout.
 
 # [1.0.2] - 2021-12-14
 
@@ -597,7 +601,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/1.0.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/kyleve/Listable/compare/1.0.2...2.0.0
 [1.0.2]: https://github.com/kyleve/Listable/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
