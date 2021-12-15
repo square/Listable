@@ -11,9 +11,11 @@ import UIKit
 
 public final class ListLayoutContent
 {
-    public var contentSize : CGSize
+    /// The full scrollable size of the content, provided by the layout's `ListLayoutResult` return value.
+    public private(set) var contentSize : CGSize
     
-    public var naturalContentWidth : CGFloat?
+    /// The natural width of the content, provided by the layout's `ListLayoutResult` return value.
+    public private(set) var naturalContentWidth : CGFloat?
     
     public let containerHeader : SupplementaryItemInfo
     public let header : SupplementaryItemInfo
@@ -234,6 +236,11 @@ public final class ListLayoutContent
     //
     // MARK: Performing Layouts
     //
+    
+    func apply(result : ListLayoutResult) {
+        self.contentSize = result.contentSize
+        self.naturalContentWidth = result.naturalContentWidth
+    }
     
     func setSectionContentsFrames() {
         self.sections.forEach {
@@ -490,7 +497,7 @@ extension ListLayoutContent
             self.state.anyModel.layouts
         }
         
-        var frame : CGRect {
+        public var frame : CGRect {
             CGRect(
                 origin: CGPoint(x: self.x, y: self.y),
                 size: self.size

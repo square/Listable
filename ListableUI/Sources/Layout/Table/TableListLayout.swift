@@ -466,7 +466,8 @@ final class TableListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
             safeAreaInsets: context.safeAreaInsets,
@@ -789,13 +790,15 @@ final class TableListLayout : ListLayout
         // Remaining Calculations
         //
         
-        self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
-        
-        self.content.naturalContentWidth = self.direction.switch {
-            content.maxValue(for: \.measuredSize.width) + bounds.padding.right + bounds.padding.left
-        } horizontal: {
-            content.maxValue(for: \.measuredSize.height) + bounds.padding.top + bounds.padding.bottom
-        }
+        return .init(
+            contentSize: direction.size(for: CGSize(width: viewWidth, height: contentBottom)),
+            
+            naturalContentWidth: direction.switch {
+                content.maxValue(for: \.measuredSize.width) + bounds.padding.right + bounds.padding.left
+            } horizontal: {
+                content.maxValue(for: \.measuredSize.height) + bounds.padding.top + bounds.padding.bottom
+            }
+        )
     }
     
     private func setItemPositions()

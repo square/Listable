@@ -163,7 +163,8 @@ final class PagedListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let viewSize = self.layoutAppearance.pagingSize.size(
             for: context.viewBounds.size,
             direction: self.direction
@@ -189,9 +190,12 @@ final class PagedListLayout : ListLayout
             lastMaxY = direction.maxY(for: containerFrame)
         }
         
-        self.content.contentSize = direction.switch(
-            vertical: CGSize(width: viewSize.width, height: lastMaxY),
-            horizontal: CGSize(width: lastMaxY, height: viewSize.height)
+        return .init(
+            contentSize: direction.switch(
+                vertical: CGSize(width: viewSize.width, height: lastMaxY),
+                horizontal: CGSize(width: lastMaxY, height: viewSize.height)
+            ),
+            naturalContentWidth: nil
         )
     }
 }
