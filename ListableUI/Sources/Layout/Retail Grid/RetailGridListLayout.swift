@@ -281,7 +281,8 @@ final class RetailGridListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let layout = self.layoutAppearance.layout
         let viewSize = context.viewBounds.size
         var lastContentMaxY : CGFloat = 0.0
@@ -310,6 +311,9 @@ final class RetailGridListLayout : ListLayout
             lastContentMaxY = pages * viewSize.height
         }
 
-        self.content.contentSize = CGSize(width: viewSize.width, height: lastContentMaxY)
+        return .init(
+            contentSize: CGSize(width: viewSize.width, height: lastContentMaxY),
+            naturalContentWidth: nil
+        )
     }
 }

@@ -154,5 +154,11 @@ private final class TestLayout : ListLayout
     
     func updateLayout(in context : ListLayoutLayoutContext) { }
     
-    func layout(delegate: CollectionViewLayoutDelegate?, in context: ListLayoutLayoutContext) {}
+    func layout(
+        delegate: CollectionViewLayoutDelegate?,
+        in context: ListLayoutLayoutContext
+    ) -> ListLayoutResult
+    {
+        .init(contentSize: .zero, naturalContentWidth: nil)
+    }
 }

@@ -8,6 +8,8 @@
 
 ### Changed
 
+- The signature of `ListLayout.layout(delegate:in:)` has been changed to return a `ListLayoutResult` value, to make it clearer which values must be provided as the output of a layout.
+
 ### Misc
 
 # Past Releases

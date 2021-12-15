@@ -117,7 +117,7 @@ public protocol AnyListLayout : AnyObject
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    )
+    ) -> ListLayoutResult
     
     func setZIndexes()
     
@@ -140,10 +140,12 @@ extension AnyListLayout
         with delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
     ) {
-        self.layout(
+        let result = self.layout(
             delegate: delegate,
             in: context
         )
+        
+        self.content.apply(result: result)
         
         self.content.setSectionContentsFrames()
         

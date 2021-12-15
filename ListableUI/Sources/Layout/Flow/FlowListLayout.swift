@@ -587,7 +587,8 @@ final class FlowListLayout : ListLayout {
     func layout(
         delegate: CollectionViewLayoutDelegate?,
         in context: ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         // 1) Calculate the base values used to drive the layout.
         
         let boundsContext = ListContentBounds.Context(
@@ -832,7 +833,10 @@ final class FlowListLayout : ListLayout {
         // Remaining Calculations
         //
         
-        self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+        return .init(
+            contentSize: direction.size(for: CGSize(width: viewWidth, height: contentBottom)),
+            naturalContentWidth: nil
+        )
     }
     
     /// Sets the x value for each item in a row, returning the item spacing used for the row.
