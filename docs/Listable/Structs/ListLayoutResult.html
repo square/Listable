@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ListLayoutSize Structure Reference</title>
+    <title>ListLayoutResult Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ListLayoutSize" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/ListLayoutResult" class="dashAnchor"></a>
 
-    <a title="ListLayoutSize Structure Reference"></a>
+    <a title="ListLayoutResult Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ListLayoutSize Structure Reference
+      ListLayoutResult Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -487,13 +487,10 @@
                 <a class="nav-group-task-link" href="../Structs/ListLayoutLayoutContext.html">ListLayoutLayoutContext</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutPoint.html">ListLayoutPoint</a>
+                <a class="nav-group-task-link" href="../Structs/ListLayoutResult.html">ListLayoutResult</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutScrollViewProperties.html">ListLayoutScrollViewProperties</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Structs/ListLayoutSize.html">ListLayoutSize</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListProperties.html">ListProperties</a>
@@ -616,15 +613,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ListLayoutSize</h1>
+            <h1>ListLayoutResult</h1>
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListLayoutSize</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListLayoutResult</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>Describes the values which should be calculated and returned from <code>ListLayout.layout(delegate:in:)</code>.</p>
 
           </div>
         </section>
@@ -636,9 +633,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ListLayoutSizeV5width12CoreGraphics7CGFloatVvp"></a>
-                    <a name="//apple_ref/swift/Property/width" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListLayoutSizeV5width12CoreGraphics7CGFloatVvp">width</a>
+                    <a name="/s:10ListableUI16ListLayoutResultV11contentSizeSo6CGSizeVvp"></a>
+                    <a name="//apple_ref/swift/Property/contentSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16ListLayoutResultV11contentSizeSo6CGSizeVvp">contentSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -646,14 +643,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The size of the content as it has been laid out by your layout.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">contentSize</span><span class="p">:</span> <span class="kt">CGSize</span></code></pre>
 
                         </div>
                       </div>
@@ -663,9 +660,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ListLayoutSizeV6height12CoreGraphics7CGFloatVvp"></a>
-                    <a name="//apple_ref/swift/Property/height" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListLayoutSizeV6height12CoreGraphics7CGFloatVvp">height</a>
+                    <a name="/s:10ListableUI16ListLayoutResultV19naturalContentWidth12CoreGraphics7CGFloatVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/naturalContentWidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16ListLayoutResultV19naturalContentWidth12CoreGraphics7CGFloatVSgvp">naturalContentWidth</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -673,14 +670,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>If available, the natural width of any measured content.
+For lists that lay out horizontally, this should be the natural height.</p>
+
+<p>If your list does not have a natural content width, provide <code>nil</code> for this value.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">naturalContentWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -690,9 +690,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ListLayoutSizeV7rotatesSbvp"></a>
-                    <a name="//apple_ref/swift/Property/rotates" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListLayoutSizeV7rotatesSbvp">rotates</a>
+                    <a name="/s:10ListableUI16ListLayoutResultV11contentSize19naturalContentWidthACSo6CGSizeV_12CoreGraphics7CGFloatVSgtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(contentSize:naturalContentWidth:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16ListLayoutResultV11contentSize19naturalContentWidthACSo6CGSizeV_12CoreGraphics7CGFloatVSgtcfc">init(contentSize:<wbr>naturalContentWidth:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -707,61 +707,10 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">rotates</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI14ListLayoutSizeV5width6height7rotatesAC12CoreGraphics7CGFloatV_AISbtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(width:height:rotates:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListLayoutSizeV5width6height7rotatesAC12CoreGraphics7CGFloatV_AISbtcfc">init(width:<wbr>height:<wbr>rotates:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">rotates</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI14ListLayoutSizeV12CGPointValue3forSo6CGSizeVAA0D9DirectionO_tF"></a>
-                    <a name="//apple_ref/swift/Method/CGPointValue(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListLayoutSizeV12CGPointValue3forSo6CGSizeVAA0D9DirectionO_tF">CGPointValue(for:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">CGPointValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Enums/LayoutDirection.html">LayoutDirection</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGSize</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">contentSize</span><span class="p">:</span> <span class="kt">CGSize</span><span class="p">,</span>
+    <span class="nv">naturalContentWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span>
+<span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -776,7 +725,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-12-06)</p>
+      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-12-15)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
