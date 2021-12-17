@@ -185,7 +185,7 @@ extension TableAppearance
             width : CustomWidth = .default
         ) {
             self.itemSpacing = itemSpacing
-            self.itemSpacing = itemSpacing
+            self.itemToSectionFooterSpacing = itemToSectionFooterSpacing
             
             self.width = width
         }
