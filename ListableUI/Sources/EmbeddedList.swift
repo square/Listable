@@ -123,6 +123,10 @@ extension EmbeddedList
     /// enum, because several of those values do not make sense for embedded lists.
     public enum Sizing : Equatable
     {
+        //case measureFirstItem
+        
+        //case measureAllContent
+        
         /// A fixed size item with the given width or height.
         ///
         /// Note: Depending on the list layout type, only one of width or height may be used.

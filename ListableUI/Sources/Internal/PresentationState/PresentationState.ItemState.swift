@@ -288,16 +288,24 @@ extension PresentationState
             // Apply Model State
             
             self.model.content.apply(
-                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+                to: ItemContentViews(
+                    content: cell.contentContainer.contentView,
+                    background: cell.background,
+                    selectedBackground: cell.selectedBackground
+                ),
                 for: reason,
                 with: applyInfo
             )
                         
-            // Apply Swipe To Action Appearance
-            if let actions = self.model.swipeActions {
-                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
-            } else {
-                cell.contentContainer.deregisterSwipeIfNeeded()
+            if reason != .measurement {
+                
+                // Apply Swipe To Action Appearance
+                
+                if let actions = self.model.swipeActions {
+                    cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
+                } else {
+                    cell.contentContainer.deregisterSwipeIfNeeded()
+                }
             }
         }
         

@@ -14,7 +14,7 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
 {
     var anyIdentifier : AnyIdentifier { get }
     
-    var anyContent : Any { get }
+    var anyContent : AnyItemContent { get }
     
     var sizing : Sizing { get set }
     
@@ -40,4 +40,9 @@ public protocol AnyItem_Internal
         updateCallbacks : UpdateCallbacks,
         performsContentCallbacks : Bool
     ) -> Any
+}
+
+
+public protocol AnyItemContent {
+    
 }

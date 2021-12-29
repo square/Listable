@@ -40,7 +40,7 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
+public protocol ItemContent : AnyItemContent, AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -441,13 +441,44 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     /// Creates a new coordinator with the provided actions and info.
     func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
+    
+    //
+    // MARK: Measuring Content
+    //
+    
+    var measurementContent : MeasurementItemContent { get }
+    
+    func measure(in constraint : CGSize, with context : ListMeasurementContext) -> CGSize
 }
 
 
-public extension ItemContent {
+public enum MeasurementItemContent {
+    case `self`
+    case other(AnyItem)
+}
+
+
+public struct ListMeasurementContext {
     
-     func toAnyItem() -> AnyItem {
+}
+
+
+extension ItemContent {
+    
+    // MARK: AnyItemConvertible
+    
+    public func toAnyItem() -> AnyItem {
         Item(self)
+    }
+    
+    // MARK: Measuring Content
+    
+    public var measurementContent : MeasurementItemContent {
+        .self
+    }
+    
+    public func measure(in constraint : CGSize, with context : ListMeasurementContext) -> CGSize {
+        fatalError()
     }
 }
 

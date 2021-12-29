@@ -137,7 +137,7 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.identifier
     }
     
-    public var anyContent: Any {
+    public var anyContent: AnyItemContent {
         self.content
     }
     
