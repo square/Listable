@@ -1,6 +1,6 @@
 source 'https://cdn.cocoapods.org/'
 
-platform :ios, '10.0'
+platform :ios, '12.0'
 
 project 'Demo/Demo.xcodeproj'
 workspace 'Demo/Demo.xcworkspace'
@@ -9,8 +9,8 @@ use_frameworks!
 
 target 'Demo' do
 	# Local Pods
-	pod 'Listable', :path => 'Listable.podspec', :testspecs => ['Tests']
-	pod 'BlueprintLists', :path => 'BlueprintLists.podspec', :testspecs => ['Tests']
+	pod 'ListableUI', :path => 'ListableUI.podspec', :testspecs => ['Tests']
+	pod 'BlueprintUILists', :path => 'BlueprintUILists.podspec', :testspecs => ['Tests']
 	pod 'SwiftUILists', :path => 'SwiftUILists.podspec', :testspecs => ['Tests']
 
 	# External Pods

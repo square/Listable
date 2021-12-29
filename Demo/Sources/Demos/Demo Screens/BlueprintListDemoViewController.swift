@@ -6,8 +6,8 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -48,34 +48,32 @@ final class BlueprintListDemoViewController : UIViewController
     
     func reloadData()
     {
-        self.blueprintView.element = List { list in
-            let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-            
-            list += Section("podcasts") { section in
+        self.blueprintView.element = List {
+            Section("podcasts") {
+                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
                 
-                guard self.showingData else {
-                    return
-                }
-
-                section += podcasts.map { podcast in
-                    PodcastRow(podcast: podcast)
+                for podcast in podcasts {
+                    ElementItem(podcast, id: \.name) { _, _ in
+                        PodcastElement(podcast: podcast)
+                    } background: { _, _ in
+                        Box(backgroundColor: .white, cornerStyle: .square)
+                    } selectedBackground: { _, _ in
+                        Box(backgroundColor: .lightGray, cornerStyle: .square)
+                    } configure: {
+                        $0.insertAndRemoveAnimations = .scaleUp
+                    }
                 }
             }
         }
     }
 }
 
-struct PodcastRow : BlueprintItemContent, Equatable
-{
+
+fileprivate struct PodcastElement : ProxyElement {
+    
     var podcast : Podcast
     
-    var identifier: Identifier<PodcastRow> {
-        return .init(self.podcast.name)
-    }
-
-    func element(with info : ApplyItemContentInfo) -> Element
-    {
-        
+    var elementRepresentation: Element {
         Row { row in
             row.horizontalUnderflow = .growUniformly
             row.verticalAlignment = .fill
@@ -118,18 +116,8 @@ struct PodcastRow : BlueprintItemContent, Equatable
         }
         .inset(uniform: 10.0)
     }
-    
-    func backgroundElement(with state: ItemState) -> Element?
-    {
-        return Box(backgroundColor: .white, cornerStyle: .square)
-    }
-    
-    func selectedBackgroundElement(with state: ItemState) -> Element?
-    {
-        return Box(backgroundColor: .lightGray, cornerStyle: .square)
-    }
-
 }
+
 
 struct Podcast : Equatable
 {

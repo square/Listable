@@ -8,16 +8,16 @@
 
 import SwiftUI
 import BlueprintUICommonControls
-import BlueprintLists
-import Listable
+import BlueprintUILists
+import ListableUI
 
 
 fileprivate struct XcodePreviewDemoContent : BlueprintItemContent, Equatable
 {
     var text : String
     
-    var identifier: Identifier<XcodePreviewDemoContent> {
-        return .init(text)
+    var identifierValue: String {
+        return self.text
     }
     
     func element(with info : ApplyItemContentInfo) -> Element

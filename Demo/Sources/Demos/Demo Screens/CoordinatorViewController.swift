@@ -6,7 +6,7 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintLists
+import BlueprintUILists
 import BlueprintUICommonControls
 
 
@@ -19,8 +19,8 @@ final class CoordinatorViewController : UIViewController
         
         self.listView.configure { list in
             
-            list += Section("section") { section in
-                section += Podcast.podcasts.map {
+            list += Section("section") {
+                Podcast.podcasts.map {
                     Item(
                         PodcastElement(podcast: $0),
                         selectionStyle: .selectable(isSelected: false)
@@ -38,8 +38,8 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
     
     var showBottomBar : Bool = false
     
-    var identifier: Identifier<PodcastElement> {
-        .init(podcast.name)
+    var identifierValue: String {
+        self.podcast.name
     }
     
     func element(with info: ApplyItemContentInfo) -> Element
@@ -116,9 +116,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         
         let actions: CoordinatorActions
         let info: CoordinatorInfo
-        
-        var view : View?
-        
+                
         init(actions: CoordinatorActions, info: CoordinatorInfo)
         {
             self.actions = actions
@@ -126,7 +124,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         }
         
         func wasSelected() {
-            self.actions.update(animated: true) {
+            self.actions.update(animation: .default) {
                 $0.content.showBottomBar = true
             }
             
@@ -157,7 +155,7 @@ fileprivate struct PodcastElement : BlueprintItemContent, Equatable
         }
         
         func wasDeselected() {
-            self.actions.update(animated: true) {
+            self.actions.update(animation: .default) {
                 $0.content.showBottomBar = false
             }
         }

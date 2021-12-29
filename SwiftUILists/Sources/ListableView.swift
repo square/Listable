@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-@testable import Listable
+@testable import ListableUI
 
 
 @available(iOS 13.0, *)
@@ -18,7 +18,7 @@ public struct ListableView : UIViewControllerRepresentable
     // MARK: Initialization
     //
         
-    public init(build : ListProperties.Build)
+    public init(build : ListProperties.Configure)
     {
         self.properties = .default(with: build)
     }

@@ -8,7 +8,7 @@ Listable is a declarative list framework for iOS, which allows you to concisely 
 self.listView.setContent { list in
     list += Section("section-1") { section in
         
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
         section += DemoItem(text: "And here is another row.")
@@ -25,7 +25,7 @@ self.listView.setContent { list in
 
     list += Section("section-2") { section in
         
-        section.header = HeaderFooter(with: DemoHeader(title: "Another Header"))
+        section.header = DemoHeader(title: "Another Header")
         
         section += DemoItem(text: "The last row.")
     }    
@@ -51,7 +51,7 @@ And then push in new content, so there  is one row with one section:
 ```swift
 self.listView.setContent { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
     } 
@@ -63,7 +63,7 @@ This new section will be animated into place. If you then insert another row:
 ```swift
 self.listView.setContent { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(with: DemoHeader(title: "This Is A Header"))
+        section.header = DemoHeader(title: "This Is A Header")
         
         section += DemoItem(text: "And here is a row")
         section += DemoItem(text: "Another row!")
@@ -100,14 +100,14 @@ public struct Appearance : Equatable
     
     public var stickySectionHeaders : Bool
     
-    public var list : ListAppearance
+    public var list : TableAppearance
 }
 ``` 
 
-You use the `ListAppearance.Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
+You use the `TableAppearance.Sizing` struct to control the default measurements within the list: How tall are standard rows, headers, footers, etc.
 
 ```swift
-public struct ListAppearance.Sizing : Equatable
+public struct TableAppearance.Sizing : Equatable
 {
     public var itemHeight : CGFloat
     
@@ -121,10 +121,10 @@ public struct ListAppearance.Sizing : Equatable
 }
 ```
 
-You can use `ListAppearance.Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
+You can use `TableAppearance.Layout` to customize the padding of the entire list, how wide the list should be (eg, up to 700px, more than 400px, etc) plus control spacing between items, headers, and footers. 
 
 ```swift
-public struct ListAppearance.Layout : Equatable
+public struct TableAppearance.Layout : Equatable
 {
     public var padding : UIEdgeInsets
     public var width : WidthConstraint
@@ -168,7 +168,7 @@ struct Underflow : Equatable
 
 ### Self-Sizing Cells
 
-Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `ListSizing` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
+Another common pain-point for standard `UITableViews` or `UICollectionViews` is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each `Item` has a `sizing` property, which can be set to any of the following values. `.default` pulls the default sizing of the item from the `List.Measurement` mentioned above, where as the `thatFits` and `autolayout` values size the item based on `sizeThatFits` and `systemLayoutSizeFitting`, respectively.
 
 ```swift
 public enum Sizing : Equatable
@@ -187,7 +187,7 @@ public enum Sizing : Equatable
 
 Listable integrates closely with [Blueprint](https://github.com/square/blueprint/), Square's framework for declarative UI construction and management (if you've used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.
 
-All you need to do is take a dependency on the `BlueprintLists` pod, and then `import BlueprintLists` to begin using Blueprint integration.
+All you need to do is take a dependency on the `BlueprintUILists` pod, and then `import BlueprintUILists` to begin using Blueprint integration.
 
 In this example, we see how to declare a `List` within a Blueprint element hierarchy.
 
@@ -213,8 +213,8 @@ struct DemoItem : BlueprintItemContent, Equatable
     
     // ItemContent
     
-    var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+    var identifierValue: String {
+        return self.text
     }
     
     // BlueprintItemContent
@@ -288,7 +288,7 @@ An `Item` is what you add to a section to represent a row in a list. It contains
 ```swift
 public struct Item<Content:ItemContent> : AnyItem
 {
-    public var identifier : AnyIdentifier
+    public var identifier : Content.Identifier
     
     public var content : Content
     
@@ -299,7 +299,7 @@ public struct Item<Content:ItemContent> : AnyItem
     
     public var swipeActions : SwipeActions?
     
-    public var reordering : Reordering?
+    public var reordering : ItemReordering?
         
     public typealias OnSelect = (Content) -> ()
     public var onSelect : OnSelect?
@@ -344,7 +344,9 @@ To prepare the views for display, the `apply(to:for:with:)` method is called, wh
 ```swift
 public protocol ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierValue : Hashable
+
+    var identifierValue : IdentifierValue { get }
 
     func apply(
         to views : ItemContentViews<Self>,
@@ -463,8 +465,8 @@ You set headers and footers on sections via the `header` and `footer` parameter.
 ```swift
 self.listView.configure { list in
     list += Section("section-1") { section in
-        section.header = HeaderFooter(DemoHeader(title: "This Is A Header"))
-        section.footer = HeaderFooter(DemoFooter(text: "And this is a footer. Please check the EULA for details."))
+        section.header = DemoHeader(title: "This Is A Header")
+        section.footer = DemoFooter(text: "And this is a footer. Please check the EULA for details.")
     } 
 }
 ```
@@ -480,7 +482,13 @@ public protocol HeaderFooterContent
     func isEquivalent(to other : Self) -> Bool
     
     associatedtype ContentView:UIView
-    static func createReusableHeaderFooterView(frame : CGRect) -> ContentView
+    static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    associatedtype BackgroundView:UIView
+    static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
+    
+    associatedtype PressedBackgroundView:UIView
+    static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
 }
 ```
 
@@ -552,7 +560,7 @@ public struct Section
 
 ## Integration With Blueprint
 
-If you're using Blueprint integration via the  `BlueprintLists` module, you will also interact with the following types.
+If you're using Blueprint integration via the  `BlueprintUILists` module, you will also interact with the following types.
 
 ### List
 When using `ListView` directly, you'd use `list.configure { list in ... }` to set the content of a list.
@@ -580,7 +588,9 @@ Unless you are supporting highlighting and selection of your `ItemContent`, you 
 ```swift
 public protocol BlueprintItemContent : ItemContent
 {
-    var identifier : Identifier<Self> { get }
+    associatedtype IdentifierValue : Hashable
+
+    var identifierValue : IdentifierValue { get }
 
     func wasMoved(comparedTo other : Self) -> Bool
     func isEquivalent(to other : Self) -> Bool
@@ -602,8 +612,8 @@ struct MyPerson : BlueprintItemContent, Equatable
     var name : String
     var phoneNumber : String
 
-    var identifier : Identifier<Self> {
-        .init(name)
+    var identifierValue : String {
+        self.name
     }
     
     func element(with info : ApplyItemContentInfo) -> Element {
@@ -651,18 +661,18 @@ struct MyHeader : BlueprintHeaderFooterContent, Equatable
 
 ## Getting Started
 
-Listable can be consumed via CocoaPods. Add one or both of these lines to your `Podfile` in order to consume Listable and BlueprintLists (the Blueprint wrapper for Listable).
+Listable is published on CocoaPods. You can add a dependency on Listable or it's Blueprint wrapper with the following in your Podspec: 
 
 ```
-  pod 'BlueprintLists', git: 'ssh://git@github.com:kyleve/Listable.git'
-  pod 'Listable', git: 'ssh://git@github.com:kyleve/Listable.git'
+s.dependency 'ListableUI'
+s.dependency 'BlueprintUILists'
 ```
 
-You can then add the following to each `podspec` which should depend on Listable.
+If you want to depend on bleeding-edge changes, you can add the pods to your Podfile via the git repo like so:
 
 ```
-s.dependency 'Listable'
-s.dependency 'BlueprintLists'
+  pod 'BlueprintUILists', git: 'ssh://git@github.com:kyleve/Listable.git'
+  pod 'ListableUI', git: 'ssh://git@github.com:kyleve/Listable.git'
 ```
 
 ## Demo Project

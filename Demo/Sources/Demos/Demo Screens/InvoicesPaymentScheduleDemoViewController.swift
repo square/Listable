@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -37,9 +37,10 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
     
     func setAppearance()
     {
-        self.list.layout = .list {
+        self.list.layout = .table {
+            $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0))
+            
             $0.layout.set {
-                $0.padding = UIEdgeInsets(top: 20.0, left: 10.0, bottom: 20.0, right: 10.0)
                 $0.interSectionSpacingWithFooter = 30.0
                 $0.interSectionSpacingWithNoFooter = 30.0
                 $0.sectionHeaderBottomSpacing = 5.0
@@ -54,41 +55,29 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
             
             list.animatesChanges = animated
                    
-            list += Section(SectionIdentifier.toggles) { section in
+            list += Section(SectionIdentifier.toggles) {
                 
-                section += Item(
+                Item(
                     ToggleRow(
                         content: .init(text: "Request initial deposit", isOn: self.data.requestsInitialDeposit),
                         onToggle: { isOn in
                             self.data.requestsInitialDeposit = isOn
-                    }),
-                    sizing: .thatFits()
+                    })
                 )
                                 
-                section += Item(
+                Item(
                     ToggleRow(
                         content: .init(text: "Split balance into milestones", isOn: self.data.splitsIntoMilestones),
                         onToggle: { isOn in
                             self.data.splitsIntoMilestones = isOn
-                    }),
-                    sizing: .thatFits()
+                    })
                 )
             }
         
             if self.data.requestsInitialDeposit {
-                list += Section(SectionIdentifier.deposits) { section in
-                    
-                    section.header = HeaderFooter(
-                        SectionHeader(text: "Deposit Request"),
-                        sizing: .thatFits()
-                    )
-                    
-                    section.footer = HeaderFooter(
-                        SectionFooter(text: "Request $10.00 deposit on $100.00 invoice."),
-                        sizing: .thatFits()
-                    )
-                    
-                    section += Item(
+                list += Section(SectionIdentifier.deposits) {
+                                        
+                    Item(
                         SegmentedControlRow(id: "split-type") { control in
                             control.appendItem(title: "%") {
                                 
@@ -98,11 +87,13 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                                                
+                        layouts: .init {
+                            $0.table.itemSpacing = 20.0
+                        }
                     )
                     
-                    section += Item(
+                    Item(
                         AmountRow(
                             content: .init(amount: 100, title: "Deposit", detail: "Due upon receipt"),
                             onAmountChanged: { _ in
@@ -110,26 +101,19 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         },
                             onEdit: { _ in
                                 
-                        }),
-                        sizing: .thatFits()
+                        })
                     )
+                } header: {
+                    SectionHeader(text: "Deposit Request")
+                } footer: {
+                    SectionFooter(text: "Request $10.00 deposit on $100.00 invoice.")
                 }
             }
             
             if self.data.splitsIntoMilestones {
-                list += Section(SectionIdentifier.splits) { section in
-                    
-                    section.header = HeaderFooter(
-                        SectionHeader(text: "Balance Split"),
-                        sizing: .thatFits()
-                    )
-                    
-                    section.footer = HeaderFooter(
-                        SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments."),
-                        sizing: .thatFits()
-                    )
-                    
-                    section += Item(
+                list += Section(SectionIdentifier.splits) {
+                     
+                    Item(
                         SegmentedControlRow(id: "split-type") { control in
                             control.appendItem(title: "%") {
                                 
@@ -139,11 +123,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                                 
                             }
                         },
-                        sizing: .thatFits(),
-                        layout: ItemLayout(itemSpacing: 20.0)
+                        layouts: .init {
+                            $0.table.itemSpacing = 20
+                        }
                     )
                     
-                    section += Item(
+                    Item(
                         AmountRow(
                             content: .init(amount: 100, title: "Payment 1", detail: "Due in 10 days."),
                             onAmountChanged: { _ in
@@ -151,11 +136,10 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         },
                             onEdit: { _ in
                                 
-                        }),
-                        sizing: .thatFits()
+                        })
                     )
                     
-                    section += Item(
+                    Item(
                         AmountRow(
                             content: .init(amount: 100, title: "Payment 2", detail: "Due in 20 days."),
                             onAmountChanged: { _ in
@@ -163,9 +147,12 @@ final class InvoicesPaymentScheduleDemoViewController : UIViewController
                         },
                             onEdit: { _ in
                                 
-                        }),
-                        sizing: .thatFits()
+                        })
                     )
+                } header: {
+                    SectionHeader(text: "Balance Split")
+                } footer: {
+                    SectionFooter(text: "Request $90.00 of $100.00 invoice balance over 2 payments.")
                 }
             }
         }
@@ -282,12 +269,12 @@ fileprivate struct ToggleRow : BlueprintItemContent
         })
     }
     
-    var identifier: Identifier<ToggleRow> {
-        return .init(self.content.text)
+    var identifierValue: String {
+        self.content.text
     }
     
     func isEquivalent(to other: ToggleRow) -> Bool {
-        return self.content == other.content
+        self.content == other.content
     }
 }
 
@@ -333,13 +320,13 @@ fileprivate struct SegmentedControlRow : BlueprintItemContent
         return self.control
     }
     
-    var identifier: Identifier<SegmentedControlRow> {
-        return .init(self.id)
+    var identifierValue: String {
+        self.id
     }
     
     func isEquivalent(to other: SegmentedControlRow) -> Bool
     {
-        return true
+        true
     }
 }
 
@@ -398,8 +385,8 @@ fileprivate struct AmountRow : BlueprintItemContent
         return box
     }
     
-    var identifier: Identifier<AmountRow> {
-        return .init(self.content.title)
+    var identifierValue: String {
+        self.content.title
     }
     
     func isEquivalent(to other: AmountRow) -> Bool
@@ -419,8 +406,8 @@ fileprivate struct ButtonRow : BlueprintItemContent
         fatalError()
     }
     
-    var identifier: Identifier<ButtonRow> {
-        return .init(self.text)
+    var identifierValue: String {
+        self.text
     }
     
     func isEquivalent(to other: ButtonRow) -> Bool

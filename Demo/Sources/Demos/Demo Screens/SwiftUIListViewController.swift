@@ -65,14 +65,14 @@ fileprivate struct SwiftUIDemoItem : SwiftUIItemContent, Equatable
 {
     var text : String
     
-    var identifier: Identifier<SwiftUIDemoItem> {
-        .init()
+    var identifierValue : String {
+        self.text
     }
     
     func content(with info: ApplyItemContentInfo) -> some View {
         Text(self.text)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.system(size: 16.0, weight: .medium, design: .default))
+            .font(.system(size: 36.0, weight: .medium, design: .default))
             .foregroundColor(info.state.isActive ? .white : .black)
             .padding(EdgeInsets(top: 10.0, leading: 15.0, bottom: 10.0, trailing: 15.0))
     }

@@ -8,101 +8,89 @@
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
 
-final class ReorderingViewController : UIViewController
+final class ReorderingViewController : ListViewController
 {
-    let list = ListView()
-    
-    override func loadView()
-    {
-        self.view = self.list
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        self.list.configure { list in
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Reload", style: .plain, target: self, action: #selector(reload))
+    }
+    
+    @objc private func reload() {
+        self.reload(animated: true)
+    }
+    
+    override func configure(list: inout ListProperties) {
+        
+        list.appearance = .demoAppearance
+        list.layout = .demoLayout
+        
+        list.stateObserver.onItemReordered { reordered in
+            print("Moved: \(reordered.result.indexPathsDescription)")
             
-            list.appearance = .demoAppearance
-            list.layout = .demoLayout
-            
-            list += Section("first") { section in
-                section.header = HeaderFooter(DemoHeader(title: "First Section"))
-                
-                section += Item(ReorderItem(text: "0,0 Row")) { item in
-                    
-                    item.reordering = Reordering(didReorder: { result in
-                        print("Moved")
-                    })
-                    
-                }
-                
-                section += Item(ReorderItem(text: "0,1 Row")) { item in
-                    
-                    item.reordering = Reordering(didReorder: { result in
-                        print("Moved")
-                    })
-                    
-                }
-                
-                section += Item(ReorderItem(text: "0,2 Row")) { item in
-                    
-                    item.reordering = Reordering(didReorder: { result in
-                        print("Moved")
-                    })
-                    
-                }
-            }
-            
-            list += Section("second") { section in
-                section.header = HeaderFooter(DemoHeader(title: "Second Section"))
-                
-                section += Item(ReorderItem(text: "1,0  Row")) { item in
-                    
-                    item.reordering = Reordering(didReorder: { result in
-                        print("Moved")
-                    })
-                    
-                }
-                
-                section += Item(ReorderItem(text: "1,1 Row")) { item in
-                    
-                    item.reordering = Reordering(didReorder: { result in
-                        print("Moved")
-                    })
-                    
-                }
+            reordered.result.toSection.filtered(to: DemoItem.self) { items in
+                print(items.map(\.text).joined(separator: "\n"))
             }
         }
-    }
-}
-
-
-struct ReorderItem : BlueprintItemContent, Equatable
-{
-    var text : String
-    
-    var identifier: Identifier<ReorderItem> {
-        return .init(self.text)
-    }
-    
-    func element(with info : ApplyItemContentInfo) -> Element
-    {
-        var box = Box(
-            backgroundColor: .white,
-            cornerStyle: .rounded(radius: 6.0),
-            wrapping: Inset(
-                uniformInset: 10.0,
-                wrapping: Label(text: self.text)
-            )
-        )
         
-        box.borderStyle = .solid(color: .white(0.9), width: 2.0)
+        list += Section("1") { section in
+            section.header = DemoHeader(title: "First Section")
+            
+            section.layouts.table.columns = .init(count: 2, spacing: 15.0)
+            
+            section += Item(DemoItem(text: "0,0 Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+            }
+            
+            section += Item(DemoItem(text: "0,1 Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+            }
+            
+            section += Item(DemoItem(text: "0,2 Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+            }
+            
+            section += Item(DemoItem(text: "0,3 Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+            }
+        }
         
-        return ReorderGesture(
-            reordering: info.reordering,
-            wrapping: box
-        )
+        list += Section("2") { section in
+            section.header = DemoHeader(title: "Second Section")
+            
+            section += Item(DemoItem(text: "1,0  Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+                
+            }
+            
+            section += Item(DemoItem(text: "1,1 Row")) { item in
+                item.reordering = ItemReordering(sections: .all)
+            }
+        }
+        
+        list += Section("3") { section in
+            section.header = DemoHeader(title: "Third Section")
+            
+            section += Item(DemoItem(text: "2,0  Row (Can't Move)")) { item in
+                
+                item.reordering = ItemReordering(sections: .all) { _ in
+                    false
+                }
+            }
+            
+            section += Item(DemoItem(text: "2,1 Row (First Section Only)")) { item in
+                item.reordering = ItemReordering(sections: .specific(current: false, IDs: ["1"]))
+            }
+            
+            section += Item(DemoItem(text: "2,2 Row (Same Section Only)")) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+        }
     }
 }

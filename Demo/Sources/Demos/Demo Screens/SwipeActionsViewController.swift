@@ -5,8 +5,8 @@
 //  Created by Kyle Van Essen on 3/24/20.
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 import UIKit
@@ -16,7 +16,7 @@ final class SwipeActionsViewController: UIViewController  {
 
     private var allowDeleting: Bool = true
 
-    private var items = (0..<20).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
+    private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
 
     override func loadView() {
         self.title = "Swipe Actions"
@@ -37,18 +37,44 @@ final class SwipeActionsViewController: UIViewController  {
 
             list.animatesChanges = animated
             
-            list.layout = .list { [weak self] in
+            list.layout = .table { [weak self] in
                 guard let self = self else { return }
                 
                 if #available(iOS 11, *) {
-                    $0.layout.padding = UIEdgeInsets(top: 0.0, left: self.view.safeAreaInsets.left, bottom: 0.0, right: self.view.safeAreaInsets.right)
+                    $0.bounds = .init(
+                        padding: UIEdgeInsets(
+                            top: 0.0,
+                            left: self.view.safeAreaInsets.left,
+                            bottom: 0.0,
+                            right: self.view.safeAreaInsets.right
+                        )
+                    )
                 }
             }
 
-            list += Section("items") { section in
+            list += Section("standardSwipeActionItems") { section in
+                section.header = DemoHeader(title: "Standard Style Swipable Items")
                 section += self.items.map { item in
                     Item(
-                        SwipeActionsDemoItem(item: item),
+                        SwipeActionsDemoItem(item: item, swipeActionsStyle: .default),
+                        swipeActions: self.makeSwipeActions(for: item)
+                    )
+                }
+            }
+
+            list += Section("customSwipeActionItems") { section in
+                section.header = DemoHeader(title: "Custom Style Swipable Items")
+                section += self.items.map { item in
+                    Item(
+                        SwipeActionsDemoItem(
+                            item: item,
+                            swipeActionsStyle:
+                                .init(
+                                    actionShape: .rectangle(cornerRadius: 8),
+                                    interActionSpacing: 8,
+                                    containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
+                                )
+                        ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
                 }
@@ -57,32 +83,27 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
-        var actions: [SwipeAction] = []
-
-        if allowDeleting {
-            actions.append(
+        
+        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+            if allowDeleting {
                 SwipeAction(
                     title: "Delete",
                     backgroundColor: .systemRed,
-                    image: nil,
-                    handler: { [weak self] expandActions in
-                        self?.confirmDelete(item: item, expandActions: expandActions)
-                })
-            )
-        }
-
-        actions.append(
+                    image: nil
+                ) { [weak self] expandActions in
+                    self?.confirmDelete(item: item, expandActions: expandActions)
+                }
+            }
+            
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                image: nil,
-                handler: { [weak self] expandActions in
-                    self?.toggleSave(item: item)
-                    expandActions(false)
-            })
-        )
-
-        return SwipeActionsConfiguration(actions: actions, performsFirstActionWithFullSwipe: true)
+                image: nil
+            ) { [weak self] expandActions in
+                self?.toggleSave(item: item)
+                expandActions(false)
+            }
+        }
     }
 
     @objc private func addItem() {
@@ -121,9 +142,10 @@ final class SwipeActionsViewController: UIViewController  {
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
         var item: SwipeActionItem
+        var swipeActionsStyle: DefaultSwipeActionsView.Style
 
-        var identifier: Identifier<SwipeActionsDemoItem> {
-            return .init(item.identifier)
+        var identifierValue: Int {
+            self.item.identifier
         }
 
         func element(with info : ApplyItemContentInfo) -> Element {
@@ -157,6 +179,7 @@ final class SwipeActionsViewController: UIViewController  {
                 let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
                 column.add(growPriority: 0, shrinkPriority: 0, child: separator)
             }
+            .accessibilityElement(label: "Swipeable Item", value: item.title, traits: [.button])
         }
     }
 

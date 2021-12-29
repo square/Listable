@@ -1,14 +1,14 @@
 //
 //  CollectionViewBasicDemoViewController.swift
-//  Listable-DemoApp
+//  ListableUI-DemoApp
 //
 //  Created by Kyle Van Essen on 7/9/19.
 //
 
 import UIKit
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 
 
 final class CollectionViewBasicDemoViewController : UIViewController
@@ -27,6 +27,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
     
     var showsOverscrollFooter : Bool = true
     var showsSectionHeaders : Bool = true
+    var isVertical : Bool = true
     
     let listView = ListView()
     
@@ -36,6 +37,7 @@ final class CollectionViewBasicDemoViewController : UIViewController
             UIBarButtonItem(title: "UF", style: .plain, target: self, action: #selector(cycleUnderflow)),
             UIBarButtonItem(title: "OS", style: .plain, target: self, action: #selector(toggleOverscroll)),
             UIBarButtonItem(title: "SH", style: .plain, target: self, action: #selector(toggleSectionHeaders)),
+            UIBarButtonItem(title: "D", style: .plain, target: self, action: #selector(toggleDirection)),
             
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(removeItem)),
@@ -54,9 +56,11 @@ final class CollectionViewBasicDemoViewController : UIViewController
         listView.configure { list in
             
             if self.showsOverscrollFooter {
-                list.content.overscrollFooter = HeaderFooter(
-                    DemoHeader(title: "Thanks for using Listable!!")
-                )
+                list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
+            }
+            
+            list.layout = .demoLayout {
+                $0.direction = self.isVertical ? .vertical : .horizontal
             }
             
             list.animatesChanges = animated
@@ -64,18 +68,15 @@ final class CollectionViewBasicDemoViewController : UIViewController
             list += self.rows.map { sectionRows in
                 Section("Demo Section") { section in
                     
-                    section.columns = .init(count: 2, spacing: 10.0)
+                    section.layouts.table.columns = .init(count: 2, spacing: 10.0)
                      
                     if self.showsSectionHeaders {
-                        section.header = HeaderFooter(DemoHeader(title: "Section Header"))
+                        section.header = DemoHeader(title: "Section Header")
                     } else {
-                        section.header = HeaderFooter(DemoHeader2(title: "Section Header"))
+                        section.header = DemoHeader2(title: "Section Header")
                     }
                     
-                    section.footer = HeaderFooter(
-                        DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante."),
-                        sizing: .thatFits()
-                    )
+                    section.footer = DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante.")
                     
                     section += sectionRows
                 }
@@ -93,6 +94,13 @@ final class CollectionViewBasicDemoViewController : UIViewController
     @objc func toggleSectionHeaders()
     {
         self.showsSectionHeaders.toggle()
+        
+        self.updateTable(animated: true)
+    }
+    
+    @objc func toggleDirection()
+    {
+        self.isVertical.toggle()
         
         self.updateTable(animated: true)
     }

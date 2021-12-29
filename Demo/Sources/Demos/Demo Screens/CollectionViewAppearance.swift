@@ -6,8 +6,8 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -22,15 +22,37 @@ extension Appearance
 extension LayoutDescription
 {
     static var demoLayout : Self {
-        .list {
-            $0.layout = .init(
+        self.demoLayout()
+    }
+    
+    static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
+        .table {
+            $0.bounds = .init(
                 padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
-                width: .atMost(600.0),
+                width: .atMost(600.0)
+            )
+            
+            $0.layout = .init(
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
+            )
+            
+            $0.stickySectionHeaders = true
+            
+            configure(&$0)
+        }
+    }
+    
+    static func retailGridDemo(columns: Int, rows: RetailGridAppearance.Layout.Rows = .infinite(tileAspectRatio: 9.0/16.0)) -> Self {
+        .retailGrid {
+            $0.layout = .init(
+                padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
+                itemSpacing: 20,
+                columns: columns,
+                rows: rows
             )
         }
     }
@@ -49,16 +71,43 @@ extension UIColor
 struct DemoHeader : BlueprintHeaderFooterContent, Equatable
 {
     var title : String
+    var detail : String?
+    
+    var useMonospacedTitleFont : Bool
+ 
+    init(
+        title: String,
+        detail : String? = nil,
+        useMonospacedTitleFont: Bool = false
+    ) {
+        self.title = title
+        self.detail = detail
+        self.useMonospacedTitleFont = useMonospacedTitleFont
+    }
     
     var elementRepresentation: Element {
-        Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+        Column(alignment: .fill, minimumSpacing: 10.0) {
+            Label(text: self.title) {
+                if #available(iOS 13.0, *), useMonospacedTitleFont {
+                    $0.font = .monospacedSystemFont(ofSize: 21.0, weight: .semibold)
+                } else {
+                    $0.font = .systemFont(ofSize: 21.0, weight: .semibold)
+                }
+            }
+            
+            if let detail = detail {
+                Label(text: detail) {
+                    $0.font = .systemFont(ofSize: 14.0, weight: .regular)
+                    $0.color = .lightGray
+                }
+                .constrainedTo(width: .atMost(600))
+                .aligned(vertically: .fill, horizontally: .leading)
+            }
         }
-        .inset(horizontal: 15.0, vertical: 10.0)
+        .inset(horizontal: 15.0, vertical: 15.0)
         .box(
             background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
+            corners: .rounded(radius: 10.0)
         )
     }
 }
@@ -69,43 +118,58 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
     
     var elementRepresentation: Element {
         Label(text: self.title) {
-            $0.font = .systemFont(ofSize: 20.0, weight: .bold)
+            $0.font = .systemFont(ofSize: 21.0, weight: .bold)
         }
         .inset(horizontal: 15.0, vertical: 30.0)
         .box(
             background: .white,
-            corners: .rounded(radius: 10.0),
-            shadow: .simple(radius: 2.0, opacity: 0.2, offset: .init(width: 0.0, height: 1.0), color: .black)
+            corners: .rounded(radius: 10.0)
         )
     }
 }
 
 
-struct DemoItem : BlueprintItemContent, Equatable
+struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
     
-    var identifier: Identifier<DemoItem> {
-        return .init(self.text)
+    var identifierValue: String {
+        return self.text
     }
 
     typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
-        Label(text: self.text) {
-            $0.font = .systemFont(ofSize: 16.0, weight: .medium)
-            $0.color = info.state.isActive ? .white : .darkGray
+        Row { row in
+            row.verticalAlignment = .center
+            
+            row.add(child: Label(text: self.text) {
+                $0.font = .systemFont(ofSize: 17.0, weight: .medium)
+                $0.color = info.state.isActive ? .white : .darkGray
+            })
+            
+            row.addFlexible(child: Spacer(width: 1.0))
+            
+            if info.isReorderable {
+                row.addFixed(
+                    child: Image(
+                        image: UIImage(named: "ReorderControl"),
+                        contentMode: .center
+                    )
+                        .listReorderGesture(with: info.reorderingActions)
+                )
+            }
         }
-        .inset(horizontal: 15.0, vertical: 10.0)
+        .inset(horizontal: 15.0, vertical: 13.0)
+        .accessibilityElement(label: self.text, value: nil, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
             backgroundColor: .white,
-            cornerStyle: .rounded(radius: 8.0),
-            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
+            cornerStyle: .rounded(radius: 8.0)
         )
     }
     
@@ -119,6 +183,10 @@ struct DemoItem : BlueprintItemContent, Equatable
             cornerStyle: .rounded(radius: 8.0),
             shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
         )
+    }
+    
+    var collationString: String {
+        self.text
     }
 }
 
@@ -142,15 +210,16 @@ struct Toggle : Element {
         return ElementContent(layout: Layout())
     }
     
-    func backingViewDescription(bounds: CGRect, subtreeExtent: CGRect?) -> ViewDescription?
-    {
+    func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription? {
         return ViewDescription(ToggleView.self) { config in
             config.builder = {
                 return ToggleView()
             }
             
             config.apply { toggle in
-                toggle.isOn = self.isOn
+                if toggle.isOn != self.isOn {
+                    toggle.setOn(self.isOn, animated: UIView.inheritedAnimationDuration > 0.0)
+                }
                 toggle.onToggle = self.onToggle
             }
         }
@@ -164,7 +233,7 @@ struct Toggle : Element {
         {
             super.init(frame: frame)
             
-            self.addTarget(self, action: #selector(toggled), for: .valueChanged)
+            self.addTarget(self, action: #selector(didToggleValue), for: .valueChanged)
         }
         
         @available(*, unavailable)
@@ -172,7 +241,7 @@ struct Toggle : Element {
             fatalError()
         }
         
-        @objc func toggled()
+        @objc func didToggleValue()
         {
             self.onToggle(self.isOn)
         }

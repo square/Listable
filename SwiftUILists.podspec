@@ -8,11 +8,12 @@ Pod::Spec.new do |s|
   s.author       = { 'iOS Team' => 'seller-ios@squareup.com' }
   s.source       = { git: 'Not Published', tag: "podify/#{s.version}" }
 
-  s.ios.deployment_target = '10.0'
+  s.ios.deployment_target = '12.0'
 
   s.swift_versions = ['5.0']
 
-  s.dependency 'Listable'
+  s.dependency 'ListableUI'
+  
   s.weak_framework = 'SwiftUI'
 
   s.source_files = 'SwiftUILists/Sources/**/*.{swift}'

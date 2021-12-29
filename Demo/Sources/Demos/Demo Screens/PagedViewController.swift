@@ -6,7 +6,7 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintLists
+import BlueprintUILists
 import BlueprintUICommonControls
 
 
@@ -28,13 +28,13 @@ final class PagedViewController : UIViewController
             list.layout = .paged {
                 $0.direction = .vertical
             }
-            
-            list += Section("first") { section in
-                section += DemoElement(color: .black)
-                section += DemoElement(color: .white)
-                section += DemoElement(color: .black)
-                section += DemoElement(color: .white)
-                section += DemoElement(color: .black)
+        } sections: {
+            Section("first") {
+                DemoElement(color: .black)
+                DemoElement(color: .white)
+                DemoElement(color: .black)
+                DemoElement(color: .white)
+                DemoElement(color: .black)
             }
         }
     }
@@ -42,8 +42,8 @@ final class PagedViewController : UIViewController
 
 fileprivate struct DemoElement : BlueprintItemContent, Equatable
 {
-    var identifier: Identifier<DemoElement> {
-        .init(self.color)
+    var identifierValue: UIColor {
+        self.color
     }
     
     var color : UIColor

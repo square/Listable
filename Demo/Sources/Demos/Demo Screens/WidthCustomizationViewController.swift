@@ -8,10 +8,10 @@
 
 
 import UIKit
-import Listable
+import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
-import BlueprintLists
+import BlueprintUILists
 
 
 final class WidthCustomizationViewController : UIViewController
@@ -24,9 +24,10 @@ final class WidthCustomizationViewController : UIViewController
         
         self.listView.configure { list in
             
-            list.layout = .list {
+            list.layout = .table {
+                $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0))
+                
                 $0.layout.set {
-                    $0.padding = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
                     $0.itemSpacing = 20.0
                     $0.interSectionSpacingWithFooter = 20.0
                     $0.interSectionSpacingWithNoFooter = 20.0
@@ -35,7 +36,7 @@ final class WidthCustomizationViewController : UIViewController
             
             list += Section("default") { section in
                 
-                section.layout = Section.Layout(width: .default)
+                section.layouts.table.width = .default
                 
                 section += Item(
                     CardElement(title: "Default Row In Default Section", color: .white(0.95)),
@@ -45,7 +46,7 @@ final class WidthCustomizationViewController : UIViewController
             
             list += Section("fill") { section in
                 
-                section.layout = Section.Layout(width: .fill)
+                section.layouts.table.width = .fill
                 
                 section += Item(
                     CardElement(title: "Default Row In Fill Section", color: .white(0.95)),
@@ -55,51 +56,58 @@ final class WidthCustomizationViewController : UIViewController
             
             list += Section("custom-1") { section in
 
-                section.layout = Section.Layout(width: .custom(.init(
-                        padding: HorizontalPadding(uniform: 10.0),
-                        width: .atMost(200.0),
-                        alignment: .left
-                        )
+                section.layouts.table.width = .custom(.init(
+                    padding: HorizontalPadding(uniform: 10.0),
+                    width: .atMost(200.0),
+                    alignment: .leading
                     )
                 )
                 
                 section += Item(
                     CardElement(title: "Default Row In Left Section", color: .white(0.95)),
                     sizing: .thatFits(),
-                    layout: .init(width: .default)
+                    layouts: .init {
+                        $0.table.width = .default
+                    }
                 )
                 
                 section += Item(
                     CardElement(title: "Left Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(),
-                    layout: .init(width: .custom(.init(
-                        padding: HorizontalPadding(uniform: 10.0),
-                        width: .atMost(200.0),
-                        alignment: .left
-                        ))
-                    )
+                    layouts: .init {
+                        $0.table.width = .custom(.init(
+                            padding: HorizontalPadding(uniform: 10.0),
+                            width: .atMost(200.0),
+                            alignment: .leading
+                            )
+                        )
+                    }
                 )
                 
                 section += Item(
                     CardElement(title: "Center Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(),
-                    layout: .init(width: .custom(.init(
-                        padding: HorizontalPadding(uniform: 10.0),
-                        width: .atMost(200.0),
-                        alignment: .center
-                        ))
-                    )
+                    layouts: .init {
+                        $0.table.width = .custom(.init(
+                            padding: HorizontalPadding(uniform: 10.0),
+                            width: .atMost(200.0),
+                            alignment: .center
+                            )
+                        )
+                    }
                 )
                 
                 section += Item(
                     CardElement(title: "Right Aligned In Left Section", color: .white(0.95)),
                     sizing: .thatFits(),
-                    layout: .init(width: .custom(.init(
-                        padding: HorizontalPadding(uniform: 10.0),
-                        width: .atMost(200.0),
-                        alignment: .right
-                        ))
-                    )
+                    layouts: .init {
+                        $0.table.width = .custom(.init(
+                            padding: HorizontalPadding(uniform: 10.0),
+                            width: .atMost(200.0),
+                            alignment: .trailing
+                            )
+                        )
+                    }
                 )
             }
         }
@@ -116,8 +124,8 @@ fileprivate struct CardElement : BlueprintItemContent, Equatable
     // MARK: BlueprintItemElement
     //
     
-    var identifier: Identifier<CardElement> {
-        return .init(self.title)
+    var identifierValue: String {
+        self.title
     }
     
     func element(with info : ApplyItemContentInfo) -> Element

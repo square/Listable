@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import Listable
-import BlueprintLists
+import ListableUI
+import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
 
@@ -21,30 +21,17 @@ final class KeyboardTestingViewController : UIViewController
     {
         self.view = self.listView
         
-        self.listView.layout = .list {
+        self.listView.layout = .table {
             $0.layout.itemSpacing = 10.0
         }
         
         self.listView.configure { list in
-            list.content.overscrollFooter = HeaderFooter(
-                DemoHeader(title: "Thanks for using Listable!!")
-            )
+            list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
             
-            list += Section("section") { section in
-                section += Item(TextFieldElement(content: "Item 1"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 2"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 3"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 4"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 5"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 6"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 7"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 8"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 9"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 10"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 11"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 12"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 13"), sizing: .fixed(height: 100.0))
-                section += Item(TextFieldElement(content: "Item 14"), sizing: .fixed(height: 100.0))
+            list += Section("section") {
+                for index in 1...14 {
+                    Item(TextFieldElement(content: "Item \(index)"), sizing: .fixed(height: 100.0))
+                }
             }
         }
         
@@ -76,8 +63,8 @@ struct TextFieldElement : BlueprintItemContent, Equatable
     
     // MARK: BlueprintItemElement
     
-    var identifier: Identifier<TextFieldElement> {
-        return .init(self.content)
+    var identifierValue: String {
+        self.content
     }
     
     func element(with info : ApplyItemContentInfo) -> Element

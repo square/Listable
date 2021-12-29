@@ -10,4 +10,4 @@
 ///
 
 @_exported import SwiftUI
-@_exported import Listable
+@_exported import ListableUI

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import BlueprintLists
+import BlueprintUILists
 
 
 final class ItemInsertAndRemoveAnimationsViewController : ListViewController
@@ -61,40 +61,38 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
         list.appearance = .demoAppearance
         list.layout = .demoLayout
         
-        list += Section("animations") { section in
+        list += Section("animations") {
             
-            section.header = HeaderFooter(DemoHeader(title: "Item Animations"))
-            
-            for animations in self.animations {
-                
-                guard self.deleted != animations else {
-                    continue
-                }
-                
-                section += Item(
-                    DemoItem(text: animations.id),
-                    selectionStyle: .tappable,
-                    insertAndRemoveAnimations: animations.animations,
-                    onSelect: { _ in
-                        self.view.isUserInteractionEnabled = false
-                        
-                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
-                            self.deleted = animations
-                            self.reload(animated: true)
+            for animation in self.animations {
+                if deleted != animation {
+                    Item(
+                        DemoItem(text: animation.id),
+                        selectionStyle: .tappable,
+                        insertAndRemoveAnimations: animation.animations,
+                        onSelect: { _ in
+                            self.view.isUserInteractionEnabled = false
                             
-                            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                                self.view.isUserInteractionEnabled = true
-                                
-                                self.deleted = nil
+                            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+                                self.deleted = animation
                                 self.reload(animated: true)
+                                
+                                Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                                    self.view.isUserInteractionEnabled = true
+                                    
+                                    self.deleted = nil
+                                    self.reload(animated: true)
+                                }
                             }
                         }
-                })
+                    )
+                }
             }
             
-            section += DemoItem(text: "Extra Row 1")
-            section += DemoItem(text: "Extra Row 2")
-            section += DemoItem(text: "Extra Row 3")
+            DemoItem(text: "Extra Row 1")
+            DemoItem(text: "Extra Row 2")
+            DemoItem(text: "Extra Row 3")
+        } header: {
+            DemoHeader(title: "Item Animations")
         }
     }
 }
