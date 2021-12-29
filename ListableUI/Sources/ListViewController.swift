@@ -30,6 +30,8 @@ import UIKit
 ///
 open class ListViewController : UIViewController
 {
+    private(set) var listView : ListView?
+    
     //
     // MARK: Configuration
     //
@@ -110,12 +112,12 @@ open class ListViewController : UIViewController
     
     // MARK: UIViewController
     
-    private(set) var listView : ListView?
-    
     public override func loadView() {
         let listView = ListView()
+        listView.containingViewController = self
         
         self.listView = listView
+        
         self.view = listView
     }
     
@@ -125,14 +127,37 @@ open class ListViewController : UIViewController
     {
         super.viewWillAppear(animated)
         
-        if self.hasViewAppeared == false {
-            self.hasViewAppeared = true
-            self.reload(animated: false)
+        listView?.containingViewControllerWillAppear(animated: animated)
+        
+        if hasViewAppeared == false {
+            hasViewAppeared = true
+            reload(animated: false)
         } else {
-            if self.clearsSelectionOnViewWillAppear {
-                self.listView?.clearSelectionDuringViewWillAppear(alongside: self.transitionCoordinator, animated: animated)
+            if clearsSelectionOnViewWillAppear {
+                listView?.clearSelectionDuringViewWillAppear(
+                    alongside: self.transitionCoordinator,
+                    animated: animated
+                )
             }
         }
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        listView?.containingViewControllerEndedAppearanceTransition()
+    }
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        listView?.containingViewControllerWillDisappear(animated: animated)
+    }
+    
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        listView?.containingViewControllerEndedAppearanceTransition()
     }
 }
 

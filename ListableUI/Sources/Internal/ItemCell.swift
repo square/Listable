@@ -10,14 +10,25 @@ import UIKit
 
 protocol AnyItemCell : UICollectionViewCell
 {
-    func willBeProvided(to listView : ListView)
+    func wasDequeued(in context : WasDequeuedContext)
     
     func willDisplay()
+    func didEndDisplay()
+    
+    func listWillAppear(animated : Bool)
+    func listWillDisappear(animated : Bool)
+    func listEndedAppearanceTransition()
 
     func closeSwipeActions()
-    
-    func wasDequeued(with liveCells : LiveCells)
 }
+
+
+struct WasDequeuedContext {
+    
+    let list : ListView
+    let cells : LiveCells
+}
+
 
 ///
 /// An internal cell type used to render items in the list.
@@ -125,69 +136,79 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     // MARK: AnyItemCell
     
-    func willBeProvided(to listView : ListView)
-    {
-        guard let contentView = self.contentContainer.contentView as? ItemCellContentView else {
-            return
+    private lazy var listContentViews : [ListContentView] = [
+        self.contentContainer.contentView,
+        self.background,
+        self.selectedBackground
+    ].compactMap {
+        $0 as? ListContentView
+    }
+    
+    private var wasDequeued = Guard()
+    
+    func wasDequeued(in context : WasDequeuedContext) {
+        
+        guard wasDequeued.needsRun() else { return }
+                
+        if let vc = context.list.containingViewController {
+            for view in listContentViews {
+                view.setContainingViewController(vc)
+            }
         }
         
-        contentView.containingViewController = listView.containingViewController
+        context.cells.add(self)
     }
     
     func willDisplay()
     {
-        guard let contentView = self.contentContainer.contentView as? ItemCellContentView else {
-            return
+        for view in listContentViews {
+            view.willDisplay()
         }
-        
-        contentView.willDisplay()
+    }
+    
+    func didEndDisplay() {
+        for view in listContentViews {
+            view.didEndDisplay()
+        }
+    }
+    
+    func listWillAppear(animated : Bool)
+    {
+        for view in listContentViews {
+            view.listWillAppear(animated: animated)
+        }
+    }
+    
+    func listWillDisappear(animated : Bool)
+    {
+        for view in listContentViews {
+            view.listWillDisappear(animated: animated)
+        }
+    }
+    
+    func listEndedAppearanceTransition() {
+        for view in listContentViews {
+            view.listEndedAppearanceTransition()
+        }
     }
     
     func closeSwipeActions() {
         self.contentContainer.performAnimatedClose()
     }
-    
-    private var hasBeenDequeued = false
-    
-    func wasDequeued(with liveCells : LiveCells) {
-        guard hasBeenDequeued == false else {
-            return
-        }
-        
-        self.hasBeenDequeued = true
-        
-        liveCells.add(self)
-    }
 }
 
 
-public protocol ItemCellContentView : AnyObject
-{
-    var containingViewController : UIViewController? { get set }
+struct Guard {
     
-    func willDisplay()
-}
-
-
-final class LiveCells {
+    private var hasRun : Bool = false
     
-    func add(_ cell : AnyItemCell) {
-        self.cells.append(.init(cell: cell))
-        
-        self.cells = self.cells.filter { $0.cell != nil }
-    }
-    
-    func perform(_ block : (AnyItemCell) -> ()) {
-        self.cells.forEach {
-            if let cell = $0.cell {
-                block(cell)
-            }
+    mutating func needsRun() -> Bool {
+        if hasRun {
+            return false
+        } else {
+            hasRun = true
+            return true
         }
     }
-    
-    private(set) var cells : [LiveCell] = []
-    
-    struct LiveCell {
-        weak var cell : AnyItemCell?
-    }
 }
+

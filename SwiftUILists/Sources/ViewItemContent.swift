@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  ViewItemContent.swift
 //  SwiftUILists
 //
 //  Created by Kyle Van Essen on 10/22/19.
@@ -19,7 +19,7 @@ import SwiftUI
 /// you instead provide SwiftUI view trees, and `Listable` handles mapping this to an underlying SwiftUI view.
 ///
 @available(iOS 13.0, *)
-public protocol SwiftUIItemContent : ItemContent
+public protocol ViewItemContent : ItemContent
     where
     ContentView == SwiftUIContentView,
     BackgroundView == SwiftUIContentView,
@@ -70,7 +70,7 @@ public protocol SwiftUIItemContent : ItemContent
 
 
 @available(iOS 13.0, *)
-public extension SwiftUIItemContent where BackgroundType == EmptyView
+public extension ViewItemContent where BackgroundType == EmptyView
 {
     //
     // MARK: Default Implementations
@@ -85,7 +85,7 @@ public extension SwiftUIItemContent where BackgroundType == EmptyView
 
 
 @available(iOS 13.0, *)
-public extension SwiftUIItemContent where SelectedBackgroundType == EmptyView
+public extension ViewItemContent where SelectedBackgroundType == EmptyView
 {
     //
     // MARK: Default Implementations
@@ -100,7 +100,7 @@ public extension SwiftUIItemContent where SelectedBackgroundType == EmptyView
 
 
 @available(iOS 13.0, *)
-public extension SwiftUIItemContent
+public extension ViewItemContent
 {
     //
     // MARK: ItemContent

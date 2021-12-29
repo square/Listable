@@ -133,15 +133,19 @@ extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            didEndDisplaying cell: UICollectionViewCell,
+            didEndDisplaying anyCell: UICollectionViewCell,
             forItemAt indexPath: IndexPath
             )
         {
+            let cell = anyCell as! AnyItemCell
+            
             guard let item = self.displayedItems.removeValue(forKey: ObjectIdentifier(cell)) else {
                 return
             }
             
             item.didEndDisplay()
+            
+            cell.didEndDisplay()
         }
         
         private var displayedSupplementaryItems : [ObjectIdentifier:PresentationState.HeaderFooterViewStatePair] = [:]
@@ -284,7 +288,7 @@ extension ListView
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
-            self.view.liveCells.perform {
+            self.view.liveCells.forEach {
                 $0.closeSwipeActions()
             }
         }

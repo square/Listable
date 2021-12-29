@@ -17,7 +17,7 @@ protocol AnyPresentationHeaderFooterState : AnyObject
         in cache : ReusableViewCache,
         frame : CGRect,
         environment : ListEnvironment
-    ) -> UIView
+    ) -> AnyHeaderFooterContentView
     
     func enqueueReusableHeaderFooterView(_ view : UIView, in cache : ReusableViewCache)
     
@@ -116,7 +116,7 @@ extension PresentationState
             in cache : ReusableViewCache,
             frame : CGRect,
             environment : ListEnvironment
-        ) -> UIView
+        ) -> AnyHeaderFooterContentView
         {
             let view = cache.pop(with: self.model.reuseIdentifier) {
                 HeaderFooterContentView<Content>(frame: frame)

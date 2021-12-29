@@ -880,6 +880,28 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
     
     //
+    // MARK: Internal - View Controller Integration
+    //
+    
+    func containingViewControllerWillAppear(animated : Bool) {
+        liveCells.forEach { cell in
+            cell.listWillAppear(animated: animated)
+        }
+    }
+    
+    func containingViewControllerWillDisappear(animated : Bool) {
+        liveCells.forEach { cell in
+            cell.listWillDisappear(animated: animated)
+        }
+    }
+    
+    func containingViewControllerEndedAppearanceTransition() {
+        liveCells.forEach { cell in
+            cell.listEndedAppearanceTransition()
+        }
+    }
+    
+    //
     // MARK: Internal - Updating Content
     //
     

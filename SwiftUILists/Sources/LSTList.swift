@@ -1,5 +1,5 @@
 //
-//  ListableView.swift
+//  LSTList.swift
 //  SwiftUILists
 //
 //  Created by Kyle Van Essen on 10/22/19.
@@ -10,7 +10,7 @@ import SwiftUI
 
 
 @available(iOS 13.0, *)
-public struct ListableView : UIViewControllerRepresentable
+public struct LSTList : UIViewControllerRepresentable
 {
     public var properties : ListProperties
 
@@ -18,9 +18,19 @@ public struct ListableView : UIViewControllerRepresentable
     // MARK: Initialization
     //
         
-    public init(build : ListProperties.Configure)
-    {
-        self.properties = .default(with: build)
+    public init(
+        configure : ListProperties.Configure
+    ) {
+        self.properties = .default(with: configure)
+    }
+    
+    public init(
+        configure : ListProperties.Configure = { _ in },
+        @ListableBuilder<ListableUI.Section> sections : () -> [ListableUI.Section]
+    ) {
+        self.properties = .default(with: configure)
+        
+        self.properties.sections += sections()
     }
     
     //
@@ -47,12 +57,14 @@ public struct ListableView : UIViewControllerRepresentable
             }
         }
         
-        public override func viewDidLoad()
-        {
-            super.viewDidLoad()
-            
-            self.listView?.containingViewController = self
+        // MARK: UIViewController
+        
+        public override var shouldAutomaticallyForwardAppearanceMethods: Bool {
+            // TODO: Handle these...
+            false
         }
+        
+        // MARK: ListViewController
         
         public override func configure(list: inout ListProperties) {
             guard let properties = self.properties else {

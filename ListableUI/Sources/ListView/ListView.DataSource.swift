@@ -44,8 +44,12 @@ internal extension ListView
                 environment: self.view.environment
             )
             
-            cell.wasDequeued(with: self.liveCells)
-            cell.willBeProvided(to: self.view)
+            cell.wasDequeued(
+                in: .init(
+                    list: self.view,
+                    cells: self.liveCells
+                )
+            )
             
             return cell
         }

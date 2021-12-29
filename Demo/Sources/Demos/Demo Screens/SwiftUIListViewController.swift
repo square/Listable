@@ -45,7 +45,7 @@ final class SwiftUIListViewController : UIViewController
     required init?(coder: NSCoder) { fatalError() }
     
     var body : some View {
-        ListableView { list in
+        LSTList { list in
             
             list.layout = .demoLayout
             list.appearance = .demoAppearance
@@ -61,7 +61,7 @@ final class SwiftUIListViewController : UIViewController
 }
 
 @available(iOS 13.0, *)
-fileprivate struct SwiftUIDemoItem : SwiftUIItemContent, Equatable
+fileprivate struct SwiftUIDemoItem : ViewItemContent, Equatable
 {
     var text : String
     

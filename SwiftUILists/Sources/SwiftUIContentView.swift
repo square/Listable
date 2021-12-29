@@ -9,7 +9,7 @@ import SwiftUI
 
 
 @available(iOS 13.0, *)
-public final class SwiftUIContentView : UIView, ItemCellContentView
+public final class SwiftUIContentView : UIView, ListContentView
 {
     var rootView : AnyView {
         get {
@@ -54,31 +54,99 @@ public final class SwiftUIContentView : UIView, ItemCellContentView
         return self.controller.view.sizeThatFits(size)
     }
     
-    // MARK: ItemCellContentView
+    // MARK: ListContentView
     
-    public weak var containingViewController : UIViewController? = nil {
-        didSet {
-            if oldValue === self.containingViewController {
-                return
-            }
-            
-            if let parent = self.containingViewController {
-                parent.addChild(self.controller)
-                self.controller.didMove(toParent: parent)
-            } else {
-                self.controller.willMove(toParent: nil)
-                self.controller.removeFromParent()
-
-            }
-        }
+    private weak var containingViewController : UIViewController? = nil
+    
+    public func setContainingViewController(_ viewController : UIViewController) {
+        
+        guard containingViewController == nil else { fatalError() }
+        
+        self.containingViewController = viewController
+        
+        viewController.addChild(self.controller)
+        self.controller.didMove(toParent: viewController)
     }
+    
+    private var visibility = Visibility()
     
     public func willDisplay()
     {
-        if self.containingViewController != nil {
+        assertContainingViewController()
+        
+        visibility.isContentVisible = true
+        
+        if visibility.wantsAppearanceTransition {
+            controller.beginAppearanceTransition(true, animated: false)
+            controller.endAppearanceTransition()
+        }
+    }
+    
+    public func didEndDisplay() {
+                
+        if visibility.wantsAppearanceTransition {
+            controller.beginAppearanceTransition(false, animated: false)
+            controller.endAppearanceTransition()
+        }
+        
+        visibility.isContentVisible = false
+        
+        fatalError()
+    }
+    
+    public func listWillAppear(animated : Bool)
+    {
+        visibility.isListVisible = true
+        
+        if visibility.wantsAppearanceTransition {
+            visibility.isInAppearanceTransition = true
+            controller.beginAppearanceTransition(true, animated: animated)
+        }
+    }
+    
+    public func listWillDisappear(animated : Bool)
+    {
+        if visibility.wantsAppearanceTransition {
+            visibility.isInAppearanceTransition = true
+            controller.beginAppearanceTransition(false, animated: animated)
+        }
+        
+        visibility.isListVisible = false
+    }
+    
+    public func listEndedAppearanceTransition() {
+        guard visibility.isInAppearanceTransition else { return }
+
+        visibility.isInAppearanceTransition = false
+        controller.endAppearanceTransition()
+    }
+    
+    private func assertContainingViewController() {
+        
+        guard self.containingViewController == nil else {
             return
         }
         
-        fatalError("The `containingViewController` was not set on `SwiftUIContentView` before it was about to be presented. This will break embedded view controllers in SwiftUI view trees. This property is normally set automatically by Listable. If you are allocating this view manually, set the `containingViewController` property manually.")
+        fatalError(
+            """
+            The `containingViewController` was not set on `SwiftUIContentView` before it was about \
+            to be presented. This will break embedded view controllers in SwiftUI view trees. \
+            This property is normally set automatically by Listable. If you are allocating \
+            this view manually, set the `containingViewController` property manually.
+            """
+        )
+    }
+}
+
+
+struct Visibility {
+    
+    var isListVisible : Bool = false
+    var isContentVisible : Bool = false
+    
+    var isInAppearanceTransition : Bool = false
+    
+    var wantsAppearanceTransition : Bool {
+        isListVisible && isContentVisible
     }
 }

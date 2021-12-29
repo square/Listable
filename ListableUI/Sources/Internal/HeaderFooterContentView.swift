@@ -8,7 +8,11 @@
 import UIKit
 
 
-final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
+protocol AnyHeaderFooterContentView : UIView {
+}
+
+
+final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView, AnyHeaderFooterContentView
 {
     //
     // MARK: Properties

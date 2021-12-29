@@ -144,7 +144,7 @@ extension ItemCell {
                 && configuration.performsFirstActionWithFullSwipe
 
             if sender.state == .began {
-                self.listView?.liveCells.perform {
+                self.listView?.liveCells.forEach {
                     $0.closeSwipeActions()
                 }
             }

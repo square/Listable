@@ -107,7 +107,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     var environment : ListEnvironment!
     var reuseCache : ReusableViewCache!
     
-    private(set) var content : UIView? {
+    private(set) var content : AnyHeaderFooterContentView? {
         didSet {
             if let old = oldValue {
                 old.removeFromSuperview()
