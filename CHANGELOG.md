@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- `TableAppearance.ItemLayout` now properly initializes the `itemToSectionFooterSpacing` value.
+
 ### Added
 
 ### Removed
