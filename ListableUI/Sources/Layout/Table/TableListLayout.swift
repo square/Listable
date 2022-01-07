@@ -127,6 +127,10 @@ public struct TableAppearance : ListLayoutAppearance
         )
     }
     
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: TableListLayout.self, appearance: self)
+    }
+    
     // MARK: Properties
     
     /// When providing the `ItemPosition` for items in a list, specifies the max spacing

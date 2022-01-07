@@ -47,6 +47,10 @@ public struct RetailGridAppearance : ListLayoutAppearance
     
     public let bounds: ListContentBounds? = nil
     
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: RetailGridListLayout.self, appearance: self)
+    }
+    
     // MARK: Properties
     
     public var layout : Layout

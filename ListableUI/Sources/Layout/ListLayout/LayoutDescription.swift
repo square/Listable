@@ -48,12 +48,20 @@ public struct LayoutDescription : Equatable
         layoutType : LayoutType.Type,
         appearance configure : (inout LayoutType.LayoutAppearance) -> () = { _ in }
     ) {
-        var layoutAppearance = LayoutType.LayoutAppearance.default
-        configure(&layoutAppearance)
+        var appearance = LayoutType.LayoutAppearance.default
+        configure(&appearance)
         
+        self.init(layoutType: layoutType, appearance: appearance)
+    }
+    
+    /// Creates a new layout description for the provided layout type, with the provided appearance.
+    public init<LayoutType:ListLayout>(
+        layoutType : LayoutType.Type,
+        appearance : LayoutType.LayoutAppearance
+    ) {
         self.configuration = Configuration(
             layoutType: layoutType,
-            layoutAppearance: layoutAppearance
+            layoutAppearance: appearance
         )
     }
     
