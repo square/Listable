@@ -6,6 +6,8 @@
 
 ### Added
 
+- `LayoutDescription` now conforms to `Equatable`.
+
 ### Removed
 
 ### Changed
