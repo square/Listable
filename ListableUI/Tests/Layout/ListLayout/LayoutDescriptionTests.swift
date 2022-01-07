@@ -91,6 +91,25 @@ final class LayoutDescriptionTests : XCTestCase
         XCTAssertEqual(description1.configuration.isSameLayoutType(as: description1.configuration), true)
         XCTAssertEqual(description1.configuration.isSameLayoutType(as: description2.configuration), false)
     }
+    
+    func test_equatable() {
+        let description1 = TableListLayout.describe()
+        
+        let description2 = PagedListLayout.describe {
+            $0.direction = .vertical
+        }
+        
+        let description3 = PagedListLayout.describe {
+            $0.direction = .horizontal
+        }
+        
+        XCTAssertEqual(description1 == description1, true)
+        XCTAssertEqual(description2 == description2, true)
+        
+        XCTAssertEqual(description1 == description2, false)
+        
+        XCTAssertEqual(description2 == description3, false)
+    }
 }
 
 
