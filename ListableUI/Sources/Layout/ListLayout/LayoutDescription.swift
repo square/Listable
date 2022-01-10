@@ -39,7 +39,7 @@ import Foundation
 /// Under the hood, Listable is smart, and will only re-create the underlying
 /// layout object when needed (when the layout type or layout appearance changes).
 ///
-public struct LayoutDescription
+public struct LayoutDescription : Equatable
 {
     let configuration : AnyLayoutDescriptionConfiguration
     
@@ -48,12 +48,20 @@ public struct LayoutDescription
         layoutType : LayoutType.Type,
         appearance configure : (inout LayoutType.LayoutAppearance) -> () = { _ in }
     ) {
-        var layoutAppearance = LayoutType.LayoutAppearance.default
-        configure(&layoutAppearance)
+        var appearance = LayoutType.LayoutAppearance.default
+        configure(&appearance)
         
+        self.init(layoutType: layoutType, appearance: appearance)
+    }
+    
+    /// Creates a new layout description for the provided layout type, with the provided appearance.
+    public init<LayoutType:ListLayout>(
+        layoutType : LayoutType.Type,
+        appearance : LayoutType.LayoutAppearance
+    ) {
         self.configuration = Configuration(
             layoutType: layoutType,
-            layoutAppearance: layoutAppearance
+            layoutAppearance: appearance
         )
     }
     
@@ -63,6 +71,10 @@ public struct LayoutDescription
     /// of the backing list layout.
     public var layoutAppearanceProperties : ListLayoutAppearanceProperties {
         configuration.layoutAppearanceProperties()
+    }
+    
+    public static func == (lhs : Self, rhs : Self) -> Bool {
+        lhs.configuration.isEqual(to: rhs.configuration)
     }
 }
 
@@ -84,11 +96,15 @@ extension ListLayout
 
 extension LayoutDescription
 {
-    public struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration
+    public struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration, Equatable
     {
         public let layoutType : LayoutType.Type
         
         public let layoutAppearance : LayoutType.LayoutAppearance
+        
+        public static func == (lhs: Self, rhs: Self) -> Bool {
+            lhs.layoutType == rhs.layoutType && lhs.layoutAppearance == rhs.layoutAppearance
+        }
         
         // MARK: AnyLayoutDescriptionConfiguration
         
@@ -141,6 +157,10 @@ extension LayoutDescription
             
             return self.layoutType == other.layoutType
         }
+        
+        public func isEqual(to other : AnyLayoutDescriptionConfiguration) -> Bool {
+            self == (other as? Self)
+        }
     }
 }
 
@@ -163,4 +183,6 @@ public protocol AnyLayoutDescriptionConfiguration
     func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
 
     func isSameLayoutType(as other : AnyLayoutDescriptionConfiguration) -> Bool
+    
+    func isEqual(to other : AnyLayoutDescriptionConfiguration) -> Bool
 }

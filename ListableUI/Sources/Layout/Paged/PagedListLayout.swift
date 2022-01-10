@@ -79,6 +79,10 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public let bounds: ListContentBounds? = nil
     
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: PagedListLayout.self, appearance: self)
+    }
+    
     // MARK: Properties
     
     /// If scroll indicators should be visible along the scrollable axis.

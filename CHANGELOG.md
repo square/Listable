@@ -6,6 +6,10 @@
 
 ### Added
 
+- `LayoutDescription` now conforms to `Equatable`.
+- `ListLayoutAppearance` now has a `func` to modify the default layout.
+- You can now construct a layout description from a `ListLayoutAppearance`, allowing the underlying `ListLayout` to remain internal to a module.
+
 ### Removed
 
 ### Changed

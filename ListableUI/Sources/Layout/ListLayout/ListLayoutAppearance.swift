@@ -12,6 +12,8 @@ public protocol ListLayoutAppearance : Equatable
 {
     static var `default` : Self { get }
     
+    static func `default`(_ modifying : (inout Self) -> ()) -> Self
+    
     var direction : LayoutDirection { get }
     
     var bounds : ListContentBounds? { get }
@@ -21,6 +23,18 @@ public protocol ListLayoutAppearance : Equatable
     var pagingBehavior : ListPagingBehavior { get }
     
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
+    
+    func toLayoutDescription() -> LayoutDescription
+}
+
+
+extension ListLayoutAppearance {
+    
+    public static func `default`(_ modifying : (inout Self) -> ()) -> Self {
+        var appearance = Self.default
+        modifying(&appearance)
+        return appearance
+    }
 }
 
 
