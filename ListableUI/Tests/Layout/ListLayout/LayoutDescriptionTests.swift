@@ -138,6 +138,10 @@ private struct TestLayoutAppearance : ListLayoutAppearance
         nil
     }
     
+    func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: TestLayout.self, appearance: self)
+    }
+    
     var anotherValue : String
 }
 
