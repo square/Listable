@@ -3,6 +3,7 @@
 ### Fixed
 
 - `TableAppearance.ItemLayout` now properly initializes the `itemToSectionFooterSpacing` value.
+- A swipe actions memory leak has been fixed for `ItemCell.ContentContainerView`.
 
 ### Added
 
