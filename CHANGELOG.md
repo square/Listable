@@ -2,14 +2,7 @@
 
 ### Fixed
 
-- `TableAppearance.ItemLayout` now properly initializes the `itemToSectionFooterSpacing` value.
-- A swipe actions memory leak has been fixed for `ItemCell.ContentContainerView`.
-
 ### Added
-
-- `LayoutDescription` now conforms to `Equatable`.
-- `ListLayoutAppearance` now has a `func` to modify the default layout.
-- You can now construct a layout description from a `ListLayoutAppearance`, allowing the underlying `ListLayout` to remain internal to a module.
 
 ### Removed
 
@@ -18,6 +11,19 @@
 ### Misc
 
 # Past Releases
+
+# [3.0.0] - 2022-01-15
+
+### Fixed
+
+- `TableAppearance.ItemLayout` now properly initializes the `itemToSectionFooterSpacing` value.
+- A swipe actions memory leak has been fixed for `ItemCell.ContentContainerView`.
+
+### Added
+
+- `LayoutDescription` now conforms to `Equatable`.
+- `ListLayoutAppearance` now has a `func` to modify the default layout.
+- You can now construct a layout description from a `ListLayoutAppearance`, allowing the underlying `ListLayout` to remain internal to a module.
 
 # [2.0.0] - 2021-12-15
 
