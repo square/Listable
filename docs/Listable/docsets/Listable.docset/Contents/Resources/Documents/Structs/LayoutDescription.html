@@ -617,7 +617,7 @@
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LayoutDescription</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LayoutDescription</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
@@ -686,6 +686,36 @@ layout object when needed (when the layout type or layout appearance changes).</
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI17LayoutDescriptionV10layoutType10appearanceACxm_0C10AppearanceQztcAA04ListC0Rzlufc"></a>
+                    <a name="//apple_ref/swift/Method/init(layoutType:appearance:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17LayoutDescriptionV10layoutType10appearanceACxm_0C10AppearanceQztcAA04ListC0Rzlufc">init(layoutType:<wbr>appearance:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new layout description for the provided layout type, with the provided appearance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">LayoutType</span><span class="p">:</span><span class="kt"><a href="../Protocols/ListLayout.html">ListLayout</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">layoutType</span> <span class="p">:</span> <span class="kt">LayoutType</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span>
+    <span class="nv">appearance</span> <span class="p">:</span> <span class="kt">LayoutType</span><span class="o">.</span><span class="kt">LayoutAppearance</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI17LayoutDescriptionV26layoutAppearancePropertiesAA04ListcfG0Vvp"></a>
                     <a name="//apple_ref/swift/Property/layoutAppearanceProperties" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI17LayoutDescriptionV26layoutAppearancePropertiesAA04ListcfG0Vvp">layoutAppearanceProperties</a>
@@ -707,6 +737,32 @@ of the backing list layout.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">layoutAppearanceProperties</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:SQ2eeoiySbx_xtFZ"></a>
+                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:<wbr>_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="err">`</span><span class="k">Self</span><span class="err">`</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="err">`</span><span class="k">Self</span><span class="err">`</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -764,7 +820,7 @@ See the <code><a href="../Structs/FlowAppearance.html">FlowAppearance</a></code>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Configuration</span><span class="o">&lt;</span><span class="kt">LayoutType</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyLayoutDescriptionConfiguration.html">AnyLayoutDescriptionConfiguration</a></span> <span class="k">where</span> <span class="kt">LayoutType</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ListLayout.html">ListLayout</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Configuration</span><span class="o">&lt;</span><span class="kt">LayoutType</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyLayoutDescriptionConfiguration.html">AnyLayoutDescriptionConfiguration</a></span><span class="p">,</span> <span class="kt">Equatable</span> <span class="k">where</span> <span class="kt">LayoutType</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ListLayout.html">ListLayout</a></span></code></pre>
 
                         </div>
                       </div>
@@ -860,7 +916,7 @@ See the <code><a href="../Structs/FlowAppearance.html">FlowAppearance</a></code>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2021 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2021-12-15)</p>
+      <p>&copy; 2022 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2022-01-15)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
