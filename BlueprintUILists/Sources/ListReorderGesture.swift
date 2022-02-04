@@ -43,6 +43,9 @@ public struct ListReorderGesture : Element
     
     /// If the gesture is enabled or not.
     public var isEnabled : Bool
+
+    /// TODO
+    public var requiresLongPress: Bool
     
     let actions : ReorderingActions
     
@@ -53,11 +56,14 @@ public struct ListReorderGesture : Element
     public init(
         isEnabled : Bool = true,
         actions : ReorderingActions,
+        requiresLongPress: Bool = false,
         wrapping element : Element
     ) {
         self.isEnabled =  isEnabled
         
         self.actions = actions
+
+        self.requiresLongPress = requiresLongPress
         
         self.element = element
     }
@@ -81,6 +87,8 @@ public struct ListReorderGesture : Element
                 view.recognizer.isEnabled = self.isEnabled
                 
                 view.recognizer.apply(actions: self.actions)
+                
+                view.recognizer.minimumPressDuration = requiresLongPress ? 0.5 : 0.0
             }
         }
     }
@@ -90,9 +98,9 @@ public struct ListReorderGesture : Element
 public extension Element
 {
     /// Wraps the element in a re-order gesture.
-    func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true) -> Element
+    func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true, requiresLongPress: Bool = false) -> Element
     {
-        ListReorderGesture(isEnabled: isEnabled, actions: actions, wrapping: self)
+        ListReorderGesture(isEnabled: isEnabled, actions: actions, requiresLongPress: requiresLongPress, wrapping: self)
     }
 }
 
