@@ -151,7 +151,7 @@ extension ItemReordering {
     ///     }
     /// }
     /// ```
-    public class GestureRecognizer : UILongPressGestureRecognizer, UIGestureRecognizerDelegate
+    public class GestureRecognizer : UILongPressGestureRecognizer
     {
         private typealias OnStart = () -> Bool
         private typealias OnMove = (GestureRecognizer) -> ()
@@ -167,8 +167,7 @@ extension ItemReordering {
             super.init(target: target, action: action)
             
             self.addTarget(self, action: #selector(updated))
-            self.delegate = self
-            self.minimumPressDuration = 0.5
+            self.minimumPressDuration = 0
         }
         
         /// Applies the actions from the ``ReorderingActions`` to the gesture recognizer,
@@ -202,13 +201,19 @@ extension ItemReordering {
                 y: translation.y + initialPointAndCenterDiff.y
             )
         }
-                        
+
+        private var initialTouchPoint : CGPoint? = nil
+
         @objc private func updated()
         {
             switch self.state {
             case .possible: break
             case .began:
-                break
+                if self.onStart?() == true {
+                    initialTouchPoint = location(in: view)
+                } else {
+                    self.state = .cancelled
+                }
             case .changed:
                 self.onMove?(self)
 
@@ -222,16 +227,6 @@ extension ItemReordering {
                 
             @unknown default: listableInternalFatal()
             }
-        }
-
-        private var initialTouchPoint : CGPoint? = nil
-
-        public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-            let shouldStart = onStart?() ?? false
-            if shouldStart {
-                initialTouchPoint = location(in: view)
-            }
-            return shouldStart
         }
     }
 }

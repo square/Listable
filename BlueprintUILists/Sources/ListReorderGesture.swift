@@ -38,14 +38,19 @@ import UIKit
 /// ```
 public struct ListReorderGesture : Element
 {
+    public enum Begins {
+        case onTap
+        case onLongPress
+    }
+
     /// The element which is being wrapped by the reorder gesture.
     public var element : Element
     
     /// If the gesture is enabled or not.
     public var isEnabled : Bool
 
-    /// TODO
-    public var requiresLongPress: Bool
+    /// Condition to start the reorder gesture
+    public var begins: Begins
     
     let actions : ReorderingActions
     
@@ -56,14 +61,14 @@ public struct ListReorderGesture : Element
     public init(
         isEnabled : Bool = true,
         actions : ReorderingActions,
-        requiresLongPress: Bool = false,
+        begins: Begins = .onTap,
         wrapping element : Element
     ) {
         self.isEnabled =  isEnabled
         
         self.actions = actions
 
-        self.requiresLongPress = requiresLongPress
+        self.begins = begins
         
         self.element = element
     }
@@ -88,7 +93,7 @@ public struct ListReorderGesture : Element
                 
                 view.recognizer.apply(actions: self.actions)
                 
-                view.recognizer.minimumPressDuration = requiresLongPress ? 0.5 : 0.0
+                view.recognizer.minimumPressDuration = begins == .onLongPress ? 0.5 : 0.0
             }
         }
     }
@@ -98,9 +103,12 @@ public struct ListReorderGesture : Element
 public extension Element
 {
     /// Wraps the element in a re-order gesture.
-    func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true, requiresLongPress: Bool = false) -> Element
-    {
-        ListReorderGesture(isEnabled: isEnabled, actions: actions, requiresLongPress: requiresLongPress, wrapping: self)
+    func listReorderGesture(
+        with actions : ReorderingActions,
+        isEnabled : Bool = true,
+        begins: ListReorderGesture.Begins = .onTap
+    ) -> Element {
+        ListReorderGesture(isEnabled: isEnabled, actions: actions, begins: begins, wrapping: self)
     }
 }
 

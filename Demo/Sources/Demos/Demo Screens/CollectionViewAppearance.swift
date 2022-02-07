@@ -132,15 +132,10 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
-    var dragging = false
     var requiresLongPress = false
     
     var identifierValue: String {
         return self.text
-    }
-    
-    func isEquivalent(to other: DemoItem) -> Bool {
-        text == other.text && other.dragging != other.dragging
     }
 
     typealias SwipeActionsView = DefaultSwipeActionsView
@@ -163,7 +158,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
                         image: UIImage(named: "ReorderControl"),
                         contentMode: .center
                     )
-                        .listReorderGesture(with: info.reorderingActions, requiresLongPress: requiresLongPress)
+                        .listReorderGesture(with: info.reorderingActions, begins: requiresLongPress ? .onLongPress : .onTap)
                 )
             }
         }
@@ -174,7 +169,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
-            backgroundColor: dragging ? .white(0.8) : .white,
+            backgroundColor: info.state.isReordering ? .white(0.8) : .white,
             cornerStyle: .rounded(radius: 8.0)
         )
     }

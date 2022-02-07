@@ -508,10 +508,6 @@ extension PresentationState
                 return
             }
 
-            if let callback = self.model.onStartReorder {
-                callback(self.model)
-            }
-
             self.activeReorderEventInfo = .init(
                 originalIndexPath: originalIndexPath
             )

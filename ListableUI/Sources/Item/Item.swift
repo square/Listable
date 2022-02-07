@@ -34,11 +34,9 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     
     public var swipeActions : SwipeActionsConfiguration?
 
-    public typealias OnStartReorder = (Self) -> ()
     public typealias OnWasReordered = (Self, ItemReordering.Result) -> ()
     
     public var reordering : ItemReordering?
-    public var onStartReorder : OnStartReorder?
     public var onWasReordered : OnWasReordered?
         
     public var onDisplay : OnDisplay.Callback?
