@@ -507,7 +507,7 @@ extension PresentationState
             if self.isReordering {
                 return
             }
-            
+
             self.activeReorderEventInfo = .init(
                 originalIndexPath: originalIndexPath
             )

@@ -132,6 +132,7 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
+    var requiresLongPress = false
     
     var identifierValue: String {
         return self.text
@@ -157,7 +158,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
                         image: UIImage(named: "ReorderControl"),
                         contentMode: .center
                     )
-                        .listReorderGesture(with: info.reorderingActions)
+                        .listReorderGesture(with: info.reorderingActions, begins: requiresLongPress ? .onLongPress : .onTap)
                 )
             }
         }
@@ -168,7 +169,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
-            backgroundColor: .white,
+            backgroundColor: info.state.isReordering ? .white(0.8) : .white,
             cornerStyle: .rounded(radius: 8.0)
         )
     }
