@@ -4,8 +4,6 @@
 
 ### Added
 
-- `ListReorderGesture.Begins` added. This controls when the reorder gesture starts: `onTap` and `onLongPress`.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [3.1.0] - 2022-02-08
+
+### Added
+
+- `ListReorderGesture.Begins` added. This controls when the reorder gesture starts: `onTap` and `onLongPress`.
 
 # [3.0.0] - 2022-01-15
 
