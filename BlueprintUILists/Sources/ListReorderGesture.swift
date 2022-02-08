@@ -89,14 +89,24 @@ public struct ListReorderGesture : Element
             }
             
             config.apply { view in
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = ListReorderGesture.Strings.accessibilityLabel
+                view.accessibilityHint = ListReorderGesture.Strings.accessibilityHint
+                view.accessibilityTraits.formUnion(.button)
+                
                 view.recognizer.isEnabled = self.isEnabled
                 
                 view.recognizer.apply(actions: self.actions)
                 
                 view.recognizer.minimumPressDuration = begins == .onLongPress ? 0.5 : 0.0
+                if UIAccessibility.isVoiceOverRunning {
+                    // Voiceover already uses a long press when moving items. We shouldn't add our own.
+                    view.recognizer.minimumPressDuration = 0.0
+                }
             }
         }
     }
+
 }
 
 
@@ -136,5 +146,18 @@ fileprivate extension ListReorderGesture
         required init?(coder aDecoder: NSCoder) {
             listableInternalFatal()
         }
+    }
+}
+
+private class AccessibilityReorderAction: UIAccessibilityCustomAction {
+    
+}
+
+fileprivate extension ListReorderGesture
+{
+    struct Strings{
+        static var accessibilityLabel = NSLocalizedString("Reorder", comment: "Accessibility label for the reorder control on an item")
+        static var accessibilityValue = NSLocalizedString("Draggable", comment: "Accessibility value for the reorder control on an item")
+        static var accessibilityHint = NSLocalizedString("Double tap and hold, wait for the sound, then drag to rearrange.", comment: "Accessibility hint for the reorder control in an item")
     }
 }
