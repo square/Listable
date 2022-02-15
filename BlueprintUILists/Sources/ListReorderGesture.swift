@@ -55,7 +55,7 @@ public struct ListReorderGesture : Element
     let actions : ReorderingActions
     
     /// The acccessibility Label of the item that will be reordered.
-    /// This will be set as the gesture's accessibilityValue to procude a richer VoiceOver utterance.
+    /// This will be set as the gesture's accessibilityValue to provide a richer VoiceOver utterance.
     public var reorderItemAccessibilityLabel : String? = nil
     
     /// Creates a new re-order gesture which wraps the provided element.
