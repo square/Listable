@@ -145,7 +145,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     // MARK: AccessibilityLabel
     
-    // When reordering cells the UICollectionView expects all cells to have a valid accessibility label, even when acting as an accessibility container with `isAccessibilityElement == false`. This is used to announce the destination of the reodering operaton e.g. "Before foo" or "after bar".
+    // When reordering cells the UICollectionView expects all cells to have a valid accessibility label, even when acting as an accessibility container with `isAccessibilityElement == false`. This is used to announce the destination of the reodering operaton in relation to the other cells, e.g. "Before foo" or "after bar".
     private var _accessibilityLabel: String?
     override var accessibilityLabel: String? {
         set {

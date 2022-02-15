@@ -54,6 +54,10 @@ public struct ListReorderGesture : Element
     
     let actions : ReorderingActions
     
+    /// The acccessibility Label of the item that will be reordered.
+    /// This will be set as the gesture's accessibilityValue to procude a richer VoiceOver utterance.
+    public var reorderItemAccessibilityLabel : String? = nil
+    
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
     /// This element on its own has no visual appearance. Thus, you should
@@ -91,6 +95,7 @@ public struct ListReorderGesture : Element
             config.apply { view in
                 view.isAccessibilityElement = true
                 view.accessibilityLabel = ListReorderGesture.Strings.accessibilityLabel
+                view.accessibilityValue = reorderItemAccessibilityLabel
                 view.accessibilityHint = ListReorderGesture.Strings.accessibilityHint
                 view.accessibilityTraits.formUnion(.button)
                 
@@ -157,7 +162,6 @@ fileprivate extension ListReorderGesture
 {
     struct Strings{
         static var accessibilityLabel = NSLocalizedString("Reorder", comment: "Accessibility label for the reorder control on an item")
-        static var accessibilityValue = NSLocalizedString("Draggable", comment: "Accessibility value for the reorder control on an item")
         static var accessibilityHint = NSLocalizedString("Double tap and hold, wait for the sound, then drag to rearrange.", comment: "Accessibility hint for the reorder control in an item")
     }
 }
