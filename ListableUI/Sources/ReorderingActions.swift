@@ -68,6 +68,14 @@ public final class ReorderingActions
         
         self.delegate?.endReorder(for: item, with: result)
     }
+    
+    public func accessibilityMove(direction: AccessibilityMoveDirection) -> Bool {
+        guard let item = self.item, let delegate = self.delegate else {
+            return false
+        }
+        return delegate.accessibilityMove(item: item, direction: direction)
+    }
+    
 }
 
 
@@ -79,10 +87,19 @@ extension ReorderingActions {
     }
 }
 
+extension ReorderingActions {
+    public enum AccessibilityMoveDirection {
+        case up
+        case down
+    }
+}
 
 protocol ReorderingActionsDelegate : AnyObject
 {
     func beginReorder(for item : AnyPresentationItemState) -> Bool
     func updateReorderTargetPosition(with recognizer : ItemReordering.GestureRecognizer, for item : AnyPresentationItemState)
     func endReorder(for item : AnyPresentationItemState, with result : ReorderingActions.Result)
+    
+    // Used by an AccessibilityCustomAction, move the item up or down by one index path position.
+    func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool
 }

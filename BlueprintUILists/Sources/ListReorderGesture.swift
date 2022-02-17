@@ -98,6 +98,7 @@ public struct ListReorderGesture : Element
                 view.accessibilityValue = reorderItemAccessibilityLabel
                 view.accessibilityHint = ListReorderGesture.Strings.accessibilityHint
                 view.accessibilityTraits.formUnion(.button)
+                view.accessibilityCustomActions = accessibilityActions()
                 
                 view.recognizer.isEnabled = self.isEnabled
                 
@@ -154,14 +155,30 @@ fileprivate extension ListReorderGesture
     }
 }
 
-private class AccessibilityReorderAction: UIAccessibilityCustomAction {
-    
+
+fileprivate extension ListReorderGesture {
+    func accessibilityActions() -> [UIAccessibilityCustomAction]? {
+        if #available(iOS 13.0, *) {
+            let up = UIAccessibilityCustomAction(name: Strings.moveUp) { _  in
+                return self.actions.accessibilityMove(direction: .up)
+            }
+            let down = UIAccessibilityCustomAction(name: Strings.moveDown) { _  in
+                return self.actions.accessibilityMove(direction: .down)
+            }
+            return [up, down]
+        } else {
+            return nil
+        }
+    }
 }
+
 
 fileprivate extension ListReorderGesture
 {
     struct Strings{
         static var accessibilityLabel = NSLocalizedString("Reorder", comment: "Accessibility label for the reorder control on an item")
         static var accessibilityHint = NSLocalizedString("Double tap and hold, wait for the sound, then drag to rearrange.", comment: "Accessibility hint for the reorder control in an item")
+        static var moveUp = "Move up"
+        static var moveDown = "Move down"
     }
 }

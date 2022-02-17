@@ -192,11 +192,11 @@ final class LiveCells {
 
 extension UIView {
     
-   fileprivate func firstAccessibleChild() -> UIView? {
+   fileprivate func firstAccessibleChild() -> NSObject? {
         guard !isAccessibilityElement else {
             return self
         }
-        return recursiveAccessibleSubviews().first as? UIView
+        return recursiveAccessibleSubviews().first as? NSObject
     }
     
     fileprivate func recursiveAccessibleSubviews() -> [Any] {
