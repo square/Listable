@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Generate a Localizable.strings file from the LocalizedStrings.swift file in MarketUI
+# Generate a Localizable.strings file from the LocalizedStrings.swift file in BlueprintUILists
 # Usage: extract_english_strings
 
 set -euo pipefail
