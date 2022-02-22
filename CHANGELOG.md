@@ -3,13 +3,11 @@
 ### Fixed
 
 ### Added
+- Item reordering is now possible when using VoiceOver.
 
 ### Removed
 
 ### Changed
-- `ListReorderGesture` now supports interaction via VoiceOver.
-- `ItemCell` now exposes an `accessibilityLabel` from its child element when acting as an `AccessibilityContainer`. This is used in reordering operations.
-- `ListReorderGesture.begins.onLongPress` is ignored when voiceover is enabled. Accessible reordering already requires a long press.
 
 ### Misc
 

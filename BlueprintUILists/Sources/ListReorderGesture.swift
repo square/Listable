@@ -105,10 +105,6 @@ public struct ListReorderGesture : Element
                 view.recognizer.apply(actions: self.actions)
                 
                 view.recognizer.minimumPressDuration = begins == .onLongPress ? 0.5 : 0.0
-                if UIAccessibility.isVoiceOverRunning {
-                    // Voiceover already uses a long press when moving items. We shouldn't add our own.
-                    view.recognizer.minimumPressDuration = 0.0
-                }
             }
         }
     }
