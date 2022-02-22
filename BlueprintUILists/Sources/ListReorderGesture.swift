@@ -94,9 +94,9 @@ public struct ListReorderGesture : Element
             
             config.apply { view in
                 view.isAccessibilityElement = true
-                view.accessibilityLabel = ListReorderGesture.Strings.accessibilityLabel
+                view.accessibilityLabel = LocalizedStrings.ReorderGesture.accessibilityLabel
                 view.accessibilityValue = reorderItemAccessibilityLabel
-                view.accessibilityHint = ListReorderGesture.Strings.accessibilityHint
+                view.accessibilityHint = LocalizedStrings.ReorderGesture.accessibilityHint
                 view.accessibilityTraits.formUnion(.button)
                 view.accessibilityCustomActions = accessibilityActions()
                 
@@ -159,26 +159,15 @@ fileprivate extension ListReorderGesture
 fileprivate extension ListReorderGesture {
     func accessibilityActions() -> [UIAccessibilityCustomAction]? {
         if #available(iOS 13.0, *) {
-            let up = UIAccessibilityCustomAction(name: Strings.moveUp) { _  in
+            let up = UIAccessibilityCustomAction(name: LocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
                 return self.actions.accessibilityMove(direction: .up)
             }
-            let down = UIAccessibilityCustomAction(name: Strings.moveDown) { _  in
+            let down = UIAccessibilityCustomAction(name: LocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
                 return self.actions.accessibilityMove(direction: .down)
             }
             return [up, down]
         } else {
             return nil
         }
-    }
-}
-
-
-fileprivate extension ListReorderGesture
-{
-    struct Strings{
-        static var accessibilityLabel = NSLocalizedString("Reorder", comment: "Accessibility label for the reorder control on an item")
-        static var accessibilityHint = NSLocalizedString("Double tap and hold, wait for the sound, then drag to rearrange.", comment: "Accessibility hint for the reorder control in an item")
-        static var moveUp = "Move up"
-        static var moveDown = "Move down"
     }
 }
