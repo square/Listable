@@ -1334,9 +1334,11 @@ extension ListView : ReorderingActionsDelegate
     }
     
     func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool {
-        guard let indexPath = self.storage.presentationState.indexPath(for: item) else {
+        guard let indexPath = self.storage.presentationState.indexPath(for: item),
+              self.dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath) else {
             return false
         }
+
         let destinationPath : IndexPath
         switch direction {
         case .up:
@@ -1371,8 +1373,8 @@ extension ListView : ReorderingActionsDelegate
             }
         }
         
-        let targetPath =  self.delegate.collectionView(self.collectionView, targetIndexPathForMoveFromItemAt: indexPath, toProposedIndexPath: destinationPath)
-        
+        let targetPath = self.delegate.collectionView(self.collectionView, targetIndexPathForMoveFromItemAt: indexPath, toProposedIndexPath: destinationPath)
+
         item.beginReorder(from: indexPath, with: self.environment)
         self.dataSource.collectionView(self.collectionView, moveItemAt: indexPath, to: targetPath)
         self.collectionView.moveItem(at: indexPath, to: targetPath)
