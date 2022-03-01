@@ -1377,7 +1377,7 @@ extension ListView : ReorderingActionsDelegate
         
         /*  We are responding to a user event, but won't be using the `InteractiveMovement` API the collection view provides as we are being called from an accessibility action rather than a gesture regognizer. This means we'll have to call out to the dataSource directly.
         
-            NOTE: It's Important that we call `dataSource.collectionView(_ :, moveItemAt:, to:)` to perfrom the move in the data source before calling `collectionView.moveItem(at:, to:)` to update the collection view itself.
+            NOTE: It's Important that we call `dataSource.collectionView(_ :, moveItemAt:, to:)` to perform the move in the data source before calling `collectionView.moveItem(at:, to:)` to update the collection view itself.
         */
         
         item.beginReorder(from: indexPath, with: self.environment)
