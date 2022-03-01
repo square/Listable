@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Generate a Localizable.strings file from the LocalizedStrings.swift file in BlueprintUILists
+# Generate a Localizable.strings file from the LocalizedStrings.swift file in ListableUI
 # Usage: extract_english_strings
 
 set -euo pipefail
@@ -9,9 +9,9 @@ set -euo pipefail
 # so we cd to the script dir is and use paths relative to that.
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-genstrings -o ../BlueprintUILists/Resources/en.lproj \
-../BlueprintUILists/Sources/LocalizedStrings.swift \
+genstrings -o ../ListableUI/Resources/en.lproj \
+../ListableUI/Sources/LocalizedStrings.swift \
 
 # genstrings encodes its file in UTF-16, but UTF-8 is also supported and will show in diffs,
 # so we'll convert the file to UTF-8
-iconv -f UTF-16 -t UTF-8 ../BlueprintUILists/Resources/en.lproj/Localizable.strings > temp && mv temp ../BlueprintUILists/Resources/en.lproj/Localizable.strings
+iconv -f UTF-16 -t UTF-8 ../ListableUI/Resources/en.lproj/Localizable.strings > temp && mv temp ../ListableUI/Resources/en.lproj/Localizable.strings
