@@ -149,16 +149,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     private var _accessibilityLabel: String?
     override var accessibilityLabel: String? {
         set {
-            guard _accessibilityLabel != newValue  else {
-                return
-            }
             _accessibilityLabel = newValue
         }
         get {
             guard let accessibilityLabel = _accessibilityLabel else {
-                let first = contentView.firstAccessibleChild()?.accessibilityLabel
-                _accessibilityLabel = first
-                return first
+                return contentView.firstAccessibleChild()?.accessibilityLabel
             }
             return accessibilityLabel
         }
