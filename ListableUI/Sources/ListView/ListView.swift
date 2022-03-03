@@ -1335,7 +1335,7 @@ extension ListView : ReorderingActionsDelegate
     
     func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool {
         guard let indexPath = self.storage.presentationState.indexPath(for: item),
-              self.dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath) else {
+        self.dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath) else {
             return false
         }
 
