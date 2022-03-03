@@ -88,6 +88,7 @@ extension ReorderingActions {
 }
 
 extension ReorderingActions {
+    
     public enum AccessibilityMoveDirection {
         case up
         case down
@@ -100,6 +101,6 @@ protocol ReorderingActionsDelegate : AnyObject
     func updateReorderTargetPosition(with recognizer : ItemReordering.GestureRecognizer, for item : AnyPresentationItemState)
     func endReorder(for item : AnyPresentationItemState, with result : ReorderingActions.Result)
     
-    // Used by an AccessibilityCustomAction, move the item up or down by one index path position.
+    // In addition to reordering cells with the standard drag gesture we offer an AccessibilityCustomAction to move a selected cell up or down by a single index path position. This provides an affordance for those who struggle to percisely drag cells about the screen.
     func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool
 }

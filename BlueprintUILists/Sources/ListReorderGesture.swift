@@ -94,9 +94,9 @@ public struct ListReorderGesture : Element
             
             config.apply { view in
                 view.isAccessibilityElement = true
-                view.accessibilityLabel = LocalizedStrings.ReorderGesture.accessibilityLabel
+                view.accessibilityLabel = ListableLocalizedStrings.ReorderGesture.accessibilityLabel
                 view.accessibilityValue = reorderItemAccessibilityLabel
-                view.accessibilityHint = LocalizedStrings.ReorderGesture.accessibilityHint
+                view.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
                 view.accessibilityTraits.formUnion(.button)
                 view.accessibilityCustomActions = accessibilityActions()
                 
@@ -155,10 +155,10 @@ fileprivate extension ListReorderGesture
 fileprivate extension ListReorderGesture {
     func accessibilityActions() -> [UIAccessibilityCustomAction]? {
         if #available(iOS 13.0, *) {
-            let up = UIAccessibilityCustomAction(name: LocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
+            let up = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
                 return self.actions.accessibilityMove(direction: .up)
             }
-            let down = UIAccessibilityCustomAction(name: LocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
+            let down = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
                 return self.actions.accessibilityMove(direction: .down)
             }
             return [up, down]
