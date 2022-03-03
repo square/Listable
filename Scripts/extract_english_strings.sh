@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Generate a Localizable.strings file from the LocalizedStrings.swift file in ListableUI
+# Generate a Localizable.strings file from the ListableLocalizedStrings.swift file in ListableUI
 # Usage: extract_english_strings
 
 set -euo pipefail
@@ -10,7 +10,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 genstrings -o ../ListableUI/Resources/en.lproj \
-../ListableUI/Sources/LocalizedStrings.swift \
+../ListableUI/Sources/ListableLocalizedStrings.swift \
 
 # genstrings encodes its file in UTF-16, but UTF-8 is also supported and will show in diffs,
 # so we'll convert the file to UTF-8
