@@ -3,6 +3,7 @@
 ### Fixed
 
 ### Added
+- Item reordering is now possible when using VoiceOver.
 
 ### Removed
 

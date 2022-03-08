@@ -15,6 +15,8 @@
 
 1. Create a branch off `main` to update the version numbers and `Podfile.lock`. An example name would be `your-username/release-0.1.0`.
 
+1. Update localized strings. Find the sha of the latest commit with `git log`, then run `./Scripts/install_localized_strings.sh [sha]` to download the latest translations. 
+
 1. Update the library version in `version.rb` if it has not already been updated (it should match the version number that you are about to release).
 
 1. Update `CHANGELOG.md` (in the root of the repo), moving current changes under `Main` to a new section under `Past Releases` for the version you are releasing.

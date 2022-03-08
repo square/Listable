@@ -90,6 +90,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return layoutAttributes
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        _accessibilityLabel = nil
+    }
+    
     // MARK: UIView
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -136,6 +141,23 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         
         liveCells.add(self)
     }
+    
+    
+    // MARK: AccessibilityLabel
+    
+    // When reordering cells the UICollectionView expects all cells to have a valid accessibility label, even when acting as an accessibility container with `isAccessibilityElement == false`. This is used to announce the destination of the reodering operaton in relation to the other cells, e.g. "Before foo" or "after bar".
+    private var _accessibilityLabel: String?
+    override var accessibilityLabel: String? {
+        set {
+            _accessibilityLabel = newValue
+        }
+        get {
+            guard let accessibilityLabel = _accessibilityLabel else {
+                return contentView.firstAccessibleChild()?.accessibilityLabel
+            }
+            return accessibilityLabel
+        }
+    }
 }
 
 
@@ -159,5 +181,28 @@ final class LiveCells {
     
     struct LiveCell {
         weak var cell : AnyItemCell?
+    }
+}
+
+
+extension UIView {
+    
+   fileprivate func firstAccessibleChild() -> NSObject? {
+        guard !isAccessibilityElement else {
+            return self
+        }
+        return recursiveAccessibleSubviews().first as? NSObject
+    }
+    
+    fileprivate func recursiveAccessibleSubviews() -> [Any] {
+        subviews.flatMap { subview -> [Any] in
+            if let accessibilityElements = subview.accessibilityElements {
+                return accessibilityElements
+            } else if subview.isAccessibilityElement {
+                return [subview]
+            } else {
+                return subview.recursiveAccessibleSubviews()
+            }
+        }
     }
 }
