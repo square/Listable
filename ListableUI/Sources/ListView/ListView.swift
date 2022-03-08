@@ -1362,7 +1362,7 @@ extension ListView : ReorderingActionsDelegate
             // Moving an item down means incrementing the index.
             if indexPath.row == storage.allContent.sections[indexPath.section].count - 1 {
                 // we are the last item our section, lets see if there's another section we can move down to
-                if storage.allContent.sections.count > indexPath.section {
+                if storage.allContent.sections.count - 1 > indexPath.section {
                     destinationPath = IndexPath(row: 0, section: indexPath.section + 1)
                 } else {
                     // Unable to move down, we are the last item in the last section.
