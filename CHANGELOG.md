@@ -1,6 +1,7 @@
 # [Main]
 
 ### Fixed
+- Fix measuring large titles in modals.
 
 ### Added
 - Item reordering is now possible when using VoiceOver.
