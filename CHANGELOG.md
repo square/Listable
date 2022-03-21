@@ -1,10 +1,8 @@
 # [Main]
 
 ### Fixed
-- Fixed list measurements with container headers.
 
 ### Added
-- Item reordering is now possible when using VoiceOver.
 
 ### Removed
 
@@ -13,6 +11,14 @@
 ### Misc
 
 # Past Releases
+
+# [3.2.0] - 2022-03-21
+
+### Fixed
+- Fixed list measurements with container headers.
+
+### Added
+- Item reordering is now possible when using VoiceOver.
 
 # [3.1.0] - 2022-02-08
 
@@ -622,7 +628,10 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/2.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/3.2.0...HEAD
+[3.2.0]: https://github.com/kyleve/Listable/compare/3.1.0...3.2.0
+[3.1.0]: https://github.com/kyleve/Listable/compare/3.0.0...3.1.0
+[3.0.0]: https://github.com/kyleve/Listable/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/kyleve/Listable/compare/1.0.2...2.0.0
 [1.0.2]: https://github.com/kyleve/Listable/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
