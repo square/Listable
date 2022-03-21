@@ -1,6 +1,7 @@
 # [Main]
 
 ### Fixed
+- Fixed build issues for SPM consumers
 
 ### Added
 

@@ -30,6 +30,9 @@ let package = Package(
                 "Layout/Paged/PagedAppearance.monopic",
                 "ContentBounds/ListContentBounds.monopic",
                 "Layout/Table/TableAppearance.monopic",
+            ],
+            resources: [
+                .process("Resources"),
             ]
         ),
         .target(
