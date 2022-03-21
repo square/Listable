@@ -79,7 +79,7 @@ final class PresentationState
         /// as well as for testing purposes.
         
         self.containerHeader = .init(state: SectionState.newHeaderFooterState(
-            with: content.header,
+            with: content.containerHeader,
             performsContentCallbacks: false
         ))
         
