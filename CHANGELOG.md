@@ -1,6 +1,7 @@
 # [Main]
 
 ### Fixed
+- Fixed list measurements with container headers.
 
 ### Added
 - Item reordering is now possible when using VoiceOver.
