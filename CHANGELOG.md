@@ -12,6 +12,11 @@
 
 # Past Releases
 
+# [3.2.1] - 2022-03-25
+
+### Removed
+- Removed item reordering with VoiceOver as it caused issues with KIF tests.
+
 # [3.2.0] - 2022-03-21
 
 ### Fixed
