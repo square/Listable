@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   s.swift_versions = ['5.4']
 
   s.source_files = 'ListableUI/Sources/**/*.{swift,h,m}'
-  s.resource_bundle = { 'ListableUIResources' => 'ListableUI/Resources/**/*' }
 
   s.weak_framework = 'SwiftUI'
 

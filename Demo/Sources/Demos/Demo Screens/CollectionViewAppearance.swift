@@ -142,7 +142,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
-       let row = Row { row in
+        Row { row in
             row.verticalAlignment = .center
             
             row.add(child: Label(text: self.text) {
@@ -163,12 +163,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
             }
         }
         .inset(horizontal: 15.0, vertical: 13.0)
-        
-        if !info.isReorderable {
-            // Only wrap the row in an accessibility element if we arent showing the reorder gesture.
-            return AccessibilityElement(label: self.text, value: nil, traits: [.button], wrapping: row)
-        }
-        return row
+        .accessibilityElement(label: self.text, value: nil, traits: [.button])
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?

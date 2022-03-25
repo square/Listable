@@ -88,6 +88,4 @@ final class ReorderingActionsDelegateMock : ReorderingActionsDelegate
     ) {}
     
     func endReorder(for item: AnyPresentationItemState, with result: ReorderingActions.Result) {}
-    
-    func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool { true }
 }
