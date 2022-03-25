@@ -54,10 +54,6 @@ public struct ListReorderGesture : Element
     
     let actions : ReorderingActions
     
-    /// The acccessibility Label of the item that will be reordered.
-    /// This will be set as the gesture's accessibilityValue to provide a richer VoiceOver utterance.
-    public var reorderItemAccessibilityLabel : String? = nil
-    
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
     /// This element on its own has no visual appearance. Thus, you should
@@ -93,13 +89,6 @@ public struct ListReorderGesture : Element
             }
             
             config.apply { view in
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = ListableLocalizedStrings.ReorderGesture.accessibilityLabel
-                view.accessibilityValue = reorderItemAccessibilityLabel
-                view.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
-                view.accessibilityTraits.formUnion(.button)
-                view.accessibilityCustomActions = accessibilityActions()
-                
                 view.recognizer.isEnabled = self.isEnabled
                 
                 view.recognizer.apply(actions: self.actions)
@@ -108,7 +97,6 @@ public struct ListReorderGesture : Element
             }
         }
     }
-
 }
 
 
@@ -147,23 +135,6 @@ fileprivate extension ListReorderGesture
         @available(*, unavailable)
         required init?(coder aDecoder: NSCoder) {
             listableInternalFatal()
-        }
-    }
-}
-
-
-fileprivate extension ListReorderGesture {
-    func accessibilityActions() -> [UIAccessibilityCustomAction]? {
-        if #available(iOS 13.0, *) {
-            let up = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
-                return self.actions.accessibilityMove(direction: .up)
-            }
-            let down = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
-                return self.actions.accessibilityMove(direction: .down)
-            }
-            return [up, down]
-        } else {
-            return nil
         }
     }
 }
