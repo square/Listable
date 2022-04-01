@@ -6,6 +6,8 @@
 
 ### Removed
 
+- When using `BlueprintUILists`, layout is no longer forced during element updates. This will cause animations to no longer be inherited. Please use `.transition`, etc. to control animations.
+
 ### Changed
 
 ### Misc
