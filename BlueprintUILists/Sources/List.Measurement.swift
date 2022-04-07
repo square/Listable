@@ -82,7 +82,6 @@ extension List {
         ///     measurement and layout performance.
         ///
         case measureContent(
-            cacheKey : AnyHashable? = nil,
             horizontalFill : FillRule = .fillParent,
             verticalFill : FillRule = .natural,
             itemLimit : Int? = ListView.defaultContentSizeItemLimit
@@ -92,7 +91,7 @@ extension List {
             switch self {
             case .fillParent:
                 return false
-            case .measureContent(_, let horizontalFill, let verticalFill, _):
+            case .measureContent(let horizontalFill, let verticalFill, _):
                 return horizontalFill.needsMeasurement || verticalFill.needsMeasurement
             }
         }
