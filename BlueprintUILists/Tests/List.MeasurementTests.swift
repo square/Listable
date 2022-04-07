@@ -14,8 +14,7 @@ class List_MeasurementTests : XCTestCase {
         
         let defaults = List.Measurement.measureContent()
         
-        if case let .measureContent(key, horizontal, vertical, itemLimit) = defaults {
-            XCTAssertEqual(key, nil)
+        if case let .measureContent(horizontal, vertical, itemLimit) = defaults {
             XCTAssertEqual(horizontal, .fillParent)
             XCTAssertEqual(vertical, .natural)
             XCTAssertEqual(itemLimit, 50)
