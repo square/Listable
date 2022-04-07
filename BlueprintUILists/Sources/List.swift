@@ -140,16 +140,8 @@ extension List {
                     constraint.maximum
                 }
                 
-            case .measureContent(let key, let horizontalFill, let verticalFill, let limit):
-                return ElementContent(
-                    measurementCachingKey: {
-                        if let key = key {
-                            return MeasurementCachingKey(type: Self.self, input: key)
-                        } else {
-                            return nil
-                        }
-                    }()
-                ) { constraint -> CGSize in
+            case .measureContent(let horizontalFill, let verticalFill, let limit):
+                return ElementContent() { constraint -> CGSize in
                     let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
