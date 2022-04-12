@@ -28,6 +28,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     let background : Content.BackgroundView
     let selectedBackground : Content.SelectedBackgroundView
     
+    var isReorderable: Bool = false
+    
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
@@ -153,7 +155,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         }
         get {
             guard let accessibilityLabel = _accessibilityLabel else {
-                return contentView.firstAccessibleChild()?.accessibilityLabel
+                return reorderingAccessibilityLabel
             }
             return accessibilityLabel
         }
@@ -182,6 +184,17 @@ final class LiveCells {
     struct LiveCell {
         weak var cell : AnyItemCell?
     }
+}
+
+extension ItemCell {
+    
+    var reorderingAccessibilityLabel: String? {
+        if isReorderable && UIAccessibility.isVoiceOverRunning {
+            return contentView.firstAccessibleChild()?.accessibilityLabel
+        }
+        return nil
+    }
+    
 }
 
 
