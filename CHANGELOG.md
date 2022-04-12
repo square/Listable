@@ -4,6 +4,8 @@
 
 ### Added
 
+- Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
+
 ### Removed
 
 ### Changed
@@ -21,6 +23,7 @@
 # [3.2.1] - 2022-03-25
 
 ### Removed
+
 - Removed item reordering with VoiceOver as it caused issues with KIF tests.
 
 # [3.2.0] - 2022-03-21
