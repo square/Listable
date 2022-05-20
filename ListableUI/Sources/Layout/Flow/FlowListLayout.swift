@@ -629,7 +629,7 @@ final class FlowListLayout : ListLayout {
         
         self.layout(
             headerFooter: self.content.containerHeader,
-            width: rootWidth,
+            width: .fill,
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
             contentBottom: contentBottom,
