@@ -10,12 +10,16 @@
 
 ### Changed
 
-- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
-they were inset with the content. 
-
 ### Misc
 
 # Past Releases
+
+# [4.1.0] - 2022-05-23
+
+### Changed
+
+- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
+they were inset with the content. 
 
 # [4.0.0] - 2022-04-07
 
