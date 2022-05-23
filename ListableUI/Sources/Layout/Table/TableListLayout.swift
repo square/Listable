@@ -522,7 +522,7 @@ final class TableListLayout : ListLayout
         
         self.layout(
             headerFooter: self.content.containerHeader,
-            width: self.content.containerHeader.layouts.table.width.merge(with: rootWidth),
+            width: self.content.containerHeader.layouts.table.width.merge(with: .fill),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
             contentBottom: contentBottom,
