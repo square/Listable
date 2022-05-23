@@ -3,15 +3,15 @@
     - width: 3940.0
     - height: 500.0
   - naturalContentWidth: nil
-  ▿ containerHeader: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 10.0, 50.0, 460.0)))
+  ▿ containerHeader: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 0.0, 50.0, 500.0)))
     ▿ some: ListableUI.ListLayoutAttributes.Supplementary
-      ▿ frame: (0.0, 10.0, 50.0, 460.0)
-        ▿ origin: (0.0, 10.0)
+      ▿ frame: (0.0, 0.0, 50.0, 500.0)
+        ▿ origin: (0.0, 0.0)
           - x: 0.0
-          - y: 10.0
-        ▿ size: (50.0, 460.0)
+          - y: 0.0
+        ▿ size: (50.0, 500.0)
           - width: 50.0
-          - height: 460.0
+          - height: 500.0
   ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (70.0, 10.0, 50.0, 460.0)))
     ▿ some: ListableUI.ListLayoutAttributes.Supplementary
       ▿ frame: (70.0, 10.0, 50.0, 460.0)
