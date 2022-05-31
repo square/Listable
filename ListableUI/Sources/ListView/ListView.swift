@@ -1050,7 +1050,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
                 return self.storage.allContent.sliceTo(indexPath: greaterIndexPath)
 
-            case .none:
+            case .none, .pin:
 
                 return self.storage.allContent.sliceTo(indexPath: indexPath)
             }
@@ -1074,6 +1074,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 if let destination = info.destination.destination(with: self.content) {
                     self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
                         info.didPerform(self.scrollPositionInfo)
+                    }
+                }
+            }
+            
+        case .pin(let pin):
+            if pin.shouldPerform(self.scrollPositionInfo) {
+                /// Only animate the scroll if both the update **and** the scroll action are animated.
+                let animation = pin.animation.and(with: animated)
+                
+                if let destination = pin.destination.destination(with: self.content) {
+                    self.scrollTo(item: destination, position: pin.position, animation: animation) { _ in
+                        pin.didPerform(self.scrollPositionInfo)
                     }
                 }
             }

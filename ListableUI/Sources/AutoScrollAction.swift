@@ -17,6 +17,9 @@ public enum AutoScrollAction {
     /// Scrolls to the specified item when the list is updated if the item was inserted in this update.
     case scrollToItem(onInsertOf: OnInsertedItem)
 
+    /// Scrolls to the specified item when the list is updated. Similar to `scrollToItem`, except it doesn't rely on item insertion to determine when scrolling is appropriate.
+    case pin(to: Pin)
+
     /// Scrolls to the specified item when the list is updated if the item was inserted in this update.
     ///
     /// If you would like to control if this scroll should occur on insert, pass a `shouldPerform` closure,
@@ -71,6 +74,56 @@ public enum AutoScrollAction {
             )
         )
     }
+
+    /// Scrolls to the specified item when the list is updated. Similar to `scrollTo`, except it doesn't
+    /// rely on item insertion to determine when scrolling is appropriate.
+    ///
+    /// If you would like to control if this scroll should occur on insert, pass a `shouldPerform` closure,
+    /// which will be called when the item is inserted, to give you a chance to confirm or reject the scroll
+    /// action. The `ListScrollPositionInfo` passed to your closure provides the current state of the list,
+    /// including visible content edges and visible items. If you do not pass a `shouldPerform` closure,
+    /// the action will be performed on insert.
+    ///
+    /// ### Example
+    /// ```
+    /// let pin = Pin(
+    ///     .lastItem,
+    ///     position: .init(position: .bottom),
+    ///     animation: .default
+    /// ) { info in
+    ///    // Only scroll to the item if the bottom of the list is already visible.
+    ///    state.isLastItemVisible
+    /// } didPerform : { info in
+    ///     // Called when the scroll action occurs.
+    /// }
+    /// let action = .pin(to: pin)
+    /// ```
+    /// - Parameters:
+    ///    - destination: Where the list should scroll to on insert. If not specified, the value passed to `onInsertOf` will be used.
+    ///    - position: The position to scroll the list to.
+    ///    - animation: The animation type to perform. Note: Will only animate if the list update itself is animated.
+    ///    - shouldPerform: A block which lets you control if the auto scroll action should be performed based on the state of the list.
+    ///    - didPerform: A block which is called when the action is performed. If the item causing insertion is inserted multiple times,
+    ///     this block will be called multiple times.
+    ///
+    public static func pin(
+        _ destination : ScrollDestination,
+        position: ScrollPosition,
+        animation: ViewAnimation = .none,
+        shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
+        didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
+    ) -> AutoScrollAction
+    {
+        .pin(
+            to: .init(
+                destination: destination,
+                position: position,
+                animation: animation,
+                shouldPerform: shouldPerform,
+                didPerform: didPerform
+            )
+        )
+    }
 }
 
 
@@ -107,6 +160,29 @@ extension AutoScrollAction
         /// The identifier of the item for which the `AutoScrollAction` should be performed.
         public var insertedIdentifier : AnyIdentifier
         
+        /// The desired scroll position,
+        public var position : ScrollPosition
+        
+        /// How to animate the change.
+        ///
+        /// ### Note
+        /// The action will only be animated if it is animated, **and** the list update itself is
+        /// animated. Otherwise, no animation occurs.
+        public var animation : ViewAnimation
+        
+        /// An additional check you may provide to approve or reject the scroll action.
+        public var shouldPerform : (ListScrollPositionInfo) -> Bool
+        
+        /// Called when the list performs the insertion.
+        public var didPerform : (ListScrollPositionInfo) -> ()
+    }
+
+    /// Values used to configure the `pin(to:)` action.
+    public struct Pin
+    {
+        /// The item in the list to scroll to.
+        public var destination : ScrollDestination
+
         /// The desired scroll position,
         public var position : ScrollPosition
         

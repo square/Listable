@@ -48,13 +48,21 @@ public final class DemosRootViewController : ListViewController
                 )
 
                 Item(
-                    DemoItem(text: "Auto Scrolling (Bottom Pin)"),
+                    DemoItem(text: "Auto Scrolling (Bottom Pin: scrollTo)"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(AutoScrollingViewController())
                     }
                 )
-                
+
+                Item(
+                    DemoItem(text: "Auto Scrolling2 (Bottom Pin: pin)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(AutoScrollingViewController2())
+                    }
+                )
+
                 if #available(iOS 13.0, *) {
                     Item(
                         DemoItem(text: "List State & State Reader"),
