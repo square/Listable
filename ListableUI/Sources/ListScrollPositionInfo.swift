@@ -110,7 +110,7 @@ public struct ListScrollPositionInfo : Equatable {
         self.isFirstItemVisible = isFirstItemVisible
         self.isLastItemVisible = isLastItemVisible
 
-        self.bottomScrollOffset = scrollView.contentSize.height - scrollView.bounds.size.height - scrollView.contentOffset.y
+        self.bottomScrollOffset = scrollView.contentSize.height - scrollView.bounds.size.height - scrollView.contentOffset.y + scrollView.adjustedContentInset.bottom
     }
     
     struct ScrollViewState : Equatable
