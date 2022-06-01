@@ -152,6 +152,9 @@
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction/OnInsertedItem.html">– OnInsertedItem</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AutoScrollAction/Pin.html">– Pin</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ContentFilters.html">ContentFilters</a>
               </li>
               <li class="nav-group-task">
@@ -696,6 +699,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3pinyA2C3PinV_tcACmF"></a>
+                    <a name="//apple_ref/swift/Element/pin(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pinyA2C3PinV_tcACmF">pin(to:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to the specified item when the list is updated. Similar to <code>scrollToItem</code>, except it doesn&rsquo;t rely on item insertion to determine when scrolling is appropriate.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">pin</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/Pin.html">Pin</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ"></a>
                     <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
@@ -832,6 +862,127 @@ this block will be called multiple times.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3pin_8position9animation13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVAA13ViewAnimationOSbAA04ListdM4InfoVcyAPctFZ"></a>
+                    <a name="//apple_ref/swift/Method/pin(_:position:animation:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_8position9animation13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVAA13ViewAnimationOSbAA04ListdM4InfoVcyAPctFZ">pin(_:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to the specified item when the list is updated. Similar to <code>scrollTo</code>, except it doesn&rsquo;t
+rely on item insertion to determine when scrolling is appropriate.</p>
+
+<p>If you would like to control if this scroll should occur on insert, pass a <code>shouldPerform</code> closure,
+which will be called when the item is inserted, to give you a chance to confirm or reject the scroll
+action. The <code><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></code> passed to your closure provides the current state of the list,
+including visible content edges and visible items. If you do not pass a <code>shouldPerform</code> closure,
+the action will be performed on insert.</p>
+<h3 id='example' class='heading'>Example</h3>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">pin</span> <span class="o">=</span> <span class="kt">Pin</span><span class="p">(</span>
+    <span class="o">.</span><span class="n">lastItem</span><span class="p">,</span>
+    <span class="nv">position</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">position</span><span class="p">:</span> <span class="o">.</span><span class="n">bottom</span><span class="p">),</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="o">.</span><span class="k">default</span>
+<span class="p">)</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
+   <span class="c1">// Only scroll to the item if the bottom of the list is already visible.</span>
+   <span class="n">state</span><span class="o">.</span><span class="n">isLastItemVisible</span>
+<span class="p">}</span> <span class="nv">didPerform</span> <span class="p">:</span> <span class="p">{</span> <span class="n">info</span> <span class="k">in</span>
+    <span class="c1">// Called when the scroll action occurs.</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">action</span> <span class="o">=</span> <span class="o">.</span><span class="nf">pin</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">pin</span><span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">pin</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">,</span>
+    <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>destination</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Where the list should scroll to on insert. If not specified, the value passed to <code>onInsertOf</code> will be used.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>position</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The position to scroll the list to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>animation</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The animation type to perform. Note: Will only animate if the list update itself is animated.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>shouldPerform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block which lets you control if the auto scroll action should be performed based on the state of the list.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>didPerform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A block which is called when the action is performed. If the item causing insertion is inserted multiple times,
+this block will be called multiple times.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI16AutoScrollActionO0D11DestinationO"></a>
                     <a name="//apple_ref/swift/Enum/ScrollDestination" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI16AutoScrollActionO0D11DestinationO">ScrollDestination</a>
@@ -885,6 +1036,34 @@ this block will be called multiple times.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV"></a>
+                    <a name="//apple_ref/swift/Struct/Pin" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV">Pin</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Values used to configure the <code><a href="../Enums/AutoScrollAction.html#/s:10ListableUI16AutoScrollActionO3pinyA2C3PinV_tcACmF">pin(to:)</a></code> action.</p>
+
+                        <a href="../Enums/AutoScrollAction/Pin.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Pin</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -893,7 +1072,7 @@ this block will be called multiple times.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2022 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2022-05-23)</p>
+      <p>&copy; 2022 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2022-06-01)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
