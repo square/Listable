@@ -5,6 +5,8 @@
 ### Added
 
 - Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
+- Added a pinning option `pin(to:)` which is very similar to `scrollToItem(onInsertOf:)` except that you don't specify an `onInsertOf` item.
+- Adds a `bottomScrollOffset` property to `ListScrollPositionInfo`. You can use this to fine-tune pinning by only pinning when within a certain distance of the bottom scroll position.
 
 ### Removed
 
