@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>KeyboardAdjustmentMode Enumeration Reference</title>
+    <title>Pin Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/KeyboardAdjustmentMode" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/Pin" class="dashAnchor"></a>
 
-    <a title="KeyboardAdjustmentMode Enumeration Reference"></a>
+    <a title="Pin Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../../index.html">Listable Reference</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      KeyboardAdjustmentMode Enumeration Reference
+      Pin Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -625,15 +625,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>KeyboardAdjustmentMode</h1>
+            <h1>Pin</h1>
               <div class="declaration">
                 <div class="language">
 
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">KeyboardAdjustmentMode</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Pin</span></code></pre>
 
                 </div>
               </div>
-            <p>How to adjust the <code>contentInset</code> of the list when the keyboard visibility changes.</p>
+            <p>Values used to configure the <code><a href="../../Enums/AutoScrollAction.html#/s:10ListableUI16AutoScrollActionO3pinyA2C3PinV_tcACmF">pin(to:)</a></code> action.</p>
 
           </div>
         </section>
@@ -645,9 +645,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV22KeyboardAdjustmentModeO4noneyA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/none" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV22KeyboardAdjustmentModeO4noneyA2EmF">none</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV11destinationAC0D11DestinationOvp"></a>
+                    <a name="//apple_ref/swift/Property/destination" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV11destinationAC0D11DestinationOvp">destination</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -655,14 +655,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>contentInset</code> of the list is not adjusted when the keyboard appears or disappears.</p>
+                        <p>The item in the list to scroll to.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="k">none</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">destination</span><span class="p">:</span> <span class="kt"><a href="../../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span></code></pre>
 
                         </div>
                       </div>
@@ -672,9 +672,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV22KeyboardAdjustmentModeO18adjustsWhenVisibleyA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/adjustsWhenVisible" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV22KeyboardAdjustmentModeO18adjustsWhenVisibleyA2EmF">adjustsWhenVisible</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV8positionAA0D8PositionVvp"></a>
+                    <a name="//apple_ref/swift/Property/position" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV8positionAA0D8PositionVvp">position</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -682,14 +682,99 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>contentInset</code> of the list is adjusted when the keyboard appears or disappears.</p>
+                        <p>The desired scroll position,</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">adjustsWhenVisible</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../../Structs/ScrollPosition.html">ScrollPosition</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV9animationAA13ViewAnimationOvp"></a>
+                    <a name="//apple_ref/swift/Property/animation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV9animationAA13ViewAnimationOvp">animation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>How to animate the change.</p>
+<h3 id='note' class='heading'>Note</h3>
+
+<p>The action will only be animated if it is animated, <strong>and</strong> the list update itself is
+animated. Otherwise, no animation occurs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../../Enums/ViewAnimation.html">ViewAnimation</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV13shouldPerformySbAA04ListD12PositionInfoVcvp"></a>
+                    <a name="//apple_ref/swift/Property/shouldPerform" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV13shouldPerformySbAA04ListD12PositionInfoVcvp">shouldPerform</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An additional check you may provide to approve or reject the scroll action.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">shouldPerform</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3PinV10didPerformyyAA04ListD12PositionInfoVcvp"></a>
+                    <a name="//apple_ref/swift/Property/didPerform" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3PinV10didPerformyyAA04ListD12PositionInfoVcvp">didPerform</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the list performs the insertion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">didPerform</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
 
                         </div>
                       </div>
