@@ -32,6 +32,12 @@ public struct ListScrollPositionInfo : Equatable {
 
     /// Distance required to scroll to the bottom
     public var bottomScrollOffset: CGFloat
+
+    /// `bounds` of the list view
+    public var bounds: CGRect
+
+    /// `safeAreaInsests` of the list view
+    public var safeAreaInsets: UIEdgeInsets
     
     ///
     /// Used to retrieve the visible content edges for the list's content.
@@ -111,6 +117,9 @@ public struct ListScrollPositionInfo : Equatable {
         self.isLastItemVisible = isLastItemVisible
 
         self.bottomScrollOffset = scrollView.contentSize.height - scrollView.bounds.size.height - scrollView.contentOffset.y + scrollView.adjustedContentInset.bottom
+
+        self.bounds = scrollView.bounds
+        self.safeAreaInsets = scrollView.safeAreaInsets
     }
     
     struct ScrollViewState : Equatable

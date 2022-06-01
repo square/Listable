@@ -68,8 +68,9 @@ final class AutoScrollingViewController2 : UIViewController
                 position: .init(position: .bottom),
                 animation: .default,
                 shouldPerform: { info in
-                    // Only auto-scroll if we're 800px from the bottom
-                    return info.bottomScrollOffset < 800
+                    // Only auto-scroll if we're currently scrolled less than a
+                    // screen's-height from the bottom
+                    return info.bottomScrollOffset < info.bounds.height - info.safeAreaInsets.top
                 },
                 didPerform: { info in
                     print("Did scroll: \(info)")
