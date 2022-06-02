@@ -44,6 +44,7 @@
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
+		0AFBC761284905A300F18986 /* SearchDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFBC760284905A300F18986 /* SearchDemoViewController.swift */; };
 		1F46FB6B26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F46FB6A26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift */; };
 		27B4DCE9244F88BE001BA9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */; };
 		2B56913A2846737C00E575BE /* AutoScrollingViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */; };
@@ -97,6 +98,7 @@
 		0AEB96BB22FBCBA600341DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0AEB96BD22FBCBA600341DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0AFBC760284905A300F18986 /* SearchDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDemoViewController.swift; sourceTree = "<group>"; };
 		1F46FB6A26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControlOffsetAdjustmentViewController.swift; sourceTree = "<group>"; };
 		27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingViewController2.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				0AA4D9B2248064A300CF95A5 /* CollectionViewAppearance.swift */,
 				0AA4D9B8248064A300CF95A5 /* CollectionViewBasicDemoViewController.swift */,
 				0AA4D9B6248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift */,
+				0AFBC760284905A300F18986 /* SearchDemoViewController.swift */,
 				0A57BA2C274FFCE000A118BD /* FlowLayoutViewController.swift */,
 				0AA4D9B0248064A300CF95A5 /* CoordinatorViewController.swift */,
 				0AD827DB2752C8A700D42B4A /* CarouselLayoutViewController.swift */,
@@ -483,6 +486,7 @@
 				0ACF96D624A0094D0090EAC4 /* ItemInsertAndRemoveAnimationsViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0ADC3B3524907C80008DF2C0 /* XcodePreviewDemo.swift in Sources */,
+				0AFBC761284905A300F18986 /* SearchDemoViewController.swift in Sources */,
 				0AD827DC2752C8A700D42B4A /* CarouselLayoutViewController.swift in Sources */,
 				0AD6767A25423BE500A49315 /* MultiSelectViewController.swift in Sources */,
 				0A02B2F42675E14600B3501B /* PaymentTypesViewController.swift in Sources */,

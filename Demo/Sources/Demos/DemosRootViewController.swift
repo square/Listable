@@ -31,6 +31,15 @@ public final class DemosRootViewController : ListViewController
         
         list.add {
             Section("list") { [weak self] in
+                
+                Item(
+                    DemoItem(text: "Search Demo"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(SearchDemoViewController())
+                    }
+                )
+                
                 Item(
                     DemoItem(text: "Basic Demo"),
                     selectionStyle: .selectable(),
