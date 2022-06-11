@@ -50,6 +50,15 @@ extension PresentationState
             }
         }
         
+        func resetAllCachedSizes() {
+            self.header.state?.resetCachedSizes()
+            self.footer.state?.resetCachedSizes()
+            
+            self.items.forEach { item in
+                item.resetCachedSizes()
+            }
+        }
+        
         func removeItem(at index : Int) -> AnyPresentationItemState
         {
             self.model.items.remove(at: index)

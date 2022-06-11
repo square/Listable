@@ -756,10 +756,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
     private func setContentFromSource(animated : Bool = false)
     {
         let oldIdentifier = self.storage.allContent.identifier
-        self.storage.allContent = self.sourcePresenter.reloadContent()
-        let newIdentifier = self.storage.allContent.identifier
         
+        self.storage.allContent = self.sourcePresenter.reloadContent()
+        
+        let newIdentifier = self.storage.allContent.identifier
         let identifierChanged = oldIdentifier != newIdentifier
+        
+        self.storage.presentationState.context = self.storage.allContent.context
         
         self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
