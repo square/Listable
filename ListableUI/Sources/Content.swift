@@ -19,10 +19,10 @@ public struct Content
     /// the list will reload without animation.
     public var identifier : AnyHashable?
 
-    /// The context for the entire list content.
+    /// The context for the entire list.
     /// If this value changes, all measurements will be discarded and re-measured.
     ///
-    /// While this can incur a performance hit, it can also simplify code: if your screen's traits
+    /// Using the `ContentContext` can simplify code: If your screen's traits
     /// change, pass them in here vs requiring every item to check the screen traits.
     public var context : ContentContext?
     

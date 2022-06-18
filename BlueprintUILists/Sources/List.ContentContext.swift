@@ -9,13 +9,11 @@ import BlueprintUI
 import ListableUI
 
 
-public enum ListContentContextKey : EnvironmentKey {
-    public static let defaultValue: ContentContext? = nil
-}
-
-
 extension Environment {
     
+    /// Applies the provided `ContentContext` to the list when it's updated by Blueprint.
+    ///
+    /// See `ContentContext` for more information.
     public var listContentContext : ContentContext? {
         get { self[ListContentContextKey.self] }
         set { self[ListContentContextKey.self] = newValue }
@@ -23,3 +21,6 @@ extension Environment {
 }
 
 
+public enum ListContentContextKey : EnvironmentKey {
+    public static let defaultValue: ContentContext? = nil
+}
