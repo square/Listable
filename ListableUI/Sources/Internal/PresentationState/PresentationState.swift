@@ -18,6 +18,14 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
+    var context : ContentContext? {
+        didSet {
+            guard oldValue != context else { return }
+            
+            self.resetAllCachedSizes()
+        }
+    }
+    
     let containerHeader : HeaderFooterViewStatePair
     let header : HeaderFooterViewStatePair
     let footer : HeaderFooterViewStatePair
@@ -260,13 +268,21 @@ final class PresentationState
     // MARK: Height Caching
     //
     
+    // Exposed for testing only.
+    var onResetCachedSizes : () -> () = {}
+    
     func resetAllCachedSizes()
     {
+        containerHeader.state?.resetCachedSizes()
+        header.state?.resetCachedSizes()
+        footer.state?.resetCachedSizes()
+        overscrollFooter.state?.resetCachedSizes()
+        
         self.sections.forEach { section in
-            section.items.forEach { item in
-                item.resetCachedSizes()
-            }
+            section.resetAllCachedSizes()
         }
+        
+        onResetCachedSizes()
     }
     
     //

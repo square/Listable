@@ -437,6 +437,73 @@ class ListViewTests: XCTestCase
             XCTAssertEqual(reappliedIDs, [])
         }
     }
+    
+    func test_content_context() {
+        
+        let view = ListView()
+        view.frame.size = CGSize(width: 200, height: 400)
+        
+        func configure(list : inout ListProperties) {
+            list.header = HeaderFooter(
+                ReapplySupplementary1(title: "title", reappliesToVisibleView: .ifNotEquivalent) {},
+                sizing: .fixed(height: 50)
+            )
+            
+            list.footer = HeaderFooter(
+                ReapplySupplementary1(title: "title", reappliesToVisibleView: .ifNotEquivalent) {},
+                sizing: .fixed(height: 50)
+            )
+            
+            list("section") { section in
+                section.header = HeaderFooter(
+                    ReapplySupplementary1(title: "title", reappliesToVisibleView: .ifNotEquivalent) {},
+                    sizing: .fixed(height: 50)
+                )
+                
+                section.footer = HeaderFooter(
+                    ReapplySupplementary1(title: "changed footer", reappliesToVisibleView: .ifNotEquivalent) {},
+                    sizing: .fixed(height: 50)
+                )
+                
+                section += Item(
+                    ReapplyContent(title: "row", id: 1, reappliesToVisibleView: .ifNotEquivalent) {},
+                    sizing: .fixed(height: 50)
+                )
+            }
+        }
+     
+        view.configure { list in
+            
+            list.context = ContentContext(false)
+            
+            configure(list: &list)
+        }
+        
+        /// Force the cells in the collection view to be updated.
+        view.collectionView.layoutIfNeeded()
+        
+        var didResetSizesCount = 0
+        
+        view.storage.presentationState.onResetCachedSizes = {
+            didResetSizesCount += 1
+        }
+        
+        // Do it twice, should only be called once since the value is the same.
+
+        for _ in 1...2 {
+            view.configure { list in
+                
+                list.context = ContentContext(true)
+                
+                configure(list: &list)
+            }
+        }
+        
+        /// Force the cells in the collection view to be updated.
+        view.collectionView.layoutIfNeeded()
+        
+        XCTAssertEqual(didResetSizesCount, 1)
+    }
 }
 
 

@@ -299,6 +299,9 @@ extension PresentationState
             } else {
                 cell.contentContainer.deregisterSwipeIfNeeded()
             }
+            
+            cell.isReorderable = self.model.reordering != nil
+   
         }
         
         func applyToVisibleCell(with environment : ListEnvironment)

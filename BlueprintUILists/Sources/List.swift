@@ -161,13 +161,17 @@ extension List {
         
         public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
         {
-            ListView.describe { config in
+            var properties = self.properties
+            
+            properties.context = properties.context ?? context.environment.listContentContext
+            
+            return ListView.describe { config in
                 config.builder = {
-                    ListView(frame: context.bounds, appearance: self.properties.appearance)
+                    ListView(frame: context.bounds, appearance: properties.appearance)
                 }
                 
                 config.apply { listView in
-                    listView.configure(with: self.properties)
+                    listView.configure(with: properties)
                 }
             }
         }

@@ -756,10 +756,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
     private func setContentFromSource(animated : Bool = false)
     {
         let oldIdentifier = self.storage.allContent.identifier
-        self.storage.allContent = self.sourcePresenter.reloadContent()
-        let newIdentifier = self.storage.allContent.identifier
         
+        self.storage.allContent = self.sourcePresenter.reloadContent()
+        
+        let newIdentifier = self.storage.allContent.identifier
         let identifierChanged = oldIdentifier != newIdentifier
+        
+        self.storage.presentationState.context = self.storage.allContent.context
         
         self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
@@ -1051,7 +1054,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
                 return self.storage.allContent.sliceTo(indexPath: greaterIndexPath)
 
-            case .none:
+            case .none, .pin:
 
                 return self.storage.allContent.sliceTo(indexPath: indexPath)
             }
@@ -1075,6 +1078,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 if let destination = info.destination.destination(with: self.content) {
                     self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
                         info.didPerform(self.scrollPositionInfo)
+                    }
+                }
+            }
+            
+        case .pin(let pin):
+            if pin.shouldPerform(self.scrollPositionInfo) {
+                /// Only animate the scroll if both the update **and** the scroll action are animated.
+                let animation = pin.animation.and(with: animated)
+                
+                if let destination = pin.destination.destination(with: self.content) {
+                    self.scrollTo(item: destination, position: pin.position, animation: animation) { _ in
+                        pin.didPerform(self.scrollPositionInfo)
                     }
                 }
             }
@@ -1332,6 +1347,61 @@ extension ListView : ReorderingActionsDelegate
         case .cancelled:
             self.collectionView.cancelInteractiveMovement()
         }
+    }
+    
+    func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool {
+        guard let indexPath = self.storage.presentationState.indexPath(for: item),
+        self.dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath) else {
+            return false
+        }
+
+        let destinationPath : IndexPath
+        switch direction {
+        case .up:
+            // Moving an item up means decrementing the index.
+            if indexPath.row == 0 {
+                // First item in section, we should go to the previous section
+                if indexPath.section > 0 {
+                    let newSection = indexPath.section - 1
+                    let rowInNewSection = self.storage.allContent.sections[indexPath.section - 1].count
+                    destinationPath = IndexPath(row: rowInNewSection, section:newSection )
+                }
+                else {
+                    // Unable to move up, we are item 0,0.
+                    return false
+                }
+            } else {
+                destinationPath = IndexPath(row: indexPath.row - 1, section: indexPath.section)
+            }
+
+        case .down:
+            // Moving an item down means incrementing the index.
+            if indexPath.row == storage.allContent.sections[indexPath.section].count - 1 {
+                // we are the last item our section, lets see if there's another section we can move down to
+                if storage.allContent.sections.count - 1 > indexPath.section {
+                    destinationPath = IndexPath(row: 0, section: indexPath.section + 1)
+                } else {
+                    // Unable to move down, we are the last item in the last section.
+                    return false
+                }
+            } else {
+                destinationPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
+            }
+        }
+        
+        let targetPath = self.delegate.collectionView(self.collectionView, targetIndexPathForMoveFromItemAt: indexPath, toProposedIndexPath: destinationPath)
+        
+        /*  We are responding to a user event, but won't be using the `InteractiveMovement` API the collection view provides as we are being called from an accessibility action rather than a gesture regognizer. This means we'll have to call out to the dataSource directly.
+        
+            NOTE: It's Important that we call `dataSource.collectionView(_ :, moveItemAt:, to:)` to perform the move in the data source before calling `collectionView.moveItem(at:, to:)` to update the collection view itself.
+        */
+        
+        item.beginReorder(from: indexPath, with: self.environment)
+        self.dataSource.collectionView(self.collectionView, moveItemAt: indexPath, to: targetPath)
+        self.collectionView.moveItem(at: indexPath, to: targetPath)
+        item.endReorder(with: environment, result: .finished)
+        
+        return true
     }
     
     func cancelAllInProgressReorders() {

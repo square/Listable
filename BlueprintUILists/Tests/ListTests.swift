@@ -5,8 +5,12 @@
 //  Created by Kyle Van Essen on 10/26/20.
 //
 
+@testable import ListableUI
+
 import XCTest
 import BlueprintUI
+import BlueprintUICommonControls
+
 
 @testable import BlueprintUILists
 
@@ -22,18 +26,22 @@ class ListTests : XCTestCase {
             callCount += 1
         }
         
+        let onEnvRead = { (env:Environment) in
+            XCTAssertTrue(env[TestingKey.self])
+        }
+        
         view.element = List { list in
             
-            list.header = TestHeaderContent(wasCalled: callback)
-            list.footer = TestHeaderContent(wasCalled: callback)
+            list.header = TestHeaderContent(wasCalled: callback, onEnvRead: onEnvRead)
+            list.footer = TestHeaderContent(wasCalled: callback, onEnvRead: onEnvRead)
             
             list("section") { section in
                 
-                section.header = TestHeaderContent(wasCalled: callback)
-                section.footer = TestHeaderContent(wasCalled: callback)
+                section.header = TestHeaderContent(wasCalled: callback, onEnvRead: onEnvRead)
+                section.footer = TestHeaderContent(wasCalled: callback, onEnvRead: onEnvRead)
                 
-                section += TestItemContent(wasCalled: callback)
-                section += TestItemContent(wasCalled: callback)
+                section += TestItemContent(wasCalled: callback, onEnvRead: onEnvRead)
+                section += TestItemContent(wasCalled: callback, onEnvRead: onEnvRead)
             }
         }.adaptedEnvironment { env in
             env[TestingKey.self] = true
@@ -103,19 +111,65 @@ class ListTests : XCTestCase {
             CGSize(width: 900, height: 1000)
         )
     }
+    
+    func test_listContentContext() {
+        let view = BlueprintView(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
+        
+        func configure(list: inout ListProperties) {
+            list.header = TestHeaderContent()
+            list.footer = TestHeaderContent()
+            
+            list("section") { section in
+                
+                section.header = TestHeaderContent()
+                section.footer = TestHeaderContent()
+                
+                section += TestItemContent()
+                section += TestItemContent()
+            }
+        }
+        
+        view.element = List { list in
+            configure(list: &list)
+        }.adaptedEnvironment(keyPath: \.listContentContext, value: .init(false))
+        
+        view.layoutIfNeeded()
+        
+        let listView = view.findListView()!
+        
+        var didResetSizesCount = 0
+        
+        listView.storage.presentationState.onResetCachedSizes = {
+            didResetSizesCount += 1
+        }
+        
+        // Do it twice, should only be called once since the value is the same.
+
+        for _ in 1...2 {
+            view.element = List { list in
+                configure(list: &list)
+            }.adaptedEnvironment(keyPath: \.listContentContext, value: .init(true))
+        }
+        
+        view.layoutIfNeeded()
+        
+        XCTAssertEqual(didResetSizesCount, 1)
+    }
 }
 
 
 fileprivate struct TestHeaderContent : BlueprintHeaderFooterContent {
     
-    var wasCalled : () -> ()
+    var wasCalled : () -> () = {}
+    
+    var onEnvRead : (Environment) -> () = { _ in }
     
     var elementRepresentation: Element {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
-            return Empty()
+            onEnvRead(env)
+            return Box(backgroundColor: .red).constrainedTo(height: .absolute(60))
         }
     }
     
@@ -123,7 +177,7 @@ fileprivate struct TestHeaderContent : BlueprintHeaderFooterContent {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
+            onEnvRead(env)
             return Empty()
         }
     }
@@ -132,7 +186,7 @@ fileprivate struct TestHeaderContent : BlueprintHeaderFooterContent {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
+            onEnvRead(env)
             return Empty()
         }
     }
@@ -144,8 +198,10 @@ fileprivate struct TestHeaderContent : BlueprintHeaderFooterContent {
 
 
 fileprivate struct TestItemContent : BlueprintItemContent {
+        
+    var wasCalled : () -> () = {}
     
-    var wasCalled : () -> ()
+    var onEnvRead : (Environment) -> () = { _ in }
     
     var identifierValue: String {
         ""
@@ -155,8 +211,8 @@ fileprivate struct TestItemContent : BlueprintItemContent {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
-            return Empty()
+            onEnvRead(env)
+            return Box(backgroundColor: .blue).constrainedTo(height: .absolute(40))
         }
     }
     
@@ -164,7 +220,7 @@ fileprivate struct TestItemContent : BlueprintItemContent {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
+            onEnvRead(env)
             return Empty()
         }
     }
@@ -173,7 +229,7 @@ fileprivate struct TestItemContent : BlueprintItemContent {
         self.wasCalled()
         
         return EnvironmentReader { env in
-            XCTAssertTrue(env[TestingKey.self])
+            onEnvRead(env)
             return Empty()
         }
     }
@@ -187,5 +243,21 @@ fileprivate struct TestItemContent : BlueprintItemContent {
 fileprivate struct TestingKey : EnvironmentKey {
     static var defaultValue: Bool {
         false
+    }
+}
+
+
+fileprivate extension UIView {
+    
+    func findListView() -> ListView? {
+        if let list = self as? ListView {
+            return list
+        }
+        
+        for subview in subviews {
+            return subview.findListView()
+        }
+        
+        return nil
     }
 }

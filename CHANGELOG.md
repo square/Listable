@@ -6,6 +6,8 @@
 
 ### Added
 
+- Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
+
 ### Removed
 
 ### Changed
@@ -13,6 +15,22 @@
 ### Misc
 
 # Past Releases
+
+# [4.2.0] - 2022-06-01
+
+### Added
+
+- Added a pinning option `pin(to:)` which is very similar to `scrollToItem(onInsertOf:)` except that you don't specify an `onInsertOf` item.
+- Adds a `bottomScrollOffset` property to `ListScrollPositionInfo`. You can use this to fine-tune pinning by only pinning when within a certain distance of the bottom scroll position.
+
+# [4.1.0] - 2022-05-23
+
+### Changed
+
+- Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
+
+- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
+they were inset with the content. 
 
 # [4.0.0] - 2022-04-07
 
@@ -23,6 +41,7 @@
 # [3.2.1] - 2022-03-25
 
 ### Removed
+
 - Removed item reordering with VoiceOver as it caused issues with KIF tests.
 
 # [3.2.0] - 2022-03-21
@@ -641,7 +660,11 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/3.2.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/4.2.0...HEAD
+[4.2.0]: https://github.com/kyleve/Listable/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/kyleve/Listable/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/kyleve/Listable/compare/3.2.1...4.0.0
+[3.2.1]: https://github.com/kyleve/Listable/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/kyleve/Listable/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/kyleve/Listable/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/kyleve/Listable/compare/2.0.0...3.0.0
