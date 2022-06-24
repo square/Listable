@@ -4,6 +4,8 @@
 
 ### Added
 
+- Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
+
 ### Removed
 
 ### Changed

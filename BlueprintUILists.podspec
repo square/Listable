@@ -26,6 +26,8 @@ Pod::Spec.new do |s|
       test_spec.source_files = 'BlueprintUILists/Tests/**/*.{swift}'
       test_spec.ios.resource_bundle = { 'BlueprintUIListsResources' => 'BlueprintUILists/Tests/Resources/**/*.*' }
 
+      test_spec.dependency 'BlueprintUICommonControls'
+
       test_spec.framework = 'XCTest'
 
       test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
