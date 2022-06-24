@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Supplementary views will now properly animate (fade) in and out when they are added or removed.
+
 ### Added
 
 ### Removed
