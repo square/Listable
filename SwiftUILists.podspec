@@ -25,5 +25,7 @@ Pod::Spec.new do |s|
     test_spec.framework = 'XCTest'
 
     test_spec.requires_app_host = true
+    
+    test_spec.dependency 'ListableUITesting'
   end
 end

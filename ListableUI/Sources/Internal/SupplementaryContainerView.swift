@@ -32,7 +32,7 @@ import UIKit
  of the header or footer in or out as needed as it changes. As mentioned above,
  if there is no actual header or footer to show, the view has zero height.
  */
-final class SupplementaryContainerView : UICollectionReusableView
+final class SupplementaryContainerView : UICollectionReusableView, ListContentView
 {
     //
     // MARK: Registering & Dequeuing Cells
@@ -109,11 +109,22 @@ final class SupplementaryContainerView : UICollectionReusableView
     
     private(set) var content : AnyHeaderFooterContentView? {
         didSet {
+            guard oldValue !== self.content else {
+                return
+            }
+            
             if let old = oldValue {
+                old.didEndDisplay()
                 old.removeFromSuperview()
             }
             
             if let new = self.content {
+                if let vc = self.containingViewController {
+                    new.setContainingViewController(vc)
+                }
+                
+                new.willDisplay()
+                
                 self.addSubview(new)
             }
             
@@ -226,5 +237,34 @@ final class SupplementaryContainerView : UICollectionReusableView
         if let content = self.content {
             content.frame = self.bounds
         }
+    }
+    
+    // MARK: ListContentView
+    
+    private weak var containingViewController : UIViewController? = nil
+    
+    func setContainingViewController(_ viewController: UIViewController) {
+        // TODO...
+        content?.setContainingViewController(viewController)
+    }
+    
+    func willDisplay() {
+        content?.willDisplay()
+    }
+    
+    func didEndDisplay() {
+        content?.didEndDisplay()
+    }
+    
+    func listWillAppear(animated: Bool) {
+        content?.listWillAppear(animated: animated)
+    }
+    
+    func listWillDisappear(animated: Bool) {
+        content?.listWillDisappear(animated: animated)
+    }
+    
+    func listEndedAppearanceTransition() {
+        content?.listEndedAppearanceTransition()
     }
 }

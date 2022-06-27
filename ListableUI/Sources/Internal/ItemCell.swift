@@ -8,16 +8,9 @@
 import UIKit
 
 
-protocol AnyItemCell : UICollectionViewCell
+protocol AnyItemCell : UICollectionViewCell, ListContentView
 {
     func wasDequeued(in context : WasDequeuedContext)
-    
-    func willDisplay()
-    func didEndDisplay()
-    
-    func listWillAppear(animated : Bool)
-    func listWillDisappear(animated : Bool)
-    func listEndedAppearanceTransition()
 
     func closeSwipeActions()
 }
@@ -143,6 +136,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     ].compactMap {
         $0 as? ListContentView
     }
+        
+    // MARK: AnyItemCell
     
     private var wasDequeued = Guard()
     
@@ -157,6 +152,16 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         }
         
         context.cells.add(self)
+    }
+    
+    func closeSwipeActions() {
+        self.contentContainer.performAnimatedClose()
+    }
+    
+    // MARK: ListContentView
+    
+    func setContainingViewController(_ viewController: UIViewController) {
+        // TODO... Anything?
     }
     
     func willDisplay()
@@ -190,10 +195,6 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         for view in listContentViews {
             view.listEndedAppearanceTransition()
         }
-    }
-    
-    func closeSwipeActions() {
-        self.contentContainer.performAnimatedClose()
     }
 }
 

@@ -19,6 +19,8 @@ target 'Demo' do
 
 	# Internal Pods
 	pod 'EnglishDictionary', :path => 'Internal Pods/EnglishDictionary/EnglishDictionary.podspec'
+	
+	pod 'ListableUITesting', :path => 'ListableUITesting.podspec', :testspecs => ['Tests']
 end
 
 

@@ -1,9 +1,9 @@
 require_relative 'version'
 
 Pod::Spec.new do |s|
-  s.name         = 'ListableUI'
-  s.version      = LISTABLE_VERSION
-  s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 11.0.'
+  s.name         = 'ListableUITesting'
+  s.version      = '1.0.0.LOCAL'
+  s.summary      = 'Testing library for Listable.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Kyle' => 'k@squareup.com' }
@@ -13,25 +13,23 @@ Pod::Spec.new do |s|
 
   s.swift_versions = ['5.4']
 
-  s.source_files = 'ListableUI/Sources/**/*.{swift,h,m}'
-
-  s.weak_framework = 'SwiftUI'
+  s.source_files = 'ListableUITesting/Sources/**/*.{swift,h,m}'
+  
+  s.framework = 'XCTest'
+  
+  s.dependency 'ListableUI'
 
   unless ENV['LISTABLE_PUBLISHING']
 
     # These tests can only be run locally, because they depend on local pods.
 
     s.test_spec 'Tests' do |test_spec|
-      test_spec.source_files = 'ListableUI/Tests/**/*.{swift}'
-      test_spec.ios.resource_bundle = { 'ListableUITestsResources' => 'ListableUI/Tests/Resources/**/*.*' }
+      test_spec.source_files = 'ListableUITesting/Tests/**/*.{swift}'
+      test_spec.ios.resource_bundle = { 'ListableUITestingTestsResources' => 'ListableUITesting/Tests/Resources/**/*.*' }
 
       test_spec.framework = 'XCTest'
 
       test_spec.requires_app_host = true
-
-      test_spec.dependency 'EnglishDictionary'
-      test_spec.dependency 'Snapshot'
-      test_spec.dependency 'ListableUITesting'
     end
   end
 end

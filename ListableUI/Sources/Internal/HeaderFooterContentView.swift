@@ -8,8 +8,7 @@
 import UIKit
 
 
-protocol AnyHeaderFooterContentView : UIView {
-}
+protocol AnyHeaderFooterContentView : ListContentView {}
 
 
 final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView, AnyHeaderFooterContentView
@@ -90,6 +89,54 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView, AnyHe
         self.content.frame = self.bounds
         self.background.frame = self.bounds
         self.pressedBackground.frame = self.bounds
+    }
+    
+    //
+    // MARK: ListContentView
+    //
+    
+    private lazy var listContentViews : [ListContentView] = [
+        self.content,
+        self.background,
+        self.pressedBackground
+    ].compactMap {
+        $0 as? ListContentView
+    }
+    
+    func setContainingViewController(_ viewController: UIViewController) {
+        for view in listContentViews {
+            view.setContainingViewController(viewController)
+        }
+    }
+    
+    func willDisplay() {
+        for view in listContentViews {
+            view.willDisplay()
+        }
+    }
+    
+    func didEndDisplay() {
+        for view in listContentViews {
+            view.didEndDisplay()
+        }
+    }
+    
+    func listWillAppear(animated: Bool) {
+        for view in listContentViews {
+            view.listWillAppear(animated: animated)
+        }
+    }
+    
+    func listWillDisappear(animated: Bool) {
+        for view in listContentViews {
+            view.listWillDisappear(animated: animated)
+        }
+    }
+    
+    func listEndedAppearanceTransition() {
+        for view in listContentViews {
+            view.listEndedAppearanceTransition()
+        }
     }
     
     //

@@ -8,17 +8,24 @@ PODS:
   - BlueprintUILists/Tests (2.0.0):
     - BlueprintUI
     - ListableUI
+    - ListableUITesting
   - EnglishDictionary (1.0.0.LOCAL)
   - ListableUI (2.0.0)
   - ListableUI/Tests (2.0.0):
     - EnglishDictionary
+    - ListableUITesting
     - Snapshot
+  - ListableUITesting (1.0.0.LOCAL):
+    - ListableUI
+  - ListableUITesting/Tests (1.0.0.LOCAL):
+    - ListableUI
   - Snapshot (1.0.0.LOCAL)
   - Snapshot/Tests (1.0.0.LOCAL)
   - SwiftUILists (0.1.1):
     - ListableUI
   - SwiftUILists/Tests (0.1.1):
     - ListableUI
+    - ListableUITesting
 
 DEPENDENCIES:
   - BlueprintUI
@@ -28,6 +35,8 @@ DEPENDENCIES:
   - EnglishDictionary (from `Internal Pods/EnglishDictionary/EnglishDictionary.podspec`)
   - ListableUI (from `ListableUI.podspec`)
   - ListableUI/Tests (from `ListableUI.podspec`)
+  - ListableUITesting (from `ListableUITesting.podspec`)
+  - ListableUITesting/Tests (from `ListableUITesting.podspec`)
   - Snapshot (from `Internal Pods/Snapshot/Snapshot.podspec`)
   - Snapshot/Tests (from `Internal Pods/Snapshot/Snapshot.podspec`)
   - SwiftUILists (from `SwiftUILists.podspec`)
@@ -45,6 +54,8 @@ EXTERNAL SOURCES:
     :path: Internal Pods/EnglishDictionary/EnglishDictionary.podspec
   ListableUI:
     :path: ListableUI.podspec
+  ListableUITesting:
+    :path: ListableUITesting.podspec
   Snapshot:
     :path: Internal Pods/Snapshot/Snapshot.podspec
   SwiftUILists:
@@ -53,12 +64,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BlueprintUI: 11f180c0ac1429efe5b6c742282b31e13259bfc9
   BlueprintUICommonControls: dd8ab6222332e1cff2d6e62c34c0b5921923796f
-  BlueprintUILists: dc9a85a1de35421d283acb409e7f68ce8671ce07
+  BlueprintUILists: 950a56e2e363b17a6ea90acef241b5a9af7f419c
   EnglishDictionary: f03968b9382ddc5c8dd63535efbf783c6cd45f1c
-  ListableUI: 591a783e54fa7fd47c3a196a04242247df6539da
+  ListableUI: 56f8f0d67c435638c440b94475dba96d9f9088fe
+  ListableUITesting: ba471db8a54ef225f6cef04902b2ff14061bdd4c
   Snapshot: cda3414db426919d09f775434b36289c8e864183
-  SwiftUILists: c72dff591885578f8fa0cb26a32f3f5e5ba4aab2
+  SwiftUILists: f2729e65a12fdbdaaa85c417fc63953ace10d3b4
 
-PODFILE CHECKSUM: 8b82cfb92f074595692b004a8176b8a47682ce20
+PODFILE CHECKSUM: badc6f729e85973c9bf2fd1f10005dae25b1fc5f
 
 COCOAPODS: 1.11.2

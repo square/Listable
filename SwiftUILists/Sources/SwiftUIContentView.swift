@@ -51,7 +51,8 @@ public final class SwiftUIContentView : UIView, ListContentView
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize
     {
-        return self.controller.view.sizeThatFits(size)
+        /// TODO: Return to `.view`?
+        self.controller.sizeThatFits(in: size)
     }
     
     // MARK: ListContentView
