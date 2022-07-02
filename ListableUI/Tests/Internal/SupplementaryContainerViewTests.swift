@@ -36,7 +36,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         XCTAssertEqual(view.sizeThatFits(.zero), .zero)
         
-        view.headerFooter = self.newHeaderFooter()
+        view.setHeaderFooter(self.newHeaderFooter(), animated: false)
         
         XCTAssertEqual(view.sizeThatFits(.zero), CGSize(width: 50, height: 40))
     }
@@ -50,7 +50,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         XCTAssertEqual(view.sizeThatFits(.zero), .zero)
         
-        view.headerFooter = self.newHeaderFooter()
+        view.setHeaderFooter(self.newHeaderFooter(), animated: false)
         
         XCTAssertEqual(view.systemLayoutSizeFitting(.zero), CGSize(width: 51, height: 41))
     }
@@ -64,8 +64,8 @@ class SupplementaryContainerViewTests: XCTestCase
         
         XCTAssertEqual(view.sizeThatFits(.zero), .zero)
         
-        view.headerFooter = self.newHeaderFooter()
-        
+        view.setHeaderFooter(self.newHeaderFooter(), animated: false)
+
         XCTAssertEqual(
             view.systemLayoutSizeFitting(
                 .zero,
@@ -91,7 +91,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         let header = self.newHeaderFooter()
         
-        view.headerFooter = header
+        view.setHeaderFooter(header, animated: false)
         view.sizeToFit()
         
         // Make sure the view is set
@@ -105,7 +105,7 @@ class SupplementaryContainerViewTests: XCTestCase
         
         // Unset the header footer, make sure the view is pushed back into the cache.
         
-        view.headerFooter = nil
+        view.setHeaderFooter(nil, animated: false)
         
         XCTAssertNil(view.content)
         
@@ -113,8 +113,8 @@ class SupplementaryContainerViewTests: XCTestCase
         
         // And now, let's set the header one more time to make sure it pulls from the cache.
         
-        view.headerFooter = self.newHeaderFooter()
-        
+        view.setHeaderFooter(self.newHeaderFooter(), animated: false)
+
         XCTAssertEqual(cache.count(for: ReuseIdentifier.identifier(for: TestHeaderFooterContent.self)), 0)
     }
     
@@ -126,8 +126,8 @@ class SupplementaryContainerViewTests: XCTestCase
         view.reuseCache = cache
         view.environment = .empty
         
-        view.headerFooter = self.newHeaderFooter()
-        
+        view.setHeaderFooter(self.newHeaderFooter(), animated: false)
+
         view.prepareForReuse()
         
         XCTAssertNil(view.headerFooter)
