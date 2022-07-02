@@ -65,7 +65,7 @@ internal extension ListView
                 environment: self.view.environment
             )
             
-            container.headerFooter = {
+            let headerFooter : AnyPresentationHeaderFooterState? = {
                 switch SupplementaryKind(rawValue: kind)! {
                 case .listContainerHeader: return self.presentationState.containerHeader.state
                 case .listHeader: return self.presentationState.header.state
@@ -75,6 +75,8 @@ internal extension ListView
                 case .overscrollFooter: return self.presentationState.overscrollFooter.state
                 }
             }()
+            
+            container.setHeaderFooter(headerFooter, animated: false)
             
             return container
         }

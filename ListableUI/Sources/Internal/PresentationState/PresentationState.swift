@@ -293,6 +293,7 @@ final class PresentationState
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         slice : Content.Slice,
         reason: ApplyReason,
+        animated : Bool,
         dependencies: ItemStateDependencies,
         updateCallbacks : UpdateCallbacks,
         loggable : SignpostLoggable?
@@ -317,6 +318,7 @@ final class PresentationState
             ),
             new: slice.content.containerHeader,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -329,6 +331,7 @@ final class PresentationState
             ),
             new: slice.content.header,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -341,6 +344,7 @@ final class PresentationState
             ),
             new: slice.content.footer,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -353,6 +357,7 @@ final class PresentationState
             ),
             new: slice.content.overscrollFooter,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -376,6 +381,7 @@ final class PresentationState
                     new: new,
                     changes: changes,
                     reason: reason,
+                    animated: animated,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
@@ -386,6 +392,7 @@ final class PresentationState
                     new: new,
                     changes: changes,
                     reason: reason,
+                    animated: animated,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )

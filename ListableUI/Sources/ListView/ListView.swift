@@ -990,6 +990,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 with: diff,
                 slice: visibleSlice,
                 reason: .wasUpdated,
+                animated: reason.animated,
                 dependencies: dependencies,
                 updateCallbacks: updateCallbacks,
                 loggable: self
