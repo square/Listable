@@ -2,11 +2,7 @@
 
 ### Fixed
 
-- Supplementary views will now properly animate (fade) in and out when they are added or removed.
-
 ### Added
-
-- Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
 
 ### Removed
 
@@ -15,6 +11,16 @@
 ### Misc
 
 # Past Releases
+
+# [4.3.0] - 2022-07-02
+
+### Fixed
+
+- Supplementary views will now properly animate (fade) in and out when they are added or removed.
+
+### Added
+
+- Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
 
 # [4.2.0] - 2022-06-01
 
@@ -660,7 +666,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/4.2.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/4.3.0...HEAD
+[4.3.0]: https://github.com/kyleve/Listable/compare/4.2.0...4.3.0
 [4.2.0]: https://github.com/kyleve/Listable/compare/4.1.0...4.2.0
 [4.1.0]: https://github.com/kyleve/Listable/compare/4.0.0...4.1.0
 [4.0.0]: https://github.com/kyleve/Listable/compare/3.2.1...4.0.0
