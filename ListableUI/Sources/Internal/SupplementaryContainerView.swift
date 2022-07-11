@@ -214,7 +214,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     {
         super.prepareForReuse()
         
-        self.headerFooter = nil
+        setHeaderFooter(nil, animated: false)
     }
     
     //
