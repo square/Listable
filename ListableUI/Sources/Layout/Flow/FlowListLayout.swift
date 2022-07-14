@@ -106,6 +106,7 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// The direction the flow layout will be laid out in.
     public var direction: LayoutDirection
 
+    /// If the list header should stick to the top when scrolled.
     public var stickyListHeader: Bool
     
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.

@@ -109,6 +109,7 @@ public struct TableAppearance : ListLayoutAppearance
     /// How the layout should flow, either horizontally or vertically.
     public var direction: LayoutDirection
 
+    /// If the list header should stick to the top when scrolled.
     public var stickyListHeader: Bool
     
     /// If sticky section headers should be leveraged in the layout.
