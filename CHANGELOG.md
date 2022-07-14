@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `List` measurement now includes the `safeAreaInsets` from the `Environment` if the `contentInsetAdjustmentBehavior` will affect the layout.
+
 ### Misc
 
 # Past Releases
