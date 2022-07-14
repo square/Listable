@@ -29,6 +29,8 @@ public struct RetailGridAppearance : ListLayoutAppearance
     public var direction: LayoutDirection {
         .vertical
     }
+
+    public var stickyListHeader: Bool = false
     
     public var stickySectionHeaders : Bool = false
     
