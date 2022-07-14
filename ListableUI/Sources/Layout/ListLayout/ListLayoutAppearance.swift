@@ -17,9 +17,11 @@ public protocol ListLayoutAppearance : Equatable
     var direction : LayoutDirection { get }
     
     var bounds : ListContentBounds? { get }
-    
+
+    var stickyListHeader : Bool { get }
+
     var stickySectionHeaders : Bool { get }
-    
+
     var pagingBehavior : ListPagingBehavior { get }
     
     var scrollViewProperties : ListLayoutScrollViewProperties { get }

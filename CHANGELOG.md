@@ -6,6 +6,8 @@
 
 ### Added
 
+- Added `stickyListHeader` to layout / appearance, allowing you to pin list headers to the top of the content.
+
 ### Removed
 
 ### Changed
