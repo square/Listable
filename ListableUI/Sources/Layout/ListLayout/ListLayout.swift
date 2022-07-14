@@ -219,7 +219,7 @@ extension AnyListLayout
 
         if headerOrigin < visibleContentOrigin {
 
-            // Make sure the pinned origin stays within the section's frame.
+            // Make sure the pinned origin stays within the list's frame.
 
             self.direction.switch(
                 vertical: {
