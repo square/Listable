@@ -482,7 +482,8 @@ final class CollectionViewLayout : UICollectionViewLayout
             collectionView: view,
             environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
-        
+
+        self.layout.positionStickyListHeaderIfNeeded(in: view)
         self.layout.positionStickySectionHeadersIfNeeded(in: view)
         
         self.layout.updateLayout(in: context)
