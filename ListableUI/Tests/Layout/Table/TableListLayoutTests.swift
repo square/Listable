@@ -52,7 +52,7 @@ class TableAppearance_LayoutTests : XCTestCase
 class TableListLayoutTests : XCTestCase
 {
     func test_naturalWidth_vertical() {
-        let list = self.listProperties(direction: .vertical, includeHeader: true)
+        let list = self.listProperties(direction: .vertical, includeHeader: true, stickyListHeader: false)
         
         let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list, safeAreaInsets: .zero)
         
@@ -60,7 +60,7 @@ class TableListLayoutTests : XCTestCase
     }
     
     func test_naturalWidth_horizontal() {
-        let list = self.listProperties(direction: .horizontal, includeHeader: true)
+        let list = self.listProperties(direction: .horizontal, includeHeader: true, stickyListHeader: false)
         
         let size = ListView.contentSize(in: CGSize(width: 400, height: 400), for: list, safeAreaInsets: .zero)
         
@@ -73,6 +73,17 @@ class TableListLayoutTests : XCTestCase
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+
+    func test_layout_vertical_stickyHeader()
+    {
+        let listView = self.list(direction: .vertical, includeHeader: true, stickyListHeader: true)
+        listView.collectionView.setContentOffset(.init(x: 0, y: listView.frame.height), animated: false)
+
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.frame.size), input: listView)
+
         snapshot.test(output: ViewImageSnapshot.self)
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
@@ -106,14 +117,26 @@ class TableListLayoutTests : XCTestCase
         snapshot.test(output: ViewImageSnapshot.self)
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
+
+    func test_layout_horizontal_stickyHeader()
+    {
+        let listView = self.list(direction: .horizontal, includeHeader: true, stickyListHeader: true)
+        listView.collectionView.setContentOffset(.init(x: listView.frame.width, y: 0), animated: false)
+
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.frame.size), input: listView)
+
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+
     
-    func list(direction: LayoutDirection, includeHeader: Bool) -> ListView
+    func list(direction: LayoutDirection, includeHeader: Bool, stickyListHeader: Bool = false) -> ListView
     {
         /// 200x200 so the layout will support both horizontal and vertical layouts.
         let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
         
         listView.configure(
-            with: self.listProperties(direction: direction, includeHeader: includeHeader)
+            with: self.listProperties(direction: direction, includeHeader: includeHeader, stickyListHeader: stickyListHeader)
         )
         
         listView.collectionView.layoutIfNeeded()
@@ -121,10 +144,11 @@ class TableListLayoutTests : XCTestCase
         return listView
     }
     
-    func listProperties(direction : LayoutDirection, includeHeader : Bool) -> ListProperties {
+    func listProperties(direction : LayoutDirection, includeHeader : Bool, stickyListHeader: Bool) -> ListProperties {
         ListProperties.default { list in
             list.layout = .table {
-                
+                $0.stickyListHeader = stickyListHeader
+
                 $0.direction = direction
                 
                 $0.bounds = .init(
