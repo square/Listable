@@ -237,8 +237,12 @@ public final class ListLayoutContent
     // MARK: Performing Layouts
     //
     
-    func apply(result : ListLayoutResult) {
-        self.contentSize = result.contentSize
+    func apply(result : ListLayoutResult, adjustedContentInset: UIEdgeInsets) {
+        self.contentSize = CGSize(
+            width: result.contentSize.width + adjustedContentInset.left + adjustedContentInset.right,
+            height: result.contentSize.height + adjustedContentInset.top + adjustedContentInset.bottom
+        )
+        
         self.naturalContentWidth = result.naturalContentWidth
     }
     
