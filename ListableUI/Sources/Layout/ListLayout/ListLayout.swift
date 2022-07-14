@@ -145,7 +145,7 @@ extension AnyListLayout
             in: context
         )
         
-        self.content.apply(result: result, adjustedContentInset: context.adjustedContentInset)
+        self.content.apply(result: result)
         
         self.content.setSectionContentsFrames()
         
