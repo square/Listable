@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
+
 ### Added
 
 ### Removed
