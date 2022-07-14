@@ -80,7 +80,7 @@ class TableListLayoutTests : XCTestCase
     func test_layout_vertical_stickyHeader()
     {
         let listView = self.list(direction: .vertical, includeHeader: true, stickyListHeader: true)
-        listView.collectionView.setContentOffset(.init(x: 0, y: listView.frame.height), animated: false)
+        listView.collectionView.setContentOffset(.init(x: 0, y: 100), animated: false)
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.frame.size), input: listView)
 
@@ -121,7 +121,7 @@ class TableListLayoutTests : XCTestCase
     func test_layout_horizontal_stickyHeader()
     {
         let listView = self.list(direction: .horizontal, includeHeader: true, stickyListHeader: true)
-        listView.collectionView.setContentOffset(.init(x: listView.frame.width, y: 0), animated: false)
+        listView.collectionView.setContentOffset(.init(x: 100, y: 0), animated: false)
 
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.frame.size), input: listView)
 
@@ -173,7 +173,7 @@ class TableListLayoutTests : XCTestCase
                 list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 50.0, height: 50.0))
             }
             
-            list.footer = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 70.0, height: 70.0))
+            list.footer = HeaderFooter(TestingHeaderFooterContent(color: .cyan), sizing: .fixed(width: 70.0, height: 70.0))
             
             list += Section("first") { section in
                 section.layouts.table.customInterSectionSpacing = 30
@@ -181,7 +181,7 @@ class TableListLayoutTests : XCTestCase
                 section.layouts.table.width = .fill
                 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .magenta), sizing: .fixed(width: 40.0, height: 40.0))
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 20.0, height: 20.0))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 20.0, height: 20.0))
@@ -199,8 +199,8 @@ class TableListLayoutTests : XCTestCase
                 )
                 
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
-                
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .magenta), sizing: .fixed(width: 40.0, height: 40.0))
+
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 30.0, height: 30.0))
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.2)), sizing: .fixed(width: 40.0, height: 40.0))
             }
@@ -214,8 +214,8 @@ class TableListLayoutTests : XCTestCase
             
             list += Section("fourth") { section in
                 section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
-                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 40.0, height: 40.0))
-                
+                section.footer = HeaderFooter(TestingHeaderFooterContent(color: .magenta), sizing: .fixed(width: 40.0, height: 40.0))
+
                 section.layouts.table.columns = .init(count: 2, spacing: 10.0)
                 
                 section += Item(TestingItemContent(color: .init(white: 0.0, alpha: 0.1)), sizing: .fixed(width: 50.0, height: 50.0))
