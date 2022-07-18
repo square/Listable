@@ -8,13 +8,19 @@
 
 ### Changed
 
-- `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
-
-- `List` measurement now has options to include the `safeAreaInsets` from the `Environment` if the `contentInsetAdjustmentBehavior` will affect the layout.
-
 ### Misc
 
 # Past Releases
+
+# [5.0.0] - 2022-07-18
+
+### Added
+
+- `List` measurement now has options to include the `safeAreaInsets` from the `Environment` if the `contentInsetAdjustmentBehavior` will affect the layout.
+
+### Changed
+
+- `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
 
 # [4.4.0] - 2022-07-18
 
@@ -686,7 +692,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/4.4.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.0.0...HEAD
+[5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
 [4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
 [4.3.1]: https://github.com/kyleve/Listable/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/kyleve/Listable/compare/4.2.0...4.3.0
