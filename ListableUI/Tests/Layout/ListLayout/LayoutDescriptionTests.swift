@@ -121,7 +121,7 @@ private struct TestLayoutAppearance : ListLayoutAppearance
     
     var direction: LayoutDirection = .vertical
 
-    var stickyListHeader: Bool = true
+    var listHeaderPosition: ListHeaderPosition = .sticky
     
     var stickySectionHeaders: Bool = true
     
