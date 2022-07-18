@@ -109,9 +109,9 @@ public struct TableAppearance : ListLayoutAppearance
     /// How the layout should flow, either horizontally or vertically.
     public var direction: LayoutDirection
 
-    /// If the list header should stick to the top when scrolled.
-    public var stickyListHeader: Bool
-    
+    /// How the list header should be positioned when content is scrolled.
+    public var listHeaderPosition: ListHeaderPosition
+
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
     
@@ -157,7 +157,7 @@ public struct TableAppearance : ListLayoutAppearance
     /// Creates a new `TableAppearance` object.
     public init(
         direction : LayoutDirection = .vertical,
-        stickListHeader: Bool = false,
+        listHeaderPosition: ListHeaderPosition = .inline,
         stickySectionHeaders : Bool = true,
         pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
@@ -167,7 +167,7 @@ public struct TableAppearance : ListLayoutAppearance
         layout : Layout = .init()
     ) {
         self.direction = direction
-        self.stickyListHeader = stickListHeader
+        self.listHeaderPosition = listHeaderPosition
         self.stickySectionHeaders = stickySectionHeaders
         self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight

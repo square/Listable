@@ -18,7 +18,7 @@ public protocol ListLayoutAppearance : Equatable
     
     var bounds : ListContentBounds? { get }
 
-    var stickyListHeader : Bool { get }
+    var listHeaderPosition : ListHeaderPosition { get }
 
     var stickySectionHeaders : Bool { get }
 

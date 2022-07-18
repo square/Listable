@@ -30,7 +30,7 @@ public struct RetailGridAppearance : ListLayoutAppearance
         .vertical
     }
 
-    public var stickyListHeader: Bool = false
+    public var listHeaderPosition: ListHeaderPosition = .inline
     
     public var stickySectionHeaders : Bool = false
     

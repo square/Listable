@@ -73,8 +73,8 @@ extension ListLayout
         self.layoutAppearance.bounds
     }
 
-    public var stickyListHeader: Bool {
-        self.layoutAppearance.stickyListHeader
+    public var listHeaderPosition: ListHeaderPosition {
+        self.layoutAppearance.listHeaderPosition
     }
     
     public var stickySectionHeaders: Bool {
@@ -106,7 +106,7 @@ public protocol AnyListLayout : AnyObject
     
     var bounds : ListContentBounds? { get }
 
-    var stickyListHeader : Bool { get }
+    var listHeaderPosition : ListHeaderPosition { get }
 
     var stickySectionHeaders : Bool { get }
     
@@ -208,7 +208,7 @@ extension AnyListLayout
 
     public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
     {
-        guard self.stickyListHeader else { return }
+        guard self.listHeaderPosition != .inline else { return }
 
         let visibleContentFrame = self.visibleContentFrame(for: collectionView)
 
@@ -217,7 +217,7 @@ extension AnyListLayout
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        if headerOrigin < visibleContentOrigin {
+        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
 
             // Make sure the pinned origin stays within the list's frame.
 
@@ -243,7 +243,10 @@ extension AnyListLayout
         
         var visibleContentFrame = self.visibleContentFrame(for: collectionView)
 
-        if self.stickyListHeader {
+        switch listHeaderPosition {
+        case .inline:
+            break
+        case .sticky, .fixed:
             let listHeaderHeight = self.direction.height(for: self.content.header.size)
             self.direction.switch {
                 visibleContentFrame.size.height -= listHeaderHeight

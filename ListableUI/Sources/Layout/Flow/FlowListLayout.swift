@@ -106,8 +106,8 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// The direction the flow layout will be laid out in.
     public var direction: LayoutDirection
 
-    /// If the list header should stick to the top when scrolled.
-    public var stickyListHeader: Bool
+    /// How the list header should be positioned when content is scrolled.
+    public var listHeaderPosition: ListHeaderPosition
     
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.
     public var stickySectionHeaders: Bool
@@ -163,7 +163,7 @@ public struct FlowAppearance : ListLayoutAppearance {
     ) {
         self.direction = direction
 
-        self.stickyListHeader = false
+        self.listHeaderPosition = .inline
 
         self.stickySectionHeaders = {
             if let stickySectionHeaders = stickySectionHeaders {
