@@ -2,11 +2,7 @@
 
 ### Fixed
 
-- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
-
 ### Added
-
-- Added `stickyListHeader` to layout / appearance, allowing you to pin list headers to the top of the content.
 
 ### Removed
 
@@ -15,6 +11,16 @@
 ### Misc
 
 # Past Releases
+
+# [4.4.0] - 2022-07-18
+
+### Fixed
+
+- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
+
+### Added
+
+- Added `stickyListHeader` to layout / appearance, allowing you to pin list headers to the top of the content.
 
 # [4.3.1] - 2022-07-11
 
@@ -676,7 +682,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/4.3.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/4.4.0...HEAD
+[4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
 [4.3.1]: https://github.com/kyleve/Listable/compare/4.3.0...4.3.1
 [4.3.0]: https://github.com/kyleve/Listable/compare/4.2.0...4.3.0
 [4.2.0]: https://github.com/kyleve/Listable/compare/4.1.0...4.2.0
