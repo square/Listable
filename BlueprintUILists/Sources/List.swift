@@ -140,12 +140,12 @@ extension List {
                     constraint.maximum
                 }
                 
-            case .measureContent(let horizontalFill, let verticalFill, let limit):
+            case .measureContent(let horizontalFill, let verticalFill, let safeArea, let limit):
                 return ElementContent() { constraint, environment -> CGSize in
                     let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
-                        safeAreaInsets: environment.safeAreaInsets,
+                        safeAreaInsets: safeArea.safeArea(with: environment),
                         itemLimit: limit
                     )
                     
