@@ -72,6 +72,10 @@ extension ListLayout
     public var bounds : ListContentBounds? {
         self.layoutAppearance.bounds
     }
+
+    public var listHeaderPosition: ListHeaderPosition {
+        self.layoutAppearance.listHeaderPosition
+    }
     
     public var stickySectionHeaders: Bool {
         self.layoutAppearance.stickySectionHeaders
@@ -101,7 +105,9 @@ public protocol AnyListLayout : AnyObject
     var direction : LayoutDirection { get }
     
     var bounds : ListContentBounds? { get }
-    
+
+    var listHeaderPosition : ListHeaderPosition { get }
+
     var stickySectionHeaders : Bool { get }
     
     var pagingBehavior : ListPagingBehavior { get }
@@ -199,6 +205,35 @@ extension AnyListLayout
             height: collectionView.bounds.size.height
         )
     }
+
+    public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
+    {
+        guard self.listHeaderPosition != .inline else { return }
+
+        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
+
+        let header = self.content.header
+
+        let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
+        let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
+
+        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
+
+            // Make sure the pinned origin stays within the list's frame.
+
+            self.direction.switch(
+                vertical: {
+                    header.pinnedY = visibleContentFrame.origin.y
+                },
+                horizontal: {
+                    header.pinnedX = visibleContentFrame.origin.x
+                }
+            )
+        } else {
+            header.pinnedY = nil
+            header.pinnedX = nil
+        }
+    }
     
     // TODO: This should take in a `context` so we can call it in layout tests too,
     // when not using a collection view.
@@ -206,7 +241,21 @@ extension AnyListLayout
     {
         guard self.stickySectionHeaders else { return }
         
-        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
+        var visibleContentFrame = self.visibleContentFrame(for: collectionView)
+
+        switch listHeaderPosition {
+        case .inline:
+            break
+        case .sticky, .fixed:
+            let listHeaderHeight = self.direction.height(for: self.content.header.size)
+            self.direction.switch {
+                visibleContentFrame.size.height -= listHeaderHeight
+                visibleContentFrame.origin.y += listHeaderHeight
+            } horizontal: {
+                visibleContentFrame.size.width -= listHeaderHeight
+                visibleContentFrame.origin.x += listHeaderHeight
+            }
+        }
         
         self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             let sectionBottom = self.direction.maxY(for: section.contentsFrame)

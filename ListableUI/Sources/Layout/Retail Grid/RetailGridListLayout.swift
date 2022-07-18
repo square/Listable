@@ -29,6 +29,8 @@ public struct RetailGridAppearance : ListLayoutAppearance
     public var direction: LayoutDirection {
         .vertical
     }
+
+    public var listHeaderPosition: ListHeaderPosition = .inline
     
     public var stickySectionHeaders : Bool = false
     

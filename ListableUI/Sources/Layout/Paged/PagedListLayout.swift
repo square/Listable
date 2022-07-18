@@ -61,7 +61,9 @@ public struct PagedAppearance : ListLayoutAppearance
     
     /// The direction the paging layout should occur in. Defaults to `vertical`.
     public var direction: LayoutDirection
-    
+
+    public let listHeaderPosition: ListHeaderPosition = .inline
+
     public let stickySectionHeaders: Bool = false
     
     public let pagingBehavior: ListPagingBehavior = .none

@@ -28,7 +28,9 @@ public final class DemosRootViewController : ListViewController
         list.layout = .demoLayout
         
         list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
-        
+
+        list.content.header = DemoHeader(title: "Sticky List Header")
+
         list.add {
             Section("list") { [weak self] in
                 Item(

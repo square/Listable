@@ -105,6 +105,9 @@ public struct FlowAppearance : ListLayoutAppearance {
     
     /// The direction the flow layout will be laid out in.
     public var direction: LayoutDirection
+
+    /// How the list header should be positioned when content is scrolled.
+    public var listHeaderPosition: ListHeaderPosition
     
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.
     public var stickySectionHeaders: Bool
@@ -148,6 +151,7 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// Creates a new `FlowAppearance`.
     public init(
         direction: LayoutDirection = .vertical,
+        stickyListHeader: Bool = false,
         stickySectionHeaders: Bool? = nil,
         pagingBehavior : ListPagingBehavior = .none,
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
@@ -158,7 +162,9 @@ public struct FlowAppearance : ListLayoutAppearance {
         spacings : Spacings = .init()
     ) {
         self.direction = direction
-        
+
+        self.listHeaderPosition = .inline
+
         self.stickySectionHeaders = {
             if let stickySectionHeaders = stickySectionHeaders {
                 return stickySectionHeaders
