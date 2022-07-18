@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
+
 ### Misc
 
 # Past Releases

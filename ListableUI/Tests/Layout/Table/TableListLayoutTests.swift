@@ -147,7 +147,7 @@ class TableListLayoutTests : XCTestCase
     func listProperties(direction : LayoutDirection, includeHeader : Bool, stickyListHeader: Bool) -> ListProperties {
         ListProperties.default { list in
             list.layout = .table {
-                $0.stickyListHeader = stickyListHeader
+                $0.listHeaderPosition = stickyListHeader ? .sticky : .inline
 
                 $0.direction = direction
                 

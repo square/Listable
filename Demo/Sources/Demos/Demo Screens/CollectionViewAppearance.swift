@@ -41,7 +41,7 @@ extension LayoutDescription
                 itemToSectionFooterSpacing: 10.0
             )
 
-            $0.stickyListHeader = true
+            $0.listHeaderPosition = .fixed
             $0.stickySectionHeaders = true
             
             configure(&$0)
