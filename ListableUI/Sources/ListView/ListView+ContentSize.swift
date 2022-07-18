@@ -50,18 +50,24 @@ extension ListView
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
     ) -> MeasuredListSize
     {
-        let layout = properties.makeLayout(
+        let (layout, layoutContext) = properties.makeLayout(
             in: fittingSize,
             safeAreaInsets: safeAreaInsets,
             itemLimit: itemLimit
         )
         
-        let size = layout.content.contentSize
+        let contentSize = layout.content.contentSize
+        let contentInset = layoutContext.adjustedContentInset
+        
+        let totalSize = CGSize(
+            width: contentSize.width + contentInset.left + contentInset.right,
+            height: contentSize.height + contentInset.top + contentInset.bottom
+        )
         
         return .init(
             contentSize: CGSize(
-                width: fittingSize.width > 0 ? min(fittingSize.width, size.width) : size.width,
-                height: fittingSize.height > 0 ? min(fittingSize.height, size.height) : size.height
+                width: fittingSize.width > 0 ? min(fittingSize.width, totalSize.width) : totalSize.width,
+                height: fittingSize.height > 0 ? min(fittingSize.height, totalSize.height) : totalSize.height
             ),
             naturalWidth: layout.content.naturalContentWidth
         )

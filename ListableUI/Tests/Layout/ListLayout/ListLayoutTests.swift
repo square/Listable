@@ -284,11 +284,13 @@ final class AnyListLayoutTests : XCTestCase {
             }
         }
         
-        return list.makeLayout(
+        let (layout, _) = list.makeLayout(
             in: CGSize(width: 200, height: 200),
             safeAreaInsets: .zero,
             itemLimit: nil
         )
+        
+        return layout
     }
 }
 

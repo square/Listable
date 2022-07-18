@@ -10,6 +10,8 @@
 
 - `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
 
+- `List` measurement now has options to include the `safeAreaInsets` from the `Environment` if the `contentInsetAdjustmentBehavior` will affect the layout.
+
 ### Misc
 
 # Past Releases

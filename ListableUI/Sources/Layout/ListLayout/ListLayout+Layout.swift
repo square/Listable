@@ -22,7 +22,7 @@ extension ListProperties {
         in fittingSize : CGSize,
         safeAreaInsets : UIEdgeInsets,
         itemLimit : Int?
-    ) -> AnyListLayout
+    ) -> (AnyListLayout, ListLayoutLayoutContext)
     {
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
@@ -55,23 +55,25 @@ extension ListProperties {
         
         /// 2b) Measure the content.
         
-        layout.performLayout(
-            with: nil,
-            in: .init(
-                viewBounds: CGRect(origin: .zero, size: fittingSize),
+        let layoutContext = ListLayoutLayoutContext(
+            viewBounds: CGRect(origin: .zero, size: fittingSize),
+            safeAreaInsets: safeAreaInsets,
+            contentInset: .zero,
+            adjustedContentInset: .listAdjustedContentInset(
+                with: layout.scrollViewProperties.contentInsetAdjustmentBehavior,
+                direction: layout.direction,
                 safeAreaInsets: safeAreaInsets,
-                contentInset: .zero,
-                adjustedContentInset: .listAdjustedContentInset(
-                    with: layout.scrollViewProperties.contentInsetAdjustmentBehavior,
-                    direction: layout.direction,
-                    safeAreaInsets: safeAreaInsets,
-                    contentInset: .zero
-                ),
-                environment: self.environment
-            )
+                contentInset: .zero
+            ),
+            environment: self.environment
         )
         
-        return layout
+        layout.performLayout(
+            with: nil,
+            in: layoutContext
+        )
+        
+        return (layout, layoutContext)
     }
 }
 
