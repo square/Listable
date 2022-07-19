@@ -98,7 +98,8 @@ final class SwipeActionsViewController: UIViewController  {
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                image: nil
+                tintColor: UIColor(red: 0.1843, green: 0.4, blue: 0.1922, alpha: 1.0),
+                image: item.isSaved ? nil : UIImage(named: "bookmark")!.withRenderingMode(.alwaysTemplate)
             ) { [weak self] expandActions in
                 self?.toggleSave(item: item)
                 expandActions(false)
