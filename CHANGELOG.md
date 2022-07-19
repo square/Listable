@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fix an issue where horizontal list views would erroneously inset for the keyboard. Horizontal lists should not adjust for the keyboard, since it ends up causing vertical scrolling.
+
 ### Added
 
 ### Removed
