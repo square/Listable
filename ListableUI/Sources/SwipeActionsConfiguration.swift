@@ -62,6 +62,7 @@ public struct SwipeAction {
 
     public var title: String?
     public var backgroundColor: UIColor?
+    /// Sets the text and image (image must use the template rendering mode) color.
     public var tintColor: UIColor
     public var image: UIImage?
 

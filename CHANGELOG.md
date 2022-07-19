@@ -3,6 +3,7 @@
 ### Fixed
 
 ### Added
+- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
 
 ### Removed
 
