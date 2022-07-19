@@ -93,11 +93,11 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         
         let defaults = self.content.defaultItemProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
-        self.layouts = finalValue(from: layouts, defaults.layouts, .init())
-        self.selectionStyle = finalValue(from: selectionStyle, defaults.selectionStyle, .notSelectable)
-        self.insertAndRemoveAnimations = finalValue(from: insertAndRemoveAnimations, defaults.insertAndRemoveAnimations, nil)
-        self.swipeActions = finalValue(from: swipeActions, defaults.swipeActions, nil)
+        self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
+        self.layouts = layouts ?? defaults.layouts ?? .init()
+        self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
+        self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations ?? nil
+        self.swipeActions = swipeActions ?? defaults.swipeActions ?? nil
         
         self.reordering = reordering
         self.onWasReordered = onWasReordered
@@ -253,21 +253,5 @@ extension Item : SignpostLoggable
             identifier: self.debuggingIdentifier,
             instanceIdentifier: self.identifier.debugDescription
         )
-    }
-}
-
-
-private func finalValue<Value>(
-    from provided : Value?,
-    _ contentDefault : Value?,
-    _ default : @autoclosure () -> Value
-) -> Value
-{
-    if let value = provided {
-        return value
-    } else if let value = contentDefault {
-        return value
-    } else {
-        return `default`()
     }
 }

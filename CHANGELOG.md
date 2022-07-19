@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [5.0.1] - 2022-07-19
+
+### Fixed
+
+- Ensure `Optional` values from `DefaultItemProperties` and `DefaultHeaderFooterProperties` are respected.
+
 # [5.0.0] - 2022-07-18
 
 ### Added
@@ -692,7 +698,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/5.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.0.1...HEAD
+[5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
 [4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
 [4.3.1]: https://github.com/kyleve/Listable/compare/4.3.0...4.3.1
