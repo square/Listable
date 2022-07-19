@@ -198,7 +198,12 @@ public final class DemosRootViewController : ListViewController
                 DemoHeader(title: "List Views")
             }
             
-            Section("coordinator") { [weak self] in
+            Section(
+                "coordinator",
+                layouts: .table {
+                    $0.isHeaderSticky = false
+                }
+            ) { [weak self] in
                 
                 Item(
                     DemoItem(text: "Expand / Collapse Items"),

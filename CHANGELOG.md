@@ -4,6 +4,8 @@
 
 ### Added
 
+- You may now control the stickiness of headers within individual sections, eg by setting `section.layouts.table.isHeaderSticky = true/false/nil`. Setting nil falls back to the list-level stickiness setting.
+
 ### Removed
 
 ### Changed

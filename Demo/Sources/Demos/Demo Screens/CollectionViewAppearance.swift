@@ -28,12 +28,11 @@ extension LayoutDescription
     static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
-                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 30.0, right: 20.0),
                 width: .atMost(600.0)
             )
             
             $0.layout = .init(
-                headerToFirstSectionSpacing: 20.0,
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,

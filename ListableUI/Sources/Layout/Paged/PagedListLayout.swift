@@ -128,6 +128,10 @@ public struct PagedAppearance : ListLayoutAppearance
 
 final class PagedListLayout : ListLayout
 {
+    typealias ItemLayout = EmptyItemLayoutsValue
+    typealias HeaderFooterLayout = EmptyHeaderFooterLayoutsValue
+    typealias SectionLayout = EmptySectionLayoutsValue
+    
     public typealias LayoutAppearance = PagedAppearance
     
     static var defaults: ListLayoutDefaults {

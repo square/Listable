@@ -63,6 +63,15 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     var defaultHeaderFooterProperties : DefaultProperties { get }
     
     //
+    // MARK: Properties
+    //
+    
+    /// If this `HeaderFooterContent` is used as a header in a section,
+    /// setting this value to `true` will result in the header being sticky at the
+    /// top of the while the section is visible.
+    var isStickySectionHeader : Bool? { get }
+    
+    //
     // MARK: Applying To Displayed View
     //
     
@@ -224,5 +233,14 @@ public extension HeaderFooterContent
 {
     var defaultHeaderFooterProperties : DefaultProperties {
         .init()
+    }
+}
+
+
+public extension HeaderFooterContent {
+    
+    /// By default, headers will be sticky depending on their content or section configuration.
+    var isStickySectionHeader : Bool? {
+        nil
     }
 }

@@ -13,6 +13,10 @@ public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
     
+    associatedtype ItemLayout:ItemLayoutsValue
+    associatedtype HeaderFooterLayout:HeaderFooterLayoutsValue
+    associatedtype SectionLayout:SectionLayoutsValue
+    
     static var defaults : ListLayoutDefaults { get }
     
     var layoutAppearance : LayoutAppearance { get }
@@ -125,6 +129,10 @@ public protocol AnyListLayout : AnyObject
         in context : ListLayoutLayoutContext
     ) -> ListLayoutResult
     
+    
+    func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
+    func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    
     func setZIndexes()
     
     //
@@ -162,6 +170,98 @@ extension AnyListLayout
         self.updateOverscrollFooterPosition(in: context)
         self.adjustPositionsForLayoutUnderflow(in: context)
     }
+}
+
+
+extension ListLayout {
+    
+    public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
+    {
+        guard self.listHeaderPosition != .inline else { return }
+
+        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
+
+        let header = self.content.header
+
+        let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
+        let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
+
+        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
+
+            // Make sure the pinned origin stays within the list's frame.
+
+            self.direction.switch(
+                vertical: {
+                    header.pinnedY = visibleContentFrame.origin.y
+                },
+                horizontal: {
+                    header.pinnedX = visibleContentFrame.origin.x
+                }
+            )
+        } else {
+            header.pinnedY = nil
+            header.pinnedX = nil
+        }
+    }
+    
+    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    {
+        var visibleContentFrame = self.visibleContentFrame(for: collectionView)
+
+        switch listHeaderPosition {
+        case .inline:
+            break
+        case .sticky, .fixed:
+            let listHeaderHeight = self.direction.height(for: self.content.header.size)
+            
+            self.direction.switch {
+                visibleContentFrame.size.height -= listHeaderHeight
+                visibleContentFrame.origin.y += listHeaderHeight
+            } horizontal: {
+                visibleContentFrame.size.width -= listHeaderHeight
+                visibleContentFrame.origin.x += listHeaderHeight
+            }
+        }
+        
+        self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
+            let sectionBottom = self.direction.maxY(for: section.contentsFrame)
+            
+            let header = section.header
+            
+            let sectionLayout = section.layouts[SectionLayout.self]
+            
+            let isHeaderSticky = sectionLayout.isHeaderSticky(
+                list: self.stickySectionHeaders,
+                header: section.isHeaderSticky
+            )
+            
+            let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
+            let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
+            
+            if isHeaderSticky, headerOrigin < visibleContentOrigin {
+                
+                // Make sure the pinned origin stays within the section's frame.
+                
+                self.direction.switch(
+                    vertical: {
+                        header.pinnedY = min(
+                            visibleContentFrame.origin.y,
+                            sectionBottom - header.size.height
+                        )
+                    },
+                    horizontal: {
+                        header.pinnedX = min(
+                            visibleContentFrame.origin.x,
+                            sectionBottom - header.size.width
+                        )
+                    }
+                )
+            } else {
+                header.pinnedY = nil
+                header.pinnedX = nil
+            }
+        }
+    }
     
     public func setZIndexes()
     {
@@ -193,7 +293,6 @@ extension AnyListLayout
     }
 }
 
-
 extension AnyListLayout
 {
     public func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
@@ -204,90 +303,6 @@ extension AnyListLayout
             width: collectionView.bounds.size.width,
             height: collectionView.bounds.size.height
         )
-    }
-
-    public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
-    {
-        guard self.listHeaderPosition != .inline else { return }
-
-        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
-
-        let header = self.content.header
-
-        let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
-        let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
-
-        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
-
-            // Make sure the pinned origin stays within the list's frame.
-
-            self.direction.switch(
-                vertical: {
-                    header.pinnedY = visibleContentFrame.origin.y
-                },
-                horizontal: {
-                    header.pinnedX = visibleContentFrame.origin.x
-                }
-            )
-        } else {
-            header.pinnedY = nil
-            header.pinnedX = nil
-        }
-    }
-    
-    // TODO: This should take in a `context` so we can call it in layout tests too,
-    // when not using a collection view.
-    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
-    {
-        guard self.stickySectionHeaders else { return }
-        
-        var visibleContentFrame = self.visibleContentFrame(for: collectionView)
-
-        switch listHeaderPosition {
-        case .inline:
-            break
-        case .sticky, .fixed:
-            let listHeaderHeight = self.direction.height(for: self.content.header.size)
-            self.direction.switch {
-                visibleContentFrame.size.height -= listHeaderHeight
-                visibleContentFrame.origin.y += listHeaderHeight
-            } horizontal: {
-                visibleContentFrame.size.width -= listHeaderHeight
-                visibleContentFrame.origin.x += listHeaderHeight
-            }
-        }
-        
-        self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
-            let sectionBottom = self.direction.maxY(for: section.contentsFrame)
-            
-            let header = section.header
-            
-            let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
-            let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
-            
-            if headerOrigin < visibleContentOrigin {
-                
-                // Make sure the pinned origin stays within the section's frame.
-                
-                self.direction.switch(
-                    vertical: {
-                        header.pinnedY = min(
-                            visibleContentFrame.origin.y,
-                            sectionBottom - header.size.height
-                        )
-                    },
-                    horizontal: {
-                        header.pinnedX = min(
-                            visibleContentFrame.origin.x,
-                            sectionBottom - header.size.width
-                        )
-                    }
-                )
-            } else {
-                header.pinnedY = nil
-                header.pinnedX = nil
-            }
-        }
     }
     
     public func updateOverscrollFooterPosition(in context : ListLayoutLayoutContext)

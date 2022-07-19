@@ -79,6 +79,10 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     // MARK: AnyHeaderFooter_Internal
     
+    public var isStickySectionHeader: Bool? {
+        content.isStickySectionHeader
+    }
+    
     public func apply(
         to anyView : UIView,
         for reason : ApplyReason,

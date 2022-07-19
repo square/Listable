@@ -245,6 +245,10 @@ extension ItemLayouts {
 
 final class RetailGridListLayout : ListLayout
 {
+    typealias ItemLayout = RetailGridAppearance.ItemLayout
+    typealias HeaderFooterLayout = EmptyHeaderFooterLayoutsValue
+    typealias SectionLayout = EmptySectionLayoutsValue
+    
     typealias LayoutAppearance = RetailGridAppearance
     
     static var defaults: ListLayoutDefaults {

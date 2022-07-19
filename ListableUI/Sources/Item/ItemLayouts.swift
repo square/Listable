@@ -111,3 +111,14 @@ public protocol ItemLayoutsValue {
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
 }
+
+
+/// Use this type if you have no `ItemLayout` for your `ListLayout`.
+public struct EmptyItemLayoutsValue : ItemLayoutsValue {
+    
+    public init() {}
+    
+    public static var defaultValue: EmptyItemLayoutsValue {
+        .init()
+    }
+}

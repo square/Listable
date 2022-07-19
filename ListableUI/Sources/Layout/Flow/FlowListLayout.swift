@@ -419,6 +419,8 @@ extension FlowAppearance {
     /// Controls the layout parameters for a given `Section` when it is displayed within a `.flow` layout.
     public struct SectionLayout : Equatable, SectionLayoutsValue
     {
+        public var isHeaderSticky: Bool?
+        
         /// Controls the custom width of the `Section`.
         public var width : CustomWidth
         
@@ -436,12 +438,14 @@ extension FlowAppearance {
         
         /// Creates a new section layout.
         public init(
+            isHeaderSticky: Bool? = nil,
             width : CustomWidth = .default,
             rowUnderflowAlignment : RowUnderflowAlignment? = nil,
             rowItemsAlignment : RowItemsAlignment? = nil,
             itemSizing : ItemSizing? = nil,
             itemSpacing : CGFloat? = nil
         ) {
+            self.isHeaderSticky = isHeaderSticky
             self.width = width
             self.rowUnderflowAlignment = rowUnderflowAlignment
             self.rowItemsAlignment = rowItemsAlignment
@@ -535,6 +539,13 @@ extension FlowAppearance {
 
 extension ItemLayouts {
     
+    /// Creates a new `ItemLayouts` value that allows configuring the flow values for the item.
+    public static func flow(_ configure : (inout FlowAppearance.ItemLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.flow)
+        }
+    }
+    
     /// Allows customization of an `Item`'s layout when it is presented within a `.flow` style layout.
     public var flow : FlowAppearance.ItemLayout {
         get { self[FlowAppearance.ItemLayout.self] }
@@ -544,6 +555,13 @@ extension ItemLayouts {
 
 
 extension HeaderFooterLayouts {
+    
+    /// Creates a new `HeaderFooterLayouts` value that allows configuring the flow values for the header / footer.
+    public static func flow(_ configure : (inout FlowAppearance.HeaderFooterLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.flow)
+        }
+    }
     
     /// Allows customization of a `HeaderFooter`'s layout when it is presented within a `.flow` style layout.
     public var flow : FlowAppearance.HeaderFooterLayout {
@@ -555,6 +573,13 @@ extension HeaderFooterLayouts {
 
 extension SectionLayouts {
     
+    /// Creates a new `SectionLayouts` value that allows configuring the flow values for the section.
+    public static func flow(_ configure : (inout FlowAppearance.SectionLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.flow)
+        }
+    }
+    
     /// Allows customization of a `Section`'s layout when it is presented within a `.flow` style layout.
     public var flow : FlowAppearance.SectionLayout {
         get { self[FlowAppearance.SectionLayout.self] }
@@ -564,6 +589,10 @@ extension SectionLayouts {
 
 
 final class FlowListLayout : ListLayout {
+    
+    typealias ItemLayout = FlowAppearance.ItemLayout
+    typealias HeaderFooterLayout = FlowAppearance.HeaderFooterLayout
+    typealias SectionLayout = FlowAppearance.SectionLayout
     
     typealias LayoutAppearance = FlowAppearance
     

@@ -222,6 +222,9 @@ extension TableAppearance
     
     public struct SectionLayout : Equatable, SectionLayoutsValue
     {
+        // If the header for the section should be sticky.
+        public var isHeaderSticky : Bool?
+        
         public var width : CustomWidth
 
         /// Overrides the calculated spacing after this section
@@ -230,10 +233,12 @@ extension TableAppearance
         public var columns : Columns
         
         public init(
+            isHeaderSticky: Bool? = nil,
             width : CustomWidth = .default,
             customInterSectionSpacing : CGFloat? = nil,
             columns : Columns = .one
         ) {
+            self.isHeaderSticky = isHeaderSticky
             self.width = width
             self.customInterSectionSpacing = customInterSectionSpacing
             
@@ -350,6 +355,13 @@ extension TableAppearance
 
 extension ItemLayouts {
     
+    /// Creates a new `ItemLayouts` value that allows configuring the table values for the item.
+    public static func table(_ configure : (inout TableAppearance.ItemLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.table)
+        }
+    }
+    
     /// Allows customization of an `Item`'s layout when it is presented within a `.table` style layout.
     public var table : TableAppearance.ItemLayout {
         get { self[TableAppearance.ItemLayout.self] }
@@ -359,6 +371,13 @@ extension ItemLayouts {
 
 
 extension HeaderFooterLayouts {
+    
+    /// Creates a new `HeaderFooterLayouts` value that allows configuring the header footer values for the item.
+    public static func table(_ configure : (inout TableAppearance.HeaderFooterLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.table)
+        }
+    }
     
     /// Allows customization of a `HeaderFooter`'s layout when it is presented within a `.table` style layout.
     public var table : TableAppearance.HeaderFooterLayout {
@@ -370,6 +389,13 @@ extension HeaderFooterLayouts {
 
 extension SectionLayouts {
     
+    /// Creates a new `SectionLayouts` value that allows configuring the table values for the section.
+    public static func table(_ configure : (inout TableAppearance.SectionLayout) -> ()) -> Self {
+        .init {
+            configure(&$0.table)
+        }
+    }
+    
     /// Allows customization of a `Section`'s layout when it is presented within a `.table` style layout.
     public var table : TableAppearance.SectionLayout {
         get { self[TableAppearance.SectionLayout.self] }
@@ -380,6 +406,10 @@ extension SectionLayouts {
 
 final class TableListLayout : ListLayout
 {
+    typealias ItemLayout = TableAppearance.ItemLayout
+    typealias HeaderFooterLayout = TableAppearance.HeaderFooterLayout
+    typealias SectionLayout = TableAppearance.SectionLayout
+    
     typealias LayoutAppearance = TableAppearance
     
     static var defaults: ListLayoutDefaults {
