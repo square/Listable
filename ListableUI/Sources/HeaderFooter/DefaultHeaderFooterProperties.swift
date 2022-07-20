@@ -17,18 +17,27 @@ import Foundation
 /// 1) The value passed to the initializer.
 /// 2) The value from `defaultHeaderFooterProperties` on the contained `HeaderFooterContent`, if non-nil.
 /// 3) A standard, default value.
-public struct DefaultHeaderFooterProperties<Content:HeaderFooterContent>
+public struct DefaultHeaderFooterProperties<ContentType:HeaderFooterContent>
 {
+    public typealias HeaderFooter = ListableUI.HeaderFooter<ContentType>
+    
     public var sizing : Sizing?
     public var layouts : HeaderFooterLayouts?
+    public var onTap : HeaderFooter.OnTap?
+    public var debuggingIdentifier : String?
     
     public init(
         sizing : Sizing? = nil,
         layouts : HeaderFooterLayouts? = nil,
+        onTap : HeaderFooter.OnTap? = nil,
+        debuggingIdentifier : String? = nil,
+        
         configure : (inout Self) -> () = { _ in }
     ) {
         self.sizing = sizing
         self.layouts = layouts
+        self.onTap = onTap
+        self.debuggingIdentifier = debuggingIdentifier
         
         configure(&self)
     }

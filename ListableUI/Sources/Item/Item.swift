@@ -49,10 +49,10 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     public var onRemove : OnRemove.Callback?
     public var onMove : OnMove.Callback?
     public var onUpdate : OnUpdate.Callback?
+        
+    public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
-    
-    public var debuggingIdentifier : String? = nil
     
     //
     // MARK: Initialization
@@ -98,6 +98,17 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
         self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations ?? nil
         self.swipeActions = swipeActions ?? defaults.swipeActions ?? nil
+        self.reordering = reordering ?? defaults.reordering ?? nil
+        self.onWasReordered = onWasReordered ?? defaults.onWasReordered ?? nil
+        self.onDisplay = onDisplay ?? defaults.onDisplay ?? nil
+        self.onEndDisplay = onEndDisplay ?? defaults.onEndDisplay ?? nil
+        self.onSelect = onSelect ?? defaults.onSelect ?? nil
+        self.onDeselect = onDeselect ?? defaults.onDeselect ?? nil
+        self.onInsert = onInsert ?? defaults.onInsert ?? nil
+        self.onRemove = onRemove ?? defaults.onRemove ?? nil
+        self.onMove = onMove ?? defaults.onMove ?? nil
+        self.onUpdate = onUpdate ?? defaults.onUpdate ?? nil
+        self.debuggingIdentifier = debuggingIdentifier ?? defaults.debuggingIdentifier ?? nil
         
         self.reordering = reordering
         self.onWasReordered = onWasReordered
