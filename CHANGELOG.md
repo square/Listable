@@ -2,12 +2,7 @@
 
 ### Fixed
 
-- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the container header by falling back to `sticky` behavior if there's a container header.
-- Supplementary items will now animate when their position in the layout changes.
-- Fix an issue where horizontal list views would erroneously inset for the keyboard. Horizontal lists should not adjust for the keyboard, since it ends up causing vertical scrolling.
-
 ### Added
-- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
 
 ### Removed
 
@@ -16,6 +11,18 @@
 ### Misc
 
 # Past Releases
+
+# [5.1.0] - 2022-07-20
+
+### Fixed
+
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the container header by falling back to `sticky` behavior if there's a container header.
+- Supplementary items will now animate when their position in the layout changes.
+- Fix an issue where horizontal list views would erroneously inset for the keyboard. Horizontal lists should not adjust for the keyboard, since it ends up causing vertical scrolling.
+
+### Added
+
+- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
 
 # [5.0.1] - 2022-07-19
 
@@ -703,7 +710,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/5.0.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.1.0...HEAD
+[5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0
 [5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
 [4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
