@@ -8,11 +8,15 @@
 
 ### Changed
 
-- `DefaultItemProperties` and `DefaultHeaderFooterProperties` now have all properties for each of `Item` and `HeaderFooter`.
-
 ### Misc
 
 # Past Releases
+
+# [5.2.0] - 2022-07-20
+
+### Changed
+
+- `DefaultItemProperties` and `DefaultHeaderFooterProperties` now have all properties for each of `Item` and `HeaderFooter`.
 
 # [5.1.0] - 2022-07-20
 
@@ -712,7 +716,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/5.1.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.2.0...HEAD
+[5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0
 [5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
 [5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
