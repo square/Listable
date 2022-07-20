@@ -217,7 +217,10 @@ extension AnyListLayout
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
+        /// `fixed` only works if there's no `containerHeader`.
+        let shouldBeFixed =  listHeaderPosition == .fixed && !content.containerHeader.isPopulated
+
+        if headerOrigin < visibleContentOrigin || shouldBeFixed {
 
             // Make sure the pinned origin stays within the list's frame.
 
