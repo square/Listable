@@ -186,3 +186,19 @@ public protocol AnyLayoutDescriptionConfiguration
     
     func isEqual(to other : AnyLayoutDescriptionConfiguration) -> Bool
 }
+
+
+extension LayoutDescription {
+    
+    var wantsKeyboardInsetAdjustment : Bool {
+        layoutAppearanceProperties.direction == .vertical
+    }
+    
+    func needsCollectionViewInsetUpdate(for other : LayoutDescription) -> Bool {
+        guard self.layoutAppearanceProperties.direction == other.layoutAppearanceProperties.direction else {
+            return true
+        }
+        
+        return false
+    }
+}
