@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `DefaultItemProperties` and `DefaultHeaderFooterProperties` now have all properties for each of `Item` and `HeaderFooter`.
+
 ### Misc
 
 # Past Releases
