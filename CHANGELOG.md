@@ -2,6 +2,9 @@
 
 ### Fixed
 
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the container header by falling back to `sticky` behavior if there's a container header.
+- Supplementary items will now animate when their position in the layout changes.
+
 ### Added
 
 ### Removed
