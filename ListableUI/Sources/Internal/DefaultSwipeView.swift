@@ -199,7 +199,6 @@ private class DefaultSwipeActionButton: UIButton {
         super.init(frame: frame)
 
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        tintColor = .white
         contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
@@ -214,6 +213,9 @@ private class DefaultSwipeActionButton: UIButton {
         backgroundColor = action.backgroundColor
         setTitle(action.title, for: .normal)
         setImage(action.image, for: .normal)
+        
+        tintColor = action.tintColor
+        setTitleColor(action.tintColor, for: .normal)
     }
 
     @objc private func onTap() {
