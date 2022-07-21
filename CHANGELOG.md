@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [5.2.1] - 2022-07-21
+
+### Fixed
+
+- Fix a crash when initializing `Item`.
+
 # [5.2.0] - 2022-07-20
 
 ### Changed
@@ -716,7 +722,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/5.2.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.2.1...HEAD
+[5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0
 [5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
