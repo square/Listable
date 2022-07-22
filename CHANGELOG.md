@@ -4,6 +4,8 @@
 
 ### Added
 
+- `SwipeAction` now allows you to provide an `accessibility{Label,Value,Hint}`, and requires either a `title` or `accessibilityLabel`.
+
 ### Removed
 
 ### Changed
