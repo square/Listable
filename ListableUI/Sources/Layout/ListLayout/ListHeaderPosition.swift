@@ -10,7 +10,7 @@ public enum ListHeaderPosition {
 
     /// The header is always positioned at the top of the visible frame, and does not bounce with the content.
     ///
-    /// Note: This mode only works if the list has no container header. If there is a container header, the behavior
-    /// falls back to `sticky`.
+    /// Note: This mode only works if the list has no container header or refresh control. If there is a container
+    /// header or refresh control, the behavior falls back to `sticky` so the header doesn't overlap with those.
     case fixed
 }
