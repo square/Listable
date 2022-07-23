@@ -31,7 +31,6 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     public var selectionStyle : ItemSelectionStyle
     
     public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
-    public var sectionInsertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
     
     public var swipeActions : SwipeActionsConfiguration?
 
