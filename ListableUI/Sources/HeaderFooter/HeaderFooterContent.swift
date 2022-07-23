@@ -68,7 +68,7 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     
     /// If this `HeaderFooterContent` is used as a header in a section,
     /// setting this value to `true` will result in the header being sticky at the
-    /// top of the while the section is visible.
+    /// top of the list while the section's rect is visible.
     var isStickySectionHeader : Bool? { get }
     
     //

@@ -149,6 +149,10 @@ private struct TestLayoutAppearance : ListLayoutAppearance
 
 private final class TestLayout : ListLayout
 {
+    typealias ItemLayout = EmptyItemLayoutsValue
+    typealias HeaderFooterLayout = EmptyHeaderFooterLayoutsValue
+    typealias SectionLayout = EmptySectionLayoutsValue
+    
     typealias LayoutAppearance = TestLayoutAppearance
     
     static var defaults: ListLayoutDefaults {
