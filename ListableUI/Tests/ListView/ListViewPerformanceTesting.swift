@@ -95,7 +95,7 @@ class ListViewPerformanceTesting : XCTestCase {
         let fittingSize = CGSize(width: 400, height: 700)
         
         self.determineAverage(for: 5.0) {
-            _ = ListView.contentSize(in: fittingSize, for: properties)
+            _ = ListView.contentSize(in: fittingSize, for: properties, safeAreaInsets: .zero)
         }
     }
 }

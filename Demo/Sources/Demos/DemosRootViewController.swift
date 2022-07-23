@@ -28,7 +28,9 @@ public final class DemosRootViewController : ListViewController
         list.layout = .demoLayout
         
         list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
-        
+
+        list.content.header = DemoHeader(title: "Sticky List Header")
+
         list.add {
             Section("list") { [weak self] in
                 Item(
@@ -48,13 +50,21 @@ public final class DemosRootViewController : ListViewController
                 )
 
                 Item(
-                    DemoItem(text: "Auto Scrolling (Bottom Pin)"),
+                    DemoItem(text: "Auto Scrolling (Bottom Pin: scrollTo)"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(AutoScrollingViewController())
                     }
                 )
-                
+
+                Item(
+                    DemoItem(text: "Auto Scrolling2 (Bottom Pin: pin)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(AutoScrollingViewController2())
+                    }
+                )
+
                 if #available(iOS 13.0, *) {
                     Item(
                         DemoItem(text: "List State & State Reader"),
@@ -224,6 +234,14 @@ public final class DemosRootViewController : ListViewController
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(PagedViewController())
+                    }
+                )
+                
+                Item(
+                    DemoItem(text: "Carousel-Style Layouts"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(CarouselLayoutViewController())
                     }
                 )
                 

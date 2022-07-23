@@ -2,6 +2,8 @@
   ▿ contentSize: (200.0, 295.0)
     - width: 200.0
     - height: 295.0
+  - naturalContentWidth: nil
+  - containerHeader: nil
   - header: nil
   - footer: nil
   - overscrollFooter: nil

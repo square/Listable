@@ -50,6 +50,15 @@ extension PresentationState
             }
         }
         
+        func resetAllCachedSizes() {
+            self.header.state?.resetCachedSizes()
+            self.footer.state?.resetCachedSizes()
+            
+            self.items.forEach { item in
+                item.resetCachedSizes()
+            }
+        }
+        
         func removeItem(at index : Int) -> AnyPresentationItemState
         {
             self.model.items.remove(at: index)
@@ -67,6 +76,7 @@ extension PresentationState
             new newSection : Section,
             changes : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges,
             reason: ApplyReason,
+            animated : Bool,
             dependencies : ItemStateDependencies,
             updateCallbacks : UpdateCallbacks
         ) {
@@ -82,6 +92,7 @@ extension PresentationState
                 ),
                 new: self.model.header,
                 reason: reason,
+                animated: animated,
                 updateCallbacks: updateCallbacks,
                 environment: environment
             )
@@ -94,6 +105,7 @@ extension PresentationState
                 ),
                 new: self.model.footer,
                 reason: reason,
+                animated: animated,
                 updateCallbacks: updateCallbacks,
                 environment: environment
             )

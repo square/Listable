@@ -29,8 +29,12 @@ public struct RetailGridAppearance : ListLayoutAppearance
     public var direction: LayoutDirection {
         .vertical
     }
+
+    public var listHeaderPosition: ListHeaderPosition = .inline
     
     public var stickySectionHeaders : Bool = false
+    
+    public let pagingBehavior: ListPagingBehavior = .none
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -41,6 +45,12 @@ public struct RetailGridAppearance : ListLayoutAppearance
             allowsVerticalScrollIndicator: true,
             allowsHorizontalScrollIndicator: false
         )
+    }
+    
+    public let bounds: ListContentBounds? = nil
+    
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: RetailGridListLayout.self, appearance: self)
     }
     
     // MARK: Properties
@@ -277,7 +287,8 @@ final class RetailGridListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let layout = self.layoutAppearance.layout
         let viewSize = context.viewBounds.size
         var lastContentMaxY : CGFloat = 0.0
@@ -306,10 +317,9 @@ final class RetailGridListLayout : ListLayout
             lastContentMaxY = pages * viewSize.height
         }
 
-        self.content.contentSize = CGSize(width: viewSize.width, height: lastContentMaxY)
+        return .init(
+            contentSize: CGSize(width: viewSize.width, height: lastContentMaxY),
+            naturalContentWidth: nil
+        )
     }
-}
-
-private func + (lhs: UIEdgeInsets, rhs: UIEdgeInsets) -> UIEdgeInsets {
-    return UIEdgeInsets(top: lhs.top + rhs.top, left: lhs.left + rhs.left, bottom: lhs.bottom + rhs.bottom, right: lhs.right + rhs.right)
 }

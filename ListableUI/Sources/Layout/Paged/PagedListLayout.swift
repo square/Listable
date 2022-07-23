@@ -61,8 +61,12 @@ public struct PagedAppearance : ListLayoutAppearance
     
     /// The direction the paging layout should occur in. Defaults to `vertical`.
     public var direction: LayoutDirection
-    
+
+    public let listHeaderPosition: ListHeaderPosition = .inline
+
     public let stickySectionHeaders: Bool = false
+    
+    public let pagingBehavior: ListPagingBehavior = .none
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
@@ -73,6 +77,12 @@ public struct PagedAppearance : ListLayoutAppearance
             allowsVerticalScrollIndicator: self.showsScrollIndicators,
             allowsHorizontalScrollIndicator: self.showsScrollIndicators
         )
+    }
+    
+    public let bounds: ListContentBounds? = nil
+    
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: PagedListLayout.self, appearance: self)
     }
     
     // MARK: Properties
@@ -159,7 +169,8 @@ final class PagedListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let viewSize = self.layoutAppearance.pagingSize.size(
             for: context.viewBounds.size,
             direction: self.direction
@@ -185,9 +196,12 @@ final class PagedListLayout : ListLayout
             lastMaxY = direction.maxY(for: containerFrame)
         }
         
-        self.content.contentSize = direction.switch(
-            vertical: CGSize(width: viewSize.width, height: lastMaxY),
-            horizontal: CGSize(width: lastMaxY, height: viewSize.height)
+        return .init(
+            contentSize: direction.switch(
+                vertical: CGSize(width: viewSize.width, height: lastMaxY),
+                horizontal: CGSize(width: lastMaxY, height: viewSize.height)
+            ),
+            naturalContentWidth: nil
         )
     }
 }

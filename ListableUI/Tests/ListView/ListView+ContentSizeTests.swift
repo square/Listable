@@ -23,10 +23,12 @@ class ListView_ContentSizeTests : XCTestCase
         /// for some reason break after a few passes (eg due to measurement view cache reuse).
         
         let section = Section("section") { section in
-            section += Item(TestContent(title: "first item"), sizing: .fixed(width: 200, height: 50))
-            section += Item(TestContent(title: "second item"), sizing: .fixed(width: 200, height: 50))
+            section += Item(TestContent(title: "first item"), sizing: .fixed(width: 100, height: 50))
+            section += Item(TestContent(title: "second item"), sizing: .fixed(width: 150, height: 50))
             section += Item(TestContent(title: "third item"), sizing: .fixed(width: 200, height: 50))
         }
+        
+        let safeArea = UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
         
         for _ in 1...3 {
             self.testcase("vertical list") {
@@ -38,8 +40,12 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 100.0, height: 0.0), for: properties),
-                    CGSize(width: 100.0, height: 150.0)
+                    ListView.contentSize(in: CGSize(width: 300.0, height: 0.0), for: properties, safeAreaInsets: safeArea),
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 300.0, height: 190.0),
+                        naturalWidth: 200.0
+                    )
                 )
             }
             
@@ -55,8 +61,32 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties),
-                    CGSize(width: 100.0, height: 300.0)
+                    ListView.contentSize(in: CGSize(width: 100.0, height: 0), for: properties, safeAreaInsets: safeArea),
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 100.0, height: 300.0),
+                        naturalWidth: nil
+                    )
+                )
+            }
+            
+            self.testcase("horizontal list") {
+                let properties = ListProperties.default { list in
+                    
+                    list.layout = .table {
+                        $0.direction = .horizontal
+                    }
+                    
+                    list += section
+                }
+                                
+                XCTAssertEqual(
+                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties, safeAreaInsets: safeArea),
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 510.0, height: 100.0),
+                        naturalWidth: 50.0
+                    )
                 )
             }
             
@@ -72,8 +102,12 @@ class ListView_ContentSizeTests : XCTestCase
                 }
                 
                 XCTAssertEqual(
-                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties),
-                    CGSize(width: 300.0, height: 100.0)
+                    ListView.contentSize(in: CGSize(width: 0.0, height: 100.0), for: properties, safeAreaInsets: safeArea),
+                    
+                    MeasuredListSize(
+                        contentSize: CGSize(width: 300.0, height: 100.0),
+                        naturalWidth: nil
+                    )
                 )
             }
         }

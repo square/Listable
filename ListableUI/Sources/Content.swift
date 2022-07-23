@@ -19,6 +19,13 @@ public struct Content
     /// the list will reload without animation.
     public var identifier : AnyHashable?
 
+    /// The context for the entire list.
+    /// If this value changes, all measurements will be discarded and re-measured.
+    ///
+    /// Using the `ContentContext` can simplify code: If your screen's traits
+    /// change, pass them in here vs requiring every item to check the screen traits.
+    public var context : ContentContext?
+    
     /// The refresh control, if any, associated with the list.
     public var refreshControl : RefreshControl?
     
@@ -104,6 +111,7 @@ public struct Content
     /// All parameters are optional, pass only what you need to customize.
     public init(
         identifier : AnyHashable? = nil,
+        context : ContentContext? = nil,
         refreshControl : RefreshControl? = nil,
         containerHeader : AnyHeaderFooterConvertible? = nil,
         header : AnyHeaderFooterConvertible? = nil,
@@ -112,6 +120,7 @@ public struct Content
         sections : [Section] = []
     ) {
         self.identifier = identifier
+        self.context = context
         
         self.refreshControl = refreshControl
         

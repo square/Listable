@@ -15,7 +15,7 @@ public extension Item where Content == EmbeddedList
     /// list, or vice versa.
     ///
     /// ```
-    /// section += .list(
+    /// section += Item.list(
     ///     "my-identifier",
     ///     sizing: .fixed(height: 200)
     /// ) { list in

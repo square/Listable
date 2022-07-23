@@ -151,7 +151,7 @@ extension ItemReordering {
     ///     }
     /// }
     /// ```
-    public class GestureRecognizer : UIPanGestureRecognizer
+    public class GestureRecognizer : UILongPressGestureRecognizer
     {
         private typealias OnStart = () -> Bool
         private typealias OnMove = (GestureRecognizer) -> ()
@@ -167,9 +167,7 @@ extension ItemReordering {
             super.init(target: target, action: action)
             
             self.addTarget(self, action: #selector(updated))
-            
-            self.minimumNumberOfTouches = 1
-            self.maximumNumberOfTouches = 1
+            self.minimumPressDuration = 0
         }
         
         /// Applies the actions from the ``ReorderingActions`` to the gesture recognizer,
@@ -182,34 +180,37 @@ extension ItemReordering {
         }
         
         func reorderPosition(in collectionView : UIView) -> CGPoint? {
-            
-            guard let initial = self.initialCenter else {
+            guard
+                let initialPoint = self.initialTouchPoint,
+                let cell = self.view?.firstSuperview(ofType: UICollectionViewCell.self)
+            else {
                 return nil
             }
             
-            let translation = self.translation(in: collectionView)
+            let translation = self.location(in: collectionView)
             
+            let initialPointInCell = cell.convert(initialPoint, from: view)
+
+            let initialPointAndCenterDiff = CGPoint(
+                x: cell.contentView.center.x - initialPointInCell.x,
+                y: cell.contentView.center.y - initialPointInCell.y
+            )
+
             return CGPoint(
-                x: initial.x + translation.x,
-                y: initial.y + translation.y
+                x: translation.x + initialPointAndCenterDiff.x,
+                y: translation.y + initialPointAndCenterDiff.y
             )
         }
-        
-        private var initialCenter : CGPoint? = nil
-                
+
+        private var initialTouchPoint : CGPoint? = nil
+
         @objc private func updated()
         {
             switch self.state {
             case .possible: break
             case .began:
-                let center = self.view?.firstSuperview(ofType: UICollectionViewCell.self)?.center
-                
-                if let center = center {
-                    if self.onStart?() == true {
-                        self.initialCenter = center
-                    } else {
-                        self.state = .cancelled
-                    }
+                if self.onStart?() == true {
+                    initialTouchPoint = location(in: view)
                 } else {
                     self.state = .cancelled
                 }
@@ -218,11 +219,11 @@ extension ItemReordering {
 
             case .ended:
                 self.onEnd?(.finished)
-                self.initialCenter = nil
+                self.initialTouchPoint = nil
                 
             case .cancelled, .failed:
                 self.onEnd?(.cancelled)
-                self.initialCenter = nil
+                self.initialTouchPoint = nil
                 
             @unknown default: listableInternalFatal()
             }

@@ -53,10 +53,10 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         
         let defaults = self.content.defaultHeaderFooterProperties
         
-        self.sizing = finalValue(from: sizing, defaults.sizing, .thatFits(.noConstraint))
-        self.layouts = finalValue(from: layouts, defaults.layouts, .init())
-        
-        self.onTap = onTap
+        self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
+        self.layouts = layouts ?? defaults.layouts ?? .init()
+        self.onTap = onTap ?? defaults.onTap
+        self.debuggingIdentifier = defaults.debuggingIdentifier
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
     }
@@ -158,21 +158,5 @@ extension HeaderFooter : SignpostLoggable
             identifier: self.debuggingIdentifier,
             instanceIdentifier: nil
         )
-    }
-}
-
-
-private func finalValue<Value>(
-    from provided : Value?,
-    _ contentDefault : Value?,
-    _ default : @autoclosure () -> Value
-) -> Value
-{
-    if let value = provided {
-        return value
-    } else if let value = contentDefault {
-        return value
-    } else {
-        return `default`()
     }
 }

@@ -62,6 +62,8 @@ public struct SwipeAction {
 
     public var title: String?
     public var backgroundColor: UIColor?
+    /// Sets the text and image (image must use the template rendering mode) color.
+    public var tintColor: UIColor
     public var image: UIImage?
 
     public var handler: Handler
@@ -70,11 +72,13 @@ public struct SwipeAction {
     public init(
         title: String,
         backgroundColor: UIColor,
+        tintColor: UIColor = .white,
         image: UIImage? = nil,
         handler: @escaping Handler
     ) {
         self.title = title
         self.backgroundColor = backgroundColor
+        self.tintColor = tintColor
         self.image = image
         self.handler = handler
     }

@@ -92,5 +92,21 @@ final class ReorderingViewController : ListViewController
                 item.reordering = ItemReordering(sections: .current)
             }
         }
+
+        list += Section("4") { section in
+            section.header = DemoHeader(title: "Long press")
+            
+            section += Item(DemoItem(text: "3,0 Row (long press)", requiresLongPress: true)) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+
+            section += Item(DemoItem(text: "3,1 Row (long press)", requiresLongPress: true)) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+
+            section += Item(DemoItem(text: "3,2 Row (long press)", requiresLongPress: true)) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+        }
     }
 }

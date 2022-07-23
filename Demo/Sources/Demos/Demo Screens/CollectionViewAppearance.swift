@@ -33,13 +33,15 @@ extension LayoutDescription
             )
             
             $0.layout = .init(
+                headerToFirstSectionSpacing: 20.0,
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
                 itemSpacing: 10.0,
                 itemToSectionFooterSpacing: 10.0
             )
-            
+
+            $0.listHeaderPosition = .fixed
             $0.stickySectionHeaders = true
             
             configure(&$0)
@@ -132,6 +134,7 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
+    var requiresLongPress = false
     
     var identifierValue: String {
         return self.text
@@ -141,7 +144,7 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
-        Row { row in
+       let row = Row { row in
             row.verticalAlignment = .center
             
             row.add(child: Label(text: self.text) {
@@ -157,18 +160,23 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
                         image: UIImage(named: "ReorderControl"),
                         contentMode: .center
                     )
-                        .listReorderGesture(with: info.reorderingActions)
+                        .listReorderGesture(with: info.reorderingActions, begins: requiresLongPress ? .onLongPress : .onTap)
                 )
             }
         }
         .inset(horizontal: 15.0, vertical: 13.0)
-        .accessibilityElement(label: self.text, value: nil, traits: [.button])
+        
+        if !info.isReorderable {
+            // Only wrap the row in an accessibility element if we arent showing the reorder gesture.
+            return AccessibilityElement(label: self.text, value: nil, traits: [.button], wrapping: row)
+        }
+        return row
     }
     
     func backgroundElement(with info: ApplyItemContentInfo) -> Element?
     {
         Box(
-            backgroundColor: .white,
+            backgroundColor: info.state.isReordering ? .white(0.8) : .white,
             cornerStyle: .rounded(radius: 8.0)
         )
     }

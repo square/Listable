@@ -18,6 +18,14 @@ final class PresentationState
         
     var refreshControl : RefreshControlState?
     
+    var context : ContentContext? {
+        didSet {
+            guard oldValue != context else { return }
+            
+            self.resetAllCachedSizes()
+        }
+    }
+    
     let containerHeader : HeaderFooterViewStatePair
     let header : HeaderFooterViewStatePair
     let footer : HeaderFooterViewStatePair
@@ -79,7 +87,7 @@ final class PresentationState
         /// as well as for testing purposes.
         
         self.containerHeader = .init(state: SectionState.newHeaderFooterState(
-            with: content.header,
+            with: content.containerHeader,
             performsContentCallbacks: false
         ))
         
@@ -260,13 +268,21 @@ final class PresentationState
     // MARK: Height Caching
     //
     
+    // Exposed for testing only.
+    var onResetCachedSizes : () -> () = {}
+    
     func resetAllCachedSizes()
     {
+        containerHeader.state?.resetCachedSizes()
+        header.state?.resetCachedSizes()
+        footer.state?.resetCachedSizes()
+        overscrollFooter.state?.resetCachedSizes()
+        
         self.sections.forEach { section in
-            section.items.forEach { item in
-                item.resetCachedSizes()
-            }
+            section.resetAllCachedSizes()
         }
+        
+        onResetCachedSizes()
     }
     
     //
@@ -277,6 +293,7 @@ final class PresentationState
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         slice : Content.Slice,
         reason: ApplyReason,
+        animated : Bool,
         dependencies: ItemStateDependencies,
         updateCallbacks : UpdateCallbacks,
         loggable : SignpostLoggable?
@@ -301,6 +318,7 @@ final class PresentationState
             ),
             new: slice.content.containerHeader,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -313,6 +331,7 @@ final class PresentationState
             ),
             new: slice.content.header,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -325,6 +344,7 @@ final class PresentationState
             ),
             new: slice.content.footer,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -337,6 +357,7 @@ final class PresentationState
             ),
             new: slice.content.overscrollFooter,
             reason: reason,
+            animated: animated,
             updateCallbacks: updateCallbacks,
             environment: environment
         )
@@ -360,6 +381,7 @@ final class PresentationState
                     new: new,
                     changes: changes,
                     reason: reason,
+                    animated: animated,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
@@ -370,6 +392,7 @@ final class PresentationState
                     new: new,
                     changes: changes,
                     reason: reason,
+                    animated: animated,
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )

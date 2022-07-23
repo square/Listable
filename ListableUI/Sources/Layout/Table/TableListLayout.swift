@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 
-public extension LayoutDescription
+extension LayoutDescription
 {
-    static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
+    public static func table(_ configure : (inout TableAppearance) -> () = { _ in }) -> Self
     {
         TableListLayout.describe(appearance: configure)
     }
@@ -108,20 +108,30 @@ public struct TableAppearance : ListLayoutAppearance
     
     /// How the layout should flow, either horizontally or vertically.
     public var direction: LayoutDirection
-    
+
+    /// How the list header should be positioned when content is scrolled.
+    public var listHeaderPosition: ListHeaderPosition
+
     /// If sticky section headers should be leveraged in the layout.
     public var stickySectionHeaders : Bool
+    
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
     
     /// The properties applied to the scroll view backing the list.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
             isPagingEnabled: false,
-            contentInsetAdjustmentBehavior: .scrollableAxes,
-            allowsBounceVertical: true,
-            allowsBounceHorizontal: true,
+            contentInsetAdjustmentBehavior: self.contentInsetAdjustmentBehavior,
+            allowsBounceVertical: self.bounceOnUnderflow,
+            allowsBounceHorizontal: self.bounceOnUnderflow,
             allowsVerticalScrollIndicator: true,
             allowsHorizontalScrollIndicator: true
         )
+    }
+    
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: TableListLayout.self, appearance: self)
     }
     
     // MARK: Properties
@@ -130,6 +140,11 @@ public struct TableAppearance : ListLayoutAppearance
     /// for items to be considered in the same group. For example, if this value is 1, and
     /// items are spaced 2pts apart, the items will be in a new group.
     public var itemPositionGroupingHeight : CGFloat
+    
+    /// How to adjust the safe area insets of the list view.
+    public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
+    
+    public var bounceOnUnderflow : Bool
     
     /// The bounds of the content of the list, which can be optionally constrained.
     public var bounds : ListContentBounds?
@@ -142,14 +157,22 @@ public struct TableAppearance : ListLayoutAppearance
     /// Creates a new `TableAppearance` object.
     public init(
         direction : LayoutDirection = .vertical,
+        listHeaderPosition: ListHeaderPosition = .inline,
         stickySectionHeaders : Bool = true,
+        pagingBehavior : ListPagingBehavior = .none,
         itemPositionGroupingHeight : CGFloat = 0.0,
+        contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior = .scrollableAxes,
+        bounceOnUnderflow : Bool = true,
         bounds : ListContentBounds? = nil,
         layout : Layout = .init()
     ) {
         self.direction = direction
+        self.listHeaderPosition = listHeaderPosition
         self.stickySectionHeaders = stickySectionHeaders
+        self.pagingBehavior = pagingBehavior
         self.itemPositionGroupingHeight = itemPositionGroupingHeight
+        self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
+        self.bounceOnUnderflow = bounceOnUnderflow
         self.bounds = bounds
         self.layout = layout
     }
@@ -171,7 +194,7 @@ extension TableAppearance
             width : CustomWidth = .default
         ) {
             self.itemSpacing = itemSpacing
-            self.itemSpacing = itemSpacing
+            self.itemToSectionFooterSpacing = itemToSectionFooterSpacing
             
             self.width = width
         }
@@ -253,8 +276,7 @@ extension TableAppearance
             }
         }
     }
-    
-    
+        
     /// Layout options for the list.
     public struct Layout : Equatable
     {
@@ -430,6 +452,8 @@ final class TableListLayout : ListLayout
 
         let size = headerFooter.measurer(measureInfo)
         
+        headerFooter.measuredSize = size
+        
         // Write the measurement and position out to the header/footer.
         
         self.direction.switch(
@@ -451,7 +475,8 @@ final class TableListLayout : ListLayout
     func layout(
         delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
             safeAreaInsets: context.safeAreaInsets,
@@ -490,6 +515,10 @@ final class TableListLayout : ListLayout
         
         delegate?.listViewLayoutUpdatedItemPositions()
         
+        //
+        // Sizing
+        //
+        
         var contentBottom : CGFloat = 0.0
                 
         //
@@ -498,7 +527,7 @@ final class TableListLayout : ListLayout
         
         self.layout(
             headerFooter: self.content.containerHeader,
-            width: self.content.containerHeader.layouts.table.width.merge(with: rootWidth),
+            width: self.content.containerHeader.layouts.table.width.merge(with: .fill),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
             contentBottom: contentBottom,
@@ -603,6 +632,8 @@ final class TableListLayout : ListLayout
                     
                     let size = item.measurer(measureInfo)
                     
+                    item.measuredSize = size
+                    
                     self.direction.switch(
                         vertical: {
                             item.x = itemPosition.origin
@@ -663,6 +694,8 @@ final class TableListLayout : ListLayout
                         )
                                                 
                         let size = item.measurer(measureInfo)
+                        
+                        item.measuredSize = size
                         
                         let height = self.direction.switch(vertical: size.height, horizontal: size.width)
                         
@@ -766,7 +799,15 @@ final class TableListLayout : ListLayout
         // Remaining Calculations
         //
         
-        self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+        return .init(
+            contentSize: direction.size(for: CGSize(width: viewWidth, height: contentBottom)),
+            
+            naturalContentWidth: direction.switch {
+                content.maxValue(for: \.measuredSize.width) + bounds.padding.right + bounds.padding.left
+            } horizontal: {
+                content.maxValue(for: \.measuredSize.height) + bounds.padding.top + bounds.padding.bottom
+            }
+        )
     }
     
     private func setItemPositions()

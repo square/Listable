@@ -74,29 +74,35 @@ final class SupplementaryContainerView : UICollectionReusableView
     // MARK: Content
     //
     
-    var headerFooter : AnyPresentationHeaderFooterState? {
-        didSet {
-            guard oldValue !== self.headerFooter else {
-                return
-            }
+    func setHeaderFooter(_ new : AnyPresentationHeaderFooterState?, animated : Bool) {
+        guard headerFooter !== new else {
+            return
+        }
+        
+        let old = headerFooter
+        
+        headerFooter = new
+        
+        let cache = self.reuseCache!
+        
+        if let old = old, let content = self.content {
+            old.enqueueReusableHeaderFooterView(content, in: cache)
+        }
+        
+        if let headerFooter = self.headerFooter {
+            let newContent = headerFooter.dequeueAndPrepareReusableHeaderFooterView(
+                in: cache,
+                frame: self.bounds,
+                environment: self.environment
+            )
             
-            let cache = self.reuseCache!
-            
-            if let old = oldValue, let content = self.content {
-                old.enqueueReusableHeaderFooterView(content, in: cache)
-            }
-            
-            if let headerFooter = self.headerFooter {
-                self.content = headerFooter.dequeueAndPrepareReusableHeaderFooterView(
-                    in: cache,
-                    frame: self.bounds,
-                    environment: self.environment
-                )
-            } else {
-                self.content = nil
-            }
+            setContent(newContent, animated: animated)
+        } else {
+            setContent(nil, animated: animated)
         }
     }
+    
+    private(set) var headerFooter : AnyPresentationHeaderFooterState?
     
     /// Note: Using implicitly unwrapped optionals because we cannot do
     /// initializer injection in this type – `UICollectionView` calls `init(frame:)`,
@@ -107,19 +113,50 @@ final class SupplementaryContainerView : UICollectionReusableView
     var environment : ListEnvironment!
     var reuseCache : ReusableViewCache!
     
-    private(set) var content : UIView? {
-        didSet {
-            if let old = oldValue {
+    func setContent(_ new : UIView?, animated: Bool) {
+        
+        guard content !== new else { return }
+        
+        let old = content
+        
+        content = new
+        
+        if let old = old {
+            if animated {
+                UIView.animate(withDuration: 0.2) {
+                    old.alpha = 0.0
+                } completion: { _ in
+                    old.removeFromSuperview()
+                    
+                    // Reset to an expected alpha in case the view is reused.
+                    old.alpha = 1.0
+                }
+
+            } else {
                 old.removeFromSuperview()
             }
-            
-            if let new = self.content {
+        }
+        
+        if let new = self.content {
+            if animated {
+                UIView.performWithoutAnimation {
+                    self.addSubview(new)
+                    new.alpha = 0.0
+                }
+                
+                UIView.animate(withDuration: 0.2) {
+                    new.alpha = 1.0
+                }
+            } else {
+                new.alpha = 1.0
                 self.addSubview(new)
             }
-            
-            self.setNeedsLayout()
         }
+        
+        self.setNeedsLayout()
     }
+    
+    private(set) var content : UIView?
     
     //
     // MARK: Initialization
@@ -177,7 +214,7 @@ final class SupplementaryContainerView : UICollectionReusableView
     {
         super.prepareForReuse()
         
-        self.headerFooter = nil
+        setHeaderFooter(nil, animated: false)
     }
     
     //

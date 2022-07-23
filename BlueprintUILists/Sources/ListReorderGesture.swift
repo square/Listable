@@ -38,13 +38,25 @@ import UIKit
 /// ```
 public struct ListReorderGesture : Element
 {
+    public enum Begins {
+        case onTap
+        case onLongPress
+    }
+
     /// The element which is being wrapped by the reorder gesture.
     public var element : Element
     
     /// If the gesture is enabled or not.
     public var isEnabled : Bool
+
+    /// Condition to start the reorder gesture
+    public var begins: Begins
     
     let actions : ReorderingActions
+    
+    /// The acccessibility Label of the item that will be reordered.
+    /// This will be set as the gesture's accessibilityValue to provide a richer VoiceOver utterance.
+    public var reorderItemAccessibilityLabel : String? = nil
     
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
@@ -53,11 +65,14 @@ public struct ListReorderGesture : Element
     public init(
         isEnabled : Bool = true,
         actions : ReorderingActions,
+        begins: Begins = .onTap,
         wrapping element : Element
     ) {
         self.isEnabled =  isEnabled
         
         self.actions = actions
+
+        self.begins = begins
         
         self.element = element
     }
@@ -78,21 +93,34 @@ public struct ListReorderGesture : Element
             }
             
             config.apply { view in
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = ListableLocalizedStrings.ReorderGesture.accessibilityLabel
+                view.accessibilityValue = reorderItemAccessibilityLabel
+                view.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
+                view.accessibilityTraits.formUnion(.button)
+                view.accessibilityCustomActions = accessibilityActions()
+                
                 view.recognizer.isEnabled = self.isEnabled
                 
                 view.recognizer.apply(actions: self.actions)
+                
+                view.recognizer.minimumPressDuration = begins == .onLongPress ? 0.5 : 0.0
             }
         }
     }
+
 }
 
 
 public extension Element
 {
     /// Wraps the element in a re-order gesture.
-    func listReorderGesture(with actions : ReorderingActions, isEnabled : Bool = true) -> Element
-    {
-        ListReorderGesture(isEnabled: isEnabled, actions: actions, wrapping: self)
+    func listReorderGesture(
+        with actions : ReorderingActions,
+        isEnabled : Bool = true,
+        begins: ListReorderGesture.Begins = .onTap
+    ) -> Element {
+        ListReorderGesture(isEnabled: isEnabled, actions: actions, begins: begins, wrapping: self)
     }
 }
 
@@ -119,6 +147,23 @@ fileprivate extension ListReorderGesture
         @available(*, unavailable)
         required init?(coder aDecoder: NSCoder) {
             listableInternalFatal()
+        }
+    }
+}
+
+
+fileprivate extension ListReorderGesture {
+    func accessibilityActions() -> [UIAccessibilityCustomAction]? {
+        if #available(iOS 13.0, *) {
+            let up = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
+                return self.actions.accessibilityMove(direction: .up)
+            }
+            let down = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
+                return self.actions.accessibilityMove(direction: .down)
+            }
+            return [up, down]
+        } else {
+            return nil
         }
     }
 }

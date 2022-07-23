@@ -61,6 +61,7 @@ extension PresentationState
             with state : AnyPresentationHeaderFooterState?,
             new: AnyHeaderFooterConvertible?,
             reason: ApplyReason,
+            animated : Bool,
             updateCallbacks : UpdateCallbacks,
             environment: ListEnvironment
         ) {
@@ -68,7 +69,7 @@ extension PresentationState
             
             if self.state !== state {
                 self.state = state
-                self.visibleContainer?.headerFooter = state
+                self.visibleContainer?.setHeaderFooter(state, animated: reason.shouldAnimate && animated)
             } else {
                 if let state = state, let new = new {
                     state.set(

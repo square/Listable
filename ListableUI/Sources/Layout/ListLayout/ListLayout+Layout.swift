@@ -22,7 +22,7 @@ extension ListProperties {
         in fittingSize : CGSize,
         safeAreaInsets : UIEdgeInsets,
         itemLimit : Int?
-    ) -> AnyListLayout
+    ) -> (AnyListLayout, ListLayoutLayoutContext)
     {
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
@@ -55,15 +55,63 @@ extension ListProperties {
         
         /// 2b) Measure the content.
         
-        layout.layout(
-            delegate: nil,
-            in: .init(
-                viewBounds: CGRect(origin: .zero, size: fittingSize),
+        let layoutContext = ListLayoutLayoutContext(
+            viewBounds: CGRect(origin: .zero, size: fittingSize),
+            safeAreaInsets: safeAreaInsets,
+            contentInset: .zero,
+            adjustedContentInset: .listAdjustedContentInset(
+                with: layout.scrollViewProperties.contentInsetAdjustmentBehavior,
+                direction: layout.direction,
                 safeAreaInsets: safeAreaInsets,
-                environment: self.environment
-            )
+                contentInset: .zero
+            ),
+            environment: self.environment
         )
         
-        return layout
+        layout.performLayout(
+            with: nil,
+            in: layoutContext
+        )
+        
+        return (layout, layoutContext)
+    }
+}
+
+extension UIEdgeInsets {
+    
+    /// Because `ListProperties.makeLayout(...)` does not deal with an actual
+    /// `UIScrollView`, we need to calculate `adjustedContentInset` ourselves,
+    /// to pass to `layout.performLayout(...)`.
+    static func listAdjustedContentInset(
+        with contentInsetAdjustmentBehaviour : ContentInsetAdjustmentBehavior,
+        direction : LayoutDirection,
+        safeAreaInsets : UIEdgeInsets,
+        contentInset : UIEdgeInsets
+    ) -> UIEdgeInsets
+    {
+        switch contentInsetAdjustmentBehaviour {
+        case .automatic, .always:
+            return safeAreaInsets + contentInset
+            
+        case .scrollableAxes:
+            switch direction {
+            case .vertical:
+                return UIEdgeInsets(
+                    top: safeAreaInsets.top + contentInset.top,
+                    left: 0,
+                    bottom: safeAreaInsets.bottom + contentInset.bottom,
+                    right: 0
+                )
+            case .horizontal:
+                return UIEdgeInsets(
+                    top: 0,
+                    left: safeAreaInsets.left + contentInset.left,
+                    bottom: 0,
+                    right: safeAreaInsets.right + contentInset.right
+                )
+            }
+        case .never:
+            return .zero
+        }
     }
 }

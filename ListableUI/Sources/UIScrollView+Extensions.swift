@@ -11,7 +11,7 @@ extension UIScrollView {
 
     /// The frame of the collection view inset by the adjusted content inset,
     /// i.e., the visible frame of the content.
-    var contentFrame: CGRect {
+    var visibleContentFrame: CGRect {
         return self.bounds.inset(by: self.adjustedContentInset)
     }
 }

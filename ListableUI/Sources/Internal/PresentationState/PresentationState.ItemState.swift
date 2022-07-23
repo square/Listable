@@ -299,6 +299,9 @@ extension PresentationState
             } else {
                 cell.contentContainer.deregisterSwipeIfNeeded()
             }
+            
+            cell.isReorderable = self.model.reordering != nil
+   
         }
         
         func applyToVisibleCell(with environment : ListEnvironment)
@@ -507,7 +510,7 @@ extension PresentationState
             if self.isReordering {
                 return
             }
-            
+
             self.activeReorderEventInfo = .init(
                 originalIndexPath: originalIndexPath
             )

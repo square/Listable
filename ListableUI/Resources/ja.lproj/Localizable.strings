@@ -1,0 +1,12 @@
+/* title for an accessibility action that will move a selected cell down one position in the list. */
+"reorder.AccessibilityAction.MoveDown" = "下に移動";
+
+/* title for an accessibility action that will move a selected cell up one position in the list. */
+"reorder.AccessibilityAction.MoveUp" = "上に移動";
+
+/* Accessibility hint for the reorder control in an item */
+"reorder.AccessibilityHint" = "ダブルタップして長押し、音が鳴ったらドラッグして並べ替えます。";
+
+/* Accessibility label for the reorder control on an item */
+"reorder.AccessibilityLabel" = "並べ替え";
+

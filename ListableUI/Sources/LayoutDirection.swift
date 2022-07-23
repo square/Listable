@@ -189,6 +189,16 @@ extension LayoutDirection
         }
     }
     
+    /// `.vertical`: Returns the **minY** of the frame.
+    /// `.horizontal`: Returns the **minX** of the frame.
+    public func minY(for frame : CGRect) -> CGFloat
+    {
+        switch self {
+        case .vertical: return frame.minY
+        case .horizontal: return frame.minX
+        }
+    }
+    
     /// `.vertical`: Returns the **maxX** of the frame.
     /// `.horizontal`: Returns the **maxY** of the frame.
     public func maxX(for frame : CGRect) -> CGFloat

@@ -4,11 +4,176 @@
 
 ### Added
 
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [5.2.1] - 2022-07-21
+
+### Fixed
+
+- Fix a crash when initializing `Item`.
+
+# [5.2.0] - 2022-07-20
+
+### Changed
+
+- `DefaultItemProperties` and `DefaultHeaderFooterProperties` now have all properties for each of `Item` and `HeaderFooter`.
+
+# [5.1.0] - 2022-07-20
+
+### Fixed
+
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the container header by falling back to `sticky` behavior if there's a container header.
+- Supplementary items will now animate when their position in the layout changes.
+- Fix an issue where horizontal list views would erroneously inset for the keyboard. Horizontal lists should not adjust for the keyboard, since it ends up causing vertical scrolling.
+
+### Added
+
+- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
+
+# [5.0.1] - 2022-07-19
+
+### Fixed
+
+- Ensure `Optional` values from `DefaultItemProperties` and `DefaultHeaderFooterProperties` are respected.
+
+# [5.0.0] - 2022-07-18
+
+### Added
+
+- `List` measurement now has options to include the `safeAreaInsets` from the `Environment` if the `contentInsetAdjustmentBehavior` will affect the layout.
+
+### Changed
+
+- `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
+
+# [4.4.0] - 2022-07-18
+
+### Fixed
+
+- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
+
+### Added
+
+- Added `stickyListHeader` to layout / appearance, allowing you to pin list headers to the top of the content.
+
+# [4.3.1] - 2022-07-11
+
+### Fixed
+
+- Ensure supplementary views are properly reused.
+
+# [4.3.0] - 2022-07-02
+
+### Fixed
+
+- Supplementary views will now properly animate (fade) in and out when they are added or removed.
+
+### Added
+
+- Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
+
+# [4.2.0] - 2022-06-01
+
+### Added
+
+- Added a pinning option `pin(to:)` which is very similar to `scrollToItem(onInsertOf:)` except that you don't specify an `onInsertOf` item.
+- Adds a `bottomScrollOffset` property to `ListScrollPositionInfo`. You can use this to fine-tune pinning by only pinning when within a certain distance of the bottom scroll position.
+
+# [4.1.0] - 2022-05-23
+
+### Changed
+
+- Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
+
+- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
+they were inset with the content. 
+
+# [4.0.0] - 2022-04-07
+
+### Removed
+
+- When using `BlueprintUILists`, layout is no longer forced during element updates. This will cause animations to no longer be inherited. Please use `.transition`, etc. to control animations.
+
+# [3.2.1] - 2022-03-25
+
+### Removed
+
+- Removed item reordering with VoiceOver as it caused issues with KIF tests.
+
+# [3.2.0] - 2022-03-21
+
+### Fixed
+- Fixed list measurements with container headers.
+
+### Added
+- Item reordering is now possible when using VoiceOver.
+
+# [3.1.0] - 2022-02-08
+
+### Added
+
+- `ListReorderGesture.Begins` added. This controls when the reorder gesture starts: `onTap` and `onLongPress`.
+
+# [3.0.0] - 2022-01-15
+
+### Fixed
+
+- `TableAppearance.ItemLayout` now properly initializes the `itemToSectionFooterSpacing` value.
+- A swipe actions memory leak has been fixed for `ItemCell.ContentContainerView`.
+
+### Added
+
+- `LayoutDescription` now conforms to `Equatable`.
+- `ListLayoutAppearance` now has a `func` to modify the default layout.
+- You can now construct a layout description from a `ListLayoutAppearance`, allowing the underlying `ListLayout` to remain internal to a module.
+
+# [2.0.0] - 2021-12-15
+
+### Changed
+
+- The signature of `ListLayout.layout(delegate:in:)` has been changed to return a `ListLayoutResult` value, to make it clearer which values must be provided as the output of a layout.
+
+# [1.0.2] - 2021-12-14
+
+### Changed
+
+- When measuring a `List` in an unconstrained size constraint, and `.fillParent` is passed, a better assertion message is provided.
+
+### Fixed
+
+- Ensure that `.fillParent` `List` measurements returns the right height.
+
+# [1.0.1] - 2021-12-06
+
+### Added
+
+- You may now set the `contentInsetAdjustmentBehavior` on `.table` layouts. This is useful when presenting in a sheet, to more directly control the safe area inset.
+
+- You can now control underflow bounce behavior on `.table` layouts, via `bounceOnUnderflow`.
+
+# [1.0.0] - 2021-12-06
+
+### Fixed
+
+- Insert and removal animations for items now respect `UIAccessibility.isReduceMotionEnabled`, falling back to `.fade` if `isReduceMotionEnabled` is true.
+
+### Added
+
 - [Added support for `.horizontal` `.table` layouts](https://github.com/kyleve/Listable/pull/314). To get a horizontal table; just set the `layout.direction = .horizontal` when configuring your list's layout. Additionally, some properties were renamed from left/right to leading/trailing to better reflect they can now be on the left/top and right/bottom of a list view, respectively.
 
 - Expose `layoutAppearanceProperties` on `LayoutDescription`, to access standard layout appearance properties without creating an instance of the backing layout.
 
 - The `.flow` layout type has been added, to support flow and grid style layouts.
+
+- `ListView.contentSize` will now also provide access to the natural width of a layout if the layout supports natural width calculation. This is useful, for example, to show a `.table` layout in a popover – you can now know how wide to render the popover.
+
+- Added `.pagingBehaviour` to `.table` and `.flow` style layouts, which allows implementing carousel-style layouts, by enabling scroll paging alongside item boundaries.
 
 ### Removed
 
@@ -20,13 +185,9 @@
 
 - `scrollViewProperties` has moved from `ListLayout` to `ListLayoutAppearance`.
 
-- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription functions no longer take an escaping closure.
+- The various `.table { ... }`, `.paged { ... }`, etc, `LayoutDescription` functions no longer take an escaping closure.
 
 - `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
-
-### Misc
-
-# Past Releases
 
 # [0.30.1] - 2021-11-16
 
@@ -561,7 +722,26 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/0.30.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/5.2.1...HEAD
+[5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
+[5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0
+[5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
+[5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
+[4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
+[4.3.1]: https://github.com/kyleve/Listable/compare/4.3.0...4.3.1
+[4.3.0]: https://github.com/kyleve/Listable/compare/4.2.0...4.3.0
+[4.2.0]: https://github.com/kyleve/Listable/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/kyleve/Listable/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/kyleve/Listable/compare/3.2.1...4.0.0
+[3.2.1]: https://github.com/kyleve/Listable/compare/3.2.0...3.2.1
+[3.2.0]: https://github.com/kyleve/Listable/compare/3.1.0...3.2.0
+[3.1.0]: https://github.com/kyleve/Listable/compare/3.0.0...3.1.0
+[3.0.0]: https://github.com/kyleve/Listable/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/kyleve/Listable/compare/1.0.2...2.0.0
+[1.0.2]: https://github.com/kyleve/Listable/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
 [0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
 [0.30.0]: https://github.com/kyleve/Listable/compare/0.29.3...0.30.0
 [0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3

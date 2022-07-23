@@ -105,9 +105,15 @@ public struct FlowAppearance : ListLayoutAppearance {
     
     /// The direction the flow layout will be laid out in.
     public var direction: LayoutDirection
+
+    /// How the list header should be positioned when content is scrolled.
+    public var listHeaderPosition: ListHeaderPosition
     
     /// If sections should have sticky headers, staying visible until the section is scrolled off screen.
     public var stickySectionHeaders: Bool
+    
+    /// How paging is performed when a drag event ends.
+    public var pagingBehavior : ListPagingBehavior
     
     /// The properties of the backing `UIScrollView`.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
@@ -119,6 +125,10 @@ public struct FlowAppearance : ListLayoutAppearance {
             allowsVerticalScrollIndicator: true,
             allowsHorizontalScrollIndicator: true
         )
+    }
+    
+    public func toLayoutDescription() -> LayoutDescription {
+        LayoutDescription(layoutType: FlowListLayout.self, appearance: self)
     }
     
     // MARK: Properties
@@ -141,15 +151,20 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// Creates a new `FlowAppearance`.
     public init(
         direction: LayoutDirection = .vertical,
+        stickyListHeader: Bool = false,
         stickySectionHeaders: Bool? = nil,
-        bounds : ListContentBounds? = nil,
+        pagingBehavior : ListPagingBehavior = .none,
         rowUnderflowAlignment : RowUnderflowAlignment = .leading,
         rowItemsAlignment : RowItemsAlignment = .top,
         itemSizing : ItemSizing = .natural,
+        
+        bounds : ListContentBounds? = nil,
         spacings : Spacings = .init()
     ) {
         self.direction = direction
-        
+
+        self.listHeaderPosition = .inline
+
         self.stickySectionHeaders = {
             if let stickySectionHeaders = stickySectionHeaders {
                 return stickySectionHeaders
@@ -161,12 +176,14 @@ public struct FlowAppearance : ListLayoutAppearance {
             }
         }()
         
-        self.bounds = bounds
-        
+        self.pagingBehavior = pagingBehavior
+                
         self.rowUnderflowAlignment = rowUnderflowAlignment
         self.rowItemsAlignment = rowItemsAlignment
         
         self.itemSizing = itemSizing
+        
+        self.bounds = bounds
         
         self.spacings = spacings
     }
@@ -580,7 +597,8 @@ final class FlowListLayout : ListLayout {
     func layout(
         delegate: CollectionViewLayoutDelegate?,
         in context: ListLayoutLayoutContext
-    ) {
+    ) -> ListLayoutResult
+    {
         // 1) Calculate the base values used to drive the layout.
         
         let boundsContext = ListContentBounds.Context(
@@ -617,7 +635,7 @@ final class FlowListLayout : ListLayout {
         
         self.layout(
             headerFooter: self.content.containerHeader,
-            width: rootWidth,
+            width: .fill,
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
             contentBottom: contentBottom,
@@ -825,7 +843,10 @@ final class FlowListLayout : ListLayout {
         // Remaining Calculations
         //
         
-        self.content.contentSize = self.direction.size(for: CGSize(width: viewWidth, height: contentBottom))
+        return .init(
+            contentSize: direction.size(for: CGSize(width: viewWidth, height: contentBottom)),
+            naturalContentWidth: nil
+        )
     }
     
     /// Sets the x value for each item in a row, returning the item spacing used for the row.
