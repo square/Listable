@@ -239,7 +239,7 @@ struct ChoiceItem : BlueprintItemContent, Equatable
     }
 }
 
-struct ToggleItem : BlueprintItemContent
+struct ToggleItem : BlueprintItemContent, KeyPathEquivalentContent
 {
     var content : Content
     
@@ -253,9 +253,8 @@ struct ToggleItem : BlueprintItemContent
     
     var onToggle : (Bool) -> ()
     
-    func isEquivalent(to other: ToggleItem) -> Bool
-    {
-        return self.content == other.content
+    static func isEquivalent(using comparison: inout KeyPathEquivalent<ToggleItem>) {
+        comparison.add(\.content)
     }
     
     var identifierValue: String {

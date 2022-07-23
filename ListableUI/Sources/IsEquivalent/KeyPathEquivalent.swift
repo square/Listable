@@ -20,26 +20,25 @@ public struct KeyPathEquivalent<Value> {
         configure(&self)
     }
     
-    mutating func add<Property:Equatable>(
+    public mutating func add<Property:Equatable>(
         _ keyPath : KeyPath<Value, Property>
     ) {
         self.add(keyPath) { $0 == $1 }
     }
     
-    mutating func add<Property:AnyObject>(
+    public mutating func add<Property:AnyObject>(
         _ keyPath : KeyPath<Value, Property>
     ) {
         self.add(keyPath) { $0 === $1 }
     }
     
-    // TODO: Do I need this?
-    mutating func add<Property:AnyObject & Equatable>(
+    public mutating func add<Property:AnyObject & Equatable>(
         _ keyPath : KeyPath<Value, Property>
     ) {
         self.add(keyPath) { $0 == $1 }
     }
     
-    mutating func add<Property>(
+    public mutating func add<Property>(
         _ keyPath : KeyPath<Value, Property>,
         with compare : @escaping (Property, Property) -> Bool
     ) {
@@ -48,7 +47,7 @@ public struct KeyPathEquivalent<Value> {
         })
     }
     
-    func `is`(_ lhs : Value, equivalentTo rhs : Value) -> Bool {
+    public func isEquivalent(_ lhs : Value, _ rhs : Value) -> Bool {
         for comparison in comparisons {
             if comparison(lhs, rhs) == false {
                 return false

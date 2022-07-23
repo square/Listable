@@ -73,8 +73,7 @@ public protocol IsEquivalentContent {
 
 public extension IsEquivalentContent where Self:Equatable
 {
-    /// If your content is `Equatable`, `isEquivalent`
-    /// is based on the `Equatable` implementation.
+    /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
     func isEquivalent(to other : Self) -> Bool {
         self == other
     }
@@ -83,16 +82,19 @@ public extension IsEquivalentContent where Self:Equatable
 
 public protocol KeyPathEquivalentContent : IsEquivalentContent {
     
-    static func isEquivalent(using comparisons : inout KeyPathEquivalent<Self>)
+    static func isEquivalent(using comparison : inout KeyPathEquivalent<Self>)
 }
 
 
 private var allKeyPathEquivalents : [ObjectIdentifier:Any] = [:]
 
+
 extension KeyPathEquivalentContent {
     
+    // MARK: IsEquivalentContent
+    
     public func isEquivalent(to other: Self) -> Bool {
-        Self.comparator.is(self, equivalentTo: other)
+        Self.comparator.isEquivalent(self, other)
     }
     
     private static var comparator : KeyPathEquivalent<Self> {
