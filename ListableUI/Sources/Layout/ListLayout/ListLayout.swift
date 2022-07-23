@@ -186,7 +186,10 @@ extension ListLayout {
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        if headerOrigin < visibleContentOrigin || listHeaderPosition == .fixed {
+        /// `fixed` only works if there's no `containerHeader`.
+        let shouldBeFixed =  listHeaderPosition == .fixed && !content.containerHeader.isPopulated
+
+        if headerOrigin < visibleContentOrigin || shouldBeFixed {
 
             // Make sure the pinned origin stays within the list's frame.
 
@@ -202,6 +205,29 @@ extension ListLayout {
             header.pinnedY = nil
             header.pinnedX = nil
         }
+    }
+    
+    static func isHeaderSticky(
+        list: Bool,
+        section: Bool?,
+        header: Bool?
+    ) -> Bool {
+        
+        /// If the header itself specifies a stickiness; defer to that value.
+        
+        if let header = header {
+            return header
+        }
+        
+        /// Otherwise, use the value from the section's layout value.
+        
+        if let section = section {
+            return section
+        }
+        
+        /// Finally, defer to the list's value.
+        
+        return list
     }
     
     public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
@@ -230,8 +256,9 @@ extension ListLayout {
             
             let sectionLayout = section.layouts[SectionLayout.self]
             
-            let isHeaderSticky = sectionLayout.isHeaderSticky(
+            let isHeaderSticky = Self.isHeaderSticky(
                 list: self.stickySectionHeaders,
+                section: sectionLayout.isHeaderSticky,
                 header: section.isHeaderSticky
             )
             

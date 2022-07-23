@@ -130,17 +130,3 @@ public struct EmptySectionLayoutsValue : SectionLayoutsValue {
         nil
     }
 }
-
-
-extension SectionLayoutsValue {
-    
-    func isHeaderSticky(list listValue: Bool, header: Bool?) -> Bool {
-        if let sticky = isHeaderSticky {
-            return sticky
-        } else if let header = header {
-            return header
-        } else {
-            return listValue
-        }
-    }
-}

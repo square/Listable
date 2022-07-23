@@ -205,9 +205,15 @@ public final class ListView : UIView, KeyboardObserverDelegate
         set { self.set(layout: newValue, animated: false) }
     }
 
-    public func set(layout : LayoutDescription, animated : Bool = false, completion : @escaping () -> () = {})
+    public func set(layout new : LayoutDescription, animated : Bool = false, completion : @escaping () -> () = {})
     {
-        self.layoutManager.set(layout: layout, animated: animated, completion: completion)
+        let needsInsetUpdate = layout.needsCollectionViewInsetUpdate(for: new)
+        
+        self.layoutManager.set(layout: new, animated: animated, completion: completion)
+        
+        if needsInsetUpdate {
+            self.updateScrollViewInsets()
+        }
     }
     
     public var contentSize : CGSize {
@@ -306,6 +312,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
         let keyboardBottomInset : CGFloat = {
             
             guard let keyboardFrame = keyboardFrame else {
+                return 0.0
+            }
+            
+            guard layout.wantsKeyboardInsetAdjustment else {
                 return 0.0
             }
             

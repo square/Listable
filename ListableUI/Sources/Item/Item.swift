@@ -49,10 +49,10 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     public var onRemove : OnRemove.Callback?
     public var onMove : OnMove.Callback?
     public var onUpdate : OnUpdate.Callback?
+        
+    public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
-    
-    public var debuggingIdentifier : String? = nil
     
     //
     // MARK: Initialization
@@ -96,22 +96,19 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
-        self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations ?? nil
-        self.swipeActions = swipeActions ?? defaults.swipeActions ?? nil
-        
-        self.reordering = reordering
-        self.onWasReordered = onWasReordered
-                
-        self.onDisplay = onDisplay
-        self.onEndDisplay = onEndDisplay
-        
-        self.onSelect = onSelect
-        self.onDeselect = onDeselect
-        
-        self.onInsert = onInsert
-        self.onRemove = onRemove
-        self.onMove = onMove
-        self.onUpdate = onUpdate
+        self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations
+        self.swipeActions = swipeActions ?? defaults.swipeActions
+        self.reordering = reordering ?? defaults.reordering
+        self.onWasReordered = onWasReordered ?? defaults.onWasReordered
+        self.onDisplay = onDisplay ?? defaults.onDisplay
+        self.onEndDisplay = onEndDisplay ?? defaults.onEndDisplay
+        self.onSelect = onSelect ?? defaults.onSelect
+        self.onDeselect = onDeselect ?? defaults.onDeselect
+        self.onInsert = onInsert ?? defaults.onInsert
+        self.onRemove = onRemove ?? defaults.onRemove
+        self.onMove = onMove ?? defaults.onMove
+        self.onUpdate = onUpdate ?? defaults.onUpdate
+        self.debuggingIdentifier = defaults.debuggingIdentifier
         
         self.reuseIdentifier = .identifier(for: Content.self)
         

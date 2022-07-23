@@ -9,5 +9,8 @@ public enum ListHeaderPosition {
     case sticky
 
     /// The header is always positioned at the top of the visible frame, and does not bounce with the content.
+    ///
+    /// Note: This mode only works if the list has no container header. If there is a container header, the behavior
+    /// falls back to `sticky`.
     case fixed
 }
