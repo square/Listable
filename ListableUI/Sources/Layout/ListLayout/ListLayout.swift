@@ -217,8 +217,10 @@ extension AnyListLayout
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        /// `fixed` only works if there's no `containerHeader`.
-        let shouldBeFixed =  listHeaderPosition == .fixed && !content.containerHeader.isPopulated
+        /// `fixed` only works if there's no `containerHeader` or `refreshControl` (those behave "inline" so fixing it would overlap).
+        let shouldBeFixed = listHeaderPosition == .fixed
+            && !content.containerHeader.isPopulated
+            && collectionView.refreshControl == nil
 
         if headerOrigin < visibleContentOrigin || shouldBeFixed {
 

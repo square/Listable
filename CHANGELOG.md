@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the refresh control by falling back to `sticky` behavior if there's a refresh control.
+
 ### Added
 
 ### Removed
