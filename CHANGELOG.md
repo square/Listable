@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the refresh control by falling back to `sticky` behavior if there's a refresh control.
+
 ### Added
 
 - `SwipeAction` now allows you to provide an `accessibility{Label,Value,Hint}`, and requires either a `title` or `accessibilityLabel`.
