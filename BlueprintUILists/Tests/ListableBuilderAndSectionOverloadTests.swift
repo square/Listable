@@ -21,6 +21,10 @@ class ListableBuilderAndSectionOverloadTests : XCTestCase {
                 
                 Element1()
                 Element2()
+            } header: {
+                Element1()
+            } footer: {
+                Element2().headerFooter()
             }
             
             Section("2") { section in

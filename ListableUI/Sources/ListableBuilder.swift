@@ -107,31 +107,11 @@
 ///
 @resultBuilder public enum ListableOptionalBuilder<ContentType> {
 
-    /// The final value from the builder.
-    public typealias Component = ContentType?
-    
-    /// If an empty closure is provided, returns an empty array.
-    public static func buildBlock() -> Component {
+    public static func buildBlock() -> ContentType? {
         nil
     }
 
-    /// Enables support for `if` statements that do not have an `else`.
-    public static func buildOptional(_ component: Component?) -> Component {
-        component ?? nil
-    }
-
-    /// With buildEither(second:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
-    public static func buildEither(first component: Component) -> Component {
-        component
-    }
-
-    /// With buildEither(first:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
-    public static func buildEither(second component: Component) -> Component {
-        component
-    }
-
-    /// If declared, this will be called on the partial result of an `if #available` block to allow the result builder to erase type information.
-    public static func buildLimitedAvailability(_ component: Component) -> Component {
-        component
+    public static func buildBlock(_ content: ContentType?) -> ContentType? {
+        return content
     }
 }

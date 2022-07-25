@@ -74,26 +74,9 @@ public extension ListableBuilder where ContentType == AnyItemConvertible {
 
 
 public extension ListableOptionalBuilder where ContentType == AnyHeaderFooterConvertible {
-
-
-    /// Enables support for `if` statements that do not have an `else`.
-    @_disfavoredOverload static func buildOptional(_ component: Element?) -> Component {
-        component?.toHeaderFooterConvertible()
-    }
-
-    /// With buildEither(second:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
-    @_disfavoredOverload static func buildEither(first component: Element) -> Component {
-        component.toHeaderFooterConvertible()
-    }
-
-    /// With buildEither(first:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
-    @_disfavoredOverload static func buildEither(second component: Element) -> Component {
-        component.toHeaderFooterConvertible()
-    }
-
-    /// If declared, this will be called on the partial result of an `if #available` block to allow the result builder to erase type information.
-    @_disfavoredOverload static func buildLimitedAvailability(_ component: Element) -> Component {
-        component.toHeaderFooterConvertible()
+    
+    static func buildBlock(_ content: Element) -> ContentType {
+        return content.toHeaderFooterConvertible()
     }
 }
 

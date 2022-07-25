@@ -85,8 +85,7 @@ public struct Section
         header : AnyHeaderFooterConvertible? = nil,
         footer : AnyHeaderFooterConvertible? = nil,
         reordering : SectionReordering = .init(),
-        items : [AnyItemConvertible] = [],
-        configure : Configure = { _ in }
+        items : [AnyItemConvertible] = []
     ) {
         self.identifier = Identifier(identifier)
         
@@ -98,8 +97,6 @@ public struct Section
         self.reordering = reordering
         
         self.items = items.map { $0.toAnyItem() }
-        
-        configure(&self)
     }
     
     /// Creates a new section with a trailing closure to configure the section inline.
@@ -124,8 +121,8 @@ public struct Section
         layouts : SectionLayouts = .init(),
         reordering : SectionReordering = .init(),
         @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        header : () -> AnyHeaderFooterConvertible? = { nil },
-        footer : () -> AnyHeaderFooterConvertible? = { nil }
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.identifier = Identifier(identifier)
         
