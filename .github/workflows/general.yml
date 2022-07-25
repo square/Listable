@@ -1,0 +1,19 @@
+name: General
+
+on:
+  pull_request:
+
+jobs:
+
+  format:
+    name: swiftformat
+
+    runs-on: macos-11
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Ensure swift files are formatted
+        run: Scripts/ci-swiftformat.sh
