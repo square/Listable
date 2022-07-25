@@ -19,9 +19,9 @@ extension Section {
     ///     section.add(Element2())
     /// }
     /// ```
-    public mutating func add(_ item : Element)
+    public mutating func add<ElementType:Element>(_ element : ElementType)
     {
-        self.items.append(item.toAnyItemConvertible().toAnyItem())
+        self.items.append(element.item())
     }
     
     /// ```swift
@@ -30,26 +30,8 @@ extension Section {
     ///     section += Element2()
     /// }
     /// ```
-    public static func += (lhs : inout Section, rhs : Element)
+    public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType)
     {
         lhs.add(rhs)
-    }
-    
-    /// Adds `Element` support when building a `Section`:
-    ///
-    /// ```swift
-    /// Section("3") { section in
-    ///     section.add {
-    ///         TestContent1() // An ItemContent
-    ///
-    ///         Element1() // A Element
-    ///         Element2() // A Element
-    ///     }
-    /// }
-    /// ```
-    public mutating func add(
-        @ListableBuilder<Element> items : () -> [Element]
-    ) {
-        self.items += items().map { $0.toAnyItemConvertible().toAnyItem() }
     }
 }

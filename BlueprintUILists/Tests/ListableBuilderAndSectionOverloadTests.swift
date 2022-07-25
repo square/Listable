@@ -13,6 +13,32 @@ class ListableBuilderAndSectionOverloadTests : XCTestCase {
     
     func test_build() {
         
+        // Make sure the various result builder methods
+        // are present such that various control flow statements still compile.
+        
+        let aBool = Bool("true")!
+        
+        _ = Section("1") {
+            
+            if aBool {
+                TestContent1()
+            } else {
+                Element1()
+            }
+            
+            if aBool {
+                Element1()
+            } else {
+                Element2()
+            }
+            
+            if #available(iOS 11.0, *) {
+                Element1()
+            } else {
+                Element2()
+            }
+        }
+        
         let list = List {
             Section("1") {
                 TestContent1()
