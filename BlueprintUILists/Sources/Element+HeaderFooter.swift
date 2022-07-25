@@ -40,14 +40,6 @@ extension Element {
             configure: configure
         )
     }
-    
-    /// Used by internal Listable methods to  convert type-erased `Element` instances into `Item` instances.
-    func toHeaderFooterConvertible() -> AnyHeaderFooterConvertible {
-        /// We use `type(of:)` to ensure we get the actual type, not just `Element`.
-        WrappedHeaderFooterContent(
-            represented: self
-        )
-    }
 }
 
 
