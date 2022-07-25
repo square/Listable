@@ -22,9 +22,6 @@ public struct RefreshControl
     /// The title of the control.
     public var title : Title?
     
-    /// The color of the control.
-    public var tintColor : UIColor?
-    
     public typealias OnRefresh = () -> ()
     
     /// Invoked when a customer triggers a refresh event.
@@ -34,7 +31,6 @@ public struct RefreshControl
         isRefreshing: Bool,
         offsetAdjustmentBehavior: OffsetAdjustmentBehavior = .none,
         title : Title? = nil,
-        tintColor : UIColor? = nil,
         onRefresh : @escaping OnRefresh
         )
     {
@@ -42,7 +38,6 @@ public struct RefreshControl
         self.offsetAdjustmentBehavior = offsetAdjustmentBehavior
 
         self.title = title
-        self.tintColor = tintColor
         
         self.onRefresh = onRefresh
     }
