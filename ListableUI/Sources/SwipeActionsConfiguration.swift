@@ -57,6 +57,11 @@ public struct SwipeAction {
     public typealias Handler = (@escaping CompletionHandler) -> Void
 
     public var title: String?
+
+    public var accessibilityLabel: String?
+    public var accessibilityValue: String?
+    public var accessibilityHint: String?
+
     public var backgroundColor: UIColor?
     /// Sets the text and image (image must use the template rendering mode) color.
     public var tintColor: UIColor
@@ -66,13 +71,27 @@ public struct SwipeAction {
 
     /// Creates a new swipe action with the provided options.
     public init(
-        title: String,
+        title: String?,
+        accessibilityLabel: String? = nil,
+        accessibilityValue: String? = nil,
+        accessibilityHint: String? = nil,
         backgroundColor: UIColor,
         tintColor: UIColor = .white,
         image: UIImage? = nil,
         handler: @escaping Handler
     ) {
+        if title == nil || title?.isEmpty == true {
+            precondition(
+                accessibilityLabel?.isEmpty == false,
+                "You must provide a title or an accessibilityLabel to a SwipeAction to ensure proper VoiceOver support."
+            )
+        }
+
         self.title = title
+        self.accessibilityLabel = accessibilityLabel
+        self.accessibilityValue = accessibilityValue
+        self.accessibilityHint = accessibilityHint
+
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         self.image = image
