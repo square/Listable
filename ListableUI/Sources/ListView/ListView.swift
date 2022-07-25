@@ -1015,7 +1015,11 @@ public final class ListView : UIView, KeyboardObserverDelegate
          Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
          we trigger a bug where updated indexes are calculated incorrectly.
          */
-        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl, in: self.collectionView)
+        presentationState.updateRefreshControl(
+            with: visibleSlice.content.refreshControl,
+            in: self.collectionView,
+            color: appearance.refreshControlColor
+        )
         
         // Update Collection View
         

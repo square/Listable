@@ -12,6 +12,8 @@
 
 ### Changed
 
+- The refresh control color has moved to `Appearance` from `RefreshControl`.
+
 ### Misc
 
 # Past Releases
