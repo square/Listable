@@ -5,14 +5,11 @@
 //  Created by Kyle Van Essen on 8/21/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
-
-class ContentFiltersTests: XCTestCase
-{
-    func test_contains()
-    {
+class ContentFiltersTests: XCTestCase {
+    func test_contains() {
         let sections = [
             Section(
                 "",
@@ -23,47 +20,47 @@ class ContentFiltersTests: XCTestCase
                     Item(TestItem()),
                     Item(TestItem()),
                 ]
-            )
+            ),
         ]
-        
+
         let empty = Content()
-        
+
         let noHeader = Content(
             header: nil,
             footer: HeaderFooter(TestHeaderFooter()),
             overscrollFooter: HeaderFooter(TestHeaderFooter()),
             sections: sections
         )
-        
+
         let noFooter = Content(
             header: HeaderFooter(TestHeaderFooter()),
             footer: nil,
             overscrollFooter: HeaderFooter(TestHeaderFooter()),
             sections: sections
         )
-        
+
         let noOverscroll = Content(
             header: HeaderFooter(TestHeaderFooter()),
             footer: HeaderFooter(TestHeaderFooter()),
             overscrollFooter: nil,
             sections: sections
         )
-        
+
         let noSections = Content(
             header: HeaderFooter(TestHeaderFooter()),
             footer: HeaderFooter(TestHeaderFooter()),
             overscrollFooter: HeaderFooter(TestHeaderFooter()),
             sections: []
         )
-        
+
         let populated = Content(
             header: HeaderFooter(TestHeaderFooter()),
             footer: HeaderFooter(TestHeaderFooter()),
             overscrollFooter: HeaderFooter(TestHeaderFooter()),
             sections: sections
         )
-        
-        self.testcase("list header") {
+
+        testcase("list header") {
             XCTAssertEqual(empty.contains(any: [.listHeader]), false)
             XCTAssertEqual(noHeader.contains(any: [.listHeader]), false)
             XCTAssertEqual(noFooter.contains(any: [.listHeader]), true)
@@ -72,7 +69,7 @@ class ContentFiltersTests: XCTestCase
             XCTAssertEqual(populated.contains(any: [.listHeader]), true)
         }
 
-        self.testcase("list footer") {
+        testcase("list footer") {
             XCTAssertEqual(empty.contains(any: [.listFooter]), false)
             XCTAssertEqual(noHeader.contains(any: [.listFooter]), true)
             XCTAssertEqual(noFooter.contains(any: [.listFooter]), false)
@@ -80,8 +77,8 @@ class ContentFiltersTests: XCTestCase
             XCTAssertEqual(noSections.contains(any: [.listFooter]), true)
             XCTAssertEqual(populated.contains(any: [.listFooter]), true)
         }
-        
-        self.testcase("overscroll footer") {
+
+        testcase("overscroll footer") {
             XCTAssertEqual(empty.contains(any: [.overscrollFooter]), false)
             XCTAssertEqual(noHeader.contains(any: [.overscrollFooter]), true)
             XCTAssertEqual(noFooter.contains(any: [.overscrollFooter]), true)
@@ -89,8 +86,8 @@ class ContentFiltersTests: XCTestCase
             XCTAssertEqual(noSections.contains(any: [.overscrollFooter]), true)
             XCTAssertEqual(populated.contains(any: [.overscrollFooter]), true)
         }
-        
-        self.testcase("section only fields") {
+
+        testcase("section only fields") {
             XCTAssertEqual(empty.contains(any: [.items]), false)
             XCTAssertEqual(noHeader.contains(any: [.items]), true)
             XCTAssertEqual(noFooter.contains(any: [.items]), true)
@@ -101,36 +98,32 @@ class ContentFiltersTests: XCTestCase
     }
 }
 
-
-fileprivate struct TestHeaderFooter : HeaderFooterContent, Equatable {
-    
+private struct TestHeaderFooter: HeaderFooterContent, Equatable {
     typealias ContentView = UIView
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
+
     func apply(
-        to views: HeaderFooterContentViews<Self>,
-        for reason: ApplyReason,
-        with info: ApplyHeaderFooterContentInfo
+        to _: HeaderFooterContentViews<Self>,
+        for _: ApplyReason,
+        with _: ApplyHeaderFooterContentInfo
     ) {
         // Nothing.
     }
 }
 
-
-fileprivate struct TestItem : ItemContent, Equatable {
-    
+private struct TestItem: ItemContent, Equatable {
     var identifierValue: String {
         ""
     }
-    
+
     typealias ContentView = UIView
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
-    func apply(to views: ItemContentViews<TestItem>, for reason: ApplyReason, with info: ApplyItemContentInfo) {}
+
+    func apply(to _: ItemContentViews<TestItem>, for _: ApplyReason, with _: ApplyItemContentInfo) {}
 }

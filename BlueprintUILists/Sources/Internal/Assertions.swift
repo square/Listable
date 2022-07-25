@@ -7,21 +7,19 @@
 
 import Foundation
 
-
 @inline(__always)
 func listableInternalFatal(
     _ message: @autoclosure () -> String = String(),
     file: StaticString = #file,
     line: UInt = #line
-) -> Never
-{
+) -> Never {
     fatalError(
         """
         LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#listable) know:
-        
+
         \(message())
         """,
-        
+
         file: file,
         line: line
     )
@@ -36,18 +34,17 @@ func listableInternalPrecondition(
 ) {
     precondition(
         condition(),
-        
+
         """
         LISTABLE FATAL ERROR: This is a problem with Listable. Please let the UI Systems team (#listable) know:
-        
+
         \(message())
         """,
-        
+
         file: file,
         line: line
     )
 }
-
 
 /// By default, `precondition` error messages are not included in release builds. We would like that!
 /// https://bugs.swift.org/browse/SR-905

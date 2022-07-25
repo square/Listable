@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// A type which can be converted into a `HeaderFooter`, so you
 /// do not need to explicitly wrap / convert your `HeaderFooterContent`
 /// in a `HeaderFooter` when providing an header or footer to a list or section:
@@ -33,9 +32,6 @@ import Foundation
 /// utilizing the default values from the `HeaderFooter` initializer.
 ///
 public protocol AnyHeaderFooterConvertible {
-    
     /// Converts the object into a type-erased `AnyHeaderFooter` instance.
     func asAnyHeaderFooter() -> AnyHeaderFooter
 }
-
-

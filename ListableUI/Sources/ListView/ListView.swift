@@ -7,103 +7,101 @@
 
 import UIKit
 
+public final class ListView: UIView, KeyboardObserverDelegate {
+    //
 
-public final class ListView : UIView, KeyboardObserverDelegate
-{
-    //
     // MARK: Initialization
+
     //
-    
-    public init(frame: CGRect = .zero, appearance : Appearance = Appearance())
-    {
+
+    public init(frame: CGRect = .zero, appearance: Appearance = Appearance()) {
         // Create all default values.
 
         self.appearance = appearance
-        
-        self.behavior = Behavior()
-        self.autoScrollAction = .none
-        self.scrollIndicatorInsets = .zero
-        
-        self.storage = Storage()
-        
-        self.environment = .empty
-        
-        self.sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
-        
-        self.dataSource = DataSource()
-        self.delegate = Delegate()
-        
+
+        behavior = Behavior()
+        autoScrollAction = .none
+        scrollIndicatorInsets = .zero
+
+        storage = Storage()
+
+        environment = .empty
+
+        sourcePresenter = SourcePresenter(initial: StaticSource.State(), source: StaticSource())
+
+        dataSource = DataSource()
+        delegate = Delegate()
+
         let initialLayout = CollectionViewLayout(
-            delegate: self.delegate,
+            delegate: delegate,
             layoutDescription: .table(),
             appearance: self.appearance,
-            behavior: self.behavior
+            behavior: behavior
         )
 
-        self.collectionView = UICollectionView(
+        collectionView = UICollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
-        
-        self.layoutManager = LayoutManager(
-            layout: initialLayout,
-            collectionView: self.collectionView
-        )
-        
-        self.liveCells = LiveCells()
-                
-        self.visibleContent = VisibleContent()
 
-        self.keyboardObserver = KeyboardObserver.shared
+        layoutManager = LayoutManager(
+            layout: initialLayout,
+            collectionView: collectionView
+        )
+
+        liveCells = LiveCells()
+
+        visibleContent = VisibleContent()
+
+        keyboardObserver = KeyboardObserver.shared
         KeyboardObserver.logKeyboardSetupWarningIfNeeded()
-        
-        self.stateObserver = ListStateObserver()
-        
-        self.collectionView.isPrefetchingEnabled = false
-        
-        self.collectionView.delegate = self.delegate
-        self.collectionView.dataSource = self.dataSource
-        
+
+        stateObserver = ListStateObserver()
+
+        collectionView.isPrefetchingEnabled = false
+
+        collectionView.delegate = delegate
+        collectionView.dataSource = dataSource
+
         // Super init.
-        
+
         super.init(frame: frame)
-        
+
         // Associate ourselves with our child objects.
 
-        self.dataSource.view = self
-        self.dataSource.presentationState = self.storage.presentationState
-        self.dataSource.storage = self.storage
-        self.dataSource.liveCells = self.liveCells
-        
-        self.delegate.view = self
-        self.delegate.presentationState = self.storage.presentationState
-        self.delegate.layoutManager = self.layoutManager
-        
-        self.keyboardObserver.add(delegate: self)
-                
+        dataSource.view = self
+        dataSource.presentationState = storage.presentationState
+        dataSource.storage = storage
+        dataSource.liveCells = liveCells
+
+        delegate.view = self
+        delegate.presentationState = storage.presentationState
+        delegate.layoutManager = layoutManager
+
+        keyboardObserver.add(delegate: self)
+
         // Register supplementary views.
-        
+
         SupplementaryKind.allCases.forEach {
             SupplementaryContainerView.register(in: self.collectionView, for: $0.rawValue)
         }
-        
+
         // Size and update views.
-        
-        self.collectionView.frame = self.bounds
-        self.addSubview(self.collectionView)
-        
-        self.applyAppearance()
-        self.applyBehavior()
-        self.updateScrollViewInsets()
+
+        collectionView.frame = bounds
+        addSubview(collectionView)
+
+        applyAppearance()
+        applyBehavior()
+        updateScrollViewInsets()
     }
-    
-    deinit
-    {
+
+    deinit {
         self.keyboardObserver.remove(delegate: self)
-        
+
         /**
          Even though these are zeroing weak references in UIKIt as of iOS 9.0,
-         
+
          We still want to nil these out, because _our_ `delegate` and `dataSource`
          objects have unowned references back to us (`ListView`). We do not want
          any `delegate` or `dataSource` callbacks to trigger referencing
@@ -113,335 +111,346 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.collectionView.delegate = nil
         self.collectionView.dataSource = nil
     }
-    
+
     @available(*, unavailable)
-    required init?(coder: NSCoder) { listableInternalFatal() }
-    
+    required init?(coder _: NSCoder) { listableInternalFatal() }
+
     //
+
     // MARK: Internal Properties
+
     //
-    
-    let storage : Storage
-    let collectionView : UICollectionView
-    let delegate : Delegate
-    let layoutManager : LayoutManager
-    let liveCells : LiveCells
-    
-    var collectionViewLayout : CollectionViewLayout {
-        self.layoutManager.collectionViewLayout
+
+    let storage: Storage
+    let collectionView: UICollectionView
+    let delegate: Delegate
+    let layoutManager: LayoutManager
+    let liveCells: LiveCells
+
+    var collectionViewLayout: CollectionViewLayout {
+        layoutManager.collectionViewLayout
     }
-    
-    var performsContentCallbacks : Bool = true {
+
+    var performsContentCallbacks: Bool = true {
         didSet {
-            self.storage.presentationState.performsContentCallbacks = self.performsContentCallbacks
+            storage.presentationState.performsContentCallbacks = performsContentCallbacks
         }
     }
-    
-    private(set) var visibleContent : VisibleContent
-    
-    //
-    // MARK: Private Properties
-    //
-            
-    private var sourcePresenter : AnySourcePresenter
 
-    private var autoScrollAction : AutoScrollAction
-    
-    private let dataSource : DataSource
-    
-    private let keyboardObserver : KeyboardObserver
-    
+    private(set) var visibleContent: VisibleContent
+
     //
+
+    // MARK: Private Properties
+
+    //
+
+    private var sourcePresenter: AnySourcePresenter
+
+    private var autoScrollAction: AutoScrollAction
+
+    private let dataSource: DataSource
+
+    private let keyboardObserver: KeyboardObserver
+
+    //
+
     // MARK: Debugging
+
     //
-    
-    public var debuggingIdentifier : String? = nil
-    
+
+    public var debuggingIdentifier: String?
+
     //
+
     // MARK: Appearance
+
     //
-    
-    public var appearance : Appearance {
+
+    public var appearance: Appearance {
         didSet {
-            guard oldValue != self.appearance else {
+            guard oldValue != appearance else {
                 return
             }
-            
-            self.applyAppearance()
+
+            applyAppearance()
         }
     }
-    
-    private func applyAppearance()
-    {
+
+    private func applyAppearance() {
         // Appearance
-        
-        self.collectionViewLayout.appearance = self.appearance
-        self.backgroundColor = self.appearance.backgroundColor
-        
+
+        collectionViewLayout.appearance = appearance
+        backgroundColor = appearance.backgroundColor
+
         // Scroll View
-        
-        self.updateCollectionViewWithCurrentLayoutProperties()
+
+        updateCollectionViewWithCurrentLayoutProperties()
     }
-    
+
     //
+
     // MARK: Layout
+
     //
-        
-    public var scrollPositionInfo : ListScrollPositionInfo {
-        let visibleItems = Set(self.visibleContent.items.map { item in
+
+    public var scrollPositionInfo: ListScrollPositionInfo {
+        let visibleItems = Set(visibleContent.items.map { item in
             item.item.anyModel.anyIdentifier
         })
-        
+
         return ListScrollPositionInfo(
-            scrollView: self.collectionView,
+            scrollView: collectionView,
             visibleItems: visibleItems,
-            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.anyIdentifier) } ?? false,
-            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.anyIdentifier) } ?? false
+            isFirstItemVisible: content.firstItem.map { visibleItems.contains($0.anyIdentifier) } ?? false,
+            isLastItemVisible: content.lastItem.map { visibleItems.contains($0.anyIdentifier) } ?? false
         )
-    }
-    
-    public var layout : LayoutDescription {
-        get { self.collectionViewLayout.layoutDescription }
-        set { self.set(layout: newValue, animated: false) }
     }
 
-    public func set(layout new : LayoutDescription, animated : Bool = false, completion : @escaping () -> () = {})
+    public var layout: LayoutDescription {
+        get { collectionViewLayout.layoutDescription }
+        set { set(layout: newValue, animated: false) }
+    }
+
+    public func set(layout new: LayoutDescription, animated: Bool = false, completion: @escaping () -> Void = {})
     {
         let needsInsetUpdate = layout.needsCollectionViewInsetUpdate(for: new)
-        
-        self.layoutManager.set(layout: new, animated: animated, completion: completion)
-        
+
+        layoutManager.set(layout: new, animated: animated, completion: completion)
+
         if needsInsetUpdate {
-            self.updateScrollViewInsets()
+            updateScrollViewInsets()
         }
     }
-    
-    public var contentSize : CGSize {
-        return self.collectionViewLayout.layout.content.contentSize
+
+    public var contentSize: CGSize {
+        collectionViewLayout.layout.content.contentSize
     }
-    
+
     //
+
     // MARK: Behavior
+
     //
-    
-    public var behavior : Behavior {
+
+    public var behavior: Behavior {
         didSet {
-            guard oldValue != self.behavior else {
+            guard oldValue != behavior else {
                 return
             }
-            
-            self.applyBehavior()
+
+            applyBehavior()
         }
     }
-    
-    private func applyBehavior()
-    {
-        self.collectionViewLayout.behavior = self.behavior
-        
-        self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
-        
-        self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
-        self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
-        
-        self.updateCollectionViewWithCurrentLayoutProperties()
-        self.updateCollectionViewSelectionMode()
-        
-        self.updateScrollViewInsets()
+
+    private func applyBehavior() {
+        collectionViewLayout.behavior = behavior
+
+        collectionView.keyboardDismissMode = behavior.keyboardDismissMode
+
+        collectionView.canCancelContentTouches = behavior.canCancelContentTouches
+        collectionView.delaysContentTouches = behavior.delaysContentTouches
+
+        updateCollectionViewWithCurrentLayoutProperties()
+        updateCollectionViewSelectionMode()
+
+        updateScrollViewInsets()
     }
-    
-    private func updateCollectionViewWithCurrentLayoutProperties()
-    {
-        self.collectionViewLayout.layout.scrollViewProperties.apply(
-            to: self.collectionView,
-            behavior: self.behavior,
-            direction: self.collectionViewLayout.layout.direction,
-            showsScrollIndicators: self.appearance.showsScrollIndicators
+
+    private func updateCollectionViewWithCurrentLayoutProperties() {
+        collectionViewLayout.layout.scrollViewProperties.apply(
+            to: collectionView,
+            behavior: behavior,
+            direction: collectionViewLayout.layout.direction,
+            showsScrollIndicators: appearance.showsScrollIndicators
         )
     }
-    
-    private func updateCollectionViewSelectionMode()
-    {
-        let view = self.collectionView
-        
-        switch self.behavior.selectionMode {
+
+    private func updateCollectionViewSelectionMode() {
+        let view = collectionView
+
+        switch behavior.selectionMode {
         case .none:
             view.allowsSelection = false
             view.allowsMultipleSelection = false
-            
+
         case .single:
             view.allowsSelection = true
             view.allowsMultipleSelection = false
-            
+
         case .multiple:
             view.allowsSelection = true
             view.allowsMultipleSelection = true
         }
     }
-    
+
     //
+
     // MARK: Scroll Insets
+
     //
-    
-    public var scrollIndicatorInsets : UIEdgeInsets {
+
+    public var scrollIndicatorInsets: UIEdgeInsets {
         didSet {
-            guard oldValue != self.scrollIndicatorInsets else {
+            guard oldValue != scrollIndicatorInsets else {
                 return
             }
-            
-            self.updateScrollViewInsets()
+
+            updateScrollViewInsets()
         }
     }
-        
-    private func updateScrollViewInsets()
-    {
-        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
-            with: self.keyboardObserver.currentFrame(in: self)
+
+    private func updateScrollViewInsets() {
+        let (contentInsets, scrollIndicatorInsets) = calculateScrollViewInsets(
+            with: keyboardObserver.currentFrame(in: self)
         )
-        
-        if self.collectionView.contentInset != contentInsets {
-            self.collectionView.contentInset = contentInsets
+
+        if collectionView.contentInset != contentInsets {
+            collectionView.contentInset = contentInsets
         }
-        
-        if self.collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
-            self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets
+
+        if collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
+            collectionView.scrollIndicatorInsets = scrollIndicatorInsets
         }
     }
-    
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
+
+    func calculateScrollViewInsets(with keyboardFrame: KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
     {
-        let keyboardBottomInset : CGFloat = {
-            
+        let keyboardBottomInset: CGFloat = {
             guard let keyboardFrame = keyboardFrame else {
                 return 0.0
             }
-            
+
             guard layout.wantsKeyboardInsetAdjustment else {
                 return 0.0
             }
-            
+
             switch self.behavior.keyboardAdjustmentMode {
             case .none:
                 return 0.0
-                
+
             case .adjustsWhenVisible:
                 switch keyboardFrame {
                 case .nonOverlapping:
                     return 0.0
-                    
-                case .overlapping(let frame):
+
+                case let .overlapping(frame):
                     return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
                 }
             }
         }()
-        
-        let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
+
+        let scrollIndicatorInsets = modified(scrollIndicatorInsets) {
             $0.bottom = max($0.bottom, keyboardBottomInset)
         }
-        
-        let contentInsets = modified(self.collectionView.contentInset) {
+
+        let contentInsets = modified(collectionView.contentInset) {
             $0.bottom = keyboardBottomInset
         }
-        
+
         return (contentInsets, scrollIndicatorInsets)
     }
-    
+
     //
+
     // MARK: KeyboardObserverDelegate
+
     //
-    
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
-    
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
-        
-        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+
+    private var lastKeyboardFrame: KeyboardObserver.KeyboardFrame?
+
+    func keyboardFrameWillChange(for _: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+        guard let frame = keyboardObserver.currentFrame(in: self) else {
             return
         }
-        
-        guard self.lastKeyboardFrame != frame else {
+
+        guard lastKeyboardFrame != frame else {
             return
         }
-        
-        self.lastKeyboardFrame = frame
-        
+
+        lastKeyboardFrame = frame
+
         UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
             self.updateScrollViewInsets()
         })
     }
-    
+
     //
+
     // MARK: List State Observation
+
     //
-    
+
     /// A state observer allows you to receive callbacks when varying types
     /// of changes occur within the list's state, such as scroll events,
     /// content change events, frame change events, or item visibility changes.
     ///
     /// See the `ListStateObserver` for more info.
-    public var stateObserver : ListStateObserver
-    
+    public var stateObserver: ListStateObserver
+
     /// Allows registering a `ListActions` object associated
     /// with the list view that allows you to perform actions such as scrolling to
     /// items, or controlling view appearance transitions.
-    private var actions : ListActions? {
+    private var actions: ListActions? {
         didSet {
             oldValue?.listView = nil
-            
-            self.actions?.listView = self
+
+            actions?.listView = self
         }
     }
-    
+
     //
+
     // MARK: Public - Scrolling To Sections & Items
+
     //
-    
+
     /// TODO: The below functions do not yet work for horizontal lists.
     /// A pass needs to be done to change math and offsets based on the `LayoutDirection`
     /// of the current layout.
-    
-    public typealias ScrollCompletion = (Bool) -> ()
-    
+
+    public typealias ScrollCompletion = (Bool) -> Void
+
     ///
     /// Scrolls to the provided item, with the provided positioning.
     /// If the item is contained in the list, true is returned. If it is not, false is returned.
     ///
     @discardableResult
     public func scrollTo(
-        item : AnyItem,
-        position : ScrollPosition,
+        item: AnyItem,
+        position: ScrollPosition,
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
-    ) -> Bool
-    {
-        self.scrollTo(
+        completion: @escaping ScrollCompletion = { _ in }
+    ) -> Bool {
+        scrollTo(
             item: item.anyIdentifier,
             position: position,
             animation: animation,
             completion: completion
         )
     }
-    
-    private var hasLoggedHorizontalScrollToWarning : Bool = false
-    
+
+    private var hasLoggedHorizontalScrollToWarning: Bool = false
+
     private func logHorizontalScrollToWarning() {
-        
-        guard self.collectionViewLayout.layout.direction == .horizontal else { return }
-        
-        if self.hasLoggedHorizontalScrollToWarning { return }
-        
-        self.hasLoggedHorizontalScrollToWarning = true
-        
+        guard collectionViewLayout.layout.direction == .horizontal else { return }
+
+        if hasLoggedHorizontalScrollToWarning { return }
+
+        hasLoggedHorizontalScrollToWarning = true
+
         print(
-        """
-        Hello! It looks like you are using one of the `scrollTo...` family of APIs.
-        
-        These have not yet been updated to support `.horizontal` layouts, and thus, will
-        likely not work as expected.
-        
-        Please let us know you're looking for this feature in #listable on Slack.
-        """
+            """
+            Hello! It looks like you are using one of the `scrollTo...` family of APIs.
+
+            These have not yet been updated to support `.horizontal` layouts, and thus, will
+            likely not work as expected.
+
+            Please let us know you're looking for this feature in #listable on Slack.
+            """
         )
     }
-    
+
     ///
     /// Scrolls to the item with the provided identifier, with the provided positioning.
     /// If there is more than one item with the same identifier, the list scrolls to the first.
@@ -449,28 +458,27 @@ public final class ListView : UIView, KeyboardObserverDelegate
     ///
     @discardableResult
     public func scrollTo(
-        item : AnyIdentifier,
-        position : ScrollPosition,
+        item: AnyIdentifier,
+        position: ScrollPosition,
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
-    ) -> Bool
-    {
-        self.logHorizontalScrollToWarning()
-        
+        completion: @escaping ScrollCompletion = { _ in }
+    ) -> Bool {
+        logHorizontalScrollToWarning()
+
         // Make sure the item identifier is valid.
 
-        guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+        guard let toIndexPath = storage.allContent.firstIndexPathForItem(with: item) else {
             return false
         }
-        
-        return self.preparePresentationStateForScroll(to: toIndexPath) {
+
+        return preparePresentationStateForScroll(to: toIndexPath) {
             let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
             let isAlreadyVisible = self.collectionView.visibleContentFrame.contains(itemFrame)
 
             // If the item is already visible and that's good enough, return.
 
-            if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+            if isAlreadyVisible, position.ifAlreadyVisible == .doNothing {
                 return
             }
 
@@ -481,8 +489,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
                 if sectionHeader.isPopulated,
                    self.collectionViewLayout.layout.stickySectionHeaders,
-                   position.position == .top {
-
+                   position.position == .top
+                {
                     let itemFrameAdjustedForStickyHeaders = CGRect(
                         x: itemFrame.minX,
                         y: itemFrame.minY - sectionHeader.size.height,
@@ -499,7 +507,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     )
                 }
             }
-            
+
             animation.perform(
                 animations: scroll,
                 completion: completion
@@ -524,15 +532,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
     ///
     @discardableResult
     public func scrollToSection(
-        with identifier : AnyIdentifier,
-        sectionPosition : SectionPosition = .top,
-        scrollPosition : ScrollPosition,
+        with identifier: AnyIdentifier,
+        sectionPosition: SectionPosition = .top,
+        scrollPosition: ScrollPosition,
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
-    ) -> Bool
-    {
-        self.logHorizontalScrollToWarning()
-        
+        completion: @escaping ScrollCompletion = { _ in }
+    ) -> Bool {
+        logHorizontalScrollToWarning()
+
         let storageContent = storage.allContent
 
         // Make sure the section identifier is valid.
@@ -598,20 +605,19 @@ public final class ListView : UIView, KeyboardObserverDelegate
             }
         }
     }
-    
+
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
     public func scrollToTop(
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        completion: @escaping ScrollCompletion = { _ in }
     ) -> Bool {
-        
-        self.logHorizontalScrollToWarning()
-        
+        logHorizontalScrollToWarning()
+
         // The rect we scroll to must have an area – an empty rect will result in no scrolling.
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
-        
-        return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
+
+        return preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0)) {
             animation.perform(
                 animations: {
                     self.collectionView.scrollRectToVisible(rect, animated: false)
@@ -625,20 +631,19 @@ public final class ListView : UIView, KeyboardObserverDelegate
     @discardableResult
     public func scrollToLastItem(
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        completion: @escaping ScrollCompletion = { _ in }
     ) -> Bool {
-        
-        self.logHorizontalScrollToWarning()
+        logHorizontalScrollToWarning()
 
         // Make sure we have a valid last index path.
 
-        guard let toIndexPath = self.storage.allContent.lastIndexPath() else {
+        guard let toIndexPath = storage.allContent.lastIndexPath() else {
             return false
         }
 
         // Perform scrolling.
 
-        return self.preparePresentationStateForScroll(to: toIndexPath)  {
+        return preparePresentationStateForScroll(to: toIndexPath) {
             let contentHeight = self.collectionViewLayout.collectionViewContentSize.height
             let contentFrameHeight = self.collectionView.visibleContentFrame.height
 
@@ -648,7 +653,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
             let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
-            
+
             animation.perform(
                 animations: {
                     self.collectionView.setContentOffset(contentOffset, animated: false)
@@ -657,11 +662,13 @@ public final class ListView : UIView, KeyboardObserverDelegate
             )
         }
     }
-    
+
     //
+
     // MARK: Setting & Getting Content
+
     //
-    
+
     /// The environment associated with the list, which is used to pass data through to
     /// the list's layout, or through to items, headers/footers, etc.
     ///
@@ -670,81 +677,78 @@ public final class ListView : UIView, KeyboardObserverDelegate
     /// ### Note
     /// Setting the environment, or a property on the environment, does **not** force a re-layout
     /// of the list view. The newly provided environment values will be used during the next update.
-    public var environment : ListEnvironment
-    
-    public var content : Content {
-        get { return self.storage.allContent }
-        set { self.setContent(animated: false, newValue) }
+    public var environment: ListEnvironment
+
+    public var content: Content {
+        get { storage.allContent }
+        set { setContent(animated: false, newValue) }
     }
-    
-    public func setContent(animated : Bool = false, _ content : Content)
-    {
-        self.set(
+
+    public func setContent(animated: Bool = false, _ content: Content) {
+        set(
             source: StaticSource(with: content),
             initial: StaticSource.State(),
             animated: animated
         )
     }
-    
-    private var sourceChangedTimer : ReloadTimer? = nil
-    
+
+    private var sourceChangedTimer: ReloadTimer?
+
     @discardableResult
-    public func set<Source:ListViewSource>(source : Source, initial : Source.State, animated : Bool = false) -> StateAccessor<Source.State>
+    public func set<Source: ListViewSource>(source: Source, initial: Source.State, animated: Bool = false) -> StateAccessor<Source.State>
     {
         self.sourcePresenter.discard()
-        
+
         let sourcePresenter = SourcePresenter(initial: initial, source: source, didChange: { [weak self] in
             guard let self = self else { return }
             guard self.sourceChangedTimer == nil else { return }
-            
+
             self.sourceChangedTimer = ReloadTimer {
                 self.sourceChangedTimer = nil
                 self.setContentFromSource(animated: true)
             }
         })
-        
+
         self.sourcePresenter = sourcePresenter
-        
-        self.setContentFromSource(animated: animated)
-        
+
+        setContentFromSource(animated: animated)
+
         return StateAccessor(get: {
             sourcePresenter.state
         }, set: {
             sourcePresenter.state = $0
         })
     }
-    
-    public func configure(with configure : ListProperties.Configure)
-    {
+
+    public func configure(with configure: ListProperties.Configure) {
         let description = ListProperties(
             animatesChanges: true,
-            layout: self.layout,
-            appearance: self.appearance,
-            scrollIndicatorInsets: self.scrollIndicatorInsets,
-            behavior: self.behavior,
-            autoScrollAction: self.autoScrollAction,
-            accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
-            debuggingIdentifier: self.debuggingIdentifier,
+            layout: layout,
+            appearance: appearance,
+            scrollIndicatorInsets: scrollIndicatorInsets,
+            behavior: behavior,
+            autoScrollAction: autoScrollAction,
+            accessibilityIdentifier: collectionView.accessibilityIdentifier,
+            debuggingIdentifier: debuggingIdentifier,
             configure: configure
         )
-        
+
         self.configure(with: description)
     }
-    
+
     let updateQueue = ListChangesQueue()
-    
-    public func configure(with properties : ListProperties)
-    {
+
+    public func configure(with properties: ListProperties) {
         /// We enqueue these changes into the update queue to ensure they are not applied
         /// before it is safe to do so. Currently, "safe" means "during the application of a reorder".
         ///
         /// See `CollectionViewLayout.sendEndQueuingEditsAfterDelay()` for more.
-        
-        self.updateQueue.add { [weak self] in
+
+        updateQueue.add { [weak self] in
             guard let self = self else { return }
-            
+
             let animated = properties.animatesChanges
-            
+
             self.appearance = properties.appearance
             self.behavior = properties.behavior
             self.autoScrollAction = properties.autoScrollAction
@@ -754,88 +758,88 @@ public final class ListView : UIView, KeyboardObserverDelegate
             self.actions = properties.actions
 
             self.stateObserver = properties.stateObserver
-            
+
             self.environment = properties.environment
-            
+
             self.set(layout: properties.layout, animated: animated)
-            
+
             self.setContent(animated: animated, properties.content)
         }
     }
-    
-    private func setContentFromSource(animated : Bool = false)
-    {
-        let oldIdentifier = self.storage.allContent.identifier
-        
-        self.storage.allContent = self.sourcePresenter.reloadContent()
-        
-        let newIdentifier = self.storage.allContent.identifier
+
+    private func setContentFromSource(animated: Bool = false) {
+        let oldIdentifier = storage.allContent.identifier
+
+        storage.allContent = sourcePresenter.reloadContent()
+
+        let newIdentifier = storage.allContent.identifier
         let identifierChanged = oldIdentifier != newIdentifier
-        
-        self.storage.presentationState.context = self.storage.allContent.context
-        
-        self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
+
+        storage.presentationState.context = storage.allContent.context
+
+        updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
-    
+
     //
+
     // MARK: UIView
+
     //
-    
+
     @available(*, unavailable, message: "sizeThatFits does not re-measure the size of the list. Use ListView.contentSize(in:for:) instead.")
-    public override func sizeThatFits(_ size: CGSize) -> CGSize {
+    override public func sizeThatFits(_ size: CGSize) -> CGSize {
         super.sizeThatFits(size)
     }
-    
+
     @available(*, unavailable, message: "intrinsicContentSize does not re-measure the size of the list. Use ListView.contentSize(in:for:) instead.")
-    public override var intrinsicContentSize: CGSize {
+    override public var intrinsicContentSize: CGSize {
         super.intrinsicContentSize
     }
-    
-    public override var frame: CGRect {
+
+    override public var frame: CGRect {
         didSet {
             self.frameDidChange(from: oldValue, to: self.frame)
         }
     }
-    
-    public override var bounds: CGRect {
+
+    override public var bounds: CGRect {
         get { super.bounds }
-        
+
         set {
-            let oldValue = self.frame
-            
+            let oldValue = frame
+
             super.bounds = newValue
-            
-            self.frameDidChange(from: oldValue, to: self.frame)
+
+            frameDidChange(from: oldValue, to: frame)
         }
     }
-    
-    private func frameDidChange(from old : CGRect, to new : CGRect) {
-        
+
+    private func frameDidChange(from old: CGRect, to new: CGRect) {
         /// Set the frame explicitly, so that the layout can occur
         /// within performBatchUpdates. Waiting for layoutSubviews() is too late.
-        self.collectionView.frame = self.bounds
-        
+        collectionView.frame = bounds
+
         /// If nothing has changed, there's no work here – return early.
         guard old != new else {
             return
         }
-        
+
         /// Once the view actually has a size, we can provide content.
         ///
         /// There's no value in having content with no view size, as we cannot size cells otherwise.
         let fromEmpty = old.size.isEmpty && new.size.isEmpty == false
         let toEmpty = old.size.isEmpty == false && new.size.isEmpty
-        
+
         if fromEmpty {
-            self.updatePresentationState(for: .transitionedToBounds(isEmpty: false))
+            updatePresentationState(for: .transitionedToBounds(isEmpty: false))
         } else if toEmpty {
-            self.updatePresentationState(for: .transitionedToBounds(isEmpty: true))
+            updatePresentationState(for: .transitionedToBounds(isEmpty: true))
         }
-        
+
         /// Our frame changed, update the keyboard inset in case the inset should now be different.
-        self.updateScrollViewInsets()
-        
-        ListStateObserver.perform(self.stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
+        updateScrollViewInsets()
+
+        ListStateObserver.perform(stateObserver.onFrameChanged, "Frame Changed", with: self) { actions in
             ListStateObserver.FrameChanged(
                 actions: actions,
                 positionInfo: self.scrollPositionInfo,
@@ -844,158 +848,157 @@ public final class ListView : UIView, KeyboardObserverDelegate
             )
         }
     }
-    
-    public override var backgroundColor: UIColor? {
+
+    override public var backgroundColor: UIColor? {
         didSet {
             self.collectionView.backgroundColor = self.backgroundColor
         }
     }
-    
-    public override func didMoveToWindow()
-    {
+
+    override public func didMoveToWindow() {
         super.didMoveToWindow()
-        
-        if self.window != nil {
-            self.updateScrollViewInsets()
+
+        if window != nil {
+            updateScrollViewInsets()
         }
     }
-    
-    public override func didMoveToSuperview()
-    {
+
+    override public func didMoveToSuperview() {
         super.didMoveToSuperview()
-        
-        if self.superview != nil {
-            self.updateScrollViewInsets()
+
+        if superview != nil {
+            updateScrollViewInsets()
         }
     }
-    
-    override public func layoutSubviews()
-    {
+
+    override public func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.collectionView.frame = self.bounds
-        
+
+        collectionView.frame = bounds
+
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
-        self.updateScrollViewInsets()
+        updateScrollViewInsets()
     }
-    
+
     //
+
     // MARK: Internal - Updating Content
+
     //
-    
-    internal func setPresentationStateItemPositions()
-    {        
-        self.storage.presentationState.forEachItem { indexPath, item in
+
+    internal func setPresentationStateItemPositions() {
+        storage.presentationState.forEachItem { indexPath, item in
             item.itemPosition = self.collectionViewLayout.positionForItem(at: indexPath)
         }
     }
-    
-    private func updateCollectionViewSelections(animated : Bool)
-    {
-        let oldSelected : Set<IndexPath> = Set(self.collectionView.indexPathsForSelectedItems ?? [])
-        let newSelected : Set<IndexPath> = Set(self.storage.presentationState.selectedIndexPaths)
-        
+
+    private func updateCollectionViewSelections(animated: Bool) {
+        let oldSelected: Set<IndexPath> = Set(collectionView.indexPathsForSelectedItems ?? [])
+        let newSelected: Set<IndexPath> = Set(storage.presentationState.selectedIndexPaths)
+
         let removed = oldSelected.subtracting(newSelected)
         let added = newSelected.subtracting(oldSelected)
-        
-        let view = self.collectionView
-        let state = self.storage.presentationState
-        
+
+        let view = collectionView
+        let state = storage.presentationState
+
         removed.forEach {
             let item = state.item(at: $0)
             view.deselectItem(at: $0, animated: animated)
             item.applyToVisibleCell(with: self.environment)
         }
-        
+
         added.forEach {
             let item = state.item(at: $0)
             view.selectItem(at: $0, animated: animated, scrollPosition: [])
             item.applyToVisibleCell(with: self.environment)
         }
     }
-    
+
     //
+
     // MARK: Internal - Updating Presentation State
+
     //
-    
+
     internal func updatePresentationState(
-        for reason : PresentationState.UpdateReason,
-        completion callerCompletion : @escaping (Bool) -> () = { _ in }
+        for reason: PresentationState.UpdateReason,
+        completion callerCompletion: @escaping (Bool) -> Void = { _ in }
     ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "List Update", for: self)
-        
-        let completion = { (completed : Bool) in
+
+        let completion = { (completed: Bool) in
             callerCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "List Update", for: self)
         }
-        
-        let indexPaths = self.collectionView.indexPathsForVisibleItems
-        
+
+        let indexPaths = collectionView.indexPathsForVisibleItems
+
         let indexPath = indexPaths.first
-        
-        let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
-        
+
+        let presentationStateTruncated = storage.presentationState.containsAllItems == false
+
         switch reason {
         case .scrolledDown:
-            let needsUpdate = self.collectionView.isScrolledNearBottom() && presentationStateTruncated
-            
+            let needsUpdate = collectionView.isScrolledNearBottom() && presentationStateTruncated
+
             if needsUpdate {
-                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+                updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
             } else {
                 completion(true)
             }
-            
+
         case .contentChanged:
-            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+            updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
 
         case .didEndDecelerating:
             if presentationStateTruncated {
-                self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+                updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
             } else {
                 completion(true)
             }
-            
+
         case .scrolledToTop:
             if presentationStateTruncated {
-                self.updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason, completion: completion)
+                updatePresentationStateWith(firstVisibleIndexPath: IndexPath(item: 0, section: 0), for: reason, completion: completion)
             } else {
                 completion(true)
             }
-            
-        case .transitionedToBounds(_):
-            self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
-            
-        case .programaticScrollDownTo(let scrollToIndexPath):
-            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
+
+        case .transitionedToBounds:
+            updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
+
+        case let .programaticScrollDownTo(scrollToIndexPath):
+            updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
         }
     }
-        
+
     private func updatePresentationStateWith(
         firstVisibleIndexPath indexPath: IndexPath?,
-        for reason : PresentationState.UpdateReason,
-        completion callerCompletion : @escaping (Bool) -> ()
+        for reason: PresentationState.UpdateReason,
+        completion callerCompletion: @escaping (Bool) -> Void
     ) {
         // Figure out visible content.
-        
-        let presentationState = self.storage.presentationState
-        
+
+        let presentationState = storage.presentationState
+
         let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
-        let visibleSlice = self.newVisibleSlice(to: indexPath)
+        let visibleSlice = newVisibleSlice(to: indexPath)
 
         let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
             ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
         }
 
         let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
-        
+
         let updateBackingData = {
             let dependencies = ItemStateDependencies(
                 reorderingDelegate: self,
                 coordinatorDelegate: self,
                 environmentProvider: { [weak self] in self?.environment ?? .empty }
             )
-            
+
             presentationState.update(
                 with: diff,
                 slice: visibleSlice,
@@ -1006,38 +1009,38 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 loggable: self
             )
         }
-                
+
         // Update Refresh Control
-        
+
         /**
          Update Refresh Control
-         
+
          Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
          we trigger a bug where updated indexes are calculated incorrectly.
          */
-        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl, in: self.collectionView)
-        
+        presentationState.updateRefreshControl(with: visibleSlice.content.refreshControl, in: collectionView)
+
         // Update Collection View
-        
-        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
+
+        performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
 
         // Update the offset of the scroll view to show the refresh control if needed
-        presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
+        presentationState.adjustContentOffsetForRefreshControl(in: collectionView)
 
         // Perform any needed auto scroll actions.
-        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+        performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
         // Update info for new contents.
-        
-        self.updateCollectionViewSelections(animated: reason.animated)
-        
+
+        updateCollectionViewSelections(animated: reason.animated)
+
         // Notify updates.
-        
+
         updateCallbacks.perform()
-        
+
         // Notify state reader the content updated.
-        
-        if case .contentChanged(_, _) = reason {
+
+        if case .contentChanged = reason {
             ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
                 ListStateObserver.ContentUpdated(
                     hadChanges: diff.changes.isEmpty == false,
@@ -1048,57 +1051,54 @@ public final class ListView : UIView, KeyboardObserverDelegate
             }
         }
     }
-    
-    private func newVisibleSlice(to indexPath : IndexPath) -> Content.Slice
-    {
-        if self.bounds.isEmpty {
+
+    private func newVisibleSlice(to indexPath: IndexPath) -> Content.Slice {
+        if bounds.isEmpty {
             return Content.Slice()
         } else {
-            switch self.autoScrollAction {
-            case .scrollToItem(let insertInfo):
-                let itemPath = self.storage.allContent.firstIndexPathForItem(with: insertInfo.insertedIdentifier)
+            switch autoScrollAction {
+            case let .scrollToItem(insertInfo):
+                let itemPath = storage.allContent.firstIndexPathForItem(with: insertInfo.insertedIdentifier)
                 guard let autoScrollIndexPath = itemPath else {
                     fallthrough
                 }
 
                 let greaterIndexPath = max(autoScrollIndexPath, indexPath)
-                return self.storage.allContent.sliceTo(indexPath: greaterIndexPath)
+                return storage.allContent.sliceTo(indexPath: greaterIndexPath)
 
             case .none, .pin:
 
-                return self.storage.allContent.sliceTo(indexPath: indexPath)
+                return storage.allContent.sliceTo(indexPath: indexPath)
             }
         }
     }
-    
-    private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool)
-    {
-        switch self.autoScrollAction {
+
+    private func performAutoScrollAction(with addedItems: Set<AnyIdentifier>, animated: Bool) {
+        switch autoScrollAction {
         case .none:
             return
-            
-        case .scrollToItem(let info):
+
+        case let .scrollToItem(info):
             let wasInserted = addedItems.contains(info.insertedIdentifier)
-            
-            if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
-                
+
+            if wasInserted, info.shouldPerform(scrollPositionInfo) {
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
                 let animation = info.animation.and(with: animated)
-                
-                if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
+
+                if let destination = info.destination.destination(with: content) {
+                    scrollTo(item: destination, position: info.position, animation: animation) { _ in
                         info.didPerform(self.scrollPositionInfo)
                     }
                 }
             }
-            
-        case .pin(let pin):
-            if pin.shouldPerform(self.scrollPositionInfo) {
+
+        case let .pin(pin):
+            if pin.shouldPerform(scrollPositionInfo) {
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
                 let animation = pin.animation.and(with: animated)
-                
-                if let destination = pin.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: pin.position, animation: animation) { _ in
+
+                if let destination = pin.destination.destination(with: content) {
+                    scrollTo(item: destination, position: pin.position, animation: animation) { _ in
                         pin.didPerform(self.scrollPositionInfo)
                     }
                 }
@@ -1107,16 +1107,15 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 
     private func performScroll(
-        to targetFrame : CGRect,
-        scrollPosition : ScrollPosition,
+        to targetFrame: CGRect,
+        scrollPosition: ScrollPosition,
         animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
-    )
-    {
+        completion: @escaping ScrollCompletion = { _ in }
+    ) {
         // If the item is already visible and that's good enough, return.
 
         let isAlreadyVisible = collectionView.visibleContentFrame.contains(targetFrame)
-        if isAlreadyVisible && scrollPosition.ifAlreadyVisible == .doNothing {
+        if isAlreadyVisible, scrollPosition.ifAlreadyVisible == .doNothing {
             return
         }
 
@@ -1153,17 +1152,16 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
-
         // Make sure we have a last loaded index path.
 
-        guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
+        guard let lastLoadedIndexPath = storage.presentationState.lastIndexPath else {
             return false
         }
 
         // Update presentation state if needed, then scroll.
 
         if lastLoadedIndexPath < toIndexPath {
-            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
+            updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
                 scroll()
             }
         } else {
@@ -1174,7 +1172,6 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 
     private func preparePresentationStateForScrollToSection(index: Int, scroll: @escaping () -> Void) -> Bool {
-
         // Make sure section is contained within all content.
 
         guard index < storage.allContent.sections.count else {
@@ -1185,7 +1182,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         if index >= storage.presentationState.sections.count {
             let toIndexPath = IndexPath(item: 0, section: index)
-            self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
+            updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
                 scroll()
             }
         } else {
@@ -1196,48 +1193,46 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 
     private func performBatchUpdates(
-        with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
+        with diff: SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
-        updateBackingData : @escaping () -> (),
-        completion callerCompletion : @escaping (Bool) -> ()
-    )
-    {
+        updateBackingData: @escaping () -> Void,
+        completion callerCompletion: @escaping (Bool) -> Void
+    ) {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update UICollectionView", for: self)
-        
-        let completion = { (completed : Bool) in
+
+        let completion = { (completed: Bool) in
             callerCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "Update UICollectionView", for: self)
         }
-        
-        let view = self.collectionView
-        
+
+        let view = collectionView
+
         let changes = CollectionViewChanges(sectionChanges: diff.changes)
-            
+
         let batchUpdates = {
             updateBackingData()
-            
+
             // Sections
 
-            view.deleteSections(IndexSet(changes.deletedSections.map { $0.oldIndex }))
-            view.insertSections(IndexSet(changes.insertedSections.map { $0.newIndex }))
-            
+            view.deleteSections(IndexSet(changes.deletedSections.map(\.oldIndex)))
+            view.insertSections(IndexSet(changes.insertedSections.map(\.newIndex)))
+
             changes.movedSections.forEach {
                 view.moveSection($0.oldIndex, toSection: $0.newIndex)
             }
 
             // Items
-            
-            view.deleteItems(at: changes.deletedItems.map { $0.oldIndex })
-            view.insertItems(at: changes.insertedItems.map { $0.newIndex })
-            
+
+            view.deleteItems(at: changes.deletedItems.map(\.oldIndex))
+            view.insertItems(at: changes.insertedItems.map(\.newIndex))
+
             changes.movedItems.forEach {
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
         }
-        
+
         if changes.hasIndexAffectingChanges {
-            
-            if self.hasInProgressReorders {
+            if hasInProgressReorders {
                 print(
                     """
                     LISTABLE WARNING: Reordering while applying an update diff that has changes which affect index \
@@ -1246,12 +1241,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
                     """
                 )
             }
-            
-            self.cancelAllInProgressReorders()
+
+            cancelAllInProgressReorders()
         }
-        
-        self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
-        
+
+        collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
+
         if animated {
             view.performBatchUpdates(batchUpdates, completion: completion)
         } else {
@@ -1260,10 +1255,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
             }
         }
     }
-    
-    private static func diffWith(old : [Section], new : [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
+
+    private static func diffWith(old: [Section], new: [Section]) -> SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>
     {
-        return SectionedDiff(
+        SectionedDiff(
             old: old,
             new: new,
             configuration: SectionedDiff.Configuration(
@@ -1282,9 +1277,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
 }
 
-
-public extension ListView
-{
+public extension ListView {
     ///
     /// Call this method to force an immediate, synchronous re-render of the list
     /// and its content when writing unit or snapshot tests. This avoids needing to
@@ -1293,79 +1286,73 @@ public extension ListView
     ///
     /// **WARNING**: You must **not** call this method outside of tests. Doing so will cause a fatal error.
     ///
-    func testing_forceLayoutUpdateNow()
-    {
+    func testing_forceLayoutUpdateNow() {
         guard NSClassFromString("XCTestCase") != nil else {
             fatalError("You must not call testing_forceLayoutUpdateNow outside of an XCTest environment.")
         }
-        
-        self.collectionView.reloadData()
+
+        collectionView.reloadData()
     }
 }
 
-
-extension ListView : ItemContentCoordinatorDelegate
-{
-    func coordinatorUpdated(for : AnyItem)
-    {
-        self.collectionViewLayout.setNeedsRelayout()
-        self.collectionView.layoutIfNeeded()
+extension ListView: ItemContentCoordinatorDelegate {
+    func coordinatorUpdated(for _: AnyItem) {
+        collectionViewLayout.setNeedsRelayout()
+        collectionView.layoutIfNeeded()
     }
 }
 
-
-extension ListView : ReorderingActionsDelegate
-{
+extension ListView: ReorderingActionsDelegate {
     //
+
     // MARK: Internal - Moving Items
+
     //
-    
-    func beginReorder(for item : AnyPresentationItemState) -> Bool
-    {
-        guard let indexPath = self.storage.presentationState.indexPath(for: item) else {
+
+    func beginReorder(for item: AnyPresentationItemState) -> Bool {
+        guard let indexPath = storage.presentationState.indexPath(for: item) else {
             return false
         }
-        
-        if self.collectionView.beginInteractiveMovementForItem(at: indexPath) {
-            item.beginReorder(from: indexPath, with: self.environment)
-            
+
+        if collectionView.beginInteractiveMovementForItem(at: indexPath) {
+            item.beginReorder(from: indexPath, with: environment)
+
             return true
         } else {
             return false
         }
     }
-    
+
     func updateReorderTargetPosition(
-        with recognizer : ItemReordering.GestureRecognizer,
-        for item : AnyPresentationItemState
-    )
-    {
-        guard let position = recognizer.reorderPosition(in: self.collectionView) else {
+        with recognizer: ItemReordering.GestureRecognizer,
+        for _: AnyPresentationItemState
+    ) {
+        guard let position = recognizer.reorderPosition(in: collectionView) else {
             return
         }
-        
-        self.collectionView.updateInteractiveMovementTargetPosition(position)
+
+        collectionView.updateInteractiveMovementTargetPosition(position)
     }
-    
-    func endReorder(for item : AnyPresentationItemState, with result : ReorderingActions.Result)
-    {
-        item.endReorder(with: self.environment, result: result)
-        
+
+    func endReorder(for item: AnyPresentationItemState, with result: ReorderingActions.Result) {
+        item.endReorder(with: environment, result: result)
+
         switch result {
         case .finished:
-            self.collectionView.endInteractiveMovement()
+            collectionView.endInteractiveMovement()
         case .cancelled:
-            self.collectionView.cancelInteractiveMovement()
+            collectionView.cancelInteractiveMovement()
         }
     }
-    
+
     func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool {
-        guard let indexPath = self.storage.presentationState.indexPath(for: item),
-        self.dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath) else {
+        guard let indexPath = storage.presentationState.indexPath(for: item),
+              dataSource.collectionView(self.collectionView, canMoveItemAt: indexPath)
+        else {
             return false
         }
 
-        let destinationPath : IndexPath
+        let destinationPath: IndexPath
         switch direction {
         case .up:
             // Moving an item up means decrementing the index.
@@ -1373,10 +1360,9 @@ extension ListView : ReorderingActionsDelegate
                 // First item in section, we should go to the previous section
                 if indexPath.section > 0 {
                     let newSection = indexPath.section - 1
-                    let rowInNewSection = self.storage.allContent.sections[indexPath.section - 1].count
-                    destinationPath = IndexPath(row: rowInNewSection, section:newSection )
-                }
-                else {
+                    let rowInNewSection = storage.allContent.sections[indexPath.section - 1].count
+                    destinationPath = IndexPath(row: rowInNewSection, section: newSection)
+                } else {
                     // Unable to move up, we are item 0,0.
                     return false
                 }
@@ -1398,65 +1384,57 @@ extension ListView : ReorderingActionsDelegate
                 destinationPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
             }
         }
-        
-        let targetPath = self.delegate.collectionView(self.collectionView, targetIndexPathForMoveFromItemAt: indexPath, toProposedIndexPath: destinationPath)
-        
+
+        let targetPath = delegate.collectionView(collectionView, targetIndexPathForMoveFromItemAt: indexPath, toProposedIndexPath: destinationPath)
+
         /*  We are responding to a user event, but won't be using the `InteractiveMovement` API the collection view provides as we are being called from an accessibility action rather than a gesture regognizer. This means we'll have to call out to the dataSource directly.
-        
-            NOTE: It's Important that we call `dataSource.collectionView(_ :, moveItemAt:, to:)` to perform the move in the data source before calling `collectionView.moveItem(at:, to:)` to update the collection view itself.
-        */
-        
-        item.beginReorder(from: indexPath, with: self.environment)
-        self.dataSource.collectionView(self.collectionView, moveItemAt: indexPath, to: targetPath)
-        self.collectionView.moveItem(at: indexPath, to: targetPath)
+
+             NOTE: It's Important that we call `dataSource.collectionView(_ :, moveItemAt:, to:)` to perform the move in the data source before calling `collectionView.moveItem(at:, to:)` to update the collection view itself.
+         */
+
+        item.beginReorder(from: indexPath, with: environment)
+        dataSource.collectionView(collectionView, moveItemAt: indexPath, to: targetPath)
+        collectionView.moveItem(at: indexPath, to: targetPath)
         item.endReorder(with: environment, result: .finished)
-        
+
         return true
     }
-    
+
     func cancelAllInProgressReorders() {
-        
-        self.storage.presentationState.forEachItem { _, item in
+        storage.presentationState.forEachItem { _, item in
             item.endReorder(with: self.environment, result: .cancelled)
         }
-        
-        self.collectionView.cancelInteractiveMovement()
+
+        collectionView.cancelInteractiveMovement()
     }
-    
-    private var hasInProgressReorders : Bool {
-        
-        for section in self.storage.presentationState.sections {
+
+    private var hasInProgressReorders: Bool {
+        for section in storage.presentationState.sections {
             for item in section.items {
                 if item.isReordering {
                     return true
                 }
             }
         }
-        
+
         return false
     }
 }
 
-
-extension ListView : SignpostLoggable
-{
-    var signpostInfo : SignpostLoggingInfo {
+extension ListView: SignpostLoggable {
+    var signpostInfo: SignpostLoggingInfo {
         SignpostLoggingInfo(
-            identifier: self.debuggingIdentifier,
+            identifier: debuggingIdentifier,
             instanceIdentifier: String(format: "%p", unsafeBitCast(self, to: Int.self))
         )
     }
 }
 
+private extension UIScrollView {
+    func isScrolledNearBottom() -> Bool {
+        let viewHeight = bounds.size.height
 
-fileprivate extension UIScrollView
-{
-
-    func isScrolledNearBottom() -> Bool
-    {
-        let viewHeight = self.bounds.size.height
-        
         // We are within one half view height from the bottom of the content.
-        return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
+        return contentOffset.y + (viewHeight * 1.5) > contentSize.height
     }
 }

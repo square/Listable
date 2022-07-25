@@ -7,41 +7,38 @@
 
 import Foundation
 
+extension PresentationState {
+    final class SectionState {
+        var model: Section
 
-extension PresentationState
-{
-    final class SectionState
-    {
-        var model : Section
-        
-        let header : HeaderFooterViewStatePair
-        let footer : HeaderFooterViewStatePair
-        
-        var items : [AnyPresentationItemState]
-        
-        let performsContentCallbacks : Bool
-        
+        let header: HeaderFooterViewStatePair
+        let footer: HeaderFooterViewStatePair
+
+        var items: [AnyPresentationItemState]
+
+        let performsContentCallbacks: Bool
+
         init(
-            with model : Section,
-            dependencies : ItemStateDependencies,
-            updateCallbacks : UpdateCallbacks,
-            performsContentCallbacks : Bool
+            with model: Section,
+            dependencies: ItemStateDependencies,
+            updateCallbacks: UpdateCallbacks,
+            performsContentCallbacks: Bool
         ) {
             self.model = model
-                        
-            self.header = .init(state: SectionState.newHeaderFooterState(
+
+            header = .init(state: SectionState.newHeaderFooterState(
                 with: model.header,
                 performsContentCallbacks: performsContentCallbacks
             ))
-            
-            self.footer = .init(state: SectionState.newHeaderFooterState(
+
+            footer = .init(state: SectionState.newHeaderFooterState(
                 with: model.footer,
                 performsContentCallbacks: performsContentCallbacks
             ))
-            
+
             self.performsContentCallbacks = performsContentCallbacks
-            
-            self.items = self.model.items.map {
+
+            items = self.model.items.map {
                 $0.newPresentationItemState(
                     with: dependencies,
                     updateCallbacks: updateCallbacks,
@@ -49,69 +46,67 @@ extension PresentationState
                 ) as! AnyPresentationItemState
             }
         }
-        
+
         func resetAllCachedSizes() {
-            self.header.state?.resetCachedSizes()
-            self.footer.state?.resetCachedSizes()
-            
-            self.items.forEach { item in
+            header.state?.resetCachedSizes()
+            footer.state?.resetCachedSizes()
+
+            items.forEach { item in
                 item.resetCachedSizes()
             }
         }
-        
-        func removeItem(at index : Int) -> AnyPresentationItemState
-        {
-            self.model.items.remove(at: index)
-            return self.items.remove(at: index)
+
+        func removeItem(at index: Int) -> AnyPresentationItemState {
+            model.items.remove(at: index)
+            return items.remove(at: index)
         }
-        
-        func insert(item : AnyPresentationItemState, at index : Int)
-        {
-            self.model.items.insert(item.anyModel, at: index)
-            self.items.insert(item, at: index)
+
+        func insert(item: AnyPresentationItemState, at index: Int) {
+            model.items.insert(item.anyModel, at: index)
+            items.insert(item, at: index)
         }
-        
+
         func update(
-            with oldSection : Section,
-            new newSection : Section,
-            changes : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges,
+            with _: Section,
+            new newSection: Section,
+            changes: SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>.ItemChanges,
             reason: ApplyReason,
-            animated : Bool,
-            dependencies : ItemStateDependencies,
-            updateCallbacks : UpdateCallbacks
+            animated: Bool,
+            dependencies: ItemStateDependencies,
+            updateCallbacks: UpdateCallbacks
         ) {
-            self.model = newSection
-            
+            model = newSection
+
             let environment = dependencies.environmentProvider()
-            
-            self.header.update(
+
+            header.update(
                 with: SectionState.headerFooterState(
-                    current: self.header.state,
-                    new: self.model.header,
-                    performsContentCallbacks: self.performsContentCallbacks
+                    current: header.state,
+                    new: model.header,
+                    performsContentCallbacks: performsContentCallbacks
                 ),
-                new: self.model.header,
+                new: model.header,
                 reason: reason,
                 animated: animated,
                 updateCallbacks: updateCallbacks,
                 environment: environment
             )
-            
-            self.footer.update(
+
+            footer.update(
                 with: SectionState.headerFooterState(
-                    current: self.footer.state,
-                    new: self.model.footer,
-                    performsContentCallbacks: self.performsContentCallbacks
+                    current: footer.state,
+                    new: model.footer,
+                    performsContentCallbacks: performsContentCallbacks
                 ),
-                new: self.model.footer,
+                new: model.footer,
                 reason: reason,
                 animated: animated,
                 updateCallbacks: updateCallbacks,
                 environment: environment
             )
-            
-            self.items = changes.transform(
-                old: self.items,
+
+            items = changes.transform(
+                old: items,
                 removed: {
                     _, item in item.wasRemoved(updateCallbacks: updateCallbacks)
                 },
@@ -122,51 +117,48 @@ extension PresentationState
                         performsContentCallbacks: self.performsContentCallbacks
                     ) as! AnyPresentationItemState
                 },
-                moved: { old, new, item in
+                moved: { _, new, item in
                     item.set(new: new, reason: .moveFromList, updateCallbacks: updateCallbacks, environment: environment)
                 },
-                updated: { old, new, item in
+                updated: { _, new, item in
                     item.set(new: new, reason: .updateFromList, updateCallbacks: updateCallbacks, environment: environment)
                 },
-                noChange: { old, new, item in
+                noChange: { _, new, item in
                     item.set(new: new, reason: .noChange, updateCallbacks: updateCallbacks, environment: environment)
                 }
             )
         }
-        
-        func wasRemoved(updateCallbacks : UpdateCallbacks)
-        {
-            for item in self.items {
+
+        func wasRemoved(updateCallbacks: UpdateCallbacks) {
+            for item in items {
                 item.wasRemoved(updateCallbacks: updateCallbacks)
             }
         }
-        
+
         static func newHeaderFooterState(
-            with new : AnyHeaderFooterConvertible?,
-            performsContentCallbacks : Bool
-        ) -> AnyPresentationHeaderFooterState?
-        {
+            with new: AnyHeaderFooterConvertible?,
+            performsContentCallbacks: Bool
+        ) -> AnyPresentationHeaderFooterState? {
             if let new = new {
                 return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
             } else {
                 return nil
             }
         }
-        
+
         static func headerFooterState(
-            current : AnyPresentationHeaderFooterState?,
-            new : AnyHeaderFooterConvertible?,
-            performsContentCallbacks : Bool
-        ) -> AnyPresentationHeaderFooterState?
-        {
+            current: AnyPresentationHeaderFooterState?,
+            new: AnyHeaderFooterConvertible?,
+            performsContentCallbacks: Bool
+        ) -> AnyPresentationHeaderFooterState? {
             /// Eagerly convert the header/footer to the correct final type, so the `type(of:)` check later
             /// on in the function is comparing `HeaderFooter<Content>` types.
             let new = new?.asAnyHeaderFooter()
-            
+
             if let current = current {
                 if let new = new {
                     let isSameType = type(of: current.anyModel) == type(of: new)
-                    
+
                     if isSameType {
                         return current
                     } else {

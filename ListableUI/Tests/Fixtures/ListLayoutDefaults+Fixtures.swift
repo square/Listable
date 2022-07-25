@@ -8,8 +8,7 @@
 import ListableUI
 
 extension ListLayoutDefaults {
-    
-    static var testing : ListLayoutDefaults {
+    static var testing: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .fade)
     }
 }

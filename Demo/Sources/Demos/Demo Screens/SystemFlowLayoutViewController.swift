@@ -12,89 +12,84 @@ import UIKit
  Implements  a very basic UICollectionViewFlowLayout, so we can use the debugger and view inspector
  to determine how it implements various things like supplementary views, etc.
  */
-final class SystemFlowLayoutViewController : UIViewController
-{
-    let layout : UICollectionViewFlowLayout
-    let collectionView : UICollectionView
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
-        self.layout = UICollectionViewFlowLayout()
-        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        
+final class SystemFlowLayoutViewController: UIViewController {
+    let layout: UICollectionViewFlowLayout
+    let collectionView: UICollectionView
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        layout = UICollectionViewFlowLayout()
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        self.title = "Flow Layout Demo"
+
+        title = "Flow Layout Demo"
     }
-    
-    required init?(coder: NSCoder) { fatalError() }
-    
-    override func loadView()
-    {
-        self.view = self.collectionView
-        
-        self.collectionView.backgroundColor = .white
-        
-        self.collectionView.register(FlowCell.self, forCellWithReuseIdentifier: "Cell")
-        self.collectionView.register(FlowHeader.self, forSupplementaryViewOfKind:UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
-        self.collectionView.register(FlowFooter.self, forSupplementaryViewOfKind:UICollectionView.elementKindSectionFooter , withReuseIdentifier: "Footer")
-        
-        self.layout.headerReferenceSize = CGSize(width: 300.0, height: 50.0)
-        self.layout.footerReferenceSize = CGSize(width: 300.0, height: 50.0)
-        self.layout.itemSize = CGSize(width: 300.0, height: 100.0)
-        
-        self.layout.minimumLineSpacing = 20.0
-        self.layout.minimumInteritemSpacing = 20.0
-                
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
+
+    override func loadView() {
+        view = collectionView
+
+        collectionView.backgroundColor = .white
+
+        collectionView.register(FlowCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(FlowHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        collectionView.register(FlowFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
+
+        layout.headerReferenceSize = CGSize(width: 300.0, height: 50.0)
+        layout.footerReferenceSize = CGSize(width: 300.0, height: 50.0)
+        layout.itemSize = CGSize(width: 300.0, height: 100.0)
+
+        layout.minimumLineSpacing = 20.0
+        layout.minimumInteritemSpacing = 20.0
+
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
-    
-    fileprivate let items : [[FlowItem]] = [
+
+    fileprivate let items: [[FlowItem]] = [
         [
             // Empty section.
         ],
         [
             // Section with one item.
-            
-            FlowItem(title: "Item 0, Section 1")
+
+            FlowItem(title: "Item 0, Section 1"),
         ],
         [
             // Section with two items.
-            
+
             FlowItem(title: "Item 0, Section 2"),
-            FlowItem(title: "Item 1, Section 2")
+            FlowItem(title: "Item 1, Section 2"),
         ],
         [
             // Section with three items.
-            
+
             FlowItem(title: "Item 0, Section 3"),
             FlowItem(title: "Item 1, Section 3"),
-            FlowItem(title: "Item 2, Section 3")
-        ]
+            FlowItem(title: "Item 2, Section 3"),
+        ],
     ]
 }
 
-
-extension SystemFlowLayoutViewController : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+extension SystemFlowLayoutViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     // MARK: UICollectionViewDataSource
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int
-    {
-        return self.items.count
+
+    func numberOfSections(in _: UICollectionView) -> Int {
+        items.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-    {
-        return self.items[section].count
+
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        items[section].count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView
     {
         switch kind {
@@ -105,52 +100,45 @@ extension SystemFlowLayoutViewController : UICollectionViewDataSource, UICollect
         default: fatalError()
         }
     }
-    
+
     // MARK: UICollectionViewDelegate
-    
+
     // MARK: UICollectionViewDelegateFlowLayout
 }
 
-
-fileprivate struct FlowItem : Equatable
-{
-    var title : String
+private struct FlowItem: Equatable {
+    var title: String
 }
 
-
-final fileprivate class FlowCell : UICollectionViewCell
-{
-    override init(frame: CGRect)
-    {
+private final class FlowCell: UICollectionViewCell {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.backgroundColor = .init(white: 0.9, alpha: 1.0)
+
+        backgroundColor = .init(white: 0.9, alpha: 1.0)
     }
-    
-    required init?(coder: NSCoder) { fatalError() }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
 }
 
-
-final fileprivate class FlowHeader : UICollectionReusableView
-{
-    override init(frame: CGRect)
-    {
+private final class FlowHeader: UICollectionReusableView {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.backgroundColor = .init(white: 0.95, alpha: 1.0)
+
+        backgroundColor = .init(white: 0.95, alpha: 1.0)
     }
-    
-    required init?(coder: NSCoder) { fatalError() }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
 }
 
-final fileprivate class FlowFooter : UICollectionReusableView
-{
-    override init(frame: CGRect)
-    {
+private final class FlowFooter: UICollectionReusableView {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.backgroundColor = .init(white: 0.8, alpha: 1.0)
+
+        backgroundColor = .init(white: 0.8, alpha: 1.0)
     }
-    
-    required init?(coder: NSCoder) { fatalError() }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
 }

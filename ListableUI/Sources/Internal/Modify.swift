@@ -7,9 +7,7 @@
 
 import Foundation
 
-
-func modified<Value>(_ initial : Value, _ modify : (inout Value) -> ()) -> Value
-{
+func modified<Value>(_ initial: Value, _ modify: (inout Value) -> Void) -> Value {
     var copy = initial
     modify(&copy)
     return copy

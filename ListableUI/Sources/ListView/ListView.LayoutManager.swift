@@ -8,51 +8,46 @@
 import Foundation
 import UIKit
 
+extension ListView {
+    final class LayoutManager {
+        unowned let collectionView: UICollectionView
 
-extension ListView
-{
-    final class LayoutManager
-    {
-        unowned let collectionView : UICollectionView
+        private(set) var collectionViewLayout: CollectionViewLayout
 
-        private(set) var collectionViewLayout : CollectionViewLayout
-
-        var layout : AnyListLayout {
+        var layout: AnyListLayout {
             collectionViewLayout.layout
         }
 
-        init(layout collectionViewLayout : CollectionViewLayout, collectionView : UICollectionView)
-        {
+        init(layout collectionViewLayout: CollectionViewLayout, collectionView: UICollectionView) {
             self.collectionViewLayout = collectionViewLayout
             self.collectionView = collectionView
         }
 
         func stateForItem(at indexPath: IndexPath) -> AnyPresentationItemState {
-            self.collectionViewLayout.layout.content.item(at: indexPath).state
+            collectionViewLayout.layout.content.item(at: indexPath).state
         }
 
-        func set(layout : LayoutDescription, animated : Bool, completion : @escaping () -> ())
-        {
-            if self.collectionViewLayout.layoutDescription.configuration.isSameLayoutType(as: layout.configuration) {
-                self.collectionViewLayout.layoutDescription = layout
+        func set(layout: LayoutDescription, animated: Bool, completion: @escaping () -> Void) {
+            if collectionViewLayout.layoutDescription.configuration.isSameLayoutType(as: layout.configuration) {
+                collectionViewLayout.layoutDescription = layout
 
-                let shouldRebuild = self.collectionViewLayout.layoutDescription.configuration.shouldRebuild(
-                    layout: self.collectionViewLayout.layout
+                let shouldRebuild = collectionViewLayout.layoutDescription.configuration.shouldRebuild(
+                    layout: collectionViewLayout.layout
                 )
 
                 if shouldRebuild {
-                    /// TODO: We shouldn't need to rebuild in any case here; just push the new values through to the ListLayout.
-                    self.collectionViewLayout.setNeedsRebuild(animated: animated)
+                    // TODO: We shouldn't need to rebuild in any case here; just push the new values through to the ListLayout.
+                    collectionViewLayout.setNeedsRebuild(animated: animated)
                 }
             } else {
-                self.collectionViewLayout = CollectionViewLayout(
-                    delegate: self.collectionViewLayout.delegate,
+                collectionViewLayout = CollectionViewLayout(
+                    delegate: collectionViewLayout.delegate,
                     layoutDescription: layout,
-                    appearance: self.collectionViewLayout.appearance,
-                    behavior: self.collectionViewLayout.behavior
+                    appearance: collectionViewLayout.appearance,
+                    behavior: collectionViewLayout.behavior
                 )
 
-                self.collectionView.setCollectionViewLayout(self.collectionViewLayout, animated: animated) { _ in
+                collectionView.setCollectionViewLayout(collectionViewLayout, animated: animated) { _ in
                     completion()
                 }
             }

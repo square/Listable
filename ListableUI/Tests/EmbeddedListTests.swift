@@ -7,7 +7,4 @@
 
 import XCTest
 
-class EmbeddedListTests: XCTestCase
-{
-
-}
+class EmbeddedListTests: XCTestCase {}

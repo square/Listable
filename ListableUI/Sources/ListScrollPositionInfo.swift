@@ -8,27 +8,27 @@
 import Foundation
 import UIKit
 
-
 /// Information about the current scroll position of a list,
 /// including which edges of the list are visible, and which items are visible.
 ///
 /// This is useful within callback APIs where you as a developer may want to
 /// perform different behavior based on the position of the list, eg, do you
 /// want to allow an auto-scroll action, etc.
-public struct ListScrollPositionInfo : Equatable {
-    
+public struct ListScrollPositionInfo: Equatable {
     //
+
     // MARK: Public
+
     //
-    
+
     /// Which items within the list are currently visible.
-    public var visibleItems : Set<AnyIdentifier>
-    
+    public var visibleItems: Set<AnyIdentifier>
+
     /// If the first item list is partially visible.
-    public var isFirstItemVisible : Bool
-    
+    public var isFirstItemVisible: Bool
+
     /// If the last item list is partially visible.
-    public var isLastItemVisible : Bool
+    public var isLastItemVisible: Bool
 
     /// Distance required to scroll to the bottom
     public var bottomScrollOffset: CGFloat
@@ -38,7 +38,7 @@ public struct ListScrollPositionInfo : Equatable {
 
     /// `safeAreaInsests` of the list view
     public var safeAreaInsets: UIEdgeInsets
-    
+
     ///
     /// Used to retrieve the visible content edges for the list's content.
     ///
@@ -81,131 +81,128 @@ public struct ListScrollPositionInfo : Equatable {
     /// Generally, you want to include the `safeAreaInsets` for the top, left, and right, but may want to exclude the bottom
     /// if you consider the bottom edge visible if it's visible below the home indicator on a home button-less iPhone or iPad.
     ///
-    public func visibleContentEdges(includingSafeAreaEdges safeAreaEdges : UIRectEdge = .all) -> UIRectEdge
+    public func visibleContentEdges(includingSafeAreaEdges safeAreaEdges: UIRectEdge = .all) -> UIRectEdge
     {
-        let safeArea = self.scrollViewState.safeAreaInsets.masked(by: safeAreaEdges)
-        
+        let safeArea = scrollViewState.safeAreaInsets.masked(by: safeAreaEdges)
+
         return UIRectEdge.visibleScrollViewContentEdges(
-            bounds: self.scrollViewState.bounds,
-            contentSize: self.scrollViewState.contentSize,
+            bounds: scrollViewState.bounds,
+            contentSize: scrollViewState.contentSize,
             safeAreaInsets: safeArea
         )
     }
-    
+
     //
+
     // MARK: Private
+
     //
-    
-    private let scrollViewState : ScrollViewState
-    
+
+    private let scrollViewState: ScrollViewState
+
     /// Creates a `ListScrollPositionInfo` for the provided scroll view.
     public init(
-        scrollView : UIScrollView,
-        visibleItems : Set<AnyIdentifier>,
-        isFirstItemVisible : Bool,
-        isLastItemVisible : Bool
+        scrollView: UIScrollView,
+        visibleItems: Set<AnyIdentifier>,
+        isFirstItemVisible: Bool,
+        isLastItemVisible: Bool
     ) {
-        self.scrollViewState = ScrollViewState(
+        scrollViewState = ScrollViewState(
             bounds: scrollView.bounds,
-            contentSize : scrollView.contentSize,
+            contentSize: scrollView.contentSize,
             safeAreaInsets: scrollView.safeAreaInsets
         )
-        
+
         self.visibleItems = visibleItems
-        
+
         self.isFirstItemVisible = isFirstItemVisible
         self.isLastItemVisible = isLastItemVisible
 
-        self.bottomScrollOffset = scrollView.contentSize.height - scrollView.bounds.size.height - scrollView.contentOffset.y + scrollView.adjustedContentInset.bottom
+        bottomScrollOffset = scrollView.contentSize.height - scrollView.bounds.size.height - scrollView.contentOffset.y + scrollView.adjustedContentInset.bottom
 
-        self.bounds = scrollView.bounds
-        self.safeAreaInsets = scrollView.safeAreaInsets
+        bounds = scrollView.bounds
+        safeAreaInsets = scrollView.safeAreaInsets
     }
-    
-    struct ScrollViewState : Equatable
-    {
-        var bounds : CGRect
-        var contentSize : CGSize
-        var safeAreaInsets : UIEdgeInsets
+
+    struct ScrollViewState: Equatable {
+        var bounds: CGRect
+        var contentSize: CGSize
+        var safeAreaInsets: UIEdgeInsets
     }
 }
 
-extension UIEdgeInsets
-{
-    func masked(by edges : UIRectEdge) -> UIEdgeInsets
-    {
+extension UIEdgeInsets {
+    func masked(by edges: UIRectEdge) -> UIEdgeInsets {
         var insets = UIEdgeInsets()
-        
+
         if edges.contains(.top) {
-            insets.top = self.top
+            insets.top = top
         }
-        
+
         if edges.contains(.left) {
-            insets.left = self.left
+            insets.left = left
         }
-        
+
         if edges.contains(.bottom) {
-            insets.bottom = self.bottom
+            insets.bottom = bottom
         }
-        
+
         if edges.contains(.right) {
-            insets.right = self.right
+            insets.right = right
         }
-        
+
         return insets
     }
 }
 
-extension UIRectEdge : CustomDebugStringConvertible
-{
+extension UIRectEdge: CustomDebugStringConvertible {
     static func visibleScrollViewContentEdges(
-        bounds : CGRect,
-        contentSize : CGSize,
-        safeAreaInsets : UIEdgeInsets
-    ) -> UIRectEdge
-    {
+        bounds: CGRect,
+        contentSize: CGSize,
+        safeAreaInsets: UIEdgeInsets
+    ) -> UIRectEdge {
         let insetBounds = bounds.inset(by: safeAreaInsets)
-                
+
         var edges = UIRectEdge()
-        
+
         if insetBounds.minY <= 0.0 {
             edges.formUnion(.top)
         }
-        
+
         if insetBounds.minX <= 0.0 {
             edges.formUnion(.left)
         }
-        
+
         if insetBounds.maxY >= contentSize.height {
             edges.formUnion(.bottom)
         }
-        
+
         if insetBounds.maxX >= contentSize.width {
             edges.formUnion(.right)
         }
-        
+
         return edges
     }
-    
+
     public var debugDescription: String {
         var components = [String]()
-        
-        if self.contains(.top) {
+
+        if contains(.top) {
             components += [".top"]
         }
-        
-        if self.contains(.left) {
+
+        if contains(.left) {
             components += [".left"]
         }
-        
-        if self.contains(.bottom) {
+
+        if contains(.bottom) {
             components += [".bottom"]
         }
-        
-        if self.contains(.right) {
+
+        if contains(.right) {
             components += [".right"]
         }
-        
+
         return "UIRectEdge(\(components.joined(separator: ", ")))"
     }
 }

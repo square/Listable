@@ -5,41 +5,40 @@
 //  Created by Kyle Van Essen on 3/24/20.
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
-import ListableUI
-import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
+import BlueprintUILists
+import ListableUI
 import UIKit
 
-final class SwipeActionsViewController: UIViewController  {
+final class SwipeActionsViewController: UIViewController {
     private let blueprintView = BlueprintView()
 
     private var allowDeleting: Bool = true
 
-    private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
+    private var items = (0 ..< 10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
 
     override func loadView() {
-        self.title = "Swipe Actions"
+        title = "Swipe Actions"
 
-        self.view = self.blueprintView
+        view = blueprintView
 
-        self.navigationItem.rightBarButtonItems = [
+        navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(toggleDelete)),
         ]
 
-        self.reloadData()
+        reloadData()
     }
 
     func reloadData(animated: Bool = false) {
-
-        self.blueprintView.element = List { list in
+        blueprintView.element = List { list in
 
             list.animatesChanges = animated
-            
+
             list.layout = .table { [weak self] in
                 guard let self = self else { return }
-                
+
                 if #available(iOS 11, *) {
                     $0.bounds = .init(
                         padding: UIEdgeInsets(
@@ -69,11 +68,11 @@ final class SwipeActionsViewController: UIViewController  {
                         SwipeActionsDemoItem(
                             item: item,
                             swipeActionsStyle:
-                                .init(
-                                    actionShape: .rectangle(cornerRadius: 8),
-                                    interActionSpacing: 8,
-                                    containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
-                                )
+                            .init(
+                                actionShape: .rectangle(cornerRadius: 8),
+                                interActionSpacing: 8,
+                                containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
+                            )
                         ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
@@ -83,7 +82,6 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
-        
         SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
             if allowDeleting {
                 SwipeAction(
@@ -94,7 +92,7 @@ final class SwipeActionsViewController: UIViewController  {
                     self?.confirmDelete(item: item, expandActions: expandActions)
                 }
             }
-            
+
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
                 backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
@@ -138,7 +136,6 @@ final class SwipeActionsViewController: UIViewController  {
         guard let index = items.firstIndex(of: item) else { return }
         items[index].isSaved.toggle()
         reloadData(animated: true)
-
     }
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
@@ -146,11 +143,11 @@ final class SwipeActionsViewController: UIViewController  {
         var swipeActionsStyle: DefaultSwipeActionsView.Style
 
         var identifierValue: Int {
-            self.item.identifier
+            item.identifier
         }
 
-        func element(with info : ApplyItemContentInfo) -> Element {
-            return Column { column in
+        func element(with _: ApplyItemContentInfo) -> Element {
+            Column { column in
 
                 column.horizontalAlignment = .fill
 
@@ -162,7 +159,7 @@ final class SwipeActionsViewController: UIViewController  {
                     row.add(child: Label(text: self.item.title))
 
                     let bookmark = UIImage(named: "bookmark")!
-                    
+
                     if item.isSaved {
                         var image = Image(image: bookmark)
                         image.contentMode = .center

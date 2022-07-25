@@ -7,10 +7,8 @@
 
 import Foundation
 
-
 extension UIEdgeInsets {
-    
-    static func + (lhs : UIEdgeInsets, rhs : UIEdgeInsets) -> UIEdgeInsets {
+    static func + (lhs: UIEdgeInsets, rhs: UIEdgeInsets) -> UIEdgeInsets {
         UIEdgeInsets(
             top: lhs.top + rhs.top,
             left: lhs.left + rhs.left,

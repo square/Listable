@@ -5,35 +5,28 @@
 //  Created by Kyle Van Essen on 8/10/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
+final class ListLayoutTests: XCTestCase {}
 
-final class ListLayoutTests : XCTestCase
-{
-    
-}
-
-
-final class AnyListLayoutTests : XCTestCase {
-            
+final class AnyListLayoutTests: XCTestCase {
     func test_onDidEndDraggingTargetContentOffset_for_velocity() {
-        
-        self.testcase("no paging") {
+        testcase("no paging") {
             let layout = layoutForVisibleTests(direction: .vertical, pagingBehavior: .none)
-            
+
             XCTAssertEqual(
                 layout.onDidEndDraggingTargetContentOffset(
                     for: CGPoint(x: 0, y: 0),
-                       velocity: CGPoint(x: 0, y: 1)
+                    velocity: CGPoint(x: 0, y: 1)
                 ),
                 nil
             )
         }
-        
-        self.testcase("vertical") {
+
+        testcase("vertical") {
             let layout = layoutForVisibleTests(direction: .vertical)
-            
+
             self.testcase("forward") {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
@@ -42,7 +35,7 @@ final class AnyListLayoutTests : XCTestCase {
                     ),
                     CGPoint(x: 0, y: 0.0)
                 )
-                
+
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 100),
@@ -51,7 +44,7 @@ final class AnyListLayoutTests : XCTestCase {
                     CGPoint(x: 0, y: 100.0)
                 )
             }
-            
+
             self.testcase("backward") {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
@@ -60,7 +53,7 @@ final class AnyListLayoutTests : XCTestCase {
                     ),
                     nil
                 )
-                
+
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 100),
@@ -70,8 +63,8 @@ final class AnyListLayoutTests : XCTestCase {
                 )
             }
         }
-        
-        self.testcase("horizontal") {
+
+        testcase("horizontal") {
             let layout = layoutForVisibleTests(direction: .horizontal)
 
             self.testcase("forward") {
@@ -82,8 +75,7 @@ final class AnyListLayoutTests : XCTestCase {
                     ),
                     CGPoint(x: 0.0, y: 0.0)
                 )
-                
-                
+
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 100, y: 0),
@@ -101,8 +93,7 @@ final class AnyListLayoutTests : XCTestCase {
                     ),
                     nil
                 )
-                
-                
+
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 100, y: 0),
@@ -113,12 +104,11 @@ final class AnyListLayoutTests : XCTestCase {
             }
         }
     }
-    
+
     func test_itemToScrollToOnDidEndDragging_after_velocity() {
-        
-        self.testcase("vertical") {
+        testcase("vertical") {
             let layout = layoutForVisibleTests(direction: .vertical)
-            
+
             self.testcase("forward") {
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
@@ -127,7 +117,7 @@ final class AnyListLayoutTests : XCTestCase {
                     )?.defaultFrame,
                     CGRect(x: 20, y: 10, width: 140, height: 100)
                 )
-                
+
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
                         after: CGPoint(x: 0, y: 50),
@@ -136,7 +126,7 @@ final class AnyListLayoutTests : XCTestCase {
                     CGRect(x: 20, y: 110, width: 140, height: 100)
                 )
             }
-            
+
             self.testcase("backward") {
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
@@ -145,7 +135,7 @@ final class AnyListLayoutTests : XCTestCase {
                     )?.defaultFrame,
                     nil
                 )
-                
+
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
                         after: CGPoint(x: 0, y: 350),
@@ -155,10 +145,10 @@ final class AnyListLayoutTests : XCTestCase {
                 )
             }
         }
-        
-        self.testcase("horizontal") {
+
+        testcase("horizontal") {
             let layout = layoutForVisibleTests(direction: .horizontal)
-            
+
             self.testcase("forward") {
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
@@ -167,7 +157,7 @@ final class AnyListLayoutTests : XCTestCase {
                     )?.defaultFrame,
                     CGRect(x: 20, y: 10, width: 100, height: 160)
                 )
-                
+
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
                         after: CGPoint(x: 50, y: 0),
@@ -176,7 +166,7 @@ final class AnyListLayoutTests : XCTestCase {
                     CGRect(x: 120, y: 10, width: 100, height: 160)
                 )
             }
-            
+
             self.testcase("backward") {
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
@@ -185,7 +175,7 @@ final class AnyListLayoutTests : XCTestCase {
                     )?.defaultFrame,
                     nil
                 )
-                
+
                 XCTAssertEqual(
                     layout.itemToScrollToOnDidEndDragging(
                         after: CGPoint(x: 350, y: 0),
@@ -196,10 +186,9 @@ final class AnyListLayoutTests : XCTestCase {
             }
         }
     }
-    
-    func test_rectForFindingItemToScrollToOnDidEndDragging_after_velocity() {
 
-        self.testcase("vertical") {
+    func test_rectForFindingItemToScrollToOnDidEndDragging_after_velocity() {
+        testcase("vertical") {
             let layout = layoutForVisibleTests(direction: .vertical)
 
             self.testcase("forward") {
@@ -211,7 +200,7 @@ final class AnyListLayoutTests : XCTestCase {
                     CGRect(x: 0, y: 100, width: 200, height: 1000)
                 )
             }
-            
+
             self.testcase("backward") {
                 XCTAssertEqual(
                     layout.rectForFindingItemToScrollToOnDidEndDragging(
@@ -222,10 +211,10 @@ final class AnyListLayoutTests : XCTestCase {
                 )
             }
         }
-        
-        self.testcase("horizontal") {
+
+        testcase("horizontal") {
             let layout = layoutForVisibleTests(direction: .horizontal)
-            
+
             self.testcase("forward") {
                 XCTAssertEqual(
                     layout.rectForFindingItemToScrollToOnDidEndDragging(
@@ -235,7 +224,7 @@ final class AnyListLayoutTests : XCTestCase {
                     CGRect(x: 100, y: 0, width: 1000, height: 200)
                 )
             }
-            
+
             self.testcase("backward") {
                 XCTAssertEqual(
                     layout.rectForFindingItemToScrollToOnDidEndDragging(
@@ -247,24 +236,23 @@ final class AnyListLayoutTests : XCTestCase {
             }
         }
     }
-    
+
     private func layoutForVisibleTests(
         direction: LayoutDirection,
-        pagingBehavior : ListPagingBehavior = .firstVisibleItemEdge
+        pagingBehavior: ListPagingBehavior = .firstVisibleItemEdge
     ) -> AnyListLayout {
-        
-        let list : ListProperties = .default { list in
-            
+        let list: ListProperties = .default { list in
+
             list.layout = .table {
                 $0.direction = direction
-                
+
                 $0.bounds = .init(
                     padding: UIEdgeInsets(top: 10, left: 20, bottom: 30, right: 40)
                 )
-                
+
                 $0.pagingBehavior = pagingBehavior
             }
-            
+
             list.add {
                 Section(1) {
                     TestingItemContent()
@@ -273,7 +261,7 @@ final class AnyListLayoutTests : XCTestCase {
                 } header: {
                     TestingHeaderFooterContent()
                 }
-                
+
                 Section(2) {
                     TestingItemContent()
                     TestingItemContent()
@@ -283,38 +271,36 @@ final class AnyListLayoutTests : XCTestCase {
                 }
             }
         }
-        
+
         let (layout, _) = list.makeLayout(
             in: CGSize(width: 200, height: 200),
             safeAreaInsets: .zero,
             itemLimit: nil
         )
-        
+
         return layout
     }
 }
 
-
-fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
-        
+private struct TestingHeaderFooterContent: HeaderFooterContent {
     func apply(
         to views: HeaderFooterContentViews<Self>,
-        for reason: ApplyReason,
-        with info: ApplyHeaderFooterContentInfo
+        for _: ApplyReason,
+        with _: ApplyHeaderFooterContentInfo
     ) {
         views.content.backgroundColor = .black
     }
-    
-    func isEquivalent(to other: TestingHeaderFooterContent) -> Bool {
+
+    func isEquivalent(to _: TestingHeaderFooterContent) -> Bool {
         false
     }
-    
+
     typealias ContentView = UIView
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
+
     var defaultHeaderFooterProperties: DefaultProperties {
         .defaults {
             $0.sizing = .fixed(width: 100, height: 100)
@@ -322,28 +308,25 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
     }
 }
 
-
-fileprivate struct TestingItemContent : ItemContent {
-        
+private struct TestingItemContent: ItemContent {
     var identifierValue: String {
         ""
     }
-    
-    func apply(to views: ItemContentViews<Self>, for reason: ApplyReason, with info: ApplyItemContentInfo)
-    {
+
+    func apply(to views: ItemContentViews<Self>, for _: ApplyReason, with _: ApplyItemContentInfo) {
         views.content.backgroundColor = .darkGray
     }
-    
-    func isEquivalent(to other: TestingItemContent) -> Bool {
+
+    func isEquivalent(to _: TestingItemContent) -> Bool {
         false
     }
-    
+
     typealias ContentView = UIView
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
+
     var defaultItemProperties: DefaultProperties {
         .defaults {
             $0.sizing = .fixed(width: 100, height: 100)

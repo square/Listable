@@ -6,105 +6,102 @@
 //  Copyright © 2021 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintUILists
 import BlueprintUICommonControls
+import BlueprintUILists
 
-
-final class PaymentTypesViewController : ListViewController {
-    
+final class PaymentTypesViewController: ListViewController {
     override func configure(list: inout ListProperties) {
-        
         list.layout = .table { table in
             table.layout.interSectionSpacingWithNoFooter = 10.0
             table.bounds = .init(
                 padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
             )
         }
-        
-        let types = self.types
-        
+
+        let types = types
+
         list.stateObserver.onItemReordered { [weak self] info in
             self?.save(with: info)
         }
-        
+
         list += Section(SectionID.main) { section in
-            
+
             section.header = PaymentTypeHeader(title: SectionID.main.title)
-            
-            section += types.filter { $0.isEnabled }
-            .filter { $0.isMain }
-            .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeItem(with:))
+
+            section += types.filter(\.isEnabled)
+                .filter(\.isMain)
+                .sorted { $0.sortOrder < $1.sortOrder }
+                .map(makeItem(with:))
         }
-        
+
         list += Section(SectionID.more) { section in
-            
+
             section.header = PaymentTypeHeader(title: SectionID.more.title)
-            
-            section += types.filter { $0.isEnabled }
-            .filter { $0.isMain == false }
-            .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeItem(with:))
+
+            section += types.filter(\.isEnabled)
+                .filter { $0.isMain == false }
+                .sorted { $0.sortOrder < $1.sortOrder }
+                .map(makeItem(with:))
         }
-        
+
         list += Section(SectionID.disabled) { section in
-            
+
             section.header = PaymentTypeHeader(title: SectionID.disabled.title)
-            
+
             section.reordering.minItemCount = 0
-            
+
             section += types.filter { $0.isEnabled == false }
-            .sorted { $0.sortOrder < $1.sortOrder }
-            .map(makeItem(with:))
-            
+                .sorted { $0.sortOrder < $1.sortOrder }
+                .map(makeItem(with:))
+
             if section.items.isEmpty {
                 section += EmptyRow()
             }
         }
     }
-    
-    private func save(with info : ListStateObserver.ItemReordered) {
+
+    private func save(with info: ListStateObserver.ItemReordered) {
         let main = info.sections.first { $0.identifier == Section.identifier(with: SectionID.main) }!
         let more = info.sections.first { $0.identifier == Section.identifier(with: SectionID.more) }!
         let disabled = info.sections.first { $0.identifier == Section.identifier(with: SectionID.disabled) }!
-        
-        let mainItems : [PaymentTypeRow] = main.filtered(to: PaymentTypeRow.self).map { row in
+
+        let mainItems: [PaymentTypeRow] = main.filtered(to: PaymentTypeRow.self).map { row in
             var row = row
             row.type.isEnabled = true
             row.type.isMain = true
-            
+
             return row
         }
-        
-        let moreItems : [PaymentTypeRow] = more.filtered(to: PaymentTypeRow.self).map { row in
+
+        let moreItems: [PaymentTypeRow] = more.filtered(to: PaymentTypeRow.self).map { row in
             var row = row
             row.type.isEnabled = true
             row.type.isMain = false
-            
+
             return row
         }
-        
-        let disabledItems : [PaymentTypeRow] = disabled.filtered(to: PaymentTypeRow.self).map { row in
+
+        let disabledItems: [PaymentTypeRow] = disabled.filtered(to: PaymentTypeRow.self).map { row in
             var row = row
             row.type.isEnabled = false
-            
+
             return row
         }
-        
-        var index : Int = 0
-        let all : [PaymentTypeRow] = (mainItems + moreItems + disabledItems).map { row in
+
+        var index = 0
+        let all: [PaymentTypeRow] = (mainItems + moreItems + disabledItems).map { row in
             defer { index += 1 }
-            
+
             var row = row
             row.type.sortOrder = index
-            
+
             return row
         }
-        
-        self.types = all.map(\.type)
+
+        types = all.map(\.type)
     }
-    
-    private func makeItem(with type : PaymentType) -> Item<PaymentTypeRow> {
+
+    private func makeItem(with type: PaymentType) -> Item<PaymentTypeRow> {
         Item(
             PaymentTypeRow(type: type) { isOn in
                 self.types = self.types.edit(with: type.name) {
@@ -114,13 +111,13 @@ final class PaymentTypesViewController : ListViewController {
             reordering: .init(sections: .all)
         )
     }
-    
-    enum SectionID : Hashable {
+
+    enum SectionID: Hashable {
         case main
         case more
         case disabled
-        
-        var title : String {
+
+        var title: String {
             switch self {
             case .main: return "Main payment types"
             case .more: return "More payment types"
@@ -130,29 +127,27 @@ final class PaymentTypesViewController : ListViewController {
     }
 }
 
-fileprivate struct PaymentTypeHeader : BlueprintHeaderFooterContent, Equatable {
-    
-    var title : String
-    
+private struct PaymentTypeHeader: BlueprintHeaderFooterContent, Equatable {
+    var title: String
+
     var elementRepresentation: Element {
         Label(text: title) {
             $0.font = .systemFont(ofSize: 18.0, weight: .medium)
         }
         .inset(uniform: 15.0)
     }
-    
+
     var background: Element? {
         Box(backgroundColor: .white)
     }
 }
 
-fileprivate struct EmptyRow : BlueprintItemContent, Equatable {
-    
+private struct EmptyRow: BlueprintItemContent, Equatable {
     var identifierValue: String {
         ""
     }
-    
-    func element(with info: ApplyItemContentInfo) -> Element {
+
+    func element(with _: ApplyItemContentInfo) -> Element {
         Label(text: "No Contents") {
             $0.font = .systemFont(ofSize: 16.0, weight: .semibold)
             $0.color = .lightGray
@@ -161,22 +156,20 @@ fileprivate struct EmptyRow : BlueprintItemContent, Equatable {
     }
 }
 
-fileprivate struct PaymentTypeRow : BlueprintItemContent {
-    
-    var type : PaymentType
-    
-    var onToggle : (Bool) -> ()
-    
+private struct PaymentTypeRow: BlueprintItemContent {
+    var type: PaymentType
+
+    var onToggle: (Bool) -> Void
+
     var identifierValue: String {
-        self.type.name
+        type.name
     }
-    
+
     func element(with info: ApplyItemContentInfo) -> Element {
-        
         Row { row in
             row.horizontalUnderflow = .growUniformly
             row.verticalAlignment = .center
-            
+
             row.addFixed(child: Label(text: type.name) {
                 $0.font = .systemFont(ofSize: 16.0, weight: .medium)
                 $0.color = .darkText
@@ -184,7 +177,7 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
             row.addFlexible(child: Spacer(width: 1))
             row.addFixed(child: Toggle(isOn: type.isEnabled, onToggle: onToggle))
             row.addFixed(child: Spacer(width: 10))
-            
+
             row.addFixed(
                 child: Image(
                     image: UIImage(named: "ReorderControl"),
@@ -193,9 +186,8 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
             )
         }
         .inset(uniform: 15.0)
-        
     }
-    
+
     func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
         Box(
             backgroundColor: .white,
@@ -213,22 +205,19 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
             }()
         )
     }
-    
+
     func isEquivalent(to other: PaymentTypeRow) -> Bool {
-        self.type == other.type
+        type == other.type
     }
 }
 
-
-fileprivate extension Array where Element == PaymentType {
-    
-    func edit(with name : String, using edit : (inout PaymentType) -> ()) -> Self  {
-        
-        self.map { type in
+private extension Array where Element == PaymentType {
+    func edit(with name: String, using edit: (inout PaymentType) -> Void) -> Self {
+        map { type in
             guard type.name == name else {
                 return type
             }
-            
+
             var edited = type
             edit(&edited)
             return edited
@@ -236,122 +225,118 @@ fileprivate extension Array where Element == PaymentType {
     }
 }
 
+private struct PaymentType: Codable, Equatable {
+    var name: String
 
-fileprivate struct PaymentType : Codable, Equatable {
-    
-    var name : String
-    
-    var isEnabled : Bool
-    
-    var isMain : Bool
-    
-    var sortOrder : Int
-    
-    static let defaults : [PaymentType] = [
+    var isEnabled: Bool
+
+    var isMain: Bool
+
+    var sortOrder: Int
+
+    static let defaults: [PaymentType] = [
         PaymentType(
             name: "Manual credit card entry",
             isEnabled: true,
             isMain: true,
             sortOrder: 0
         ),
-        
+
         PaymentType(
             name: "Manual gift card entry",
             isEnabled: true,
             isMain: true,
             sortOrder: 1
         ),
-        
+
         PaymentType(
             name: "Customer card on file",
             isEnabled: true,
             isMain: true,
             sortOrder: 2
         ),
-        
+
         PaymentType(
             name: "Cash",
             isEnabled: true,
             isMain: true,
             sortOrder: 3
         ),
-        
+
         PaymentType(
             name: "Invoice",
             isEnabled: true,
             isMain: false,
             sortOrder: 4
         ),
-        
+
         PaymentType(
             name: "Check",
             isEnabled: true,
             isMain: false,
             sortOrder: 5
         ),
-        
+
         PaymentType(
             name: "Pay with QR code",
             isEnabled: true,
             isMain: false,
             sortOrder: 6
         ),
-        
+
         PaymentType(
             name: "Send payment link",
             isEnabled: true,
             isMain: false,
             sortOrder: 7
         ),
-        
+
         PaymentType(
             name: "Other gift card or certificate",
             isEnabled: false,
             isMain: false,
             sortOrder: 8
         ),
-        
+
         PaymentType(
             name: "Other payment types",
             isEnabled: false,
             isMain: false,
             sortOrder: 9
-        )
+        ),
     ]
 }
 
-
-fileprivate extension PaymentTypesViewController {
-    
-    var types : [PaymentType] {
+private extension PaymentTypesViewController {
+    var types: [PaymentType] {
         get {
             guard let data = UserDefaults.standard.value(forKey: "demo-payment-types") as? Data else {
                 return PaymentType.defaults
             }
-            
+
             let decoder = PropertyListDecoder()
-            
+
             guard let types = try? decoder.decode([PaymentType].self, from: data) else {
                 return PaymentType.defaults
             }
-            
+
             return types
         }
-        
+
         set {
             guard self.types != newValue else {
                 return
             }
-            
+
             let encoder = PropertyListEncoder()
-            
+
             guard let data = try? encoder.encode(newValue) else {
                 return
             }
-            
+
             UserDefaults.standard.set(data, forKey: "demo-payment-types")
-            
-            self.reload(animated: true)
+
+            reload(animated: true)
         }
     }
 }

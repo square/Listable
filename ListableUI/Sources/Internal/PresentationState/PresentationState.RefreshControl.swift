@@ -8,47 +8,41 @@
 import Foundation
 import UIKit
 
+extension PresentationState {
+    final class RefreshControlState {
+        public var model: RefreshControl
+        public var view: UIRefreshControl
 
-extension PresentationState
-{
-    internal final class RefreshControlState
-    {
-        public var model : RefreshControl
-        public var view : UIRefreshControl
-        
-        public init(_ model : RefreshControl)
-        {
+        public init(_ model: RefreshControl) {
             self.model = model
-            self.view = UIRefreshControl()
-            
-            self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
+            view = UIRefreshControl()
+
+            view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
         }
-        
-        func update(with control : RefreshControl)
-        {
-            self.model = control
-            
-            if let title = self.model.title {
+
+        func update(with control: RefreshControl) {
+            model = control
+
+            if let title = model.title {
                 switch title {
-                case .string(let string): self.view.attributedTitle = NSAttributedString(string: string)
-                case .attributed(let string): self.view.attributedTitle = string
+                case let .string(string): view.attributedTitle = NSAttributedString(string: string)
+                case let .attributed(string): view.attributedTitle = string
                 }
             } else {
-                self.view.attributedTitle = nil
+                view.attributedTitle = nil
             }
-            
-            self.view.tintColor = self.model.tintColor
-            
-            if self.model.isRefreshing {
-                self.view.beginRefreshing()
+
+            view.tintColor = model.tintColor
+
+            if model.isRefreshing {
+                view.beginRefreshing()
             } else {
-                self.view.endRefreshing()
+                view.endRefreshing()
             }
         }
-        
-        @objc func refreshControlChanged()
-        {
-            self.model.onRefresh()
+
+        @objc func refreshControlChanged() {
+            model.onRefresh()
         }
     }
 }

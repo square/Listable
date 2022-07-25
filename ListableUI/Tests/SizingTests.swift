@@ -5,11 +5,10 @@
 //  Created by Kyle Van Essen on 11/27/19.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
-class SizingTests: XCTestCase
-{
+class SizingTests: XCTestCase {
     //  MARK: - CustomWidth Tests
 
     func test_customWidth_alignment_originWith() {

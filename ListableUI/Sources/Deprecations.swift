@@ -40,14 +40,14 @@ import Foundation
 ///
 
 //
+
 // MARK: Deprecated Jan 22, 2021
+
 //
 
-extension LayoutDescription
-{
+public extension LayoutDescription {
     @available(*, unavailable, renamed: "table")
-    public static func list(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self
-    {
+    static func list(_ configure: @escaping (inout TableAppearance) -> Void = { _ in }) -> Self {
         TableListLayout.describe(appearance: configure)
     }
 }

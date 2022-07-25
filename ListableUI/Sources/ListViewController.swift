@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 ///
 /// A class which provides an easy way to set up and display a `ListView`,
 /// The `ListViewController` itself manages setup and presentation of the `ListView`.
@@ -28,21 +27,24 @@ import UIKit
 /// Which will update the list with the new contents returned from your `configure` method.
 /// If the `ListViewController`'s view is not loaded, this method has no effect.
 ///
-open class ListViewController : UIViewController
-{
+open class ListViewController: UIViewController {
     //
+
     // MARK: Configuration
+
     //
-    
+
     /// The default value for `clearsSelectionOnViewWillAppear` is true.
     /// This parameter allows mirroring the `clearsSelectionOnViewWillAppear`
     /// as available from `UITableViewController` or `UICollectionViewController`.
-    public var clearsSelectionOnViewWillAppear : Bool = true
-    
+    public var clearsSelectionOnViewWillAppear: Bool = true
+
     //
+
     // MARK: Methods To Override
+
     //
-    
+
     /// Override this method to configure your list how you'd like to.
     /// The properties on `ListProperties` closely mirror those on `ListView`
     /// itself, allowing you to fully configure and work with a list without needing to maintain
@@ -72,18 +74,18 @@ open class ListViewController : UIViewController
     /// ```
     /// You should not call super in your overridden implementation.
     ///
-    open func configure(list : inout ListProperties)
-    {
+    open func configure(list _: inout ListProperties) {
         fatalError("Subclasses of `ListViewController` must override `configure(list:)` to customize the content of their list view.")
     }
-    
+
     //
+
     // MARK: Updating Content
+
     //
-    
-    public func reload(animated : Bool = false)
-    {
-        guard let listView = self.listView else {
+
+    public func reload(animated: Bool = false) {
+        guard let listView = listView else {
             return
         }
 
@@ -93,52 +95,48 @@ open class ListViewController : UIViewController
         }
     }
 
-    
     //
+
     // MARK: - Internal & Private Methods -
+
     //
-    
-    
+
     // MARK: Initialization
-    
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+
+    override public init(nibName _: String?, bundle _: Bundle?) {
         super.init(nibName: nil, bundle: nil)
     }
-    
-    @available(*, unavailable) required public init?(coder: NSCoder) { fatalError() }
-    
+
+    @available(*, unavailable) public required init?(coder _: NSCoder) { fatalError() }
+
     // MARK: UIViewController
-    
-    private var listView : ListView?
-    
-    public override func loadView() {
+
+    private var listView: ListView?
+
+    override public func loadView() {
         let listView = ListView()
-        
+
         self.listView = listView
-        self.view = listView
+        view = listView
     }
-    
-    private var hasViewAppeared : Bool = false
-    
-    open override func viewWillAppear(_ animated: Bool)
-    {
+
+    private var hasViewAppeared: Bool = false
+
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if self.hasViewAppeared == false {
-            self.hasViewAppeared = true
-            self.reload(animated: false)
+
+        if hasViewAppeared == false {
+            hasViewAppeared = true
+            reload(animated: false)
         } else {
-            if self.clearsSelectionOnViewWillAppear {
-                self.listView?.clearSelectionDuringViewWillAppear(alongside: self.transitionCoordinator, animated: animated)
+            if clearsSelectionOnViewWillAppear {
+                listView?.clearSelectionDuringViewWillAppear(alongside: transitionCoordinator, animated: animated)
             }
         }
     }
 }
 
-
 public extension ListView {
-    
     /// A method which provides `Behavior.SelectionMode.single`'s `clearsSelectionOnViewWillAppear` behaviour.
     /// By default, this method is called by `ListViewController`. However if you are not using `ListViewController` you
     /// will need to call this method yourself one of two ways:
@@ -150,8 +148,7 @@ public extension ListView {
     ///
     /// // Behaviour from UIKit Eng: https://twitter.com/smileyborg/status/1279473615553982464
     ///
-    func clearSelectionDuringViewWillAppear(alongside coordinator: UIViewControllerTransitionCoordinator?, animated : Bool) {
-        
+    func clearSelectionDuringViewWillAppear(alongside coordinator: UIViewControllerTransitionCoordinator?, animated: Bool) {
         guard case Behavior.SelectionMode.single = behavior.selectionMode else {
             return
         }
@@ -159,18 +156,18 @@ public extension ListView {
         guard let indexPath = storage.presentationState.selectedIndexPaths.first else {
             return
         }
-        
+
         let item = storage.presentationState.item(at: indexPath)
-        
+
         guard let coordinator = coordinator else {
             // No transition coordinator is available – we should just deselect return in this case.
             item.set(isSelected: false, performCallbacks: true)
             collectionView.deselectItem(at: indexPath, animated: animated)
-            item.applyToVisibleCell(with: self.environment)
+            item.applyToVisibleCell(with: environment)
 
             return
         }
-        
+
         coordinator.animate(alongsideTransition: { _ in
             item.set(isSelected: false, performCallbacks: true)
             self.collectionView.deselectItem(at: indexPath, animated: true)

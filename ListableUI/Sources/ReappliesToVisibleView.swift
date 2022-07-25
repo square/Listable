@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// A rule to determine when an ``ItemContent`` or ``HeaderFooterContent`` should be re-applied
 /// to the visible view currently representing the content on screen. If the content is not on
 /// screen, then no application is done regardless of the rule (because there is no view).
@@ -50,23 +49,22 @@ import Foundation
 /// instead of implementing tappable items manually (which is a common source of callback closures in item content).
 ///
 public enum ReappliesToVisibleView {
-    
     /// The visible view will always be re-applied during updates, regardless of the result of ``ItemContent/isEquivalent(to:)``.
     case always
-    
+
     /// The visible view will only have its contents re-applied during updates if ``ItemContent/isEquivalent(to:)`` returns false.
     case ifNotEquivalent
-    
-    func shouldReapply(comparing other : Self, isEquivalent : Bool) -> Bool {
+
+    func shouldReapply(comparing other: Self, isEquivalent: Bool) -> Bool {
         switch self {
         case .always:
             return true
-            
+
         case .ifNotEquivalent:
             switch other {
             case .always:
                 return true
-                
+
             case .ifNotEquivalent:
                 return isEquivalent == false
             }

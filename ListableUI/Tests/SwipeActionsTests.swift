@@ -7,7 +7,4 @@
 
 import XCTest
 
-class SwipeActionsTests: XCTestCase
-{
-
-}
+class SwipeActionsTests: XCTestCase {}

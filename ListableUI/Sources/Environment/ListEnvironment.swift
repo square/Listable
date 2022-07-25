@@ -5,7 +5,6 @@
 //  Created by Kyle Van Essen on 10/26/20.
 //
 
-
 /// An environment of keys and values that are passed to every `ItemContent` and `HeaderFooter`
 /// during layout and measurement, to allow passing down data.
 ///
@@ -42,7 +41,6 @@
 /// }
 /// ```
 public struct ListEnvironment {
-    
     /// A default "empty" environment, with no values overridden.
     /// Each key will return its default value.
     public static let empty = ListEnvironment()
@@ -62,7 +60,6 @@ public struct ListEnvironment {
             values[ObjectIdentifier(key)] = newValue
         }
     }
-    
+
     private var values: [ObjectIdentifier: Any] = [:]
 }
-

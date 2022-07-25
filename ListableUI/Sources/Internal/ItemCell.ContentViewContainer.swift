@@ -7,12 +7,9 @@
 
 import UIKit
 
-
 extension ItemCell {
-
-    final class ContentContainerView : UIView {
-
-        let contentView : Content.ContentView
+    final class ContentContainerView: UIView {
+        let contentView: Content.ContentView
 
         private var swipeConfiguration: SwipeConfiguration?
 
@@ -24,18 +21,18 @@ extension ItemCell {
             }
         }
 
-        override init(frame : CGRect) {
+        override init(frame: CGRect) {
             let bounds = CGRect(origin: .zero, size: frame.size)
 
-            self.contentView = Content.createReusableContentView(frame: bounds)
+            contentView = Content.createReusableContentView(frame: bounds)
 
             super.init(frame: frame)
 
-            self.addSubview(self.contentView)
+            addSubview(contentView)
         }
 
         @available(*, unavailable)
-        required init?(coder: NSCoder) { fatalError() }
+        required init?(coder _: NSCoder) { fatalError() }
 
         override func layoutSubviews() {
             super.layoutSubviews()
@@ -48,11 +45,9 @@ extension ItemCell {
         }
 
         private func updateFrames(using configuration: SwipeConfiguration) {
-
             let xOriginOffset: CGFloat
 
             switch swipeState {
-
             case .closed:
 
                 xOriginOffset = 0
@@ -76,7 +71,6 @@ extension ItemCell {
             case .willPerformFirstActionAutomatically:
 
                 return
-
             }
 
             contentView.frame = bounds
@@ -101,7 +95,6 @@ extension ItemCell {
 
         public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: Content.SwipeActionsView.Style, reason: ApplyReason) {
             if swipeConfiguration == nil {
-
                 let swipeView = Content.SwipeActionsView(
                     style: style,
                     didPerformAction: { [weak self] expandActions in
@@ -132,12 +125,11 @@ extension ItemCell {
             }
         }
 
-        private weak var listView : ListView? = nil
+        private weak var listView: ListView?
 
         @objc private func handlePan(sender: UIPanGestureRecognizer) {
-
-            if self.listView == nil {
-                self.listView = self.firstSuperview(ofType: ListView.self)
+            if listView == nil {
+                listView = firstSuperview(ofType: ListView.self)
             }
 
             guard let configuration = swipeConfiguration else { return }
@@ -149,7 +141,7 @@ extension ItemCell {
                 && configuration.performsFirstActionWithFullSwipe
 
             if sender.state == .began {
-                self.listView?.liveCells.perform {
+                listView?.liveCells.perform {
                     $0.closeSwipeActions()
                 }
             }
@@ -168,7 +160,6 @@ extension ItemCell {
                 var swipeState: SwipeActionState
 
                 if velocity < 0 {
-
                     if willPerformAction {
                         swipeState = .willPerformFirstActionAutomatically
                     } else {
@@ -176,11 +167,9 @@ extension ItemCell {
                     }
 
                 } else if velocity > 0 {
-
                     swipeState = .closed
 
                 } else {
-
                     if willPerformAction {
                         swipeState = .willPerformFirstActionAutomatically
                     } else if currentSwipeOffset > keepOpenOffset {
@@ -188,33 +177,28 @@ extension ItemCell {
                     } else {
                         swipeState = .closed
                     }
-
                 }
 
                 set(state: swipeState, animated: true)
 
-
             default:
                 set(state: .closed)
-
             }
         }
 
         private func didPerformAction(expandActions: Bool) {
-
             if expandActions {
-                self.set(state: .expandActions, animated: true)
+                set(state: .expandActions, animated: true)
             } else {
-                self.set(state: .closed, animated: true)
+                set(state: .closed, animated: true)
             }
         }
 
         func performAnimatedClose() {
-            self.set(state: .closed, animated: true)
+            set(state: .closed, animated: true)
         }
 
         private func set(state: SwipeActionState, animated: Bool = false) {
-
             swipeState = state
 
             if animated {
@@ -228,12 +212,12 @@ extension ItemCell {
         }
 
         @objc private func performAccessibilityAction(_ action: AccessibilitySwipeAction) -> Bool {
-            action.action.handler(self.didPerformAction)
+            action.action.handler(didPerformAction)
             return true
         }
 
         private func configureAccessibilityActions(for actions: [SwipeAction]) {
-            self.accessibilityCustomActions = actions.map {
+            accessibilityCustomActions = actions.map {
                 AccessibilitySwipeAction(action: $0, target: self, selector: #selector(performAccessibilityAction))
             }
         }

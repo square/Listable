@@ -8,29 +8,25 @@
 import Foundation
 import UIKit
 
+public protocol AnyHeaderFooter: AnyHeaderFooterConvertible, AnyHeaderFooter_Internal {
+    var anyContent: Any { get }
 
-public protocol AnyHeaderFooter : AnyHeaderFooterConvertible, AnyHeaderFooter_Internal
-{
-    var anyContent : Any { get }
-    
-    var sizing : Sizing { get set }
-    var layouts : HeaderFooterLayouts { get set }
-    
+    var sizing: Sizing { get set }
+    var layouts: HeaderFooterLayouts { get set }
+
     var reappliesToVisibleView: ReappliesToVisibleView { get }
 }
 
+public protocol AnyHeaderFooter_Internal {
+    var layouts: HeaderFooterLayouts { get }
 
-public protocol AnyHeaderFooter_Internal
-{
-    var layouts : HeaderFooterLayouts { get }
-    
     func apply(
-        to headerFooterView : UIView,
-        for reason : ApplyReason,
-        with info : ApplyHeaderFooterContentInfo
+        to headerFooterView: UIView,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
     )
-    
-    func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
-    
-    func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
+
+    func anyIsEquivalent(to other: AnyHeaderFooter) -> Bool
+
+    func newPresentationHeaderFooterState(performsContentCallbacks: Bool) -> Any
 }

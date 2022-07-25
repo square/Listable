@@ -7,12 +7,10 @@
 
 import Foundation
 
-
 /// Defines a value stored in the `ListEnvironment` of a list.
 ///
 /// See `ListEnvironment` for more info and examples.
 public protocol ListEnvironmentKey {
-    
     /// The type of value stored by this key.
     associatedtype Value
 

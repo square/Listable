@@ -8,10 +8,8 @@
 import ListableUI
 import XCTest
 
-class ItemTests: XCTestCase
-{
+class ItemTests: XCTestCase {
     func test_defaultValues() {
-        
         let content = TestContent(
             name: "test",
             defaultItemProperties: .defaults { defaults in
@@ -24,38 +22,35 @@ class ItemTests: XCTestCase
                 )
             }
         )
-        
+
         // Make sure the defaults are actually passed through.
-        
+
         let item = Item(content)
-        
+
         XCTAssertEqual(item.swipeActions?.actions.count, 1)
         XCTAssertEqual(item.swipeActions?.actions[0].title, "Test")
     }
 }
 
-fileprivate struct TestContent : ItemContent {
-    
+private struct TestContent: ItemContent {
     typealias ContentView = UIView
     typealias IdentifierValue = String
-    
-    var name : String
-    
+
+    var name: String
+
     var defaultItemProperties: DefaultProperties = .defaults()
-    
+
     var identifierValue: String {
         name
     }
-    
-    func isEquivalent(to other: TestContent) -> Bool {
+
+    func isEquivalent(to _: TestContent) -> Bool {
         true
     }
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
-    func apply(to views: ItemContentViews<TestContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {
-        
-    }
+
+    func apply(to _: ItemContentViews<TestContent>, for _: ApplyReason, with _: ApplyItemContentInfo) {}
 }

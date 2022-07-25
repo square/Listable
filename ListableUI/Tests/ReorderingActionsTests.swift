@@ -7,7 +7,4 @@
 
 import XCTest
 
-class ReorderingActionsTests: XCTestCase
-{
-
-}
+class ReorderingActionsTests: XCTestCase {}

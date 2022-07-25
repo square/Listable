@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 /// For participating layouts; allows controlling the padding around and width of content when it is laid out.
 ///
 /// ```
@@ -30,14 +29,13 @@ import UIKit
 /// │      padding.bottom      │    │              padding.bottom               │
 /// └──────────────────────────┘    └───────────────────────────────────────────┘
 /// ```
-public struct ListContentBounds : Equatable {
-
+public struct ListContentBounds: Equatable {
     /// The padding to place around the outside of the content of the list.
-    public var padding : UIEdgeInsets
-    
+    public var padding: UIEdgeInsets
+
     /// An optional constraint on the width of the content.
-    public var width : WidthConstraint
-    
+    public var width: WidthConstraint
+
     /// Creates a new bounds with the provided options.
     public init(
         padding: UIEdgeInsets = .zero,
@@ -48,14 +46,13 @@ public struct ListContentBounds : Equatable {
     }
 }
 
-
 //
+
 // MARK: Controlling Bounds Via The Environment
+
 //
 
-
-extension ListEnvironment {
-    
+public extension ListEnvironment {
     /// The provider for the `ListContentBounds` of the list. You may want to use the `Context`
     /// passed to the provider in order to vary your bounds based on, eg, the width of
     /// the list view:
@@ -69,37 +66,34 @@ extension ListEnvironment {
     ///     }
     ///  }
     /// ```
-    public var listContentBounds : ListContentBoundsKey.Provider? {
+    var listContentBounds: ListContentBoundsKey.Provider? {
         get { self[ListContentBoundsKey.self] }
         set { self[ListContentBoundsKey.self] = newValue }
     }
-    
+
     /// Calculates the bounds in the provided context.
-    public func listContentBounds(in context : ListContentBounds.Context) -> ListContentBounds {
-        self.listContentBounds?(context) ?? .init()
+    func listContentBounds(in context: ListContentBounds.Context) -> ListContentBounds {
+        listContentBounds?(context) ?? .init()
     }
 }
 
-
-extension ListContentBounds {
-    
+public extension ListContentBounds {
     /// View and layout information passed to `environment.listContentBounds` to determine
     /// the correct `ListContentBounds` for the list.
-    public struct Context {
-        
+    struct Context {
         /// The size of the view in question.
-        public var viewSize : CGSize
-        
+        public var viewSize: CGSize
+
         /// The safe area applied to the view.
-        public var safeAreaInsets : UIEdgeInsets
-        
+        public var safeAreaInsets: UIEdgeInsets
+
         /// The layout direction.
-        public var direction : LayoutDirection
-        
+        public var direction: LayoutDirection
+
         /// Creates a new context to use in the `ListEnvironment`'s `listContentBounds`.
         public init(
             viewSize: CGSize,
-            safeAreaInsets : UIEdgeInsets,
+            safeAreaInsets: UIEdgeInsets,
             direction: LayoutDirection
         ) {
             self.viewSize = viewSize
@@ -109,15 +103,13 @@ extension ListContentBounds {
     }
 }
 
-
 /// A key used to store default / provided bounds into the list's environment.
 /// Useful if a parent screen would like to provide default width constraints
 /// to be applied to participating layouts.
-public enum ListContentBoundsKey : ListEnvironmentKey {
-    
+public enum ListContentBoundsKey: ListEnvironmentKey {
     public typealias Provider = (ListContentBounds.Context) -> ListContentBounds
     public typealias Value = Provider?
-    
+
     public static var defaultValue: Value {
         nil
     }

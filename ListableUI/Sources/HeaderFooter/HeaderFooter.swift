@@ -7,116 +7,111 @@
 
 import UIKit
 
+public typealias Header<Content: HeaderFooterContent> = HeaderFooter<Content>
+public typealias Footer<Content: HeaderFooterContent> = HeaderFooter<Content>
 
-public typealias Header<Content:HeaderFooterContent> = HeaderFooter<Content>
-public typealias Footer<Content:HeaderFooterContent> = HeaderFooter<Content>
+public struct HeaderFooter<Content: HeaderFooterContent>: AnyHeaderFooter {
+    public var content: Content
 
+    public var sizing: Sizing
+    public var layouts: HeaderFooterLayouts
 
-public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
-{
-    public var content : Content
-    
-    public var sizing : Sizing
-    public var layouts : HeaderFooterLayouts
-    
-    public typealias OnTap = () -> ()
-    public var onTap : OnTap?
-    
-    public var debuggingIdentifier : String? = nil
-    
-    internal let reuseIdentifier : ReuseIdentifier<Content>
-    
+    public typealias OnTap = () -> Void
+    public var onTap: OnTap?
+
+    public var debuggingIdentifier: String?
+
+    internal let reuseIdentifier: ReuseIdentifier<Content>
+
     //
+
     // MARK: Initialization
+
     //
-    
-    public typealias Configure = (inout HeaderFooter) -> ()
-    
+
+    public typealias Configure = (inout HeaderFooter) -> Void
+
     public init(
-        _ content : Content,
-        configure : Configure
+        _ content: Content,
+        configure: Configure
     ) {
         self.init(content)
-        
+
         configure(&self)
     }
-    
+
     public init(
-        _ content : Content,
-        sizing : Sizing? = nil,
-        layouts : HeaderFooterLayouts? = nil,
-        onTap : OnTap? = nil
+        _ content: Content,
+        sizing: Sizing? = nil,
+        layouts: HeaderFooterLayouts? = nil,
+        onTap: OnTap? = nil
     ) {
         assertIsValueType(Content.self)
-        
+
         self.content = content
-        
+
         let defaults = self.content.defaultHeaderFooterProperties
-        
+
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.onTap = onTap ?? defaults.onTap
-        self.debuggingIdentifier = defaults.debuggingIdentifier
-        
-        self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
+        debuggingIdentifier = defaults.debuggingIdentifier
+
+        reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
     }
-    
+
     // MARK: AnyHeaderFooter
-    
+
     public var anyContent: Any {
-        self.content
+        content
     }
-    
+
     public var reappliesToVisibleView: ReappliesToVisibleView {
-        self.content.reappliesToVisibleView
+        content.reappliesToVisibleView
     }
-    
+
     // MARK: AnyHeaderFooterConvertible
-    
+
     public func asAnyHeaderFooter() -> AnyHeaderFooter {
         self
     }
-    
+
     // MARK: AnyHeaderFooter_Internal
-    
+
     public func apply(
-        to anyView : UIView,
-        for reason : ApplyReason,
-        with info : ApplyHeaderFooterContentInfo
+        to anyView: UIView,
+        for reason: ApplyReason,
+        with info: ApplyHeaderFooterContentInfo
     ) {
         let view = anyView as! HeaderFooterContentView<Content>
-        
+
         let views = HeaderFooterContentViews<Content>(
             content: view.content,
             background: view.background,
             pressed: view.pressedBackground
         )
-        
-        self.content.apply(
+
+        content.apply(
             to: views,
             for: reason,
             with: info
         )
     }
-        
-    public func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
-    {
+
+    public func anyIsEquivalent(to other: AnyHeaderFooter) -> Bool {
         guard let other = other as? HeaderFooter<Content> else {
             return false
         }
-        
-        return self.content.isEquivalent(to: other.content)
+
+        return content.isEquivalent(to: other.content)
     }
-    
-    public func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
-    {
-        return PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
+
+    public func newPresentationHeaderFooterState(performsContentCallbacks: Bool) -> Any {
+        PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
     }
 }
 
-
-extension HeaderFooterContent {
-    
+public extension HeaderFooterContent {
     /// Identical to `HeaderFooter.init` which takes in a `HeaderFooterContent`,
     /// except you can call this on the `HeaderFooterContent` itself, instead of wrapping it,
     /// to avoid additional nesting, and to hoist your content up in your code.
@@ -135,12 +130,11 @@ extension HeaderFooterContent {
     ///    ...
     /// }
     /// ```
-    public func with(
-        sizing : Sizing? = nil,
-        layouts : HeaderFooterLayouts? = nil,
-        onTap : HeaderFooter<Self>.OnTap? = nil
-    ) -> HeaderFooter<Self>
-    {
+    func with(
+        sizing: Sizing? = nil,
+        layouts: HeaderFooterLayouts? = nil,
+        onTap: HeaderFooter<Self>.OnTap? = nil
+    ) -> HeaderFooter<Self> {
         HeaderFooter(
             self,
             sizing: sizing,
@@ -150,12 +144,10 @@ extension HeaderFooterContent {
     }
 }
 
-
-extension HeaderFooter : SignpostLoggable
-{
-    var signpostInfo : SignpostLoggingInfo {
+extension HeaderFooter: SignpostLoggable {
+    var signpostInfo: SignpostLoggingInfo {
         SignpostLoggingInfo(
-            identifier: self.debuggingIdentifier,
+            identifier: debuggingIdentifier,
             instanceIdentifier: nil
         )
     }

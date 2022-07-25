@@ -6,28 +6,25 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintUILists
 import BlueprintUICommonControls
+import BlueprintUILists
 
-
-final class MultiSelectViewController : ListViewController
-{
+final class MultiSelectViewController: ListViewController {
     override func configure(list: inout ListProperties) {
-        
         list.behavior.selectionMode = .multiple
-        
+
         list.layout = .table {
             $0.bounds = .init(padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
-            
+
             $0.layout.itemSpacing = 10.0
         }
-        
+
         list.stateObserver.onSelectionChanged { change in
             print("Selection Changed from \(change.old) to \(change.new).")
         }
-        
+
         list(1) { section in
-            section += (1...100).map { row in
+            section += (1 ... 100).map { row in
                 Item(
                     SelectableRow(text: "Row #\(row)"),
                     selectionStyle: .selectable(isSelected: false)
@@ -37,27 +34,25 @@ final class MultiSelectViewController : ListViewController
     }
 }
 
+private struct SelectableRow: BlueprintItemContent, Equatable {
+    var text: String
 
-fileprivate struct SelectableRow : BlueprintItemContent, Equatable {
-    
-    var text : String
-    
     var identifierValue: String {
-        self.text
+        text
     }
-    
-    func element(with info: ApplyItemContentInfo) -> Element {
-        Label(text: self.text) {
+
+    func element(with _: ApplyItemContentInfo) -> Element {
+        Label(text: text) {
             $0.font = .systemFont(ofSize: 18.0, weight: .semibold)
         }
         .inset(uniform: 20.0)
     }
-    
-    func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
+
+    func backgroundElement(with _: ApplyItemContentInfo) -> Element? {
         Box(backgroundColor: .white, cornerStyle: .rounded(radius: 15.0))
     }
-    
-    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
+
+    func selectedBackgroundElement(with _: ApplyItemContentInfo) -> Element? {
         Box(backgroundColor: .white(0.8), cornerStyle: .rounded(radius: 15.0))
     }
 }

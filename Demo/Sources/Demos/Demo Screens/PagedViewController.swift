@@ -6,25 +6,21 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintUILists
 import BlueprintUICommonControls
+import BlueprintUILists
 
-
-final class PagedViewController : UIViewController
-{
+final class PagedViewController: UIViewController {
     let blueprintView = BlueprintView()
-        
-    override func loadView()
-    {
-        self.view = self.blueprintView
-        
-        self.update()
+
+    override func loadView() {
+        view = blueprintView
+
+        update()
     }
-    
-    func update()
-    {
-        self.blueprintView.element = List { list in
-                        
+
+    func update() {
+        blueprintView.element = List { list in
+
             list.layout = .paged {
                 $0.direction = .vertical
             }
@@ -40,15 +36,14 @@ final class PagedViewController : UIViewController
     }
 }
 
-fileprivate struct DemoElement : BlueprintItemContent, Equatable
-{
+private struct DemoElement: BlueprintItemContent, Equatable {
     var identifierValue: UIColor {
-        self.color
+        color
     }
-    
-    var color : UIColor
-    
-    func element(with info: ApplyItemContentInfo) -> Element {
-        Box(backgroundColor: self.color)
+
+    var color: UIColor
+
+    func element(with _: ApplyItemContentInfo) -> Element {
+        Box(backgroundColor: color)
     }
 }

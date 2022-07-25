@@ -9,13 +9,11 @@ import BlueprintUI
 import ListableUI
 import UIKit
 
-
 /// Alias to allow less verbose creation of headers.
 public typealias BlueprintHeaderContent = BlueprintHeaderFooterContent
 
 /// Alias to allow less verbose creation of footers.
 public typealias BlueprintFooterContent = BlueprintHeaderFooterContent
-
 
 ///
 /// A `HeaderFooterContent` specialized for use with Blueprint. Instead of providing
@@ -58,19 +56,21 @@ public typealias BlueprintFooterContent = BlueprintHeaderFooterContent
 /// z-Index 2) `pressedBackground` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
 /// z-Index 1) `background`
 ///
-public protocol BlueprintHeaderFooterContent : HeaderFooterContent
-where
+public protocol BlueprintHeaderFooterContent: HeaderFooterContent
+    where
     ContentView == BlueprintView,
     BackgroundView == BlueprintView,
     PressedBackgroundView == BlueprintView
 {
     //
+
     // MARK: Creating Blueprint Element Representations
+
     //
-    
+
     /// Required. Create and return the Blueprint element used to represent the content.
-    var elementRepresentation : Element { get }
-    
+    var elementRepresentation: Element { get }
+
     /// Optional. Create and return the Blueprint element used to represent the background of the content.
     /// You usually provide this method alongside `pressedBackground`, if your header
     /// has an `onTap` handler.
@@ -78,62 +78,64 @@ where
     /// ### Note
     /// The default implementation of this method returns nil, and provides no background.
     ///
-    var background : Element? { get }
-    
+    var background: Element? { get }
+
     /// Optional. Create and return the Blueprint element used to represent the background of the content when it is pressed.
     /// You usually provide this method alongside `background`, if your header has an `onTap` handler.
     ///
     /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
     ///
-    var pressedBackground : Element? { get }
+    var pressedBackground: Element? { get }
 }
 
+public extension BlueprintHeaderFooterContent {
+    //
 
-public extension BlueprintHeaderFooterContent
-{
-    //
     // MARK: BlueprintHeaderFooterContent
+
     //
-    
-    var background : Element? {
+
+    var background: Element? {
         nil
     }
-    
-    var pressedBackground : Element? {
+
+    var pressedBackground: Element? {
         nil
     }
-    
+
     //
+
     // MARK: HeaderFooterContent
+
     //
-    
+
     func apply(
         to views: HeaderFooterContentViews<Self>,
-        for reason: ApplyReason,
+        for _: ApplyReason,
         with info: ApplyHeaderFooterContentInfo
     ) {
-        views.content.element = self.elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.content.element = elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.background.element = background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.pressed.element = pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
     }
-    
+
     static func createReusableContentView(frame: CGRect) -> ContentView {
-        self.newBlueprintView(with: frame)
+        newBlueprintView(with: frame)
     }
-    
+
     static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
-        self.newBlueprintView(with: frame)
+        newBlueprintView(with: frame)
     }
-    
+
     static func createReusablePressedBackgroundView(frame: CGRect) -> PressedBackgroundView {
-        self.newBlueprintView(with: frame)
+        newBlueprintView(with: frame)
     }
-    
-    private static func newBlueprintView(with frame : CGRect) -> BlueprintView {
+
+    private static func newBlueprintView(with frame: CGRect) -> BlueprintView {
         let view = BlueprintView(frame: frame)
         view.backgroundColor = .clear
-        
+
         return view
     }
 }

@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 ///
 /// `ListActions` is an type that you can use to gain access to actions to perform on a `List`
 /// (for example, scrolling to a given item in the list) when used when you otherwise do
@@ -57,51 +56,48 @@ import UIKit
 /// }
 /// ```
 public final class ListActions {
-        
     /// Actions which allow scrolling to individual items in a list.
-    public let scrolling : Scrolling
-    
+    public let scrolling: Scrolling
+
     /// Actions which allow hooking up your list to the view controller transitioning APIs.
-    public let viewControllerTransitioning : ViewControllerTransitioning
-    
+    public let viewControllerTransitioning: ViewControllerTransitioning
+
     /// Creates and returns an actions object which can be registered with a list view.
     public init() {
-        self.scrolling = Scrolling()
-        self.viewControllerTransitioning = ViewControllerTransitioning()
+        scrolling = Scrolling()
+        viewControllerTransitioning = ViewControllerTransitioning()
     }
-    
-    weak var listView : ListView? {
+
+    weak var listView: ListView? {
         didSet {
-            self.scrolling.listView = self.listView
-            self.viewControllerTransitioning.listView = self.listView
+            scrolling.listView = listView
+            viewControllerTransitioning.listView = listView
         }
     }
 
     /// Provides access to scrolling actions within a list view.
     public final class Scrolling {
-        
         public init() {}
-        
-        fileprivate weak var listView : ListView?
-        
+
+        fileprivate weak var listView: ListView?
+
         public typealias ScrollCompletion = ListView.ScrollCompletion
-        
+
         ///
         /// Scrolls to the provided item, with the provided positioning.
         /// If the item is contained in the list, true is returned. If it is not, false is returned.
         ///
         @discardableResult
         public func scrollTo(
-            item : AnyItem,
-            position : ScrollPosition,
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
-            guard let listView = self.listView else {
+            item: AnyItem,
+            position: ScrollPosition,
+            animation: ViewAnimation = .none,
+            completion: @escaping ScrollCompletion = { _ in }
+        ) -> Bool {
+            guard let listView = listView else {
                 return false
             }
-            
+
             return listView.scrollTo(
                 item: item,
                 position: position,
@@ -109,7 +105,7 @@ public final class ListActions {
                 completion: completion
             )
         }
-        
+
         ///
         /// Scrolls to the item with the provided identifier, with the provided positioning.
         /// If there is more than one item with the same identifier, the list scrolls to the first.
@@ -117,16 +113,15 @@ public final class ListActions {
         ///
         @discardableResult
         public func scrollTo(
-            item : AnyIdentifier,
-            position : ScrollPosition,
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-            ) -> Bool
-        {
-            guard let listView = self.listView else {
+            item: AnyIdentifier,
+            position: ScrollPosition,
+            animation: ViewAnimation = .none,
+            completion: @escaping ScrollCompletion = { _ in }
+        ) -> Bool {
+            guard let listView = listView else {
                 return false
             }
-            
+
             return listView.scrollTo(
                 item: item,
                 position: position,
@@ -152,14 +147,13 @@ public final class ListActions {
         ///
         @discardableResult
         public func scrollToSection(
-            with identifier : AnyIdentifier,
-            sectionPosition : SectionPosition = .top,
-            scrollPosition : ScrollPosition,
+            with identifier: AnyIdentifier,
+            sectionPosition: SectionPosition = .top,
+            scrollPosition: ScrollPosition,
             animation: ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
-            guard let listView = self.listView else {
+            completion: @escaping ScrollCompletion = { _ in }
+        ) -> Bool {
+            guard let listView = listView else {
                 return false
             }
 
@@ -171,18 +165,17 @@ public final class ListActions {
                 completion: completion
             )
         }
-        
+
         /// Scrolls to the very top of the list, which includes displaying the list header.
         @discardableResult
         public func scrollToTop(
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
-            guard let listView = self.listView else {
+            animation: ViewAnimation = .none,
+            completion: @escaping ScrollCompletion = { _ in }
+        ) -> Bool {
+            guard let listView = listView else {
                 return false
             }
-            
+
             return listView.scrollToTop(
                 animation: animation,
                 completion: completion
@@ -192,34 +185,32 @@ public final class ListActions {
         /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
         @discardableResult
         public func scrollToLastItem(
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
-            guard let listView = self.listView else {
+            animation: ViewAnimation = .none,
+            completion: @escaping ScrollCompletion = { _ in }
+        ) -> Bool {
+            guard let listView = listView else {
                 return false
             }
-           
+
             return listView.scrollToLastItem(
                 animation: animation,
                 completion: completion
             )
         }
     }
-    
+
     /// Provides access to view controller transitioning options in a list.
     public final class ViewControllerTransitioning {
-        
         public init() {}
-        
-        fileprivate weak var listView : ListView?
-        
-        func clearSelectionDuringViewWillAppear(alongside coordinator: UIViewControllerTransitionCoordinator?, animated : Bool)
+
+        fileprivate weak var listView: ListView?
+
+        func clearSelectionDuringViewWillAppear(alongside coordinator: UIViewControllerTransitionCoordinator?, animated: Bool)
         {
-            guard let listView = self.listView else {
+            guard let listView = listView else {
                 return
             }
-           
+
             listView.clearSelectionDuringViewWillAppear(alongside: coordinator, animated: animated)
         }
     }

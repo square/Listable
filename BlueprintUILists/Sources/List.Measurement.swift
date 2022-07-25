@@ -7,7 +7,6 @@
 
 import ListableUI
 
-
 ///
 /// Provides the possible options for how to size and measure a list when its measured size is queried
 /// by the layout system.
@@ -42,10 +41,8 @@ import ListableUI
 /// │└─────────┘│
 /// └───────────┘
 /// ```
-extension List {
-    
-    public enum Measurement : Equatable
-    {
+public extension List {
+    enum Measurement: Equatable {
         /// When using  `.fillParent`, the full available space will be taken up, regardless
         /// of the content size of the list itself.
         ///
@@ -57,7 +54,7 @@ extension List {
         ///
         /// This option is the most performant, because no content measurement has to occur.
         case fillParent
-        
+
         /// When using `.measureContent`, the content of the list will be measured within the provided fitting size
         /// and the smallest of the two sizes will be returned.
         ///
@@ -84,62 +81,58 @@ extension List {
         ///     measurement and layout performance.
         ///
         case measureContent(
-            horizontalFill : FillRule = .fillParent,
-            verticalFill : FillRule = .natural,
+            horizontalFill: FillRule = .fillParent,
+            verticalFill: FillRule = .natural,
             safeArea: SafeArea = .none,
-            itemLimit : Int? = ListView.defaultContentSizeItemLimit
+            itemLimit: Int? = ListView.defaultContentSizeItemLimit
         )
-        
-        var needsMeasurement : Bool {
+
+        var needsMeasurement: Bool {
             switch self {
             case .fillParent:
                 return false
-            case .measureContent(let horizontalFill, let verticalFill, _, _):
+            case let .measureContent(horizontalFill, verticalFill, _, _):
                 return horizontalFill.needsMeasurement || verticalFill.needsMeasurement
             }
         }
     }
 }
 
-
-extension List.Measurement {
-    
+public extension List.Measurement {
     /// Controls how the safe area is used when calculating content size.
     /// The safe area included in the calculation affected by the list layout's `contentInsetAdjustmentBehavior`.
-    public enum SafeArea : Equatable {
-        
+    enum SafeArea: Equatable {
         /// No safe area will be included in the size calculation.
         case none
-        
+
         /// The safe area from the blueprint environment will be included in the calculation.
         case environment
-        
+
         /// The provided safe area will be included in the calculation.
         case custom(UIEdgeInsets)
-        
-        func safeArea(with environment : BlueprintUI.Environment) -> UIEdgeInsets {
+
+        func safeArea(with environment: BlueprintUI.Environment) -> UIEdgeInsets {
             switch self {
             case .none: return .zero
             case .environment: return environment.safeAreaInsets
-            case .custom(let value): return value
+            case let .custom(value): return value
             }
         }
     }
-    
+
     /// How to fill a given axis when performing a `List.Measurement.measureContent` measurement.
-    public enum FillRule : Equatable {
-        
+    enum FillRule: Equatable {
         /// The full amount of space afforded to the list by its parent element will
         /// be used. The measurement from the list is not used.
         case fillParent
-        
+
         /// The amount of space needed, as determined by the list's measurement will be used.
         ///
         /// Eg, if you provide 1000pt of vertical space, but the list only needs 300pt to display,
         /// 300pt will be returned from the measurement.
         case natural
-        
-        var needsMeasurement : Bool {
+
+        var needsMeasurement: Bool {
             switch self {
             case .fillParent:
                 return false

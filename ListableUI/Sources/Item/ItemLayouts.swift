@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 ///
 /// `ItemLayouts` allows you to provide `ListLayout`-specific layout configuration for
 /// individual items within a list. Eg, customize the layout for an item when it is in a table, a grid, etc.
@@ -52,19 +51,18 @@ import Foundation
 /// }
 /// ```
 public struct ItemLayouts {
-    
     /// Creates a new instance of the layouts, with an optional `configure`
     /// closure, to allow you to set up styling inline.
     public init(
-        _ configure : (inout Self) -> () = { _ in }
+        _ configure: (inout Self) -> Void = { _ in }
     ) {
-        self.storage = .init()
-        
+        storage = .init()
+
         configure(&self)
     }
-    
-    private var storage : ContentLayoutsStorage
-    
+
+    private var storage: ContentLayoutsStorage
+
     /// Allows accessing the various `ItemLayoutsValue`s stored within the object.
     /// This method will return the `defaultValue` for a value if none is set.
     ///
@@ -81,12 +79,11 @@ public struct ItemLayouts {
     ///     }
     /// }
     /// ```
-    public subscript<ValueType:ItemLayoutsValue>(_ valueType : ValueType.Type) -> ValueType {
-        get { self.storage.get(valueType, default: ValueType.defaultValue) }
-        set { self.storage.set(valueType, new: newValue) }
+    public subscript<ValueType: ItemLayoutsValue>(_ valueType: ValueType.Type) -> ValueType {
+        get { storage.get(valueType, default: ValueType.defaultValue) }
+        set { storage.set(valueType, new: newValue) }
     }
 }
-
 
 ///
 /// The `ItemLayoutsValue` protocol provides a default value for the different layouts stored
@@ -107,7 +104,6 @@ public struct ItemLayouts {
 /// }
 /// ```
 public protocol ItemLayoutsValue {
-    
     /// The default value used when accessing the value, if none is set.
-    static var defaultValue : Self { get }
+    static var defaultValue: Self { get }
 }

@@ -8,12 +8,10 @@
 import Foundation
 import UIKit
 
-
 extension UIView {
-    
-    func firstSuperview<ViewType:UIView>(ofType : ViewType.Type) -> ViewType? {
-        var view = self.superview
-        
+    func firstSuperview<ViewType: UIView>(ofType _: ViewType.Type) -> ViewType? {
+        var view = superview
+
         while view != nil {
             if let view = view as? ViewType {
                 return view
@@ -21,7 +19,7 @@ extension UIView {
                 view = view?.superview
             }
         }
-        
+
         return nil
     }
 }

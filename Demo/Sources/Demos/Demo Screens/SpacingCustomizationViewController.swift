@@ -6,28 +6,23 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-
-import UIKit
-import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
 import BlueprintUILists
+import ListableUI
+import UIKit
 
-
-final class SpacingCustomizationViewController : UIViewController
-{
+final class SpacingCustomizationViewController: UIViewController {
     let listView = ListView()
 
-    override func loadView()
-    {
-        self.view = self.listView
+    override func loadView() {
+        view = listView
 
-        self.listView.configure { list in
-            
+        listView.configure { list in
+
             list.layout = .table {
-                
                 $0.bounds = .init(padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0))
-                
+
                 $0.layout.set {
                     $0.itemSpacing = 20.0
                     $0.interSectionSpacingWithFooter = 20.0
@@ -72,26 +67,25 @@ final class SpacingCustomizationViewController : UIViewController
     }
 }
 
-
-fileprivate struct CardElement : BlueprintItemContent, Equatable
-{
-    var title : String
-    var color : UIColor
+private struct CardElement: BlueprintItemContent, Equatable {
+    var title: String
+    var color: UIColor
 
     //
+
     // MARK: BlueprintItemElement
+
     //
 
     var identifierValue: String {
-        self.title
+        title
     }
 
-    func element(with info : ApplyItemContentInfo) -> Element
-    {
-        return Box(
-            backgroundColor: self.color,
+    func element(with _: ApplyItemContentInfo) -> Element {
+        Box(
+            backgroundColor: color,
             cornerStyle: .rounded(radius: 5.0),
-            wrapping: Inset(uniformInset: 10.0, wrapping: Label(text: self.title) {
+            wrapping: Inset(uniformInset: 10.0, wrapping: Label(text: title) {
                 $0.font = .systemFont(ofSize: 16.0, weight: .bold)
             })
         )

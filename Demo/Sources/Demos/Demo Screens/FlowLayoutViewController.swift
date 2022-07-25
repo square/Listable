@@ -8,44 +8,41 @@
 
 @testable import ListableUI
 
-import BlueprintUILists
 import BlueprintUICommonControls
+import BlueprintUILists
 
+final class FlowLayoutViewController: ListViewController {
+    var isHorizontal: Bool = false
 
-final class FlowLayoutViewController : ListViewController
-{
-    var isHorizontal : Bool = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Toggle Direction",
             style: .plain,
             target: self,
             action: #selector(toggleDirection)
         )
     }
-    
+
     @objc private func toggleDirection() {
-        self.isHorizontal.toggle()
-        
-        self.reload(animated: true)
+        isHorizontal.toggle()
+
+        reload(animated: true)
     }
-    
+
     override func configure(list: inout ListProperties) {
-        
         list.appearance = .demoAppearance
-        
+
         list.layout = .flow { flow in
-                        
+
             flow.direction = isHorizontal ? .horizontal : .vertical
-            
+
             flow.bounds = .init(
                 padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
                 width: .atMost(900)
             )
-            
+
             flow.spacings = .init(
                 headerToFirstSectionSpacing: 20,
                 interSectionSpacing: .init(30),
@@ -56,11 +53,11 @@ final class FlowLayoutViewController : ListViewController
                 lastSectionToFooterSpacing: 20
             )
         }
-        
+
         list.header = DemoHeader(title: "Flow Layout Demo")
         list.footer = DemoHeader(title: "Flow Layout Footer")
-        
-        let ipsums : [String] = [
+
+        let ipsums: [String] = [
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non efficitur elit",
             "Maecenas at ligula vitae nisl blandit pulvinar id at nibh. Mauris consequat vitae turpis id finibus. Nam eget massa ac augue commodo auctor",
             "Morbi metus urna, ullamcorper in dapibus quis, ultricies id sem. Donec sodales efficitur odio, id pharetra ligula ornare vitae. Praesent lacinia mollis ipsum viverra molestie. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -70,11 +67,11 @@ final class FlowLayoutViewController : ListViewController
             "Fusce aliquam tortor sit amet neque consequat faucibus. Nulla sem lorem, vehicula eget porta vitae, ultricies et sapien.",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus non efficitur elit",
         ]
-        
+
         list.add {
             for (alignment, description) in FlowAppearance.RowItemsAlignment.allTestCases {
                 Section("\(alignment)") { section in
-                    
+
                     section.header = DemoHeader(
                         title: description,
                         detail: """
@@ -83,10 +80,10 @@ final class FlowLayoutViewController : ListViewController
                         """,
                         useMonospacedTitleFont: true
                     )
-                    
+
                     section.layouts.flow.rowItemsAlignment = alignment
                     section.layouts.flow.itemSizing = .columns(3)
-                    
+
                     section.add {
                         for ipsum in ipsums {
                             FlowItem(text: ipsum)
@@ -94,10 +91,10 @@ final class FlowLayoutViewController : ListViewController
                     }
                 }
             }
-            
+
             for (underflow, description) in FlowAppearance.RowUnderflowAlignment.allTestCases {
                 Section("\(underflow)") { section in
-                    
+
                     section.header = DemoHeader(
                         title: description,
                         detail: """
@@ -106,10 +103,10 @@ final class FlowLayoutViewController : ListViewController
                         """,
                         useMonospacedTitleFont: true
                     )
-                    
+
                     section.layouts.flow.rowUnderflowAlignment = underflow
                     section.layouts.flow.itemSizing = .fixed(200)
-                    
+
                     section.add {
                         for ipsum in ipsums {
                             FlowItem(text: ipsum)
@@ -121,16 +118,14 @@ final class FlowLayoutViewController : ListViewController
     }
 }
 
+private struct FlowItem: BlueprintItemContent, Equatable {
+    var text: String
 
-fileprivate struct FlowItem : BlueprintItemContent, Equatable {
-    
-    var text : String
-    
-    var identifierValue : String {
+    var identifierValue: String {
         text
     }
-    
-    func element(with info: ApplyItemContentInfo) -> Element {
+
+    func element(with _: ApplyItemContentInfo) -> Element {
         Label(text: text) {
             $0.numberOfLines = 0
             $0.color = .darkGray

@@ -9,11 +9,8 @@ import XCTest
 
 @testable import ListableUI
 
-
-class ApplyReasonTests: XCTestCase
-{
-    func test_shouldAnimate()
-    {
+class ApplyReasonTests: XCTestCase {
+    func test_shouldAnimate() {
         XCTAssertEqual(ApplyReason.willDisplay.shouldAnimate, false)
         XCTAssertEqual(ApplyReason.wasUpdated.shouldAnimate, true)
     }

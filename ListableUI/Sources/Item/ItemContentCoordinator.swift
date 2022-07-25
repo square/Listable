@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 ///
 /// A type which lets you interactively manage the contents of an `Item` or `ItemContent`
 /// within a list.
@@ -54,44 +53,43 @@ import Foundation
 /// }
 /// ```
 ///
-public protocol ItemContentCoordinator : AnyObject
-{
+public protocol ItemContentCoordinator: AnyObject {
     /// The type of `ItemContent` associated with this coordinator.
-    associatedtype ItemContentType : ItemContent
-    
+    associatedtype ItemContentType: ItemContent
+
     /// The item associated with the coordinator.
     typealias Item = ListableUI.Item<ItemContentType>
-    
+
     // MARK: Actions & Info
-    
+
     /// The available actions you can perform on the coordinated `Item`. Eg, updating it to a new value.
-    var actions : ItemContentType.CoordinatorActions { get }
-    
+    var actions: ItemContentType.CoordinatorActions { get }
+
     /// Info about the coordinated `Item`, such as its original and current value.
-    var info : ItemContentType.CoordinatorInfo { get }
-    
+    var info: ItemContentType.CoordinatorInfo { get }
+
     // MARK: Instance Lifecycle
-    
+
     /// Invoked on the coordinator when it is first created and configured.
-    func wasInserted(_ info : Item.OnInsert)
-    
+    func wasInserted(_ info: Item.OnInsert)
+
     /// Invoked on the coordinator when its owned item is removed from the list due to
     /// the item, or its entire section, being removed from the list.
     ///
     /// Not invoked during deallocation of a list.
-    func wasRemoved(_ info : Item.OnRemove)
-    
+    func wasRemoved(_ info: Item.OnRemove)
+
     /// Invoked on the coordinator when its owned item is moved inside a list due to its
     /// order changing.
     ///
     /// Not invoked when an item is manually re-ordered by a user.
-    func wasMoved(_ info : Item.OnMove)
-    
+    func wasMoved(_ info: Item.OnMove)
+
     /// Invoked on the coordinator when an external update is pushed onto the owned `Item`.
     /// This happens when the developer updates the content of the list, and the item is
     /// reported as changed via its `isEquivalent(to:)` method.
-    func wasUpdated(_ info : Item.OnUpdate)
-    
+    func wasUpdated(_ info: Item.OnUpdate)
+
     // MARK: Visibility & View Lifecycle
 
     /// Invoked when the list is about to begin displaying the item with the given view.
@@ -99,53 +97,49 @@ public protocol ItemContentCoordinator : AnyObject
 
     /// Invoked when the list is about to complete displaying the item with the given view.
     func didEndDisplay()
-    
+
     // MARK: Selection & Highlight Lifecycle
-    
+
     /// Invoked when the item is selected, via either user interaction or the `selectionStyle`.
     func wasSelected()
-    
+
     /// Invoked when the item is deselected, via either user interaction or the `selectionStyle`.
     func wasDeselected()
 }
 
-
-public extension ItemContentCoordinator
-{
+public extension ItemContentCoordinator {
     // MARK: Instance Lifecycle
-    
-    func wasInserted(_ info : Item.OnInsert) {}
-    
-    func wasRemoved(_ info : Item.OnRemove) {}
-    
-    func wasMoved(_ info : Item.OnMove) {}
-    
-    func wasUpdated(_ info : Item.OnUpdate) {}
-    
+
+    func wasInserted(_: Item.OnInsert) {}
+
+    func wasRemoved(_: Item.OnRemove) {}
+
+    func wasMoved(_: Item.OnMove) {}
+
+    func wasUpdated(_: Item.OnUpdate) {}
+
     // MARK: Visibility Lifecycle
-        
+
     func willDisplay() {}
 
     func didEndDisplay() {}
-    
+
     // MARK: Selection & Highlight Lifecycle
-    
+
     func wasSelected() {}
-    
+
     func wasDeselected() {}
 }
 
-
 /// The available actions you can perform as a coordinator, which are reported back to the list to manage the item.
-public final class ItemContentCoordinatorActions<Content:ItemContent>
-{
-    private let currentProvider : () -> Item<Content>
-    var updateCallback : (Item<Content>, ViewAnimation) -> ()
-    
-    init(current : @escaping () -> Item<Content>, update : @escaping (Item<Content>, ViewAnimation) -> ())
+public final class ItemContentCoordinatorActions<Content: ItemContent> {
+    private let currentProvider: () -> Item<Content>
+    var updateCallback: (Item<Content>, ViewAnimation) -> Void
+
+    init(current: @escaping () -> Item<Content>, update: @escaping (Item<Content>, ViewAnimation) -> Void)
     {
-        self.currentProvider = current
-        self.updateCallback = update
+        currentProvider = current
+        updateCallback = update
     }
 
     ///
@@ -165,56 +159,51 @@ public final class ItemContentCoordinatorActions<Content:ItemContent>
     public func update(
         animation: ViewAnimation = .default,
         after delay: TimeInterval = 0,
-        update : @escaping (inout Item<Content>) -> ()
+        update: @escaping (inout Item<Content>) -> Void
     ) {
         if delay > 0 {
             Timer.scheduledTimer(withTimeInterval: delay, repeats: false) { _ in
                 var new = self.currentProvider()
                 update(&new)
-                
+
                 self.updateCallback(new, animation)
             }
         } else {
-            var new = self.currentProvider()
+            var new = currentProvider()
             update(&new)
-            
-            self.updateCallback(new, animation)
+
+            updateCallback(new, animation)
         }
     }
 }
 
-
 /// Information about the current and original state of the item.
-public final class ItemContentCoordinatorInfo<Content:ItemContent>
-{
+public final class ItemContentCoordinatorInfo<Content: ItemContent> {
     /// The original state of the item, as passed to the list.
     /// This is property is updated when the list is updated, and the
     /// `isEquivalent(to:)` reports a change to the item.
-    public internal(set) var original : Item<Content>
-    
+    public internal(set) var original: Item<Content>
+
     /// The current value of the item, including changes made
     /// by the coordinator itself.
-    public var current : Item<Content> {
-        self.currentProvider()
+    public var current: Item<Content> {
+        currentProvider()
     }
-    
-    private let currentProvider : () -> Item<Content>
-    
-    init(original : Item<Content>, current : @escaping () -> Item<Content>)
-    {
+
+    private let currentProvider: () -> Item<Content>
+
+    init(original: Item<Content>, current: @escaping () -> Item<Content>) {
         self.original = original
-        
-        self.currentProvider = current
+
+        currentProvider = current
     }
 }
 
-
 /// The default `ItemContentCoordinator`, which performs no actions.
-public final class DefaultItemContentCoordinator<Content:ItemContent> : ItemContentCoordinator
-{
-    public let actions : Content.CoordinatorActions
-    public let info : Content.CoordinatorInfo
-    
+public final class DefaultItemContentCoordinator<Content: ItemContent>: ItemContentCoordinator {
+    public let actions: Content.CoordinatorActions
+    public let info: Content.CoordinatorInfo
+
     internal init(
         actions: Content.CoordinatorActions,
         info: Content.CoordinatorInfo

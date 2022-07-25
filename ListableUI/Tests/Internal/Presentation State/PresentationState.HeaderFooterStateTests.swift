@@ -5,16 +5,9 @@
 //  Created by Kyle Van Essen on 5/22/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
+class PresentationState_HeaderFooterStateTests: XCTestCase {}
 
-class PresentationState_HeaderFooterStateTests : XCTestCase
-{
-    
-}
-
-class PresentationState_HeaderFooterViewStatePairTests : XCTestCase {
-    
-    
-}
+class PresentationState_HeaderFooterViewStatePairTests: XCTestCase {}

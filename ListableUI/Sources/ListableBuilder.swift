@@ -26,7 +26,6 @@
 /// Most comments on methods come from the result builders SE proposal.
 ///
 @resultBuilder public enum ListableBuilder<ContentType> {
-    
     /// The type of individual statement expressions in the transformed function.
     public typealias Expression = ContentType
 
@@ -35,12 +34,12 @@
 
     /// The type of the final returned result.
     public typealias FinalResult = [ContentType]
-    
+
     /// If an empty closure is provided, returns an empty array.
     public static func buildBlock() -> Component {
         []
     }
-    
+
     /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock(_ components: Component...) -> Component {
         components.reduce(into: []) { $0 += $1 }
@@ -50,7 +49,7 @@
     public static func buildExpression(_ expression: Expression) -> Component {
         [expression]
     }
-    
+
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
     public static func buildExpression(_ expression: [Expression]) -> Component {
         expression

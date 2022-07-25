@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 ///
 /// A `LayoutDescription`, well, describes the type of and properties of a layout to apply to a list view.
 ///
@@ -39,80 +38,72 @@ import Foundation
 /// Under the hood, Listable is smart, and will only re-create the underlying
 /// layout object when needed (when the layout type or layout appearance changes).
 ///
-public struct LayoutDescription : Equatable
-{
-    let configuration : AnyLayoutDescriptionConfiguration
-    
+public struct LayoutDescription: Equatable {
+    let configuration: AnyLayoutDescriptionConfiguration
+
     /// Creates a new layout description for the provided layout type, with the provided optional layout configuration.
-    public init<LayoutType:ListLayout>(
-        layoutType : LayoutType.Type,
-        appearance configure : (inout LayoutType.LayoutAppearance) -> () = { _ in }
+    public init<LayoutType: ListLayout>(
+        layoutType: LayoutType.Type,
+        appearance configure: (inout LayoutType.LayoutAppearance) -> Void = { _ in }
     ) {
         var appearance = LayoutType.LayoutAppearance.default
         configure(&appearance)
-        
+
         self.init(layoutType: layoutType, appearance: appearance)
     }
-    
+
     /// Creates a new layout description for the provided layout type, with the provided appearance.
-    public init<LayoutType:ListLayout>(
-        layoutType : LayoutType.Type,
-        appearance : LayoutType.LayoutAppearance
+    public init<LayoutType: ListLayout>(
+        layoutType: LayoutType.Type,
+        appearance: LayoutType.LayoutAppearance
     ) {
-        self.configuration = Configuration(
+        configuration = Configuration(
             layoutType: layoutType,
             layoutAppearance: appearance
         )
     }
-    
+
     /// Returns the standard layout properties, which apply to any kind of list layout.
     ///
     /// Calling this method is relatively inexpensive – it does not create an instance
     /// of the backing list layout.
-    public var layoutAppearanceProperties : ListLayoutAppearanceProperties {
+    public var layoutAppearanceProperties: ListLayoutAppearanceProperties {
         configuration.layoutAppearanceProperties()
     }
-    
-    public static func == (lhs : Self, rhs : Self) -> Bool {
+
+    public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.configuration.isEqual(to: rhs.configuration)
     }
 }
 
-
-extension ListLayout
-{
+public extension ListLayout {
     /// Creates a new layout description for a list layout, with the provided optional layout configuration.
-    public static func describe(
-        appearance : (inout Self.LayoutAppearance) -> () = { _ in }
-    ) -> LayoutDescription
-    {
-        return LayoutDescription(
+    static func describe(
+        appearance: (inout Self.LayoutAppearance) -> Void = { _ in }
+    ) -> LayoutDescription {
+        LayoutDescription(
             layoutType: Self.self,
             appearance: appearance
         )
     }
 }
 
+public extension LayoutDescription {
+    struct Configuration<LayoutType: ListLayout>: AnyLayoutDescriptionConfiguration, Equatable {
+        public let layoutType: LayoutType.Type
 
-extension LayoutDescription
-{
-    public struct Configuration<LayoutType:ListLayout> : AnyLayoutDescriptionConfiguration, Equatable
-    {
-        public let layoutType : LayoutType.Type
-        
-        public let layoutAppearance : LayoutType.LayoutAppearance
-        
+        public let layoutAppearance: LayoutType.LayoutAppearance
+
         public static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.layoutType == rhs.layoutType && lhs.layoutAppearance == rhs.layoutAppearance
         }
-        
+
         // MARK: AnyLayoutDescriptionConfiguration
-        
+
         public func createEmptyLayout(
-            appearance : Appearance,
+            appearance: Appearance,
             behavior: Behavior
-        ) -> AnyListLayout
-        {
+        ) -> AnyListLayout {
             LayoutType(
                 layoutAppearance: layoutAppearance,
                 appearance: appearance,
@@ -120,85 +111,78 @@ extension LayoutDescription
                 content: .init()
             )
         }
-        
+
         public func createPopulatedLayout(
-            appearance : Appearance,
+            appearance: Appearance,
             behavior: Behavior,
-            content : (ListLayoutDefaults) -> ListLayoutContent
-        ) -> AnyListLayout
-        {
+            content: (ListLayoutDefaults) -> ListLayoutContent
+        ) -> AnyListLayout {
             LayoutType(
-                layoutAppearance: self.layoutAppearance,
+                layoutAppearance: layoutAppearance,
                 appearance: appearance,
                 behavior: behavior,
                 content: content(LayoutType.defaults)
             )
         }
-        
+
         public func layoutAppearanceProperties() -> ListLayoutAppearanceProperties {
-            .init(self.layoutAppearance)
+            .init(layoutAppearance)
         }
-        
-        public func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
-        {
+
+        public func shouldRebuild(layout anyLayout: AnyListLayout) -> Bool {
             let layout = anyLayout as! LayoutType
             let old = layout.layoutAppearance
-            
-            return old != self.layoutAppearance
+
+            return old != layoutAppearance
         }
-        
-        public func isSameLayoutType(as anyOther : AnyLayoutDescriptionConfiguration) -> Bool
-        {
+
+        public func isSameLayoutType(as anyOther: AnyLayoutDescriptionConfiguration) -> Bool {
             // TODO: We don't need both of these checks, just the second one.
-            
+
             guard let other = anyOther as? Self else {
                 return false
             }
-            
-            return self.layoutType == other.layoutType
+
+            return layoutType == other.layoutType
         }
-        
-        public func isEqual(to other : AnyLayoutDescriptionConfiguration) -> Bool {
+
+        public func isEqual(to other: AnyLayoutDescriptionConfiguration) -> Bool {
             self == (other as? Self)
         }
     }
 }
 
-
-public protocol AnyLayoutDescriptionConfiguration
-{
+public protocol AnyLayoutDescriptionConfiguration {
     func createEmptyLayout(
-        appearance : Appearance,
+        appearance: Appearance,
         behavior: Behavior
     ) -> AnyListLayout
-    
-    func createPopulatedLayout(
-        appearance : Appearance,
-        behavior: Behavior,
-        content : (ListLayoutDefaults) -> ListLayoutContent
-    ) -> AnyListLayout
-    
-    func layoutAppearanceProperties() -> ListLayoutAppearanceProperties
-    
-    func shouldRebuild(layout anyLayout : AnyListLayout) -> Bool
 
-    func isSameLayoutType(as other : AnyLayoutDescriptionConfiguration) -> Bool
-    
-    func isEqual(to other : AnyLayoutDescriptionConfiguration) -> Bool
+    func createPopulatedLayout(
+        appearance: Appearance,
+        behavior: Behavior,
+        content: (ListLayoutDefaults) -> ListLayoutContent
+    ) -> AnyListLayout
+
+    func layoutAppearanceProperties() -> ListLayoutAppearanceProperties
+
+    func shouldRebuild(layout anyLayout: AnyListLayout) -> Bool
+
+    func isSameLayoutType(as other: AnyLayoutDescriptionConfiguration) -> Bool
+
+    func isEqual(to other: AnyLayoutDescriptionConfiguration) -> Bool
 }
 
-
 extension LayoutDescription {
-    
-    var wantsKeyboardInsetAdjustment : Bool {
+    var wantsKeyboardInsetAdjustment: Bool {
         layoutAppearanceProperties.direction == .vertical
     }
-    
-    func needsCollectionViewInsetUpdate(for other : LayoutDescription) -> Bool {
-        guard self.layoutAppearanceProperties.direction == other.layoutAppearanceProperties.direction else {
+
+    func needsCollectionViewInsetUpdate(for other: LayoutDescription) -> Bool {
+        guard layoutAppearanceProperties.direction == other.layoutAppearanceProperties.direction else {
             return true
         }
-        
+
         return false
     }
 }

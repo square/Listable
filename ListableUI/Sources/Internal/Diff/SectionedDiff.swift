@@ -7,135 +7,124 @@
 
 import Foundation
 
+struct SectionedDiff<Section, SectionIdentifier: Hashable, Item, ItemIdentifier: Hashable> {
+    let old: [Section]
+    let new: [Section]
 
-struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:Hashable>
-{
-    let old : [Section]
-    let new : [Section]
-    
-    let changes : SectionChanges
-    
-    init(old : [Section], new: [Section], configuration : Configuration)
-    {
+    let changes: SectionChanges
+
+    init(old: [Section], new: [Section], configuration: Configuration) {
         self.old = old
         self.new = new
-        
-        self.changes = SectionChanges(
+
+        changes = SectionChanges(
             old: old,
             new: new,
             configuration: configuration
         )
     }
-    
-    struct Configuration
-    {
-        var section : SectionProviders
-        var item : ItemProviders
-        
-        init(section : SectionProviders, item : ItemProviders)
-        {
+
+    struct Configuration {
+        var section: SectionProviders
+        var item: ItemProviders
+
+        init(section: SectionProviders, item: ItemProviders) {
             self.section = section
             self.item = item
         }
-        
-        struct SectionProviders
-        {
-            var identifier : (Section) -> SectionIdentifier
-            
-            var items : (Section) -> [Item]
-            
-            var movedHint : (Section, Section) -> Bool
-            
+
+        struct SectionProviders {
+            var identifier: (Section) -> SectionIdentifier
+
+            var items: (Section) -> [Item]
+
+            var movedHint: (Section, Section) -> Bool
+
             init(
-                identifier : @escaping (Section) -> SectionIdentifier,
-                items : @escaping (Section) -> [Item],
-                movedHint : @escaping (Section, Section) -> Bool
-                )
-            {
+                identifier: @escaping (Section) -> SectionIdentifier,
+                items: @escaping (Section) -> [Item],
+                movedHint: @escaping (Section, Section) -> Bool
+            ) {
                 self.identifier = identifier
                 self.items = items
                 self.movedHint = movedHint
             }
         }
-        
-        struct ItemProviders
-        {
-            var identifier : (Item) -> ItemIdentifier
-            
-            var updated : (Item, Item) -> Bool
-            var movedHint : (Item, Item) -> Bool
-            
+
+        struct ItemProviders {
+            var identifier: (Item) -> ItemIdentifier
+
+            var updated: (Item, Item) -> Bool
+            var movedHint: (Item, Item) -> Bool
+
             init(
-                identifier : @escaping (Item) -> ItemIdentifier,
-                updated : @escaping (Item, Item) -> Bool,
-                movedHint : @escaping (Item, Item) -> Bool
-                )
-            {
+                identifier: @escaping (Item) -> ItemIdentifier,
+                updated: @escaping (Item, Item) -> Bool,
+                movedHint: @escaping (Item, Item) -> Bool
+            ) {
                 self.identifier = identifier
                 self.updated = updated
                 self.movedHint = movedHint
             }
         }
     }
-    
-    struct SectionChanges
-    {
-        let added : [Added]
-        let removed : [Removed]
-        
-        let moved : [Moved]
-        let noChange : [NoChange]
-        
-        let addedItemIdentifiers : Set<ItemIdentifier>
-        let removedItemIdentifiers : Set<ItemIdentifier>
-        
-        let sectionsChangeCount : Int
-        let itemsChangeCount : Int
-        
-        var totalChangeCount : Int {
-            self.sectionsChangeCount + self.itemsChangeCount
+
+    struct SectionChanges {
+        let added: [Added]
+        let removed: [Removed]
+
+        let moved: [Moved]
+        let noChange: [NoChange]
+
+        let addedItemIdentifiers: Set<ItemIdentifier>
+        let removedItemIdentifiers: Set<ItemIdentifier>
+
+        let sectionsChangeCount: Int
+        let itemsChangeCount: Int
+
+        var totalChangeCount: Int {
+            sectionsChangeCount + itemsChangeCount
         }
-        
-        var isEmpty : Bool {
-            self.totalChangeCount == 0
+
+        var isEmpty: Bool {
+            totalChangeCount == 0
         }
-        
-        private let diff : ArrayDiff<Section, SectionIdentifier>
-        
-        init(old : [Section], new : [Section], configuration : Configuration)
-        {
-            self.diff = ArrayDiff(
+
+        private let diff: ArrayDiff<Section, SectionIdentifier>
+
+        init(old: [Section], new: [Section], configuration: Configuration) {
+            diff = ArrayDiff(
                 old: old,
                 new: new,
                 identifierProvider: { configuration.section.identifier($0) },
                 movedHint: { configuration.section.movedHint($0, $1) },
                 updated: { _, _ in false }
             )
-            
-            self.added = diff.added.map {
+
+            added = diff.added.map {
                 Added(
                     identifier: $0.identifier,
                     newIndex: $0.newIndex,
                     newValue: $0.new
                 )
             }
-            
-            self.removed = diff.removed.map {
+
+            removed = diff.removed.map {
                 Removed(
                     identifier: $0.identifier,
                     oldIndex: $0.oldIndex,
                     oldValue: $0.old
                 )
             }
-            
-            self.moved = diff.moved.map {
+
+            moved = diff.moved.map {
                 Moved(
                     identifier: $0.identifier,
                     oldIndex: $0.old.oldIndex,
                     newIndex: $0.new.newIndex,
                     oldValue: $0.old.old,
                     newValue: $0.new.new,
-                    
+
                     itemChanges: SectionedDiff.ItemChanges(
                         old: $0.old.old,
                         oldIndex: $0.old.oldIndex,
@@ -145,15 +134,15 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                     )
                 )
             }
-            
-            self.noChange = diff.noChange.map {
+
+            noChange = diff.noChange.map {
                 NoChange(
                     identifier: $0.identifier,
                     oldIndex: $0.oldIndex,
                     newIndex: $0.newIndex,
                     oldValue: $0.old,
                     newValue: $0.new,
-                    
+
                     itemChanges: SectionedDiff.ItemChanges(
                         old: $0.old,
                         oldIndex: $0.oldIndex,
@@ -163,108 +152,101 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                     )
                 )
             }
-            
+
             let sectionsChangeCount =
-                self.added.count
-                + self.removed.count
-                + self.moved.count
-            
+                added.count
+                    + removed.count
+                    + moved.count
+
             let itemsChangeCount =
-                self.moved.reduce(0, { $0 + $1.itemChanges.changeCount })
-                + self.noChange.reduce(0, { $0 + $1.itemChanges.changeCount })
-            
+                moved.reduce(0) { $0 + $1.itemChanges.changeCount }
+                    + noChange.reduce(0) { $0 + $1.itemChanges.changeCount }
+
             self.sectionsChangeCount = sectionsChangeCount
             self.itemsChangeCount = itemsChangeCount
-            
+
             let hasChanges = itemsChangeCount > 0 || sectionsChangeCount > 0
-            
+
             if hasChanges {
                 let oldIDs = Self.allItemIDs(in: old, configuration: configuration)
                 let newIDs = Self.allItemIDs(in: new, configuration: configuration)
-                
-                self.addedItemIdentifiers = newIDs.subtracting(oldIDs)
-                self.removedItemIdentifiers = oldIDs.subtracting(newIDs)
+
+                addedItemIdentifiers = newIDs.subtracting(oldIDs)
+                removedItemIdentifiers = oldIDs.subtracting(newIDs)
             } else {
-                self.addedItemIdentifiers = []
-                self.removedItemIdentifiers = []
+                addedItemIdentifiers = []
+                removedItemIdentifiers = []
             }
-            
+
             listableInternalPrecondition(diff.updated.isEmpty, "Must not have any updates for sections; sections can only move.")
         }
-        
-        private static func allItemIDs(in sections : [Section], configuration : Configuration) -> Set<ItemIdentifier> {
-            
+
+        private static func allItemIDs(in sections: [Section], configuration: Configuration) -> Set<ItemIdentifier> {
             var IDs = Set<ItemIdentifier>()
-            
+
             for section in sections {
                 for item in configuration.section.items(section) {
                     IDs.insert(configuration.item.identifier(item))
                 }
             }
-            
+
             return IDs
         }
-        
-        struct Added
-        {
-            let identifier : SectionIdentifier
-            
-            let newIndex : Int
-            
-            let newValue : Section
+
+        struct Added {
+            let identifier: SectionIdentifier
+
+            let newIndex: Int
+
+            let newValue: Section
         }
-        
-        struct Removed
-        {
-            let identifier : SectionIdentifier
-            
-            let oldIndex : Int
-            
-            let oldValue : Section
+
+        struct Removed {
+            let identifier: SectionIdentifier
+
+            let oldIndex: Int
+
+            let oldValue: Section
         }
-        
-        struct Moved
-        {
-            let identifier : SectionIdentifier
-            
-            let oldIndex : Int
-            let newIndex : Int
-            
-            let oldValue : Section
-            let newValue : Section
-            
-            let itemChanges : ItemChanges
+
+        struct Moved {
+            let identifier: SectionIdentifier
+
+            let oldIndex: Int
+            let newIndex: Int
+
+            let oldValue: Section
+            let newValue: Section
+
+            let itemChanges: ItemChanges
         }
-        
-        struct NoChange
-        {
-            let identifier : SectionIdentifier
-            
-            let oldIndex : Int
-            let newIndex : Int
-            
-            let oldValue : Section
-            let newValue : Section
-            
-            let itemChanges : ItemChanges
+
+        struct NoChange {
+            let identifier: SectionIdentifier
+
+            let oldIndex: Int
+            let newIndex: Int
+
+            let oldValue: Section
+            let newValue: Section
+
+            let itemChanges: ItemChanges
         }
     }
-    
-    
-    struct ItemChanges
-    {
-        let added : [Added]
-        let removed : [Removed]
-        
-        let moved : [Moved]
-        let updated : [Updated]
-        let noChange : [NoChange]
-        
-        let changeCount : Int
-        
-        let diff : ArrayDiff<Item, ItemIdentifier>
-        
-        init(old : Section, oldIndex : Int, new : Section, newIndex : Int, configuration: Configuration)
+
+    struct ItemChanges {
+        let added: [Added]
+        let removed: [Removed]
+
+        let moved: [Moved]
+        let updated: [Updated]
+        let noChange: [NoChange]
+
+        let changeCount: Int
+
+        let diff: ArrayDiff<Item, ItemIdentifier>
+
+        init(old: Section, oldIndex: Int, new: Section, newIndex: Int, configuration: Configuration)
         {
             self.init(
                 old: configuration.section.items(old),
@@ -274,34 +256,33 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                 configuration: configuration
             )
         }
-        
-        init(old : [Item], oldIndex : Int, new : [Item], newIndex : Int, configuration : Configuration)
-        {
-            self.diff = ArrayDiff(
+
+        init(old: [Item], oldIndex: Int, new: [Item], newIndex: Int, configuration: Configuration) {
+            diff = ArrayDiff(
                 old: old,
                 new: new,
                 identifierProvider: { configuration.item.identifier($0) },
                 movedHint: { configuration.item.movedHint($0, $1) },
                 updated: { configuration.item.updated($0, $1) }
             )
-            
-            self.added = diff.added.map {
+
+            added = diff.added.map {
                 Added(
                     identifier: $0.identifier,
                     newIndex: IndexPath(item: $0.newIndex, section: newIndex),
                     newValue: $0.new
                 )
             }
-            
-            self.removed = diff.removed.map {
+
+            removed = diff.removed.map {
                 Removed(
                     identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
                     oldValue: $0.old
                 )
             }
-            
-            self.moved = diff.moved.map {
+
+            moved = diff.moved.map {
                 Moved(
                     identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.old.oldIndex, section: oldIndex),
@@ -310,8 +291,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                     newValue: $0.new.new
                 )
             }
-            
-            self.updated = diff.updated.map {
+
+            updated = diff.updated.map {
                 Updated(
                     identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
@@ -320,8 +301,8 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                     newValue: $0.new
                 )
             }
-            
-            self.noChange = diff.noChange.map {
+
+            noChange = diff.noChange.map {
                 NoChange(
                     identifier: $0.identifier,
                     oldIndex: IndexPath(item: $0.oldIndex, section: oldIndex),
@@ -330,261 +311,246 @@ struct SectionedDiff<Section, SectionIdentifier:Hashable, Item, ItemIdentifier:H
                     newValue: $0.new
                 )
             }
-            
-            self.changeCount = self.added.count
-                + self.removed.count
-                + self.moved.count
-                + self.updated.count
+
+            changeCount = added.count
+                + removed.count
+                + moved.count
+                + updated.count
         }
-        
-        struct Added
-        {
-            let identifier : ItemIdentifier
-            
-            let newIndex : IndexPath
-            
-            let newValue : Item
+
+        struct Added {
+            let identifier: ItemIdentifier
+
+            let newIndex: IndexPath
+
+            let newValue: Item
         }
-        
-        struct Removed
-        {
-            let identifier : ItemIdentifier
-            
-            let oldIndex : IndexPath
-            
-            let oldValue : Item
+
+        struct Removed {
+            let identifier: ItemIdentifier
+
+            let oldIndex: IndexPath
+
+            let oldValue: Item
         }
-        
-        struct Moved
-        {
-            let identifier : ItemIdentifier
-            
-            let oldIndex : IndexPath
-            let newIndex : IndexPath
-            
-            var oldValue : Item
-            var newValue : Item
+
+        struct Moved {
+            let identifier: ItemIdentifier
+
+            let oldIndex: IndexPath
+            let newIndex: IndexPath
+
+            var oldValue: Item
+            var newValue: Item
         }
-        
-        struct Updated
-        {
-            let identifier : ItemIdentifier
-            
-            let oldIndex : IndexPath
-            let newIndex : IndexPath
-            
-            let oldValue : Item
-            let newValue : Item
+
+        struct Updated {
+            let identifier: ItemIdentifier
+
+            let oldIndex: IndexPath
+            let newIndex: IndexPath
+
+            let oldValue: Item
+            let newValue: Item
         }
-        
-        struct NoChange
-        {
-            let identifier : ItemIdentifier
-            
-            let oldIndex : IndexPath
-            let newIndex : IndexPath
-            
-            let oldValue : Item
-            let newValue : Item
+
+        struct NoChange {
+            let identifier: ItemIdentifier
+
+            let oldIndex: IndexPath
+            let newIndex: IndexPath
+
+            let oldValue: Item
+            let newValue: Item
         }
     }
 }
 
-extension SectionedDiff.SectionChanges.Added : Equatable where Section:Equatable, Item:Equatable {}
-extension SectionedDiff.SectionChanges.Removed : Equatable where Section:Equatable, Item:Equatable {}
-extension SectionedDiff.SectionChanges.Moved : Equatable where Section:Equatable, Item:Equatable {}
-extension SectionedDiff.SectionChanges.NoChange : Equatable where Section:Equatable, Item:Equatable {}
+extension SectionedDiff.SectionChanges.Added: Equatable where Section: Equatable, Item: Equatable {}
+extension SectionedDiff.SectionChanges.Removed: Equatable where Section: Equatable, Item: Equatable {}
+extension SectionedDiff.SectionChanges.Moved: Equatable where Section: Equatable, Item: Equatable {}
+extension SectionedDiff.SectionChanges.NoChange: Equatable where Section: Equatable, Item: Equatable {}
 
-extension SectionedDiff.ItemChanges : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges: Equatable where Item: Equatable {}
 
-extension SectionedDiff.ItemChanges.Added : Equatable where Item:Equatable {}
-extension SectionedDiff.ItemChanges.Removed : Equatable where Item:Equatable {}
-extension SectionedDiff.ItemChanges.Moved : Equatable where Item:Equatable {}
-extension SectionedDiff.ItemChanges.Updated : Equatable where Item:Equatable {}
-extension SectionedDiff.ItemChanges.NoChange : Equatable where Item:Equatable {}
+extension SectionedDiff.ItemChanges.Added: Equatable where Item: Equatable {}
+extension SectionedDiff.ItemChanges.Removed: Equatable where Item: Equatable {}
+extension SectionedDiff.ItemChanges.Moved: Equatable where Item: Equatable {}
+extension SectionedDiff.ItemChanges.Updated: Equatable where Item: Equatable {}
+extension SectionedDiff.ItemChanges.NoChange: Equatable where Item: Equatable {}
 
-
-extension SectionedDiff.SectionChanges
-{
+extension SectionedDiff.SectionChanges {
     func transform<Mapped>(
-        old : [Mapped],
-        removed : (Section, Mapped) -> (),
-        added : (Section) -> Mapped,
-        moved : (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> (),
-        noChange : (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> ()
-        ) -> [Mapped]
-    {
-        let removes : [Removal<Mapped>] = (self.removed.map({
+        old: [Mapped],
+        removed: (Section, Mapped) -> Void,
+        added: (Section) -> Mapped,
+        moved: (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> Void,
+        noChange: (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> Void
+    ) -> [Mapped] {
+        let removes: [Removal<Mapped>] = (self.removed.map {
             removed($0.oldValue, old[$0.oldIndex])
             return .remove(old[$0.oldIndex], $0)
-        }) + self.moved.map({
+        } + self.moved.map {
             .move(old[$0.oldIndex], $0)
-        })).sorted(by: {$0.oldIndex > $1.oldIndex})
-        
-        let inserts : [Insertion<Mapped>] = (self.added.map({
+        }).sorted(by: { $0.oldIndex > $1.oldIndex })
+
+        let inserts: [Insertion<Mapped>] = (self.added.map {
             let value = added($0.newValue)
             return .add(value, $0)
-        }) + self.moved.map({
+        } + self.moved.map {
             var value = old[$0.oldIndex]
             moved($0.oldValue, $0.newValue, $0.itemChanges, &value)
             return .move(value, $0)
-        })).sorted(by: {$0.newIndex < $1.newIndex})
-        
+        }).sorted(by: { $0.newIndex < $1.newIndex })
+
         var new = old
-        
+
         removes.forEach {
             new.remove(at: $0.oldIndex)
         }
-        
+
         inserts.forEach {
             new.insert($0.mapped, at: $0.newIndex)
         }
-        
+
         // Now that index changes are complete, perform no change messaging.
-        
+
         self.noChange.forEach {
             var value = new[$0.newIndex]
             noChange($0.oldValue, $0.newValue, $0.itemChanges, &value)
             new[$0.newIndex] = value
         }
-        
+
         return new
     }
-    
-    private enum Insertion<Mapped>
-    {
+
+    private enum Insertion<Mapped> {
         case add(Mapped, Added)
         case move(Mapped, Moved)
-        
-        var mapped : Mapped {
+
+        var mapped: Mapped {
             switch self {
-            case .add(let mapped, _): return mapped
-            case .move(let mapped, _): return mapped
+            case let .add(mapped, _): return mapped
+            case let .move(mapped, _): return mapped
             }
         }
-        
-        var newIndex : Int {
+
+        var newIndex: Int {
             switch self {
-            case .add(_, let added): return added.newIndex
-            case .move(_, let move): return move.newIndex
+            case let .add(_, added): return added.newIndex
+            case let .move(_, move): return move.newIndex
             }
         }
     }
-    
-    private enum Removal<Mapped>
-    {
+
+    private enum Removal<Mapped> {
         case remove(Mapped, Removed)
         case move(Mapped, Moved)
-        
-        var mapped : Mapped {
+
+        var mapped: Mapped {
             switch self {
-            case .remove(let mapped, _): return mapped
-            case .move(let mapped, _): return mapped
+            case let .remove(mapped, _): return mapped
+            case let .move(mapped, _): return mapped
             }
         }
-        
-        var oldIndex : Int {
+
+        var oldIndex: Int {
             switch self {
-            case .remove(_, let remove): return remove.oldIndex
-            case .move(_, let move): return move.oldIndex
+            case let .remove(_, remove): return remove.oldIndex
+            case let .move(_, move): return move.oldIndex
             }
         }
     }
 }
 
-
-extension SectionedDiff.ItemChanges
-{
+extension SectionedDiff.ItemChanges {
     func transform<Mapped>(
-        old : [Mapped],
-        removed : (Item, Mapped) -> (),
-        added : (Item) -> Mapped,
-        moved : (Item, Item, inout Mapped) -> (),
-        updated : (Item, Item, inout Mapped) -> (),
-        noChange : (Item, Item, inout Mapped) -> ()
-        ) -> [Mapped]
-    {
+        old: [Mapped],
+        removed: (Item, Mapped) -> Void,
+        added: (Item) -> Mapped,
+        moved: (Item, Item, inout Mapped) -> Void,
+        updated: (Item, Item, inout Mapped) -> Void,
+        noChange: (Item, Item, inout Mapped) -> Void
+    ) -> [Mapped] {
         // Built mutative changes, sort to ensure changes are not destructive.
-        
-        let removes : [Removal<Mapped>] = (self.removed.map({
+
+        let removes: [Removal<Mapped>] = (self.removed.map {
             removed($0.oldValue, old[$0.oldIndex.item])
             return .remove(old[$0.oldIndex.item], $0)
-        }) + self.moved.map({
-            return .move(old[$0.oldIndex.item], $0)
-        })).sorted(by: { $0.oldIndex > $1.oldIndex })
-        
-        let inserts : [Insertion<Mapped>] = (self.added.map({
+        } + self.moved.map {
+            .move(old[$0.oldIndex.item], $0)
+        }).sorted(by: { $0.oldIndex > $1.oldIndex })
+
+        let inserts: [Insertion<Mapped>] = (self.added.map {
             let value = added($0.newValue)
             return .add(value, $0)
-        }) + self.moved.map({
+        } + self.moved.map {
             var value = old[$0.oldIndex.item]
             moved($0.oldValue, $0.newValue, &value)
             return .move(value, $0)
-        })).sorted(by: { $0.newIndex < $1.newIndex })
-        
+        }).sorted(by: { $0.newIndex < $1.newIndex })
+
         var new = old
-        
+
         removes.forEach {
             new.remove(at: $0.oldIndex)
         }
-        
+
         inserts.forEach {
             new.insert($0.mapped, at: $0.newIndex)
         }
-        
+
         // Now that index changes are complete, perform update and no change messaging.
-        
+
         self.updated.forEach {
             var value = new[$0.newIndex.item]
             updated($0.oldValue, $0.newValue, &value)
             new[$0.newIndex.item] = value
         }
-        
+
         self.noChange.forEach {
             var value = new[$0.newIndex.item]
             noChange($0.oldValue, $0.newValue, &value)
             new[$0.newIndex.item] = value
         }
-        
+
         return new
     }
-    
-    private enum Insertion<Mapped>
-    {
+
+    private enum Insertion<Mapped> {
         case add(Mapped, Added)
         case move(Mapped, Moved)
-        
-        var mapped : Mapped {
+
+        var mapped: Mapped {
             switch self {
-            case .add(let mapped, _): return mapped
-            case .move(let mapped, _): return mapped
+            case let .add(mapped, _): return mapped
+            case let .move(mapped, _): return mapped
             }
         }
-        
-        var newIndex : Int {
+
+        var newIndex: Int {
             switch self {
-            case .add(_, let added): return added.newIndex.item
-            case .move(_, let move): return move.newIndex.item
+            case let .add(_, added): return added.newIndex.item
+            case let .move(_, move): return move.newIndex.item
             }
         }
     }
-    
-    private enum Removal<Mapped>
-    {
+
+    private enum Removal<Mapped> {
         case remove(Mapped, Removed)
         case move(Mapped, Moved)
-        
-        var mapped : Mapped {
+
+        var mapped: Mapped {
             switch self {
-            case .remove(let mapped, _): return mapped
-            case .move(let mapped, _): return mapped
+            case let .remove(mapped, _): return mapped
+            case let .move(mapped, _): return mapped
             }
         }
-        
-        var oldIndex : Int {
+
+        var oldIndex: Int {
             switch self {
-            case .remove(_, let remove): return remove.oldIndex.item
-            case .move(_, let move): return move.oldIndex.item
+            case let .remove(_, remove): return remove.oldIndex.item
+            case let .move(_, move): return move.oldIndex.item
             }
         }
     }

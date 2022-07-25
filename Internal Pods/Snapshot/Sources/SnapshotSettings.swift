@@ -7,25 +7,22 @@
 
 import Foundation
 
+public struct SnapshotSettings: Equatable {
+    public var savesBySystemVersion: SavesBySystemVersion
 
-public struct SnapshotSettings : Equatable
-{
-    public var savesBySystemVersion : SavesBySystemVersion
-    
     public init(
-        savesBySystemVersion : SavesBySystemVersion = .disabled
+        savesBySystemVersion: SavesBySystemVersion = .disabled
     ) {
         self.savesBySystemVersion = savesBySystemVersion
     }
-    
-    public enum SavesBySystemVersion : Equatable
-    {
+
+    public enum SavesBySystemVersion: Equatable {
         case disabled
         case major
         case majorMinor
         case complete
-        
-        func systemVersionDirectory(for version : OperatingSystemVersion = ProcessInfo.processInfo.operatingSystemVersion) -> String
+
+        func systemVersionDirectory(for version: OperatingSystemVersion = ProcessInfo.processInfo.operatingSystemVersion) -> String
         {
             switch self {
             case .disabled: return "All"

@@ -7,7 +7,6 @@
 
 import BlueprintUI
 
-
 ///
 /// This file contains deprecations which have occurred in BlueprintUILists, for which there are reasonable
 /// forward-moving defaults (eg, renames), to ease transitions for consumers when they update their library version.
@@ -41,5 +40,7 @@ import BlueprintUI
 ///
 
 //
+
 // MARK: Deprecated Month XX, 20XX
+
 //

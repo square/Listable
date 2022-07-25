@@ -10,7 +10,6 @@ import UIKit
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
 public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView {
-
     public struct Style: Equatable {
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
@@ -34,7 +33,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
 
         var cornerRadius: CGFloat {
             switch actionShape {
-            case .rectangle(let cornerRadius):
+            case let .rectangle(cornerRadius):
                 return cornerRadius
             }
         }
@@ -47,6 +46,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         view.clipsToBounds = true
         return view
     }()
+
     private var calculatedNaturalWidth: CGFloat = 0
 
     private var firstAction: SwipeAction?
@@ -71,11 +71,12 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         addSubview(container)
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
 
         let insets = style.containerInsets
@@ -87,7 +88,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         // Calculates the x origin for each button based on the width of each button before it
         // and the percent that the actions are slid open for the overlapping parallax effect
         func xOriginForButton(at index: Int) -> CGFloat {
-            let previousButtons = Array(actionButtons[0..<index])
+            let previousButtons = Array(actionButtons[0 ..< index])
             let position = width(ofButtons: previousButtons)
             let percentOpen = bounds.width / swipeActionsWidth
             return percentOpen * position
@@ -108,7 +109,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
 
             // If there's only one action, the button stays right-aligned while the container stretches.
             // For multiple actions, they stay left-aligned.
-            if wrapperView.frame.width > button.frame.width && actionButtons.count == 1 {
+            if wrapperView.frame.width > button.frame.width, actionButtons.count == 1 {
                 button.frame.origin.x = wrapperView.frame.width - button.frame.width
             } else {
                 button.frame.origin.x = 0
@@ -184,13 +185,11 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
             self.state = state
 
             setNeedsLayout()
-
         }
     }
 }
 
 private class DefaultSwipeActionButton: UIButton {
-
     private let inset: CGFloat = 16
     private var action: SwipeAction?
     private var didPerformAction: ((Bool) -> Void)?
@@ -203,7 +202,8 @@ private class DefaultSwipeActionButton: UIButton {
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -213,7 +213,7 @@ private class DefaultSwipeActionButton: UIButton {
         backgroundColor = action.backgroundColor
         setTitle(action.title, for: .normal)
         setImage(action.image, for: .normal)
-        
+
         tintColor = action.tintColor
         setTitleColor(action.tintColor, for: .normal)
     }

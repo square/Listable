@@ -5,9 +5,8 @@
 //  Created by Kyle Van Essen on 9/10/20.
 //
 
-import ListableUI
 import BlueprintUI
-
+import ListableUI
 
 ///
 /// Provides a way to create an `Item` for your Blueprint elements without
@@ -37,26 +36,25 @@ import BlueprintUI
 ///     item.selectionStyle = .tappable
 /// }
 /// ```
-public func ElementItem<Represented, IdentifierValue:Hashable>(
-    _ represented : Represented,
-    
-    id : KeyPath<Represented, IdentifierValue>,
-    
-    isEquivalent : @escaping (Represented, Represented) -> Bool,
+public func ElementItem<Represented, IdentifierValue: Hashable>(
+    _ represented: Represented,
 
-    element : @escaping (Represented, ApplyItemContentInfo) -> Element,
-    background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
-    selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
-    
-    configure : (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> () = { _ in }
-) -> Item<ElementItemContent<Represented, IdentifierValue>>
-{
+    id: KeyPath<Represented, IdentifierValue>,
+
+    isEquivalent: @escaping (Represented, Represented) -> Bool,
+
+    element: @escaping (Represented, ApplyItemContentInfo) -> Element,
+    background: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+    selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+
+    configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> Void = { _ in }
+) -> Item<ElementItemContent<Represented, IdentifierValue>> {
     Item(
         ElementItemContent(
             represented: represented,
-            
+
             idValueKeyPath: id,
-            
+
             isEquivalentProvider: isEquivalent,
             elementProvider: element,
             backgroundProvider: background,
@@ -65,7 +63,6 @@ public func ElementItem<Represented, IdentifierValue:Hashable>(
         configure: configure
     )
 }
-
 
 ///
 /// Provides a way to create an `Item` for your Blueprint elements without
@@ -93,24 +90,23 @@ public func ElementItem<Represented, IdentifierValue:Hashable>(
 ///     item.selectionStyle = .tappable
 /// }
 /// ```
-public func ElementItem<Represented:Equatable, IdentifierValue:Hashable>(
-    _ represented : Represented,
-    
-    id : KeyPath<Represented, IdentifierValue>,
+public func ElementItem<Represented: Equatable, IdentifierValue: Hashable>(
+    _ represented: Represented,
 
-    element : @escaping (Represented, ApplyItemContentInfo) -> Element,
-    background : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
-    selectedBackground : @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
-    
-    configure : (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> () = { _ in }
-) -> Item<ElementItemContent<Represented, IdentifierValue>>
-{
+    id: KeyPath<Represented, IdentifierValue>,
+
+    element: @escaping (Represented, ApplyItemContentInfo) -> Element,
+    background: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+    selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element? = { _, _ in nil },
+
+    configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> Void = { _ in }
+) -> Item<ElementItemContent<Represented, IdentifierValue>> {
     Item(
         ElementItemContent(
             represented: represented,
-            
+
             idValueKeyPath: id,
-            
+
             isEquivalentProvider: { $0 == $1 },
             elementProvider: element,
             backgroundProvider: background,
@@ -120,37 +116,35 @@ public func ElementItem<Represented:Equatable, IdentifierValue:Hashable>(
     )
 }
 
-
 /// The `BlueprintItemContent` type that is used to provide
 /// a lightweight way to present an `Element`, without needing to provide an entirely
 /// new `BlueprintItemContent` type.
-public struct ElementItemContent<Represented, IdentifierValue:Hashable> : BlueprintItemContent
-{
-    public let represented : Represented
+public struct ElementItemContent<Represented, IdentifierValue: Hashable>: BlueprintItemContent {
+    public let represented: Represented
 
-    let idValueKeyPath : KeyPath<Represented, IdentifierValue>
-    let isEquivalentProvider : (Represented, Represented) -> Bool
-    let elementProvider : (Represented, ApplyItemContentInfo) -> Element
-    let backgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
-    let selectedBackgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
-    
+    let idValueKeyPath: KeyPath<Represented, IdentifierValue>
+    let isEquivalentProvider: (Represented, Represented) -> Bool
+    let elementProvider: (Represented, ApplyItemContentInfo) -> Element
+    let backgroundProvider: (Represented, ApplyItemContentInfo) -> Element?
+    let selectedBackgroundProvider: (Represented, ApplyItemContentInfo) -> Element?
+
     public var identifierValue: IdentifierValue {
-        self.represented[keyPath: self.idValueKeyPath]
+        represented[keyPath: idValueKeyPath]
     }
-    
+
     public func isEquivalent(to other: Self) -> Bool {
-        self.isEquivalentProvider(self.represented, other.represented)
+        isEquivalentProvider(represented, other.represented)
     }
-    
+
     public func element(with info: ApplyItemContentInfo) -> Element {
-        self.elementProvider(self.represented, info)
+        elementProvider(represented, info)
     }
-    
+
     public func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
-        self.backgroundProvider(self.represented, info)
+        backgroundProvider(represented, info)
     }
-    
+
     public func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
-        self.selectedBackgroundProvider(self.represented, info)
+        selectedBackgroundProvider(represented, info)
     }
 }

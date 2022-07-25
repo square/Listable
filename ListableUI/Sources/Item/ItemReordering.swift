@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 ///
 /// Provides configuration options to control how an ``Item`` can be reordered within a list.
 ///
@@ -37,48 +36,44 @@ import UIKit
 /// ```
 /// From which you can then read any changes and pass them through to your data model.
 ///
-public struct ItemReordering
-{
+public struct ItemReordering {
     // MARK: Controlling Reordering Behavior
-    
+
     /// The sections in which the `Item` can be reordered into.
-    public var sections : Sections
-    
+    public var sections: Sections
+
     public typealias CanReorder = (Result) throws -> Bool
-    
+
     /// A predicate closure which allows more fine-grained validation of a reorder event,
     /// allowing you to control reordering on an index by index basis.
-    public var canReorder : CanReorder?
-    
+    public var canReorder: CanReorder?
+
     // MARK: Initialization
-    
+
     /// Creates a new `Reorder` instance with the provided options.
     public init(
-        sections : Sections,
-        canReorder : CanReorder? = nil
+        sections: Sections,
+        canReorder: CanReorder? = nil
     ) {
         self.sections = sections
         self.canReorder = canReorder
     }
 }
 
-
-extension ItemReordering {
-    
+public extension ItemReordering {
     /// Controls which sections a reorderable ``Item`` can be moved to during a reorder event.
-    public enum Sections : Equatable {
-        
+    enum Sections: Equatable {
         /// The ``Item`` can be moved to any section during a reorder
         case all
-        
+
         /// The ``Item`` can only be moved within the current section during a reorder.
         case current
-        
+
         /// The ``Item`` can only be moved within the specified sections during a reorder.
         /// The values passed should be the value of the ``Section``'s ``Identifier``.
         case specific(current: Bool, IDs: Set<AnyHashable>)
     }
-    
+
     /// Provides information about the current state of a reorder event.
     ///
     /// When used as part of ``canReorder-swift.property``, the state of the sections
@@ -87,25 +82,24 @@ extension ItemReordering {
     /// When used as part of ``Item/onWasReordered-swift.property``, the state of the sections
     /// and identifiers reflect the state of the list after the move has been committed.
     ///
-    public struct Result {
-        
+    struct Result {
         // MARK: Public Properties
-        
+
         /// The index path the ``Item`` is being moved from.
-        public var from : IndexPath
+        public var from: IndexPath
         /// The ``Section`` the ``Item`` is being moved from.
-        public var fromSection : Section
-        
+        public var fromSection: Section
+
         /// The index path the ``Item`` is being moved to.
-        public var to : IndexPath
+        public var to: IndexPath
         /// The ``Section`` the ``Item`` is being moved to.
-        public var toSection : Section
-        
+        public var toSection: Section
+
         /// If the item moved between sections during the reorder operation.
-        public var sectionChanged : Bool
-        
+        public var sectionChanged: Bool
+
         // MARK: Initialization
-        
+
         /// Creates a new instance of ``ItemReordering/Result`` with the provided options.
         public init(
             from: IndexPath,
@@ -117,17 +111,17 @@ extension ItemReordering {
             self.fromSection = fromSection
             self.to = to
             self.toSection = toSection
-            self.sectionChanged = from.section != to.section
+            sectionChanged = from.section != to.section
         }
-        
+
         // MARK: Reading Values
-        
+
         /// A short, readable description of the index path changes involved with the move.
-        public var indexPathsDescription : String {
+        public var indexPathsDescription: String {
             "(\(from) -> \(to))"
         }
     }
-    
+
     ///
     /// A gesture recognizer that you should use when implementing a reorderable ``Item`` in your list.
     ///
@@ -151,44 +145,41 @@ extension ItemReordering {
     ///     }
     /// }
     /// ```
-    public class GestureRecognizer : UILongPressGestureRecognizer
-    {
+    class GestureRecognizer: UILongPressGestureRecognizer {
         private typealias OnStart = () -> Bool
-        private typealias OnMove = (GestureRecognizer) -> ()
-        private typealias OnEnd = (ReorderingActions.Result) -> ()
+        private typealias OnMove = (GestureRecognizer) -> Void
+        private typealias OnEnd = (ReorderingActions.Result) -> Void
 
-        private var onStart : OnStart? = nil
-        private var onMove : OnMove? = nil
-        private var onEnd : OnEnd? = nil
-        
+        private var onStart: OnStart?
+        private var onMove: OnMove?
+        private var onEnd: OnEnd?
+
         /// Creates a gesture recognizer with the provided target and selector.
-        public override init(target: Any?, action: Selector?)
-        {
+        override public init(target: Any?, action: Selector?) {
             super.init(target: target, action: action)
-            
-            self.addTarget(self, action: #selector(updated))
-            self.minimumPressDuration = 0
+
+            addTarget(self, action: #selector(updated))
+            minimumPressDuration = 0
         }
-        
+
         /// Applies the actions from the ``ReorderingActions`` to the gesture recognizer,
         /// so that it can communicate with the list during reorder actions.
-        public func apply(actions : ReorderingActions) {
-            
-            self.onStart = actions.start
-            self.onMove = actions.moved(with:)
-            self.onEnd = actions.end(_:)
+        public func apply(actions: ReorderingActions) {
+            onStart = actions.start
+            onMove = actions.moved(with:)
+            onEnd = actions.end(_:)
         }
-        
-        func reorderPosition(in collectionView : UIView) -> CGPoint? {
+
+        func reorderPosition(in collectionView: UIView) -> CGPoint? {
             guard
-                let initialPoint = self.initialTouchPoint,
-                let cell = self.view?.firstSuperview(ofType: UICollectionViewCell.self)
+                let initialPoint = initialTouchPoint,
+                let cell = view?.firstSuperview(ofType: UICollectionViewCell.self)
             else {
                 return nil
             }
-            
-            let translation = self.location(in: collectionView)
-            
+
+            let translation = location(in: collectionView)
+
             let initialPointInCell = cell.convert(initialPoint, from: view)
 
             let initialPointAndCenterDiff = CGPoint(
@@ -202,84 +193,77 @@ extension ItemReordering {
             )
         }
 
-        private var initialTouchPoint : CGPoint? = nil
+        private var initialTouchPoint: CGPoint?
 
-        @objc private func updated()
-        {
-            switch self.state {
+        @objc private func updated() {
+            switch state {
             case .possible: break
             case .began:
-                if self.onStart?() == true {
+                if onStart?() == true {
                     initialTouchPoint = location(in: view)
                 } else {
-                    self.state = .cancelled
+                    state = .cancelled
                 }
             case .changed:
-                self.onMove?(self)
+                onMove?(self)
 
             case .ended:
-                self.onEnd?(.finished)
-                self.initialTouchPoint = nil
-                
+                onEnd?(.finished)
+                initialTouchPoint = nil
+
             case .cancelled, .failed:
-                self.onEnd?(.cancelled)
-                self.initialTouchPoint = nil
-                
+                onEnd?(.cancelled)
+                initialTouchPoint = nil
+
             @unknown default: listableInternalFatal()
             }
         }
     }
 }
 
-
 extension ItemReordering {
-    
     func destination(
-        from : IndexPath,
-        fromSection : PresentationState.SectionState,
-        to : IndexPath,
-        toSection : PresentationState.SectionState
-    ) -> IndexPath
-    {
+        from: IndexPath,
+        fromSection: PresentationState.SectionState,
+        to: IndexPath,
+        toSection: PresentationState.SectionState
+    ) -> IndexPath {
         let result = Result(
             from: from,
             fromSection: fromSection.model,
             to: to,
             toSection: toSection.model
         )
-                
+
         if from == to {
             return to
         }
-        
-        let checks : [() -> Bool] = [
+
+        let checks: [() -> Bool] = [
             { self.sections.canMove(from: fromSection, to: toSection) },
-            
+
             { fromSection.model.reordering.canReorderOut(with: result) },
             { toSection.model.reordering.canReorderIn(with: result) },
-            
+
             { result.allowed(with: self.canReorder) },
         ]
-        
+
         for check in checks {
             if check() == false {
                 return from
             }
         }
-        
+
         return to
     }
 }
 
-
 extension ItemReordering.Result {
-    
-    func allowed(with check : ((ItemReordering.Result) throws -> Bool)?) -> Bool {
-        
+    func allowed(with check: ((ItemReordering.Result) throws -> Bool)?) -> Bool {
         guard let check = check else {
             return true
         }
-        
+
         do {
             if try check(self) == false {
                 return false
@@ -287,24 +271,21 @@ extension ItemReordering.Result {
         } catch {
             return false
         }
-        
+
         return true
     }
 }
 
-
 extension ItemReordering.Sections {
-    
-    func canMove(from : PresentationState.SectionState, to : PresentationState.SectionState) -> Bool {
-        
+    func canMove(from: PresentationState.SectionState, to: PresentationState.SectionState) -> Bool {
         switch self {
         case .current:
             return from === to
-            
+
         case .all:
             return true
-            
-        case .specific(let current, let IDs):
+
+        case let .specific(current, IDs):
             return (current && from === to) || IDs.contains(to.model.identifier.value)
         }
     }

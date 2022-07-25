@@ -7,46 +7,42 @@
 
 import UIKit
 
-
 /// Controls the animations that are displayed when an item is inserted into, or removed from, a list.
 ///
 /// ### Note
 /// If `UIAccessibility.isReduceMotionEnabled` is `true`, animations will fall
 /// back to a `.fade` style animation when displayed by the list view.
-public struct ItemInsertAndRemoveAnimations
-{
-    public typealias Prepare = (inout ListContentLayoutAttributes) -> ()
-    
-    public var name : String
-    
-    public var onInsert : Prepare
-    public var onRemoval : Prepare
-    
+public struct ItemInsertAndRemoveAnimations {
+    public typealias Prepare = (inout ListContentLayoutAttributes) -> Void
+
+    public var name: String
+
+    public var onInsert: Prepare
+    public var onRemoval: Prepare
+
     public init(
-        name : String,
-        onInsert : @escaping Prepare,
-        onRemoval : @escaping Prepare
+        name: String,
+        onInsert: @escaping Prepare,
+        onRemoval: @escaping Prepare
     ) {
         self.name = name
         self.onInsert = onInsert
         self.onRemoval = onRemoval
     }
-    
+
     public init(
-        name : String,
-        attributes : @escaping Prepare
+        name: String,
+        attributes: @escaping Prepare
     ) {
         self.name = name
-        
-        self.onInsert = attributes
-        self.onRemoval = attributes
+
+        onInsert = attributes
+        onRemoval = attributes
     }
 }
 
-
-public extension ItemInsertAndRemoveAnimations
-{
-    static var fade : Self {
+public extension ItemInsertAndRemoveAnimations {
+    static var fade: Self {
         Self(
             name: "fade",
             onInsert: {
@@ -57,8 +53,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var right : Self {
+
+    static var right: Self {
         Self(
             name: "right",
             onInsert: {
@@ -71,8 +67,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var left : Self {
+
+    static var left: Self {
         Self(
             name: "left",
             onInsert: {
@@ -85,8 +81,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var top : Self {
+
+    static var top: Self {
         Self(
             name: "top",
             onInsert: {
@@ -99,8 +95,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var bottom : Self {
+
+    static var bottom: Self {
         Self(
             name: "bottom",
             onInsert: {
@@ -113,8 +109,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var scaleDown : Self {
+
+    static var scaleDown: Self {
         Self(
             name: "scaleDown",
             onInsert: {
@@ -127,8 +123,8 @@ public extension ItemInsertAndRemoveAnimations
             }
         )
     }
-    
-    static var scaleUp : Self {
+
+    static var scaleUp: Self {
         Self(
             name: "scaleUp",
             onInsert: {

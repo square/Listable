@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// An `Equatable` value which represents the overall context for all content presented in a list.
 ///
 /// Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or
@@ -26,22 +25,21 @@ import Foundation
 ///     MyTraits(textSize: .large)
 /// )
 /// ```
-public struct ContentContext : Equatable {
-    
-    private let value : Any
-    private let isEqual : (Any) -> Bool
-    
+public struct ContentContext: Equatable {
+    private let value: Any
+    private let isEqual: (Any) -> Bool
+
     /// Creates a new context with the provided `Equatable` value.
-    public init<Value:Equatable>(_ value : Value) {
+    public init<Value: Equatable>(_ value: Value) {
         self.value = value
-        self.isEqual = { other in
-            guard let other = other as? Value else { return false}
-            
+        isEqual = { other in
+            guard let other = other as? Value else { return false }
+
             return value == other
         }
     }
-    
-    public static func == (lhs : ContentContext, rhs : ContentContext) -> Bool {
+
+    public static func == (lhs: ContentContext, rhs: ContentContext) -> Bool {
         lhs.isEqual(rhs.value)
     }
 }

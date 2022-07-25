@@ -5,7 +5,6 @@
 //  Created by Kyle Van Essen on 6/10/21.
 //
 
-
 /// A type which can be converted into a `AnyItem`, so you
 /// do not need to explicitly wrap / convert your `ItemContent`
 /// in an `Item` when providing it to a `Section`.
@@ -31,8 +30,6 @@
 /// utilizing the default values from the `Item` initializer.
 ///
 public protocol AnyItemConvertible {
-    
     /// Converts the object into a type-erased `AnyItem` instance.
     func toAnyItem() -> AnyItem
 }
-

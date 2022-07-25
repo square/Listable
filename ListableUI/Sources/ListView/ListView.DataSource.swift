@@ -7,65 +7,58 @@
 
 import UIKit
 
+internal extension ListView {
+    final class DataSource: NSObject, UICollectionViewDataSource {
+        unowned var view: ListView!
+        unowned var presentationState: PresentationState!
+        unowned var storage: ListView.Storage!
+        unowned var liveCells: LiveCells!
 
-internal extension ListView
-{
-    final class DataSource : NSObject, UICollectionViewDataSource
-    {
-        unowned var view : ListView!
-        unowned var presentationState : PresentationState!
-        unowned var storage : ListView.Storage!
-        unowned var liveCells : LiveCells!
-
-        func numberOfSections(in collectionView: UICollectionView) -> Int
-        {
-            return self.presentationState.sections.count
+        func numberOfSections(in _: UICollectionView) -> Int {
+            presentationState.sections.count
         }
-        
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-        {
-            let section = self.presentationState.sections[section]
-            
+
+        func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+            let section = presentationState.sections[section]
+
             return section.items.count
         }
-        
+
         func collectionView(
             _ collectionView: UICollectionView,
             cellForItemAt indexPath: IndexPath
-        ) -> UICollectionViewCell
-        {
-            let item = self.presentationState.item(at: indexPath)
-            
-            self.presentationState.registerCell(for: item, in: collectionView)
-            
+        ) -> UICollectionViewCell {
+            let item = presentationState.item(at: indexPath)
+
+            presentationState.registerCell(for: item, in: collectionView)
+
             let cell = item.dequeueAndPrepareCollectionViewCell(
                 in: collectionView,
                 for: indexPath,
-                environment: self.view.environment
+                environment: view.environment
             )
-            
-            cell.wasDequeued(with: self.liveCells)
-            
+
+            cell.wasDequeued(with: liveCells)
+
             return cell
         }
-        
+
         private let headerFooterReuseCache = ReusableViewCache()
-        
+
         func collectionView(
             _ collectionView: UICollectionView,
             viewForSupplementaryElementOfKind kind: String,
             at indexPath: IndexPath
-            ) -> UICollectionReusableView
-        {
+        ) -> UICollectionReusableView {
             let container = SupplementaryContainerView.dequeue(
                 in: collectionView,
                 for: kind,
                 at: indexPath,
-                reuseCache: self.headerFooterReuseCache,
-                environment: self.view.environment
+                reuseCache: headerFooterReuseCache,
+                environment: view.environment
             )
-            
-            let headerFooter : AnyPresentationHeaderFooterState? = {
+
+            let headerFooter: AnyPresentationHeaderFooterState? = {
                 switch SupplementaryKind(rawValue: kind)! {
                 case .listContainerHeader: return self.presentationState.containerHeader.state
                 case .listHeader: return self.presentationState.header.state
@@ -75,31 +68,30 @@ internal extension ListView
                 case .overscrollFooter: return self.presentationState.overscrollFooter.state
                 }
             }()
-            
+
             container.setHeaderFooter(headerFooter, animated: false)
-            
+
             return container
         }
-        
+
         func collectionView(
-            _ collectionView: UICollectionView,
+            _: UICollectionView,
             canMoveItemAt indexPath: IndexPath
-        ) -> Bool
-        {            
-            let item = self.presentationState.item(at: indexPath)
-            
+        ) -> Bool {
+            let item = presentationState.item(at: indexPath)
+
             return item.anyModel.reordering != nil
         }
-        
+
         func collectionView(
-            _ collectionView: UICollectionView,
+            _: UICollectionView,
             moveItemAt from: IndexPath,
             to: IndexPath
         ) {
             guard from != to else {
                 return
             }
-            
+
             ///
             /// Mark us as queuing for re-orders, to prevent destructive edits which could break the collection
             /// view's layout while the re-order event settles.
@@ -108,26 +100,26 @@ internal extension ListView
             ///
             /// See `sendEndQueuingEditsAfterDelay` for a more in-depth explanation.
             ///
-            self.view.updateQueue.isQueuingForReorderEvent = true
-            
+            view.updateQueue.isQueuingForReorderEvent = true
+
             /// Perform the change in our data source.
-            
-            self.storage.moveItem(from: from, to: to)
+
+            storage.moveItem(from: from, to: to)
 
             /// Notify our observers about the change.
 
             let result = ItemReordering.Result(
                 from: from,
-                fromSection: self.presentationState.sections[from.section].model,
+                fromSection: presentationState.sections[from.section].model,
                 to: to,
-                toSection: self.presentationState.sections[to.section].model
+                toSection: presentationState.sections[to.section].model
             )
-            
-            let item = self.presentationState.item(at: to)
-            
+
+            let item = presentationState.item(at: to)
+
             let itemHadCallback = item.performDidReorder(with: result)
-            let hasStateObservers = self.view.stateObserver.onItemReordered.isEmpty == false
-            
+            let hasStateObservers = view.stateObserver.onItemReordered.isEmpty == false
+
             guard itemHadCallback || hasStateObservers else {
                 fatalError(
                     """
@@ -140,8 +132,8 @@ internal extension ListView
                     """
                 )
             }
-            
-            ListStateObserver.perform(self.view.stateObserver.onItemReordered, "Item Reordered", with: self.view) {
+
+            ListStateObserver.perform(view.stateObserver.onItemReordered, "Item Reordered", with: view) {
                 ListStateObserver.ItemReordered(
                     actions: $0,
                     positionInfo: self.view.scrollPositionInfo,

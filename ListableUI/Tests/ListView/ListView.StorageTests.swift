@@ -7,7 +7,4 @@
 
 import XCTest
 
-class ListView_StorageTests: XCTestCase
-{
-
-}
+class ListView_StorageTests: XCTestCase {}

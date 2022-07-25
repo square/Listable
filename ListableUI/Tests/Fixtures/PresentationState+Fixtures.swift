@@ -7,10 +7,8 @@
 
 @testable import ListableUI
 
-
 extension PresentationState {
-    
-    convenience init(_ content : (inout Content) -> () = { _ in }) {
+    convenience init(_ content: (inout Content) -> Void = { _ in }) {
         self.init(
             forMeasuringOrTestsWith: Content(with: content),
             environment: .empty,
@@ -18,16 +16,14 @@ extension PresentationState {
             headerFooterMeasurementCache: .init()
         )
     }
-    
+
     func toListLayoutContent() -> ListLayoutContent {
-        self.toListLayoutContent(defaults: .testing, environment: .empty)
+        toListLayoutContent(defaults: .testing, environment: .empty)
     }
 }
 
-
 extension PresentationState.SectionState {
-    
-    convenience init(_ section : Section) {
+    convenience init(_ section: Section) {
         self.init(
             with: section,
             dependencies: ItemStateDependencies(
@@ -41,18 +37,14 @@ extension PresentationState.SectionState {
     }
 }
 
-
 extension PresentationState.HeaderFooterState {
-    
-    convenience init(_ headerFooter : HeaderFooter<Content>) {
+    convenience init(_ headerFooter: HeaderFooter<Content>) {
         self.init(headerFooter, performsContentCallbacks: true)
     }
 }
 
-
 extension PresentationState.ItemState {
-    
-    convenience init(_ item : Item<Content>) {
+    convenience init(_ item: Item<Content>) {
         self.init(
             with: item,
             dependencies: ItemStateDependencies(
@@ -66,28 +58,23 @@ extension PresentationState.ItemState {
     }
 }
 
-
-final class ItemContentCoordinatorDelegateMock : ItemContentCoordinatorDelegate
-{
+final class ItemContentCoordinatorDelegateMock: ItemContentCoordinatorDelegate {
     var coordinatorUpdated_calls = [AnyItem]()
-    
-    func coordinatorUpdated(for item: AnyItem)
-    {
-        self.coordinatorUpdated_calls.append(item)
+
+    func coordinatorUpdated(for item: AnyItem) {
+        coordinatorUpdated_calls.append(item)
     }
 }
 
+final class ReorderingActionsDelegateMock: ReorderingActionsDelegate {
+    func beginReorder(for _: AnyPresentationItemState) -> Bool { true }
 
-final class ReorderingActionsDelegateMock : ReorderingActionsDelegate
-{
-    func beginReorder(for item: AnyPresentationItemState) -> Bool { true }
-    
     func updateReorderTargetPosition(
-        with recognizer: ItemReordering.GestureRecognizer,
-        for item: AnyPresentationItemState
+        with _: ItemReordering.GestureRecognizer,
+        for _: AnyPresentationItemState
     ) {}
-    
-    func endReorder(for item: AnyPresentationItemState, with result: ReorderingActions.Result) {}
-    
-    func accessibilityMove(item: AnyPresentationItemState, direction: ReorderingActions.AccessibilityMoveDirection) -> Bool { true }
+
+    func endReorder(for _: AnyPresentationItemState, with _: ReorderingActions.Result) {}
+
+    func accessibilityMove(item _: AnyPresentationItemState, direction _: ReorderingActions.AccessibilityMoveDirection) -> Bool { true }
 }

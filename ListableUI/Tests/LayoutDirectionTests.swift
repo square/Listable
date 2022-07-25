@@ -7,7 +7,4 @@
 
 import XCTest
 
-class LayoutDirectionTests: XCTestCase
-{
-
-}
+class LayoutDirectionTests: XCTestCase {}

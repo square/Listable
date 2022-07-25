@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIViewPropertyAnimator {
-
     /// Create a UIViewPropertyAnimator with the same animation curve as most system animations
     /// (including view controller presentation and navigation controller pushes).
     ///

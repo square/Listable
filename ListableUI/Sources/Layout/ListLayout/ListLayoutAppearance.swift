@@ -7,55 +7,49 @@
 
 import Foundation
 
+public protocol ListLayoutAppearance: Equatable {
+    static var `default`: Self { get }
 
-public protocol ListLayoutAppearance : Equatable
-{
-    static var `default` : Self { get }
-    
-    static func `default`(_ modifying : (inout Self) -> ()) -> Self
-    
-    var direction : LayoutDirection { get }
-    
-    var bounds : ListContentBounds? { get }
+    static func `default`(_ modifying: (inout Self) -> Void) -> Self
 
-    var listHeaderPosition : ListHeaderPosition { get }
+    var direction: LayoutDirection { get }
 
-    var stickySectionHeaders : Bool { get }
+    var bounds: ListContentBounds? { get }
 
-    var pagingBehavior : ListPagingBehavior { get }
-    
-    var scrollViewProperties : ListLayoutScrollViewProperties { get }
-    
+    var listHeaderPosition: ListHeaderPosition { get }
+
+    var stickySectionHeaders: Bool { get }
+
+    var pagingBehavior: ListPagingBehavior { get }
+
+    var scrollViewProperties: ListLayoutScrollViewProperties { get }
+
     func toLayoutDescription() -> LayoutDescription
 }
 
-
-extension ListLayoutAppearance {
-    
-    public static func `default`(_ modifying : (inout Self) -> ()) -> Self {
+public extension ListLayoutAppearance {
+    static func `default`(_ modifying: (inout Self) -> Void) -> Self {
         var appearance = Self.default
         modifying(&appearance)
         return appearance
     }
 }
 
-
 /// Represents the properties from a `ListLayoutAppearance`, which
 /// are applicable to any kind of layout.
-public struct ListLayoutAppearanceProperties : Equatable {
-        
-    public let direction : LayoutDirection
-    public let bounds : ListContentBounds?
-    public let stickySectionHeaders : Bool
-    public let pagingBehavior : ListPagingBehavior
-    public let scrollViewProperties : ListLayoutScrollViewProperties
-    
+public struct ListLayoutAppearanceProperties: Equatable {
+    public let direction: LayoutDirection
+    public let bounds: ListContentBounds?
+    public let stickySectionHeaders: Bool
+    public let pagingBehavior: ListPagingBehavior
+    public let scrollViewProperties: ListLayoutScrollViewProperties
+
     public init(
         direction: LayoutDirection,
-        bounds : ListContentBounds?,
+        bounds: ListContentBounds?,
         stickySectionHeaders: Bool,
-        pagingBehavior : ListPagingBehavior,
-        scrollViewProperties : ListLayoutScrollViewProperties
+        pagingBehavior: ListPagingBehavior,
+        scrollViewProperties: ListLayoutScrollViewProperties
     ) {
         self.direction = direction
         self.bounds = bounds
@@ -63,12 +57,12 @@ public struct ListLayoutAppearanceProperties : Equatable {
         self.pagingBehavior = pagingBehavior
         self.scrollViewProperties = scrollViewProperties
     }
-    
-    public init<Appearance:ListLayoutAppearance>(_ appearance : Appearance) {
-        self.direction = appearance.direction
-        self.bounds = appearance.bounds
-        self.stickySectionHeaders = appearance.stickySectionHeaders
-        self.pagingBehavior = appearance.pagingBehavior
-        self.scrollViewProperties = appearance.scrollViewProperties
+
+    public init<Appearance: ListLayoutAppearance>(_ appearance: Appearance) {
+        direction = appearance.direction
+        bounds = appearance.bounds
+        stickySectionHeaders = appearance.stickySectionHeaders
+        pagingBehavior = appearance.pagingBehavior
+        scrollViewProperties = appearance.scrollViewProperties
     }
 }

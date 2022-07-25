@@ -6,23 +6,21 @@
 //  Copyright © 2021 Kyle Van Essen. All rights reserved.
 //
 
-import UIKit
-import ListableUI
 import BlueprintUILists
+import ListableUI
+import UIKit
 
-
-final class RetailGridViewController : ListViewController
-{
+final class RetailGridViewController: ListViewController {
     override func configure(list: inout ListProperties) {
         list += Section("default") { section in
             list.appearance = .demoAppearance
-            
+
             if self.infiniteScollOn {
                 list.layout = .retailGridDemo(columns: 5)
             } else {
                 list.layout = .retailGridDemo(columns: 5, rows: .rows(5))
             }
-            
+
             section += Item(DemoItem(text: "Single")) { item in
                 item.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                     origin: .init(x: 0, y: 0), size: .single
@@ -100,7 +98,7 @@ final class RetailGridViewController : ListViewController
                     origin: .init(x: 0, y: 10), size: .single
                 )
             }
-            
+
             section += Item(DemoItem(text: "Single")) { item in
                 item.layouts.retailGrid = RetailGridAppearance.ItemLayout(
                     origin: .init(x: 1, y: 10), size: .single
@@ -108,18 +106,18 @@ final class RetailGridViewController : ListViewController
             }
         }
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Switch scrolling", style: .plain, target: self, action: #selector(swapLayout))
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Switch scrolling", style: .plain, target: self, action: #selector(swapLayout))
     }
 
-    private var infiniteScollOn : Bool = false
-    
-    @objc func swapLayout()
-    {
-        self.infiniteScollOn.toggle()
-        self.reload(animated: true)
+    private var infiniteScollOn: Bool = false
+
+    @objc func swapLayout() {
+        infiniteScollOn.toggle()
+        reload(animated: true)
     }
 }

@@ -7,49 +7,43 @@
 
 import Foundation
 
-
 import BlueprintUI
 import BlueprintUILists
 import XCTest
 
-
-class ListPerformanceTesting : XCTestCase {
-    
+class ListPerformanceTesting: XCTestCase {
     override func invokeTest() {
         // Uncomment to be able to run perf testing.
         // super.invokeTest()
     }
-    
+
     func test_applying_same_elements() {
-        
         let list = List { list in
             list("section") { section in
-                section += (1...10).map { index in
+                section += (1 ... 10).map { index in
                     Content(title: "\(index)")
                 }
             }
         }
-        
+
         let view = BlueprintView()
         view.frame.size = CGSize(width: 400, height: 2000)
-        
-        self.determineAverage(for: 10) {
+
+        determineAverage(for: 10) {
             view.element = list
             view.layoutIfNeeded()
         }
     }
 }
 
+private struct Content: BlueprintItemContent, Equatable {
+    var title: String
 
-fileprivate struct Content : BlueprintItemContent, Equatable {
-    
-    var title : String
-    
-    var identifierValue : String {
-        self.title
+    var identifierValue: String {
+        title
     }
-    
-    func element(with info: ApplyItemContentInfo) -> Element {
+
+    func element(with _: ApplyItemContentInfo) -> Element {
         Column { col in
             col.add(child: Column { col in
                 col.add(child: Column { col in
@@ -74,22 +68,20 @@ fileprivate struct Content : BlueprintItemContent, Equatable {
             })
         }
     }
-    
+
     var reappliesToVisibleView: ReappliesToVisibleView {
-        return .ifNotEquivalent
+        .ifNotEquivalent
     }
 }
 
+private struct Label: UIViewElement {
+    var text: String
 
-fileprivate struct Label : UIViewElement {
-    
-    var text : String
-    
     func makeUIView() -> UILabel {
-        return UILabel()
+        UILabel()
     }
-    
-    func updateUIView(_ view: UILabel, with context: UIViewElementContext) {
-        view.text = self.text
+
+    func updateUIView(_ view: UILabel, with _: UIViewElementContext) {
+        view.text = text
     }
 }

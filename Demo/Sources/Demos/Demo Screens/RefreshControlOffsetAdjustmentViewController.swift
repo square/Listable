@@ -8,34 +8,32 @@
 
 import UIKit
 
-import UIKit
-import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
 import BlueprintUILists
+import ListableUI
+import UIKit
 
-final class RefreshControlOffsetAdjustmentViewController : UIViewController
-{
+final class RefreshControlOffsetAdjustmentViewController: UIViewController {
     private let blueprintView = BlueprintView()
     private var isRefreshing: Bool = false
     private var enableScrollToTop: Bool = false
 
     // MARK: - Views
 
-    override func loadView()
-    {
-        self.view = self.blueprintView
+    override func loadView() {
+        view = blueprintView
         reloadData()
         updateNavigationItems()
     }
 
-    private func updateNavigationItems()
-    {
+    private func updateNavigationItems() {
         var items: [UIBarButtonItem] = [
             UIBarButtonItem(
                 title: "Scroll to top: \(enableScrollToTop ? "ON" : "OFF")",
                 style: .plain,
-                target: self, action: #selector(toggleScrollToTop))
+                target: self, action: #selector(toggleScrollToTop)
+            ),
         ]
 
         if isRefreshing {
@@ -53,21 +51,18 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
 
     // MARK: - Actions
 
-    @objc func toggleScrollToTop()
-    {
+    @objc func toggleScrollToTop() {
         enableScrollToTop.toggle()
         updateNavigationItems()
     }
 
-    @objc func refresh()
-    {
+    @objc func refresh() {
         isRefreshing = true
         reloadData()
         updateNavigationItems()
     }
 
-    @objc func stopRefreshing()
-    {
+    @objc func stopRefreshing() {
         isRefreshing = false
         reloadData()
         updateNavigationItems()
@@ -75,8 +70,7 @@ final class RefreshControlOffsetAdjustmentViewController : UIViewController
 
     // MARK: - Content
 
-    func reloadData()
-    {
+    func reloadData() {
         blueprintView.element = List { list in
             list.layout = .table {
                 $0.bounds = .init(padding: UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16))

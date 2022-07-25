@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 ///
 /// An `Identifier` is used to unique items in Listable lists. Sections,
 /// and items in those sections have identifiers, which are used to keep track
@@ -34,10 +33,9 @@ import Foundation
 /// Even once type-erased to `AnyIdentifier`, these identifiers will still not be
 /// equal, because their underlying `Represented` type is different.
 ///
-public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
-{
+public final class Identifier<Represented, Value: Hashable>: AnyIdentifier {
     // MARK: Reading Values
-    
+
     ///
     /// The underlying value that backs the identifier.
     /// For example, if you create an identifier using:
@@ -46,12 +44,12 @@ public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
     /// ```
     /// Then the value of `value` will be `"1"`.
     ///
-    public var value : Value {
-        self.anyValue.base as! Value
+    public var value: Value {
+        anyValue.base as! Value
     }
-    
+
     // MARK: Initialization
-    
+
     ///
     /// Creates an identifier which identifies by both `Represented`, and the `value` passed to init.
     ///
@@ -67,21 +65,19 @@ public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
     /// You can also read  ``Item.identifier-swift.property`` or ``AnyItem.anyIdentifier-swift.property``
     /// to get the identifier of an item that has been created in a type safe manner.
     ///
-    init(_ value : Value)
-    {
+    init(_ value: Value) {
         super.init(
             type: ObjectIdentifier(Represented.self),
             value: AnyHashable(value)
         )
     }
-    
+
     // MARK: CustomDebugStringConvertible
-    
-    public override var debugDescription : String {
-        "Identifier<\(String(describing: Represented.self)), \(String(describing: Value.self))>: \(self.anyValue.identifierContentString)"
+
+    override public var debugDescription: String {
+        "Identifier<\(String(describing: Represented.self)), \(String(describing: Value.self))>: \(anyValue.identifierContentString)"
     }
 }
-
 
 ///
 /// A type-erased `Identifier` used to identify content in a list.
@@ -100,8 +96,7 @@ public final class Identifier<Represented, Value:Hashable> : AnyIdentifier
 /// `Identifier<Represented, Value>`. This is done  for performance reasons;
 /// it allows free bridging from `Identifier` to `AnyIdentifier`.
 ///
-public class AnyIdentifier : Hashable, CustomDebugStringConvertible
-{
+public class AnyIdentifier: Hashable, CustomDebugStringConvertible {
     ///
     /// The underlying value that backs the identifier.
     /// For example, if you create an identifier using:
@@ -112,8 +107,8 @@ public class AnyIdentifier : Hashable, CustomDebugStringConvertible
     ///
     /// To directly read the value, access `anyValue.base`.
     ///
-    public let anyValue : AnyHashable
-    
+    public let anyValue: AnyHashable
+
     ///
     /// The underlying type that backs the identifier.
     /// For example, if you create an identifier using:
@@ -122,52 +117,47 @@ public class AnyIdentifier : Hashable, CustomDebugStringConvertible
     /// ```
     /// Then the value of `representedType` will be `ObjectIdentifier(MyThing.self)`.
     ///
-    public let representedType : ObjectIdentifier
-    
-    private let hash : Int
-    
-    fileprivate init(type : ObjectIdentifier, value : AnyHashable)
-    {
-        self.representedType = type
-        self.anyValue = value
-        
+    public let representedType: ObjectIdentifier
+
+    private let hash: Int
+
+    fileprivate init(type: ObjectIdentifier, value: AnyHashable) {
+        representedType = type
+        anyValue = value
+
         var hasher = Hasher()
-        hasher.combine(self.representedType)
-        hasher.combine(self.anyValue)
-        self.hash = hasher.finalize()
+        hasher.combine(representedType)
+        hasher.combine(anyValue)
+        hash = hasher.finalize()
     }
-    
+
     // MARK: Equatable
-    
-    public static func == (lhs: AnyIdentifier, rhs: AnyIdentifier) -> Bool
-    {
-        return lhs.hash == rhs.hash && lhs.representedType == rhs.representedType && lhs.anyValue == rhs.anyValue
+
+    public static func == (lhs: AnyIdentifier, rhs: AnyIdentifier) -> Bool {
+        lhs.hash == rhs.hash && lhs.representedType == rhs.representedType && lhs.anyValue == rhs.anyValue
     }
-    
+
     // MARK: Hashable
-    
-    public func hash(into hasher: inout Hasher)
-    {
-        hasher.combine(self.hash)
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hash)
     }
-    
+
     // MARK: CustomDebugStringConvertible
-    
-    public var debugDescription : String {
+
+    public var debugDescription: String {
         fatalError()
     }
 }
 
-
-fileprivate extension AnyHashable
-{
-    var identifierContentString : String {
-        if let base = self.base as? CustomDebugStringConvertible {
+private extension AnyHashable {
+    var identifierContentString: String {
+        if let base = base as? CustomDebugStringConvertible {
             return base.debugDescription
-        } else if let base = self.base as? CustomStringConvertible {
+        } else if let base = base as? CustomStringConvertible {
             return base.description
         } else {
-            return self.debugDescription
+            return debugDescription
         }
     }
 }

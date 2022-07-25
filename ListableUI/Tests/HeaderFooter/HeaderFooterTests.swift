@@ -7,7 +7,4 @@
 
 import XCTest
 
-class HeaderFooterTests: XCTestCase
-{
-
-}
+class HeaderFooterTests: XCTestCase {}

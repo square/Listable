@@ -1,6 +1,5 @@
 /// How the list header should be positioned when content is scrolled.
 public enum ListHeaderPosition {
-
     /// The header will scroll up and down with the content.
     case inline
 

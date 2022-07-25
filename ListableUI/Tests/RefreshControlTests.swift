@@ -7,7 +7,4 @@
 
 import XCTest
 
-class RefreshControlTests: XCTestCase
-{
-
-}
+class RefreshControlTests: XCTestCase {}

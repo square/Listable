@@ -5,25 +5,22 @@
 //  Created by Kyle Van Essen on 7/16/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
-
-class ListStateObserverTests : XCTestCase
-{
-    func test_perform()
-    {
+class ListStateObserverTests: XCTestCase {
+    func test_perform() {
         let listView = ListView()
-        
+
         struct CallbackInfo {}
-        
-        var factoryCallCount : Int = 0
-        var callCount : Int = 0
-        
-        let callbacks : [(CallbackInfo) -> ()] = [
-            { info in callCount += 1 },
-            { info in callCount += 1 },
-            { info in callCount += 1 },
+
+        var factoryCallCount = 0
+        var callCount = 0
+
+        let callbacks: [(CallbackInfo) -> Void] = [
+            { _ in callCount += 1 },
+            { _ in callCount += 1 },
+            { _ in callCount += 1 },
         ]
 
         ListStateObserver.perform(callbacks, "Callback Testing", with: listView) { actions in
@@ -31,10 +28,10 @@ class ListStateObserverTests : XCTestCase
             XCTAssertEqual(actions.listView, listView)
             return CallbackInfo()
         }
-        
+
         // Callback info factory should only be called once (for performance),
         // and each callback block should be executed.
-        
+
         XCTAssertEqual(factoryCallCount, 1)
         XCTAssertEqual(callCount, 3)
     }

@@ -7,7 +7,4 @@
 
 import XCTest
 
-class ListPropertiesTests : XCTestCase
-{
-
-}
+class ListPropertiesTests: XCTestCase {}

@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 ///
 /// An `ItemContent` is a type used to provide the content of an `Item` in a list section.
 ///
@@ -40,12 +39,13 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
-{
+public protocol ItemContent: AnyItemConvertible where Coordinator.ItemContentType == Self {
     //
+
     // MARK: Identification
+
     //
-    
+
     /// A `Hashable` type which is returned from ``ItemContent/identifierValue-swift.property``,
     /// which is used to identify the ``ItemContent`` when it put into a list.
     ///
@@ -53,8 +53,8 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// control its lifetime, and identify it across update operations.
     ///
     /// See ``ItemContent/identifierValue-swift.property`` for more.
-    associatedtype IdentifierValue : Hashable
-    
+    associatedtype IdentifierValue: Hashable
+
     ///
     /// Used to unique the item, control its lifetime, and identify it across update operations.
     ///
@@ -232,12 +232,14 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     ///     }
     /// }
     /// ```
-    var identifierValue : IdentifierValue { get }
-    
+    var identifierValue: IdentifierValue { get }
+
     //
+
     // MARK: Tracking Changes
+
     //
-    
+
     ///
     /// Used by the list to determine when the content of the item has changed; in order to
     /// remeasure the item and re-layout the list.
@@ -295,8 +297,8 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// If your ``ItemContent`` conforms to ``Equatable``, there is a default
     /// implementation of this method which simply returns `self == other`.
     ///
-    func isEquivalent(to other : Self) -> Bool
-    
+    func isEquivalent(to other: Self) -> Bool
+
     /// Used by the list view to determine move events during an update's diff operation.
     ///
     /// This function should return `true` if the content's sort changed based on the old value passed into the function.
@@ -312,47 +314,52 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// There is a default implementation of this method which calls `isEquivalent == false`. Unless
     /// your list has an extremely high amount of ordering churn, you should not need to implement this method.
     ///
-    func wasMoved(comparedTo other : Self) -> Bool
-    
+    func wasMoved(comparedTo other: Self) -> Bool
+
     //
+
     // MARK: Default Item Properties
+
     //
-    
+
     typealias DefaultProperties = DefaultItemProperties<Self>
 
-    
     /// Default values to assign to various properties on the `Item` which wraps
     /// this `ItemContent`, if those values are not passed to the `Item` initializer.
-    var defaultItemProperties : DefaultProperties { get }
-    
+    var defaultItemProperties: DefaultProperties { get }
+
     //
+
     // MARK: Applying To Displayed View
+
     //
-        
+
     /**
      Called when rendering the content. This is where you should push data from your
      content into the passed in views.
-     
+
      Do not retain a reference to the passed in views – they are reused by the list.
      */
     func apply(
-        to views : ItemContentViews<Self>,
+        to views: ItemContentViews<Self>,
         for reason: ApplyReason,
-        with info : ApplyItemContentInfo
+        with info: ApplyItemContentInfo
     )
-    
+
     /// When the `ItemContent` is on screen, controls how and when to apply updates
     /// to the view.
     ///
     /// Defaults to ``ReappliesToVisibleView/always``.
     ///
     /// See ``ReappliesToVisibleView`` for a full discussion.
-    var reappliesToVisibleView : ReappliesToVisibleView { get }
-    
+    var reappliesToVisibleView: ReappliesToVisibleView { get }
+
     //
+
     // MARK: Creating & Providing Swipe Action Views
+
     //
-    
+
     /// The view type to use to render swipe actions (delete, etc) for this content.
     /// A default implementation, which matches `UITableView`, is provided.
     associatedtype SwipeActionsView: ItemContentSwipeActionsView = DefaultSwipeActionsView
@@ -361,13 +368,14 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     var swipeActionsStyle: SwipeActionsView.Style { get }
 
     //
+
     // MARK: Creating & Providing Content Views
+
     //
-    
+
     /// The content view used to draw the content.
     /// The content view is drawn at the top of the view hierarchy, above the background views.
-    associatedtype ContentView:UIView
-    
+    associatedtype ContentView: UIView
 
     /// Create and return a new content view used to render the content.
     ///
@@ -375,12 +383,14 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// ----
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
-    static func createReusableContentView(frame : CGRect) -> ContentView
-    
+    static func createReusableContentView(frame: CGRect) -> ContentView
+
     //
+
     // MARK: Creating & Providing Background Views
+
     //
-    
+
     /// The background view used to draw the background of the content.
     /// The background view is drawn below the content view.
     ///
@@ -390,16 +400,16 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a background view.
     ///
-    associatedtype BackgroundView:UIView = UIView
-    
+    associatedtype BackgroundView: UIView = UIView
+
     /// Create and return a new background view used to render the content's background.
     ///
     /// Note
     /// ----
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
-    static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
-    
+    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView
+
     /// The selected background view used to draw the background of the content when it is selected or highlighted.
     /// The selected background view is drawn below the content view.
     ///
@@ -409,9 +419,8 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a selected background view.
     ///
-    associatedtype SelectedBackgroundView:UIView = UIView
-    
-    
+    associatedtype SelectedBackgroundView: UIView = UIView
+
     /// Create and return a new background view used to render the content's selected background.
     ///
     /// This view is displayed when the content is highlighted or selected.
@@ -423,49 +432,46 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// ----
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
-    static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
-    
+    static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView
+
     //
+
     // MARK: Content Coordination
+
     //
-    
+
     /// The coordinator type to use to manage the live state of the `Item` and `ItemContent`,
     /// if you need to update content based on signals such as notifications, view state, appearance state,
     /// etc.
-    associatedtype Coordinator : ItemContentCoordinator = DefaultItemContentCoordinator<Self>
-    
+    associatedtype Coordinator: ItemContentCoordinator = DefaultItemContentCoordinator<Self>
+
     /// The actions passed to the coordinator.
     typealias CoordinatorActions = ItemContentCoordinatorActions<Self>
     /// The info passed to the coordinator.
     typealias CoordinatorInfo = ItemContentCoordinatorInfo<Self>
-    
+
     /// Creates a new coordinator with the provided actions and info.
-    func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
+    func makeCoordinator(actions: CoordinatorActions, info: CoordinatorInfo) -> Coordinator
 }
 
-
 public extension ItemContent {
-    
-     func toAnyItem() -> AnyItem {
+    func toAnyItem() -> AnyItem {
         Item(self)
     }
 }
 
-
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
-public struct ItemContentViews<Content:ItemContent>
-{
+public struct ItemContentViews<Content: ItemContent> {
     /// The content view of the content.
-    public var content : Content.ContentView
-    
+    public var content: Content.ContentView
+
     /// The background view of the content.
-    public var background : Content.BackgroundView
-    
+    public var background: Content.BackgroundView
+
     /// The selected background view of the content.
     /// Displayed when the content is highlighted or selected.
-    public var selectedBackground : Content.SelectedBackgroundView
+    public var selectedBackground: Content.SelectedBackgroundView
 }
-
 
 /// Information about the current state of the content, which is passed to `apply(to:for:with:)`
 /// during configuration and preparation for display.
@@ -475,59 +481,55 @@ public struct ItemContentViews<Content:ItemContent>
 /// for different item positions, etc.
 ///
 /// TODO: Rename to `ApplyItemContext`
-public struct ApplyItemContentInfo
-{
+public struct ApplyItemContentInfo {
     /// The state of the `Item` currently displaying the content. Is it highlighted, selected, etc.
-    public var state : ItemState
-    
+    public var state: ItemState
+
     /// The position of the item within its section.
-    public var position : ItemPosition
-    
+    public var position: ItemPosition
+
     /// Provides access to actions to handle re-ordering the content within the list.
-    public var reorderingActions : ReorderingActions
-    
+    public var reorderingActions: ReorderingActions
+
     /// If the item can be reordered.
     /// Use this property to determine if your `ItemContent` should display a reorder control.
-    public var isReorderable : Bool
-    
+    public var isReorderable: Bool
+
     /// The environment of the containing list.
     /// See `ListEnvironment` for usage information.
-    public var environment : ListEnvironment
+    public var environment: ListEnvironment
 }
 
 public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
     var swipeActionsStyle: SwipeActionsView.Style {
-        return .default
+        .default
     }
 }
 
-public extension ItemContent where Self:Equatable
-{
+public extension ItemContent where Self: Equatable {
     /// If your `ItemContent` is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
-    func isEquivalent(to other : Self) -> Bool {
+    func isEquivalent(to other: Self) -> Bool {
         self == other
     }
 }
 
-
 public extension ItemContent {
-    
     /// The `Identifier` type for the item.
     ///
     /// For example, if your ``ItemContent`` was `MyContent`, and your `IdentifierValue` was `UUID`,
     /// this variable will provide an `Identifier<MyContent, UUID>`.
     ///
     typealias Identifier = ListableUI.Identifier<Self, IdentifierValue>
-    
+
     /// The `Identifier` for the item.
     ///
     /// For example, if your ``ItemContent`` was `MyContent`, and your `IdentifierValue` was `UUID`,
     /// this variable will provide an `Identifier<MyContent, UUID>`.
     ///
-    var identifier : Identifier {
-        Self.identifier(with: self.identifierValue)
+    var identifier: Identifier {
+        Self.identifier(with: identifierValue)
     }
-    
+
     /// Creates an ``Identifier`` with the provided value.
     ///
     /// This method allows creating an ``Identifier`` in a type safe manner; enforcing that the
@@ -538,80 +540,62 @@ public extension ItemContent {
     /// ```
     /// You can also read the identifier via  ``ItemContent/identifier``, ``Item/identifier`` or ``AnyItem/anyIdentifier``.
     ///
-    static func identifier(with value : IdentifierValue) -> Identifier {
+    static func identifier(with value: IdentifierValue) -> Identifier {
         Identifier(value)
     }
 }
 
-
 /// Provides a default implementation of `identifierValue` when self conforms to Swift's `Identifiable` protocol.
 @available(iOS 13.0, *)
-public extension ItemContent where Self:Identifiable
-{    
-    var identifierValue : ID {
-        self.id
+public extension ItemContent where Self: Identifiable {
+    var identifierValue: ID {
+        id
     }
 }
-
 
 /// Implement `wasMoved` in terms of `isEquivalent(to:)` by default.
-public extension ItemContent
-{
-    func wasMoved(comparedTo other : Self) -> Bool
-    {
-        return self.isEquivalent(to: other) == false
+public extension ItemContent {
+    func wasMoved(comparedTo other: Self) -> Bool {
+        isEquivalent(to: other) == false
     }
 }
 
-
 /// Provide a default implementation of `reappliesToVisibleView` which returns `.always`.
-public extension ItemContent
-{
-    var reappliesToVisibleView : ReappliesToVisibleView {
+public extension ItemContent {
+    var reappliesToVisibleView: ReappliesToVisibleView {
         .always
     }
 }
 
-
 /// Provide a default implementation of `defaultItemProperties` which returns an
 /// empty instance that does not provide any defaults.
-public extension ItemContent
-{
-    var defaultItemProperties : DefaultProperties {
+public extension ItemContent {
+    var defaultItemProperties: DefaultProperties {
         .init()
     }
 }
 
-
 /// Provides a default coordinator for items without a specified coordinator.
-public extension ItemContent where Coordinator == DefaultItemContentCoordinator<Self>
-{
-    func makeCoordinator(actions : ItemContentCoordinatorActions<Self>, info : ItemContentCoordinatorInfo<Self>) -> Coordinator
+public extension ItemContent where Coordinator == DefaultItemContentCoordinator<Self> {
+    func makeCoordinator(actions: ItemContentCoordinatorActions<Self>, info: ItemContentCoordinatorInfo<Self>) -> Coordinator
     {
         DefaultItemContentCoordinator(actions: actions, info: info)
     }
 }
 
-
 /// Provide a UIView when no special background view is specified.
-public extension ItemContent where BackgroundView == UIView
-{
-    static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
-    {
+public extension ItemContent where BackgroundView == UIView {
+    static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
         BackgroundView(frame: frame)
     }
 }
 
-
 /// Provide a UIView when no special selected background view is specified.
-public extension ItemContent where BackgroundView == UIView
-{
-    static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
-    {
+public extension ItemContent where BackgroundView == UIView {
+    static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView {
         SelectedBackgroundView(frame: frame)
     }
 }
-
 
 /// Conform to this protocol to implement a completely custom swipe action view.
 ///

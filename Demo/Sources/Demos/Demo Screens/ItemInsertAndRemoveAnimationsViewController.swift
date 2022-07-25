@@ -6,26 +6,22 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import Foundation
 import BlueprintUILists
+import Foundation
 
+final class ItemInsertAndRemoveAnimationsViewController: ListViewController {
+    struct Animations: Equatable {
+        let id: String
+        let animations: ItemInsertAndRemoveAnimations
 
-final class ItemInsertAndRemoveAnimationsViewController : ListViewController
-{
-    struct Animations : Equatable
-    {
-        let id : String
-        let animations : ItemInsertAndRemoveAnimations
-        
-        static func == (lhs: Self, rhs: Self) -> Bool
-        {
+        static func == (lhs: Self, rhs: Self) -> Bool {
             lhs.id == rhs.id
         }
     }
 
-    var deleted : Animations? = nil
-    
-    let animations : [Animations] = [
+    var deleted: Animations?
+
+    let animations: [Animations] = [
         Animations(
             id: "Fade",
             animations: .fade
@@ -55,14 +51,12 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
             animations: .scaleDown
         ),
     ]
-    
-    override func configure(list: inout ListProperties)
-    {
+
+    override func configure(list: inout ListProperties) {
         list.appearance = .demoAppearance
         list.layout = .demoLayout
-        
+
         list += Section("animations") {
-            
             for animation in self.animations {
                 if deleted != animation {
                     Item(
@@ -71,14 +65,14 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
                         insertAndRemoveAnimations: animation.animations,
                         onSelect: { _ in
                             self.view.isUserInteractionEnabled = false
-                            
+
                             Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
                                 self.deleted = animation
                                 self.reload(animated: true)
-                                
+
                                 Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                                     self.view.isUserInteractionEnabled = true
-                                    
+
                                     self.deleted = nil
                                     self.reload(animated: true)
                                 }
@@ -87,7 +81,7 @@ final class ItemInsertAndRemoveAnimationsViewController : ListViewController
                     )
                 }
             }
-            
+
             DemoItem(text: "Extra Row 1")
             DemoItem(text: "Extra Row 2")
             DemoItem(text: "Extra Row 3")

@@ -19,80 +19,81 @@
 ///
 /// Once added to a section, `Item` is type erased to`AnyItem`,
 /// to allow for mixed collections of content within a section.
-public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
-{
-    public var identifier : Content.Identifier
-    
-    public var content : Content
-    
-    public var sizing : Sizing
-    public var layouts : ItemLayouts
-    
-    public var selectionStyle : ItemSelectionStyle
-    
-    public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
-    
-    public var swipeActions : SwipeActionsConfiguration?
+public struct Item<Content: ItemContent>: AnyItem, AnyItemConvertible {
+    public var identifier: Content.Identifier
 
-    public typealias OnWasReordered = (Self, ItemReordering.Result) -> ()
-    
-    public var reordering : ItemReordering?
-    public var onWasReordered : OnWasReordered?
-        
-    public var onDisplay : OnDisplay.Callback?
-    public var onEndDisplay : OnEndDisplay.Callback?
-    
-    public var onSelect : OnSelect.Callback?
-    public var onDeselect : OnDeselect.Callback?
-    
-    public var onInsert : OnInsert.Callback?
-    public var onRemove : OnRemove.Callback?
-    public var onMove : OnMove.Callback?
-    public var onUpdate : OnUpdate.Callback?
-        
-    public var debuggingIdentifier : String? = nil
-    
-    internal let reuseIdentifier : ReuseIdentifier<Content>
-    
+    public var content: Content
+
+    public var sizing: Sizing
+    public var layouts: ItemLayouts
+
+    public var selectionStyle: ItemSelectionStyle
+
+    public var insertAndRemoveAnimations: ItemInsertAndRemoveAnimations?
+
+    public var swipeActions: SwipeActionsConfiguration?
+
+    public typealias OnWasReordered = (Self, ItemReordering.Result) -> Void
+
+    public var reordering: ItemReordering?
+    public var onWasReordered: OnWasReordered?
+
+    public var onDisplay: OnDisplay.Callback?
+    public var onEndDisplay: OnEndDisplay.Callback?
+
+    public var onSelect: OnSelect.Callback?
+    public var onDeselect: OnDeselect.Callback?
+
+    public var onInsert: OnInsert.Callback?
+    public var onRemove: OnRemove.Callback?
+    public var onMove: OnMove.Callback?
+    public var onUpdate: OnUpdate.Callback?
+
+    public var debuggingIdentifier: String?
+
+    internal let reuseIdentifier: ReuseIdentifier<Content>
+
     //
+
     // MARK: Initialization
+
     //
-    
-    public typealias Configure = (inout Item) -> ()
-    
+
+    public typealias Configure = (inout Item) -> Void
+
     public init(
-        _ content : Content,
-        configure : Configure
+        _ content: Content,
+        configure: Configure
     ) {
         self.init(content)
-        
+
         configure(&self)
     }
-    
+
     public init(
-        _ content : Content,
-        sizing : Sizing? = nil,
-        layouts : ItemLayouts? = nil,
-        selectionStyle : ItemSelectionStyle? = nil,
-        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil,
-        reordering : ItemReordering? = nil,
-        onWasReordered : OnWasReordered? = nil,
-        onDisplay : OnDisplay.Callback? = nil,
-        onEndDisplay : OnEndDisplay.Callback? = nil,
-        onSelect : OnSelect.Callback? = nil,
-        onDeselect : OnDeselect.Callback? = nil,
-        onInsert : OnInsert.Callback? = nil,
-        onRemove : OnRemove.Callback? = nil,
-        onMove : OnMove.Callback? = nil,
-        onUpdate : OnUpdate.Callback? = nil
+        _ content: Content,
+        sizing: Sizing? = nil,
+        layouts: ItemLayouts? = nil,
+        selectionStyle: ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations: ItemInsertAndRemoveAnimations? = nil,
+        swipeActions: SwipeActionsConfiguration? = nil,
+        reordering: ItemReordering? = nil,
+        onWasReordered: OnWasReordered? = nil,
+        onDisplay: OnDisplay.Callback? = nil,
+        onEndDisplay: OnEndDisplay.Callback? = nil,
+        onSelect: OnSelect.Callback? = nil,
+        onDeselect: OnDeselect.Callback? = nil,
+        onInsert: OnInsert.Callback? = nil,
+        onRemove: OnRemove.Callback? = nil,
+        onMove: OnMove.Callback? = nil,
+        onUpdate: OnUpdate.Callback? = nil
     ) {
         assertIsValueType(Content.self)
-        
+
         self.content = content
-        
+
         let defaults = self.content.defaultItemProperties
-        
+
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
@@ -108,84 +109,79 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.onRemove = onRemove ?? defaults.onRemove
         self.onMove = onMove ?? defaults.onMove
         self.onUpdate = onUpdate ?? defaults.onUpdate
-        self.debuggingIdentifier = defaults.debuggingIdentifier
-        
-        self.reuseIdentifier = .identifier(for: Content.self)
-        
-        self.identifier = self.content.identifier
-        
+        debuggingIdentifier = defaults.debuggingIdentifier
+
+        reuseIdentifier = .identifier(for: Content.self)
+
+        identifier = self.content.identifier
+
         #if DEBUG
-        precondition(
-            self.identifier.value == self.content.identifierValue,
-            
-            """
-            `\(String(describing: Content.self)).identifierValue` is not stable: When requested twice, \
-            the value changed from `\(self.identifier.value)` to `\(self.content.identifierValue)`. In \
-            order for Listable to perform correct and efficient updates to your content, your `identifierValue` \
-            must be stable. See the documentation on `ItemContent.identifierValue` for suggestions.
-            """
-        )
+            precondition(
+                identifier.value == self.content.identifierValue,
+
+                """
+                `\(String(describing: Content.self)).identifierValue` is not stable: When requested twice, \
+                the value changed from `\(identifier.value)` to `\(self.content.identifierValue)`. In \
+                order for Listable to perform correct and efficient updates to your content, your `identifierValue` \
+                must be stable. See the documentation on `ItemContent.identifierValue` for suggestions.
+                """
+            )
         #endif
     }
-    
+
     // MARK: AnyItem
-    
-    public var anyIdentifier : AnyIdentifier {
-        self.identifier
+
+    public var anyIdentifier: AnyIdentifier {
+        identifier
     }
-    
+
     public var anyContent: Any {
-        self.content
+        content
     }
-    
+
     public var reappliesToVisibleView: ReappliesToVisibleView {
-        self.content.reappliesToVisibleView
+        content.reappliesToVisibleView
     }
-    
+
     // MARK: AnyItemConvertible
-    
+
     public func toAnyItem() -> AnyItem {
         self
     }
-    
+
     // MARK: AnyItem_Internal
-    
-    public func anyIsEquivalent(to other : AnyItem) -> Bool
-    {
+
+    public func anyIsEquivalent(to other: AnyItem) -> Bool {
         guard let other = other as? Item<Content> else {
             return false
         }
-        
-        return self.content.isEquivalent(to: other.content)
+
+        return content.isEquivalent(to: other.content)
     }
-    
-    public func anyWasMoved(comparedTo other : AnyItem) -> Bool
-    {
+
+    public func anyWasMoved(comparedTo other: AnyItem) -> Bool {
         guard let other = other as? Item<Content> else {
             return true
         }
-        
-        return self.content.wasMoved(comparedTo: other.content)
+
+        return content.wasMoved(comparedTo: other.content)
     }
-    
+
     public func newPresentationItemState(
-        with dependencies : ItemStateDependencies,
-        updateCallbacks : UpdateCallbacks,
-        performsContentCallbacks : Bool
-    ) -> Any
-    {
+        with dependencies: ItemStateDependencies,
+        updateCallbacks: UpdateCallbacks,
+        performsContentCallbacks: Bool
+    ) -> Any {
         PresentationState.ItemState(
             with: self,
             dependencies: dependencies,
             updateCallbacks: updateCallbacks,
-            performsContentCallbacks : performsContentCallbacks
+            performsContentCallbacks: performsContentCallbacks
         )
     }
 }
 
-
-extension ItemContent {
-    
+public extension ItemContent {
     /// Identical to `Item.init` which takes in an `ItemContent`,
     /// except you can call this on the `ItemContent` itself, instead of wrapping it,
     /// to avoid additional nesting, and to hoist your content up in your code.
@@ -203,24 +199,23 @@ extension ItemContent {
     ///    ...
     /// }
     /// ```
-    public func with(
-        sizing : Sizing? = nil,
-        layouts : ItemLayouts? = nil,
-        selectionStyle : ItemSelectionStyle? = nil,
-        insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil,
-        reordering : ItemReordering? = nil,
-        onWasReordered : Item<Self>.OnWasReordered? = nil,
-        onDisplay : Item<Self>.OnDisplay.Callback? = nil,
-        onEndDisplay : Item<Self>.OnEndDisplay.Callback? = nil,
-        onSelect : Item<Self>.OnSelect.Callback? = nil,
-        onDeselect : Item<Self>.OnDeselect.Callback? = nil,
-        onInsert : Item<Self>.OnInsert.Callback? = nil,
-        onRemove : Item<Self>.OnRemove.Callback? = nil,
-        onMove : Item<Self>.OnMove.Callback? = nil,
-        onUpdate : Item<Self>.OnUpdate.Callback? = nil
-    ) -> Item<Self>
-    {
+    func with(
+        sizing: Sizing? = nil,
+        layouts: ItemLayouts? = nil,
+        selectionStyle: ItemSelectionStyle? = nil,
+        insertAndRemoveAnimations: ItemInsertAndRemoveAnimations? = nil,
+        swipeActions: SwipeActionsConfiguration? = nil,
+        reordering: ItemReordering? = nil,
+        onWasReordered: Item<Self>.OnWasReordered? = nil,
+        onDisplay: Item<Self>.OnDisplay.Callback? = nil,
+        onEndDisplay: Item<Self>.OnEndDisplay.Callback? = nil,
+        onSelect: Item<Self>.OnSelect.Callback? = nil,
+        onDeselect: Item<Self>.OnDeselect.Callback? = nil,
+        onInsert: Item<Self>.OnInsert.Callback? = nil,
+        onRemove: Item<Self>.OnRemove.Callback? = nil,
+        onMove: Item<Self>.OnMove.Callback? = nil,
+        onUpdate: Item<Self>.OnUpdate.Callback? = nil
+    ) -> Item<Self> {
         Item(
             self,
             sizing: sizing,
@@ -242,13 +237,11 @@ extension ItemContent {
     }
 }
 
-
-extension Item : SignpostLoggable
-{
-    var signpostInfo : SignpostLoggingInfo {
+extension Item: SignpostLoggable {
+    var signpostInfo: SignpostLoggingInfo {
         SignpostLoggingInfo(
-            identifier: self.debuggingIdentifier,
-            instanceIdentifier: self.identifier.debugDescription
+            identifier: debuggingIdentifier,
+            instanceIdentifier: identifier.debugDescription
         )
     }
 }

@@ -5,9 +5,8 @@
 //  Created by Kyle Van Essen on 10/9/20.
 //
 
-import ListableUI
 import BlueprintUI
-
+import ListableUI
 
 ///
 /// Provides a way to create a `HeaderFooter` for your Blueprint elements without
@@ -38,18 +37,17 @@ import BlueprintUI
 /// }
 /// ```
 public func ElementHeaderFooter<Represented>(
-    _ represented : Represented,
-    
-    isEquivalent : @escaping (Represented, Represented) -> Bool,
-    
-    element : @escaping (Represented) -> Element,
-    background : @escaping (Represented) -> Element? = { _ in nil },
-    pressedBackground : @escaping (Represented) -> Element? = { _ in nil },
-    
-    configure : (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> () = { _ in }
-    
-) -> HeaderFooter<ElementHeaderFooterContent<Represented>>
-{
+    _ represented: Represented,
+
+    isEquivalent: @escaping (Represented, Represented) -> Bool,
+
+    element: @escaping (Represented) -> Element,
+    background: @escaping (Represented) -> Element? = { _ in nil },
+    pressedBackground: @escaping (Represented) -> Element? = { _ in nil },
+
+    configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> Void = { _ in }
+
+) -> HeaderFooter<ElementHeaderFooterContent<Represented>> {
     HeaderFooter(
         ElementHeaderFooterContent<Represented>(
             represented: represented,
@@ -90,17 +88,16 @@ public func ElementHeaderFooter<Represented>(
 ///     ...
 /// }
 /// ```
-public func ElementHeaderFooter<Represented:Equatable>(
-    _ represented : Represented,
-                    
-    element : @escaping (Represented) -> Element,
-    background : @escaping (Represented) -> Element? = { _ in nil },
-    pressedBackground : @escaping (Represented) -> Element? = { _ in nil },
-    
-    configure : (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> () = { _ in }
-    
-) -> HeaderFooter<ElementHeaderFooterContent<Represented>>
-{
+public func ElementHeaderFooter<Represented: Equatable>(
+    _ represented: Represented,
+
+    element: @escaping (Represented) -> Element,
+    background: @escaping (Represented) -> Element? = { _ in nil },
+    pressedBackground: @escaping (Represented) -> Element? = { _ in nil },
+
+    configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> Void = { _ in }
+
+) -> HeaderFooter<ElementHeaderFooterContent<Represented>> {
     HeaderFooter(
         ElementHeaderFooterContent<Represented>(
             represented: represented,
@@ -116,28 +113,27 @@ public func ElementHeaderFooter<Represented:Equatable>(
 /// The `BlueprintHeaderFooterContent` type that is used to provide
 /// a lightweight way to present an `Element`, without needing to provide an entirely
 /// new `BlueprintHeaderFooterContent` type.
-public struct ElementHeaderFooterContent<Represented> : BlueprintHeaderFooterContent
-{
-    public let represented : Represented
+public struct ElementHeaderFooterContent<Represented>: BlueprintHeaderFooterContent {
+    public let represented: Represented
 
-    let isEquivalentProvider : (Represented, Represented) -> Bool
-    let elementProvider : (Represented) -> Element
-    let backgroundProvider : (Represented) -> Element?
-    let pressedBackgroundProvider : (Represented) -> Element?
-    
+    let isEquivalentProvider: (Represented, Represented) -> Bool
+    let elementProvider: (Represented) -> Element
+    let backgroundProvider: (Represented) -> Element?
+    let pressedBackgroundProvider: (Represented) -> Element?
+
     public func isEquivalent(to other: Self) -> Bool {
-        self.isEquivalentProvider(self.represented, other.represented)
+        isEquivalentProvider(represented, other.represented)
     }
-    
-    public var elementRepresentation : Element {
-        self.elementProvider(self.represented)
+
+    public var elementRepresentation: Element {
+        elementProvider(represented)
     }
-    
-    public var background : Element? {
-        self.backgroundProvider(self.represented)
+
+    public var background: Element? {
+        backgroundProvider(represented)
     }
-    
-    public var pressedBackground : Element? {
-        self.pressedBackgroundProvider(self.represented)
+
+    public var pressedBackground: Element? {
+        pressedBackgroundProvider(represented)
     }
 }

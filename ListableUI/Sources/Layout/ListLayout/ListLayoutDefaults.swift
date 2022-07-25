@@ -7,13 +7,10 @@
 
 import Foundation
 
+public struct ListLayoutDefaults {
+    public var itemInsertAndRemoveAnimations: ItemInsertAndRemoveAnimations
 
-public struct ListLayoutDefaults
-{
-    public var itemInsertAndRemoveAnimations : ItemInsertAndRemoveAnimations
-    
-    public init(itemInsertAndRemoveAnimations : ItemInsertAndRemoveAnimations)
-    {
+    public init(itemInsertAndRemoveAnimations: ItemInsertAndRemoveAnimations) {
         self.itemInsertAndRemoveAnimations = itemInsertAndRemoveAnimations
     }
 }

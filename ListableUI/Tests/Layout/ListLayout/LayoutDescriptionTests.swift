@@ -5,23 +5,20 @@
 //  Created by Kyle Van Essen on 6/17/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
-
-final class LayoutDescriptionTests : XCTestCase
-{
-    func test_createPopulatedLayout()
-    {
+final class LayoutDescriptionTests: XCTestCase {
+    func test_createPopulatedLayout() {
         let listView = ListView()
-        
-        var describeCallCount : Int = 0
-        
+
+        var describeCallCount = 0
+
         let description = TestLayout.describe {
             describeCallCount += 1
             $0.anotherValue = "Hello"
         }
-        
+
         let populated = description.configuration.createPopulatedLayout(
             appearance: listView.appearance,
             behavior: listView.behavior,
@@ -29,43 +26,41 @@ final class LayoutDescriptionTests : XCTestCase
                 listView.delegate.listLayoutContent(defaults: $0)
             }
         )
-        
+
         XCTAssertEqual(describeCallCount, 1)
         XCTAssertEqual((populated as! TestLayout).layoutAppearance.anotherValue, "Hello")
     }
-    
-    func test_shouldRebuild()
-    {
+
+    func test_shouldRebuild() {
         let layout = TestLayout(
             layoutAppearance: TestLayoutAppearance(anotherValue: "Hello 1"),
             appearance: Appearance(),
             behavior: Behavior(),
             content: .init()
         )
-        
+
         let description1 = TestLayout.describe {
             $0.anotherValue = "Hello 1"
         }
-        
+
         let description2 = TestLayout.describe {
             $0.anotherValue = "Hello 2"
         }
-        
+
         XCTAssertEqual(description1.configuration.shouldRebuild(layout: layout), false)
         XCTAssertEqual(description2.configuration.shouldRebuild(layout: layout), true)
     }
-    
-    func test_layoutAppearanceProperties()
-    {
+
+    func test_layoutAppearanceProperties() {
         let description = TestLayout.describe {
             $0.direction = .horizontal
-            
+
             $0.stickySectionHeaders = false
         }
-        
+
         XCTAssertEqual(
             description.layoutAppearanceProperties,
-            
+
             ListLayoutAppearanceProperties(
                 direction: .horizontal,
                 bounds: nil,
@@ -82,51 +77,48 @@ final class LayoutDescriptionTests : XCTestCase
             )
         )
     }
-    
-    func test_isSameLayoutType()
-    {
+
+    func test_isSameLayoutType() {
         let description1 = TableListLayout.describe()
         let description2 = PagedListLayout.describe()
-        
+
         XCTAssertEqual(description1.configuration.isSameLayoutType(as: description1.configuration), true)
         XCTAssertEqual(description1.configuration.isSameLayoutType(as: description2.configuration), false)
     }
-    
+
     func test_equatable() {
         let description1 = TableListLayout.describe()
-        
+
         let description2 = PagedListLayout.describe {
             $0.direction = .vertical
         }
-        
+
         let description3 = PagedListLayout.describe {
             $0.direction = .horizontal
         }
-        
+
         XCTAssertEqual(description1 == description1, true)
         XCTAssertEqual(description2 == description2, true)
-        
+
         XCTAssertEqual(description1 == description2, false)
-        
+
         XCTAssertEqual(description2 == description3, false)
     }
 }
 
-
-private struct TestLayoutAppearance : ListLayoutAppearance
-{
+private struct TestLayoutAppearance: ListLayoutAppearance {
     static var `default`: TestLayoutAppearance {
         self.init(anotherValue: "")
     }
-    
+
     var direction: LayoutDirection = .vertical
 
     var listHeaderPosition: ListHeaderPosition = .sticky
-    
+
     var stickySectionHeaders: Bool = true
-    
+
     var pagingBehavior: ListPagingBehavior = .none
-    
+
     var scrollViewProperties: ListLayoutScrollViewProperties = .init(
         isPagingEnabled: false,
         contentInsetAdjustmentBehavior: .automatic,
@@ -135,32 +127,31 @@ private struct TestLayoutAppearance : ListLayoutAppearance
         allowsVerticalScrollIndicator: true,
         allowsHorizontalScrollIndicator: true
     )
-    
+
     var bounds: ListContentBounds? {
         nil
     }
-    
+
     func toLayoutDescription() -> LayoutDescription {
         LayoutDescription(layoutType: TestLayout.self, appearance: self)
     }
-    
-    var anotherValue : String
+
+    var anotherValue: String
 }
 
-private final class TestLayout : ListLayout
-{
+private final class TestLayout: ListLayout {
     typealias LayoutAppearance = TestLayoutAppearance
-    
+
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .fade)
     }
-    
+
     var layoutAppearance: TestLayoutAppearance
-        
+
     var appearance: Appearance
-    
+
     var behavior: Behavior
-    
+
     var content: ListLayoutContent
 
     init(
@@ -170,20 +161,19 @@ private final class TestLayout : ListLayout
         content: ListLayoutContent
     ) {
         self.layoutAppearance = layoutAppearance
-        
+
         self.appearance = appearance
         self.behavior = behavior
-        
+
         self.content = content
     }
-    
-    func updateLayout(in context : ListLayoutLayoutContext) { }
-    
+
+    func updateLayout(in _: ListLayoutLayoutContext) {}
+
     func layout(
-        delegate: CollectionViewLayoutDelegate?,
-        in context: ListLayoutLayoutContext
-    ) -> ListLayoutResult
-    {
+        delegate _: CollectionViewLayoutDelegate?,
+        in _: ListLayoutLayoutContext
+    ) -> ListLayoutResult {
         .init(contentSize: .zero, naturalContentWidth: nil)
     }
 }

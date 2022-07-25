@@ -8,10 +8,8 @@
 import Foundation
 import UIKit
 
-
-internal extension CGSize
-{
-    var isEmpty : Bool {
-        return self.width == 0.0 || self.height == 0.0
+internal extension CGSize {
+    var isEmpty: Bool {
+        width == 0.0 || height == 0.0
     }
 }

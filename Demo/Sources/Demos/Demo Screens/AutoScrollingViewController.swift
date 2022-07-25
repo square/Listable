@@ -8,64 +8,56 @@
 
 import UIKit
 
-import ListableUI
-import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
+import BlueprintUILists
+import ListableUI
 
-
-final class AutoScrollingViewController : UIViewController
-{
+final class AutoScrollingViewController: UIViewController {
     let list = ListView()
 
     private var items: [Item<BottomPinnedItem>] = []
 
-    override func loadView()
-    {
-        self.view = self.list
+    override func loadView() {
+        view = list
     }
 
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
-        for _ in 0..<7 {
+        for _ in 0 ..< 7 {
             addItem()
         }
 
-        self.navigationItem.rightBarButtonItems = [
+        navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(title: "Remove", style: .plain, target: self, action: #selector(removeItem)),
         ]
     }
 
-    @objc private func addItem()
-    {
+    @objc private func addItem() {
         let last = items.last
-        
+
         items.append(Item(BottomPinnedItem(text: "Item \(items.count)")))
-        
+
         updateItems(autoScrollIfVisible: last?.identifier)
     }
 
-    @objc private func removeItem()
-    {
+    @objc private func removeItem() {
         if !items.isEmpty {
             items.removeLast()
             updateItems()
         }
     }
 
-    private func updateItems(autoScrollIfVisible lastItem : AnyIdentifier? = nil) {
-        
-        self.list.configure { list in
+    private func updateItems(autoScrollIfVisible lastItem: AnyIdentifier? = nil) {
+        list.configure { list in
             list.appearance = .demoAppearance
             list.layout = .demoLayout
 
             list += Section("items", items: self.items)
 
             if let last = self.items.last {
-                
                 list.autoScrollAction = .scrollTo(
                     .lastItem,
                     onInsertOf: last.identifier,
@@ -94,23 +86,20 @@ final class AutoScrollingViewController : UIViewController
     }
 }
 
-
-struct BottomPinnedItem : BlueprintItemContent, Equatable
-{
-    var text : String
+struct BottomPinnedItem: BlueprintItemContent, Equatable {
+    var text: String
 
     var identifierValue: String {
-        self.text
+        text
     }
 
-    func element(with info : ApplyItemContentInfo) -> Element
-    {
+    func element(with _: ApplyItemContentInfo) -> Element {
         var box = Box(
             backgroundColor: .white,
             cornerStyle: .rounded(radius: 6.0),
             wrapping: Inset(
                 uniformInset: 10.0,
-                wrapping: Label(text: self.text)
+                wrapping: Label(text: text)
             )
         )
 

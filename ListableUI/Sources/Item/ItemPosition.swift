@@ -7,11 +7,9 @@
 
 import Foundation
 
-
-public enum ItemPosition
-{
+public enum ItemPosition {
     case single
-    
+
     case first
     case middle
     case last

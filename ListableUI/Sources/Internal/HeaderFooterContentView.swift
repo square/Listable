@@ -7,178 +7,177 @@
 
 import UIKit
 
+final class HeaderFooterContentView<Content: HeaderFooterContent>: UIView {
+    //
 
-final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
-{
-    //
     // MARK: Properties
+
     //
-    
-    typealias OnTap = () -> ()
-    
-    var onTap : OnTap? = nil {
-        didSet { self.updateIsTappable() }
+
+    typealias OnTap = () -> Void
+
+    var onTap: OnTap? {
+        didSet { updateIsTappable() }
     }
-    
-    let content : Content.ContentView
-    let background : Content.BackgroundView
-    let pressedBackground : Content.PressedBackgroundView
-    
-    private let pressRecognizer : PressGestureRecognizer
-    
+
+    let content: Content.ContentView
+    let background: Content.BackgroundView
+    let pressedBackground: Content.PressedBackgroundView
+
+    private let pressRecognizer: PressGestureRecognizer
+
     //
+
     // MARK: Initialization
+
     //
-    
+
     override init(frame: CGRect) {
-        
         let bounds = CGRect(origin: .zero, size: frame.size)
-        
-        self.content = Content.createReusableContentView(frame: bounds)
-        self.background = Content.createReusableBackgroundView(frame: bounds)
-        self.pressedBackground = Content.createReusablePressedBackgroundView(frame: bounds)
-        
-        self.pressRecognizer = PressGestureRecognizer()
-        self.pressRecognizer.minimumPressDuration = 0.0
-        self.pressRecognizer.allowableMovementAfterBegin = 5.0
-        
+
+        content = Content.createReusableContentView(frame: bounds)
+        background = Content.createReusableBackgroundView(frame: bounds)
+        pressedBackground = Content.createReusablePressedBackgroundView(frame: bounds)
+
+        pressRecognizer = PressGestureRecognizer()
+        pressRecognizer.minimumPressDuration = 0.0
+        pressRecognizer.allowableMovementAfterBegin = 5.0
+
         super.init(frame: frame)
-        
-        self.pressRecognizer.addTarget(self, action: #selector(pressStateChanged))
-     
-        self.addSubview(self.background)
-        self.addSubview(self.pressedBackground)
-        self.addSubview(self.content)
-        
-        self.updateIsTappable()
+
+        pressRecognizer.addTarget(self, action: #selector(pressStateChanged))
+
+        addSubview(background)
+        addSubview(pressedBackground)
+        addSubview(content)
+
+        updateIsTappable()
     }
-    
+
     @available(*, unavailable)
-    required init?(coder: NSCoder) { fatalError() }
-    
+    required init?(coder _: NSCoder) { fatalError() }
+
     //
+
     // MARK: UIView
+
     //
-    
+
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        self.content.sizeThatFits(size)
+        content.sizeThatFits(size)
     }
-    
+
     override func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
-        self.content.systemLayoutSizeFitting(targetSize)
+        content.systemLayoutSizeFitting(targetSize)
     }
-    
+
     override func systemLayoutSizeFitting(
         _ targetSize: CGSize,
         withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
         verticalFittingPriority: UILayoutPriority
     ) -> CGSize {
-        self.content.systemLayoutSizeFitting(
+        content.systemLayoutSizeFitting(
             targetSize,
             withHorizontalFittingPriority: horizontalFittingPriority,
             verticalFittingPriority: verticalFittingPriority
         )
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.content.frame = self.bounds
-        self.background.frame = self.bounds
-        self.pressedBackground.frame = self.bounds
+
+        content.frame = bounds
+        background.frame = bounds
+        pressedBackground.frame = bounds
     }
-    
+
     //
+
     // MARK: Tap Handling
+
     //
-    
-    private func updateIsTappable()
-    {
-        self.removeGestureRecognizer(self.pressRecognizer)
-        
-        if self.onTap != nil {
-            self.accessibilityTraits = [.header, .button]
-            
-            self.pressedBackground.isHidden = false
-            self.pressedBackground.alpha = 0.0
-            
-            self.addGestureRecognizer(self.pressRecognizer)
+
+    private func updateIsTappable() {
+        removeGestureRecognizer(pressRecognizer)
+
+        if onTap != nil {
+            accessibilityTraits = [.header, .button]
+
+            pressedBackground.isHidden = false
+            pressedBackground.alpha = 0.0
+
+            addGestureRecognizer(pressRecognizer)
         } else {
-            self.accessibilityTraits = [.header]
-            
-            self.pressedBackground.isHidden = true
+            accessibilityTraits = [.header]
+
+            pressedBackground.isHidden = true
         }
     }
-    
-    @objc private func pressStateChanged() {
-        
-        let state = self.pressRecognizer.state
-        
-        switch state {
 
+    @objc private func pressStateChanged() {
+        let state = pressRecognizer.state
+
+        switch state {
         case .possible:
             break
-        
+
         case .began, .changed:
-            self.pressedBackground.alpha = 1.0
-            
+            pressedBackground.alpha = 1.0
+
         case .ended, .cancelled, .failed:
             let didEnd = state == .ended
-            
+
             UIView.animate(withDuration: didEnd ? 0.1 : 0.0) {
                 self.pressedBackground.alpha = 0.0
             }
-            
+
             if didEnd {
-                self.onTap?()
+                onTap?()
             }
-            
+
         @unknown default: break
         }
     }
 }
 
+private final class PressGestureRecognizer: UILongPressGestureRecognizer {
+    var allowableMovementAfterBegin: CGFloat = 0.0
 
-fileprivate final class PressGestureRecognizer : UILongPressGestureRecognizer {
-    
-    var allowableMovementAfterBegin : CGFloat = 0.0
-    
-    private var initialPoint : CGPoint? = nil
-    
+    private var initialPoint: CGPoint?
+
     override func reset() {
         super.reset()
-        
-        self.initialPoint = nil
+
+        initialPoint = nil
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesBegan(touches, with: event)
-        
-        self.initialPoint = self.location(in: self.view)
+
+        initialPoint = location(in: view)
     }
-    
+
     override func canPrevent(_ gesture: UIGestureRecognizer) -> Bool {
-        
         // We want to allow the pan gesture of our containing scroll view to continue to track
         // when the user moves their finger vertically or horizontally, when we are cancelled.
-        
+
         if let panGesture = gesture as? UIPanGestureRecognizer, panGesture.view is UIScrollView {
             return false
         }
-        
+
         return super.canPrevent(gesture)
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesMoved(touches, with: event)
-        
-        if let initialPoint = self.initialPoint {
-            let currentPoint = self.location(in: self.view)
-            
+
+        if let initialPoint = initialPoint {
+            let currentPoint = location(in: view)
+
             let distance = sqrt(pow(abs(initialPoint.x - currentPoint.x), 2) + pow(abs(initialPoint.y - currentPoint.y), 2))
-            
-            if distance > self.allowableMovementAfterBegin {
-                self.state = .failed
+
+            if distance > allowableMovementAfterBegin {
+                state = .failed
             }
         }
     }

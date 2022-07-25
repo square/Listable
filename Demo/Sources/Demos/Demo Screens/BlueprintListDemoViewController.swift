@@ -6,52 +6,46 @@
 //  Copyright © 2019 Kyle Van Essen. All rights reserved.
 //
 
-import ListableUI
-import BlueprintUILists
 import BlueprintUI
 import BlueprintUICommonControls
+import BlueprintUILists
+import ListableUI
 
-
-final class BlueprintListDemoViewController : UIViewController
-{
+final class BlueprintListDemoViewController: UIViewController {
     let blueprintView = BlueprintView()
-    
-    var showingData : Bool = true
-    
-    override func loadView()
-    {
-        self.title = "Podcasts"
-        
-        self.view = self.blueprintView
-        
-        self.navigationItem.rightBarButtonItems = [
+
+    var showingData: Bool = true
+
+    override func loadView() {
+        title = "Podcasts"
+
+        view = blueprintView
+
+        navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Animated", style: .plain, target: self, action: #selector(toggleAnimated)),
             UIBarButtonItem(title: "No Animation", style: .plain, target: self, action: #selector(toggleNoAnimation)),
         ]
-        
-        self.reloadData()
+
+        reloadData()
     }
-    
-    @objc func toggleAnimated()
-    {
+
+    @objc func toggleAnimated() {
         UIView.animate(withDuration: 1.0) {
             self.showingData.toggle()
             self.reloadData()
         }
     }
-    
-    @objc func toggleNoAnimation()
-    {
-        self.showingData.toggle()
-        self.reloadData()
+
+    @objc func toggleNoAnimation() {
+        showingData.toggle()
+        reloadData()
     }
-    
-    func reloadData()
-    {
-        self.blueprintView.element = List {
+
+    func reloadData() {
+        blueprintView.element = List {
             Section("podcasts") {
                 let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-                
+
                 for podcast in podcasts {
                     ElementItem(podcast, id: \.name) { _, _ in
                         PodcastElement(podcast: podcast)
@@ -68,11 +62,9 @@ final class BlueprintListDemoViewController : UIViewController
     }
 }
 
+private struct PodcastElement: ProxyElement {
+    var podcast: Podcast
 
-fileprivate struct PodcastElement : ProxyElement {
-    
-    var podcast : Podcast
-    
     var elementRepresentation: Element {
         Row { row in
             row.horizontalUnderflow = .growUniformly
@@ -118,25 +110,23 @@ fileprivate struct PodcastElement : ProxyElement {
     }
 }
 
+struct Podcast: Equatable {
+    var name: String
+    var episode: String
+    var length: String
+    var image: UIImage
 
-struct Podcast : Equatable
-{
-    var name : String
-    var episode : String
-    var length : String
-    var image : UIImage
-    
-    var downloadState : DownloadState = .notDownloaded
-    
-    enum DownloadState : Equatable {
+    var downloadState: DownloadState = .notDownloaded
+
+    enum DownloadState: Equatable {
         case notDownloaded
         case downloading(Double)
         case downloaded
         case error
     }
 
-    static var podcasts : [Podcast] {
-        return [
+    static var podcasts: [Podcast] {
+        [
             Podcast(
                 name: "Nancy",
                 episode: "What Do We Have In Common?",

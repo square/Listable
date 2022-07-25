@@ -5,12 +5,10 @@
 //  Created by Kyle Van Essen on 12/7/20.
 //
 
-import XCTest
 @testable import ListableUI
+import XCTest
 
-
-class LocalizedItemCollatorTests : XCTestCase
-{
+class LocalizedItemCollatorTests: XCTestCase {
     func test_init() {
         let collator = LocalizedItemCollator(
             collation: .current(),
@@ -18,65 +16,61 @@ class LocalizedItemCollatorTests : XCTestCase
                 Item(CollatedContent(text: $0))
             }
         )
-        
-        let groupedNames : [[String]] = collator.collated.map { section in
+
+        let groupedNames: [[String]] = collator.collated.map { section in
             [section.title] + section.items.map { ($0.anyContent as! CollatedContent).text }
         }
-        
+
         XCTAssertEqual(groupedNames,
-            [
-                [
-                    "D",
-                    "Delisa Leggio",
-                    "Dionna Levering",
-                    "Duane Norred"
-                ],
-                [
-                    "J",
-                    "Justin Lafrance",
-                ],
-                [
-                    "K",
-                    "Krystin Schoenberg",
-                ],
-                [
-                    "#",
-                    "",
-                    " ",
-                    "✅",
-                    "🙏🏼🥺"
-                ],
-            ]
-        )
+                       [
+                           [
+                               "D",
+                               "Delisa Leggio",
+                               "Dionna Levering",
+                               "Duane Norred",
+                           ],
+                           [
+                               "J",
+                               "Justin Lafrance",
+                           ],
+                           [
+                               "K",
+                               "Krystin Schoenberg",
+                           ],
+                           [
+                               "#",
+                               "",
+                               " ",
+                               "✅",
+                               "🙏🏼🥺",
+                           ],
+                       ])
     }
 }
 
+private struct CollatedContent: Equatable, ItemContent, LocalizedCollatableItemContent {
+    var text: String
 
-fileprivate struct CollatedContent : Equatable, ItemContent, LocalizedCollatableItemContent {
-    
-    var text : String
-    
     var identifierValue: String {
-        self.text
+        text
     }
-    
-    func apply(to views: ItemContentViews<CollatedContent>, for reason: ApplyReason, with info: ApplyItemContentInfo) {
+
+    func apply(to _: ItemContentViews<CollatedContent>, for _: ApplyReason, with _: ApplyItemContentInfo) {
         // Nothing needed.
     }
-    
+
     static func createReusableContentView(frame: CGRect) -> UIView {
         UIView(frame: frame)
     }
-    
+
     var collationString: String {
-        self.text
+        text
     }
 }
 
-
 /// Via http://listofrandomnames.com
 
-fileprivate let names : [String] = [
+private let names: [String] = [
     "Delisa Leggio",
     "Krystin Schoenberg",
     "Dionna Levering",
@@ -85,5 +79,5 @@ fileprivate let names : [String] = [
     "",
     " ",
     "🙏🏼🥺",
-    "✅"
+    "✅",
 ]

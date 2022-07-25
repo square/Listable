@@ -68,7 +68,7 @@ let package = Package(
             name: "BlueprintUILists",
             dependencies: [
                 "ListableUI",
-                .product(name: "BlueprintUI", package: "Blueprint")
+                .product(name: "BlueprintUI", package: "Blueprint"),
             ],
             path: "BlueprintUILists/Sources"
         ),

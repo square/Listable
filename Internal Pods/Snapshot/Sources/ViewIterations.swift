@@ -7,58 +7,49 @@
 
 import UIKit
 
-
-public struct ViewIteration<ViewType:UIView> : SnapshotIteration
-{
-    public init(name: String)
-    {
+public struct ViewIteration<ViewType: UIView>: SnapshotIteration {
+    public init(name: String) {
         self.name = name
     }
-    
+
     // MARK: SnapshotIteration
-    
+
     public typealias RenderingFormat = ViewType
-    
-    public var name : String
-    
-    public func prepare(render : ViewType) -> ViewType
-    {
-        return render
+
+    public var name: String
+
+    public func prepare(render: ViewType) -> ViewType {
+        render
     }
 }
 
+public struct SizedViewIteration<ViewType: UIView>: SnapshotIteration {
+    public let name: String
+    public let size: CGSize
 
-public struct SizedViewIteration<ViewType:UIView> : SnapshotIteration
-{
-    public let name : String
-    public let size : CGSize
-    
-    public init(name: String = "Snapshot", size: CGSize)
-    {
+    public init(name: String = "Snapshot", size: CGSize) {
         self.name = name
         self.size = size
     }
-    
+
     // MARK: SnapshotIteration
-    
+
     public typealias RenderingFormat = ViewType
-    
-    public func prepare(render : ViewType) -> ViewType
-    {
-        render.frame = CGRect(origin: .zero, size: self.size)
+
+    public func prepare(render: ViewType) -> ViewType {
+        render.frame = CGRect(origin: .zero, size: size)
         render.layoutIfNeeded()
-        
-        self.spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow()
-        
+
+        spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow()
+
         return render
     }
-    
-    private func spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow()
-    {
+
+    private func spinTheRunloop_toMakeUICollectionView_call_updateVisibleCellsNow() {
         /// I don't know why this is the only way I can make UICollectionView call `_updateVisibleCellsNow:`.
-        
+
         let finalDate = Date(timeIntervalSinceNow: 0.1)
-        
+
         repeat {
             RunLoop.main.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
         } while Date() < finalDate

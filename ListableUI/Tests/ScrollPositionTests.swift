@@ -7,7 +7,4 @@
 
 import XCTest
 
-class ScrollPositionTests: XCTestCase
-{
-
-}
+class ScrollPositionTests: XCTestCase {}

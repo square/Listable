@@ -7,18 +7,18 @@
 
 import UIKit
 
+extension ListView {
+    //
 
-extension ListView
-{
-    //
     // MARK: Measuring Lists
+
     //
-    
+
     static let headerFooterMeasurementCache = ReusableViewCache()
     static let itemMeasurementCache = ReusableViewCache()
-    
+
     public static let defaultContentSizeItemLimit = 50
-    
+
     ///
     /// Returns the size that a list with the provided properties would be, within the given `fittingSize`.
     ///
@@ -44,26 +44,25 @@ extension ListView
     /// calculate a height – especially if the `fittingSize` is known and finite.
     ///
     public static func contentSize(
-        in fittingSize : CGSize,
-        for properties : ListProperties,
-        safeAreaInsets : UIEdgeInsets,
-        itemLimit : Int? = ListView.defaultContentSizeItemLimit
-    ) -> MeasuredListSize
-    {
+        in fittingSize: CGSize,
+        for properties: ListProperties,
+        safeAreaInsets: UIEdgeInsets,
+        itemLimit: Int? = ListView.defaultContentSizeItemLimit
+    ) -> MeasuredListSize {
         let (layout, layoutContext) = properties.makeLayout(
             in: fittingSize,
             safeAreaInsets: safeAreaInsets,
             itemLimit: itemLimit
         )
-        
+
         let contentSize = layout.content.contentSize
         let contentInset = layoutContext.adjustedContentInset
-        
+
         let totalSize = CGSize(
             width: contentSize.width + contentInset.left + contentInset.right,
             height: contentSize.height + contentInset.top + contentInset.bottom
         )
-        
+
         return .init(
             contentSize: CGSize(
                 width: fittingSize.width > 0 ? min(fittingSize.width, totalSize.width) : totalSize.width,
@@ -74,13 +73,11 @@ extension ListView
     }
 }
 
-
 /// Provides sizing and width information about the measurement of a list's content.
-public struct MeasuredListSize : Equatable {
-    
+public struct MeasuredListSize: Equatable {
     /// The content size of the list.
-    public var contentSize : CGSize
-    
+    public var contentSize: CGSize
+
     /// If it supports it, this value will contain the "natural" width of the list's
     /// content. For example, if you give a table layout 1000pts of width to lay out, but
     /// its content only requires 200pts of width to lay out, this value will be 200pt.
@@ -88,8 +85,8 @@ public struct MeasuredListSize : Equatable {
     /// ### Note
     /// Not all layouts support or provide a natural width. For example, a `.flow` layout
     /// cannot provide a natural width because it takes up as much space as it as given.
-    public var naturalWidth : CGFloat?
-    
+    public var naturalWidth: CGFloat?
+
     public init(
         contentSize: CGSize,
         naturalWidth: CGFloat?

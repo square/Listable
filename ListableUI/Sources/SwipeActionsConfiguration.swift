@@ -8,49 +8,45 @@
 import Foundation
 import UIKit
 
-
 /// Use SwipeActionsConfiguration to configure an item with SwipeActions.
 /// These are actions that are revealed when swiping on the cell.
 public struct SwipeActionsConfiguration {
-
     /// The actions to display when the cell is swiped.
-    public var actions : [SwipeAction]
+    public var actions: [SwipeAction]
 
     /// Whether the first action is performed automatically with a full swipe.
-    public var performsFirstActionWithFullSwipe : Bool
-    
+    public var performsFirstActionWithFullSwipe: Bool
+
     /// Creates a new configuration with the provided action.
     public init(
-        performsFirstActionWithFullSwipe : Bool = false,
-        action : SwipeAction
+        performsFirstActionWithFullSwipe: Bool = false,
+        action: SwipeAction
     ) {
         self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
-        self.actions = [action]
+        actions = [action]
     }
-    
+
     /// Creates a new configuration with the provided actions.
     public init(
-        performsFirstActionWithFullSwipe : Bool = false,
-        actions : [SwipeAction]
+        performsFirstActionWithFullSwipe: Bool = false,
+        actions: [SwipeAction]
     ) {
         self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
         self.actions = actions
     }
-    
+
     /// Creates a new configuration with the provided actions.
     public init(
-        performsFirstActionWithFullSwipe : Bool = false,
-        @ListableBuilder<SwipeAction> actions : () -> [SwipeAction]
+        performsFirstActionWithFullSwipe: Bool = false,
+        @ListableBuilder<SwipeAction> actions: () -> [SwipeAction]
     ) {
         self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
         self.actions = actions()
     }
 }
 
-
 /// Create SwipeActions to define actions that can be performed in a SwipeActionsConfiguration.
 public struct SwipeAction {
-
     /// The completion handler to call after performing the swipe action.
     ///
     /// Pass in `true` to expand the actions (typically only used when deleting the row)
@@ -67,7 +63,7 @@ public struct SwipeAction {
     public var image: UIImage?
 
     public var handler: Handler
-    
+
     /// Creates a new swipe action with the provided options.
     public init(
         title: String,

@@ -15,7 +15,7 @@ extension Bundle {
         #if SWIFT_PACKAGE
             return .module
         #else
-            let listableUIResources: Bundle = Bundle(for: MarkerClass.self)
+            let listableUIResources = Bundle(for: MarkerClass.self)
 
             guard let resourcePath = listableUIResources.path(forResource: "ListableUIResources", ofType: "bundle"),
                   let bundle = Bundle(path: resourcePath)

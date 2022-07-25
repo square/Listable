@@ -6,31 +6,27 @@
 //  Copyright © 2020 Kyle Van Essen. All rights reserved.
 //
 
-import BlueprintUILists
 import BlueprintUICommonControls
+import BlueprintUILists
 
-
-final class LocalizedCollationViewController : ListViewController {
-    
+final class LocalizedCollationViewController: ListViewController {
     override func configure(list: inout ListProperties) {
-        
         list.appearance = .demoAppearance
         list.layout = .demoLayout
-        
+
         let items = names.map { name in
             Item(DemoItem(text: name))
         }
-        
+
         list += LocalizedItemCollator.sections(with: items) { collated, section in
             section.header = DemoHeader(title: collated.title)
         }
     }
 }
 
-
 /// Via http://listofrandomnames.com
 
-fileprivate let names : [String] = [
+private let names: [String] = [
     "Delisa Leggio",
     "Carlota Loughran",
     "Krystin Schoenberg",

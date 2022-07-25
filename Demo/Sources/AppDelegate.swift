@@ -8,61 +8,57 @@
 
 import UIKit
 
-
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate
-{
+class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = DemoNavigationController()
-        
+
         self.window = window
-        
+
         window.makeKeyAndVisible()
-        
+
         return true
     }
 }
 
-
-final class DemoNavigationController : UINavigationController, UINavigationControllerDelegate {
-        
+final class DemoNavigationController: UINavigationController, UINavigationControllerDelegate {
     init() {
         super.init(rootViewController: DemosRootViewController())
-        
+
         if let demoClass = Self.demoClass {
-            self.pushViewController(demoClass.init(), animated: false)
+            pushViewController(demoClass.init(), animated: false)
         }
-        
-        self.delegate = self
+
+        delegate = self
     }
-    
+
     private static let userDefaultsKey = "ListableDemo.PushedDemoClassName"
-    
-    static func setPushedDemo(_ demo : UIViewController) {
+
+    static func setPushedDemo(_ demo: UIViewController) {
         UserDefaults.standard.set(NSStringFromClass(type(of: demo)), forKey: userDefaultsKey)
         UserDefaults.standard.synchronize()
     }
-    
-    static var demoClass : UIViewController.Type? {
+
+    static var demoClass: UIViewController.Type? {
         if let demoClassName = UserDefaults.standard.string(forKey: userDefaultsKey) {
             return NSClassFromString(demoClassName) as? UIViewController.Type
         } else {
             return nil
         }
     }
-    
-    required init?(coder aDecoder: NSCoder) { fatalError() }
-    
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) { fatalError() }
+
     func navigationController(
-        _ navigationController: UINavigationController,
-        didShow viewController: UIViewController,
-        animated: Bool
+        _: UINavigationController,
+        didShow _: UIViewController,
+        animated _: Bool
     ) {
-        if self.topViewController is DemosRootViewController {
+        if topViewController is DemosRootViewController {
             UserDefaults.standard.removeObject(forKey: Self.userDefaultsKey)
             UserDefaults.standard.synchronize()
         }

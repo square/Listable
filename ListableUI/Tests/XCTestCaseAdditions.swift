@@ -7,81 +7,73 @@
 
 import XCTest
 
-
-extension XCTestCase
-{
-    func testcase(_ name : String = "", _ block : () -> ())
-    {
+extension XCTestCase {
+    func testcase(_: String = "", _ block: () -> Void) {
         block()
     }
-    
-    func assertThrowsError(test : () throws -> (), verify : (Error) -> ())
-    {
+
+    func assertThrowsError(test: () throws -> Void, verify: (Error) -> Void) {
         var thrown = false
-        
+
         do {
             try test()
         } catch {
             thrown = true
             verify(error)
         }
-        
+
         XCTAssertTrue(thrown, "Expected an error to be thrown but one was not.")
     }
-    
-    func waitFor(timeout : TimeInterval = 10.0, predicate : () -> Bool)
-    {
+
+    func waitFor(timeout: TimeInterval = 10.0, predicate: () -> Bool) {
         let runloop = RunLoop.main
         let timeout = Date(timeIntervalSinceNow: timeout)
-        
+
         while Date() < timeout {
             if predicate() {
                 return
             }
-            
+
             runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
         }
-        
+
         XCTFail("waitUntil timed out waiting for a check to pass.")
     }
-    
-    func waitFor(timeout : TimeInterval = 10.0, block : (() -> ()) -> ())
-    {
-        var isDone : Bool = false
-        
-        self.waitFor(timeout: timeout, predicate: {
-            block({ isDone = true })
+
+    func waitFor(timeout: TimeInterval = 10.0, block: (() -> Void) -> Void) {
+        var isDone = false
+
+        waitFor(timeout: timeout, predicate: {
+            block { isDone = true }
             return isDone
         })
     }
-    
-    func waitFor(duration : TimeInterval)
-    {
+
+    func waitFor(duration: TimeInterval) {
         let end = Date(timeIntervalSinceNow: abs(duration))
 
-        self.waitFor(predicate: {
+        waitFor(predicate: {
             Date() >= end
         })
     }
-    
-    func waitForOneRunloop()
-    {
+
+    func waitForOneRunloop() {
         let runloop = RunLoop.main
         runloop.run(mode: .default, before: Date(timeIntervalSinceNow: 0.001))
     }
-    
-    func determineAverage(for seconds : TimeInterval, using block : () -> ()) {
+
+    func determineAverage(for seconds: TimeInterval, using block: () -> Void) {
         let start = Date()
 
-        var iterations : Int = 0
-        
+        var iterations = 0
+
         var lastUpdateDate = Date()
 
         repeat {
             block()
-            
+
             iterations += 1
-            
+
             if Date().timeIntervalSince(lastUpdateDate) >= 1 {
                 lastUpdateDate = Date()
                 print("Continuing Test: \(iterations) Iterations...")
@@ -98,9 +90,8 @@ extension XCTestCase
     }
 }
 
-
 extension UIView {
-    var recursiveDescription : String {
-        self.value(forKey: "recursiveDescription") as! String
+    var recursiveDescription: String {
+        value(forKey: "recursiveDescription") as! String
     }
 }
