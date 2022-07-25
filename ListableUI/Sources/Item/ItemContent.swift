@@ -40,7 +40,7 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentType == Self
+public protocol ItemContent : IsEquivalentContent, AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -121,6 +121,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// text fields, etc. The identifier of the control should be stable and **independent of the value
     /// the control is currently representing**. Including the value the control is currently representing
     /// in the identifier will cause the list to repeatedly re-create the control, removing the old item and inserting the new one.
+    ///
     /// ```swift
     /// struct MySearchBarRow : ItemContent {
     ///
@@ -238,65 +239,6 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     // MARK: Tracking Changes
     //
     
-    ///
-    /// Used by the list to determine when the content of the item has changed; in order to
-    /// remeasure the item and re-layout the list.
-    ///
-    /// You should return `false` from this method when any content within your item that
-    /// affects visual appearance or layout (and in particular, sizing) changes. When the list
-    /// receives `false` back from this method, it will invalidate any cached sizing it has stored
-    /// for the item, and re-measure + re-layout the content.
-    ///
-    /// ```swift
-    /// struct MyItemContent : ItemContent, Equatable {
-    ///
-    ///     var identifierValue : UUID
-    ///     var title : String
-    ///     var detail : String
-    ///     var theme : MyTheme
-    ///     var onTapDetail : () -> ()
-    ///
-    ///     func isEquivalent(to other : MyItemContent) -> Bool {
-    ///         // 🚫 Missing checks for title and detail.
-    ///         // If they change, they likely affect sizing,
-    ///         // which would result in incorrect item sizing.
-    ///
-    ///         self.theme == other.theme
-    ///     }
-    ///
-    ///     func isEquivalent(to other : MyItemContent) -> Bool {
-    ///         // 🚫 Missing check for theme.
-    ///         // If the theme changed; its likely that the device's
-    ///         // accessibility settings changed; dark mode was enabled,
-    ///         // etc. All of these can affect the appearance or sizing
-    ///         // of the item.
-    ///
-    ///         self.title == other.title &&
-    ///         self.detail == other.detail
-    ///     }
-    ///
-    ///     func isEquivalent(to other : MyItemContent) -> Bool {
-    ///         // ✅ Checking all parameters which can affect appearance + layout.
-    ///         // Not checking identifierValue or onTapDetail, since they do not affect appearance + layout.
-    ///
-    ///         self.theme == other.theme &&
-    ///         self.title == other.title &&
-    ///         self.detail == other.detail
-    ///     }
-    /// }
-    ///
-    /// struct MyItemContent : ItemContent, Equatable {
-    ///     // ✅ Nothing else needed!
-    ///     // `Equatable` conformance provides `isEquivalent(to:) for free!`
-    /// }
-    /// ```
-    ///
-    /// #### Note
-    /// If your ``ItemContent`` conforms to ``Equatable``, there is a default
-    /// implementation of this method which simply returns `self == other`.
-    ///
-    func isEquivalent(to other : Self) -> Bool
-    
     /// Used by the list view to determine move events during an update's diff operation.
     ///
     /// This function should return `true` if the content's sort changed based on the old value passed into the function.
@@ -384,8 +326,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// The background view used to draw the background of the content.
     /// The background view is drawn below the content view.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Defaults to a `UIView` with no drawn appearance or state.
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a background view.
@@ -394,8 +335,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     /// Create and return a new background view used to render the content's background.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableBackgroundView(frame : CGRect) -> BackgroundView
@@ -403,8 +343,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// The selected background view used to draw the background of the content when it is selected or highlighted.
     /// The selected background view is drawn below the content view.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Defaults to a `UIView` with no drawn appearance or state.
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a selected background view.
@@ -419,8 +358,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// If your `BackgroundView` and `SelectedBackgroundView` are the same type, this method
     /// is provided automatically by calling `createReusableBackgroundView`.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
@@ -498,14 +436,6 @@ public struct ApplyItemContentInfo
 public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
     var swipeActionsStyle: SwipeActionsView.Style {
         return .default
-    }
-}
-
-public extension ItemContent where Self:Equatable
-{
-    /// If your `ItemContent` is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
-    func isEquivalent(to other : Self) -> Bool {
-        self == other
     }
 }
 

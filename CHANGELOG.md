@@ -10,6 +10,8 @@
 
 ### Changed
 
+- Definition of `isEquivalent(to:)` has been moved to `IsEquivalentContent`.
+
 ### Misc
 
 # Past Releases

@@ -129,6 +129,7 @@ public struct ElementItemContent<Represented, IdentifierValue:Hashable> : Bluepr
     public let represented : Represented
 
     let idValueKeyPath : KeyPath<Represented, IdentifierValue>
+    let defaults: DefaultProperties = .init()
     let isEquivalentProvider : (Represented, Represented) -> Bool
     let elementProvider : (Represented, ApplyItemContentInfo) -> Element
     let backgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
@@ -136,6 +137,10 @@ public struct ElementItemContent<Represented, IdentifierValue:Hashable> : Bluepr
     
     public var identifierValue: IdentifierValue {
         self.represented[keyPath: self.idValueKeyPath]
+    }
+    
+    public var defaultItemProperties: DefaultProperties {
+        defaults
     }
     
     public func isEquivalent(to other: Self) -> Bool {
