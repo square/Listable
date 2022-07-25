@@ -59,7 +59,7 @@ public struct List : Element
     //
     // MARK: Initialization
     //
-        
+    
     /// Create a new list, configured with the provided properties,
     /// configured with the provided `ListProperties` builder.
     public init(
@@ -76,13 +76,26 @@ public struct List : Element
     public init(
         measurement : List.Measurement = .fillParent,
         configure : ListProperties.Configure = { _ in },
-        @ListableBuilder<Section> sections : () -> [Section]
+        @ListableBuilder<Section> sections : () -> [Section],
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> containerHeader : () -> AnyHeaderFooterConvertible? = { nil },
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil },
+        @ListableOptionalBuilder<AnyHeaderFooterConvertible> overscrollFooter : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.measurement = measurement
         
-        self.properties = .default(with: configure)
+        var properties = ListProperties.default {
+            $0.sections = sections()
+            
+            $0.content.containerHeader = containerHeader()
+            $0.content.header = header()
+            $0.content.footer = footer()
+            $0.content.overscrollFooter = overscrollFooter()
+        }
         
-        self.properties.sections += sections()
+        configure(&properties)
+        
+        self.properties = properties
     }
     
     //

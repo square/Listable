@@ -12,7 +12,7 @@ public typealias Header<Content:HeaderFooterContent> = HeaderFooter<Content>
 public typealias Footer<Content:HeaderFooterContent> = HeaderFooter<Content>
 
 
-public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
+public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter, AnyHeaderFooterConvertible
 {
     public var content : Content
     

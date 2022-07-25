@@ -86,3 +86,52 @@
         component
     }
 }
+
+
+///
+/// A result builder which can be used to provide a SwiftUI-like DSL for building a single item.
+///
+/// You provide a result builder in an API by specifying it as a method parameter, like so:
+///
+/// ```
+/// init(@ListableBuilder<SomeContent> thing : () -> SomeContent) {
+///     self.thing = thing()
+/// }
+/// ```
+///
+/// ## Links & Videos
+/// https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
+/// https://developer.apple.com/videos/play/wwdc2021/10253/
+/// https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/
+/// https://www.avanderlee.com/swift/result-builders/
+///
+@resultBuilder public enum ListableOptionalBuilder<ContentType> {
+
+    /// The final value from the builder.
+    public typealias Component = ContentType?
+    
+    /// If an empty closure is provided, returns an empty array.
+    public static func buildBlock() -> Component {
+        nil
+    }
+
+    /// Enables support for `if` statements that do not have an `else`.
+    public static func buildOptional(_ component: Component?) -> Component {
+        component ?? nil
+    }
+
+    /// With buildEither(second:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
+    public static func buildEither(first component: Component) -> Component {
+        component
+    }
+
+    /// With buildEither(first:), enables support for 'if-else' and 'switch' statements by folding conditional results into a single result.
+    public static func buildEither(second component: Component) -> Component {
+        component
+    }
+
+    /// If declared, this will be called on the partial result of an `if #available` block to allow the result builder to erase type information.
+    public static func buildLimitedAvailability(_ component: Component) -> Component {
+        component
+    }
+}

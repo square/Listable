@@ -6,6 +6,21 @@
 
 ### Added
 
+- Adding Blueprint Elements to your list content has become easier: Just add them directly! You no longer need to use the `ElementItem` wrapper, unless you need to provide an isEquivalent implementation, a background view, or a selected background view, in which case, you are encouraged to use `BlueprintItemContent` or `BlueprintHeaderFooterContent` directly. The `ElementItem` and `ElementHeaderFooter` APIs will be deprecated in a future release, and are now soft-deprecated.
+
+    ```swift
+    Section("an id") {
+        MyContent() // Regular ItemContent
+    
+        MyElement() // A Blueprint Element
+        AnotherElement() // A Blueprint Element
+        AnotherElement()
+            .item(id: "my-specified-id") { item in
+                item.insertAndRemoveAnimations = .scaleUp
+            }
+    }
+    ```
+
 ### Removed
 
 ### Changed

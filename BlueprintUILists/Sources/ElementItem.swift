@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  ElementItem.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 9/10/20.
@@ -9,6 +9,8 @@ import ListableUI
 import BlueprintUI
 
 
+///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.item(...)` instead.
 ///
 /// Provides a way to create an `Item` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintItemContent` struct.
@@ -68,6 +70,8 @@ public func ElementItem<Represented, IdentifierValue:Hashable>(
 
 
 ///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.item(...)` instead.
+/// 
 /// Provides a way to create an `Item` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintItemContent` struct.
 ///
@@ -129,7 +133,6 @@ public struct ElementItemContent<Represented, IdentifierValue:Hashable> : Bluepr
     public let represented : Represented
 
     let idValueKeyPath : KeyPath<Represented, IdentifierValue>
-    let defaults: DefaultProperties = .init()
     let isEquivalentProvider : (Represented, Represented) -> Bool
     let elementProvider : (Represented, ApplyItemContentInfo) -> Element
     let backgroundProvider : (Represented, ApplyItemContentInfo) -> Element?
@@ -137,10 +140,6 @@ public struct ElementItemContent<Represented, IdentifierValue:Hashable> : Bluepr
     
     public var identifierValue: IdentifierValue {
         self.represented[keyPath: self.idValueKeyPath]
-    }
-    
-    public var defaultItemProperties: DefaultProperties {
-        defaults
     }
     
     public func isEquivalent(to other: Self) -> Bool {

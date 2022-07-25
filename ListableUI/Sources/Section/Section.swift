@@ -138,24 +138,6 @@ public struct Section
         self.footer = footer()
     }
     
-    /// Creates a new section with result builder-style APIs.
-    public init<IdentifierValue:Hashable>(
-        _ identifier : IdentifierValue,
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        header : () -> AnyHeaderFooterConvertible? = { nil },
-        footer : () -> AnyHeaderFooterConvertible? = { nil }
-    ) {
-        self.identifier = Identifier(identifier)
-        
-        self.layouts = .init()
-        self.reordering = .init()
-        
-        self.items = items().map { $0.toAnyItem() }
-        
-        self.header = header()
-        self.footer = footer()
-    }
-    
     //
     // MARK: Reading Items
     //

@@ -1,5 +1,5 @@
 //
-//  HeaderFooter.swift
+//  ElementHeaderFooter.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 10/9/20.
@@ -9,6 +9,8 @@ import ListableUI
 import BlueprintUI
 
 
+///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.headerFooter(...)` instead.
 ///
 /// Provides a way to create a `HeaderFooter` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintHeaderFooterContent` struct.
@@ -62,6 +64,8 @@ public func ElementHeaderFooter<Represented>(
     )
 }
 
+///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.headerFooter(...)` instead.
 ///
 /// Provides a way to create a `HeaderFooter` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintHeaderFooterContent` struct.
