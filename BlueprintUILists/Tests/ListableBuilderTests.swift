@@ -145,7 +145,18 @@ class ListableBuilderTests : XCTestCase {
         
         XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
         XCTAssertEqual(callCount, 4)
-        
+    }
+}
+
+
+fileprivate struct NonConvertibleElement : ProxyElement, ListElementNonConvertible {
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    func listElementNonConvertibleFatal() -> Never {
+        fatalError()
     }
 }
 
