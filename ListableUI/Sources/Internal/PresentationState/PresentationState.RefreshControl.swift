@@ -37,9 +37,7 @@ extension PresentationState
                 self.view.attributedTitle = nil
             }
             
-            if let color = color {
-                self.view.tintColor = color
-            }
+            self.view.tintColor = color
             
             if self.model.isRefreshing {
                 self.view.beginRefreshing()
