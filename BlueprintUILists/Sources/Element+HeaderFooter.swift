@@ -71,8 +71,32 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
 {
     public let represented : ElementType
     
+    private let isEquivalent : (Self, Self) -> Bool
+    
+    init(represented : ElementType) {
+        self.represented = represented
+        
+        self.isEquivalent = { _, _ in false }
+    }
+    
+    init(represented : ElementType) where ElementType:Equatable {
+        self.represented = represented
+        
+        self.isEquivalent = {
+            $0.represented == $1.represented
+        }
+    }
+    
+    init(represented : ElementType) where ElementType:IsEquivalentContent {
+        self.represented = represented
+        
+        self.isEquivalent = {
+            $0.represented.isEquivalent(to: $1.represented)
+        }
+    }
+    
     public func isEquivalent(to other: Self) -> Bool {
-        false
+        isEquivalent(self, other)
     }
     
     public var elementRepresentation: Element {
@@ -80,26 +104,3 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
     }
 }
 
-
-extension WrappedHeaderFooterContent where ElementType : Equatable {
-    
-    public func isEquivalent(to other: Self) -> Bool {
-        represented == other.represented
-    }
-    
-    public var reappliesToVisibleView: ReappliesToVisibleView {
-        .ifNotEquivalent
-    }
-}
-
-
-extension WrappedHeaderFooterContent where ElementType : IsEquivalentContent {
-    
-    public func isEquivalent(to other: Self) -> Bool {
-        represented.isEquivalent(to: other.represented)
-    }
-    
-    public var reappliesToVisibleView: ReappliesToVisibleView {
-        .ifNotEquivalent
-    }
-}

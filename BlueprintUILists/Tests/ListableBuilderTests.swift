@@ -79,10 +79,8 @@ class ListableBuilderTests : XCTestCase {
         XCTAssertEqual(list.properties.content.sections[1].count, 4)
         XCTAssertEqual(list.properties.content.sections[2].count, 3)
     }
-    
-    // TODO: Test header/footers too
-    
-    func test_default_implementation_resolution() {
+        
+    func test_item_default_implementation_resolution() {
         
         var callCount : Int = 0
         
@@ -109,6 +107,45 @@ class ListableBuilderTests : XCTestCase {
         
         XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
         XCTAssertEqual(callCount, 4)
+    }
+    
+    func test_headerfooter_default_implementation_resolution() {
+        
+        var callCount : Int = 0
+        
+        let equatableSection = Section("1") {
+            Element1()
+        } header: {
+            EquatableElement { callCount += 1 }
+        } footer: {
+            EquatableElement { callCount += 1 }.headerFooter()
+        }
+        
+        let equivalentSection = Section("1") {
+            Element1()
+        } header: {
+            EquivalentElement { callCount += 1 }
+        } footer: {
+            EquivalentElement { callCount += 1 }.headerFooter()
+        }
+        
+        let equatableItem1 = equatableSection.header!.asAnyHeaderFooter()
+        let equatableItem2 = equatableSection.footer!.asAnyHeaderFooter()
+        let equivalentItem1 = equivalentSection.header!.asAnyHeaderFooter()
+        let equivalentItem2 = equivalentSection.footer!.asAnyHeaderFooter()
+        
+        XCTAssertTrue(equatableItem1.anyIsEquivalent(to: equatableItem1))
+        XCTAssertEqual(callCount, 1)
+        
+        XCTAssertTrue(equatableItem2.anyIsEquivalent(to: equatableItem2))
+        XCTAssertEqual(callCount, 2)
+        
+        XCTAssertTrue(equivalentItem1.anyIsEquivalent(to: equivalentItem1))
+        XCTAssertEqual(callCount, 3)
+        
+        XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
+        XCTAssertEqual(callCount, 4)
+        
     }
 }
 

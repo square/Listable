@@ -103,7 +103,9 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
         self.represented = represented
         self.identifierValue = identifierValue
         
-        self.isEquivalent = { $0.represented == $1.represented }
+        self.isEquivalent = {
+            $0.represented == $1.represented
+        }
     }
     
     init(
@@ -113,11 +115,13 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
         self.represented = represented
         self.identifierValue = identifierValue
         
-        self.isEquivalent = { $0.represented.isEquivalent(to: $1.represented) }
+        self.isEquivalent = {
+            $0.represented.isEquivalent(to: $1.represented)
+        }
     }
     
     public func isEquivalent(to other: Self) -> Bool {
-        self.isEquivalent(self, other)
+        isEquivalent(self, other)
     }
     
     public func element(with info: ApplyItemContentInfo) -> Element {
