@@ -20,12 +20,16 @@
             }
     }
     ```
+    
+- Added `ListableValueBuilder`, a result builder for single-value results.
 
 ### Removed
 
 ### Changed
 
 - Definition of `isEquivalent(to:)` has been moved to `IsEquivalentContent`.
+
+- The `ListableBuilder` result builder is now `ListableArrayBuilder`.
 
 ### Misc
 
