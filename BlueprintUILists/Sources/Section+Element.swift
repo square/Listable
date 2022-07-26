@@ -11,7 +11,7 @@ import ListableUI
 
 extension Section {
     
-    /// Adds `Element` support when building a `Section`:
+    /// Adds `Element` support when building a `Section`.
     ///
     /// ```swift
     /// Section("id") { section in
@@ -24,6 +24,18 @@ extension Section {
         self.items.append(element.item())
     }
     
+    public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:Equatable
+    {
+        self.items.append(element.item())
+    }
+    
+    public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:IsEquivalentContent
+    {
+        self.items.append(element.item())
+    }
+    
+    /// Adds `Element` support when building a `Section`.
+    ///
     /// ```swift
     /// Section("id") { section in
     ///     section += Element1()
@@ -31,6 +43,16 @@ extension Section {
     /// }
     /// ```
     public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType)
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType) where ElementType:Equatable
+    {
+        lhs.add(rhs)
+    }
+    
+    public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType) where ElementType:IsEquivalentContent
     {
         lhs.add(rhs)
     }

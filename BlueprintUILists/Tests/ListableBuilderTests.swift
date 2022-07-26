@@ -84,29 +84,52 @@ class ListableBuilderTests : XCTestCase {
         
         var callCount : Int = 0
         
-        let section = Section("1") {
-            EquatableElement { callCount += 1 }
-            EquatableElement { callCount += 1 }.item()
-            EquivalentElement { callCount += 1 }
-            EquivalentElement { callCount += 1 }.item()
+        let sections : [Section] = [
+            Section("1") {
+                EquatableElement { callCount += 1 }
+                EquatableElement { callCount += 1 }.item()
+                EquivalentElement { callCount += 1 }
+                EquivalentElement { callCount += 1 }.item()
+            },
+            
+            Section("1") { section in
+                section += EquatableElement { callCount += 1 }
+                section.add(EquatableElement { callCount += 1 }.item())
+                section += EquivalentElement { callCount += 1 }
+                section.add(EquivalentElement { callCount += 1 }.item())
+            },
+            
+            Section("1") { section in
+                section.add {
+                    EquatableElement { callCount += 1 }
+                    EquatableElement { callCount += 1 }.item()
+                    EquivalentElement { callCount += 1 }
+                    EquivalentElement { callCount += 1 }.item()
+                }
+            }
+        ]
+        
+        for section in sections {
+            
+            callCount = 0
+            
+            let equatableItem1 = section.items[0]
+            let equatableItem2 = section.items[1]
+            let equivalentItem1 = section.items[2]
+            let equivalentItem2 = section.items[3]
+            
+            XCTAssertTrue(equatableItem1.anyIsEquivalent(to: equatableItem1))
+            XCTAssertEqual(callCount, 1)
+            
+            XCTAssertTrue(equatableItem2.anyIsEquivalent(to: equatableItem2))
+            XCTAssertEqual(callCount, 2)
+            
+            XCTAssertTrue(equivalentItem1.anyIsEquivalent(to: equivalentItem1))
+            XCTAssertEqual(callCount, 3)
+            
+            XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
+            XCTAssertEqual(callCount, 4)
         }
-        
-        let equatableItem1 = section.items[0]
-        let equatableItem2 = section.items[1]
-        let equivalentItem1 = section.items[2]
-        let equivalentItem2 = section.items[3]
-        
-        XCTAssertTrue(equatableItem1.anyIsEquivalent(to: equatableItem1))
-        XCTAssertEqual(callCount, 1)
-        
-        XCTAssertTrue(equatableItem2.anyIsEquivalent(to: equatableItem2))
-        XCTAssertEqual(callCount, 2)
-        
-        XCTAssertTrue(equivalentItem1.anyIsEquivalent(to: equivalentItem1))
-        XCTAssertEqual(callCount, 3)
-        
-        XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
-        XCTAssertEqual(callCount, 4)
     }
     
     func test_headerfooter_default_implementation_resolution() {
