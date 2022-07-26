@@ -1,5 +1,5 @@
 //
-//  ListableBuilderAndSectionOverloadTests.swift
+//  ListableBuilderTests.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 7/24/22.
@@ -9,9 +9,9 @@ import BlueprintUILists
 import XCTest
 
 
-class ListableBuilderAndSectionOverloadTests : XCTestCase {
+class ListableBuilderTests : XCTestCase {
     
-    func test_build() {
+    func test_builders() {
         
         // Make sure the various result builder methods
         // are present such that various control flow statements still compile.
@@ -38,6 +38,8 @@ class ListableBuilderAndSectionOverloadTests : XCTestCase {
                 Element2()
             }
         }
+        
+        // Make sure building happens how we would expect.
         
         let list = List {
             Section("1") {
@@ -77,6 +79,37 @@ class ListableBuilderAndSectionOverloadTests : XCTestCase {
         XCTAssertEqual(list.properties.content.sections[1].count, 4)
         XCTAssertEqual(list.properties.content.sections[2].count, 3)
     }
+    
+    // TODO: Test header/footers too
+    
+    func test_default_implementation_resolution() {
+        
+        var callCount : Int = 0
+        
+        let section = Section("1") {
+            EquatableElement { callCount += 1 }
+            EquatableElement { callCount += 1 }.item()
+            EquivalentElement { callCount += 1 }
+            EquivalentElement { callCount += 1 }.item()
+        }
+        
+        let equatableItem1 = section.items[0]
+        let equatableItem2 = section.items[1]
+        let equivalentItem1 = section.items[2]
+        let equivalentItem2 = section.items[3]
+        
+        XCTAssertTrue(equatableItem1.anyIsEquivalent(to: equatableItem1))
+        XCTAssertEqual(callCount, 1)
+        
+        XCTAssertTrue(equatableItem2.anyIsEquivalent(to: equatableItem2))
+        XCTAssertEqual(callCount, 2)
+        
+        XCTAssertTrue(equivalentItem1.anyIsEquivalent(to: equivalentItem1))
+        XCTAssertEqual(callCount, 3)
+        
+        XCTAssertTrue(equivalentItem2.anyIsEquivalent(to: equivalentItem2))
+        XCTAssertEqual(callCount, 4)
+    }
 }
 
 
@@ -92,6 +125,36 @@ fileprivate struct Element2 : ProxyElement {
     
     var elementRepresentation: Element {
         Empty()
+    }
+}
+
+
+fileprivate struct EquatableElement : ProxyElement, Equatable {
+    
+    var calledEqual : () -> ()
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    static func == (lhs : Self, rhs : Self) -> Bool {
+        lhs.calledEqual()
+        return true
+    }
+}
+
+
+fileprivate struct EquivalentElement : ProxyElement, IsEquivalentContent {
+    
+    var calledIsEquivalent : () -> ()
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    func isEquivalent(to other: EquivalentElement) -> Bool {
+        calledIsEquivalent()
+        return true
     }
 }
 

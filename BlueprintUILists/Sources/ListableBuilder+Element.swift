@@ -25,21 +25,32 @@ import ListableUI
 /// See more here: https://github.com/apple/swift/blob/main/docs/ReferenceGuides/UnderscoredAttributes.md#_disfavoredoverload
 ///
 public extension ListableBuilder where ContentType == AnyItemConvertible {
-    
-    @_disfavoredOverload static func buildBlock<ElementType:Element>(_ content: ElementType) -> ContentType {
-        return content.item()
-    }
 
-    /// If declared, provides contextual type information for statement expressions to translate them into partial results.
-    @_disfavoredOverload static func buildExpression<ElementType:Element>(_ expression: ElementType) -> Component {
+    static func buildExpression<ElementType:Element>(_ expression: ElementType) -> Component {
+        [expression.item()]
+    }
+    
+    static func buildExpression<ElementType:Element>(_ expression: ElementType) -> Component where ElementType:Equatable {
+        [expression.item()]
+    }
+    
+    static func buildExpression<ElementType:Element>(_ expression: ElementType) -> Component where ElementType:IsEquivalentContent {
         [expression.item()]
     }
 }
 
 
 public extension ListableOptionalBuilder where ContentType == AnyHeaderFooterConvertible {
-    
+
     static func buildBlock<ElementType:Element>(_ content: ElementType) -> ContentType {
+        return content.headerFooter()
+    }
+    
+    static func buildBlock<ElementType:Element>(_ content: ElementType) -> ContentType where ElementType:Equatable {
+        return content.headerFooter()
+    }
+    
+    static func buildBlock<ElementType:Element>(_ content: ElementType) -> ContentType where ElementType:IsEquivalentContent {
         return content.headerFooter()
     }
 }

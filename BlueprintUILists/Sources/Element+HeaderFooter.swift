@@ -34,9 +34,33 @@ extension Element {
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
-            WrappedHeaderFooterContent(
-                represented: self
-            ),
+            WrappedHeaderFooterContent(represented: self),
+            configure: configure
+        )
+    }
+}
+
+
+extension Element where Self:Equatable {
+    
+    public func headerFooter(
+        configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
+    ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
+        HeaderFooter(
+            WrappedHeaderFooterContent(represented: self),
+            configure: configure
+        )
+    }
+}
+
+
+extension Element where Self:IsEquivalentContent {
+    
+    public func headerFooter(
+        configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
+    ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
+        HeaderFooter(
+            WrappedHeaderFooterContent(represented: self),
             configure: configure
         )
     }
