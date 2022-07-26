@@ -120,9 +120,9 @@ public struct Section
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
         reordering : SectionReordering = .init(),
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        @ListableOptionalBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
-        @ListableOptionalBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil }
+        @ListableArrayBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        @ListableValueBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
+        @ListableValueBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.identifier = Identifier(identifier)
         
@@ -211,7 +211,7 @@ public struct Section
     /// }
     /// ```
     public mutating func add(
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+        @ListableArrayBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
     ) {
         self.items += items().map { $0.toAnyItem() }
     }

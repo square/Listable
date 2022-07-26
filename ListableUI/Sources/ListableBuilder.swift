@@ -1,5 +1,5 @@
 //
-//  ListableBuilder.swift
+//  ListableArrayBuilder.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 6/10/21.
@@ -11,7 +11,7 @@
 /// You provide a result builder in an API by specifying it as a method parameter, like so:
 ///
 /// ```
-/// init(@ListableBuilder<SomeContent> contents : () -> [SomeContent]) {
+/// init(@ListableArrayBuilder<SomeContent> contents : () -> [SomeContent]) {
 ///     self.contents = contents()
 /// }
 /// ```
@@ -25,7 +25,7 @@
 /// ### Note
 /// Most comments on methods come from the result builders SE proposal.
 ///
-@resultBuilder public enum ListableBuilder<ContentType> {
+@resultBuilder public enum ListableArrayBuilder<ContentType> {
     
     /// The type of individual statement expressions in the transformed function.
     public typealias Expression = ContentType
@@ -94,7 +94,7 @@
 /// You provide a result builder in an API by specifying it as a method parameter, like so:
 ///
 /// ```
-/// init(@ListableBuilder<SomeContent> thing : () -> SomeContent) {
+/// init(@ListableValueBuilder<SomeContent> thing : () -> SomeContent) {
 ///     self.thing = thing()
 /// }
 /// ```
@@ -105,7 +105,7 @@
 /// https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/
 /// https://www.avanderlee.com/swift/result-builders/
 ///
-@resultBuilder public enum ListableOptionalBuilder<ContentType> {
+@resultBuilder public enum ListableValueBuilder<ContentType> {
 
     public static func buildBlock() -> ContentType? {
         nil

@@ -159,7 +159,7 @@ class ListableBuilderTests : XCTestCase {
     }
     
     fileprivate func build<Content>(
-        @ListableBuilder<Content> using builder : () -> [Content]
+        @ListableArrayBuilder<Content> using builder : () -> [Content]
     ) -> [Content]
     {
         builder()

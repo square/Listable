@@ -44,6 +44,8 @@ extension Element {
     }
 }
 
+
+/// Ensures that the `Equatable` initializer for `WrappedElementContent` is called.
 extension Element where Self:Equatable {
     
     public func item(
@@ -61,6 +63,7 @@ extension Element where Self:Equatable {
 }
 
 
+/// Ensures that the `IsEquivalentContent` initializer for `WrappedElementContent` is called.
 extension Element where Self:IsEquivalentContent {
     
     public func item(

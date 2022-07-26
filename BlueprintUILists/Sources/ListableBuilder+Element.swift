@@ -1,5 +1,5 @@
 //
-//  ListableBuilder+Element.swift
+//  ListableArrayBuilder+Element.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 7/24/22.
@@ -24,16 +24,18 @@ import ListableUI
 /// Takes advantage of `@_disfavoredOverload` to avoid ambiguous method resolution with the default implementations.
 /// See more here: https://github.com/apple/swift/blob/main/docs/ReferenceGuides/UnderscoredAttributes.md#_disfavoredoverload
 ///
-public extension ListableBuilder where ContentType == AnyItemConvertible {
+public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component {
         [element.item()]
     }
     
+    /// Ensures that the `Equatable`version of `.item()` is called.
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:Equatable {
         [element.item()]
     }
     
+    /// Ensures that the `IsEquivalentContent`version of `.item()` is called.
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:IsEquivalentContent {
         [element.item()]
     }
@@ -44,16 +46,18 @@ public extension ListableBuilder where ContentType == AnyItemConvertible {
 }
 
 
-public extension ListableOptionalBuilder where ContentType == AnyHeaderFooterConvertible {
+public extension ListableValueBuilder where ContentType == AnyHeaderFooterConvertible {
 
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType {
         return element.headerFooter()
     }
     
+    /// Ensures that the `Equatable`version of `.headerFooter()` is called.
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:Equatable {
         return element.headerFooter()
     }
     
+    /// Ensures that the `IsEquivalentContent`version of `.headerFooter()` is called.
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:IsEquivalentContent {
         return element.headerFooter()
     }

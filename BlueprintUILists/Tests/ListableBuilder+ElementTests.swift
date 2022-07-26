@@ -1,5 +1,5 @@
 //
-//  ListableBuilderTests.swift
+//  ListableBuilder+ElementTests.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 7/24/22.
@@ -9,7 +9,7 @@ import BlueprintUILists
 import XCTest
 
 
-class ListableBuilderTests : XCTestCase {
+class ListableBuilder_Element_Tests : XCTestCase {
     
     func test_builders() {
         

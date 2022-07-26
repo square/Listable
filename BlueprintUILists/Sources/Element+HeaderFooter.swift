@@ -41,6 +41,7 @@ extension Element {
 }
 
 
+/// Ensures that the `Equatable` initializer for `WrappedHeaderFooterContent` is called.
 extension Element where Self:Equatable {
     
     public func headerFooter(
@@ -54,6 +55,7 @@ extension Element where Self:Equatable {
 }
 
 
+/// Ensures that the `IsEquivalentContent` initializer for `WrappedHeaderFooterContent` is called.
 extension Element where Self:IsEquivalentContent {
     
     public func headerFooter(
