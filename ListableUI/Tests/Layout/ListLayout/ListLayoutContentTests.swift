@@ -47,6 +47,7 @@ class ListLayoutContentTests : XCTestCase
                 state: PresentationState.ItemState(Item(TestItem())),
                 indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
+                requestedMinimumLayoutSpacing: .zero,
                 measurer: { _ in .zero }
             )
         }
@@ -200,6 +201,7 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
                 state: PresentationState.ItemState(Item(TestItem())),
                 indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
+                requestedMinimumLayoutSpacing: .zero,
                 measurer: { _ in .zero }
             )
         }
@@ -248,6 +250,7 @@ class ListLayoutContent_SectionInfo_Tests : XCTestCase
                 state: PresentationState.ItemState(Item(TestItem())),
                 indexPath: IndexPath(item: index, section: 0),
                 insertAndRemoveAnimations: .fade,
+                requestedMinimumLayoutSpacing: .zero,
                 measurer: { _ in .zero }
             )
         }

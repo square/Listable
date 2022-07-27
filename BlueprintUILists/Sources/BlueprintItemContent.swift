@@ -90,6 +90,12 @@ public protocol BlueprintItemContent : ItemContent
     /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
     func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
+    
+    //
+    // MARK: Providing Additional Spacing
+    //
+    
+    func requestedMinimumLayoutSpacing(in environment : Environment) -> UIEdgeInsets
 }
 
 
@@ -109,6 +115,14 @@ public extension BlueprintItemContent
     func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
     {
         nil
+    }
+    
+    func requestedMinimumLayoutSpacing(in environment : ListEnvironment) -> UIEdgeInsets {
+        requestedMinimumLayoutSpacing(in: environment.blueprintEnvironment)
+    }
+    
+    func requestedMinimumLayoutSpacing(in environment : Environment) -> UIEdgeInsets {
+        .zero
     }
 }
 

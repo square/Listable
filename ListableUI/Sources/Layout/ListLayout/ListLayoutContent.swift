@@ -511,7 +511,7 @@ extension ListLayoutContent
             state : AnyPresentationItemState,
             indexPath : IndexPath,
             insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
-            requestedMinimumLayoutSpacing : UIEdgeInsets,
+            requestedMinimumLayoutSpacing : UIEdgeInsets, // TODO: Should this be a provider so it re-evals each time?
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.state = state
