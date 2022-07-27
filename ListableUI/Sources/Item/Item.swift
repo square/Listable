@@ -181,6 +181,10 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
             performsContentCallbacks : performsContentCallbacks
         )
     }
+    
+    public var anyRequestedMinimumLayoutSpacing : UIEdgeInsets {
+        content.requestedMinimumLayoutSpacing
+    }
 }
 
 

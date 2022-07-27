@@ -520,6 +520,7 @@ final class TableListLayout : ListLayout
         //
         
         var contentBottom : CGFloat = 0.0
+        var lastAddedSpacing : CGFloat = 0.0
                 
         //
         // Container Header
@@ -542,10 +543,13 @@ final class TableListLayout : ListLayout
         // Set Frame Origins
         //
         
-        contentBottom += self.direction.switch(
+        let listTopPadding = self.direction.switch(
             vertical: bounds.padding.top,
             horizontal: bounds.padding.left
         )
+        
+        contentBottom += listTopPadding
+        lastAddedSpacing = listTopPadding
         
         //
         // Header
@@ -563,6 +567,7 @@ final class TableListLayout : ListLayout
 
                     if self.content.sections.isEmpty == false {
                         contentBottom += layout.headerToFirstSectionSpacing
+                        lastAddedSpacing = layout.headerToFirstSectionSpacing
                     }
                 }
             }
@@ -601,6 +606,7 @@ final class TableListLayout : ListLayout
                         
                         if section.items.isEmpty == false {
                             contentBottom += layout.sectionHeaderBottomSpacing
+                            lastAddedSpacing = layout.sectionHeaderBottomSpacing
                         }
                     }
                 }
@@ -611,9 +617,19 @@ final class TableListLayout : ListLayout
             //
             
             if section.layouts.table.columns.count == 1 {
+                
+                var lastRequestedMinimumLayoutSpacing : UIEdgeInsets? = nil
+                
                 section.items.forEachWithIndex { itemIndex, isLast, item in
                     
                     let width = item.layouts.table.width.merge(with: sectionWidth)
+                    
+                    let requestedSpacing = RequestedSpacing(
+                        spacings: item.requestedMinimumLayoutSpacing,
+                        lastSpacings: lastRequestedMinimumLayoutSpacing,
+                        lastBottom: lastAddedSpacing,
+                        direction: direction
+                    )
                     
                     let itemPosition = width.position(
                         with: viewWidth,
@@ -637,27 +653,33 @@ final class TableListLayout : ListLayout
                     self.direction.switch(
                         vertical: {
                             item.x = itemPosition.origin
-                            item.y = contentBottom
+                            item.y = contentBottom + requestedSpacing.additionalTopSpacing
                             item.size = CGSize(width: itemPosition.width, height: size.height)
                             
-                            contentBottom += size.height
+                            contentBottom += size.height + requestedSpacing.additionalTopSpacing
                         },
                         horizontal: {
-                            item.x = contentBottom
+                            item.x = contentBottom + requestedSpacing.additionalTopSpacing
                             item.y = itemPosition.origin
                             item.size = CGSize(width: size.width, height: itemPosition.width)
                             
-                            contentBottom += size.width
+                            contentBottom += size.width + requestedSpacing.additionalTopSpacing
                         }
                     )
 
                     if isLast {
                         if hasSectionFooter {
-                            contentBottom += item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                            let spacing = item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                            contentBottom += spacing
+                            lastAddedSpacing = spacing
                         }
                     } else {
-                        contentBottom += item.layouts.table.itemSpacing ?? layout.itemSpacing
+                        let spacing = item.layouts.table.itemSpacing ?? layout.itemSpacing
+                        contentBottom += spacing
+                        lastAddedSpacing = spacing
                     }
+                    
+                    lastRequestedMinimumLayoutSpacing = item.requestedMinimumLayoutSpacing
                 }
             } else {
                 let itemWidth = round((sectionPosition.width - (section.layouts.table.columns.spacing * CGFloat(section.layouts.table.columns.count - 1))) / CGFloat(section.layouts.table.columns.count))
@@ -814,6 +836,32 @@ final class TableListLayout : ListLayout
     {
         self.content.sections.forEach { section in
             section.setItemPositions(with: self.layoutAppearance)
+        }
+    }
+    
+    private struct RequestedSpacing : Equatable {
+        
+        var additionalTopSpacing : CGFloat
+        
+        init(
+            spacings : UIEdgeInsets,
+            lastSpacings : UIEdgeInsets?,
+            lastBottom: CGFloat,
+            direction : LayoutDirection
+        ) {
+            let requestedTop = direction.switch(vertical: spacings.top, horizontal: spacings.left)
+            
+            let lastRequestedBottom : CGFloat = {
+                guard let last = lastSpacings else {
+                    return 0.0
+                }
+                
+                return direction.switch(vertical: last.top, horizontal: last.left)
+            }()
+            
+            let maxTop = max(requestedTop, lastRequestedBottom)
+            
+            self.additionalTopSpacing = maxTop > lastBottom ? maxTop - lastBottom : 0
         }
     }
 }

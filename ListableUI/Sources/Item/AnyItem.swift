@@ -40,4 +40,6 @@ public protocol AnyItem_Internal
         updateCallbacks : UpdateCallbacks,
         performsContentCallbacks : Bool
     ) -> Any
+    
+    var anyRequestedMinimumLayoutSpacing : UIEdgeInsets { get }
 }

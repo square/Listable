@@ -67,6 +67,56 @@ class TableListLayoutTests : XCTestCase
         XCTAssertEqual(size.naturalWidth, 110.0)
     }
     
+    func test_requestedMinimumLayoutSpacing() {
+        
+        let listView : ListView = {
+            /// 200x200 so the layout will support both horizontal and vertical layouts.
+            let view = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
+            
+            view.configure { list in
+                list.layout = .table()
+                
+                list += Section("1") { section in
+                    section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
+                    section.footer = HeaderFooter(TestingHeaderFooterContent(color: .magenta), sizing: .fixed(width: 40.0, height: 40.0))
+                    
+                    section += Item(
+                        TestingItemContent(
+                            color: .init(white: 0.0, alpha: 0.1),
+                            requestedMinimumLayoutSpacing: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+                        ),
+                        sizing: .fixed(width: 20.0, height: 20.0)
+                    )
+                    
+                    section += Item(
+                        TestingItemContent(
+                            color: .init(white: 0.0, alpha: 0.2),
+                            requestedMinimumLayoutSpacing: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+                        ),
+                        sizing: .fixed(width: 20.0, height: 20.0)
+                    )
+                    
+                    section += Item(
+                        TestingItemContent(
+                            color: .init(white: 0.0, alpha: 0.3),
+                            requestedMinimumLayoutSpacing: UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
+                        ),
+                        sizing: .fixed(width: 20.0, height: 20.0)
+                    )
+                }
+            }
+            
+            view.collectionView.layoutIfNeeded()
+            
+            return view
+        }()
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
     func test_layout_vertical_includingHeader()
     {
         let listView = self.list(direction: .vertical, includeHeader: true)
@@ -231,7 +281,6 @@ class TableListLayoutTests : XCTestCase
             }
         }
     }
-    
 }
 
 
@@ -262,6 +311,8 @@ fileprivate struct TestingHeaderFooterContent : HeaderFooterContent {
 fileprivate struct TestingItemContent : ItemContent {
     
     var color : UIColor
+    
+    var requestedMinimumLayoutSpacing: UIEdgeInsets = .zero
     
     var identifierValue: String {
         ""

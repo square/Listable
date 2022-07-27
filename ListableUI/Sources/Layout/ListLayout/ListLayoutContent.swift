@@ -497,6 +497,10 @@ extension ListLayoutContent
             self.state.anyModel.layouts
         }
         
+        public var requestedMinimumLayoutSpacing : UIEdgeInsets {
+            state.anyModel.anyRequestedMinimumLayoutSpacing
+        }
+        
         public var frame : CGRect {
             CGRect(
                 origin: CGPoint(x: self.x, y: self.y),

@@ -364,6 +364,12 @@ public protocol ItemContent : IsEquivalentContent, AnyItemConvertible where Coor
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     
     //
+    // MARK: Default Content Padding
+    //
+    
+    var requestedMinimumLayoutSpacing : UIEdgeInsets { get }
+    
+    //
     // MARK: Content Coordination
     //
     
@@ -509,6 +515,15 @@ public extension ItemContent
 {
     var defaultItemProperties : DefaultProperties {
         .init()
+    }
+}
+
+
+/// The default padding is zero.
+public extension ItemContent {
+    
+    var requestedMinimumLayoutSpacing : UIEdgeInsets {
+        .zero
     }
 }
 
