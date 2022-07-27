@@ -533,7 +533,7 @@ final class TableListLayout : ListLayout
         // Sizing
         //
         
-        var last = BottomAndLast(contentBottom: 0, lastAddedSpacing: 0)
+        var cursor = PositionCursor(contentBottom: 0, lastAddedSpacing: 0)
         
         var contentBottom : CGFloat = 0.0
         var lastAddedSpacing : CGFloat = 0.0
@@ -881,7 +881,7 @@ final class TableListLayout : ListLayout
         }
     }
     
-    private struct BottomAndLast : Equatable {
+    private struct PositionCursor : Equatable {
         
         private(set) var contentBottom : CGFloat
         private(set) var lastAddedSpacing : CGFloat
