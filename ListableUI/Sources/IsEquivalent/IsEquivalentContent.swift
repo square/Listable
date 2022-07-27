@@ -80,3 +80,12 @@ public protocol IsEquivalentContent {
     ///
     func isEquivalent(to other : Self) -> Bool
 }
+
+
+public extension IsEquivalentContent where Self:Equatable
+{
+    /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
+    func isEquivalent(to other : Self) -> Bool {
+        self == other
+    }
+}

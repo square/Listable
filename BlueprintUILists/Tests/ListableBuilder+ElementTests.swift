@@ -132,6 +132,8 @@ class ListableBuilder_Element_Tests : XCTestCase {
         }
     }
     
+    // TODO: Add header footer version of this
+    
     func test_element_which_is_blueprintitemcontent_resolves() {
         
         
