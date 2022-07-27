@@ -19,7 +19,7 @@ extension Element {
     ///
     /// ```swift
     /// MyElement(...)
-    ///     .item(id: "my-provided-id") { item in
+    ///     .listItem(id: "my-provided-id") { item in
     ///         item.insertAndRemoveAnimations = .scaleUp
     ///     }
     /// ```
@@ -30,7 +30,7 @@ extension Element {
     /// hurt performance for longer lists (eg, more than 20 items): it will be re-measured for each content update.
     ///
     /// It is encouraged for these longer lists, you ensure your `Element` conforms to one of these protocols.
-    public func item(
+    public func listItem(
         id : AnyHashable = ObjectIdentifier(Self.Type.self),
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
@@ -48,7 +48,7 @@ extension Element {
 /// Ensures that the `Equatable` initializer for `WrappedElementContent` is called.
 extension Element where Self:Equatable {
     
-    public func item(
+    public func listItem(
         id : AnyHashable = ObjectIdentifier(Self.Type.self),
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
@@ -66,7 +66,7 @@ extension Element where Self:Equatable {
 /// Ensures that the `IsEquivalentContent` initializer for `WrappedElementContent` is called.
 extension Element where Self:IsEquivalentContent {
     
-    public func item(
+    public func listItem(
         id : AnyHashable = ObjectIdentifier(Self.Type.self),
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {

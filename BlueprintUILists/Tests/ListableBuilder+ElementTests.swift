@@ -52,7 +52,7 @@ class ListableBuilder_Element_Tests : XCTestCase {
             } header: {
                 Element1()
             } footer: {
-                Element2().headerFooter()
+                Element2().listHeaderFooter()
             }
             
             Section("2") { section in
@@ -87,24 +87,24 @@ class ListableBuilder_Element_Tests : XCTestCase {
         let sections : [Section] = [
             Section("1") {
                 EquatableElement { callCount += 1 }
-                EquatableElement { callCount += 1 }.item()
+                EquatableElement { callCount += 1 }.listItem()
                 EquivalentElement { callCount += 1 }
-                EquivalentElement { callCount += 1 }.item()
+                EquivalentElement { callCount += 1 }.listItem()
             },
             
             Section("1") { section in
                 section += EquatableElement { callCount += 1 }
-                section.add(EquatableElement { callCount += 1 }.item())
+                section.add(EquatableElement { callCount += 1 }.listItem())
                 section += EquivalentElement { callCount += 1 }
-                section.add(EquivalentElement { callCount += 1 }.item())
+                section.add(EquivalentElement { callCount += 1 }.listItem())
             },
             
             Section("1") { section in
                 section.add {
                     EquatableElement { callCount += 1 }
-                    EquatableElement { callCount += 1 }.item()
+                    EquatableElement { callCount += 1 }.listItem()
                     EquivalentElement { callCount += 1 }
-                    EquivalentElement { callCount += 1 }.item()
+                    EquivalentElement { callCount += 1 }.listItem()
                 }
             }
         ]
@@ -141,7 +141,7 @@ class ListableBuilder_Element_Tests : XCTestCase {
         } header: {
             EquatableElement { callCount += 1 }
         } footer: {
-            EquatableElement { callCount += 1 }.headerFooter()
+            EquatableElement { callCount += 1 }.listHeaderFooter()
         }
         
         let equivalentSection = Section("1") {
@@ -149,7 +149,7 @@ class ListableBuilder_Element_Tests : XCTestCase {
         } header: {
             EquivalentElement { callCount += 1 }
         } footer: {
-            EquivalentElement { callCount += 1 }.headerFooter()
+            EquivalentElement { callCount += 1 }.listHeaderFooter()
         }
         
         let equatableItem1 = equatableSection.header!.asAnyHeaderFooter()

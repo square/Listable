@@ -27,17 +27,17 @@ import ListableUI
 public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component {
-        [element.item()]
+        [element.listItem()]
     }
     
-    /// Ensures that the `Equatable`version of `.item()` is called.
+    /// Ensures that the `Equatable`version of `.listItem()` is called.
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:Equatable {
-        [element.item()]
+        [element.listItem()]
     }
     
-    /// Ensures that the `IsEquivalentContent`version of `.item()` is called.
+    /// Ensures that the `IsEquivalentContent`version of `.listItem()` is called.
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:IsEquivalentContent {
-        [element.item()]
+        [element.listItem()]
     }
     
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:ListElementNonConvertible {
@@ -49,17 +49,17 @@ public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 public extension ListableValueBuilder where ContentType == AnyHeaderFooterConvertible {
 
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType {
-        return element.headerFooter()
+        return element.listHeaderFooter()
     }
     
-    /// Ensures that the `Equatable`version of `.headerFooter()` is called.
+    /// Ensures that the `Equatable`version of `.listHeaderFooter()` is called.
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:Equatable {
-        return element.headerFooter()
+        return element.listHeaderFooter()
     }
     
-    /// Ensures that the `IsEquivalentContent`version of `.headerFooter()` is called.
+    /// Ensures that the `IsEquivalentContent`version of `.listHeaderFooter()` is called.
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:IsEquivalentContent {
-        return element.headerFooter()
+        return element.listHeaderFooter()
     }
     
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:ListElementNonConvertible {

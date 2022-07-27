@@ -19,7 +19,7 @@ extension Element {
     ///
     /// ```swift
     /// MyElement(...)
-    ///     .headerFooter { header in
+    ///     .listHeaderFooter { header in
     ///         header.onTap = { ... }
     ///     }
     /// ```
@@ -30,7 +30,7 @@ extension Element {
     /// hurt performance for longer lists (eg, more than 20 items): it will be re-measured for each content update.
     ///
     /// It is encouraged for these longer lists, you ensure your `Element` conforms to one of these protocols.
-    public func headerFooter(
+    public func listHeaderFooter(
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
@@ -44,7 +44,7 @@ extension Element {
 /// Ensures that the `Equatable` initializer for `WrappedHeaderFooterContent` is called.
 extension Element where Self:Equatable {
     
-    public func headerFooter(
+    public func listHeaderFooter(
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
@@ -58,7 +58,7 @@ extension Element where Self:Equatable {
 /// Ensures that the `IsEquivalentContent` initializer for `WrappedHeaderFooterContent` is called.
 extension Element where Self:IsEquivalentContent {
     
-    public func headerFooter(
+    public func listHeaderFooter(
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(

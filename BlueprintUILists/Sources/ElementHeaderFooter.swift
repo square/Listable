@@ -10,7 +10,7 @@ import BlueprintUI
 
 
 ///
-/// ⚠️ This method is soft-deprecated! Consider using `myElement.headerFooter(...)` instead.
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.listHeaderFooter(...)` instead.
 ///
 /// Provides a way to create a `HeaderFooter` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintHeaderFooterContent` struct.
@@ -65,7 +65,7 @@ public func ElementHeaderFooter<Represented>(
 }
 
 ///
-/// ⚠️ This method is soft-deprecated! Consider using `myElement.headerFooter(...)` instead.
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.listHeaderFooter(...)` instead.
 ///
 /// Provides a way to create a `HeaderFooter` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintHeaderFooterContent` struct.

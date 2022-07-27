@@ -15,7 +15,7 @@
         MyElement() // A Blueprint Element
         AnotherElement() // A Blueprint Element
         AnotherElement()
-            .item(id: "my-specified-id") { item in
+            .listItem(id: "my-specified-id") { item in
                 item.insertAndRemoveAnimations = .scaleUp
             }
     }

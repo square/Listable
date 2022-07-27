@@ -21,17 +21,17 @@ extension Section {
     /// ```
     public mutating func add<ElementType:Element>(_ element : ElementType)
     {
-        self.items.append(element.item())
+        self.items.append(element.listItem())
     }
     
     public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:Equatable
     {
-        self.items.append(element.item())
+        self.items.append(element.listItem())
     }
     
     public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:IsEquivalentContent
     {
-        self.items.append(element.item())
+        self.items.append(element.listItem())
     }
     
     /// Adds `Element` support when building a `Section`.
