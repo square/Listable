@@ -41,5 +41,5 @@ public protocol AnyItem_Internal
         performsContentCallbacks : Bool
     ) -> Any
     
-    var anyRequestedMinimumLayoutSpacing : UIEdgeInsets { get }
+    func requestedMinimumLayoutSpacing(in environment : ListEnvironment) -> UIEdgeInsets
 }

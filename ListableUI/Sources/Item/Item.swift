@@ -182,8 +182,8 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         )
     }
     
-    public var anyRequestedMinimumLayoutSpacing : UIEdgeInsets {
-        content.requestedMinimumLayoutSpacing
+    public func requestedMinimumLayoutSpacing(in environment : ListEnvironment) -> UIEdgeInsets {
+        content.requestedMinimumLayoutSpacing(in: environment)
     }
 }
 

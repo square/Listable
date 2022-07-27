@@ -591,6 +591,7 @@ extension PresentationState
                             state: item,
                             indexPath: IndexPath(item: itemIndex, section: sectionIndex),
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
+                            requestedMinimumLayoutSpacing: item.anyModel.requestedMinimumLayoutSpacing(in: environment),
                             measurer: { info in
                                 item.size(for: info, cache: self.itemMeasurementCache, environment: environment)
                             }

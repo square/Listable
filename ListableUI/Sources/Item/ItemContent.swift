@@ -367,7 +367,7 @@ public protocol ItemContent : IsEquivalentContent, AnyItemConvertible where Coor
     // MARK: Default Content Padding
     //
     
-    var requestedMinimumLayoutSpacing : UIEdgeInsets { get }
+    func requestedMinimumLayoutSpacing(in environment : ListEnvironment) -> UIEdgeInsets
     
     //
     // MARK: Content Coordination
@@ -522,7 +522,7 @@ public extension ItemContent
 /// The default padding is zero.
 public extension ItemContent {
     
-    var requestedMinimumLayoutSpacing : UIEdgeInsets {
+    func requestedMinimumLayoutSpacing(in environment : ListEnvironment) -> UIEdgeInsets {
         .zero
     }
 }

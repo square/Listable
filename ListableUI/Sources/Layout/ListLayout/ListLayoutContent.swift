@@ -479,7 +479,10 @@ extension ListLayoutContent
         
         var indexPath : IndexPath
                 
-        let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
+        public let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
+        
+        public let requestedMinimumLayoutSpacing : UIEdgeInsets
+
         public let measurer : (Sizing.MeasureInfo) -> CGSize
         
         public var position : ItemPosition = .single
@@ -496,11 +499,7 @@ extension ListLayoutContent
         public var layouts : ItemLayouts {
             self.state.anyModel.layouts
         }
-        
-        public var requestedMinimumLayoutSpacing : UIEdgeInsets {
-            state.anyModel.anyRequestedMinimumLayoutSpacing
-        }
-        
+                
         public var frame : CGRect {
             CGRect(
                 origin: CGPoint(x: self.x, y: self.y),
@@ -512,11 +511,13 @@ extension ListLayoutContent
             state : AnyPresentationItemState,
             indexPath : IndexPath,
             insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
+            requestedMinimumLayoutSpacing : UIEdgeInsets,
             measurer : @escaping (Sizing.MeasureInfo) -> CGSize
         ) {
             self.state = state
             self.indexPath = indexPath
             self.insertAndRemoveAnimations = insertAndRemoveAnimations
+            self.requestedMinimumLayoutSpacing = requestedMinimumLayoutSpacing
             self.measurer = measurer
         }
         
