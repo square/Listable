@@ -533,8 +533,6 @@ final class TableListLayout : ListLayout
         // Sizing
         //
         
-        var cursor = PositionCursor(contentBottom: 0, lastAddedSpacing: 0)
-        
         var contentBottom : CGFloat = 0.0
         var lastAddedSpacing : CGFloat = 0.0
         var lastRequestedMinimumLayoutSpacing : UIEdgeInsets? = nil
@@ -554,11 +552,12 @@ final class TableListLayout : ListLayout
             after: { headerFooter in
                 if headerFooter.isPopulated {
                     contentBottom = self.direction.maxY(for: headerFooter.defaultFrame)
+                    
+                    lastAddedSpacing = 0
+                    lastRequestedMinimumLayoutSpacing = nil
                 }
             }
         )
-        
-        lastRequestedMinimumLayoutSpacing = nil
         
         //
         // Set Frame Origins
@@ -592,11 +591,11 @@ final class TableListLayout : ListLayout
                         contentBottom += layout.headerToFirstSectionSpacing
                         lastAddedSpacing = layout.headerToFirstSectionSpacing
                     }
+                    
+                    lastRequestedMinimumLayoutSpacing = nil
                 }
             }
         )
-        
-        lastRequestedMinimumLayoutSpacing = nil
         
         //
         // Sections
@@ -635,11 +634,11 @@ final class TableListLayout : ListLayout
                             contentBottom += layout.sectionHeaderBottomSpacing
                             lastAddedSpacing = layout.sectionHeaderBottomSpacing
                         }
+                        
+                        lastRequestedMinimumLayoutSpacing = nil
                     }
                 }
             )
-            
-            lastRequestedMinimumLayoutSpacing = nil
             
             //
             // Section Items
@@ -787,11 +786,11 @@ final class TableListLayout : ListLayout
                 after: { footer in
                     if footer.isPopulated {
                         contentBottom = self.direction.maxY(for: footer.defaultFrame)
+                        
+                        lastRequestedMinimumLayoutSpacing = nil
                     }
                 }
             )
-            
-            lastRequestedMinimumLayoutSpacing = nil
             
             // Add additional padding from config.
             
@@ -829,11 +828,10 @@ final class TableListLayout : ListLayout
             after: { footer in
                 if footer.isPopulated {
                     contentBottom = self.direction.maxY(for: footer.defaultFrame)
+                    lastRequestedMinimumLayoutSpacing = nil
                 }
             }
         )
-        
-        lastRequestedMinimumLayoutSpacing = nil
         
         contentBottom += self.direction.switch(
             vertical: bounds.padding.bottom,
@@ -852,11 +850,11 @@ final class TableListLayout : ListLayout
             contentBottom: contentBottom,
             lastAddedSpacing: lastAddedSpacing,
             lastRequestedMinimumLayoutSpacing: lastRequestedMinimumLayoutSpacing,
-            after: { _ in }
+            after: { _ in
+                lastRequestedMinimumLayoutSpacing = nil
+            }
         )
-        
-        lastRequestedMinimumLayoutSpacing = nil
-        
+
         //
         // Remaining Calculations
         //
@@ -878,17 +876,6 @@ final class TableListLayout : ListLayout
     {
         self.content.sections.forEach { section in
             section.setItemPositions(with: self.layoutAppearance)
-        }
-    }
-    
-    private struct PositionCursor : Equatable {
-        
-        private(set) var contentBottom : CGFloat
-        private(set) var lastAddedSpacing : CGFloat
-        
-        static func += (lhs: inout Self, rhs : CGFloat) {
-            lhs.contentBottom += rhs
-            lhs.lastAddedSpacing = rhs
         }
     }
     

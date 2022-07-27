@@ -76,7 +76,20 @@ class TableListLayoutTests : XCTestCase
             view.configure { list in
                 list.layout = .table()
                 
+                list.header = HeaderFooter(TestingHeaderFooterContent(color: .blue), sizing: .fixed(width: 20.0, height: 20.0))
+                list.footer = HeaderFooter(TestingHeaderFooterContent(color: .cyan), sizing: .fixed(width: 20.0, height: 20.0))
+                
                 list += Section("1") { section in
+                    section += Item(
+                        TestingItemContent(
+                            color: .init(white: 0.0, alpha: 0.1),
+                            requestedMinimumLayoutSpacing: UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                        ),
+                        sizing: .fixed(width: 20.0, height: 20.0)
+                    )
+                }
+                
+                list += Section("2") { section in
                     section.header = HeaderFooter(TestingHeaderFooterContent(color: .green), sizing: .fixed(width: 30.0, height: 30.0))
                     section.footer = HeaderFooter(TestingHeaderFooterContent(color: .magenta), sizing: .fixed(width: 40.0, height: 40.0))
                     
@@ -100,6 +113,16 @@ class TableListLayoutTests : XCTestCase
                         TestingItemContent(
                             color: .init(white: 0.0, alpha: 0.3),
                             requestedMinimumLayoutSpacing: UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
+                        ),
+                        sizing: .fixed(width: 20.0, height: 20.0)
+                    )
+                }
+                
+                list += Section("3") { section in
+                    section += Item(
+                        TestingItemContent(
+                            color: .init(white: 0.0, alpha: 0.1),
+                            requestedMinimumLayoutSpacing: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
                         ),
                         sizing: .fixed(width: 20.0, height: 20.0)
                     )
