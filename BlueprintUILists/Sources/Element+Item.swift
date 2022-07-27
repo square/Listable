@@ -80,14 +80,31 @@ extension Element where Self:IsEquivalentContent {
     }
 }
 
-extension BlueprintItemContent where Self:Element {
-    
-    @available(*, unavailable)
+
+extension Element where Self:BlueprintItemContent {
+
     public func item(
         id : AnyHashable = ObjectIdentifier(Self.Type.self),
-        configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
-    ) -> Item<WrappedElementContent<Self>> {
-        fatalError()
+        configure : (inout Item<Self>) -> () = { _ in }
+    ) -> Item<Self> {
+        Item(
+            self,
+            configure: configure
+        )
+    }
+}
+
+
+extension Element where Self:BlueprintItemContent & Equatable {
+
+    public func item(
+        id : AnyHashable = ObjectIdentifier(Self.Type.self),
+        configure : (inout Item<Self>) -> () = { _ in }
+    ) -> Item<Self> {
+        Item(
+            self,
+            configure: configure
+        )
     }
 }
 

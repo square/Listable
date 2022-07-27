@@ -137,11 +137,21 @@ class ListableBuilder_Element_Tests : XCTestCase {
         
         let section = Section("1") {
             ItemElement()
-            ItemElement().item() // TODO: Ambiguous method
+            ItemElement().item()
+            
+            EquatableItemElement()
+            EquatableItemElement().item()
+            
+            EquivalentItemElement()
+            EquivalentItemElement().item()
         }
         
         XCTAssertEqual(section.items[0].anyIdentifier, ItemElement.identifier(with: "ItemElement"))
-        //XCTAssertEqual(section.items[1].anyIdentifier, "")
+        XCTAssertEqual(section.items[1].anyIdentifier, ItemElement.identifier(with: "ItemElement"))
+        XCTAssertEqual(section.items[2].anyIdentifier, EquatableItemElement.identifier(with: "EquatableItemElement"))
+        XCTAssertEqual(section.items[3].anyIdentifier, EquatableItemElement.identifier(with: "EquatableItemElement"))
+        XCTAssertEqual(section.items[4].anyIdentifier, EquivalentItemElement.identifier(with: "EquivalentItemElement"))
+        XCTAssertEqual(section.items[5].anyIdentifier, EquivalentItemElement.identifier(with: "EquivalentItemElement"))
         
     }
     
@@ -196,7 +206,7 @@ fileprivate struct NonConvertibleElement : ProxyElement, ListElementNonConvertib
     }
 }
 
-fileprivate struct ItemElement : ProxyElement, BlueprintItemContent, Equatable {
+fileprivate struct ItemElement : ProxyElement, BlueprintItemContent {
     
     var elementRepresentation: Element {
         Empty()
@@ -208,6 +218,46 @@ fileprivate struct ItemElement : ProxyElement, BlueprintItemContent, Equatable {
     
     func element(with info: ApplyItemContentInfo) -> Element {
         self
+    }
+    
+    func isEquivalent(to other: ItemElement) -> Bool {
+        true
+    }
+}
+
+
+fileprivate struct EquatableItemElement : ProxyElement, BlueprintItemContent, Equatable {
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    var identifierValue: String {
+        "EquatableItemElement"
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        self
+    }
+}
+
+
+fileprivate struct EquivalentItemElement : ProxyElement, BlueprintItemContent, IsEquivalentContent {
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    var identifierValue: String {
+        "EquivalentItemElement"
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        self
+    }
+    
+    func isEquivalent(to other: EquivalentItemElement) -> Bool {
+        true
     }
 }
 
