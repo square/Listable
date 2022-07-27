@@ -137,7 +137,7 @@ class ListableBuilder_Element_Tests : XCTestCase {
         
         let section = Section("1") {
             ItemElement()
-            //ItemElement().item() // TODO: Ambiguous method
+            ItemElement().item() // TODO: Ambiguous method
         }
         
         XCTAssertEqual(section.items[0].anyIdentifier, ItemElement.identifier(with: "ItemElement"))
