@@ -1,7 +1,7 @@
 ▿ ListableUI.ListLayoutAttributes
-  ▿ contentSize: (200.0, 190.0)
+  ▿ contentSize: (200.0, 220.0)
     - width: 200.0
-    - height: 190.0
+    - height: 220.0
   ▿ naturalContentWidth: Optional(40.0)
     - some: 40.0
   - containerHeader: nil
@@ -10,13 +10,13 @@
   - overscrollFooter: nil
   ▿ sections: 1 element
     ▿ ListableUI.ListLayoutAttributes.Section
-      ▿ frame: (0.0, 0.0, 200.0, 190.0)
+      ▿ frame: (0.0, 0.0, 200.0, 220.0)
         ▿ origin: (0.0, 0.0)
           - x: 0.0
           - y: 0.0
-        ▿ size: (200.0, 190.0)
+        ▿ size: (200.0, 220.0)
           - width: 200.0
-          - height: 190.0
+          - height: 220.0
       ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 0.0, 200.0, 30.0)))
         ▿ some: ListableUI.ListLayoutAttributes.Supplementary
           ▿ frame: (0.0, 0.0, 200.0, 30.0)
@@ -26,12 +26,12 @@
             ▿ size: (200.0, 30.0)
               - width: 200.0
               - height: 30.0
-      ▿ footer: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 150.0, 200.0, 40.0)))
+      ▿ footer: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 180.0, 200.0, 40.0)))
         ▿ some: ListableUI.ListLayoutAttributes.Supplementary
-          ▿ frame: (0.0, 150.0, 200.0, 40.0)
-            ▿ origin: (0.0, 150.0)
+          ▿ frame: (0.0, 180.0, 200.0, 40.0)
+            ▿ origin: (0.0, 180.0)
               - x: 0.0
-              - y: 150.0
+              - y: 180.0
             ▿ size: (200.0, 40.0)
               - width: 200.0
               - height: 40.0
