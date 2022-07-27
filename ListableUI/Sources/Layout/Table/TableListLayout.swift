@@ -464,7 +464,7 @@ final class TableListLayout : ListLayout
             spacings: .zero,
             
             lastSpacings: lastRequestedMinimumLayoutSpacing,
-            lastBottom: lastAddedSpacing,
+            lastAddedSpacing: lastAddedSpacing,
             direction: direction
         )
         
@@ -532,6 +532,8 @@ final class TableListLayout : ListLayout
         //
         // Sizing
         //
+        
+        var last = BottomAndLast(contentBottom: 0, lastAddedSpacing: 0)
         
         var contentBottom : CGFloat = 0.0
         var lastAddedSpacing : CGFloat = 0.0
@@ -652,7 +654,7 @@ final class TableListLayout : ListLayout
                     let requestedSpacing = RequestedSpacing(
                         spacings: item.requestedMinimumLayoutSpacing,
                         lastSpacings: lastRequestedMinimumLayoutSpacing,
-                        lastBottom: lastAddedSpacing,
+                        lastAddedSpacing: lastAddedSpacing,
                         direction: direction
                     )
                     
@@ -879,6 +881,17 @@ final class TableListLayout : ListLayout
         }
     }
     
+    private struct BottomAndLast : Equatable {
+        
+        private(set) var contentBottom : CGFloat
+        private(set) var lastAddedSpacing : CGFloat
+        
+        static func += (lhs: inout Self, rhs : CGFloat) {
+            lhs.contentBottom += rhs
+            lhs.lastAddedSpacing = rhs
+        }
+    }
+    
     private struct RequestedSpacing : Equatable {
         
         var additionalTopSpacing : CGFloat
@@ -886,7 +899,7 @@ final class TableListLayout : ListLayout
         init(
             spacings : UIEdgeInsets,
             lastSpacings : UIEdgeInsets?,
-            lastBottom: CGFloat,
+            lastAddedSpacing: CGFloat,
             direction : LayoutDirection
         ) {
             let requestedTop = direction.switch(vertical: spacings.top, horizontal: spacings.left)
@@ -901,7 +914,7 @@ final class TableListLayout : ListLayout
             
             let maxTop = max(requestedTop, lastRequestedBottom)
             
-            self.additionalTopSpacing = maxTop > lastBottom ? maxTop - lastBottom : 0
+            self.additionalTopSpacing = maxTop > lastAddedSpacing ? maxTop - lastAddedSpacing : 0
         }
     }
 }

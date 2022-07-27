@@ -132,6 +132,19 @@ class ListableBuilder_Element_Tests : XCTestCase {
         }
     }
     
+    func test_element_which_is_blueprintitemcontent_resolves() {
+        
+        
+        let section = Section("1") {
+            ItemElement()
+            //ItemElement().item() // TODO: Ambiguous method
+        }
+        
+        XCTAssertEqual(section.items[0].anyIdentifier, ItemElement.identifier(with: "ItemElement"))
+        //XCTAssertEqual(section.items[1].anyIdentifier, "")
+        
+    }
+    
     func test_headerfooter_default_implementation_resolution() {
         
         var callCount : Int = 0
@@ -180,6 +193,21 @@ fileprivate struct NonConvertibleElement : ProxyElement, ListElementNonConvertib
     
     func listElementNonConvertibleFatal() -> Never {
         fatalError()
+    }
+}
+
+fileprivate struct ItemElement : ProxyElement, BlueprintItemContent, Equatable {
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+    
+    var identifierValue: String {
+        "ItemElement"
+    }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        self
     }
 }
 
