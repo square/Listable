@@ -6,6 +6,7 @@
 //
 
 import BlueprintUI
+@_spi(ListableInternal)
 import ListableUI
 
 
@@ -78,7 +79,11 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
     init(represented : ElementType) {
         self.represented = represented
         
-        self.isEquivalent = { _, _ in false }
+        self.isEquivalent = {
+            /// Our default implementation compares the `Equatable` properties of the
+            /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
+            isEqualComparingEquatableProperties($0.represented, $1.represented)
+        }
     }
     
     init(represented : ElementType) where ElementType:Equatable {

@@ -6,6 +6,7 @@
 //
 
 import BlueprintUI
+@_spi(ListableInternal)
 import ListableUI
 
 
@@ -31,7 +32,7 @@ extension Element {
     ///
     /// It is encouraged for these longer lists, you ensure your `Element` conforms to one of these protocols.
     public func listItem(
-        id : AnyHashable = ObjectIdentifier(Self.Type.self),
+        id : AnyHashable? = nil,
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
@@ -49,7 +50,7 @@ extension Element {
 extension Element where Self:Equatable {
     
     public func listItem(
-        id : AnyHashable = ObjectIdentifier(Self.Type.self),
+        id : AnyHashable? = nil,
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
@@ -67,7 +68,7 @@ extension Element where Self:Equatable {
 extension Element where Self:IsEquivalentContent {
     
     public func listItem(
-        id : AnyHashable = ObjectIdentifier(Self.Type.self),
+        id : AnyHashable? = nil,
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
@@ -83,24 +84,28 @@ extension Element where Self:IsEquivalentContent {
 
 public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
 {
-    public let identifierValue: AnyHashable
+    public let identifierValue: AnyHashable?
     
     public let represented : ElementType
     
     private let isEquivalent : (Self, Self) -> Bool
     
     init(
-        identifierValue: AnyHashable,
+        identifierValue: AnyHashable?,
         represented: ElementType
     ) {
         self.represented = represented
         self.identifierValue = identifierValue
         
-        self.isEquivalent = { _, _ in false }
+        self.isEquivalent = {
+            /// Our default implementation compares the `Equatable` properties of the
+            /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
+            isEqualComparingEquatableProperties($0.represented, $1.represented)
+        }
     }
     
     init(
-        identifierValue: AnyHashable,
+        identifierValue: AnyHashable?,
         represented: ElementType
     ) where ElementType:Equatable {
         self.represented = represented
@@ -112,7 +117,7 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
     }
     
     init(
-        identifierValue: AnyHashable,
+        identifierValue: AnyHashable?,
         represented: ElementType
     ) where ElementType:IsEquivalentContent {
         self.represented = represented
