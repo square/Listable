@@ -30,7 +30,7 @@ import Foundation
 /// Inspired by https://github.com/objcio/S01E264-comparing-views/blob/master/Sources/NotSwiftUIState/AnyEquatable.swift
 ///
 @_spi(ListableInternal)
-public func isEqualComparingEquatableProperties(_ lhs : Any, _ rhs : Any) -> Bool {
+public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> Bool {
     
     // 1) We can't compare values unless the objects are the same type.
     

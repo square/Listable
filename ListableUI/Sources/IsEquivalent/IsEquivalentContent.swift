@@ -88,7 +88,7 @@ public extension IsEquivalentContent
     /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
     /// 
     func isEquivalent(to other : Self) -> Bool {
-        isEqualComparingEquatableProperties(self, other)
+        areEquatablePropertiesEqual(self, other)
     }
 }
 

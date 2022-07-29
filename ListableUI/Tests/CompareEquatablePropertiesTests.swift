@@ -14,7 +14,7 @@ class CompareEquatablePropertiesTests : XCTestCase {
     func test_compare() {
         
         XCTAssertTrue(
-            isEqualComparingEquatableProperties(
+            areEquatablePropertiesEqual(
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
@@ -31,7 +31,7 @@ class CompareEquatablePropertiesTests : XCTestCase {
         )
         
         XCTAssertFalse(
-            isEqualComparingEquatableProperties(
+            areEquatablePropertiesEqual(
                 TestValue(
                     title: "A Different Title",
                     detail: "Some Detail",
@@ -48,7 +48,7 @@ class CompareEquatablePropertiesTests : XCTestCase {
         )
         
         XCTAssertTrue(
-            isEqualComparingEquatableProperties(
+            areEquatablePropertiesEqual(
                 TestValueWithNoEquatableProperties(),
                 TestValueWithNoEquatableProperties()
             )
@@ -57,7 +57,7 @@ class CompareEquatablePropertiesTests : XCTestCase {
     
     func test_performance() {
         determineAverage(for: 1.0) {
-            _ = isEqualComparingEquatableProperties(
+            _ = areEquatablePropertiesEqual(
                 TestValue(
                     title: "A Title",
                     count: 10,
