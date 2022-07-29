@@ -63,15 +63,13 @@ public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> AreEquatabl
     
     for (prop1, prop2) in zip(lhs.children, rhs.children) {
                 
-        if isEquatableValue(prop1.value) {
+        if let result = isEqualIfEquatable(prop1.value, prop2.value) {
             
             // If a property is `Equatable`, we can directly check it here.
         
             hadEquatableProperty = true
 
-            // Compare the underlying `Equatable` value.
-            
-            guard isEqual(prop1.value, prop2.value) else {
+            if result == false {
                 return .notEqual
             }
         } else {
@@ -167,12 +165,30 @@ private func isEquatableValue(_ value: Any) -> Bool {
 }
 
 
+/// Checks if the provided `lhs` and `rhs` values are equal if they are `Equatable`.
+private func isEqualIfEquatable(_ lhs: Any, _ rhs : Any) -> Bool? {
+    
+    func check<Value>(value: Value) -> Bool? {
+        if let typeInfo = Wrapped<Value>.self as? AnyEquatable.Type {
+            return typeInfo.isEqual(lhs: lhs, rhs: rhs)
+        } else {
+            return nil
+        }
+    }
+    
+    return _openExistential(lhs, do: check)
+}
+
+
 fileprivate enum Wrapped<Value> {}
 
 
 extension Wrapped: AnyEquatable where Value: Equatable {
     
     fileprivate static func isEqual(lhs: Any, rhs: Any) -> Bool {
+        
+        /// TODO: Can we make this an as! because I think at this point we're
+        /// guaranteed to be correctly `Value`? I think? Is that faster?
         
         guard let lhs = lhs as? Value, let rhs = rhs as? Value else {
             return false
