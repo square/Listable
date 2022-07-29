@@ -111,6 +111,8 @@ public extension IsEquivalentContent where Self:Equatable
 
 
 @_spi(ListableInternal)
+/// Our default implementation compares the `Equatable` properties of the
+/// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
 public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Value) -> Bool {
     let result = areEquatablePropertiesEqual(lhs, rhs)
     
@@ -120,6 +122,9 @@ public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Valu
         
     case .notEqual:
         return false
+        
+    case .hasNoFields:
+        return true
         
     case .error(let error):
         

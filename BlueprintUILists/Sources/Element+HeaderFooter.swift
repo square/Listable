@@ -74,8 +74,6 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
         self.represented = represented
         
         self.isEquivalent = {
-            /// Our default implementation compares the `Equatable` properties of the
-            /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
             defaultIsEquivalentImplementation($0.represented, $1.represented)
         }
     }

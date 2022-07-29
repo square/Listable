@@ -215,16 +215,6 @@ fileprivate struct EquatableElement : ProxyElement, Equatable {
 }
 
 
-fileprivate struct EquatableWithPropertyWrapperElement : ProxyElement, Equatable {
-
-    @AlwaysEqual var callback : () -> ()
-    
-    var elementRepresentation: Element {
-        Empty()
-    }
-}
-
-
 fileprivate struct EquivalentElement : ProxyElement, IsEquivalentContent {
     
     var calledIsEquivalent : () -> ()

@@ -13,6 +13,8 @@ class ComparePropertiesTests : XCTestCase {
     
     func test_compare() {
         
+        // Check values which aren't Equatable but have Equatable properties.
+        
         XCTAssertEqual(
             .equal,
             areEquatablePropertiesEqual(
@@ -73,11 +75,47 @@ class ComparePropertiesTests : XCTestCase {
             )
         )
         
+        // Ensure we message that there were no Equatable properties to compare.
+        
         XCTAssertEqual(
             .error(.noEquatableProperties),
             areEquatablePropertiesEqual(
                 TestValueWithNoEquatableProperties(),
                 TestValueWithNoEquatableProperties()
+            )
+        )
+        
+        // Check that we properly handle values which themselves are Equatable.
+        
+        XCTAssertEqual(
+            .equal,
+            areEquatablePropertiesEqual(
+                EquatableValue(
+                    title: "A Title",
+                    detail: "Some Detail",
+                    count: 10
+                ),
+                EquatableValue(
+                    title: "A Title",
+                    detail: "Some Detail",
+                    count: 10
+                )
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            areEquatablePropertiesEqual(
+                EquatableValue(
+                    title: "A Title",
+                    detail: "Some Detail",
+                    count: 10
+                ),
+                EquatableValue(
+                    title: "Another Title",
+                    detail: "Some Detail",
+                    count: 10
+                )
             )
         )
     }
@@ -119,6 +157,14 @@ fileprivate struct TestValue {
         case foo
         case bar(String)
     }
+}
+
+
+fileprivate struct EquatableValue : Equatable {
+    
+    var title : String
+    var detail : String?
+    var count : Int
 }
 
 

@@ -12,7 +12,8 @@ import Foundation
 ///
 /// ## Example
 /// For the following struct, the `title`, `detail` and `count` properties will be compared. The
-/// `nonEquatable` and `closure` parameters will be ignored.
+/// `closure` will be ignored, and the properties of `nonEquatable` will be traversed to look
+/// for `Equatable` sub-properties (and so on).
 ///
 /// ```
 /// fileprivate struct MyStruct {
@@ -32,48 +33,76 @@ import Foundation
 @_spi(ListableInternal)
 public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> AreEquatablePropertiesEqualResult {
     
-    // 1) We can't compare values unless the objects are the same type.
+    // We can't compare values unless the objects are the same type.
     
     guard type(of: lhs) == type(of: rhs) else {
         return .notEqual
     }
     
+    // Shortcut: For `Equatable` objects, compare them directly,
+    // no need to create a mirror and enumerate the properties.
+    
+    if isEquatableValue(lhs) {
+        return .with(isEqual(lhs, rhs))
+    }
+    
     let lhs = Mirror(reflecting: lhs)
     
-    // 2) Values with no fields are always Equal.
+    // Values with no fields are technically always equal, but
+    // we mark it with a special value for recursing through value trees.
     
     guard lhs.children.isEmpty == false else {
-        return .equal
+        return .hasNoFields
     }
     
     let rhs = Mirror(reflecting: rhs)
     
-    // 3) Enumerate each property, by enumerating the `Mirrors`.
+    // Enumerate each property by enumerating the value's `Mirror`.
     
     var hadEquatableProperty = false
     
     for (prop1, prop2) in zip(lhs.children, rhs.children) {
+                
+        if isEquatableValue(prop1.value) {
+            
+            // If a property is `Equatable`, we can directly check it here.
         
-        // 3a) Skip any values which are not themselves `Equatable`.
-        
-        guard isEquatableValue(prop1.value) else {
-            continue
-        }
-        
-        hadEquatableProperty = true
-        
-        // 3b) Finally, compare the underlying values.
-        
-        guard isEqual(prop1.value, prop2.value) else {
-            return .notEqual
+            hadEquatableProperty = true
+
+            // Compare the underlying `Equatable` value.
+            
+            guard isEqual(prop1.value, prop2.value) else {
+                return .notEqual
+            }
+        } else {
+            
+            // Othewise, we will recursively check its child values.
+            
+            let result = areEquatablePropertiesEqual(prop1.value, prop2.value)
+            
+            switch result {
+            case .equal:
+                hadEquatableProperty ||= true
+                
+            case .notEqual:
+                hadEquatableProperty ||= true
+                return .notEqual
+                
+            case .hasNoFields:
+                hadEquatableProperty ||= false
+                
+            case .error:
+                hadEquatableProperty ||= false
+            }
         }
     }
     
     if hadEquatableProperty {
-        // 4a) All `Equatable` properties were equal, so we're equal.
+        // We made it through the entire list of properties, and found at least
+        // one `Equatable` property, so we are equal.
         return .equal
     } else {
-        // 4b) We found no `Equatable` properties – behavior is undefined.
+        // We found no `Equatable` properties – behavior is undefined.
         return .error(.noEquatableProperties)
     }
 }
@@ -81,9 +110,15 @@ public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> AreEquatabl
 
 @_spi(ListableInternal)
 public enum AreEquatablePropertiesEqualResult : Equatable {
+
     case equal
     case notEqual
+    case hasNoFields
     case error(Error)
+    
+    public static func with(_ value: Bool) -> Self {
+        value ?.equal : .notEqual
+    }
     
     public enum Error {
         case noEquatableProperties
@@ -150,4 +185,15 @@ extension Wrapped: AnyEquatable where Value: Equatable {
 
 private protocol AnyEquatable {
     static func isEqual(lhs: Any, rhs: Any) -> Bool
+}
+
+
+
+infix operator ||=
+
+extension Bool {
+    
+    fileprivate static func ||= (lhs : inout Bool, rhs : Bool) {
+        lhs = lhs || rhs
+    }
 }

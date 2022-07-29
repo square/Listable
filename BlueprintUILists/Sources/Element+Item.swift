@@ -92,8 +92,6 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
         self.identifierValue = identifierValue
         
         self.isEquivalent = {
-            /// Our default implementation compares the `Equatable` properties of the
-            /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
             defaultIsEquivalentImplementation($0.represented, $1.represented)
         }
     }
