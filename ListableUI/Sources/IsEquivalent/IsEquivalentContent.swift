@@ -120,20 +120,21 @@ public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Valu
         
     case .notEqual:
         return false
+        
     case .error(let error):
         
         switch error {
         case .noEquatableProperties:
             assertionFailure(
                 """
-                DEBUG FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \
-                on \(Value.self). In production / release versions, `isEquivalent(to:)` will always return false, which
-                will affect performance. You should implement `isEquivalent(to:)` and check the relevant
+                FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \
+                on \(Value.self). In release versions, `isEquivalent(to:)` will always return false, which \
+                will affect performance. You should implement `isEquivalent(to:)` and check the relevant \
                 sub-properties to provide proper conformance:
                 
                 ```
                 func isEquivalent(to other : Self) -> Bool {
-                    property.subProperty == other.property.subProperty && ...
+                    myVar.subProperty == other.myVar.subProperty && ...
                 }
                 ```
                 """

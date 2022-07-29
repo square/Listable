@@ -72,6 +72,14 @@ class ComparePropertiesTests : XCTestCase {
                 )
             )
         )
+        
+        XCTAssertEqual(
+            .error(.noEquatableProperties),
+            areEquatablePropertiesEqual(
+                TestValueWithNoEquatableProperties(),
+                TestValueWithNoEquatableProperties()
+            )
+        )
     }
     
     func test_performance() {
