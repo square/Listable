@@ -11,8 +11,16 @@ import Foundation
 /// Used by the list to determine when the content of content has changed; in order to
 /// remeasure the content and re-layout the list.
 ///
-/// Please see ``IsEquivalentContent/isEquivalent(to:)-15tcq`` for a full discussion of
-/// correct (and incorrect) implementation and usages.
+/// ## Note
+/// You should rarely need to implement ``IsEquivalentContent/isEquivalent(to:)-15tcq``
+/// yourself. By default, Listable will...
+/// - For regular objects, compare all `Equatable` properties on your object to see if they changed.
+/// - For `Equatable` objects, check to see if the object is equal.
+///
+/// If you do need to implement this method yourself (eg, your object has no equatable properties,
+/// or cannot conform to `Equatable`, see ``IsEquivalentContent/isEquivalent(to:)-15tcq``
+/// for a full discussion of correct (and incorrect) implementations.
+///
 public protocol IsEquivalentContent {
     
     ///
@@ -88,7 +96,7 @@ public extension IsEquivalentContent
     /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
     /// 
     func isEquivalent(to other : Self) -> Bool {
-        areEquatablePropertiesEqual(self, other)
+        defaultIsEquivalentImplementation(self, other)
     }
 }
 
@@ -98,5 +106,40 @@ public extension IsEquivalentContent where Self:Equatable
     /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
     func isEquivalent(to other : Self) -> Bool {
         self == other
+    }
+}
+
+
+@_spi(ListableInternal)
+public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Value) -> Bool {
+    let result = areEquatablePropertiesEqual(lhs, rhs)
+    
+    switch result {
+    case .equal:
+        return true
+        
+    case .notEqual:
+        return false
+    case .error(let error):
+        
+        switch error {
+        case .noEquatableProperties:
+            assertionFailure(
+                """
+                DEBUG FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \
+                on \(Value.self). In production / release versions, `isEquivalent(to:)` will always return false, which
+                will affect performance. You should implement `isEquivalent(to:)` and check the relevant
+                sub-properties to provide proper conformance:
+                
+                ```
+                func isEquivalent(to other : Self) -> Bool {
+                    property.subProperty == other.property.subProperty && ...
+                }
+                ```
+                """
+            )
+        }
+        
+        return false
     }
 }

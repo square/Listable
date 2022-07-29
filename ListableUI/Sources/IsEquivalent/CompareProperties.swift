@@ -1,5 +1,5 @@
 //
-//  CompareEquatableProperties.swift
+//  CompareProperties.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 7/28/22.
@@ -8,7 +8,7 @@
 import Foundation
 
 
-/// Compares if the `Equatable` properies on two objects are equal, even if the object itself is not `Equatable`.
+/// Checks if the `Equatable` properies on two objects are equal, even if the object itself is not `Equatable`.
 ///
 /// ## Example
 /// For the following struct, the `title`, `detail` and `count` properties will be compared. The
@@ -30,12 +30,12 @@ import Foundation
 /// Inspired by https://github.com/objcio/S01E264-comparing-views/blob/master/Sources/NotSwiftUIState/AnyEquatable.swift
 ///
 @_spi(ListableInternal)
-public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> Bool {
+public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> AreEquatablePropertiesEqualResult {
     
     // 1) We can't compare values unless the objects are the same type.
     
     guard type(of: lhs) == type(of: rhs) else {
-        return false
+        return .notEqual
     }
     
     let lhs = Mirror(reflecting: lhs)
@@ -43,12 +43,14 @@ public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> Bool {
     // 2) Values with no fields are always Equal.
     
     guard lhs.children.isEmpty == false else {
-        return true
+        return .equal
     }
     
     let rhs = Mirror(reflecting: rhs)
     
     // 3) Enumerate each property, by enumerating the `Mirrors`.
+    
+    var hadEquatableProperty = false
     
     for (prop1, prop2) in zip(lhs.children, rhs.children) {
         
@@ -58,16 +60,34 @@ public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> Bool {
             continue
         }
         
+        hadEquatableProperty = true
+        
         // 3b) Finally, compare the underlying values.
         
         guard isEqual(prop1.value, prop2.value) else {
-            return false
+            return .notEqual
         }
     }
     
-    // 4) All `Equatable` properties were equal, so we're equal.
+    if hadEquatableProperty {
+        // 4a) All `Equatable` properties were equal, so we're equal.
+        return .equal
+    } else {
+        // 4b) We found no `Equatable` properties – behavior is undefined.
+        return .error(.noEquatableProperties)
+    }
+}
+
+
+@_spi(ListableInternal)
+public enum AreEquatablePropertiesEqualResult : Equatable {
+    case equal
+    case notEqual
+    case error(Error)
     
-    return true
+    public enum Error {
+        case noEquatableProperties
+    }
 }
 
 
@@ -75,18 +95,17 @@ public func areEquatablePropertiesEqual(_ lhs : Any, _ rhs : Any) -> Bool {
 private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     
     func check<Value>(value: Value) -> Bool {
-        
         if let typeInfo = Wrapped<Value>.self as? AnyEquatable.Type {
             return typeInfo.isEqual(lhs: lhs, rhs: rhs)
+        } else {
+            return false
         }
-        
-        return false
     }
     
     /// This is the magic part of the whole process. Through `_openExistential`,
     /// Swift will take the `Any` type (the existential type), and call the provided `body`
     /// with the existential converted to the contained type. Because we have no constraint
-    /// on the contained type (just a `LHS` generic), we can then check if the contained type
+    /// on the contained type (just a `Value` generic), we can then check if the contained type
     /// will conform to `AnyEquatable`.
     ///
     /// ```
@@ -101,6 +120,7 @@ private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     return _openExistential(lhs, do: check)
 }
 
+
 /// Checks if the provided `value` is `Equatable`.
 private func isEquatableValue(_ value: Any) -> Bool {
     
@@ -112,17 +132,12 @@ private func isEquatableValue(_ value: Any) -> Bool {
 }
 
 
-private protocol AnyEquatable {
-    static func isEqual(lhs: Any, rhs: Any) -> Bool
-}
-
-
-private enum Wrapped<Value> {}
+fileprivate enum Wrapped<Value> {}
 
 
 extension Wrapped: AnyEquatable where Value: Equatable {
     
-    static func isEqual(lhs: Any, rhs: Any) -> Bool {
+    fileprivate static func isEqual(lhs: Any, rhs: Any) -> Bool {
         
         guard let lhs = lhs as? Value, let rhs = rhs as? Value else {
             return false
@@ -130,4 +145,9 @@ extension Wrapped: AnyEquatable where Value: Equatable {
         
         return lhs == rhs
     }
+}
+
+
+private protocol AnyEquatable {
+    static func isEqual(lhs: Any, rhs: Any) -> Bool
 }

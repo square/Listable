@@ -1,5 +1,5 @@
 //
-//  CompareEquatablePropertiesTests.swift
+//  ComparePropertiesTests.swift
 //  ListableUI-Unit-Tests
 //
 //  Created by Kyle Van Essen on 7/28/22.
@@ -9,48 +9,67 @@
 import XCTest
 
 
-class CompareEquatablePropertiesTests : XCTestCase {
+class ComparePropertiesTests : XCTestCase {
     
     func test_compare() {
         
-        XCTAssertTrue(
+        XCTAssertEqual(
+            .equal,
             areEquatablePropertiesEqual(
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 ),
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 )
             )
         )
         
-        XCTAssertFalse(
+        XCTAssertEqual(
+            .notEqual,
             areEquatablePropertiesEqual(
                 TestValue(
                     title: "A Different Title",
                     detail: "Some Detail",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 ),
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 )
             )
         )
         
-        XCTAssertTrue(
+        XCTAssertEqual(
+            .notEqual,
             areEquatablePropertiesEqual(
-                TestValueWithNoEquatableProperties(),
-                TestValueWithNoEquatableProperties()
+                TestValue(
+                    title: "A Title",
+                    detail: "Some Detail",
+                    count: 10,
+                    enumValue: .foo,
+                    closure: {}
+                ),
+                TestValue(
+                    title: "A Title",
+                    detail: "Some Detail",
+                    count: 10,
+                    enumValue: .bar("A String"),
+                    closure: {}
+                )
             )
         )
     }
@@ -61,11 +80,13 @@ class CompareEquatablePropertiesTests : XCTestCase {
                 TestValue(
                     title: "A Title",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 ),
                 TestValue(
                     title: "A Title",
                     count: 10,
+                    enumValue: .foo,
                     closure: {}
                 )
             )
@@ -80,9 +101,16 @@ fileprivate struct TestValue {
     var detail : String?
     var count : Int
     
+    var enumValue : EnumValue
+    
     var nonEquatable: NonEquatableValue = .init(value: "An inner string")
     
     var closure : () -> ()
+    
+    enum EnumValue : Equatable {
+        case foo
+        case bar(String)
+    }
 }
 
 
