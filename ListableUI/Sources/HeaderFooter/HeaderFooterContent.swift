@@ -44,7 +44,7 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 2) `PressedBackgroundView` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
 /// z-Index 1) `BackgroundView`
 ///
-public protocol HeaderFooterContent : IsEquivalentContent, AnyHeaderFooterConvertible
+public protocol HeaderFooterContent : EquivalentComparable, AnyHeaderFooterConvertible
 {
     //
     // MARK: Default Properties

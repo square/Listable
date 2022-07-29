@@ -215,7 +215,7 @@ fileprivate struct EquatableElement : ProxyElement, Equatable {
 }
 
 
-fileprivate struct EquivalentElement : ProxyElement, IsEquivalentContent {
+fileprivate struct EquivalentElement : ProxyElement, EquivalentComparable {
     
     var calledIsEquivalent : () -> ()
     

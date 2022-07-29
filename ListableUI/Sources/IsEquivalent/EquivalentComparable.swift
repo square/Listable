@@ -1,5 +1,5 @@
 //
-//  IsEquivalentContent.swift
+//  EquivalentComparable.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 11/28/21.
@@ -12,16 +12,16 @@ import Foundation
 /// remeasure the content and re-layout the list.
 ///
 /// ## Note
-/// You should rarely need to implement ``IsEquivalentContent/isEquivalent(to:)-15tcq``
+/// You should rarely need to implement ``EquivalentComparable/isEquivalent(to:)-15tcq``
 /// yourself. By default, Listable will...
 /// - For regular objects, compare all `Equatable` properties on your object to see if they changed.
 /// - For `Equatable` objects, check to see if the object is equal.
 ///
 /// If you do need to implement this method yourself (eg, your object has no equatable properties,
-/// or cannot conform to `Equatable`, see ``IsEquivalentContent/isEquivalent(to:)-15tcq``
+/// or cannot conform to `Equatable`, see ``EquivalentComparable/isEquivalent(to:)-15tcq``
 /// for a full discussion of correct (and incorrect) implementations.
 ///
-public protocol IsEquivalentContent {
+public protocol EquivalentComparable {
     
     ///
     /// Used by the list to determine when the content of content has changed; in order to
@@ -90,7 +90,7 @@ public protocol IsEquivalentContent {
 }
 
 
-public extension IsEquivalentContent
+public extension EquivalentComparable
 {
     /// Our default implementation compares the `Equatable` properties of the
     /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
@@ -101,7 +101,7 @@ public extension IsEquivalentContent
 }
 
 
-public extension IsEquivalentContent where Self:Equatable
+public extension EquivalentComparable where Self:Equatable
 {
     /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
     func isEquivalent(to other : Self) -> Bool {

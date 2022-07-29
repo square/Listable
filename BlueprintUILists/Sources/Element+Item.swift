@@ -58,8 +58,8 @@ extension Element where Self:Equatable {
 }
 
 
-/// Ensures that the `IsEquivalentContent` initializer for `WrappedElementContent` is called.
-extension Element where Self:IsEquivalentContent {
+/// Ensures that the `EquivalentComparable` initializer for `WrappedElementContent` is called.
+extension Element where Self:EquivalentComparable {
     
     public func listItem(
         id : AnyHashable? = nil,
@@ -111,7 +111,7 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
     init(
         identifierValue: AnyHashable?,
         represented: ElementType
-    ) where ElementType:IsEquivalentContent {
+    ) where ElementType:EquivalentComparable {
         self.represented = represented
         self.identifierValue = identifierValue
         

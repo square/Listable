@@ -50,8 +50,8 @@ extension Element where Self:Equatable {
 }
 
 
-/// Ensures that the `IsEquivalentContent` initializer for `WrappedHeaderFooterContent` is called.
-extension Element where Self:IsEquivalentContent {
+/// Ensures that the `EquivalentComparable` initializer for `WrappedHeaderFooterContent` is called.
+extension Element where Self:EquivalentComparable {
     
     public func listHeaderFooter(
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
@@ -86,7 +86,7 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
         }
     }
     
-    init(represented : ElementType) where ElementType:IsEquivalentContent {
+    init(represented : ElementType) where ElementType:EquivalentComparable {
         self.represented = represented
         
         self.isEquivalent = {
@@ -100,6 +100,10 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
     
     public var elementRepresentation: Element {
         represented
+    }
+    
+    public var reappliesToVisibleView: ReappliesToVisibleView {
+        .ifNotEquivalent
     }
 }
 

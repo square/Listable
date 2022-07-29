@@ -35,8 +35,8 @@ public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
         [element.listItem()]
     }
     
-    /// Ensures that the `IsEquivalentContent`version of `.listItem()` is called.
-    static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:IsEquivalentContent {
+    /// Ensures that the `EquivalentComparable`version of `.listItem()` is called.
+    static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:EquivalentComparable {
         [element.listItem()]
     }
     
@@ -57,8 +57,8 @@ public extension ListableValueBuilder where ContentType == AnyHeaderFooterConver
         return element.listHeaderFooter()
     }
     
-    /// Ensures that the `IsEquivalentContent`version of `.listHeaderFooter()` is called.
-    static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:IsEquivalentContent {
+    /// Ensures that the `EquivalentComparable`version of `.listHeaderFooter()` is called.
+    static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:EquivalentComparable {
         return element.listHeaderFooter()
     }
     

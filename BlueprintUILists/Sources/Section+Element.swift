@@ -29,7 +29,7 @@ extension Section {
         self.items.append(element.listItem())
     }
     
-    public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:IsEquivalentContent
+    public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:EquivalentComparable
     {
         self.items.append(element.listItem())
     }
@@ -52,7 +52,7 @@ extension Section {
         lhs.add(rhs)
     }
     
-    public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType) where ElementType:IsEquivalentContent
+    public static func += <ElementType:Element>(lhs : inout Section, rhs : ElementType) where ElementType:EquivalentComparable
     {
         lhs.add(rhs)
     }

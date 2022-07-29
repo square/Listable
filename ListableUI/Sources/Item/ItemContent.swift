@@ -40,7 +40,7 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : IsEquivalentContent, AnyItemConvertible where Coordinator.ItemContentType == Self
+public protocol ItemContent : EquivalentComparable, AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification
@@ -475,13 +475,13 @@ public extension ItemContent {
 
 
 /// Provides a default implementation of `identifierValue` when self conforms to Swift's `Identifiable` protocol.
-@available(iOS 13.0, *)
-public extension ItemContent where Self:Identifiable
-{    
-    var identifierValue : ID {
-        self.id
-    }
-}
+//@available(iOS 13.0, *)
+//public extension ItemContent where Self:Identifiable
+//{    
+//    var identifierValue : ID {
+//        self.id
+//    }
+//}
 
 
 /// Implement `wasMoved` in terms of `isEquivalent(to:)` by default.
