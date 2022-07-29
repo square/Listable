@@ -25,12 +25,6 @@ extension Element {
     ///     }
     /// ```
     ///
-    /// ## ⚠️ Performance Considerations
-    /// Unless your `Element` conforms to `Equatable` or `IsEquivalentContent`,
-    /// it will return `false` for `isEquivalent` for each content update, which can dramatically
-    /// hurt performance for longer lists (eg, more than 20 items): it will be re-measured for each content update.
-    ///
-    /// It is encouraged for these longer lists, you ensure your `Element` conforms to one of these protocols.
     public func listItem(
         id : AnyHashable? = nil,
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }

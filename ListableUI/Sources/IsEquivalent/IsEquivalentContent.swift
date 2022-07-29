@@ -82,6 +82,17 @@ public protocol IsEquivalentContent {
 }
 
 
+public extension IsEquivalentContent
+{
+    /// Our default implementation compares the `Equatable` properties of the
+    /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
+    /// 
+    func isEquivalent(to other : Self) -> Bool {
+        isEqualComparingEquatableProperties(self, other)
+    }
+}
+
+
 public extension IsEquivalentContent where Self:Equatable
 {
     /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.

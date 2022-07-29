@@ -32,11 +32,15 @@ import Foundation
 @_spi(ListableInternal)
 public func isEqualComparingEquatableProperties(_ lhs : Any, _ rhs : Any) -> Bool {
     
+    // 1) We can't compare values unless the objects are the same type.
+    
     guard type(of: lhs) == type(of: rhs) else {
         return false
     }
     
     let lhs = Mirror(reflecting: lhs)
+    
+    // 2) Values with no fields are always Equal.
     
     guard lhs.children.isEmpty == false else {
         return true
@@ -44,23 +48,30 @@ public func isEqualComparingEquatableProperties(_ lhs : Any, _ rhs : Any) -> Boo
     
     let rhs = Mirror(reflecting: rhs)
     
+    // 3) Enumerate each property, by enumerating the `Mirrors`.
+    
     for (prop1, prop2) in zip(lhs.children, rhs.children) {
+        
+        // 3a) Skip any values which are not themselves `Equatable`.
         
         guard isEquatableValue(prop1.value) else {
             continue
         }
+        
+        // 3b) Finally, compare the underlying values.
         
         guard isEqual(prop1.value, prop2.value) else {
             return false
         }
     }
     
-    
+    // 4) All `Equatable` properties were equal, so we're equal.
     
     return true
 }
 
 
+/// Checks if the two provided values are the same type and Equatable.
 private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     
     func check<Value>(value: Value) -> Bool {
@@ -90,7 +101,7 @@ private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     return _openExistential(lhs, do: check)
 }
 
-
+/// Checks if the provided `value` is `Equatable`.
 private func isEquatableValue(_ value: Any) -> Bool {
     
     func check<Value>(value: Value) -> Bool {
