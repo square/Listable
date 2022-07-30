@@ -189,10 +189,20 @@ class ComparePropertiesTests : XCTestCase {
             )
         )
         
-        // !! Swift (?) bug: Swift cannot resolve these two strings as the same type.
+        // !! Swift 5.6 and earlier bug: Swift cannot resolve these two strings as the same type.
         // Seems to be a bug in the `Mirror` type passthrough for enums with associated values, or something.
         // For now, it'll fail open; eg not finding any Equatable values, but that is wrong.
+        // This is resolved in Swift 5.7 when we can use `any Equatable`.
         
+#if swift(>=5.7)
+        XCTAssertEqual(
+            .equal,
+            areEquatablePropertiesEqual(
+                NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value"))),
+                NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value")))
+            )
+        )
+#else
         XCTAssertEqual(
             .error(.noEquatableProperties),
             areEquatablePropertiesEqual(
@@ -200,7 +210,17 @@ class ComparePropertiesTests : XCTestCase {
                 NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value")))
             )
         )
+#endif
         
+#if swift(>=5.7)
+        XCTAssertEqual(
+            .equal,
+            areEquatablePropertiesEqual(
+                NonEquatableEnumOnlyValue(enumValue: .five("Some String")),
+                NonEquatableEnumOnlyValue(enumValue: .five("Some String"))
+            )
+        )
+#else
         XCTAssertEqual(
             .error(.noEquatableProperties), // Should be `.equal`.
             areEquatablePropertiesEqual(
@@ -208,9 +228,17 @@ class ComparePropertiesTests : XCTestCase {
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String"))
             )
         )
+#endif
         
-        // END: Swift Bug
-        
+#if swift(>=5.7)
+        XCTAssertEqual(
+            .equal,
+            areEquatablePropertiesEqual(
+                NonEquatableEnumOnlyValue(enumValue: .five(1)),
+                NonEquatableEnumOnlyValue(enumValue: .five(1))
+            )
+        )
+#else
         XCTAssertEqual(
             .error(.noEquatableProperties), // Should be `.equal`.
             areEquatablePropertiesEqual(
@@ -218,6 +246,9 @@ class ComparePropertiesTests : XCTestCase {
                 NonEquatableEnumOnlyValue(enumValue: .five(1))
             )
         )
+#endif
+        
+        // END: Swift Bug
         
         XCTAssertEqual(
             .notEqual,

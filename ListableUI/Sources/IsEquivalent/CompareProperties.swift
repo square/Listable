@@ -127,6 +127,13 @@ public enum AreEquatablePropertiesEqualResult : Equatable {
 /// Checks if the two provided values are the same type and Equatable.
 private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     
+#if swift(>=5.7)
+    if let lhs = lhs as? any Equatable {
+        return lhs.isEqual(to: rhs)
+    } else {
+        return false
+    }
+#else
     func check<Value>(value: Value) -> Bool {
         if let typeInfo = Wrapped<Value>.self as? AnyEquatable.Type {
             return typeInfo.isEqual(lhs: lhs, rhs: rhs)
@@ -151,23 +158,35 @@ private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
     /// https://github.com/apple/swift/blob/main/stdlib/public/core/Builtin.swift#L1005
     
     return _openExistential(lhs, do: check)
+#endif
 }
 
 
 /// Checks if the provided `value` is `Equatable`.
 private func isEquatableValue(_ value: Any) -> Bool {
     
+#if swift(>=5.7)
+    return value is any Equatable
+#else
     func check<Value>(value: Value) -> Bool {
         Wrapped<Value>.self is AnyEquatable.Type
     }
     
     return _openExistential(value, do: check)
+#endif
 }
 
 
 /// Checks if the provided `lhs` and `rhs` values are equal if they are `Equatable`.
 private func isEqualIfEquatable(_ lhs: Any, _ rhs : Any) -> Bool? {
     
+#if swift(>=5.7)
+    if let lhs = lhs as? any Equatable {
+        return lhs.isEqual(to: rhs)
+    } else {
+        return nil
+    }
+#else
     func check<Value>(value: Value) -> Bool? {
         if let typeInfo = Wrapped<Value>.self as? AnyEquatable.Type {
             return typeInfo.isEqual(lhs: lhs, rhs: rhs)
@@ -177,8 +196,25 @@ private func isEqualIfEquatable(_ lhs: Any, _ rhs : Any) -> Bool? {
     }
     
     return _openExistential(lhs, do: check)
+#endif
 }
 
+
+
+#if swift(>=5.7)
+
+extension Equatable {
+    
+    fileprivate func isEqual(to other: Any) -> Bool {
+        guard let other = other as? Self else {
+            return false
+        }
+        
+        return self == other
+    }
+}
+
+#else
 
 fileprivate enum Wrapped<Value> {}
 
@@ -200,6 +236,7 @@ private protocol AnyEquatable {
     static func isEqual(lhs: Any, rhs: Any) -> Bool
 }
 
+#endif
 
 
 infix operator ||=
