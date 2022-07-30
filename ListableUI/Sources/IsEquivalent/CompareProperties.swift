@@ -187,9 +187,6 @@ extension Wrapped: AnyEquatable where Value: Equatable {
     
     fileprivate static func isEqual(lhs: Any, rhs: Any) -> Bool {
         
-        /// TODO: Can we make this an as! because I think at this point we're
-        /// guaranteed to be correctly `Value`? I think? Is that faster?
-        
         guard let lhs = lhs as? Value, let rhs = rhs as? Value else {
             return false
         }
