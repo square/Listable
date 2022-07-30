@@ -40,6 +40,7 @@ public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
         [element.listItem()]
     }
     
+    @available(*, deprecated, message: "Cannot add a ListElementNonConvertible to a list. See the type's `listElementNonConvertibleFatal` implementation for the correct type to use instead.")
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:ListElementNonConvertible {
         element.listElementNonConvertibleFatal()
     }
@@ -62,6 +63,7 @@ public extension ListableValueBuilder where ContentType == AnyHeaderFooterConver
         return element.listHeaderFooter()
     }
     
+    @available(*, deprecated, message: "Cannot add a ListElementNonConvertible to a list. See the type's `listElementNonConvertibleFatal` implementation for the correct type to use instead.")
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:ListElementNonConvertible {
         element.listElementNonConvertibleFatal()
     }
