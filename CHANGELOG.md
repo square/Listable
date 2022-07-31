@@ -4,6 +4,8 @@
 
 ### Added
 
+- Swipe actions will now dismiss when touching outside of the actively swiped cell to match iOS behavior.
+
 ### Removed
 
 ### Changed

@@ -16,7 +16,7 @@ extension ItemCell {
 
         private var swipeConfiguration: SwipeConfiguration?
 
-        private var swipeState: SwipeActionState = .closed {
+        private (set) var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
                     swipeConfiguration?.swipeView.apply(state: swipeState)
