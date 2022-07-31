@@ -477,13 +477,7 @@ final class TableListLayout : ListLayout
         in context : ListLayoutLayoutContext
     ) -> ListLayoutResult
     {
-        let boundsContext = ListContentBounds.Context(
-            viewSize: context.viewBounds.size,
-            safeAreaInsets: context.safeAreaInsets,
-            direction: self.direction
-        )
-        
-        let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
+        let bounds = self.resolvedBounds(in: context)
         
         let layout = self.layoutAppearance.layout
         

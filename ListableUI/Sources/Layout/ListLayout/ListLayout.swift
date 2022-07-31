@@ -31,7 +31,10 @@ public struct ListLayoutLayoutContext {
     public var viewBounds : CGRect
     public var safeAreaInsets : UIEdgeInsets
     public var contentInset : UIEdgeInsets
+    public var contentOffset : CGPoint
     public var adjustedContentInset : UIEdgeInsets
+    
+    public var hasRefreshControl : Bool
     
     public var environment : ListEnvironment
     
@@ -39,13 +42,17 @@ public struct ListLayoutLayoutContext {
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
         contentInset : UIEdgeInsets,
+        contentOffset : CGPoint,
         adjustedContentInset : UIEdgeInsets,
+        hasRefreshControl : Bool,
         environment : ListEnvironment
     ) {
         self.viewBounds = viewBounds
         self.safeAreaInsets = safeAreaInsets
         self.contentInset = contentInset
+        self.contentOffset = contentOffset
         self.adjustedContentInset = adjustedContentInset
+        self.hasRefreshControl = hasRefreshControl
         self.environment = environment
     }
     
@@ -56,7 +63,9 @@ public struct ListLayoutLayoutContext {
         self.viewBounds = collectionView.bounds
         self.safeAreaInsets = collectionView.safeAreaInsets
         self.contentInset = collectionView.contentInset
+        self.contentOffset = collectionView.contentOffset
         self.adjustedContentInset = collectionView.adjustedContentInset
+        self.hasRefreshControl = collectionView.refreshControl != nil
         
         self.environment = environment
     }
@@ -87,6 +96,17 @@ extension ListLayout
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         self.layoutAppearance.scrollViewProperties
+    }
+    
+    public func resolvedBounds(in context : ListLayoutLayoutContext) -> ListContentBounds {
+        
+        let boundsContext = ListContentBounds.Context(
+            viewSize: context.viewBounds.size,
+            safeAreaInsets: context.safeAreaInsets,
+            direction: direction
+        )
+        
+        return layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
     }
 }
 
@@ -126,6 +146,13 @@ public protocol AnyListLayout : AnyObject
     ) -> ListLayoutResult
     
     func setZIndexes()
+    
+    func positionStickyListHeaderIfNeeded(in context : ListLayoutLayoutContext)
+    func positionStickySectionHeadersIfNeeded(in context : ListLayoutLayoutContext)
+    
+    func updateOverscrollFooterPosition(in context : ListLayoutLayoutContext)
+    
+    func adjustPositionsForLayoutUnderflow(in context : ListLayoutLayoutContext)
     
     //
     // MARK: Configuring Reordering
@@ -194,38 +221,46 @@ extension AnyListLayout
 }
 
 
-extension AnyListLayout
+extension ListLayout
 {
-    public func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
+    public func visibleContentFrame(in context : ListLayoutLayoutContext) -> CGRect
     {
         CGRect(
-            x: collectionView.contentOffset.x + collectionView.safeAreaInsets.left,
-            y: collectionView.contentOffset.y + collectionView.safeAreaInsets.top,
-            width: collectionView.bounds.size.width,
-            height: collectionView.bounds.size.height
+            x: context.contentOffset.x + context.safeAreaInsets.left,
+            y: context.contentOffset.y + context.safeAreaInsets.top,
+            width: context.viewBounds.size.width,
+            height: context.viewBounds.size.height
         )
     }
 
-    public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
+    public func positionStickyListHeaderIfNeeded(in context : ListLayoutLayoutContext)
     {
         guard self.listHeaderPosition != .inline else { return }
 
-        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
+        let visibleContentFrame = self.visibleContentFrame(in: context)
+        
+        let bounds = self.resolvedBounds(in: context)
+        
+        let topPadding = direction.top(with: bounds.padding)
 
         let header = self.content.header
 
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        /// `fixed` only works if there's no `containerHeader` or `refreshControl` (those behave "inline" so fixing it would overlap).
+        /// The `.fixed` position only works if:
+        /// - There is no `containerHeader` or `refreshControl` (those behave "inline" so fixing it would overlap).
+        /// - If there's no top padding (because this would adjust the fixed header position).
+        ///
         let shouldBeFixed = listHeaderPosition == .fixed
             && !content.containerHeader.isPopulated
-            && collectionView.refreshControl == nil
+            && context.hasRefreshControl == false
+            && topPadding == 0.0
 
         if headerOrigin < visibleContentOrigin || shouldBeFixed {
 
             // Make sure the pinned origin stays within the list's frame.
-
+            
             self.direction.switch(
                 vertical: {
                     header.pinnedY = visibleContentFrame.origin.y
@@ -240,13 +275,11 @@ extension AnyListLayout
         }
     }
     
-    // TODO: This should take in a `context` so we can call it in layout tests too,
-    // when not using a collection view.
-    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    public func positionStickySectionHeadersIfNeeded(in context : ListLayoutLayoutContext)
     {
         guard self.stickySectionHeaders else { return }
         
-        var visibleContentFrame = self.visibleContentFrame(for: collectionView)
+        var visibleContentFrame = self.visibleContentFrame(in: context)
 
         switch listHeaderPosition {
         case .inline:

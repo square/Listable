@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `ListHeaderPosition.fixed` will now only apply if the list's top padding is zero, to avoid the header shifting around during layout if the position is changed.
+
 ### Misc
 
 # Past Releases
