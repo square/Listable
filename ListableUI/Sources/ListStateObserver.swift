@@ -57,7 +57,7 @@ public struct ListStateObserver {
     /// Registers a callback which will be called when the list view is scrolled, or is
     /// scrolled to top.
     ///
-    /// ### Important Note!
+    /// ### ⚠️ Important Note!
     /// This callback is called very frequently when the user is scrolling the list (eg, every frame!).
     /// As such, make sure any work you do in the callback is efficient.
     public mutating func onDidScroll( _ callback : @escaping OnDidScroll)
@@ -92,8 +92,11 @@ public struct ListStateObserver {
     
     public typealias OnVisibilityChanged = (VisibilityChanged) -> ()
     
-    /// Registers a callback which will be called when the list view's content is changed – eg through
-    /// inserted, removed, updated, moved items or sections.
+    /// Registers a callback which will be called when the visiblity of content within the list changes,
+    /// either due to the user scrolling the list, or due to an update changing the visible content.
+    ///
+    /// If you'd like to (eg) update a pagination indicator or other indicator of what
+    /// items / pages / etc are visible, use this method.
     public mutating func onVisibilityChanged( _ callback : @escaping OnVisibilityChanged)
     {
         self.onVisibilityChanged.append(callback)
