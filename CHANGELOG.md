@@ -4,6 +4,8 @@
 
 ### Added
 
+- Introduces a `.toggles` selection type, to allow a second tap to deselect an item.
+
 ### Removed
 
 ### Changed
