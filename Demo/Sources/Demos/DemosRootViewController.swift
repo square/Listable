@@ -279,14 +279,6 @@ public final class DemosRootViewController : ListViewController
                         self?.push(SpacingCustomizationViewController())
                     }
                 )
-
-                Item(
-                    DemoItem(text: "Retail Grid Layout"),
-                    selectionStyle: .selectable(),
-                    onSelect : { _ in
-                        self?.push(RetailGridViewController())
-                    }
-                )
             } header: {
                 DemoHeader(title: "Other Layouts")
             }
