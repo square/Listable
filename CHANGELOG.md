@@ -8,6 +8,8 @@
 
 ### Removed
 
+- Removed RetailGridListLayout.
+
 ### Changed
 
 ### Misc
