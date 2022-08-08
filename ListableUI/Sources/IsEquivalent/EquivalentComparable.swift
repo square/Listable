@@ -129,7 +129,7 @@ public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Valu
     case .error(let error):
         
         switch error {
-        case .noEquatableProperties:
+        case .noEquatableProperties, .unknownCollectionType:
             assertionFailure(
                 """
                 FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \

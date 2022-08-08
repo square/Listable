@@ -59,8 +59,8 @@ public func compareEquatableProperties(_ lhs : Any, _ rhs : Any) -> CompareEquat
     /// some collections like `Set` or `Dictionary` will not
     /// return `Mirror.children` in a stable order.
     
-    if let isEqual = compareContentsIfSameTypeCollections(lhs, rhs) {
-        return .with(isEqual)
+    if let result = compareContentsIfSameTypeCollections(lhs, rhs) {
+        return .with(result == .equal)
     }
     
     let lhsMirror = Mirror(reflecting: lhs)
@@ -110,7 +110,7 @@ public func compareEquatableProperties(_ lhs : Any, _ rhs : Any) -> CompareEquat
         
             hadEquatableProperty = true
 
-            if result == false {
+            if result != .equal {
                 return .notEqual
             }
         } else {
@@ -174,8 +174,18 @@ public enum CompareEquatablePropertiesResult : Equatable {
         value ?.equal : .notEqual
     }
     
-    public enum Error {
+    public enum Error : Equatable {
         case noEquatableProperties
+        case unknownCollectionType(UnknownType)
+        
+        public struct UnknownType : Equatable {
+            
+            var unknownType : Any.Type
+            
+            public static func == (lhs: Self, rhs: Self) -> Bool {
+                type(of: lhs.unknownType) == type(of: rhs.unknownType)
+            }
+        }
     }
 }
 
@@ -272,9 +282,9 @@ private func isEqualIfEquatable(_ lhs: Any, _ rhs : Any) -> Bool? {
 
 
 /// Checks if the provided `lhs` and `rhs` values are equal if they both the same type of `Collection`.
-private func compareContentsIfSameTypeCollections(_ lhs: Any, _ rhs : Any) -> Bool? {
+private func compareContentsIfSameTypeCollections(_ lhs: Any, _ rhs : Any) -> CompareEquatablePropertiesResult? {
     
-    func check<Value>(value: Value) -> Bool? {
+    func check<Value>(value: Value) -> CompareEquatablePropertiesResult? {
         if let typeInfo = Wrapped<Value>.self as? IsCollectionType.Type {
             return typeInfo.compareContents(lhs: lhs, rhs: rhs)
         } else {
@@ -326,19 +336,19 @@ extension Wrapped: IsEquatableType where Value: Equatable {
 
 private protocol IsCollectionType {
     
-    static func compareContents(lhs : Any, rhs : Any) -> Bool
+    static func compareContents(lhs : Any, rhs : Any) -> CompareEquatablePropertiesResult
 }
 
 
 extension Wrapped: IsCollectionType where Value: Collection {
     
-    static func compareContents(lhs : Any, rhs : Any) -> Bool {
+    static func compareContents(lhs : Any, rhs : Any) -> CompareEquatablePropertiesResult {
         
         guard let lhs = lhs as? ErasedComparableCollection else {
-            return false
+            return .error(.unknownCollectionType(.init(unknownType: type(of: lhs))))
         }
         
-        return lhs.compareContents(to: rhs)
+        return .with(lhs.compareContents(to: rhs))
     }
 }
 
