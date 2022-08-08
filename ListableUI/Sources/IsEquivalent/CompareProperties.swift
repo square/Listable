@@ -171,7 +171,7 @@ public enum CompareEquatablePropertiesResult : Equatable {
     case error(Error)
     
     public static func with(_ value: Bool) -> Self {
-        value ?.equal : .notEqual
+        value ? .equal : .notEqual
     }
     
     public enum Error : Equatable {
