@@ -135,14 +135,15 @@ public func compareEquatableProperties(_ lhs : Any, _ rhs : Any) -> CompareEquat
             }
         }
     }
-    
-    let hasChildren = lhsMirror.children.count > 0
-    
+        
     if hadEquatableProperty {
         /// We made it through the entire list of properties, and found at least
         /// one `Equatable` property, so we are equal.
         return .equal
     } else {
+        
+        let hasChildren = lhsMirror.children.count > 0
+
         if hasChildren {
             
             /// We found no `Equatable` properties, but we did
