@@ -19,11 +19,6 @@ import ListableUI
 ///     Element2() // An Element
 /// }
 /// ```
-///
-/// ## Note
-/// Takes advantage of `@_disfavoredOverload` to avoid ambiguous method resolution with the default implementations.
-/// See more here: https://github.com/apple/swift/blob/main/docs/ReferenceGuides/UnderscoredAttributes.md#_disfavoredoverload
-///
 public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component {

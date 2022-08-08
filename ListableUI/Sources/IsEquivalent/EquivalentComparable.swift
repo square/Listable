@@ -114,7 +114,7 @@ public extension EquivalentComparable where Self:Equatable
 /// Our default implementation compares the `Equatable` properties of the
 /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
 public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Value) -> Bool {
-    let result = areEquatablePropertiesEqual(lhs, rhs)
+    let result = compareEquatableProperties(lhs, rhs)
     
     switch result {
     case .equal:
@@ -133,15 +133,19 @@ public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Valu
             assertionFailure(
                 """
                 FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \
-                on \(Value.self). In release versions, `isEquivalent(to:)` will always return false, which \
-                will affect performance. You should implement `isEquivalent(to:)` and check the relevant \
-                sub-properties to provide proper conformance:
+                on \(Value.self), but there were other properties.
+                
+                In release versions, `isEquivalent(to:)` will always return false, which will affect performance.
+                
+                You should implement `isEquivalent(to:)` and check the relevant sub-properties to provide proper conformance:
                 
                 ```
                 func isEquivalent(to other : Self) -> Bool {
                     myVar.subProperty == other.myVar.subProperty && ...
                 }
                 ```
+                
+                If your object can conform to `Equatable`, you can also add that conformance to provide `isEquivalent(to:)`.
                 """
             )
         }

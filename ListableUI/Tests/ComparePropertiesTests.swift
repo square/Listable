@@ -11,13 +11,11 @@ import XCTest
 
 class ComparePropertiesTests : XCTestCase {
     
-    func test_compare() {
-        
-        // Check String behavior.
+    func test_compare_string() {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 "A String",
                 "A String"
             )
@@ -25,7 +23,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 "A String",
                 "A String!"
             )
@@ -33,7 +31,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 "A String" as Any,
                 "A String" as Any
             )
@@ -41,19 +39,20 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 "A String" as Any,
                 "A String!" as Any
             )
         )
+    }
         
-        // Check Int behavior.
+    func test_compare_int() {
         
         XCTAssertTrue(_isPOD(Int.self))
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 10,
                 10
             )
@@ -61,7 +60,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 10,
                 11
             )
@@ -69,7 +68,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 10 as Any,
                 10 as Any
             )
@@ -77,17 +76,31 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 10 as Any,
                 11 as Any
             )
         )
         
-        // Check values which aren't Equatable but have Equatable properties.
+    }
+    
+    func test_empty() {
+        
+        XCTAssertEqual(
+            .hasNoFields,
+            compareEquatableProperties(
+                EmptyValue(),
+                EmptyValue()
+            )
+        )
+        
+    }
+    
+    func test_compare_non_equatable_values() {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
@@ -107,7 +120,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 TestValue(
                     title: "A Different Title",
                     detail: "Some Detail",
@@ -127,7 +140,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 TestValue(
                     title: "A Title",
                     detail: "Some Detail",
@@ -149,7 +162,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .error(.noEquatableProperties),
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 TestValueWithNoEquatableProperties(),
                 TestValueWithNoEquatableProperties()
             )
@@ -159,7 +172,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .error(.noEquatableProperties),
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .one),
                 NonEquatableEnumOnlyValue(enumValue: .one)
             )
@@ -167,7 +180,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .error(.noEquatableProperties),
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .one),
                 NonEquatableEnumOnlyValue(enumValue: .two)
             )
@@ -175,7 +188,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .three("Hello")),
                 NonEquatableEnumOnlyValue(enumValue: .three("Hello"))
             )
@@ -183,21 +196,22 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .three("Hello")),
                 NonEquatableEnumOnlyValue(enumValue: .three("Hello!!"))
             )
         )
         
-        // !! Swift 5.6 and earlier bug: Swift cannot resolve these two strings as the same type.
-        // Seems to be a bug in the `Mirror` type passthrough for enums with associated values, or something.
-        // For now, it'll fail open; eg not finding any Equatable values, but that is wrong.
-        // This is resolved in Swift 5.7 when we can use `any Equatable`.
+        // ⚠️ Swift 5.6 and earlier bug: Swift cannot resolve these two strings as an `Equatable` type.
+        // This seems to be a bug in how `Any` instances can get cast back to a strict type
+        // through `_openExistential`. This is resolved in Swift 5.7 / Xcode 14.
+        //
+        // Once we support Xcode 14 and later only, we can remove the `#else` branches here and in `ComparableProperties.swift`.
         
 #if swift(>=5.7)
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value"))),
                 NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value")))
             )
@@ -205,7 +219,7 @@ class ComparePropertiesTests : XCTestCase {
 #else
         XCTAssertEqual(
             .error(.noEquatableProperties),
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value"))),
                 NonEquatableEnumOnlyValue(enumValue: .four(.init(value: "Some Value")))
             )
@@ -215,15 +229,15 @@ class ComparePropertiesTests : XCTestCase {
 #if swift(>=5.7)
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String")),
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String"))
             )
         )
 #else
         XCTAssertEqual(
-            .error(.noEquatableProperties), // Should be `.equal`.
-            areEquatablePropertiesEqual(
+            .error(.noEquatableProperties),
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String")),
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String"))
             )
@@ -233,36 +247,36 @@ class ComparePropertiesTests : XCTestCase {
 #if swift(>=5.7)
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .five(1)),
                 NonEquatableEnumOnlyValue(enumValue: .five(1))
             )
         )
 #else
         XCTAssertEqual(
-            .error(.noEquatableProperties), // Should be `.equal`.
-            areEquatablePropertiesEqual(
+            .error(.noEquatableProperties),
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .five(1)),
                 NonEquatableEnumOnlyValue(enumValue: .five(1))
             )
         )
 #endif
         
-        // END: Swift Bug
-        
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 NonEquatableEnumOnlyValue(enumValue: .five("Some String")),
                 NonEquatableEnumOnlyValue(enumValue: .five(1))
             )
         )
         
-        // Check that we properly handle values which themselves are Equatable.
+    }
+    
+    func test_compare_equatable_values() {
         
         XCTAssertEqual(
             .equal,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 EquatableValue(
                     title: "A Title",
                     detail: "Some Detail",
@@ -278,7 +292,7 @@ class ComparePropertiesTests : XCTestCase {
         
         XCTAssertEqual(
             .notEqual,
-            areEquatablePropertiesEqual(
+            compareEquatableProperties(
                 EquatableValue(
                     title: "A Title",
                     detail: "Some Detail",
@@ -293,9 +307,154 @@ class ComparePropertiesTests : XCTestCase {
         )
     }
     
+    func test_array() {
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                [],
+                []
+            )
+        )
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                ["A", "B"],
+                ["A", "B"]
+            )
+        )
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                ["A", "B"],
+                ["A", "B"]
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                ["A", "B"],
+                ["A", "B", "C"]
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                ["A", "2"],
+                ["A", 2]
+            )
+        )
+    }
+    
+    func test_set() {
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                Set<AnyHashable>(),
+                Set<AnyHashable>()
+            )
+        )
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                Set(["A", "B"]),
+                Set(["A", "B"])
+            )
+        )
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                Set(["A", "B"]),
+                Set(["B", "A"])
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                Set(["A", "B"]),
+                Set(["A", "B", "C"])
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                Set<AnyHashable>(["A", "2"]),
+                Set<AnyHashable>(["A", 2])
+            )
+        )
+    }
+    
+    func test_dictionary() {
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                Dictionary<String, Any>(),
+                Dictionary<String, Any>()
+            )
+        )
+        
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, AnyHashable>,
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, AnyHashable>
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                ["Key1": 1, "Key2" : 3] as Dictionary<String, AnyHashable>,
+                ["Key1": 1, "Key3" : 2] as Dictionary<String, AnyHashable>
+            )
+        )
+        
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, AnyHashable>,
+                ["Key1": 1, "Key3" : 2] as Dictionary<String, AnyHashable>
+            )
+        )
+        
+        // ⚠️ Swift 5.6 and earlier bug: Swift cannot resolve these two strings as an `Equatable` type.
+        // This seems to be a bug in how `Any` instances can get cast back to a strict type
+        // through `_openExistential`. This is resolved in Swift 5.7 / Xcode 14.
+        //
+        // Once we support Xcode 14 and later only, we can remove the `#else` branches here and in `ComparableProperties.swift`.
+        
+#if swift(>=5.7)
+        XCTAssertEqual(
+            .equal,
+            compareEquatableProperties(
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, Any>,
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, Any>
+            )
+        )
+#else
+        XCTAssertEqual(
+            .notEqual,
+            compareEquatableProperties(
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, Any>,
+                ["Key1": 1, "Key2" : 2] as Dictionary<String, Any>
+            )
+        )
+#endif
+    }
+    
     func test_performance() {
         determineAverage(for: 1.0) {
-            _ = areEquatablePropertiesEqual(
+            _ = compareEquatableProperties(
                 TestValue(
                     title: "A Title",
                     count: 10,
@@ -353,6 +512,9 @@ fileprivate struct TestValueWithNoEquatableProperties {
     var closure2 : () -> () = {}
     
 }
+
+
+fileprivate struct EmptyValue {}
 
 
 fileprivate struct NonEquatableEnumOnlyValue {
