@@ -4,7 +4,11 @@
 
 ### Added
 
+- Introduces a `.toggles` selection type, to allow a second tap to deselect an item.
+
 ### Removed
+
+- Removed RetailGridListLayout.
 
 ### Changed
 
@@ -13,6 +17,20 @@
 ### Misc
 
 # Past Releases
+
+# [6.0.0] - 2022-07-29
+
+### Fixed
+
+- Fixed an issue where `ListHeaderPosition.fixed` would cause the list header to overlap with the refresh control by falling back to `sticky` behavior if there's a refresh control.
+
+### Added
+
+- `SwipeAction` now allows you to provide an `accessibility{Label,Value,Hint}`, and requires either a `title` or `accessibilityLabel`.
+
+### Changed
+
+- The refresh control color has moved to `Appearance` from `RefreshControl`.
 
 # [5.2.1] - 2022-07-21
 
@@ -724,7 +742,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/5.2.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/6.0.0...HEAD
+[6.0.0]: https://github.com/kyleve/Listable/compare/5.2.1...6.0.0
 [5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
 [5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0

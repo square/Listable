@@ -400,15 +400,15 @@ final class PresentationState
         )
     }
     
-    internal func updateRefreshControl(with new : RefreshControl?, in view : UIScrollView)
+    internal func updateRefreshControl(with new : RefreshControl?, in view : UIScrollView, color : UIColor?)
     {
         if let existing = self.refreshControl, let new = new {
-            existing.update(with: new)
+            existing.update(with: new, color: color)
         } else if self.refreshControl == nil, let new = new {
             let newControl = RefreshControlState(new)
             view.refreshControl = newControl.view
             self.refreshControl = newControl
-            newControl.update(with: new)
+            newControl.update(with: new, color: color)
         } else if self.refreshControl != nil, new == nil {
             view.refreshControl = nil
             self.refreshControl = nil
