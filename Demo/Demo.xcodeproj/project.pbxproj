@@ -50,7 +50,6 @@
 		2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8804642490844A003BB351 /* SpacingCustomizationViewController.swift */; };
 		397F72040272B0B12CAD9AEE /* Pods_Test_Targets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF78F98F7ED38C2DC8078110 /* Pods_Test_Targets.framework */; };
 		B223A33A769988911ED5C0E1 /* Pods_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C03134338F55F7FD12551D /* Pods_Demo.framework */; };
-		F818D40626AB5F3B005D5A12 /* RetailGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,7 +105,6 @@
 		C9EC890C0D683F6A704AB9ED /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		CF78F98F7ED38C2DC8078110 /* Pods_Test_Targets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Test_Targets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0E11D5AA6E2508505BEE4FC /* Pods-Test Targets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test Targets.release.xcconfig"; path = "Target Support Files/Pods-Test Targets/Pods-Test Targets.release.xcconfig"; sourceTree = "<group>"; };
-		F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetailGridViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +171,6 @@
 				0AA4D9B5248064A300CF95A5 /* SwipeActionsViewController.swift */,
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
 				0AC839A425EEAD110055CEF5 /* OnTapItemAnimationViewController.swift */,
-				F818D40526AB5F3B005D5A12 /* RetailGridViewController.swift */,
 				2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */,
 			);
 			path = "Demo Screens";
@@ -479,7 +476,6 @@
 				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,
 				0AA4D9BD248064A300CF95A5 /* BlueprintListDemoViewController.swift in Sources */,
 				0AA4D9BB248064A300CF95A5 /* ScrollViewEdgesPlaygroundViewController.swift in Sources */,
-				F818D40626AB5F3B005D5A12 /* RetailGridViewController.swift in Sources */,
 				0ACF96D624A0094D0090EAC4 /* ItemInsertAndRemoveAnimationsViewController.swift in Sources */,
 				0AA4D9C7248064A300CF95A5 /* CollectionViewDictionaryDemoViewController.swift in Sources */,
 				0ADC3B3524907C80008DF2C0 /* XcodePreviewDemo.swift in Sources */,

@@ -132,6 +132,17 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Toggle Selection"),
+                    selectionStyle: .toggles(),
+                    onSelect : { _ in
+                        print("Selected")
+                    },
+                    onDeselect: { _ in
+                        print("Deselected")
+                    }
+                )
+                
+                Item(
                     DemoItem(text: "Invoices Payment Schedule"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
@@ -266,14 +277,6 @@ public final class DemosRootViewController : ListViewController
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(SpacingCustomizationViewController())
-                    }
-                )
-
-                Item(
-                    DemoItem(text: "Retail Grid Layout"),
-                    selectionStyle: .selectable(),
-                    onSelect : { _ in
-                        self?.push(RetailGridViewController())
                     }
                 )
             } header: {
