@@ -14,6 +14,8 @@ protocol AnyItemCell : UICollectionViewCell
     
     var areSwipeActionsVisible : Bool  { get }
     
+    var anySwipeActionsView : UIView? { get }
+    
     func wasDequeued(with liveCells : LiveCells)
 }
 
@@ -138,6 +140,10 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentContainer.swipeState == .open
     }
     
+    var anySwipeActionsView : UIView? {
+        self.contentContainer.swipeActionsView
+    }
+    
     private var hasBeenDequeued = false
     
     func wasDequeued(with liveCells : LiveCells) {
@@ -198,9 +204,7 @@ final class LiveCells {
     }
     
     var activeSwipeCell : AnyItemCell? {
-        first { cell in
-            cell.areSwipeActionsVisible
-        }
+        first(where: \.areSwipeActionsVisible)
     }
     
     private(set) var cells : [LiveCell] = []

@@ -15,6 +15,10 @@ extension ItemCell {
         let contentView : Content.ContentView
 
         private var swipeConfiguration: SwipeConfiguration?
+        
+        var swipeActionsView : Content.SwipeActionsView? {
+            swipeConfiguration?.swipeView
+        }
 
         private (set) var swipeState: SwipeActionState = .closed {
             didSet {

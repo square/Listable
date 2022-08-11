@@ -898,7 +898,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         guard let cell = self.liveCells.activeSwipeCell else { return false }
         
-        return cell.contains(touch: touch) == false
+        return cell.anySwipeActionsView?.contains(touch: touch) == false
     }
     
     @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
