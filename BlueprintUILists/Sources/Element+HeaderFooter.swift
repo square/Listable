@@ -28,9 +28,7 @@ extension Element {
     ///     .background {
     ///         Box(backgroundColor: ...).inset(...)
     ///     }
-    ///     .onTap {
-    ///         // Handle the tap event.
-    ///     } show: {
+    ///     .pressedBackground {
     ///         Box(backgroundColor: ...).inset(...)
     ///     }
     /// ```
@@ -55,13 +53,12 @@ extension HeaderFooter where Content : _AnyWrappedHeaderFooterContent {
     }
     
     /// TODO
-    public func onTap(
-        _ onTap : @escaping () -> (),
-        show background : @escaping () -> Element
+    public func pressedBackground(
+        _ background : @escaping () -> Element,
+        onTap : @escaping () -> ()
     ) -> Self {
         var copy = self
-        copy.onTap = onTap
-        copy.content._backgroundProvider = background
+        copy.content._pressedBackgroundProvider = background
         return copy
     }
 }

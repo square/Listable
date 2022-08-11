@@ -453,7 +453,10 @@ class ComparePropertiesTests : XCTestCase {
     }
     
     func test_performance() {
-        determineAverage(for: 1.0) {
+        
+        print("Compare based on properties...")
+        
+        determineAverage(for: 0.5) {
             _ = compareEquatableProperties(
                 TestValue(
                     title: "A Title",
@@ -466,6 +469,23 @@ class ComparePropertiesTests : XCTestCase {
                     count: 10,
                     enumValue: .foo,
                     closure: {}
+                )
+            )
+        }
+        
+        print("Compare based on synthesized Equatable implementation...")
+        
+        determineAverage(for: 0.5) {
+            _ = compareEquatableProperties(
+                TestValue.ButEquatable(
+                    title: "A Title",
+                    count: 10,
+                    enumValue: .foo
+                ),
+                TestValue.ButEquatable(
+                    title: "A Title",
+                    count: 10,
+                    enumValue: .foo
                 )
             )
         }
@@ -488,6 +508,30 @@ fileprivate struct TestValue {
     enum EnumValue : Equatable {
         case foo
         case bar(String)
+    }
+    
+    /// Mirrors the structure of the parent type but with a synthesized `Equatable`
+    /// implementation to compare performance.
+    
+    fileprivate struct ButEquatable : Equatable {
+        
+        var title : String
+        var detail : String?
+        var count : Int
+        
+        var enumValue : EnumValue
+        
+        var nonEquatable: EquatableValue = .init(value: "An inner string")
+        
+        enum EnumValue : Equatable {
+            case foo
+            case bar(String)
+        }
+        
+        fileprivate struct EquatableValue : Equatable {
+            
+            var value : AnyHashable
+        }
     }
 }
 
