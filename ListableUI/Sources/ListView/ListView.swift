@@ -64,6 +64,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.collectionView.delegate = self.delegate
         self.collectionView.dataSource = self.dataSource
         
+        self.closeActiveSwipesGesture = TouchDownGestureRecognizer()
+        
         // Super init.
         
         super.init(frame: frame)
@@ -80,7 +82,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.delegate.layoutManager = self.layoutManager
         
         self.keyboardObserver.add(delegate: self)
-                
+        
+        self.closeActiveSwipesGesture.addTarget(self, action: #selector(closeActiveSwipeGestureIfNeeded))
+        self.addGestureRecognizer(closeActiveSwipesGesture)
+
+        self.closeActiveSwipesGesture.shouldRecognize = { [weak self] touch in
+            self?.shouldRecognizeCloseSwipeTouch(touch) ?? false
+        }
+        
         // Register supplementary views.
         
         SupplementaryKind.allCases.forEach {
@@ -877,6 +886,26 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
         self.updateScrollViewInsets()
+    }
+    
+    //
+    // MARK: Internal – Swipe To Delete
+    //
+    
+    private let closeActiveSwipesGesture : TouchDownGestureRecognizer
+    
+    @objc private func shouldRecognizeCloseSwipeTouch(_ touch : UITouch) -> Bool {
+        
+        guard let cell = self.liveCells.activeSwipeCell else { return false }
+        
+        return cell.anySwipeActionsView?.contains(touch: touch) == false
+    }
+    
+    @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
+        
+        guard let cell = self.liveCells.activeSwipeCell else { return }
+        
+        cell.closeSwipeActions()
     }
     
     //

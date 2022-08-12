@@ -6,6 +6,8 @@
 
 - Introduces a `.toggles` selection type, to allow a second tap to deselect an item.
 
+- Swipe actions will now dismiss when touching outside of the actively swiped cell to match iOS behavior.
+
 ### Removed
 
 - Removed RetailGridListLayout.
