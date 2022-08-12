@@ -135,7 +135,8 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
                 content += Section("empty") { section in
                     section += WordRow(
                         title: "No Results For '\(state.value.filter)'",
-                        detail: "Please enter a different search."
+                        detail: "Please enter a different search.",
+                        animations: .scaleUp
                     )
                 }
             }
@@ -202,10 +203,11 @@ fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable
 }
 
 
-fileprivate struct WordRow : BlueprintItemContent, Equatable
+fileprivate struct WordRow : BlueprintItemContent
 {
     var title : String
     var detail : String
+    var animations : ItemInsertAndRemoveAnimations?
     
     // MARK: BlueprintItemElement
     
@@ -231,6 +233,16 @@ fileprivate struct WordRow : BlueprintItemContent, Equatable
     
     var identifierValue: String {
         self.title
+    }
+    
+    func isEquivalent(to other: WordRow) -> Bool {
+        title == other.title && detail == other.detail
+    }
+    
+    var defaultItemProperties: DefaultProperties {
+        .defaults {
+            $0.insertAndRemoveAnimations = animations
+        }
     }
 }
 

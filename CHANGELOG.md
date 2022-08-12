@@ -14,6 +14,8 @@
 
 ### Changed
 
+- When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead.
+
 ### Misc
 
 # Past Releases
