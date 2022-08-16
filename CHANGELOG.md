@@ -4,6 +4,18 @@
 
 ### Added
 
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [7.0.0] - 2022-08-16
+
+### Added
+
 - Introduces a `.toggles` selection type, to allow a second tap to deselect an item.
 
 - Swipe actions will now dismiss when touching outside of the actively swiped cell to match iOS behavior.
@@ -15,10 +27,6 @@
 ### Changed
 
 - When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead.
-
-### Misc
-
-# Past Releases
 
 # [6.0.0] - 2022-07-29
 
@@ -744,7 +752,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/6.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/7.0.0...HEAD
+[7.0.0]: https://github.com/kyleve/Listable/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/kyleve/Listable/compare/5.2.1...6.0.0
 [5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
 [5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
