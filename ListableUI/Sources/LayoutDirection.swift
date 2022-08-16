@@ -85,10 +85,10 @@ extension LayoutDirection
     
     /// When writing a layout, use this method to return differing values based on
     /// the direction. The passed autoclosures will only be evaluated if they are for the current direction.
-    public func `switch`<Value>(vertical : @autoclosure () -> Value, horizontal : @autoclosure () -> Value) -> Value {
+    public func `switch`<Value>(vertical : @autoclosure () throws -> Value, horizontal : @autoclosure () throws -> Value) rethrows -> Value {
         switch self {
-        case .vertical: return vertical()
-        case .horizontal: return horizontal()
+        case .vertical: return try vertical()
+        case .horizontal: return try horizontal()
         }
     }
     

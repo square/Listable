@@ -26,6 +26,46 @@ public protocol ListLayout : AnyListLayout
 }
 
 
+public struct ListLayoutContentProperties : Hashable {
+    
+    public enum Completed : Error, Equatable {
+        case passedNeededMeasurementSize
+    }
+    
+    public private(set) var contentBottom : CGFloat
+    
+    public mutating func add(contentBottom: CGFloat) throws {
+        if let max = input.maxContentBottom, self.contentBottom + contentBottom >= max {
+            throw Completed.passedNeededMeasurementSize
+        }
+        
+        self.contentBottom += contentBottom
+    }
+    
+    public mutating func set(contentBottom: CGFloat) throws {
+        if let max = input.maxContentBottom, contentBottom >= max {
+            throw Completed.passedNeededMeasurementSize
+        }
+        
+        self.contentBottom = contentBottom
+    }
+    
+    public let input : Input
+    
+    public init(input : Input) {
+        self.contentBottom = 0
+        self.input = input
+    }
+    
+    public struct Input : Hashable {
+        public let maxContentBottom : CGFloat?
+        
+        public init(maxContentBottom : CGFloat?) {
+            self.maxContentBottom = maxContentBottom
+        }
+    }
+}
+
 public struct ListLayoutLayoutContext {
     
     public var viewBounds : CGRect
@@ -33,19 +73,27 @@ public struct ListLayoutLayoutContext {
     public var contentInset : UIEdgeInsets
     public var adjustedContentInset : UIEdgeInsets
     
+    public var layoutConstraints : LayoutConstraints
+    
     public var environment : ListEnvironment
+    
+    public struct LayoutConstraints : Equatable {
+        var maximumValuedHeight : CGFloat?
+    }
     
     public init(
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
         contentInset : UIEdgeInsets,
         adjustedContentInset : UIEdgeInsets,
+        layoutConstraints : LayoutConstraints,
         environment : ListEnvironment
     ) {
         self.viewBounds = viewBounds
         self.safeAreaInsets = safeAreaInsets
         self.contentInset = contentInset
         self.adjustedContentInset = adjustedContentInset
+        self.layoutConstraints = layoutConstraints
         self.environment = environment
     }
     
@@ -57,6 +105,7 @@ public struct ListLayoutLayoutContext {
         self.safeAreaInsets = collectionView.safeAreaInsets
         self.contentInset = collectionView.contentInset
         self.adjustedContentInset = collectionView.adjustedContentInset
+        self.layoutConstraints = .init(maximumValuedHeight: nil)
         
         self.environment = environment
     }
@@ -122,8 +171,9 @@ public protocol AnyListLayout : AnyObject
     
     func layout(
         delegate : CollectionViewLayoutDelegate?,
-        in context : ListLayoutLayoutContext
-    ) -> ListLayoutResult
+        in context : ListLayoutLayoutContext,
+        with input : ListLayoutContentProperties.Input
+    ) throws -> ListLayoutResult
     
     func setZIndexes()
     
@@ -145,8 +195,8 @@ extension AnyListLayout
     func performLayout(
         with delegate : CollectionViewLayoutDelegate?,
         in context : ListLayoutLayoutContext
-    ) {
-        let result = self.layout(
+    ) throws {
+        let result = try self.layout(
             delegate: delegate,
             in: context
         )

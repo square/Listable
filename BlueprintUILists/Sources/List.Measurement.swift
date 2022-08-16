@@ -6,6 +6,7 @@
 //
 
 import ListableUI
+import BlueprintUI
 
 
 ///
@@ -77,24 +78,17 @@ extension List {
         ///
         ///    - safeArea: Defaults to `.none`. The safe area, if any, to include in the content sizing calculation.
         ///
-        ///    - itemLimit: When measuring the list, how many items should be measured to determine the height. Defaults
-        ///     to 50, which is usually enough to fill the `fittingSize`. If you truly want to determine the entire height of all of
-        ///     the content in the list, set this to `nil` (but you should rarely need to do this). The lower this value, the less
-        ///     overall measurement that has to occur (if the value is less than the number of items in the list), which improvements
-        ///     measurement and layout performance.
-        ///
         case measureContent(
             horizontalFill : FillRule = .fillParent,
             verticalFill : FillRule = .natural,
-            safeArea: SafeArea = .none,
-            itemLimit : Int? = ListView.defaultContentSizeItemLimit
+            safeArea: SafeArea = .none
         )
         
         var needsMeasurement : Bool {
             switch self {
             case .fillParent:
                 return false
-            case .measureContent(let horizontalFill, let verticalFill, _, _):
+            case .measureContent(let horizontalFill, let verticalFill, _):
                 return horizontalFill.needsMeasurement || verticalFill.needsMeasurement
             }
         }
@@ -147,5 +141,23 @@ extension List.Measurement {
                 return true
             }
         }
+    }
+}
+
+
+extension Environment {
+    
+    public var listMeasurment : List.Measurement? {
+        get { self[ListMeasurementKey.self] }
+        set { self[ListMeasurementKey.self] = newValue }
+    }
+    
+}
+
+
+public enum ListMeasurementKey : EnvironmentKey {
+    
+    public static var defaultValue: List.Measurement? {
+        nil
     }
 }

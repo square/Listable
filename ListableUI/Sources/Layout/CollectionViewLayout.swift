@@ -476,7 +476,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
 
-        self.layout.performLayout(
+        try! self.layout.performLayout(
             with: self.delegate,
             in: context
         )

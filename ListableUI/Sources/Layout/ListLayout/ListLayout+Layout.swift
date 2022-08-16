@@ -20,16 +20,16 @@ extension ListProperties {
     /// the provided `fittingSize`, returning the laid out layout.
     internal func makeLayout(
         in fittingSize : CGSize,
-        safeAreaInsets : UIEdgeInsets,
-        itemLimit : Int?
+        safeAreaInsets : UIEdgeInsets
     ) -> (AnyListLayout, ListLayoutLayoutContext)
     {
         /// 1) Create an instance of presentation state and the layout we can use to measure the list.
         
         let presentationState = PresentationState(
             forMeasuringOrTestsWith: {
-                if let limit = itemLimit {
-                    let zero = IndexPath(item: 0, section: 0)
+                let zero = IndexPath(item: 0, section: 0)
+                
+                if let limit = itemLimit(in: fittingSize) {
                     return self.content.sliceTo(indexPath: zero, plus: limit).content
                 } else {
                     return self.content
@@ -65,15 +65,35 @@ extension ListProperties {
                 safeAreaInsets: safeAreaInsets,
                 contentInset: .zero
             ),
+            layoutConstraints: .init(
+                maximumValuedHeight: layout.direction.switch(
+                    vertical: fittingSize.height,
+                    horizontal: fittingSize.width
+                )
+            ),
             environment: self.environment
         )
         
-        layout.performLayout(
+        try? layout.performLayout(
             with: nil,
             in: layoutContext
         )
         
         return (layout, layoutContext)
+    }
+    
+    internal func itemLimit(in fittingSize : CGSize) -> Int? {
+        
+        let axis = layout.layoutAppearanceProperties.direction.switch(
+            vertical: fittingSize.height,
+            horizontal: fittingSize.width
+        )
+        
+        if axis.isFinite {
+            return Int(ceil(axis / 30.0)) // Assuming average row is 30pts tall...
+        } else {
+            return nil
+        }
     }
 }
 

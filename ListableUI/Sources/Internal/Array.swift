@@ -10,14 +10,14 @@ import Foundation
 
 extension Array
 {
-    func forEachWithIndex(_ block : (Int, Bool, Element) -> ())
+    func forEachWithIndex(_ block : (Int, Bool, Element) throws -> ()) rethrows
     {
         let count = self.count
         var index : Int = 0
         
         while index < count {
             let element = self[index]
-            block(index, index == (count - 1), element)
+            try block(index, index == (count - 1), element)
             index += 1
         }
     }

@@ -429,8 +429,8 @@ final class TableListLayout : ListLayout
         viewWidth : CGFloat,
         defaultWidth : CGFloat,
         contentBottom : CGFloat,
-        after : (ListLayoutContent.SupplementaryItemInfo) -> ()
-    ) {        
+        after : (ListLayoutContent.SupplementaryItemInfo) throws -> ()
+    ) throws {
         let position = width.position(
             with: viewWidth,
             defaultWidth: defaultWidth
@@ -469,13 +469,14 @@ final class TableListLayout : ListLayout
             }
         )
         
-        after(headerFooter)
+        try after(headerFooter)
     }
     
     func layout(
         delegate : CollectionViewLayoutDelegate?,
-        in context : ListLayoutLayoutContext
-    ) -> ListLayoutResult
+        in context : ListLayoutLayoutContext,
+        with input : ListLayoutContentProperties.Input
+    ) throws -> ListLayoutResult
     {
         let boundsContext = ListContentBounds.Context(
             viewSize: context.viewBounds.size,
@@ -519,21 +520,25 @@ final class TableListLayout : ListLayout
         // Sizing
         //
         
-        var contentBottom : CGFloat = 0.0
+        var properties = ListLayoutContentProperties(input: input)
+        
+        try properties.set(contentBottom: 0.0)
                 
         //
         // Container Header
         //
         
-        self.layout(
+        try self.layout(
             headerFooter: self.content.containerHeader,
             width: self.content.containerHeader.layouts.table.width.merge(with: .fill),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            contentBottom: contentBottom,
+            contentBottom: properties.contentBottom,
             after: { headerFooter in
                 if headerFooter.isPopulated {
-                    contentBottom = self.direction.maxY(for: headerFooter.defaultFrame)
+                    try properties.add(
+                        contentBottom: self.direction.maxY(for: headerFooter.defaultFrame)
+                    )
                 }
             }
         )
@@ -542,27 +547,33 @@ final class TableListLayout : ListLayout
         // Set Frame Origins
         //
         
-        contentBottom += self.direction.switch(
-            vertical: bounds.padding.top,
-            horizontal: bounds.padding.left
+        try properties.add(
+            contentBottom: self.direction.switch(
+                vertical: bounds.padding.top,
+                horizontal: bounds.padding.left
+            )
         )
         
         //
         // Header
         //
         
-        self.layout(
+        try self.layout(
             headerFooter: self.content.header,
             width: self.content.header.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            contentBottom: contentBottom,
+            contentBottom: properties.contentBottom,
             after: { headerFooter in
                 if headerFooter.isPopulated {
-                    contentBottom = self.direction.maxY(for: headerFooter.defaultFrame)
+                    try properties.set(
+                        contentBottom: self.direction.maxY(for: headerFooter.defaultFrame)
+                    )
 
                     if self.content.sections.isEmpty == false {
-                        contentBottom += layout.headerToFirstSectionSpacing
+                        try properties.add(
+                            contentBottom: layout.headerToFirstSectionSpacing
+                        )
                     }
                 }
             }
@@ -572,7 +583,7 @@ final class TableListLayout : ListLayout
         // Sections
         //
         
-        self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
+        try self.content.sections.forEachWithIndex { sectionIndex, isLast, section in
             
             if section.all.isEmpty { return }
             
@@ -589,18 +600,22 @@ final class TableListLayout : ListLayout
             
             let hasSectionFooter = section.footer.isPopulated
             
-            self.layout(
+            try self.layout(
                 headerFooter: section.header,
                 width: section.header.layouts.table.width.merge(with: sectionWidth),
                 viewWidth: viewWidth,
                 defaultWidth: sectionPosition.width,
-                contentBottom: contentBottom,
+                contentBottom: properties.contentBottom,
                 after: { header in
                     if header.isPopulated {
-                        contentBottom = self.direction.maxY(for: header.defaultFrame)
+                        try properties.set(
+                            contentBottom: self.direction.maxY(for: header.defaultFrame)
+                        )
                         
                         if section.items.isEmpty == false {
-                            contentBottom += layout.sectionHeaderBottomSpacing
+                            try properties.add(
+                                contentBottom: layout.sectionHeaderBottomSpacing
+                            )
                         }
                     }
                 }
@@ -611,7 +626,7 @@ final class TableListLayout : ListLayout
             //
             
             if section.layouts.table.columns.count == 1 {
-                section.items.forEachWithIndex { itemIndex, isLast, item in
+                try section.items.forEachWithIndex { itemIndex, isLast, item in
                     
                     let width = item.layouts.table.width.merge(with: sectionWidth)
                     
@@ -637,26 +652,30 @@ final class TableListLayout : ListLayout
                     self.direction.switch(
                         vertical: {
                             item.x = itemPosition.origin
-                            item.y = contentBottom
+                            item.y = properties.contentBottom
                             item.size = CGSize(width: itemPosition.width, height: size.height)
                             
-                            contentBottom += size.height
+                            try properties.add(contentBottom: size.height)
                         },
                         horizontal: {
-                            item.x = contentBottom
+                            item.x = properties.contentBottom
                             item.y = itemPosition.origin
                             item.size = CGSize(width: size.width, height: itemPosition.width)
                             
-                            contentBottom += size.width
+                            try properties.add(contentBottom: size.width)
                         }
                     )
 
                     if isLast {
                         if hasSectionFooter {
-                            contentBottom += item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                            try properties.add(
+                                contentBottom: item.layouts.table.itemToSectionFooterSpacing ?? layout.itemToSectionFooterSpacing
+                            )
                         }
                     } else {
-                        contentBottom += item.layouts.table.itemSpacing ?? layout.itemSpacing
+                        try properties.add(
+                            contentBottom: item.layouts.table.itemSpacing ?? layout.itemSpacing
+                        )
                     }
                 }
             } else {
@@ -664,7 +683,7 @@ final class TableListLayout : ListLayout
                 
                 let groupedItems = section.layouts.table.columns.group(values: section.items)
                 
-                groupedItems.forEachWithIndex { rowIndex, isLast, row in
+                try groupedItems.forEachWithIndex { rowIndex, isLast, row in
                     var maxHeight : CGFloat = 0.0
                     var maxItemSpacing : CGFloat = 0.0
                     var maxItemToSectionFooterSpacing : CGFloat = 0.0
@@ -675,11 +694,11 @@ final class TableListLayout : ListLayout
                         self.direction.switch(
                             vertical: {
                                 item.x = columnXOrigin
-                                item.y = contentBottom
+                                item.y = properties.contentBottom
                             },
                             horizontal: {
                                 item.y = columnXOrigin
-                                item.x = contentBottom
+                                item.x = properties.contentBottom
                             }
                         )
                                                 
@@ -711,14 +730,14 @@ final class TableListLayout : ListLayout
                         columnXOrigin += (itemWidth + section.layouts.table.columns.spacing)
                     }
                     
-                    contentBottom += maxHeight
+                    try properties.add(contentBottom: maxHeight)
                     
                     if isLast {
                         if hasSectionFooter {
-                            contentBottom += maxItemToSectionFooterSpacing
+                            try properties.add(contentBottom: maxItemToSectionFooterSpacing)
                         }
                     } else {
-                        contentBottom += maxItemSpacing
+                        try properties.add(contentBottom: maxItemSpacing)
                     }
                 }
             }
@@ -727,15 +746,15 @@ final class TableListLayout : ListLayout
             // Section Footer
             //
             
-            self.layout(
+            try self.layout(
                 headerFooter: section.footer,
                 width: section.footer.layouts.table.width.merge(with: sectionWidth),
                 viewWidth: viewWidth,
                 defaultWidth: sectionPosition.width,
-                contentBottom: contentBottom,
+                contentBottom: properties.contentBottom,
                 after: { footer in
                     if footer.isPopulated {
-                        contentBottom = self.direction.maxY(for: footer.defaultFrame)
+                        properties.set(contentBottom: self.direction.maxY(for: footer.defaultFrame))
                     }
                 }
             )
@@ -744,7 +763,7 @@ final class TableListLayout : ListLayout
             
             if isLast {
                 if self.content.footer.isPopulated {
-                    contentBottom += layout.lastSectionToFooterSpacing
+                    try properties.add(contentBottom: layout.lastSectionToFooterSpacing)
                 }
             } else {
                 let additionalSectionSpacing: CGFloat
@@ -756,7 +775,7 @@ final class TableListLayout : ListLayout
                         : layout.interSectionSpacingWithNoFooter
                 }
                 
-                contentBottom += additionalSectionSpacing
+                try properties.add(contentBottom: additionalSectionSpacing)
             }
         }
         
@@ -764,34 +783,38 @@ final class TableListLayout : ListLayout
         // Footer
         //
         
-        self.layout(
+        try self.layout(
             headerFooter: self.content.footer,
             width: self.content.footer.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            contentBottom: contentBottom,
+            contentBottom: properties.contentBottom,
             after: { footer in
                 if footer.isPopulated {
-                    contentBottom = self.direction.maxY(for: footer.defaultFrame)
+                    try properties.set(
+                        contentBottom: self.direction.maxY(for: footer.defaultFrame)
+                    )
                 }
             }
         )
         
-        contentBottom += self.direction.switch(
-            vertical: bounds.padding.bottom,
-            horizontal: bounds.padding.right
+        try properties.add(
+            contentBottom: self.direction.switch(
+                vertical: bounds.padding.bottom,
+                horizontal: bounds.padding.right
+            )
         )
         
         //
         // Overscroll Footer
         //
         
-        self.layout(
+        try self.layout(
             headerFooter: self.content.overscrollFooter,
             width: self.content.overscrollFooter.layouts.table.width.merge(with: rootWidth),
             viewWidth: viewWidth,
             defaultWidth: defaultWidth,
-            contentBottom: contentBottom,
+            contentBottom: properties.contentBottom,
             after: { _ in }
         )
         
@@ -800,7 +823,7 @@ final class TableListLayout : ListLayout
         //
         
         return .init(
-            contentSize: direction.size(for: CGSize(width: viewWidth, height: contentBottom)),
+            contentSize: direction.size(for: CGSize(width: viewWidth, height: properties.contentBottom)),
             
             naturalContentWidth: direction.switch {
                 content.maxValue(for: \.measuredSize.width) + bounds.padding.right + bounds.padding.left
