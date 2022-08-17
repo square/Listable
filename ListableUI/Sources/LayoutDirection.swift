@@ -249,3 +249,74 @@ extension LayoutDirection
         }
     }
 }
+
+
+// MARK: KeyPaths
+
+extension LayoutDirection
+{
+
+    var coordinate: WritableKeyPath<CGPoint, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.x
+        case .vertical: return \.y
+        }
+    }
+    
+    var minCoordinate: KeyPath<CGRect, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.minX
+        case .vertical: return \.minY
+        }
+    }
+
+    var midCoordinate: KeyPath<CGRect, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.midX
+        case .vertical: return \.midY
+        }
+    }
+
+    var maxCoordinate: KeyPath<CGRect, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.maxX
+        case .vertical: return \.maxY
+        }
+    }
+
+    var pairedCoordinate: WritableKeyPath<CGPoint, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.y
+        case .vertical: return \.x
+        }
+    }
+
+    var expanse: WritableKeyPath<CGSize, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.width
+        case .vertical: return \.height
+        }
+    }
+
+    var beginInset: WritableKeyPath<UIEdgeInsets, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.left
+        case .vertical: return \.top
+        }
+    }
+
+    var endInset: WritableKeyPath<UIEdgeInsets, CGFloat>
+    {
+        switch self {
+        case .horizontal: return \.right
+        case .vertical: return \.bottom
+        }
+    }
+}

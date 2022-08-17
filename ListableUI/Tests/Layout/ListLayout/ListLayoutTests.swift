@@ -25,7 +25,8 @@ final class AnyListLayoutTests : XCTestCase {
             XCTAssertEqual(
                 layout.onDidEndDraggingTargetContentOffset(
                     for: CGPoint(x: 0, y: 0),
-                       velocity: CGPoint(x: 0, y: 1)
+                    velocity: CGPoint(x: 0, y: 1),
+                    visibleContentSize: .zero
                 ),
                 nil
             )
@@ -38,7 +39,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 0),
-                        velocity: CGPoint(x: 0, y: 1)
+                        velocity: CGPoint(x: 0, y: 1),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 0, y: 0.0)
                 )
@@ -46,7 +48,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 100),
-                        velocity: CGPoint(x: 0, y: 1)
+                        velocity: CGPoint(x: 0, y: 1),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 0, y: 100.0)
                 )
@@ -56,7 +59,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 0),
-                        velocity: CGPoint(x: 0, y: -1)
+                        velocity: CGPoint(x: 0, y: -1),
+                        visibleContentSize: .zero
                     ),
                     nil
                 )
@@ -64,7 +68,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 100),
-                        velocity: CGPoint(x: 0, y: -1)
+                        velocity: CGPoint(x: 0, y: -1),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 0, y: 0)
                 )
@@ -78,7 +83,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 0),
-                        velocity: CGPoint(x: 1, y: 0)
+                        velocity: CGPoint(x: 1, y: 0),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 0.0, y: 0.0)
                 )
@@ -87,7 +93,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 100, y: 0),
-                        velocity: CGPoint(x: 1, y: 0)
+                        velocity: CGPoint(x: 1, y: 0),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 100, y: 0.0)
                 )
@@ -97,7 +104,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 0, y: 0),
-                        velocity: CGPoint(x: -1, y: 0)
+                        velocity: CGPoint(x: -1, y: 0),
+                        visibleContentSize: .zero
                     ),
                     nil
                 )
@@ -106,7 +114,8 @@ final class AnyListLayoutTests : XCTestCase {
                 XCTAssertEqual(
                     layout.onDidEndDraggingTargetContentOffset(
                         for: CGPoint(x: 100, y: 0),
-                        velocity: CGPoint(x: -1, y: 0)
+                        velocity: CGPoint(x: -1, y: 0),
+                        visibleContentSize: .zero
                     ),
                     CGPoint(x: 0.0, y: 0.0)
                 )

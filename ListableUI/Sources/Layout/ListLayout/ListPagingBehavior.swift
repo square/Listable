@@ -18,4 +18,9 @@ public enum ListPagingBehavior : Equatable {
     /// When the user stops scrolling, the final offset of the scroll event
     /// will be adjusted so that the first visible item is fully visible.
     case firstVisibleItemEdge
+
+    /// When the user stops scrolling, the final offset of the scroll event
+    /// will be adjusted so that the first visible item is centered within the
+    /// visible bounds.
+    case firstVisibleItemCentered
 }
