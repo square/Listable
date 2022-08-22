@@ -10,7 +10,7 @@ import UIKit
 
 extension ListView
 {
-    final class Delegate : NSObject, UICollectionViewDelegate, CollectionViewLayoutDelegate
+    final class Delegate : NSObject, UICollectionViewDelegate, UICollectionViewDragDelegate, CollectionViewLayoutDelegate
     {
         unowned var view : ListView!
         unowned var presentationState : PresentationState!
@@ -254,6 +254,68 @@ extension ListView
                 to: to,
                 toSection: toSection
             )
+        }
+        
+//        func indexPathForPreferredFocusedView(in collectionView: UICollectionView) -> IndexPath? {
+//            
+//        }
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            canFocusItemAt indexPath: IndexPath
+        ) -> Bool {
+            let item = self.presentationState.item(at: indexPath)
+            
+            return item.anyModel.selectionStyle.isSelectable
+        }
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            shouldUpdateFocusIn context: UICollectionViewFocusUpdateContext
+        ) -> Bool {
+            true
+        }
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            didUpdateFocusIn context: UICollectionViewFocusUpdateContext,
+            with coordinator: UIFocusAnimationCoordinator
+        ) {
+            
+        }
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            selectionFollowsFocusForItemAt indexPath: IndexPath
+        ) -> Bool {
+            true
+        }
+        
+        // MARK: UICollectionViewDragDelegate
+        
+        func collectionView(
+            _ collectionView: UICollectionView,
+            itemsForBeginning session: UIDragSession,
+            at indexPath: IndexPath
+        ) -> [UIDragItem] {
+            
+            let item = self.presentationState.item(at: indexPath)
+            
+            guard let dragItem = item.anyModel.anyDragItem else {
+                return []
+            }
+            
+            guard let cell = collectionView.cellForItem(at: indexPath) as? AnyItemCell else {
+                return []
+            }
+            
+            if dragItem.previewProvider == nil {
+                dragItem.previewProvider = {
+                    UIDragPreview(view: cell.contentView)
+                }
+            }
+            
+            return [dragItem]
         }
         
         // MARK: CollectionViewLayoutDelegate

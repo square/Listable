@@ -150,6 +150,10 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     
     // MARK: AnyItem_Internal
     
+    public var anyDragItem : UIDragItem? {
+        content.dragItem
+    }
+    
     public func anyIsEquivalent(to other : AnyItem) -> Bool
     {
         guard let other = other as? Item<Content> else {

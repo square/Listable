@@ -32,6 +32,8 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
 
 public protocol AnyItem_Internal
 {
+    var anyDragItem : UIDragItem? { get }
+    
     func anyWasMoved(comparedTo other : AnyItem) -> Bool
     func anyIsEquivalent(to other : AnyItem) -> Bool
     

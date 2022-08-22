@@ -26,6 +26,9 @@ public struct Behavior : Equatable
     /// How the list should respond to selection attempts.
     public var selectionMode : SelectionMode
         
+    /// A Boolean value that triggers an automatic selection when focus moves to a cell.
+    public var selectionFollowsFocus : Bool
+    
     /// How the list should behave when its content takes up less space than is available in the list view.
     /// TODO: This should move to individual layout types.
     public var underflow : Underflow
@@ -45,6 +48,7 @@ public struct Behavior : Equatable
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
         scrollsToTop : ScrollsToTop = .enabled,
         selectionMode : SelectionMode = .single,
+        selectionFollowsFocus : Bool = true,
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
@@ -56,6 +60,8 @@ public struct Behavior : Equatable
         self.scrollsToTop = scrollsToTop
         
         self.selectionMode = selectionMode
+        self.selectionFollowsFocus = selectionFollowsFocus
+        
         self.underflow = underflow
         
         self.canCancelContentTouches = canCancelContentTouches

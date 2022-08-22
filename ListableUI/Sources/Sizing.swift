@@ -177,6 +177,19 @@ extension Sizing
         }
     }
     
+    public struct MeasurementHinting : Hashable {
+        
+        public var width : Axis?
+        
+        public var height : Axis?
+        
+        public enum Axis : Hashable {
+            case measureInViewDimension
+            case useNaturalSize
+            case contentWillNotExceed(CGFloat)
+        }
+    }
+    
     /// Describes the range of values that are acceptable for both
     /// the width and the height of content within a list.
     ///

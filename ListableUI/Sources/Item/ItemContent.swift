@@ -426,6 +426,12 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     
     //
+    // MARK: Dragging
+    //
+    
+    var dragItem : UIDragItem? { get }
+    
+    //
     // MARK: Content Coordination
     //
     
@@ -441,6 +447,12 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     /// Creates a new coordinator with the provided actions and info.
     func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
+    
+    //
+    // MARK: Measuring
+    //
+    
+    func measurementHinting(with info : ApplyItemContentInfo) -> Sizing.MeasurementHinting
 }
 
 
@@ -609,6 +621,25 @@ public extension ItemContent where BackgroundView == UIView
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     {
         SelectedBackgroundView(frame: frame)
+    }
+}
+
+
+public extension ItemContent {
+    
+    var dragItem : UIDragItem? {
+        nil
+    }
+}
+
+
+public extension ItemContent {
+    
+    func measurementHinting(with info : ApplyItemContentInfo) -> Sizing.MeasurementHinting {
+        .init(
+            width: .measureInViewDimension,
+            height: .useNaturalSize
+        )
     }
 }
 

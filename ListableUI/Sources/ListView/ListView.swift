@@ -64,6 +64,9 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.collectionView.delegate = self.delegate
         self.collectionView.dataSource = self.dataSource
         
+        self.collectionView.dragDelegate = self.delegate
+        self.collectionView.dragInteractionEnabled = true
+        
         self.closeActiveSwipesGesture = TouchDownGestureRecognizer()
         
         // Super init.
@@ -284,6 +287,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
         case .multiple:
             view.allowsSelection = true
             view.allowsMultipleSelection = true
+        }
+        
+        if #available(macCatalyst 14.0, *) {
+            view.selectionFollowsFocus = behavior.selectionFollowsFocus
         }
     }
     
