@@ -17,7 +17,7 @@ class ListPerformanceTesting : XCTestCase {
     
     override func invokeTest() {
         // Uncomment to be able to run perf testing.
-        // super.invokeTest()
+        super.invokeTest()
     }
     
     func test_applying_same_elements() {
@@ -33,10 +33,14 @@ class ListPerformanceTesting : XCTestCase {
         let view = BlueprintView()
         view.frame.size = CGSize(width: 400, height: 2000)
         
-        self.determineAverage(for: 10) {
+        self.determineAverage(for: 3) {
             view.element = list
             view.layoutIfNeeded()
         }
+    }
+    
+    func test_measurement() {
+        
     }
 }
 
@@ -47,6 +51,10 @@ fileprivate struct Content : BlueprintItemContent, Equatable {
     
     var identifierValue : String {
         self.title
+    }
+    
+    func isEquivalent(to other: Content) -> Bool {
+        false
     }
     
     func element(with info: ApplyItemContentInfo) -> Element {
@@ -61,6 +69,12 @@ fileprivate struct Content : BlueprintItemContent, Equatable {
                                         col.add(child: Column { col in
                                             col.add(child: Column { col in
                                                 col.add(child: Column { col in
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
+                                                    col.add(child: Label(text: "This is some text that is in a thing"))
                                                     col.add(child: Label(text: "This is some text that is in a thing"))
                                                 })
                                             })

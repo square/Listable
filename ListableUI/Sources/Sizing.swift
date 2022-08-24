@@ -128,6 +128,28 @@ public enum Sizing : Hashable
         )
     }
     
+    func clamp(size : CGSize, with info : MeasureInfo) -> CGSize {
+        let size : CGSize = {
+            switch self {
+            case .fixed(let width, let height):
+                return CGSize(width: width, height: height)
+                
+            case .thatFits(let constraint):
+                return constraint.clamp(size)
+                
+            case .autolayout(let constraint):
+                return constraint.clamp(size)
+            }
+        }()
+        
+        self.validateMeasuredSize(size, with: info)
+        
+        return CGSize(
+            width: ceil(size.width),
+            height: ceil(size.height)
+        )
+    }
+    
     private func validateMeasuredSize(_ size : CGSize, with info : MeasureInfo) {
         
         // Ensure we have a reasonably valid size for the cell.

@@ -147,4 +147,17 @@ public extension BlueprintItemContent
         
         return view
     }
+    
+    func size(
+        for measurement: Sizing.MeasureInfo,
+        state info: ApplyItemContentInfo
+    ) -> CGSize? {
+        
+        self.element(with: info)
+            .content
+            .measure(
+                in: .init(measurement.sizeConstraint),
+                environment: info.environment.blueprintEnvironment
+            )
+    }
 }

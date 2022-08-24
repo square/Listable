@@ -143,6 +143,17 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
+    
+    //
+    // MARK: Measurement
+    //
+    
+    /// Provides an override opportunity to provide more efficient content sizing for your content.
+    /// If nil is returned, the default view-based measurement system is used. Defaults to nil.
+    func size(
+        for measurement : Sizing.MeasureInfo,
+        state info : ApplyHeaderFooterContentInfo
+    ) -> CGSize?
 }
 
 
@@ -214,6 +225,17 @@ public extension HeaderFooterContent where Self.PressedBackgroundView == UIView
     static func createReusablePressedBackgroundView(frame : CGRect) -> PressedBackgroundView
     {
         PressedBackgroundView(frame: frame)
+    }
+}
+
+
+public extension HeaderFooterContent {
+    
+    func size(
+        for measurement : Sizing.MeasureInfo,
+        state info : ApplyHeaderFooterContentInfo
+    ) -> CGSize? {
+        nil
     }
 }
 

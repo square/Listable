@@ -441,6 +441,17 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     /// Creates a new coordinator with the provided actions and info.
     func makeCoordinator(actions : CoordinatorActions, info : CoordinatorInfo) -> Coordinator
+    
+    //
+    // MARK: Measurement
+    //
+    
+    /// Provides an override opportunity to provide more efficient content sizing for your content.
+    /// If nil is returned, the default view-based measurement system is used. Defaults to nil.
+    func size(
+        for measurement : Sizing.MeasureInfo,
+        state info : ApplyItemContentInfo
+    ) -> CGSize?
 }
 
 
@@ -609,6 +620,17 @@ public extension ItemContent where BackgroundView == UIView
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     {
         SelectedBackgroundView(frame: frame)
+    }
+}
+
+
+public extension ItemContent {
+    
+    func size(
+        for measurement : Sizing.MeasureInfo,
+        state info : ApplyItemContentInfo
+    ) -> CGSize? {
+        return nil
     }
 }
 

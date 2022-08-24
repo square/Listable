@@ -269,6 +269,19 @@ extension PresentationState
             return cell
         }
         
+        func applyInfo(
+            itemState : ListableUI.ItemState,
+            environment : ListEnvironment
+        ) -> ApplyItemContentInfo {
+            ApplyItemContentInfo(
+                state: itemState,
+                position: self.itemPosition,
+                reorderingActions: self.reorderingActions,
+                isReorderable: self.model.reordering != nil,
+                environment: environment
+            )
+        }
+        
         func applyTo(
             cell anyCell : UICollectionViewCell,
             itemState : ListableUI.ItemState,
@@ -277,13 +290,7 @@ extension PresentationState
         ) {
             let cell = anyCell as! ItemCell<Content>
             
-            let applyInfo = ApplyItemContentInfo(
-                state: itemState,
-                position: self.itemPosition,
-                reorderingActions: self.reorderingActions,
-                isReorderable: self.model.reordering != nil,
-                environment: environment
-            )
+            let applyInfo = applyInfo(itemState: itemState, environment: environment)
             
             // Apply Model State
             
@@ -478,22 +485,34 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return ItemCell<Content>()
-                }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
-                    
-                    self.applyTo(
-                        cell: cell,
-                        itemState: itemState,
-                        reason: .measurement,
-                        environment: environment
-                    )
-                    
-                    return self.model.sizing.measure(with: cell, info: info)
-                })
+                let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+                
+                func measureSize() -> CGSize {
+                    if let size = self.model.content.size(
+                        for: info,
+                        state: applyInfo(itemState: itemState, environment: environment)
+                    ) {
+                        return self.model.sizing.clamp(size: size, with: info)
+                    } else {
+                        return cache.use(
+                            with: self.model.reuseIdentifier,
+                            create: {
+                                return ItemCell<Content>()
+                        }, { cell in
+                            
+                            self.applyTo(
+                                cell: cell,
+                                itemState: itemState,
+                                reason: .measurement,
+                                environment: environment
+                            )
+                            
+                            return self.model.sizing.measure(with: cell, info: info)
+                        })
+                    }
+                }
+                
+                let size = measureSize()
                 
                 self.cachedSizes[key] = size
                 

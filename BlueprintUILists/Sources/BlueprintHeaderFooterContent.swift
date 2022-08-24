@@ -136,4 +136,16 @@ public extension BlueprintHeaderFooterContent
         
         return view
     }
+    
+    func size(
+        for measurement : Sizing.MeasureInfo,
+        state info : ApplyHeaderFooterContentInfo
+    ) -> CGSize? {
+        elementRepresentation
+            .content
+            .measure(
+                in: .init(measurement.sizeConstraint),
+                environment: info.environment.blueprintEnvironment
+            )
+    }
 }

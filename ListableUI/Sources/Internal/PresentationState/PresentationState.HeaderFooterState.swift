@@ -213,25 +213,36 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                 
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return HeaderFooterContentView<Content>(frame: .zero)
-                }, { view in
-                    let views = HeaderFooterContentViews<Content>(
-                        content: view.content,
-                        background: view.background,
-                        pressed: view.pressedBackground
-                    )
-                    
-                    self.model.content.apply(
-                        to: views,
-                        for: .measurement,
-                        with: .init(environment: environment)
-                    )
-                    
-                    return self.model.sizing.measure(with: view, info: info)
-                })
+                func measureSize() -> CGSize {
+                    if let size = self.model.content.size(
+                        for: info,
+                        state: .init(environment: environment)
+                    ) {
+                        return self.model.sizing.clamp(size: size, with: info)
+                    } else {
+                        return cache.use(
+                            with: self.model.reuseIdentifier,
+                            create: {
+                                return HeaderFooterContentView<Content>(frame: .zero)
+                        }, { view in
+                            let views = HeaderFooterContentViews<Content>(
+                                content: view.content,
+                                background: view.background,
+                                pressed: view.pressedBackground
+                            )
+                            
+                            self.model.content.apply(
+                                to: views,
+                                for: .measurement,
+                                with: .init(environment: environment)
+                            )
+                            
+                            return self.model.sizing.measure(with: view, info: info)
+                        })
+                    }
+                }
+                
+                let size = measureSize()
                 
                 self.cachedSizes[key] = size
                 
