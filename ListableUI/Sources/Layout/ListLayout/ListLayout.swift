@@ -393,20 +393,22 @@ extension AnyListLayout
         
         let padding = self.bounds?.padding ?? .zero
 
-        var newTargetContentOffset = targetContentOffset
         switch self.pagingBehavior {
         case .firstVisibleItemEdge:
-            let itemOffset = item.defaultFrame[keyPath: direction.minCoordinate]
-            newTargetContentOffset[keyPath: direction.coordinate] = itemOffset - padding[keyPath: direction.beginInset]
-            newTargetContentOffset[keyPath: direction.pairedCoordinate] = .zero
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.minY - padding.top)
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.minX - padding.left, y: 0.0)
+            }
         case .firstVisibleItemCentered:
-            let itemOffset = item.defaultFrame[keyPath: direction.midCoordinate]
-            newTargetContentOffset[keyPath: direction.coordinate] = itemOffset - (visibleContentSize[keyPath: direction.expanse] / 2).rounded()
-            newTargetContentOffset[keyPath: direction.pairedCoordinate] = .zero
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.midY - (visibleContentSize.height / 2).rounded())
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.midX - (visibleContentSize.width / 2).rounded(), y: 0.0)
+            }
         case .none:
-            return newTargetContentOffset
+            return targetContentOffset
         }
-        return newTargetContentOffset
     }
     
     func itemToScrollToOnDidEndDragging(
