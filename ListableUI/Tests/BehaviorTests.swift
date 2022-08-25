@@ -28,7 +28,7 @@ class BehaviorTests: XCTestCase
         // These values should match the default values from the collection view.
         XCTAssertEqual(behavior.canCancelContentTouches, listView.collectionView.canCancelContentTouches)
         XCTAssertEqual(behavior.delaysContentTouches, listView.collectionView.delaysContentTouches)
-        XCTAssertEqual(behavior.decelerationRate, listView.collectionView.decelerationRate.behaviorDecelerationRate)
+        XCTAssertEqual(.init(behaviorValue: behavior.decelerationRate), listView.collectionView.decelerationRate)
     }
 }
 
@@ -59,20 +59,6 @@ class Behavior_Underflow_Alignment_Tests : XCTestCase
             XCTAssertEqual(Behavior.Underflow.Alignment.top.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 0.0)
             XCTAssertEqual(Behavior.Underflow.Alignment.center.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 25.0)
             XCTAssertEqual(Behavior.Underflow.Alignment.bottom.offsetFor(contentHeight: 50.0, viewHeight: 100.0), 50.0)
-        }
-    }
-}
-
-private extension UICollectionView.DecelerationRate {
-
-    var behaviorDecelerationRate: Behavior.DecelerationRate? {
-        switch self {
-        case .normal:
-            return .normal
-        case .fast:
-            return .fast
-        default:
-            return nil
         }
     }
 }

@@ -167,3 +167,17 @@ extension Behavior
         }
     }
 }
+
+extension UICollectionView.DecelerationRate
+{
+
+    init(behaviorValue: Behavior.DecelerationRate)
+    {
+        switch behaviorValue {
+        case .fast:
+            self.init(rawValue: UICollectionView.DecelerationRate.fast.rawValue)
+        case .normal:
+            self.init(rawValue: UICollectionView.DecelerationRate.normal.rawValue)
+        }
+    }
+}
