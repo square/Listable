@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+
 ### Added
 
 - `Behavior.decelerationRate` - Controls the rate at which scrolling decelerates. The default value, `normal`, maintains the status quo.
