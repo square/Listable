@@ -6,10 +6,6 @@
 
 ### Added
 
-- `Behavior.decelerationRate` - Controls the rate at which scrolling decelerates. The default value, `normal`, maintains the status quo.
-
-- `ListPagingBehavior.firstVisibleItemCentered` - When the user stops scrolling, the final offset of the scroll event will be adjusted so that the first visible item is centered within the visible bounds.
-
 ### Removed
 
 ### Changed
@@ -17,6 +13,19 @@
 ### Misc
 
 # Past Releases
+
+# [7.1.0] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+
+### Added
+
+- `Behavior.decelerationRate` - Controls the rate at which scrolling decelerates. The default value, `normal`, maintains the status quo.
+
+- `ListPagingBehavior.firstVisibleItemCentered` - When the user stops scrolling, the final offset of the scroll event will be adjusted so that the first visible item is centered within the visible bounds.
+
 
 # [7.0.0] - 2022-08-16
 
