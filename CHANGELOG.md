@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+
 ### Added
 
 ### Removed
