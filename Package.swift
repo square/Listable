@@ -44,7 +44,7 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-        .target(
+        .testTarget(
             name: "Snapshot",
             path: "Internal Pods/Snapshot/Sources"
         ),
