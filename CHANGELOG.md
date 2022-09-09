@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
-
 ### Added
 
 ### Removed
@@ -13,6 +11,13 @@
 ### Misc
 
 # Past Releases
+
+# [7.1.1] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+- Fixed SPM-based builds.
 
 # [7.1.0] - 2022-09-06
 
@@ -767,7 +772,9 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/7.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/7.1.1...HEAD
+[7.1.1]: https://github.com/kyleve/Listable/compare/7.1.0...7.1.1
+[7.1.0]: https://github.com/kyleve/Listable/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/kyleve/Listable/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/kyleve/Listable/compare/5.2.1...6.0.0
 [5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
