@@ -12,6 +12,8 @@ jobs:
   spm:
     name: Swift Package Manager
 
+    runs-on: macos-12
+
     steps:
       - name: Switch To Xcode 13.1
         run: sudo xcode-select -switch /Applications/Xcode_13.1.app
