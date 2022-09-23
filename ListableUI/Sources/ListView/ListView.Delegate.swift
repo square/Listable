@@ -185,16 +185,25 @@ extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            didEndDisplayingSupplementaryView view: UICollectionReusableView,
+            didEndDisplayingSupplementaryView anyView: UICollectionReusableView,
             forElementOfKind elementKind: String,
             at indexPath: IndexPath
             )
         {
-            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
+            let container = anyView as! SupplementaryContainerView
+            
+            let id = ObjectIdentifier(container)
+            
+            guard let headerFooter = self.displayedSupplementaryItems[id] else {
                 return
             }
-            
-            headerFooter.didEndDisplay()
+                        
+            if headerFooter.visibleContainer == container {
+                self.displayedSupplementaryItems.removeValue(forKey: id)
+                headerFooter.didEndDisplay()
+            } else {
+                print("Not the same header: \(headerFooter.visibleContainer), \(container)")
+            }
         }
         
         func collectionView(
