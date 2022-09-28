@@ -33,6 +33,7 @@ extension LayoutDescription
             )
             
             $0.layout = .init(
+                headerToFirstSectionSpacing: 20.0,
                 interSectionSpacingWithNoFooter: 20.0,
                 interSectionSpacingWithFooter: 20.0,
                 sectionHeaderBottomSpacing: 15.0,
@@ -41,7 +42,6 @@ extension LayoutDescription
             )
 
             $0.listHeaderPosition = .fixed
-            $0.stickySectionHeaders = true
             
             configure(&$0)
         }
