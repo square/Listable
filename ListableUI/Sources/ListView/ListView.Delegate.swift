@@ -355,7 +355,8 @@ extension ListView
         ) {
             guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
                 for: scrollView.contentOffset,
-                velocity: velocity
+                velocity: velocity,
+                visibleContentSize: scrollView.visibleContentFrame.size
             ) else {
                 return
             }

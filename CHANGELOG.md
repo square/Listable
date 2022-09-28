@@ -12,6 +12,32 @@
 
 # Past Releases
 
+# [7.1.2] - 2022-09-12
+
+### Removed
+
+- **Revert from 7.0.0**: _"When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead."_ This was causing crashes in `initialLayoutAttributesForAppearingItem` and `finalLayoutAttributesForDisappearingItem` due to index path mismatches.
+
+# [7.1.1] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+- Fixed SPM-based builds.
+
+# [7.1.0] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+
+### Added
+
+- `Behavior.decelerationRate` - Controls the rate at which scrolling decelerates. The default value, `normal`, maintains the status quo.
+
+- `ListPagingBehavior.firstVisibleItemCentered` - When the user stops scrolling, the final offset of the scroll event will be adjusted so that the first visible item is centered within the visible bounds.
+
+
 # [7.0.0] - 2022-08-16
 
 ### Added
@@ -752,7 +778,10 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/7.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/7.1.2...HEAD
+[7.1.2]: https://github.com/kyleve/Listable/compare/7.1.1...7.1.2
+[7.1.1]: https://github.com/kyleve/Listable/compare/7.1.0...7.1.1
+[7.1.0]: https://github.com/kyleve/Listable/compare/7.0.0...7.1.0
 [7.0.0]: https://github.com/kyleve/Listable/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/kyleve/Listable/compare/5.2.1...6.0.0
 [5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1

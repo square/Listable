@@ -20,7 +20,7 @@ import Foundation
 /// listView.layout = .table {
 ///     $0.stickySectionHeaders = true
 ///
-///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+///     $0.bounds = .init(padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
 ///     $0.layout.itemSpacing = 10.0
 /// }
 /// ```

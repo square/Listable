@@ -38,7 +38,10 @@ public struct Behavior : Equatable
     
     /// Is paging enabled on the underlying scroll view.
     public var isPagingEnabled : Bool
-    
+
+    /// The rate at which scrolling decelerates.
+    public var decelerationRate: DecelerationRate
+
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
@@ -48,7 +51,8 @@ public struct Behavior : Equatable
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
-        isPagingEnabled : Bool = false
+        isPagingEnabled : Bool = false,
+        decelerationRate : DecelerationRate = .normal
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
@@ -61,6 +65,7 @@ public struct Behavior : Equatable
         self.canCancelContentTouches = canCancelContentTouches
         self.delaysContentTouches = delaysContentTouches
         self.isPagingEnabled = false
+        self.decelerationRate = decelerationRate
     }
 }
 
@@ -87,8 +92,17 @@ extension Behavior
         /// When the user taps on the status bar, scroll to the top of the list.
         case enabled
     }
+
+
+    /// The rate at which scrolling decelerates.
+    public enum DecelerationRate
+    {
+        case normal
+
+        case fast
+    }
     
-    
+
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
     public enum SelectionMode : Equatable
     {
@@ -150,6 +164,20 @@ extension Behavior
                 case .bottom: return viewHeight - contentHeight
                 }
             }
+        }
+    }
+}
+
+extension UICollectionView.DecelerationRate
+{
+
+    init(behaviorValue: Behavior.DecelerationRate)
+    {
+        switch behaviorValue {
+        case .fast:
+            self.init(rawValue: UICollectionView.DecelerationRate.fast.rawValue)
+        case .normal:
+            self.init(rawValue: UICollectionView.DecelerationRate.normal.rawValue)
         }
     }
 }

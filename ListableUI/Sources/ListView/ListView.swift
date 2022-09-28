@@ -251,7 +251,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
         self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
-        
+
+        let newDecelerationRate = UICollectionView.DecelerationRate(behaviorValue: self.behavior.decelerationRate)
+        if newDecelerationRate != self.collectionView.decelerationRate {
+            self.collectionView.decelerationRate = newDecelerationRate
+        }
+
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
         
