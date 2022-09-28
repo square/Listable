@@ -13,6 +13,10 @@ public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
     
+    associatedtype ItemLayout:ItemLayoutsValue
+    associatedtype HeaderFooterLayout:HeaderFooterLayoutsValue
+    associatedtype SectionLayout:SectionLayoutsValue
+    
     static var defaults : ListLayoutDefaults { get }
     
     var layoutAppearance : LayoutAppearance { get }
@@ -189,35 +193,6 @@ extension AnyListLayout
         self.updateOverscrollFooterPosition(in: context)
         self.adjustPositionsForLayoutUnderflow(in: context)
     }
-    
-    public func setZIndexes()
-    {
-        self.content.containerHeader.zIndex = 6
-        
-        self.content.header.zIndex = 5
-        
-        self.content.sections.forEachWithIndex { sectionIndex, _, section in
-            section.header.zIndex = 4
-            
-            section.items.forEach { item in
-                item.zIndex = 3
-            }
-            
-            section.footer.zIndex = 2
-        }
-        
-        self.content.footer.zIndex = 1
-        self.content.overscrollFooter.zIndex = 0
-    }
-    
-    public func adjust(
-        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
-        originalAttributes : ListContentLayoutAttributes,
-        at indexPath: IndexPath,
-        withTargetPosition position: CGPoint
-    ) {
-        // Nothing. Just a default implementation.
-    }
 }
 
 
@@ -277,8 +252,6 @@ extension ListLayout
     
     public func positionStickySectionHeadersIfNeeded(in context : ListLayoutLayoutContext)
     {
-        guard self.stickySectionHeaders else { return }
-        
         var visibleContentFrame = self.visibleContentFrame(in: context)
 
         switch listHeaderPosition {
@@ -286,6 +259,7 @@ extension ListLayout
             break
         case .sticky, .fixed:
             let listHeaderHeight = self.direction.height(for: self.content.header.size)
+            
             self.direction.switch {
                 visibleContentFrame.size.height -= listHeaderHeight
                 visibleContentFrame.origin.y += listHeaderHeight
@@ -300,10 +274,18 @@ extension ListLayout
             
             let header = section.header
             
+            let sectionLayout = section.layouts[SectionLayout.self]
+            
+            let isHeaderSticky = Self.isHeaderSticky(
+                list: self.stickySectionHeaders,
+                section: sectionLayout.isHeaderSticky,
+                header: section.isHeaderSticky
+            )
+            
             let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
             let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
             
-            if headerOrigin < visibleContentOrigin {
+            if isHeaderSticky, headerOrigin < visibleContentOrigin {
                 
                 // Make sure the pinned origin stays within the section's frame.
                 
@@ -326,6 +308,71 @@ extension ListLayout
                 header.pinnedX = nil
             }
         }
+    }
+    
+    public func setZIndexes()
+    {
+        self.content.containerHeader.zIndex = 6
+        
+        self.content.header.zIndex = 5
+        
+        self.content.sections.forEachWithIndex { sectionIndex, _, section in
+            section.header.zIndex = 4
+            
+            section.items.forEach { item in
+                item.zIndex = 3
+            }
+            
+            section.footer.zIndex = 2
+        }
+        
+        self.content.footer.zIndex = 1
+        self.content.overscrollFooter.zIndex = 0
+    }
+    
+    public func adjust(
+        layoutAttributesForReorderingItem attributes : inout ListContentLayoutAttributes,
+        originalAttributes : ListContentLayoutAttributes,
+        at indexPath: IndexPath,
+        withTargetPosition position: CGPoint
+    ) {
+        // Nothing. Just a default implementation.
+    }
+    
+    private static func isHeaderSticky(
+        list: Bool,
+        section: Bool?,
+        header: Bool?
+    ) -> Bool {
+        
+        /// If the header itself specifies a stickiness; defer to that value.
+        
+        if let header = header {
+            return header
+        }
+        
+        /// Otherwise, use the value from the section's layout value.
+        
+        if let section = section {
+            return section
+        }
+        
+        /// Finally, defer to the list's value.
+        
+        return list
+    }
+}
+
+extension AnyListLayout
+{
+    public func visibleContentFrame(for collectionView : UICollectionView) -> CGRect
+    {
+        CGRect(
+            x: collectionView.contentOffset.x + collectionView.safeAreaInsets.left,
+            y: collectionView.contentOffset.y + collectionView.safeAreaInsets.top,
+            width: collectionView.bounds.size.width,
+            height: collectionView.bounds.size.height
+        )
     }
     
     public func updateOverscrollFooterPosition(in context : ListLayoutLayoutContext)

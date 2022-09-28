@@ -22,6 +22,8 @@ public protocol AnyHeaderFooter : AnyHeaderFooterConvertible, AnyHeaderFooter_In
 
 public protocol AnyHeaderFooter_Internal
 {
+    var isStickySectionHeader : Bool? { get }
+    
     var layouts : HeaderFooterLayouts { get }
     
     func apply(

@@ -28,7 +28,7 @@ extension LayoutDescription
     static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
-                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 30.0, right: 20.0),
                 width: .atMost(600.0)
             )
             
@@ -42,7 +42,6 @@ extension LayoutDescription
             )
 
             $0.listHeaderPosition = .fixed
-            $0.stickySectionHeaders = true
             
             configure(&$0)
         }
