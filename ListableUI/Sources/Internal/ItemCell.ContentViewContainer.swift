@@ -15,8 +15,12 @@ extension ItemCell {
         let contentView : Content.ContentView
 
         private var swipeConfiguration: SwipeConfiguration?
+        
+        var swipeActionsView : Content.SwipeActionsView? {
+            swipeConfiguration?.swipeView
+        }
 
-        private var swipeState: SwipeActionState = .closed {
+        private (set) var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
                     swipeConfiguration?.swipeView.apply(state: swipeState)

@@ -995,7 +995,7 @@ final class FlowListLayout : ListLayout {
                 let maxX = lastMaxX + width
                 
                 if maxX <= maxWidth {
-                    lastMaxX = maxX + layoutAppearance.spacings.rowSpacing
+                    lastMaxX = maxX + layoutAppearance.spacings.itemSpacing
                     return true
                 } else {
                     return false

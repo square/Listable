@@ -411,10 +411,11 @@ extension AnyListLayout
 {
     func onDidEndDraggingTargetContentOffset(
         for targetContentOffset : CGPoint,
-        velocity : CGPoint
+        velocity : CGPoint,
+        visibleContentSize: CGSize
     ) -> CGPoint?
     {
-        guard self.pagingBehavior == .firstVisibleItemEdge else { return nil }
+        guard self.pagingBehavior != .none else { return nil }
         
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
@@ -423,14 +424,23 @@ extension AnyListLayout
             return nil
         }
         
-        let leadingEdge = direction.minY(for: item.defaultFrame)
-        
         let padding = self.bounds?.padding ?? .zero
-        
-        return direction.switch {
-            CGPoint(x: 0.0, y: leadingEdge - padding.top)
-        } horizontal: {
-            CGPoint(x: leadingEdge - padding.left, y: 0.0)
+
+        switch self.pagingBehavior {
+        case .firstVisibleItemEdge:
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.minY - padding.top)
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.minX - padding.left, y: 0.0)
+            }
+        case .firstVisibleItemCentered:
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.midY - (visibleContentSize.height / 2).rounded())
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.midX - (visibleContentSize.width / 2).rounded(), y: 0.0)
+            }
+        case .none:
+            return targetContentOffset
         }
     }
     

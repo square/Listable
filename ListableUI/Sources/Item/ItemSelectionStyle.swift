@@ -20,11 +20,16 @@ public enum ItemSelectionStyle : Equatable
     /// The item is persistently selectable. Once the user lifts their finger, the item is maintained.
     case selectable(isSelected : Bool = false)
     
+    /// The item is persistently selectable. Once the user lifts their finger, the item is maintained.
+    /// If the user taps again, the item will be deselected.
+    case toggles(isSelected : Bool = false)
+    
     var isSelected : Bool {
         switch self {
         case .notSelectable: return false
         case .tappable: return false
         case .selectable(let selected): return selected
+        case .toggles(let selected): return selected
         }
     }
     
@@ -32,7 +37,8 @@ public enum ItemSelectionStyle : Equatable
         switch self {
         case .notSelectable: return false
         case .tappable: return true
-        case .selectable(_): return true
+        case .selectable: return true
+        case .toggles: return true
         }
     }
 }
