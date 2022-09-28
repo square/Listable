@@ -11,6 +11,12 @@ import UIKit
 
 extension UIView {
     
+    func contains(touch : UITouch) -> Bool {
+        let location = touch.location(in: self)
+        
+        return bounds.contains(location)
+    }
+    
     func firstSuperview<ViewType:UIView>(ofType : ViewType.Type) -> ViewType? {
         var view = self.superview
         

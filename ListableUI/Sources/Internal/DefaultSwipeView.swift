@@ -209,13 +209,19 @@ private class DefaultSwipeActionButton: UIButton {
 
     func set(action: SwipeAction, didPerformAction: @escaping SwipeAction.CompletionHandler) {
         self.action = action
+        
         self.didPerformAction = didPerformAction
+        
         backgroundColor = action.backgroundColor
+        tintColor = action.tintColor
+        
         setTitle(action.title, for: .normal)
+        setTitleColor(action.tintColor, for: .normal)
         setImage(action.image, for: .normal)
         
-        tintColor = action.tintColor
-        setTitleColor(action.tintColor, for: .normal)
+        accessibilityLabel = action.accessibilityLabel
+        accessibilityValue = action.accessibilityValue
+        accessibilityHint = action.accessibilityHint
     }
 
     @objc private func onTap() {

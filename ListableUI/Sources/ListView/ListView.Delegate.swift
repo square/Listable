@@ -52,7 +52,22 @@ extension ListView
             
             let item = self.presentationState.item(at: indexPath)
             
-            return item.anyModel.selectionStyle.isSelectable
+            if case .toggles = item.anyModel.selectionStyle {
+                
+                if item.isSelected {
+                    item.set(isSelected: false, performCallbacks: true)
+                    collectionView.deselectItem(at: indexPath, animated: false)
+                    item.applyToVisibleCell(with: self.view.environment)
+                    
+                    self.performOnSelectChanged()
+                    
+                    return false
+                } else {
+                    return true
+                }
+            } else {
+                return item.anyModel.selectionStyle.isSelectable
+            }
         }
         
         func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool
@@ -340,7 +355,8 @@ extension ListView
         ) {
             guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
                 for: scrollView.contentOffset,
-                velocity: velocity
+                velocity: velocity,
+                visibleContentSize: scrollView.visibleContentFrame.size
             ) else {
                 return
             }

@@ -131,13 +131,11 @@ public enum Sizing : Hashable
     private func validateMeasuredSize(_ size : CGSize, with info : MeasureInfo) {
         
         // Ensure we have a reasonably valid size for the cell.
-        
-        let reasonableMaxDimension : CGFloat = 5_000
-        
+                
         precondition(
-            size.height <= reasonableMaxDimension,
+            size.height.isFinite && size.height != .greatestFiniteMagnitude,
             """
-            The height of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            The height of the measured size was outside of reasonable expectations; this is likely \
             programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
             the width of the containing list view has been squished to only be a few points wide.
             
@@ -147,9 +145,9 @@ public enum Sizing : Hashable
         )
         
         precondition(
-            size.width <= reasonableMaxDimension,
+            size.width.isFinite && size.width != .greatestFiniteMagnitude,
             """
-            The width of the measured size was outside of reasonable expectations (5000pt); this is likely \
+            The width of the measured size was outside of reasonable expectations; this is likely \
             programmer error. Your sizeThatFits or autolayout constraints are likely incorrect, or \
             the height of the containing list view has been squished to only be a few points tall.
             

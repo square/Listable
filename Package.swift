@@ -19,17 +19,21 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "0.19.0"),
+        .package(url: "https://github.com/square/Blueprint", from: "0.44.1"),
     ],
     targets: [
         .target(
             name: "ListableUI",
-            path: "ListableUI/Sources",
+            path: "ListableUI",
             exclude: [
-                "Internal/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
-                "Layout/Paged/PagedAppearance.monopic",
-                "ContentBounds/ListContentBounds.monopic",
-                "Layout/Table/TableAppearance.monopic",
+                "Sources/Internal/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
+                "Sources/Layout/Paged/PagedAppearance.monopic",
+                "Sources/ContentBounds/ListContentBounds.monopic",
+                "Sources/Layout/Table/TableAppearance.monopic",
+                "Tests",
+            ],
+            resources: [
+                .process("Resources"),
             ]
         ),
         .target(
@@ -40,7 +44,7 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-        .target(
+        .testTarget(
             name: "Snapshot",
             path: "Internal Pods/Snapshot/Sources"
         ),
@@ -70,7 +74,13 @@ let package = Package(
                 "ListableUI",
                 .product(name: "BlueprintUI", package: "Blueprint")
             ],
-            path: "BlueprintUILists/Sources"
+            path: "BlueprintUILists",
+            exclude: [
+                "Tests",
+            ],
+            resources: [
+                .process("Resources"),
+            ]
         ),
         .testTarget(
             name: "BlueprintUIListsTests",

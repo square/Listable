@@ -24,7 +24,7 @@ extension PresentationState
             self.view.addTarget(self, action: #selector(refreshControlChanged), for: .valueChanged)
         }
         
-        func update(with control : RefreshControl)
+        func update(with control : RefreshControl, color : UIColor?)
         {
             self.model = control
             
@@ -37,7 +37,7 @@ extension PresentationState
                 self.view.attributedTitle = nil
             }
             
-            self.view.tintColor = self.model.tintColor
+            self.view.tintColor = color
             
             if self.model.isRefreshing {
                 self.view.beginRefreshing()

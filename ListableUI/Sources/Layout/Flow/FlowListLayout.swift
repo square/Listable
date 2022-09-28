@@ -630,13 +630,7 @@ final class FlowListLayout : ListLayout {
     {
         // 1) Calculate the base values used to drive the layout.
         
-        let boundsContext = ListContentBounds.Context(
-            viewSize: context.viewBounds.size,
-            safeAreaInsets: context.safeAreaInsets,
-            direction: self.direction
-        )
-        
-        let bounds = self.layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
+        let bounds = self.resolvedBounds(in: context)
         
         let spacings = self.layoutAppearance.spacings
         
@@ -1030,7 +1024,7 @@ final class FlowListLayout : ListLayout {
                 let maxX = lastMaxX + width
                 
                 if maxX <= maxWidth {
-                    lastMaxX = maxX + layoutAppearance.spacings.rowSpacing
+                    lastMaxX = maxX + layoutAppearance.spacings.itemSpacing
                     return true
                 } else {
                     return false

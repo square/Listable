@@ -35,7 +35,10 @@ public struct ListLayoutLayoutContext {
     public var viewBounds : CGRect
     public var safeAreaInsets : UIEdgeInsets
     public var contentInset : UIEdgeInsets
+    public var contentOffset : CGPoint
     public var adjustedContentInset : UIEdgeInsets
+    
+    public var hasRefreshControl : Bool
     
     public var environment : ListEnvironment
     
@@ -43,13 +46,17 @@ public struct ListLayoutLayoutContext {
         viewBounds : CGRect,
         safeAreaInsets : UIEdgeInsets,
         contentInset : UIEdgeInsets,
+        contentOffset : CGPoint,
         adjustedContentInset : UIEdgeInsets,
+        hasRefreshControl : Bool,
         environment : ListEnvironment
     ) {
         self.viewBounds = viewBounds
         self.safeAreaInsets = safeAreaInsets
         self.contentInset = contentInset
+        self.contentOffset = contentOffset
         self.adjustedContentInset = adjustedContentInset
+        self.hasRefreshControl = hasRefreshControl
         self.environment = environment
     }
     
@@ -60,7 +67,9 @@ public struct ListLayoutLayoutContext {
         self.viewBounds = collectionView.bounds
         self.safeAreaInsets = collectionView.safeAreaInsets
         self.contentInset = collectionView.contentInset
+        self.contentOffset = collectionView.contentOffset
         self.adjustedContentInset = collectionView.adjustedContentInset
+        self.hasRefreshControl = collectionView.refreshControl != nil
         
         self.environment = environment
     }
@@ -91,6 +100,17 @@ extension ListLayout
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         self.layoutAppearance.scrollViewProperties
+    }
+    
+    public func resolvedBounds(in context : ListLayoutLayoutContext) -> ListContentBounds {
+        
+        let boundsContext = ListContentBounds.Context(
+            viewSize: context.viewBounds.size,
+            safeAreaInsets: context.safeAreaInsets,
+            direction: direction
+        )
+        
+        return layoutAppearance.bounds ?? context.environment.listContentBounds(in: boundsContext)
     }
 }
 
@@ -129,11 +149,14 @@ public protocol AnyListLayout : AnyObject
         in context : ListLayoutLayoutContext
     ) -> ListLayoutResult
     
-    
-    func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
-    func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
-    
     func setZIndexes()
+    
+    func positionStickyListHeaderIfNeeded(in context : ListLayoutLayoutContext)
+    func positionStickySectionHeadersIfNeeded(in context : ListLayoutLayoutContext)
+    
+    func updateOverscrollFooterPosition(in context : ListLayoutLayoutContext)
+    
+    func adjustPositionsForLayoutUnderflow(in context : ListLayoutLayoutContext)
     
     //
     // MARK: Configuring Reordering
@@ -173,26 +196,46 @@ extension AnyListLayout
 }
 
 
-extension ListLayout {
-    
-    public func positionStickyListHeaderIfNeeded(in collectionView: UICollectionView)
+extension ListLayout
+{
+    public func visibleContentFrame(in context : ListLayoutLayoutContext) -> CGRect
+    {
+        CGRect(
+            x: context.contentOffset.x + context.safeAreaInsets.left,
+            y: context.contentOffset.y + context.safeAreaInsets.top,
+            width: context.viewBounds.size.width,
+            height: context.viewBounds.size.height
+        )
+    }
+
+    public func positionStickyListHeaderIfNeeded(in context : ListLayoutLayoutContext)
     {
         guard self.listHeaderPosition != .inline else { return }
 
-        let visibleContentFrame = self.visibleContentFrame(for: collectionView)
+        let visibleContentFrame = self.visibleContentFrame(in: context)
+        
+        let bounds = self.resolvedBounds(in: context)
+        
+        let topPadding = direction.top(with: bounds.padding)
 
         let header = self.content.header
 
         let headerOrigin = self.direction.y(for: header.defaultFrame.origin)
         let visibleContentOrigin = self.direction.y(for: visibleContentFrame.origin)
 
-        /// `fixed` only works if there's no `containerHeader`.
-        let shouldBeFixed =  listHeaderPosition == .fixed && !content.containerHeader.isPopulated
+        /// The `.fixed` position only works if:
+        /// - There is no `containerHeader` or `refreshControl` (those behave "inline" so fixing it would overlap).
+        /// - If there's no top padding (because this would adjust the fixed header position).
+        ///
+        let shouldBeFixed = listHeaderPosition == .fixed
+            && !content.containerHeader.isPopulated
+            && context.hasRefreshControl == false
+            && topPadding == 0.0
 
         if headerOrigin < visibleContentOrigin || shouldBeFixed {
 
             // Make sure the pinned origin stays within the list's frame.
-
+            
             self.direction.switch(
                 vertical: {
                     header.pinnedY = visibleContentFrame.origin.y
@@ -207,32 +250,9 @@ extension ListLayout {
         }
     }
     
-    static func isHeaderSticky(
-        list: Bool,
-        section: Bool?,
-        header: Bool?
-    ) -> Bool {
-        
-        /// If the header itself specifies a stickiness; defer to that value.
-        
-        if let header = header {
-            return header
-        }
-        
-        /// Otherwise, use the value from the section's layout value.
-        
-        if let section = section {
-            return section
-        }
-        
-        /// Finally, defer to the list's value.
-        
-        return list
-    }
-    
-    public func positionStickySectionHeadersIfNeeded(in collectionView : UICollectionView)
+    public func positionStickySectionHeadersIfNeeded(in context : ListLayoutLayoutContext)
     {
-        var visibleContentFrame = self.visibleContentFrame(for: collectionView)
+        var visibleContentFrame = self.visibleContentFrame(in: context)
 
         switch listHeaderPosition {
         case .inline:
@@ -317,6 +337,29 @@ extension ListLayout {
         withTargetPosition position: CGPoint
     ) {
         // Nothing. Just a default implementation.
+    }
+    
+    private static func isHeaderSticky(
+        list: Bool,
+        section: Bool?,
+        header: Bool?
+    ) -> Bool {
+        
+        /// If the header itself specifies a stickiness; defer to that value.
+        
+        if let header = header {
+            return header
+        }
+        
+        /// Otherwise, use the value from the section's layout value.
+        
+        if let section = section {
+            return section
+        }
+        
+        /// Finally, defer to the list's value.
+        
+        return list
     }
 }
 
@@ -415,10 +458,11 @@ extension AnyListLayout
 {
     func onDidEndDraggingTargetContentOffset(
         for targetContentOffset : CGPoint,
-        velocity : CGPoint
+        velocity : CGPoint,
+        visibleContentSize: CGSize
     ) -> CGPoint?
     {
-        guard self.pagingBehavior == .firstVisibleItemEdge else { return nil }
+        guard self.pagingBehavior != .none else { return nil }
         
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
@@ -427,14 +471,23 @@ extension AnyListLayout
             return nil
         }
         
-        let leadingEdge = direction.minY(for: item.defaultFrame)
-        
         let padding = self.bounds?.padding ?? .zero
-        
-        return direction.switch {
-            CGPoint(x: 0.0, y: leadingEdge - padding.top)
-        } horizontal: {
-            CGPoint(x: leadingEdge - padding.left, y: 0.0)
+
+        switch self.pagingBehavior {
+        case .firstVisibleItemEdge:
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.minY - padding.top)
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.minX - padding.left, y: 0.0)
+            }
+        case .firstVisibleItemCentered:
+            return direction.switch {
+                CGPoint(x: 0.0, y: item.defaultFrame.midY - (visibleContentSize.height / 2).rounded())
+            } horizontal: {
+                CGPoint(x: item.defaultFrame.midX - (visibleContentSize.width / 2).rounded(), y: 0.0)
+            }
+        case .none:
+            return targetContentOffset
         }
     }
     
