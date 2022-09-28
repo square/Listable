@@ -60,12 +60,14 @@ extension ListProperties {
             viewBounds: CGRect(origin: .zero, size: fittingSize),
             safeAreaInsets: safeAreaInsets,
             contentInset: .zero,
+            contentOffset: .zero,
             adjustedContentInset: .listAdjustedContentInset(
                 with: layout.scrollViewProperties.contentInsetAdjustmentBehavior,
                 direction: layout.direction,
                 safeAreaInsets: safeAreaInsets,
                 contentInset: .zero
             ),
+            hasRefreshControl: self.refreshControl != nil,
             environment: self.environment
         )
         
