@@ -1,5 +1,5 @@
 //
-//  CollectionViewDictionaryDemoViewController.swift
+//  SearchableDictionaryViewController.swift
 //  CheckoutApplet
 //
 //  Created by Kyle Van Essen on 6/25/19.
@@ -13,7 +13,7 @@ import BlueprintUICommonControls
 import EnglishDictionary
 
 
-final public class CollectionViewDictionaryDemoViewController : UIViewController
+final public class SearchableDictionaryViewController : UIViewController
 {
     let listView = ListView()
     

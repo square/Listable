@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where submitting many frequent updates in a large list would cause crashes due to state getting out of sync, hopefully.
+
 ### Added
 
 - You may now control the stickiness of headers within individual sections, eg by setting `section.layouts.table.isHeaderSticky = true/false/nil`, or by implementing `isStickySectionHeader` on your `HeaderFooterContent`. Providing nil for either value falls back to the list-level stickiness setting.

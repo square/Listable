@@ -11,7 +11,7 @@ import XCTest
 
 class ListChangesQueueTests : XCTestCase {
     
-    func test_queue() {
+    func test_pausing() {
         
         let queue = ListChangesQueue()
         
@@ -24,13 +24,60 @@ class ListChangesQueueTests : XCTestCase {
             calls += [1]
         }
         
-        XCTAssertEqual(queue.waiting.count, 0)
         XCTAssertEqual(calls, [1])
+        
+        queue.add { completion in
+            calls += [2]
+            
+            completion.finished()
+        }
+        
+        XCTAssertEqual(queue.waiting.count, 0)
+        XCTAssertEqual(calls, [1, 2])
         
         queue.isQueuingForReorderEvent = true
         
         XCTAssertTrue(queue.isPaused)
         XCTAssertTrue(queue.isQueuingForReorderEvent)
+        
+        queue.add {
+            calls += [3]
+        }
+                
+        queue.add {
+            calls += [4]
+        }
+        
+        queue.add { completion in
+            calls += [5]
+            
+            completion.finished()
+        }
+        
+        XCTAssertEqual(queue.waiting.count, 3)
+        XCTAssertEqual(calls, [1, 2])
+        
+        queue.isQueuingForReorderEvent = false
+        
+        XCTAssertFalse(queue.isPaused)
+        XCTAssertFalse(queue.isQueuingForReorderEvent)
+        
+        waitFor {
+            queue.waiting.count == 0
+        }
+        
+        XCTAssertEqual(calls, [1, 2, 3, 4, 5])
+    }
+    
+    func test_synchronous() {
+        
+        let queue = ListChangesQueue()
+        
+        var calls : [Int] = []
+        
+        queue.add {
+            calls += [1]
+        }
         
         queue.add {
             calls += [2]
@@ -40,14 +87,183 @@ class ListChangesQueueTests : XCTestCase {
             calls += [3]
         }
         
-        XCTAssertEqual(queue.waiting.count, 2)
-        XCTAssertEqual(calls, [1])
+        queue.add {
+            calls += [4]
+        }
         
-        queue.isQueuingForReorderEvent = false
+        XCTAssertEqual(calls, [1, 2, 3, 4])
+        XCTAssertEqual(queue.waiting.count, 0)
+    }
+    
+    
+    func test_asynchronous() {
         
-        XCTAssertFalse(queue.isPaused)
-        XCTAssertFalse(queue.isQueuingForReorderEvent)
+        let queue = ListChangesQueue()
         
-        XCTAssertEqual(calls, [1, 2, 3])
+        var calls : [Int] = []
+        
+        /// Add the events in reverse timing order,
+        /// to guarantee that they're executed in order of addition.
+
+        queue.add { completion in
+            XCTAssertEqual(calls, [])
+            
+            calls += [1]
+        
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                completion.finished()
+            }
+        }
+        
+        queue.add { completion in
+            XCTAssertEqual(calls, [1])
+
+            calls += [2]
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(66)) {
+                completion.finished()
+            }
+        }
+        
+        queue.add { completion in
+            XCTAssertEqual(calls, [1, 2])
+            
+            calls += [3]
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(33)) {
+                completion.finished()
+            }
+        }
+        
+        
+        queue.add { completion in
+            
+            XCTAssertEqual(calls, [1, 2, 3])
+            
+            calls += [4]
+            
+            completion.finished()
+        }
+        
+        waitFor {
+            calls == [1, 2, 3, 4]
+        }
+        
+        waitFor {
+            queue.waiting.count == 0
+        }
+    }
+    
+    func test_both() {
+        
+        let queue = ListChangesQueue()
+        
+        var calls : [Int] = []
+        
+        /// Add the async events in reverse timing order,
+        /// to guarantee that they're executed in order of addition.
+        
+        queue.add {
+            calls += [1]
+        }
+
+        queue.add { completion in
+            calls += [2]
+        
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                completion.finished()
+            }
+        }
+        
+        queue.add {
+            calls += [3]
+        }
+        
+        queue.add { completion in
+            calls += [4]
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(66)) {
+                completion.finished()
+            }
+        }
+        
+        queue.add {
+            calls += [5]
+        }
+        
+        queue.add { completion in
+            calls += [6]
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(33)) {
+                completion.finished()
+            }
+        }
+        
+        queue.add {
+            calls += [7]
+        }
+        
+        queue.add { completion in
+            calls += [8]
+            
+            completion.finished()
+        }
+        
+        queue.add {
+            calls += [9]
+        }
+        
+        waitFor {
+            calls == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        }
+        
+        waitFor {
+            queue.waiting.count == 0
+        }
+    }
+    
+    func test_fuzzing() {
+        
+        let queue = ListChangesQueue()
+        
+        var calls : [Int] = []
+        
+        var values : [Int] = (1...1000).map { $0 }.reversed()
+        
+        while values.isEmpty == false {
+            
+            if let value = values.popLast() {
+                queue.add {
+                    calls += [value]
+                }
+            }
+            
+            if let value = values.popLast() {
+                queue.add { completion in
+                    calls += [value]
+                
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2)) {
+                        completion.finished()
+                    }
+                }
+            }
+            
+            if let value = values.popLast() {
+                queue.add { completion in
+                    calls += [value]
+                
+                    completion.finished()
+                }
+            }
+        }
+        
+        waitFor {
+            queue.waiting.isEmpty
+        }
+        
+        XCTAssertEqual(
+            calls,
+            (1...1000).map { $0 }
+        )
     }
 }

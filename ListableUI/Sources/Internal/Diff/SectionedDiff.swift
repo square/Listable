@@ -404,10 +404,43 @@ extension SectionedDiff.ItemChanges.Updated : Equatable where Item:Equatable {}
 extension SectionedDiff.ItemChanges.NoChange : Equatable where Item:Equatable {}
 
 
-extension SectionedDiff.SectionChanges
+extension SectionedDiff {
+    
+    /// Takes the content of the `input` array, and transforms it using the diff's changes
+    /// into a newly returned array, creating, moving, or updating the content as required.
+    func transform<Mapped>(
+        input : [Mapped],
+        removed : (Section, Mapped) -> (),
+        added : (Section) -> Mapped,
+        moved : (Section, Section, ItemChanges, inout Mapped) -> (),
+        noChange : (Section, Section, ItemChanges, inout Mapped) -> (),
+        mappedItemCount : (Mapped) -> Int,
+        sectionItemCount : (Section) -> Int
+        ) -> [Mapped]
+    {
+        let oldSizes : [Int] = self.old.map { sectionItemCount($0) }
+        let inputSizes : [Int] = input.map { mappedItemCount($0) }
+ 
+        precondition(
+            oldSizes == inputSizes,
+            
+            """
+            Transform Error: The section and item counts for the diff and the old content to be updated did not match. \
+            This means that you used an out of date diff to attempt the transformation.
+            
+            Input: \(inputSizes.count) Sections, Counts: \(inputSizes.map { String($0) }.joined(separator: ", "))
+            Diff: \(oldSizes.count) Sections, Counts: \(oldSizes.map { String($0) }.joined(separator: ", "))
+            """
+        )
+        
+        return changes.transform(input: input, removed: removed, added: added, moved: moved, noChange: noChange)
+    }
+}
+
+fileprivate extension SectionedDiff.SectionChanges
 {
     func transform<Mapped>(
-        old : [Mapped],
+        input : [Mapped],
         removed : (Section, Mapped) -> (),
         added : (Section) -> Mapped,
         moved : (Section, Section, SectionedDiff.ItemChanges, inout Mapped) -> (),
@@ -415,22 +448,22 @@ extension SectionedDiff.SectionChanges
         ) -> [Mapped]
     {
         let removes : [Removal<Mapped>] = (self.removed.map({
-            removed($0.oldValue, old[$0.oldIndex])
-            return .remove(old[$0.oldIndex], $0)
+            removed($0.oldValue, input[$0.oldIndex])
+            return .remove(input[$0.oldIndex], $0)
         }) + self.moved.map({
-            .move(old[$0.oldIndex], $0)
+            .move(input[$0.oldIndex], $0)
         })).sorted(by: {$0.oldIndex > $1.oldIndex})
         
         let inserts : [Insertion<Mapped>] = (self.added.map({
             let value = added($0.newValue)
             return .add(value, $0)
         }) + self.moved.map({
-            var value = old[$0.oldIndex]
+            var value = input[$0.oldIndex]
             moved($0.oldValue, $0.newValue, $0.itemChanges, &value)
             return .move(value, $0)
         })).sorted(by: {$0.newIndex < $1.newIndex})
         
-        var new = old
+        var new = input
         
         removes.forEach {
             new.remove(at: $0.oldIndex)

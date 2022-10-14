@@ -107,7 +107,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
     
     deinit
-    {
+    {        
         self.keyboardObserver.remove(delegate: self)
         
         /**
@@ -1009,80 +1009,105 @@ public final class ListView : UIView, KeyboardObserverDelegate
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> ()
     ) {
-        // Figure out visible content.
+        /// We must put the updates to the collection view and our presentation state into the update queue,
+        /// to ensure that the calls to `presentationState.update` is done serially. It seems like some times,
+        /// in particular under high load, the call to `UICollectionView.performBatchUpdates` will not
+        /// call the update block synchronously, meaning if many updates are queued and submitted at once,
+        /// things can get out of sync, and we end up applying an incorrect diff to the presentation state.
+        ///
+        /// By placing the update within our serial update queue, and only marking the event as done in
+        /// `collectionViewUpdateCompletion`, we can guarantee that out of order updates do not occur.
         
-        let presentationState = self.storage.presentationState
-        
-        let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
+        self.updateQueue.add { [weak self] completion in
+            
+            guard let self = self else {
+                completion.finished()
+                return
+            }
+            
+            // Figure out visible content.
+            
+            let presentationState = self.storage.presentationState
+            
+            let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
-        let visibleSlice = self.newVisibleSlice(to: indexPath)
+            let visibleSlice = self.newVisibleSlice(to: indexPath)
 
-        let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
-            ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
-        }
+            let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
+                ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
+            }
 
-        let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
-        
-        let updateBackingData = {
-            let dependencies = ItemStateDependencies(
-                reorderingDelegate: self,
-                coordinatorDelegate: self,
-                environmentProvider: { [weak self] in self?.environment ?? .empty }
+            let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
+            
+            let updateBackingData = {
+                let dependencies = ItemStateDependencies(
+                    reorderingDelegate: self,
+                    coordinatorDelegate: self,
+                    environmentProvider: { [weak self] in self?.environment ?? .empty }
+                )
+                
+                presentationState.update(
+                    with: diff,
+                    slice: visibleSlice,
+                    reason: .wasUpdated,
+                    animated: reason.animated,
+                    dependencies: dependencies,
+                    updateCallbacks: updateCallbacks,
+                    loggable: self
+                )
+            }
+                    
+            // Update Refresh Control
+            
+            /**
+             Update Refresh Control
+             
+             Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
+             we trigger a bug where updated indexes are calculated incorrectly.
+             */
+            presentationState.updateRefreshControl(
+                with: visibleSlice.content.refreshControl,
+                in: self.collectionView,
+                color: self.appearance.refreshControlColor
             )
             
-            presentationState.update(
+            // Update Collection View
+            
+            self.performBatchUpdates(
                 with: diff,
-                slice: visibleSlice,
-                reason: .wasUpdated,
                 animated: reason.animated,
-                dependencies: dependencies,
-                updateCallbacks: updateCallbacks,
-                loggable: self
+                updateBackingData: updateBackingData,
+                collectionViewUpdateCompletion: {
+                    completion.finished()
+                },
+                animationCompletion: callerCompletion
             )
-        }
-                
-        // Update Refresh Control
-        
-        /**
-         Update Refresh Control
-         
-         Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
-         we trigger a bug where updated indexes are calculated incorrectly.
-         */
-        presentationState.updateRefreshControl(
-            with: visibleSlice.content.refreshControl,
-            in: self.collectionView,
-            color: appearance.refreshControlColor
-        )
-        
-        // Update Collection View
-        
-        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
 
-        // Update the offset of the scroll view to show the refresh control if needed
-        presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
+            // Update the offset of the scroll view to show the refresh control if needed
+            presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
 
-        // Perform any needed auto scroll actions.
-        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+            // Perform any needed auto scroll actions.
+            self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
-        // Update info for new contents.
-        
-        self.updateCollectionViewSelections(animated: reason.animated)
-        
-        // Notify updates.
-        
-        updateCallbacks.perform()
-        
-        // Notify state reader the content updated.
-        
-        if case .contentChanged(_, _) = reason {
-            ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
-                ListStateObserver.ContentUpdated(
-                    hadChanges: diff.changes.isEmpty == false,
-                    insertionsAndRemovals: .init(diff: diff),
-                    actions: actions,
-                    positionInfo: self.scrollPositionInfo
-                )
+            // Update info for new contents.
+            
+            self.updateCollectionViewSelections(animated: reason.animated)
+            
+            // Notify updates.
+            
+            updateCallbacks.perform()
+            
+            // Notify state reader the content updated.
+            
+            if case .contentChanged(_, _) = reason {
+                ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
+                    ListStateObserver.ContentUpdated(
+                        hadChanges: diff.changes.isEmpty == false,
+                        insertionsAndRemovals: .init(diff: diff),
+                        actions: actions,
+                        positionInfo: self.scrollPositionInfo
+                    )
+                }
             }
         }
     }
@@ -1237,13 +1262,14 @@ public final class ListView : UIView, KeyboardObserverDelegate
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
-        completion callerCompletion : @escaping (Bool) -> ()
+        collectionViewUpdateCompletion callerCollectionViewUpdateCompletion : @escaping () -> (),
+        animationCompletion callerAnimationCompletion : @escaping (Bool) -> ()
     )
     {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update UICollectionView", for: self)
         
-        let completion = { (completed : Bool) in
-            callerCompletion(completed)
+        let animationCompletion = { (completed : Bool) in
+            callerAnimationCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "Update UICollectionView", for: self)
         }
         
@@ -1271,6 +1297,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
             changes.movedItems.forEach {
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
+            
+            callerCollectionViewUpdateCompletion()
         }
         
         if changes.hasIndexAffectingChanges {
@@ -1291,10 +1319,10 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
         if animated {
-            view.performBatchUpdates(batchUpdates, completion: completion)
+            view.performBatchUpdates(batchUpdates, completion: animationCompletion)
         } else {
             UIView.performWithoutAnimation {
-                view.performBatchUpdates(batchUpdates, completion: completion)
+                view.performBatchUpdates(batchUpdates, completion: animationCompletion)
             }
         }
     }
