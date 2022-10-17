@@ -504,8 +504,59 @@ class ListViewTests: XCTestCase
         
         XCTAssertEqual(didResetSizesCount, 1)
     }
+    
+    func test_fuzzing() {
+        
+        let base = Content { content in
+            
+            for sectionID in 1...10 {
+                content += Section(sectionID) {
+                    for itemID in 1...20 {
+                        TestContent(content: itemID)
+                    }
+                }
+            }
+        }
+        
+        let vc = ViewController()
+        
+        show(vc: vc) { vc in
+            var content = base
+            
+            self.waitFor(timeout: 100) {
+             
+                vc.list.configure { list in
+                    list.content = content
+                }
+                
+                if var section = content.sections.popLast() {
+                    section.items.removeLast()
+                    
+                    if section.items.isEmpty == false {
+                        content.add(section)
+                    }
+                }
+                
+                vc.list.collectionView.layoutIfNeeded()
+                
+                if content.sections.isEmpty {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+    }
 }
 
+fileprivate final class ViewController : UIViewController {
+    
+    let list : ListView = ListView()
+    
+    override func loadView() {
+        self.view = list
+    }
+}
 
 fileprivate struct TestContent : ItemContent, Equatable
 {
@@ -528,6 +579,12 @@ fileprivate struct TestContent : ItemContent, Equatable
     static func createReusableContentView(frame: CGRect) -> UIView
     {
         return UIView(frame: frame)
+    }
+    
+    var defaultItemProperties: DefaultProperties {
+        .defaults { defaults in
+            defaults.sizing = .fixed(height: 50)
+        }
     }
 }
 
