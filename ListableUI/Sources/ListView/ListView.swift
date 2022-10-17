@@ -1021,7 +1021,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         self.updateQueue.add { [weak self] completion in
             
             guard let self = self else {
-                completion.finished()
+                completion.finish()
                 return
             }
             
@@ -1077,9 +1077,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 with: diff,
                 animated: reason.animated,
                 updateBackingData: updateBackingData,
-                collectionViewUpdateCompletion: {
-                    completion.finished()
-                },
+                collectionViewUpdateCompletion: completion.finish,
                 animationCompletion: callerCompletion
             )
 

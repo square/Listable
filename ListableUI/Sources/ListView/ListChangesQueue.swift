@@ -15,7 +15,7 @@ import Foundation
 /// Collection View has an issue wherein if you perform a re-order event, and then within
 /// the same runloop, deliver an update to the collection view as a result of that re-order event
 /// that removes a row or section, the collection view will crash because it's internal index path
-/// cache / data model has  not yet been updated. Thus, in `collectionView(_:,moveItemAt:,to:)`,
+/// cache / data model has not yet been updated. Thus, in `collectionView(_:moveItemAt:to:)`,
 /// we set this value to `true`, and then after one runloop, we set it back to `false`, after
 /// the collection view's updates have "settled". Please see `sendEndQueuingEditsAfterDelay` for more.
 ///
@@ -118,9 +118,17 @@ final class ListChangesQueue {
         self.isQueuingForReorderEvent
     }
     
+    var isEmpty : Bool {
+        waiting.isEmpty
+    }
+    
+    var count : Int {
+        waiting.count
+    }
+    
     /// Operations waiting to execute, or in the case of asynchronous operations,
     /// they may already be operating.
-    private(set) var waiting : [Operation] = []
+    private var waiting : [Operation] = []
     
     private var isRunning : Bool = false
     
@@ -194,9 +202,28 @@ final class ListChangesQueue {
 
 extension ListChangesQueue {
         
-    final class Operation {
+    final class Completion {
+
+        fileprivate var onFinish : () -> () = {
+            fatalError("onFinish must be set before the completion operation is used.")
+        }
         
-        fileprivate(set) var kind : Kind
+        private var isFinished : Bool = false
+        
+        /// Invoked by callers when their async work completed.
+        /// If this method is called more than once, a fatal error occurs.
+        func finish() {
+            precondition(isFinished == false, "Cannot finish an operation more than once.")
+            
+            isFinished = true
+            
+            onFinish()
+        }
+    }
+    
+    fileprivate final class Operation {
+        
+        var kind : Kind
         
         init(kind : Kind) {
             self.kind = kind
@@ -266,25 +293,6 @@ extension ListChangesQueue {
                     let body : (Operation, Completion) -> ()
                 }
             }
-        }
-    }
-    
-    final class Completion {
-
-        fileprivate var onFinish : () -> () = {
-            fatalError("onFinish must be set before the completion operation is used.")
-        }
-        
-        private var isFinished : Bool = false
-        
-        /// Invoked by callers when their async work completed.
-        /// If this method is called more than once, a fatal error occurs.
-        func finished() {
-            precondition(isFinished == false, "Cannot finish an operation more than once.")
-            
-            isFinished = true
-            
-            onFinish()
         }
     }
 }

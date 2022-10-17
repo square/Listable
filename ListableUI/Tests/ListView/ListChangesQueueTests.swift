@@ -29,10 +29,10 @@ class ListChangesQueueTests : XCTestCase {
         queue.add { completion in
             calls += [2]
             
-            completion.finished()
+            completion.finish()
         }
         
-        XCTAssertEqual(queue.waiting.count, 0)
+        XCTAssertEqual(queue.count, 0)
         XCTAssertEqual(calls, [1, 2])
         
         queue.isQueuingForReorderEvent = true
@@ -51,10 +51,10 @@ class ListChangesQueueTests : XCTestCase {
         queue.add { completion in
             calls += [5]
             
-            completion.finished()
+            completion.finish()
         }
         
-        XCTAssertEqual(queue.waiting.count, 3)
+        XCTAssertEqual(queue.count, 3)
         XCTAssertEqual(calls, [1, 2])
         
         queue.isQueuingForReorderEvent = false
@@ -63,7 +63,7 @@ class ListChangesQueueTests : XCTestCase {
         XCTAssertFalse(queue.isQueuingForReorderEvent)
         
         waitFor {
-            queue.waiting.count == 0
+            queue.isEmpty
         }
         
         XCTAssertEqual(calls, [1, 2, 3, 4, 5])
@@ -92,7 +92,7 @@ class ListChangesQueueTests : XCTestCase {
         }
         
         XCTAssertEqual(calls, [1, 2, 3, 4])
-        XCTAssertEqual(queue.waiting.count, 0)
+        XCTAssertEqual(queue.count, 0)
     }
     
     
@@ -111,7 +111,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [1]
         
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -121,7 +121,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [2]
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(66)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -131,7 +131,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [3]
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(33)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -142,7 +142,7 @@ class ListChangesQueueTests : XCTestCase {
             
             calls += [4]
             
-            completion.finished()
+            completion.finish()
         }
         
         waitFor {
@@ -150,7 +150,7 @@ class ListChangesQueueTests : XCTestCase {
         }
         
         waitFor {
-            queue.waiting.count == 0
+            queue.isEmpty
         }
     }
     
@@ -171,7 +171,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [2]
         
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -183,7 +183,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [4]
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(66)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -195,7 +195,7 @@ class ListChangesQueueTests : XCTestCase {
             calls += [6]
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(33)) {
-                completion.finished()
+                completion.finish()
             }
         }
         
@@ -206,7 +206,7 @@ class ListChangesQueueTests : XCTestCase {
         queue.add { completion in
             calls += [8]
             
-            completion.finished()
+            completion.finish()
         }
         
         queue.add {
@@ -218,7 +218,7 @@ class ListChangesQueueTests : XCTestCase {
         }
         
         waitFor {
-            queue.waiting.count == 0
+            queue.isEmpty
         }
     }
     
@@ -243,7 +243,7 @@ class ListChangesQueueTests : XCTestCase {
                     calls += [value]
                 
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2)) {
-                        completion.finished()
+                        completion.finish()
                     }
                 }
             }
@@ -252,13 +252,13 @@ class ListChangesQueueTests : XCTestCase {
                 queue.add { completion in
                     calls += [value]
                 
-                    completion.finished()
+                    completion.finish()
                 }
             }
         }
         
         waitFor {
-            queue.waiting.isEmpty
+            queue.isEmpty
         }
         
         XCTAssertEqual(
