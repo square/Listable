@@ -12,6 +12,8 @@
 
 - `ListHeaderPosition.fixed` will now only apply if the list's top padding is zero, to avoid the header shifting around during layout if the position is changed.
 
+- iOS 12 and 13 have been deprecated.
+
 ### Misc
 
 # Past Releases

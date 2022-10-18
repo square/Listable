@@ -65,15 +65,13 @@ public final class DemosRootViewController : ListViewController
                     }
                 )
 
-                if #available(iOS 13.0, *) {
-                    Item(
-                        DemoItem(text: "List State & State Reader"),
-                        selectionStyle: .selectable(),
-                        onSelect: { _ in
-                            self?.push(ListStateViewController())
-                        }
-                    )
-                }
+                Item(
+                    DemoItem(text: "List State & State Reader"),
+                    selectionStyle: .selectable(),
+                    onSelect: { _ in
+                        self?.push(ListStateViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "Itemization Editor"),

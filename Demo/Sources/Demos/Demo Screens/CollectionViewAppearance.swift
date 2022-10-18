@@ -78,7 +78,7 @@ struct DemoHeader : BlueprintHeaderFooterContent, Equatable
     var elementRepresentation: Element {
         Column(alignment: .fill, minimumSpacing: 10.0) {
             Label(text: self.title) {
-                if #available(iOS 13.0, *), useMonospacedTitleFont {
+                if useMonospacedTitleFont {
                     $0.font = .monospacedSystemFont(ofSize: 21.0, weight: .semibold)
                 } else {
                     $0.font = .systemFont(ofSize: 21.0, weight: .semibold)

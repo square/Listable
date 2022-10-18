@@ -6,7 +6,7 @@ let package = Package(
     name: "Listable",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v12),
+        .iOS(.v14),
     ],
     products: [
         .library(
@@ -19,7 +19,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "0.44.1"),
+        .package(url: "https://github.com/square/Blueprint", from: "0.45.1"),
     ],
     targets: [
         .target(

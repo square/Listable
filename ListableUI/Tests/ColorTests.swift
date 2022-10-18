@@ -20,19 +20,17 @@ class ColorTests : XCTestCase {
             XCTAssertNotEqual(Color(.black), Color(.blue))
         }
         
-        if #available(iOS 13.0, *) {
-            self.testcase("Dynamic colors") {
-                
-                XCTAssertEqual(
-                    Color(.init(dynamicProvider: { _ in .black })),
-                    Color(.init(dynamicProvider: { _ in .black }))
-                )
-                
-                XCTAssertNotEqual(
-                    Color(.init(dynamicProvider: { _ in .black })),
-                    Color(.init(dynamicProvider: { _ in .blue }))
-                )
-            }
+        self.testcase("Dynamic colors") {
+            
+            XCTAssertEqual(
+                Color(.init(dynamicProvider: { _ in .black })),
+                Color(.init(dynamicProvider: { _ in .black }))
+            )
+            
+            XCTAssertNotEqual(
+                Color(.init(dynamicProvider: { _ in .black })),
+                Color(.init(dynamicProvider: { _ in .blue }))
+            )
         }
     }
 }
