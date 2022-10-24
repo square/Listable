@@ -14,6 +14,8 @@
 
 # [7.2.0] - 2022-10-24
 
+### Fixed
+
 - Fixed an issue where submitting many frequent updates in a large list would cause crashes due to state getting out of sync, hopefully.
 
 ### Added
