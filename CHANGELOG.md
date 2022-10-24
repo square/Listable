@@ -2,21 +2,27 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+# Past Releases
+
+# [7.2.0] - 2022-10-24
+
 - Fixed an issue where submitting many frequent updates in a large list would cause crashes due to state getting out of sync, hopefully.
 
 ### Added
 
 - You may now control the stickiness of headers within individual sections, eg by setting `section.layouts.table.isHeaderSticky = true/false/nil`, or by implementing `isStickySectionHeader` on your `HeaderFooterContent`. Providing nil for either value falls back to the list-level stickiness setting.
 
-### Removed
-
 ### Changed
 
 - `ListHeaderPosition.fixed` will now only apply if the list's top padding is zero, to avoid the header shifting around during layout if the position is changed.
-
-### Misc
-
-# Past Releases
 
 # [7.1.2] - 2022-09-12
 
@@ -784,7 +790,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/7.1.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/7.2.0...HEAD
+[7.2.0]: https://github.com/kyleve/Listable/compare/7.1.2...7.2.0
 [7.1.2]: https://github.com/kyleve/Listable/compare/7.1.1...7.1.2
 [7.1.1]: https://github.com/kyleve/Listable/compare/7.1.0...7.1.1
 [7.1.0]: https://github.com/kyleve/Listable/compare/7.0.0...7.1.0
