@@ -87,7 +87,7 @@ public final class DemosRootViewController : ListViewController
                     DemoItem(text: "English Dictionary Search"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
-                        self?.push(CollectionViewDictionaryDemoViewController())
+                        self?.push(SearchableDictionaryViewController())
                     }
                 )
                 
@@ -294,6 +294,19 @@ public final class DemosRootViewController : ListViewController
                 )
             } header: {
                 DemoHeader(title: "Other Layouts")
+            }
+            
+            Section("fuzzing") { [weak self] in
+
+                Item(
+                    DemoItem(text: "Fuzz Testing"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(UpdateFuzzingViewController())
+                    }
+                )
+            } header: {
+                DemoHeader(title: "Fuzz Testing")
             }
             
             Section("selection-state") {
