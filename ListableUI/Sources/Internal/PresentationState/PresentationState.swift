@@ -362,8 +362,8 @@ final class PresentationState
             environment: environment
         )
         
-        self.sections = diff.changes.transform(
-            old: self.sections,
+        self.sections = diff.transform(
+            input: self.sections,
             removed: { _, section in
                 section.wasRemoved(updateCallbacks: updateCallbacks)
             },
@@ -396,7 +396,9 @@ final class PresentationState
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
-            }
+            },
+            mappedItemCount: \.items.count,
+            sectionItemCount: \.items.count
         )
     }
     

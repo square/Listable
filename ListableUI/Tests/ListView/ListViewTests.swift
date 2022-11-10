@@ -504,8 +504,60 @@ class ListViewTests: XCTestCase
         
         XCTAssertEqual(didResetSizesCount, 1)
     }
+    
+    /// An "integration" test that removes content from the list to verify we can round trip updates properly.
+    func test_delete_all_content() {
+                
+        let base = Content { content in
+            
+            for sectionID in 1...50 {
+                content += Section(sectionID) {
+                    for itemID in 1...20 {
+                        TestContent(content: itemID)
+                    }
+                }
+            }
+        }
+        
+        let vc = ViewController()
+        
+        show(vc: vc) { vc in
+            var content = base
+            
+            self.waitFor(timeout: 100) {
+             
+                vc.list.configure { list in
+                    list.content = content
+                    
+                    list.layout = .table {
+                        $0.layout.itemSpacing = 10
+                    }
+                }
+                
+                if var section = content.sections.popLast() {
+                    section.items.removeLast()
+                    
+                    if section.items.isEmpty == false {
+                        content.add(section)
+                    }
+                }
+                
+                vc.list.collectionView.layoutIfNeeded()
+                
+                return content.sections.isEmpty
+            }
+        }
+    }
 }
 
+fileprivate final class ViewController : UIViewController {
+    
+    let list : ListView = ListView()
+    
+    override func loadView() {
+        self.view = list
+    }
+}
 
 fileprivate struct TestContent : ItemContent, Equatable
 {
@@ -528,6 +580,12 @@ fileprivate struct TestContent : ItemContent, Equatable
     static func createReusableContentView(frame: CGRect) -> UIView
     {
         return UIView(frame: frame)
+    }
+    
+    var defaultItemProperties: DefaultProperties {
+        .defaults { defaults in
+            defaults.sizing = .fixed(height: 50)
+        }
     }
 }
 
