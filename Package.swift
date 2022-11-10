@@ -19,7 +19,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "0.45.1"),
+        .package(url: "https://github.com/square/Blueprint", from: "0.47.0"),
     ],
     targets: [
         .target(
