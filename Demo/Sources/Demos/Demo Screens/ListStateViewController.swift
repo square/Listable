@@ -11,7 +11,6 @@ import BlueprintUICommonControls
 import Combine
 
 /// Includes combine examples, so only available on iOS 13.0+.
-@available(iOS 13.0, *)
 final class ListStateViewController : ListViewController
 {
     let actions = ListActions()

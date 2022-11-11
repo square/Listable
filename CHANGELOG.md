@@ -8,6 +8,8 @@
 
 ### Changed
 
+- iOS 12 and 13 have been deprecated.
+
 ### Misc
 
 # Past Releases

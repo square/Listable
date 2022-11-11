@@ -6,7 +6,7 @@
 //
 
 
-#if DEBUG && canImport(SwiftUI) && !arch(i386) && !arch(arm)
+#if DEBUG
 
 
 import UIKit
@@ -31,7 +31,6 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-@available(iOS 13.0, *)
 public struct ItemPreview : View
 {
     /// The item being previewed by the preview.

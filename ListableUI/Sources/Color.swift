@@ -22,10 +22,6 @@ public struct Color : Equatable {
     }
     
     public static func == (lhs : Self, rhs : Self) -> Bool {
-        if #available(iOS 13.0, *) {
-            return lhs.wrappedValue.resolvedColor(with: .current) == rhs.wrappedValue.resolvedColor(with: .current)
-        } else {
-            return lhs.wrappedValue == rhs.wrappedValue
-        }
+        return lhs.wrappedValue.resolvedColor(with: .current) == rhs.wrappedValue.resolvedColor(with: .current)
     }
 }

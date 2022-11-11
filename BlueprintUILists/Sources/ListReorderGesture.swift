@@ -154,16 +154,13 @@ fileprivate extension ListReorderGesture
 
 fileprivate extension ListReorderGesture {
     func accessibilityActions() -> [UIAccessibilityCustomAction]? {
-        if #available(iOS 13.0, *) {
-            let up = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
-                return self.actions.accessibilityMove(direction: .up)
-            }
-            let down = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
-                return self.actions.accessibilityMove(direction: .down)
-            }
-            return [up, down]
-        } else {
-            return nil
+        let up = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveUp) { _  in
+            return self.actions.accessibilityMove(direction: .up)
         }
+        let down = UIAccessibilityCustomAction(name: ListableLocalizedStrings.ReorderGesture.accessibilityMoveDown) { _  in
+            return self.actions.accessibilityMove(direction: .down)
+        }
+        
+        return [up, down]
     }
 }
