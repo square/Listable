@@ -288,7 +288,12 @@ extension PresentationState
             // Apply Model State
             
             self.model.content.apply(
-                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
+                to: ItemContentViews(
+                    content: cell.contentContainer.contentView,
+                    background: cell.background,
+                    selectedBackground: cell.selectedBackground,
+                    overlayDecoration: cell.overlayDecoration.content
+                ),
                 for: reason,
                 with: applyInfo
             )

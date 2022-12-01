@@ -147,6 +147,10 @@ final class SwipeActionsViewController: UIViewController  {
             self.item.identifier
         }
 
+        func overlayDecorationElement(with info: ApplyItemContentInfo) -> Element? {
+            nil
+        }
+        
         func element(with info : ApplyItemContentInfo) -> Element {
             return Column { column in
 

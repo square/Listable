@@ -4,6 +4,8 @@
 
 ### Added
 
+- Introduce an `OverlayDecoration`, which allows you to place a border, etc, around an item which is not affected by swipe action position.
+
 ### Removed
 
 ### Changed
