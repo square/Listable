@@ -48,28 +48,66 @@ final class BlueprintListDemoViewController : UIViewController
     
     func reloadData()
     {
-        self.blueprintView.element = List {
-            Section("podcasts") {
-                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-                
-                for podcast in podcasts {
-                    ElementItem(podcast, id: \.name) { _, _ in
-                        PodcastElement(podcast: podcast)
-                    } background: { _, _ in
-                        Box(backgroundColor: .white, cornerStyle: .square)
-                    } selectedBackground: { _, _ in
-                        Box(backgroundColor: .lightGray, cornerStyle: .square)
-                    } configure: {
-                        $0.insertAndRemoveAnimations = .scaleUp
-                    }
+        let style = BorderedListStyle(
+            backgroundColor: .white,
+            outerBorder: .init(color: .gray, width: 4, cornerRadius: 8),
+            selectionBorder: .init(color: .black, width: 4, cornerRadius: 8),
+            flatBottomSelectionBorder: .init(color: .black, width: 4, cornerRadius: 16),
+            containerBackground: .init(color: .lightGray, cornerRadius: 8),
+            interContainerSpacing: 16
+        )
+        self.blueprintView.element = BorderedList(style: style) {
+            BorderedContainer {
+                $0.isBackgroundEnabled = false
+            } sections: {
+                BorderedSection("1") {
+                    Podcast.podcasts
+                        .sorted { $0.episode < $1.episode }
+                        .map {
+                            PodcastElement(podcast: $0)
+                        }
+                    
                 }
             }
-        }
+        }.inset(uniform: 32)
+//        List {
+//            Section("podcasts") {
+//                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
+//
+//                for podcast in podcasts {
+//                    ElementItem(podcast, id: \.name) { _, _ in
+//                        PodcastElement(podcast: podcast)
+//                    } background: { _, _ in
+//                        Box(backgroundColor: .white, cornerStyle: .square)
+//                    } selectedBackground: { _, _ in
+//                        Box(backgroundColor: .lightGray, cornerStyle: .square)
+//                    } configure: {
+//                        $0.insertAndRemoveAnimations = .scaleUp
+//                    }
+//                }
+//            }
+//            Section("border") {
+//                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
+//                for podcast in podcasts {
+//                    PodcastBorderedItem(podcast: podcast)
+//                }
+//            }
+//        }
     }
 }
 
-
-fileprivate struct PodcastElement : ProxyElement {
+fileprivate struct PodcastElement : BorderedItem {
+    var identifierValue: String { podcast.name }
+    
+    func element(with info: ApplyItemContentInfo) -> Element {
+        elementRepresentation
+    }
+    
+    func isEquivalent(to other: BorderedItem) -> Bool {
+        guard let other = other as? PodcastElement else { return false }
+        return podcast == other.podcast
+    }
+    
     
     var podcast : Podcast
     
