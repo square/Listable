@@ -18,6 +18,10 @@ Pod::Spec.new do |s|
 
   s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
 
+  s.pod_target_xcconfig = {
+    'APPLICATION_EXTENSION_API_ONLY' => 'YES',
+  }
+
   unless ENV['LISTABLE_PUBLISHING']
 
    # These tests can only be run locally, because they depend on local pods.
