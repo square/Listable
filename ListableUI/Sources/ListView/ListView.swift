@@ -308,20 +308,24 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     private func updateScrollViewInsets()
     {
-        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
+        let insets = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
         
-        if self.collectionView.contentInset != contentInsets {
-            self.collectionView.contentInset = contentInsets
+        if self.collectionView.contentInset != insets.content {
+            self.collectionView.contentInset = insets.content
         }
         
-        if self.collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
-            self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets
+        if self.collectionView.horizontalScrollIndicatorInsets != insets.horizontalScroll {
+            self.collectionView.horizontalScrollIndicatorInsets = insets.horizontalScroll
+        }
+
+        if self.collectionView.verticalScrollIndicatorInsets != insets.verticalScroll {
+            self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
         }
     }
-    
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
+
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
@@ -347,8 +351,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 }
             }
         }()
-        
-        let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
+
+        let scrollInsets = modified(self.scrollIndicatorInsets) {
             $0.bottom = max($0.bottom, keyboardBottomInset)
         }
         
@@ -356,7 +360,21 @@ public final class ListView : UIView, KeyboardObserverDelegate
             $0.bottom = keyboardBottomInset
         }
         
-        return (contentInsets, scrollIndicatorInsets)
+        return (
+            content: contentInsets,
+            horizontalScroll: UIEdgeInsets(
+                top: 0,
+                left: scrollInsets.left,
+                bottom: 0,
+                right: scrollInsets.right
+            ),
+            verticalScroll: UIEdgeInsets(
+                top: scrollInsets.top,
+                left: 0,
+                bottom: scrollInsets.bottom,
+                right: 0
+            )
+        )
     }
     
     //
