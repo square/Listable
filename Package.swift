@@ -59,8 +59,8 @@ let package = Package(
             dependencies: ["ListableUI", "EnglishDictionary", "Snapshot"],
             path: "ListableUI/Tests",
             exclude: [
+                "Layout/Flow/Snapshot Results",
                 "Layout/Paged/Snapshot Results",
-                "Layout/Retail Grid/Snapshot Results",
                 "Layout/Table/Snapshot Results",
                 "Previews/Snapshot Results",
             ],
