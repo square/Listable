@@ -9,6 +9,7 @@
 ### Changed
 
 - iOS 12 and 13 have been deprecated.
+- Marks pod as `APPLICATION_EXTENSION_API_ONLY`
 
 ### Misc
 
@@ -106,7 +107,7 @@
 
 ### Added
 
-- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
+- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.
 
 # [5.0.1] - 2022-07-19
 
@@ -128,7 +129,7 @@
 
 ### Fixed
 
-- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
+- Fixed a bug where child accessibility views could be exposed when they should be hidden.
 
 ### Added
 
@@ -163,8 +164,8 @@
 
 - Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
 
-- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
-they were inset with the content. 
+- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously,
+they were inset with the content.
 
 # [4.0.0] - 2022-04-07
 
@@ -312,7 +313,7 @@ they were inset with the content.
 
 ### Added
 
-- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).
 
 ### Changed
 
@@ -323,11 +324,11 @@ they were inset with the content.
 ### Changed
 
 - [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
-    
+
     ```swift
     section.header = MyHeaderContent(title: "Albums")
     ```
-    
+
     Instead of:
 
     ```swift
@@ -376,7 +377,7 @@ they were inset with the content.
 
 ### Added
 
-- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied. 
+- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied.
 
 # [0.23.2] - 2021-08-05
 
@@ -456,7 +457,7 @@ they were inset with the content.
 
 ### Changed
 
-- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used. 
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used.
 
 # [0.19.0] - 2021-03-22
 
@@ -477,11 +478,11 @@ list.content.refreshControl = RefreshControl(
 
 ### Fixed
 
-- When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279). 
+- When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279).
 
 ### Added
 
-- [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`. 
+- [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`.
 
 Example usage:
 
@@ -509,7 +510,7 @@ listActions.scrolling.scrollToSection(
 
 ### Fixed
 
-- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers. 
+- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers.
 
 ### Changed
 
@@ -543,7 +544,7 @@ listActions.scrolling.scrollToSection(
 
 ### Fixed
 
-- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/243). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance. 
+- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/243). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance.
 
 - [Fix a regression](https://github.com/kyleve/Listable/pull/246/) that caused content to be re-measured during each application of an `Appearance`, even if the new `Appearance` was equal.
 
@@ -581,7 +582,7 @@ listActions.scrolling.scrollToSection(
 
 - [Introduce `onSelectionChanged` on `ListStateObserver`](https://github.com/kyleve/Listable/pull/223) to allow observing when the selected rows change.
 
-- [Pass through `BlueprintUI.Environment` to the `Element`s being rendered from `BlueprintItemContent` and `BlueprintHeaderFooterContent`](https://github.com/kyleve/Listable/pull/225). This ensures that the content you put into a `List` respects the `BlueprintUI.Environment` of the `List` itself. This PR also introduces `ListEnvironment` to facilitate this, which allows similar passthrough of environment variables within Listable. 
+- [Pass through `BlueprintUI.Environment` to the `Element`s being rendered from `BlueprintItemContent` and `BlueprintHeaderFooterContent`](https://github.com/kyleve/Listable/pull/225). This ensures that the content you put into a `List` respects the `BlueprintUI.Environment` of the `List` itself. This PR also introduces `ListEnvironment` to facilitate this, which allows similar passthrough of environment variables within Listable.
 
 - [Add a `didPerform` callback to `AutoScrollAction`](https://github.com/kyleve/Listable/pull/229), which allows registering a callback when an auto scroll action occurs.
 
@@ -649,19 +650,19 @@ listActions.scrolling.scrollToSection(
       list += Section("first") { section in ... }
   }
   ```
-  
+
   With this:
-  
+
   ```
   List { list in
       list("first") { section in ... }
   }
   ```
-  
+
   Improving terseness when building sections in a list.
 
-- [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.  
-  
+- [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.
+
 
 ### Removed
 
@@ -689,7 +690,7 @@ listActions.scrolling.scrollToSection(
 
   ```
   let view = ItemPreviewView()
-          
+
   view.update(
       with: 300.0,
       state: .init(isSelected: false, isHighlighted: false),
@@ -712,7 +713,7 @@ listActions.scrolling.scrollToSection(
       }
   }
   ```
-  
+
   There are included options like `withAllItemStates` which allow seeing previews across the various possible selection and highlight states.
 
 - Add `customInterSectionSpacing` property to `Section.Layout` which allows the user to specify [custom spacing after a section](https://github.com/kyleve/Listable/pull/172), overriding the calculated spacing.
