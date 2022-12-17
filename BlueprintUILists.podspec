@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.swift_versions = [LISTABLE_SWIFT_VERSION]
 
   s.dependency 'ListableUI'
-  s.dependency 'BlueprintUI', '~> 0.48'
+  s.dependency 'BlueprintUI', "~> #{BLUEPRINT_VERSION}"
 
   s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
 
