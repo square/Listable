@@ -8,7 +8,7 @@
 import UIKit
 
 
-public final class ListView : UIView, KeyboardObserverDelegate
+public final class ListView : UIView
 {
     //
     // MARK: Initialization
@@ -159,6 +159,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
     private let dataSource : DataSource
     
     private let keyboardObserver : KeyboardObserver
+
+    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
     
     //
     // MARK: Debugging
@@ -376,29 +378,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             )
         )
     }
-    
-    //
-    // MARK: KeyboardObserverDelegate
-    //
-    
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
-    
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
-        
-        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
-            return
-        }
-        
-        guard self.lastKeyboardFrame != frame else {
-            return
-        }
-        
-        self.lastKeyboardFrame = frame
-        
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
-        })
-    }
+
     
     //
     // MARK: List State Observation
@@ -1382,6 +1362,28 @@ public extension ListView
         }
         
         self.collectionView.reloadData()
+    }
+}
+
+
+@_spi(ListableKeyboard)
+extension ListView : KeyboardObserverDelegate
+{
+    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+
+        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+            return
+        }
+
+        guard self.lastKeyboardFrame != frame else {
+            return
+        }
+
+        self.lastKeyboardFrame = frame
+
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.updateScrollViewInsets()
+        })
     }
 }
 

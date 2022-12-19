@@ -7,7 +7,7 @@
 
 import XCTest
 
-@testable import ListableUI
+@_spi(ListableKeyboard) @testable import ListableUI
 
 
 

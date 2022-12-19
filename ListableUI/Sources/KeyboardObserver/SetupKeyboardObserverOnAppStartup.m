@@ -28,19 +28,19 @@
     if (self != __LST_SetupKeyboardObserverOnAppStartup.class) {
         return;
     }
-    
+
     [self sharedInstance];
 }
 
 + (instancetype)sharedInstance;
 {
     static __LST_SetupKeyboardObserverOnAppStartup *loader = nil;
-    
+
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         loader = [[__LST_SetupKeyboardObserverOnAppStartup alloc] init];
     });
-    
+
     return loader;
 }
 
@@ -48,19 +48,19 @@
 {
     self = [super init];
     NSParameterAssert(self);
-    
+
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(applicationDidFinishLaunchingNotification)
                                                name:UIApplicationDidFinishLaunchingNotification
                                              object:nil];
-    
+
     return self;
 }
 
-- (void)applicationDidFinishLaunchingNotification;
+- (void)applicationDidFinishLaunchingNotification NS_EXTENSION_UNAVAILABLE_IOS("Use view controller based solutions where appropriate instead.");
 {
-    /// Application has now finished launching, so set up the keyboard observer.
-    [__LST_KeyboardObserver_ObjCAccess __setupSharedInstance];
+    /// Application has now finished launching, so set up the keyboard
+    [ListView configureWithApplication:UIApplication.sharedApplication];
 }
 
 @end
