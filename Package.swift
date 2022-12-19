@@ -26,7 +26,7 @@ let package = Package(
             name: "ListableUI",
             path: "ListableUI",
             exclude: [
-                "Sources/Internal/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
+                "Sources/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
                 "Sources/Layout/Paged/PagedAppearance.monopic",
                 "Sources/ContentBounds/ListContentBounds.monopic",
                 "Sources/Layout/Table/TableAppearance.monopic",
