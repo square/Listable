@@ -59,9 +59,9 @@ public final class KeyboardObserver {
 
     private let center : NotificationCenter
 
-    fileprivate var delegates : [Delegate] = []
+    internal private(set) var delegates : [Delegate] = []
 
-    fileprivate struct Delegate {
+    internal struct Delegate {
         private(set) weak var value : KeyboardObserverDelegate?
     }
 
@@ -199,7 +199,7 @@ public final class KeyboardObserver {
     }
 }
 
-private extension KeyboardObserver
+extension KeyboardObserver
 {
     struct NotificationInfo : Equatable {
 
