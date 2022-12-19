@@ -10,7 +10,7 @@
 
 - iOS 12 and 13 have been deprecated.
 - Marks pod as `APPLICATION_EXTENSION_API_ONLY`
-- `KeyboardObserver` is now a public API
+- `KeyboardObserver` is now a SPI accessible API
     - When using SPM, you are responsible for initializing this singleton in non-extension contexts
     - `ListView.configure(with: application)` should be called when your app has finished launching
     - Failure to do so will continue to `print()` the existing LISTABLE WARNING
