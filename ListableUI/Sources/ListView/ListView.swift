@@ -383,7 +383,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     
     private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
     
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
         
         guard let frame = self.keyboardObserver.currentFrame(in: self) else {
             return

@@ -59,7 +59,7 @@ public final class KeyboardObserver {
 
     private let center : NotificationCenter
 
-    public private(set) var delegates : [Delegate] = []
+    fileprivate var delegates : [Delegate] = []
 
     fileprivate struct Delegate {
         private(set) weak var value : KeyboardObserverDelegate?
@@ -278,27 +278,15 @@ extension KeyboardObserver {
     }
 }
 
-#if SWIFT_PACKAGE
 extension ListView {
 
     /// This should be called in UIApplicationDelegate.application(_:, didFinishLaunchingWithOption:)
     /// It ensures that all ListViews will correctly avoid the keyboard
+    /// - Note: CocoaPods automatically calls this method
     @available(iOSApplicationExtension, unavailable, message: "This cannot be used in application extensions")
+    @objc(configureWithApplication:)
     public static func configure(with application: UIApplication) {
-        __LST_KeyboardObserver_ObjCAccess.__setupSharedInstance()
-    }
-}
-#endif
-
-
-/// An Objective-C accessible class that lets us set up the shared
-/// observer on app startup, without needing to make `KeyboardObserver` Objective-C
-/// accessible. See `SetupKeyboardObserverOnAppStartup.m` for more.
-@objc public final class __LST_KeyboardObserver_ObjCAccess : NSObject
-{
-    @objc public static func __setupSharedInstance() {
         _ = KeyboardObserver.shared
-
         KeyboardObserver.didSetupSharedInstanceDuringAppStartup = true
     }
 }
