@@ -8,6 +8,7 @@
 import UIKit
 
 
+@_spi(ListableKeyboard)
 public protocol KeyboardObserverDelegate : AnyObject {
 
     func keyboardFrameWillChange(
@@ -40,6 +41,7 @@ public protocol KeyboardObserverDelegate : AnyObject {
  iOS Docs for keyboard management:
  https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/KeyboardManagement/KeyboardManagement.html
  */
+@_spi(ListableKeyboard)
 public final class KeyboardObserver {
 
     /// The global shared keyboard observer. Why is it a global shared instance?
