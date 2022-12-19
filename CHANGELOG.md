@@ -8,16 +8,22 @@
 
 ### Changed
 
+### Misc
+
+# Past Releases
+
+# [8.0.0] - 2022-12-19
+
+### Changed
+
 - iOS 12 and 13 have been deprecated.
+
 - Marks pod as `APPLICATION_EXTENSION_API_ONLY`
+
 - `KeyboardObserver` is now a SPI accessible API
     - When using SPM, you are responsible for initializing this singleton in non-extension contexts
     - `ListView.configure(with: application)` should be called when your app has finished launching
     - Failure to do so will continue to `print()` the existing LISTABLE WARNING
-
-### Misc
-
-# Past Releases
 
 # [7.2.0] - 2022-10-24
 
@@ -799,7 +805,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/7.2.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.0.0...HEAD
+[8.0.0]: https://github.com/kyleve/Listable/compare/7.2.0...8.0.0
 [7.2.0]: https://github.com/kyleve/Listable/compare/7.1.2...7.2.0
 [7.1.2]: https://github.com/kyleve/Listable/compare/7.1.1...7.1.2
 [7.1.1]: https://github.com/kyleve/Listable/compare/7.1.0...7.1.1
