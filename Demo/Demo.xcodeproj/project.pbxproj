@@ -45,6 +45,7 @@
 		0AEB96B922FBCBA600341DFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96B822FBCBA600341DFF /* Assets.xcassets */; };
 		0AEB96BC22FBCBA600341DFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEB96BA22FBCBA600341DFF /* LaunchScreen.storyboard */; };
 		0AEB96E222FBCC1D00341DFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */; };
+		0E24EF24295359B50049EB6F /* NestedAccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E24EF23295359B50049EB6F /* NestedAccordionViewController.swift */; };
 		1F46FB6B26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F46FB6A26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift */; };
 		27B4DCE9244F88BE001BA9D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */; };
 		2B56913A2846737C00E575BE /* AutoScrollingViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */; };
@@ -99,6 +100,7 @@
 		0AEB96BB22FBCBA600341DFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0AEB96BD22FBCBA600341DFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AEB96D322FBCC1D00341DFF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0E24EF23295359B50049EB6F /* NestedAccordionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NestedAccordionViewController.swift; sourceTree = "<group>"; };
 		1F46FB6A26010F4900760961 /* RefreshControlOffsetAdjustmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshControlOffsetAdjustmentViewController.swift; sourceTree = "<group>"; };
 		27B4DCE8244F88BE001BA9D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollingViewController2.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				0AA4D9AE248064A300CF95A5 /* WidthCustomizationViewController.swift */,
 				0AC839A425EEAD110055CEF5 /* OnTapItemAnimationViewController.swift */,
 				2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */,
+				0E24EF23295359B50049EB6F /* NestedAccordionViewController.swift */,
 			);
 			path = "Demo Screens";
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				0AA4D9BC248064A300CF95A5 /* KeyboardTestingViewController.swift in Sources */,
 				0AA4D9C1248064A300CF95A5 /* CoordinatorViewController.swift in Sources */,
 				0A49210424E5E11300D17038 /* AccordionViewController.swift in Sources */,
+				0E24EF24295359B50049EB6F /* NestedAccordionViewController.swift in Sources */,
 				0A1306E7272F29B300F6DDDD /* BestPractices.swift in Sources */,
 				0AA4D9C3248064A300CF95A5 /* CollectionViewAppearance.swift in Sources */,
 				2B8804652490844A003BB351 /* SpacingCustomizationViewController.swift in Sources */,

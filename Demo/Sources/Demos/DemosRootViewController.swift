@@ -195,7 +195,15 @@ public final class DemosRootViewController : ListViewController
                         self?.push(AccordionViewController())
                     }
                 )
-                
+
+                Item(
+                    DemoItem(text: "Nested Accordion View"),
+                    selectionStyle: .tappable,
+                    onSelect: { _ in
+                        self?.push(NestedAccordionViewController())
+                    }
+                )
+
                 Item(
                     DemoItem(text: "Using Autolayout"),
                     selectionStyle: .selectable(),
