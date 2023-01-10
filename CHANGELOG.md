@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [8.0.1] - 2023-01-10
+
+### Fixed
+
+- Fix Catalyst version specifier in SPM package.
+
 # [8.0.0] - 2022-12-19
 
 ### Changed
@@ -805,7 +811,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.0.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.0.1...HEAD
+[8.0.0]: https://github.com/kyleve/Listable/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/kyleve/Listable/compare/7.2.0...8.0.0
 [7.2.0]: https://github.com/kyleve/Listable/compare/7.1.2...7.2.0
 [7.1.2]: https://github.com/kyleve/Listable/compare/7.1.1...7.1.2
