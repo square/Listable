@@ -8,6 +8,10 @@
 
 ### Changed
 
+- The pod will now inherit `APPLICATION_EXTENSION_API_ONLY`
+    - This can be optionally set in version.rb for local development
+- Expose KeyboardObserver.logKeyboardSetupWarningIfNeeded() via SPI
+
 ### Misc
 
 # Past Releases

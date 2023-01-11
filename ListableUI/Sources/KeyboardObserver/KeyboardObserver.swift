@@ -260,7 +260,8 @@ extension KeyboardObserver {
 
     /// Called by `ListView` on setup, to warn developers
     /// if something has gone wrong with keyboard setup.
-    static func logKeyboardSetupWarningIfNeeded() {
+    @_spi(ListableKeyboard)
+    public static func logKeyboardSetupWarningIfNeeded() {
         guard !isExtensionContext else {
             return
         }

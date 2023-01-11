@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+EXTENSION_API_ONLY ||= '$(inherited)'
+
 LISTABLE_VERSION ||= '8.0.1'
 
 LISTABLE_IOS_DEPLOYMENT_TARGET ||= '14.0'

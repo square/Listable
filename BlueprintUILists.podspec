@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
 
   s.pod_target_xcconfig = {
-    'APPLICATION_EXTENSION_API_ONLY' => 'YES',
+    'APPLICATION_EXTENSION_API_ONLY' => EXTENSION_API_ONLY,
   }
 
   unless ENV['LISTABLE_PUBLISHING']
