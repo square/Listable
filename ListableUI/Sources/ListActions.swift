@@ -84,25 +84,24 @@ public final class ListActions {
         
         fileprivate weak var listView : ListView?
         
-        public typealias ScrollCompletion = ListView.ScrollCompletion
+        public typealias Completion = ListView.Scrolling.Completion
         
         ///
         /// Scrolls to the provided item, with the provided positioning.
         /// If the item is contained in the list, true is returned. If it is not, false is returned.
         ///
-        @discardableResult
         public func scrollTo(
             item : AnyItem,
             position : ScrollPosition,
             animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
+            completion : @escaping Completion = { _ in }
+        ) {
             guard let listView = self.listView else {
-                return false
+                completion(.failure(.noList))
+                return
             }
             
-            return listView.scrollTo(
+            listView.scrollTo(
                 item: item,
                 position: position,
                 animation: animation,
@@ -115,19 +114,18 @@ public final class ListActions {
         /// If there is more than one item with the same identifier, the list scrolls to the first.
         /// If the item is contained in the list, true is returned. If it is not, false is returned.
         ///
-        @discardableResult
         public func scrollTo(
             item : AnyIdentifier,
             position : ScrollPosition,
             animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-            ) -> Bool
-        {
+            completion : @escaping Completion = { _ in }
+        ) {
             guard let listView = self.listView else {
-                return false
+                completion(.failure(.noList))
+                return
             }
             
-            return listView.scrollTo(
+            listView.scrollTo(
                 item: item,
                 position: position,
                 animation: animation,
@@ -150,20 +148,19 @@ public final class ListActions {
         /// If none of the above are present, the list will fallback to the remaining supplementary view
         /// (footer for `.top`, header for `.bottom`).
         ///
-        @discardableResult
         public func scrollToSection(
             with identifier : AnyIdentifier,
             sectionPosition : SectionPosition = .top,
             scrollPosition : ScrollPosition,
             animation: ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
+            completion : @escaping Completion = { _ in }
+        ) {
             guard let listView = self.listView else {
-                return false
+                completion(.failure(.noList))
+                return
             }
 
-            return listView.scrollToSection(
+            listView.scrollToSection(
                 with: identifier,
                 sectionPosition: sectionPosition,
                 scrollPosition: scrollPosition,
@@ -173,34 +170,32 @@ public final class ListActions {
         }
         
         /// Scrolls to the very top of the list, which includes displaying the list header.
-        @discardableResult
         public func scrollToTop(
             animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
+            completion : @escaping Completion = { _ in }
+        ) {
             guard let listView = self.listView else {
-                return false
+                completion(.failure(.noList))
+                return
             }
             
-            return listView.scrollToTop(
+            listView.scrollToTop(
                 animation: animation,
                 completion: completion
             )
         }
 
         /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
-        @discardableResult
         public func scrollToLastItem(
             animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
-        ) -> Bool
-        {
+            completion : @escaping Completion = { _ in }
+        ) {
             guard let listView = self.listView else {
-                return false
+                completion(.failure(.noList))
+                return
             }
            
-            return listView.scrollToLastItem(
+            listView.scrollToLastItem(
                 animation: animation,
                 completion: completion
             )
