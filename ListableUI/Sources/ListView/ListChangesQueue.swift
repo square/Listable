@@ -212,7 +212,13 @@ extension ListChangesQueue {
         
         /// Invoked by callers when their async work completed.
         /// If this method is called more than once, a fatal error occurs.
-        func finish(_ action : () -> () = {}) {
+        func finish() {
+            finish({})
+        }
+        
+        /// Invoked by callers when their async work completed.
+        /// If this method is called more than once, a fatal error occurs.
+        func finish(_ action : () -> ()) {
             precondition(isFinished == false, "Cannot finish an operation more than once.")
             
             action()

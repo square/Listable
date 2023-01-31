@@ -499,13 +499,13 @@ public final class ListView : UIView
     ) {
         self.logHorizontalScrollToWarning()
         
-        self.updateQueue.add { completion in
+        self.updateQueue.add { operation in
             
             // Make sure the item identifier is valid.
 
             guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
                 callerCompletion(.failure(.notFound(item)))
-                completion.finish()
+                operation.finish()
                 return
             }
             
@@ -513,7 +513,7 @@ public final class ListView : UIView
                 
                 guard result.wasSuccessful else {
                     callerCompletion(result)
-                    completion.finish()
+                    operation.finish()
                     return
                 }
                 
@@ -525,7 +525,7 @@ public final class ListView : UIView
 
                 if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
                     callerCompletion(.success(.alreadyVisible))
-                    completion.finish()
+                    operation.finish()
                     return
                 }
 
@@ -565,7 +565,7 @@ public final class ListView : UIView
                             callerCompletion(.failure(.animationInterrupted))
                         }
                         
-                        completion.finish()
+                        operation.finish()
                     }
                 )
             }
@@ -596,7 +596,7 @@ public final class ListView : UIView
     ) {
         self.logHorizontalScrollToWarning()
         
-        self.updateQueue.add { completion in
+        self.updateQueue.add { operation in
             
             let storageContent = self.storage.allContent
 
@@ -604,7 +604,7 @@ public final class ListView : UIView
 
             guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
                 callerCompletion(.failure(.invalidSectionIdentifier(identifier)))
-                completion.finish()
+                operation.finish()
                 return
             }
 
@@ -612,7 +612,7 @@ public final class ListView : UIView
                 
                 guard result.wasSuccessful else {
                     callerCompletion(result)
-                    completion.finish()
+                    operation.finish()
                     return
                 }
                 
@@ -655,7 +655,7 @@ public final class ListView : UIView
                         animation: animation,
                         completion: { result in
                             callerCompletion(result)
-                            completion.finish()
+                            operation.finish()
                         }
                     )
                 } else if let adjacentItem = adjacentItem {
@@ -665,7 +665,7 @@ public final class ListView : UIView
                         animation: animation,
                         completion: { result in
                             callerCompletion(result)
-                            completion.finish()
+                            operation.finish()
                         }
                     )
                 } else {
@@ -675,7 +675,7 @@ public final class ListView : UIView
                         animation: animation,
                         completion: { result in
                             callerCompletion(result)
-                            completion.finish()
+                            operation.finish()
                         }
                     )
                 }
@@ -724,13 +724,13 @@ public final class ListView : UIView
         
         self.logHorizontalScrollToWarning()
         
-        self.updateQueue.add { completion in
+        self.updateQueue.add { operation in
             
             // Make sure we have a valid last index path.
 
             guard let toIndexPath = self.storage.allContent.lastIndexPath() else {
                 callerCompletion(.failure(.listEmpty))
-                completion.finish()
+                operation.finish()
                 return
             }
 
@@ -740,7 +740,7 @@ public final class ListView : UIView
                 
                 guard result.wasSuccessful else {
                     callerCompletion(result)
-                    completion.finish()
+                    operation.finish()
                     return
                 }
                 
@@ -765,7 +765,7 @@ public final class ListView : UIView
                             callerCompletion(.failure(.animationInterrupted))
                         }
                         
-                        completion.finish()
+                        operation.finish()
                     }
                 )
             }
@@ -1118,10 +1118,10 @@ public final class ListView : UIView
         /// By placing the update within our serial update queue, and only marking the event as done in
         /// `collectionViewUpdateCompletion`, we can guarantee that out of order updates do not occur.
         
-        self.updateQueue.add { [weak self] completion in
+        self.updateQueue.add { [weak self] operation in
             
             guard let self = self else {
-                completion.finish()
+                operation.finish()
                 return
             }
             
@@ -1177,7 +1177,7 @@ public final class ListView : UIView
                 with: diff,
                 animated: reason.animated,
                 updateBackingData: updateBackingData,
-                collectionViewUpdateCompletion: completion.finish,
+                collectionViewUpdateCompletion: operation.finish,
                 animationCompletion: callerCompletion
             )
 
@@ -1324,13 +1324,13 @@ public final class ListView : UIView
         to toIndexPath: IndexPath,
         scroll: @escaping Scrolling.Completion
     ) {
-        self.updateQueue.add { completion in
+        self.updateQueue.add { operation in
             
             // Make sure we have a last loaded index path.
             
             guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
                 scroll(.failure(.listEmpty))
-                completion.finish()
+                operation.finish()
                 return
             }
 
@@ -1339,11 +1339,11 @@ public final class ListView : UIView
             if lastLoadedIndexPath < toIndexPath {
                 self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
                     scroll(.success(.scrolled))
-                    completion.finish()
+                    operation.finish()
                 }
             } else {
                 scroll(.success(.scrolled))
-                completion.finish()
+                operation.finish()
             }
         }
     }
@@ -1352,12 +1352,12 @@ public final class ListView : UIView
         index: Int,
         scroll: @escaping Scrolling.Completion
     ) {
-        self.updateQueue.add { completion in
+        self.updateQueue.add { operation in
             // Make sure section is contained within all content.
 
             guard index < self.storage.allContent.sections.count else {
                 scroll(.failure(.invalidSectionIndex(index)))
-                completion.finish()
+                operation.finish()
                 return
             }
 
@@ -1368,11 +1368,11 @@ public final class ListView : UIView
                 
                 self.updatePresentationState(for: .programaticScrollDownTo(toIndexPath)) { _ in
                     scroll(.success(.scrolled))
-                    completion.finish()
+                    operation.finish()
                 }
             } else {
                 scroll(.success(.scrolled))
-                completion.finish()
+                operation.finish()
             }
         }
     }
