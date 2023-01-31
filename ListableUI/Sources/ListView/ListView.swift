@@ -417,29 +417,32 @@ public final class ListView : UIView
         /// When performing a scroll event, describes the possible outcomes of the scroll event.
         public enum Success : Equatable {
             
-            ///
+            /// The scroll event was performed successfully.
             case scrolled
+            
+            /// No scroll event was performed because the item was already visible.
+            case alreadyVisible
         }
         
         /// When performing a scroll event, describes possible error cases.
         public enum Error : Swift.Error {
             
-            ///
+            /// No list is present to perform the scroll event.
             case noList
             
-            ///
+            /// The list has no content, no scroll can be performed.
             case listEmpty
             
-            ///
+            /// The item with the given identifier was not found.
             case notFound(AnyIdentifier)
             
-            ///
+            /// There is no section with the given index.
             case invalidSectionIndex(Int)
             
-            ///
+            /// There is no section with the given identifier.
             case invalidSectionIdentifier(AnyIdentifier)
             
-            ///
+            /// The scroll animation was interrupted.
             case animationInterrupted
         }
     }
@@ -508,7 +511,7 @@ public final class ListView : UIView
             
             self.preparePresentationStateForScroll(to: toIndexPath) { result in
                 
-                guard result.isSuccess else {
+                guard result.wasSuccessful else {
                     callerCompletion(result)
                     completion.finish()
                     return
@@ -521,6 +524,8 @@ public final class ListView : UIView
                 // If the item is already visible and that's good enough, return.
 
                 if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
+                    callerCompletion(.success(.alreadyVisible))
+                    completion.finish()
                     return
                 }
 
@@ -539,8 +544,8 @@ public final class ListView : UIView
                             width: itemFrame.width,
                             height: itemFrame.height
                         )
+                        
                         self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position)
-
                     } else {
                         self.collectionView.scrollToItem(
                             at: toIndexPath,
@@ -605,7 +610,7 @@ public final class ListView : UIView
 
             self.preparePresentationStateForScrollToSection(index: sectionIndex) { result in
                 
-                guard result.isSuccess else {
+                guard result.wasSuccessful else {
                     callerCompletion(result)
                     completion.finish()
                     return
@@ -691,7 +696,7 @@ public final class ListView : UIView
         
         self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0)) { result in
             
-            guard result.isSuccess else {
+            guard result.wasSuccessful else {
                 completion(result)
                 return
             }
@@ -733,7 +738,7 @@ public final class ListView : UIView
 
             self.preparePresentationStateForScroll(to: toIndexPath)  { result in
                 
-                guard result.isSuccess else {
+                guard result.wasSuccessful else {
                     callerCompletion(result)
                     completion.finish()
                     return
@@ -1666,7 +1671,7 @@ fileprivate extension UIScrollView
 
 extension Result {
     
-    var isSuccess : Bool {
+    var wasSuccessful : Bool {
         switch self {
         case .success: return true
         case .failure: return false
