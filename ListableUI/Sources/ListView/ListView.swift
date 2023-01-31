@@ -691,28 +691,33 @@ public final class ListView : UIView
         
         self.logHorizontalScrollToWarning()
         
-        // The rect we scroll to must have an area – an empty rect will result in no scrolling.
-        let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
-        
-        self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0)) { result in
+        self.updateQueue.add { operation in
+            // The rect we scroll to must have an area – an empty rect will result in no scrolling.
+            let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
             
-            guard result.wasSuccessful else {
-                completion(result)
-                return
-            }
-            
-            animation.perform(
-                animations: {
-                    self.collectionView.scrollRectToVisible(rect, animated: false)
-                },
-                completion: { success in
-                    if success {
-                        completion(.success(.scrolled))
-                    } else {
-                        completion(.failure(.animationInterrupted))
-                    }
+            self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0)) { result in
+                
+                guard result.wasSuccessful else {
+                    completion(result)
+                    operation.finish()
+                    return
                 }
-            )
+                
+                animation.perform(
+                    animations: {
+                        self.collectionView.scrollRectToVisible(rect, animated: false)
+                    },
+                    completion: { success in
+                        if success {
+                            completion(.success(.scrolled))
+                        } else {
+                            completion(.failure(.animationInterrupted))
+                        }
+                        
+                        operation.finish()
+                    }
+                )
+            }
         }
     }
 
@@ -748,6 +753,8 @@ public final class ListView : UIView
                 let contentFrameHeight = self.collectionView.visibleContentFrame.height
 
                 guard contentHeight > contentFrameHeight else {
+                    callerCompletion(.success(.alreadyVisible))
+                    operation.finish()
                     return
                 }
 
@@ -1272,8 +1279,7 @@ public final class ListView : UIView
         scrollPosition : ScrollPosition,
         animation: ViewAnimation = .none,
         completion : @escaping Scrolling.Completion = { _ in }
-    )
-    {
+    ) {
         // If the item is already visible and that's good enough, return.
 
         let isAlreadyVisible = collectionView.visibleContentFrame.contains(targetFrame)
