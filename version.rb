@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-LISTABLE_VERSION ||= '7.2.0'
+BLUEPRINT_VERSION ||= '0.48.0'
+
+LISTABLE_VERSION ||= '8.0.1'
 
 LISTABLE_IOS_DEPLOYMENT_TARGET ||= '14.0'
 

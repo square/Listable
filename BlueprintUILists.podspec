@@ -14,9 +14,13 @@ Pod::Spec.new do |s|
   s.swift_versions = [LISTABLE_SWIFT_VERSION]
 
   s.dependency 'ListableUI'
-  s.dependency 'BlueprintUI'
+  s.dependency 'BlueprintUI', "~> #{BLUEPRINT_VERSION}"
 
   s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
+
+  s.pod_target_xcconfig = {
+    'APPLICATION_EXTENSION_API_ONLY' => 'YES',
+  }
 
   unless ENV['LISTABLE_PUBLISHING']
 

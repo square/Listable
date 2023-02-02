@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
@@ -7,6 +7,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [
         .iOS(.v14),
+        .macCatalyst(.v14),
     ],
     products: [
         .library(
@@ -19,14 +20,14 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "0.47.0"),
+        .package(url: "https://github.com/square/Blueprint", from: "0.48.1"),
     ],
     targets: [
         .target(
             name: "ListableUI",
             path: "ListableUI",
             exclude: [
-                "Sources/Internal/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
+                "Sources/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
                 "Sources/Layout/Paged/PagedAppearance.monopic",
                 "Sources/ContentBounds/ListContentBounds.monopic",
                 "Sources/Layout/Table/TableAppearance.monopic",
@@ -59,8 +60,8 @@ let package = Package(
             dependencies: ["ListableUI", "EnglishDictionary", "Snapshot"],
             path: "ListableUI/Tests",
             exclude: [
+                "Layout/Flow/Snapshot Results",
                 "Layout/Paged/Snapshot Results",
-                "Layout/Retail Grid/Snapshot Results",
                 "Layout/Table/Snapshot Results",
                 "Previews/Snapshot Results",
             ],
