@@ -456,7 +456,7 @@ class ComparePropertiesTests : XCTestCase {
         
         print("Compare based on properties...")
         
-        determineAverage(for: 0.5) {
+        determineAverage(for: 1.0) {
             _ = compareEquatableProperties(
                 TestValue(
                     title: "A Title",
@@ -473,9 +473,26 @@ class ComparePropertiesTests : XCTestCase {
             )
         }
         
-        print("Compare based on synthesized Equatable implementation...")
+        print("Compare based on properties, removing enum...")
         
-        determineAverage(for: 0.5) {
+        determineAverage(for: 1.0) {
+            _ = compareEquatableProperties(
+                TestValue.ButNoEnums(
+                    title: "A Title",
+                    count: 10,
+                    closure: {}
+                ),
+                TestValue.ButNoEnums(
+                    title: "A Title",
+                    count: 10,
+                    closure: {}
+                )
+            )
+        }
+        
+        print("Compare based on synthesized Equatable implementation...")
+
+        determineAverage(for: 1.0) {
             _ = compareEquatableProperties(
                 TestValue.ButEquatable(
                     title: "A Title",
@@ -508,6 +525,24 @@ fileprivate struct TestValue {
     enum EnumValue : Equatable {
         case foo
         case bar(String)
+    }
+    
+    /// Removing enums
+    
+    fileprivate struct ButNoEnums {
+        
+        var title : String
+        var detail : String?
+        var count : Int
+        
+        var nonEquatable: EquatableValue = .init(value: "An inner string")
+        
+        var closure : () -> ()
+        
+        fileprivate struct EquatableValue : Equatable {
+            
+            var value : AnyHashable
+        }
     }
     
     /// Mirrors the structure of the parent type but with a synthesized `Equatable`

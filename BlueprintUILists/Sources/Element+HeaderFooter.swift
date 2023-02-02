@@ -24,42 +24,25 @@ extension Element {
     /// MyElement(...)
     ///     .listHeaderFooter { header in
     ///         header.onTap = { ... }
-    ///     }
-    ///     .background {
+    ///     } background: {
     ///         Box(backgroundColor: ...).inset(...)
-    ///     }
-    ///     .pressedBackground {
+    ///     } pressedBackground: {
     ///         Box(backgroundColor: ...).inset(...)
     ///     }
     /// ```
     public func listHeaderFooter(
+        background : @escaping () -> Element? = { nil },
+        pressedBackground : @escaping () -> Element? = { nil },
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
-            WrappedHeaderFooterContent(represented: self),
+            WrappedHeaderFooterContent(
+                represented: self,
+                background: background,
+                pressedBackground: pressedBackground
+            ),
             configure: configure
         )
-    }
-}
-
-
-extension HeaderFooter where Content : _AnyWrappedHeaderFooterContent {
-    
-    /// TODO
-    public func background(_ provider : @escaping () -> Element?) -> Self {
-        var copy = self
-        copy.content._backgroundProvider = provider
-        return copy
-    }
-    
-    /// TODO
-    public func pressedBackground(
-        _ background : @escaping () -> Element,
-        onTap : @escaping () -> ()
-    ) -> Self {
-        var copy = self
-        copy.content._pressedBackgroundProvider = background
-        return copy
     }
 }
 
@@ -69,10 +52,16 @@ extension HeaderFooter where Content : _AnyWrappedHeaderFooterContent {
 extension Element where Self:Equatable {
     
     public func listHeaderFooter(
+        background : @escaping () -> Element? = { nil },
+        pressedBackground : @escaping () -> Element? = { nil },
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
-            WrappedHeaderFooterContent(represented: self),
+            WrappedHeaderFooterContent(
+                represented: self,
+                background: background,
+                pressedBackground: pressedBackground
+            ),
             configure: configure
         )
     }
@@ -83,40 +72,69 @@ extension Element where Self:Equatable {
 extension Element where Self:EquivalentComparable {
     
     public func listHeaderFooter(
+        background : @escaping () -> Element? = { nil },
+        pressedBackground : @escaping () -> Element? = { nil },
         configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
     ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
         HeaderFooter(
-            WrappedHeaderFooterContent(represented: self),
+            WrappedHeaderFooterContent(
+                represented: self,
+                background: background,
+                pressedBackground: pressedBackground
+            ),
             configure: configure
         )
     }
 }
 
 
-public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderFooterContent, _AnyWrappedHeaderFooterContent
+public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderFooterContent
 {
     public let represented : ElementType
     
     private let isEquivalent : (Self, Self) -> Bool
     
-    init(represented : ElementType) {
+    init(
+        represented : ElementType,
+        background : @escaping () -> Element?,
+        pressedBackground : @escaping () -> Element?
+    ) {
         self.represented = represented
+        
+        self.backgroundProvider = background
+        self.pressedBackgroundProvider = pressedBackground
         
         self.isEquivalent = {
             defaultIsEquivalentImplementation($0.represented, $1.represented)
         }
     }
     
-    init(represented : ElementType) where ElementType:Equatable {
+    init(
+        represented : ElementType,
+        background : @escaping () -> Element?,
+        pressedBackground : @escaping () -> Element?
+    ) where ElementType:Equatable
+    {
         self.represented = represented
+        
+        self.backgroundProvider = background
+        self.pressedBackgroundProvider = pressedBackground
         
         self.isEquivalent = {
             $0.represented == $1.represented
         }
     }
     
-    init(represented : ElementType) where ElementType:EquivalentComparable {
+    init(
+        represented : ElementType,
+        background : @escaping () -> Element?,
+        pressedBackground : @escaping () -> Element?
+    ) where ElementType:EquivalentComparable
+    {
         self.represented = represented
+        
+        self.backgroundProvider = background
+        self.pressedBackgroundProvider = pressedBackground
         
         self.isEquivalent = {
             $0.represented.isEquivalent(to: $1.represented)
@@ -131,27 +149,19 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
         represented
     }
     
-    public var _backgroundProvider : () -> Element? = { nil }
+    var backgroundProvider : () -> Element? = { nil }
     
     public var background: Element? {
-        _backgroundProvider()
+        backgroundProvider()
     }
     
-    public var _pressedBackgroundProvider : () -> Element? = { nil }
+    var pressedBackgroundProvider : () -> Element? = { nil }
     
     public var pressedBackground: Element? {
-        _pressedBackgroundProvider()
+        pressedBackgroundProvider()
     }
     
     public var reappliesToVisibleView: ReappliesToVisibleView {
         .ifNotEquivalent
     }
-}
-
-
-public protocol _AnyWrappedHeaderFooterContent {
- 
-    var _backgroundProvider : () -> Element? { get set }
-    var _pressedBackgroundProvider : () -> Element? { get set }
-    
 }

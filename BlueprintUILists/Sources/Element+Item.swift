@@ -23,49 +23,34 @@ extension Element {
     ///
     /// ```swift
     /// MyElement(...)
-    ///     .listItem(id: "my-provided-id") { item in
+    ///     .listItem(id: "my-provided-id", selection: .tappable) { item in
     ///         item.insertAndRemoveAnimations = .scaleUp
-    ///     }
-    ///     .background {
+    ///     } background: { _ in
     ///         Box(backgroundColor: ...).inset(...)
-    ///     }
-    ///     .selectedBackground(.tappable) {
+    ///     } selectedBackground: { _ in
     ///         Box(backgroundColor: ...).inset(...)
     ///     }
     /// ```
     public func listItem(
         id : AnyHashable? = nil,
+        selection: ItemSelectionStyle = .notSelectable,
+        background : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
             WrappedElementContent(
                 identifierValue: id,
-                represented: self
+                represented: self,
+                background: background,
+                selectedBackground: selectedBackground
             ),
-            configure: configure
+            configure: {
+                $0.selectionStyle = selection
+                
+                configure(&$0)
+            }
         )
-    }
-}
-
-
-extension Item where Content : _AnyWrappedElementContent {
-    
-    /// TODO
-    public func background(_ provider : @escaping (ApplyItemContentInfo) -> Element?) -> Self {
-        var copy = self
-        copy.content._backgroundProvider = provider
-        return copy
-    }
-    
-    /// TODO
-    public func selectedBackground(
-        _ selectionStyle : ItemSelectionStyle,
-        selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
-    ) -> Self {
-        var copy = self
-        copy.selectionStyle = selectionStyle
-        copy.content._backgroundProvider = selectedBackground
-        return copy
     }
 }
 
@@ -75,14 +60,23 @@ extension Element where Self:Equatable {
     
     public func listItem(
         id : AnyHashable? = nil,
+        selection: ItemSelectionStyle = .notSelectable,
+        background : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
             WrappedElementContent(
                 identifierValue: id,
-                represented: self
+                represented: self,
+                background: background,
+                selectedBackground: selectedBackground
             ),
-            configure: configure
+            configure: {
+                $0.selectionStyle = selection
+                
+                configure(&$0)
+            }
         )
     }
 }
@@ -93,20 +87,29 @@ extension Element where Self:EquivalentComparable {
     
     public func listItem(
         id : AnyHashable? = nil,
+        selection: ItemSelectionStyle = .notSelectable,
+        background : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
         configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
     ) -> Item<WrappedElementContent<Self>> {
         Item(
             WrappedElementContent(
                 identifierValue: id,
-                represented: self
+                represented: self,
+                background: background,
+                selectedBackground: selectedBackground
             ),
-            configure: configure
+            configure: {
+                $0.selectionStyle = selection
+                
+                configure(&$0)
+            }
         )
     }
 }
 
 
-public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent, _AnyWrappedElementContent
+public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
 {
     public let identifierValue: AnyHashable?
     
@@ -116,10 +119,15 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent,
     
     init(
         identifierValue: AnyHashable?,
-        represented: ElementType
+        represented: ElementType,
+        background : @escaping (ApplyItemContentInfo) -> Element?,
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
     ) {
         self.represented = represented
         self.identifierValue = identifierValue
+        
+        self.backgroundProvider = background
+        self.selectedBackgroundProvider = selectedBackground
         
         self.isEquivalent = {
             defaultIsEquivalentImplementation($0.represented, $1.represented)
@@ -128,10 +136,16 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent,
     
     init(
         identifierValue: AnyHashable?,
-        represented: ElementType
-    ) where ElementType:Equatable {
+        represented: ElementType,
+        background : @escaping (ApplyItemContentInfo) -> Element?,
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
+    ) where ElementType:Equatable
+    {
         self.represented = represented
         self.identifierValue = identifierValue
+        
+        self.backgroundProvider = background
+        self.selectedBackgroundProvider = selectedBackground
         
         self.isEquivalent = {
             $0.represented == $1.represented
@@ -140,10 +154,16 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent,
     
     init(
         identifierValue: AnyHashable?,
-        represented: ElementType
-    ) where ElementType:EquivalentComparable {
+        represented: ElementType,
+        background : @escaping (ApplyItemContentInfo) -> Element?,
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
+    ) where ElementType:EquivalentComparable
+    {
         self.represented = represented
         self.identifierValue = identifierValue
+        
+        self.backgroundProvider = background
+        self.selectedBackgroundProvider = selectedBackground
         
         self.isEquivalent = {
             $0.represented.isEquivalent(to: $1.represented)
@@ -158,27 +178,19 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent,
         represented
     }
     
-    public var _backgroundProvider: (ApplyItemContentInfo) -> Element? = { _ in nil }
+    var backgroundProvider: (ApplyItemContentInfo) -> Element?
     
     public func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
-        _backgroundProvider(info)
+        backgroundProvider(info)
     }
     
-    public var _selectedBackgroundProvider: (ApplyItemContentInfo) -> Element? = { _ in nil }
+    var selectedBackgroundProvider: (ApplyItemContentInfo) -> Element?
     
     public func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
-        _selectedBackgroundProvider(info)
+        selectedBackgroundProvider(info)
     }
     
     public var reappliesToVisibleView: ReappliesToVisibleView {
         .ifNotEquivalent
     }
-}
-
-
-public protocol _AnyWrappedElementContent {
- 
-    var _backgroundProvider : (ApplyItemContentInfo) -> Element? { get set }
-    var _selectedBackgroundProvider : (ApplyItemContentInfo) -> Element? { get set }
-    
 }
