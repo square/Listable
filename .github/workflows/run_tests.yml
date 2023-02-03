@@ -36,9 +36,6 @@ jobs:
           - name: Switch To Xcode 14.2
             run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
-          - name: Install iOS 16
-            run: xcversion simulators --install="iOS 16.2"
-
           - name: Checkout repository
             uses: actions/checkout@v1
 
