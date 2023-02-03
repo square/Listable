@@ -36,6 +36,9 @@ jobs:
           - name: Switch To Xcode 14.2
             run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
+          - name: Install iOS 16
+            run: xcversion simulators --install="iOS 16.2"
+
           - name: Checkout repository
             uses: actions/checkout@v1
 
@@ -73,11 +76,14 @@ jobs:
   ios_15:
     name: iOS 15
 
-    runs-on: macos-11
+    runs-on: macos-12
 
     steps:
-      - name: Switch To Xcode 13
-        run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
+      - name: Switch To Xcode 14
+        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+
+      - name: Install iOS 15.2
+        run: xcversion simulators --install="iOS 15.2"
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -116,11 +122,14 @@ jobs:
   ios_14:
     name: iOS 14
 
-    runs-on: macos-11
+    runs-on: macos-12
 
     steps:
-      - name: Switch To Xcode 12
-        run: sudo xcode-select -switch /Applications/Xcode_12.5.1.app
+      - name: Switch To Xcode 14
+        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+
+      - name: Install iOS 14
+        run: xcversion simulators --install="iOS 14.5"
 
       - name: Checkout repository
         uses: actions/checkout@v1
