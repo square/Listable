@@ -227,7 +227,7 @@ extension ListLayout
         /// - There is no `containerHeader` or `refreshControl` (those behave "inline" so fixing it would overlap).
         /// - If there's no top padding (because this would adjust the fixed header position).
         ///
-        let shouldBeFixed = listHeaderPosition == .fixed
+        let shouldBeFixed = listHeaderPosition == .fixed(.always) // TODO FIXME
             && !content.containerHeader.isPopulated
             && context.hasRefreshControl == false
             && topPadding == 0.0

@@ -74,6 +74,8 @@ final class SupplementaryContainerView : UICollectionReusableView
     // MARK: Content
     //
     
+    var containedTextFieldStateDidChange : (UITextField?) -> () = { _ in }
+    
     func setHeaderFooter(_ new : AnyPresentationHeaderFooterState?, animated : Bool) {
         guard headerFooter !== new else {
             return
@@ -168,6 +170,20 @@ final class SupplementaryContainerView : UICollectionReusableView
         
         self.backgroundColor = .clear
         self.layer.masksToBounds = false
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(lst_textDidEndEditingNotification(_:)),
+            name: UITextField.textDidBeginEditingNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(lst_textDidEndEditingNotification(_:)),
+            name: UITextField.textDidEndEditingNotification,
+            object: nil
+        )
     }
     
     @available(*, unavailable)
@@ -263,5 +279,68 @@ final class SupplementaryContainerView : UICollectionReusableView
         if let content = self.content {
             content.frame = self.bounds
         }
+        
+        containedTextField = findContainedTextField()
+    }
+    
+    //
+    // MARK: Private
+    //
+    
+    private weak var containedTextField : UITextField? = nil {
+        didSet {
+            guard oldValue !== containedTextField else { return }
+            
+            containedTextFieldStateDidChange(containedTextField)
+        }
+    }
+    
+    @objc private func lst_textDidBeginEditingNotification(_ notification : Notification) {
+        
+        guard window != nil else { return }
+        guard isHidden == false else { return }
+        
+        guard let field = notification.object as? UITextField else { return }
+        
+        guard field.isInHierarchy(of: self) else { return }
+     
+        containedTextField = field
+    }
+    
+    @objc private func lst_textDidEndEditingNotification(_ notification : Notification) {
+        
+        guard let field = notification.object as? UITextField else { return }
+        
+        if field == containedTextField {
+            containedTextField = nil
+        }
+    }
+}
+
+
+fileprivate extension UIView {
+    
+    func findContainedTextField() -> UITextField? {
+        
+        for view in subviews {
+            if let field = view as? UITextField {
+                return field
+            } else if let field = view.findContainedTextField() {
+                return field
+            }
+        }
+        
+        return nil
+    }
+    
+    func isInHierarchy(of container : UIView) -> Bool {
+        
+        for view in sequence(first: self, next: \.superview) {
+            if view == container {
+                return true
+            }
+        }
+        
+        return false
     }
 }

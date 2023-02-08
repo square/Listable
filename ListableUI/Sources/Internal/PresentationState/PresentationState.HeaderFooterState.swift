@@ -12,6 +12,8 @@ import UIKit
 protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
+    
+    var anyCurrentContentView : UIView? { get }
         
     func dequeueAndPrepareReusableHeaderFooterView(
         in cache : ReusableViewCache,
@@ -99,6 +101,8 @@ extension PresentationState
     {
         var model : HeaderFooter<Content>
         
+        weak var currentContentView : Content.ContentView? = nil // TODO...
+        
         let performsContentCallbacks : Bool
                 
         init(_ model : HeaderFooter<Content>, performsContentCallbacks : Bool)
@@ -111,6 +115,10 @@ extension PresentationState
         
         var anyModel: AnyHeaderFooter {
             return self.model
+        }
+        
+        weak var anyCurrentContentView : UIView? {
+            self.currentContentView
         }
                 
         func dequeueAndPrepareReusableHeaderFooterView(

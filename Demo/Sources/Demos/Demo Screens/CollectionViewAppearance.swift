@@ -41,7 +41,7 @@ extension LayoutDescription
                 itemToSectionFooterSpacing: 10.0
             )
 
-            $0.listHeaderPosition = .fixed
+            $0.listHeaderPosition = .fixed(.always)
             
             configure(&$0)
         }
