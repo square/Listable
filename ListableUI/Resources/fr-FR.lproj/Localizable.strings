@@ -5,7 +5,7 @@
 "reorder.AccessibilityAction.MoveUp" = "Déplacer vers le haut";
 
 /* Accessibility hint for the reorder control in an item */
-"reorder.AccessibilityHint" = "Touchez deux fois et restez enfoncé, attendez la tonalité et déplacez pour réarranger.";
+"reorder.AccessibilityHint" = "Touchez deux fois et maintenez enfoncé, attendez la tonalité et déplacez pour réarranger.";
 
 /* Accessibility label for the reorder control on an item */
 "reorder.AccessibilityLabel" = "Réorganiser";
