@@ -5,8 +5,8 @@
 "reorder.AccessibilityAction.MoveUp" = "Mou a dalt";
 
 /* Accessibility hint for the reorder control in an item */
-"reorder.AccessibilityHint" = "Toca dues vegades i mantén premut, espera al so, i arrossega’l per reorganitzar-lo.";
+"reorder.AccessibilityHint" = "Toca’l dues vegades i mantingues-lo premut. Espera el so i arrossega’l per canviar-lo de posició.";
 
 /* Accessibility label for the reorder control on an item */
-"reorder.AccessibilityLabel" = "Torna a comprar-ho";
+"reorder.AccessibilityLabel" = "Torna a demanar";
 
