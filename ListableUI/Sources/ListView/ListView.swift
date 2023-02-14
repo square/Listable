@@ -8,7 +8,7 @@
 import UIKit
 
 
-public final class ListView : UIView, KeyboardObserverDelegate
+public final class ListView : UIView
 {
     //
     // MARK: Initialization
@@ -159,6 +159,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
     private let dataSource : DataSource
     
     private let keyboardObserver : KeyboardObserver
+
+    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
     
     //
     // MARK: Debugging
@@ -308,20 +310,24 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     private func updateScrollViewInsets()
     {
-        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
+        let insets = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
         
-        if self.collectionView.contentInset != contentInsets {
-            self.collectionView.contentInset = contentInsets
+        if self.collectionView.contentInset != insets.content {
+            self.collectionView.contentInset = insets.content
         }
         
-        if self.collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
-            self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets
+        if self.collectionView.horizontalScrollIndicatorInsets != insets.horizontalScroll {
+            self.collectionView.horizontalScrollIndicatorInsets = insets.horizontalScroll
+        }
+
+        if self.collectionView.verticalScrollIndicatorInsets != insets.verticalScroll {
+            self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
         }
     }
-    
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
+
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
@@ -347,8 +353,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 }
             }
         }()
-        
-        let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
+
+        let scrollInsets = modified(self.scrollIndicatorInsets) {
             $0.bottom = max($0.bottom, keyboardBottomInset)
         }
         
@@ -356,31 +362,23 @@ public final class ListView : UIView, KeyboardObserverDelegate
             $0.bottom = keyboardBottomInset
         }
         
-        return (contentInsets, scrollIndicatorInsets)
+        return (
+            content: contentInsets,
+            horizontalScroll: UIEdgeInsets(
+                top: 0,
+                left: scrollInsets.left,
+                bottom: 0,
+                right: scrollInsets.right
+            ),
+            verticalScroll: UIEdgeInsets(
+                top: scrollInsets.top,
+                left: 0,
+                bottom: scrollInsets.bottom,
+                right: 0
+            )
+        )
     }
-    
-    //
-    // MARK: KeyboardObserverDelegate
-    //
-    
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
-    
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
-        
-        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
-            return
-        }
-        
-        guard self.lastKeyboardFrame != frame else {
-            return
-        }
-        
-        self.lastKeyboardFrame = frame
-        
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
-        })
-    }
+
     
     //
     // MARK: List State Observation
@@ -474,10 +472,20 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+            completion(false)
             return false
         }
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
+            
+            /// `preparePresentationStateForScroll(to:)` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+                completion(false)
+                return
+            }
+            
             let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
             let isAlreadyVisible = self.collectionView.visibleContentFrame.contains(itemFrame)
@@ -552,17 +560,29 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Make sure the section identifier is valid.
 
         guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+            completion(false)
             return false
         }
 
         return preparePresentationStateForScrollToSection(index: sectionIndex) {
+            
+            /// `preparePresentationStateForScrollToSection` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+                completion(false)
+                return
+            }
+            
             let layoutContent = self.collectionViewLayout.layout.content
 
             // Make sure the section has content.
 
             guard layoutContent.sections[sectionIndex].all.isEmpty == false else {
+                completion(false)
                 return
             }
+            
             let header = layoutContent.sections[sectionIndex].header
             let footer = layoutContent.sections[sectionIndex].footer
             let items = storageContent.sections[sectionIndex].items
@@ -1118,6 +1138,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             switch self.autoScrollAction {
             case .scrollToItem(let insertInfo):
                 let itemPath = self.storage.allContent.firstIndexPathForItem(with: insertInfo.insertedIdentifier)
+                
                 guard let autoScrollIndexPath = itemPath else {
                     fallthrough
                 }
@@ -1364,6 +1385,28 @@ public extension ListView
         }
         
         self.collectionView.reloadData()
+    }
+}
+
+
+@_spi(ListableKeyboard)
+extension ListView : KeyboardObserverDelegate
+{
+    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+
+        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+            return
+        }
+
+        guard self.lastKeyboardFrame != frame else {
+            return
+        }
+
+        self.lastKeyboardFrame = frame
+
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.updateScrollViewInsets()
+        })
     }
 }
 
