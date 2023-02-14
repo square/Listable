@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Speculative, low effort fix for a scrolling crash that occurred when the list view was under high update load, with many changes enqueued.
+
 ### Added
 
 ### Removed

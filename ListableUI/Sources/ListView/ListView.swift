@@ -472,10 +472,20 @@ public final class ListView : UIView
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+            completion(false)
             return false
         }
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
+            
+            /// `preparePresentationStateForScroll(to:)` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+                completion(false)
+                return
+            }
+            
             let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
             let isAlreadyVisible = self.collectionView.visibleContentFrame.contains(itemFrame)
@@ -550,17 +560,29 @@ public final class ListView : UIView
         // Make sure the section identifier is valid.
 
         guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+            completion(false)
             return false
         }
 
         return preparePresentationStateForScrollToSection(index: sectionIndex) {
+            
+            /// `preparePresentationStateForScrollToSection` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+                completion(false)
+                return
+            }
+            
             let layoutContent = self.collectionViewLayout.layout.content
 
             // Make sure the section has content.
 
             guard layoutContent.sections[sectionIndex].all.isEmpty == false else {
+                completion(false)
                 return
             }
+            
             let header = layoutContent.sections[sectionIndex].header
             let footer = layoutContent.sections[sectionIndex].footer
             let items = storageContent.sections[sectionIndex].items
@@ -1116,6 +1138,7 @@ public final class ListView : UIView
             switch self.autoScrollAction {
             case .scrollToItem(let insertInfo):
                 let itemPath = self.storage.allContent.firstIndexPathForItem(with: insertInfo.insertedIdentifier)
+                
                 guard let autoScrollIndexPath = itemPath else {
                     fallthrough
                 }
