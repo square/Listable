@@ -287,7 +287,15 @@ extension PresentationState
             
             // Apply Model State
             
-            self.model.content.apply(
+            model
+                .content
+                .contentAreaViewProperties(with: applyInfo)
+                .apply(to: cell.contentContainer)
+            
+            self
+                .model
+                .content
+                .apply(
                 to: ItemContentViews(
                     content: cell.contentContainer.contentView,
                     background: cell.background,

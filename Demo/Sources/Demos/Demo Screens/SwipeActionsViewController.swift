@@ -43,11 +43,13 @@ final class SwipeActionsViewController: UIViewController  {
                 $0.bounds = .init(
                     padding: UIEdgeInsets(
                         top: 0.0,
-                        left: self.view.safeAreaInsets.left,
+                        left: self.view.safeAreaInsets.left + 4,
                         bottom: 0.0,
-                        right: self.view.safeAreaInsets.right
+                        right: self.view.safeAreaInsets.right + 4
                     )
                 )
+                
+                $0.layout.itemSpacing = 8
             }
 
             list += Section("standardSwipeActionItems") { section in
@@ -148,7 +150,26 @@ final class SwipeActionsViewController: UIViewController  {
         }
 
         func overlayDecorationElement(with info: ApplyItemContentInfo) -> Element? {
-            nil
+            Empty()
+                .box(background: .clear, corners: .rounded(radius: 6), borders: .solid(color: .black, width: 2))
+        }
+        
+        func contentAreaViewProperties(with info: ApplyItemContentInfo) -> ViewProperties {
+            .init(clipsToBounds: true, cornerRadius: 6)
+        }
+        
+        func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
+            Empty()
+                .box(
+                    background: .white,
+                    corners: .rounded(radius: 6),
+                    shadow: .simple(
+                        radius: 3,
+                        opacity: 0.2,
+                        offset: .init(width: 0, height: 2),
+                        color: .black
+                    )
+                )
         }
         
         func element(with info : ApplyItemContentInfo) -> Element {

@@ -371,11 +371,13 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
 
     /// Create and return a new content view used to render the content.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    /// Describes the properties to configure on the content area view for the item.
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties
     
     //
     // MARK: Creating & Providing Background Views
@@ -384,8 +386,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// The background view used to draw the background of the content.
     /// The background view is drawn below the content view.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Defaults to a `UIView` with no drawn appearance or state.
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a background view.
@@ -624,6 +625,14 @@ public extension ItemContent where Coordinator == DefaultItemContentCoordinator<
     func makeCoordinator(actions : ItemContentCoordinatorActions<Self>, info : ItemContentCoordinatorInfo<Self>) -> Coordinator
     {
         DefaultItemContentCoordinator(actions: actions, info: info)
+    }
+}
+
+/// Provides a default implementation of `ViewProperties` which configure no options.
+public extension ItemContent {
+    
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties {
+        .init()
     }
 }
 

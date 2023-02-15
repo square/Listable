@@ -67,7 +67,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentView.backgroundColor = .clear
         
         self.layer.masksToBounds = false
-        
+    
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
