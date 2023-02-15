@@ -484,7 +484,22 @@ public struct ItemContentViews<Content:ItemContent>
     
     /// The overlay decoration view of the content.
     /// Always displayed over the content, and does not react to swipe actions.
-    public var overlayDecoration : Content.OverlayDecorationView
+    public var overlayDecoration : Content.OverlayDecorationView {
+        overlayDecorationProvider()
+    }
+    
+    public var overlayDecorationIfLoaded : Content.OverlayDecorationView? {
+        overlayDecorationIfLoadedProvider()
+    }
+    
+    // MARK: Internal
+    
+    ///
+    var overlayDecorationProvider : () -> Content.OverlayDecorationView
+
+    ///
+    var overlayDecorationIfLoadedProvider : () -> Content.OverlayDecorationView?
+
 }
 
 

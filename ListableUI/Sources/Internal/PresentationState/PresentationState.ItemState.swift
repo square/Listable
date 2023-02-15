@@ -292,7 +292,12 @@ extension PresentationState
                     content: cell.contentContainer.contentView,
                     background: cell.background,
                     selectedBackground: cell.selectedBackground,
-                    overlayDecoration: cell.overlayDecoration.content
+                    overlayDecorationProvider: {
+                        cell.overlayDecoration.content
+                    },
+                    overlayDecorationIfLoadedProvider: {
+                        cell.overlayDecorationIfLoaded?.content
+                    }
                 ),
                 for: reason,
                 with: applyInfo

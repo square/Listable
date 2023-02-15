@@ -27,7 +27,18 @@ protocol AnyItemCell : UICollectionViewCell
 ///
 final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
-    let overlayDecoration : OverlayDecorationView
+    private(set) lazy var overlayDecoration : OverlayDecorationView = {
+        let view = OverlayDecorationView(
+            content: Content.createReusableOverlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.overlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, aboveSubview: self.contentContainer)
+        
+        return view
+    }()
     
     let contentContainer : ContentContainerView
 
@@ -36,11 +47,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     var isReorderable: Bool = false
     
+    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
+    
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
-                
-        self.overlayDecoration = .init(content: Content.createReusableOverlayDecorationView(frame:bounds), frame: bounds)
         
         self.contentContainer = ContentContainerView(frame: bounds)
         
@@ -60,7 +71,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
-        self.contentView.addSubview(self.overlayDecoration)
+        
     }
     
     @available(*, unavailable)
@@ -133,7 +144,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         super.layoutSubviews()
         
         self.contentContainer.frame = self.contentView.bounds
-        self.overlayDecoration.frame = self.contentView.bounds
+        
+        self.overlayDecorationIfLoaded?.frame = self.contentView.bounds
     }
     
     // MARK: AnyItemCell

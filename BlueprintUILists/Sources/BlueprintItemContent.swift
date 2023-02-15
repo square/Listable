@@ -138,10 +138,24 @@ public extension BlueprintItemContent
     /// Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.element = self.element(with: info).wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.backgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.selectedBackground.element = self.selectedBackgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.overlayDecoration.element = self.overlayDecorationElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.content.element = element(with: info)
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.background.element = backgroundElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.selectedBackground.element = selectedBackgroundElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        if let element = overlayDecorationElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `overlayDecoration` view and assign our element update.
+            views.overlayDecoration.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.overlayDecorationIfLoaded?.element = nil
+        }
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView {
