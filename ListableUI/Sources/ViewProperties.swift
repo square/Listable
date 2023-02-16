@@ -5,7 +5,7 @@
 //  Created by Kyle Van Essen on 2/14/23.
 //
 
-import Foundation
+import UIKit
 
 
 /// Describes the properties to apply to a view for an `ItemContent` or `HeaderFooterContent`
