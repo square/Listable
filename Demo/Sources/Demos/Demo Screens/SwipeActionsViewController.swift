@@ -37,8 +37,7 @@ final class SwipeActionsViewController: UIViewController  {
 
             list.animatesChanges = animated
             
-            list.layout = .table { [weak self] in
-                guard let self = self else { return }
+            list.layout = .table {
                 
                 $0.bounds = .init(
                     padding: UIEdgeInsets(
@@ -155,7 +154,7 @@ final class SwipeActionsViewController: UIViewController  {
         }
         
         func contentAreaViewProperties(with info: ApplyItemContentInfo) -> ViewProperties {
-            .init(clipsToBounds: true, cornerRadius: 6)
+            .init(clipsToBounds: true, cornerStyle: .rounded(radius: 6))
         }
         
         func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
