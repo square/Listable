@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Speculative, low effort fix for a scrolling crash that occurred when the list view was under high update load, with many changes enqueued.
-
 ### Added
 
 ### Removed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [8.0.3] - 2023-02-17
+
+### Fixed
+
+- Speculative, low effort fix for a scrolling crash that occurred when the list view was under high update load, with many changes enqueued.
 
 # [8.0.2] - 2023-02-09
 
@@ -819,7 +823,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.0.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.0.3...HEAD
+[8.0.3]: https://github.com/kyleve/Listable/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/kyleve/Listable/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/kyleve/Listable/compare/8.0.0...8.0.1
 [8.0.0]: https://github.com/kyleve/Listable/compare/7.2.0...8.0.0
