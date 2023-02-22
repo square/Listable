@@ -222,6 +222,76 @@ class ListChangesQueueTests : XCTestCase {
         }
     }
     
+    func test_flattenedChildren() {
+        
+        let queue = ListChangesQueue()
+        queue.runIDs = []
+        
+        queue.add(1) {
+            queue.add(2) {
+                queue.add(3) {}
+            }
+            
+            queue.add(4) {
+                queue.add(5) { }
+            }
+        }
+        
+        XCTAssertEqual(
+            queue.runIDs,
+            [1, 2, 3, 4, 5]
+        )
+    }
+    
+    func test_nesting() {
+        
+        let queue = ListChangesQueue()
+        
+        var events : [Int] = []
+        
+        queue.add {
+            queue.add {
+                queue.add { operation in
+                    
+                }
+            }
+            
+            queue.add { operation in
+                queue.add { operation in
+                    
+                }
+            }
+            
+            queue.add { operation in
+                queue.add {
+                    queue.add {
+                        
+                    }
+                }
+            }
+        }
+        
+        queue.add { operation in
+            
+            queue.add { operation in
+                
+            }
+            
+            queue.add {
+                
+            }
+        }
+
+        waitFor {
+            queue.isEmpty
+        }
+        
+        XCTAssertEqual(
+            events,
+            []
+        )
+    }
+    
     func test_fuzzing() {
         
         let queue = ListChangesQueue()

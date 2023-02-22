@@ -61,47 +61,41 @@ import Foundation
 final class ListChangesQueue {
         
     /// Adds a synchronous block to the queue, marked as done once the block exits.
-    func add(sync block : @escaping () -> ()) {
-        preconditionMainThread()
-        
-        let operation = Operation(
-            kind: .synchronous(
-                .new(.init(body: block))
-            )
-        )
-        
-        self.waiting.append(operation)
-        
-        self.runIfNeeded()
+    func add(_ id : AnyHashable? = nil, sync block : @escaping () -> ()) {
+        add(id) { operation in
+            block()
+            operation.finish()
+        }
     }
     
     /// Adds an asynchronous block to the queue, marked as done once `Completion.finished()` is called.
     /// If `finished()` is called inline, the operation will be executed synchronously.
-    func add(async block : @escaping (Completion) -> ()) {
+    func add(_ id : AnyHashable? = nil, async block : @escaping (Completion) -> ()) {
         preconditionMainThread()
         
         let operation = Operation(
-            kind: .asynchronous(
-                .new(
-                    .init(
-                        completion: Completion(),
-                        body: { operation, completion in
-                            
-                            completion.onFinish = { [weak self, weak operation] in
-                                operation?.kind = .asynchronous(.completed)
-                                self?.runIfNeeded()
-                            }
-                            
-                            block(completion)
+            identifier: id,
+            state: .new(
+                .init(
+                    completion: Completion(),
+                    body: { operation, completion in
+                        
+                        completion.onFinish = { [weak self, weak operation] in
+                            operation?.state = .completed
+                            self?.runIfNeeded()
                         }
-                    )
+                        
+                        block(completion)
+                    }
                 )
             )
         )
         
-        self.waiting.append(operation)
+        operationToAppendTo()
+            .children
+            .append(operation)
         
-        self.runIfNeeded()
+        runIfNeeded()
     }
     
     /// Set by consumers to enable and disable queueing during a reorder event.
@@ -119,75 +113,95 @@ final class ListChangesQueue {
     }
     
     var isEmpty : Bool {
-        waiting.isEmpty
+        root.children.isEmpty
     }
     
     var count : Int {
-        waiting.count
+        fatalError()
     }
     
-    /// Operations waiting to execute, or in the case of asynchronous operations,
-    /// they may already be operating.
-    private var waiting : [Operation] = []
+    /// A root operation we use as the base operation for the queue.
+    /// It is always "running" and never completes.
+    let root : Operation = Operation(
+        state: .running(
+            .init(
+                completion: .init(),
+                body: { _, _ in }
+            )
+        )
+    )
     
-    private var isRunning : Bool = false
+    var runIDs : [AnyHashable]? = nil
+    
+    private func operationToAppendTo() -> Operation {
+        
+        /// Find the deepest running operation in the tree,
+        /// that will be the operation we append to. If we don't have one,
+        /// then the root operation will take on the operation as a child.
+        
+        if let running = root.flattenedChildren.last(where: { operation in
+            operation.state.isRunning
+        }) {
+            return running
+        } else {
+            return root
+        }
+    }
+    
+    private func nextRunnableOperation() -> Operation? {
+        
+        /// Digs in to find the first runnable operation, eg if we have:
+        ///
+        /// ```
+        ///  Operation1 (Running)
+        ///     Operation2 (Complete)
+        ///         Operation3 (New)
+        ///     Operation4 (New)
+        ///  Operation5 (New)
+        /// ```
+        /// We'll run `Operation3` first. This is intentionally a DFS.
+        /// At the top level `root` operation, there must only be one
+        /// in-progress operation at one time.
+        
+        root.flattenedChildren.first { operation in
+            operation.state.isNew
+        }
+    }
     
     /// Invoked to continue processing queue events.
     private func runIfNeeded() {
         preconditionMainThread()
-
-        guard isRunning == false else { return }
         
-        defer { isRunning = false }
+        /// Note: We intentionally iterate through available operations,
+        /// instead of recursively re-calling this method, to avoid the
+        /// stack trace getting deeper and deeper if there are multiple
+        /// synchronous operations to execute.
         
-        isRunning = true
-        
-        while let current = self.waiting.first {
+        while let current = nextRunnableOperation() {
             
             guard self.isPaused == false else { return }
             
-            var shouldBreak : Bool = false
-            
-            current.ifSynchronous { sync in
-                switch sync {
-                case .new(let content):
-                    content.body()
-                    sync = .completed
-                    
-                    self.waiting.removeFirst()
-                    
-                case .completed:
-                    fatalError("Should not be able to enumerate a completed synchronous operation.")
+            /// Run before we iterate to remove any asynchronously completed operations.
+            root.removeAllCompleted()
+                        
+            switch current.state {
+            case .new(let content):
+                
+                /// This is for testing; so we can follow the run operations.
+                /// It's going to always be `nil` in production.
+                if let id = current.identifier {
+                    runIDs?.append(id)
                 }
                 
-                shouldBreak = false
+                current.state = .running(content)
+                content.body(current, content.completion)
                 
-            } ifAsynchronous: { async in
-                switch async {
-                case .new(let content):
-                    async = .running(content)
-                    content.body(current, content.completion)
-                    
-                    /// Even though this is an async operation;
-                    /// its possible (and allowed) to call the completion
-                    /// block synchronously – let's ensure we handle that!
-                    
-                    if current.kind.isCompleted {
-                        shouldBreak = false
-                        self.waiting.removeFirst()
-                    } else {
-                        shouldBreak = true
-                    }
-                case .running:
-                    shouldBreak = true
-                case .completed:
-                    self.waiting.removeFirst()
-                }
-            }
-            
-            if shouldBreak {
+            case .running, .completed:
                 break
             }
+            
+            /// Run after, to remove any synchronously completed operations as well.
+            root.removeAllCompleted()
         }
     }
     
@@ -229,77 +243,112 @@ extension ListChangesQueue {
         }
     }
     
-    fileprivate final class Operation {
+    final class Operation {
         
-        var kind : Kind
+        var state : State
         
-        init(kind : Kind) {
-            self.kind = kind
+        var children : [Operation] = []
+        
+        var identifier : AnyHashable?
+        
+        init(identifier: AnyHashable? = nil, state : State) {
+            self.identifier = identifier
+            self.state = state
         }
         
-        /// Helper method for accessing (and mutating) the state
-        /// of each separate type of operation.
-        func ifSynchronous(
-            _ synchronous : (inout Kind.Synchronous) -> (),
-            ifAsynchronous asynchronous : (inout Kind.Asynchronous) -> ()
-        ) {
-            switch self.kind {
-            case .synchronous(var content):
-                synchronous(&content)
-                self.kind = .synchronous(content)
-                
-            case .asynchronous(var content):
-                asynchronous(&content)
-                self.kind = .asynchronous(content)
+        /// Removes all operations that are fully completed from
+        /// the tree. Note that this also ensures all children are
+        /// completed. If not all children are completed, then
+        /// the operation is not removed.
+        func removeAllCompleted() {
+            filter { child in
+                child.allChildrenPass { child in
+                    child.state.isCompleted == true
+                }
             }
         }
         
-        /// The kind of operation, sync or async. Note that
-        /// the synchronous operation has to track less state,
-        /// and thus has fewer cases and stored properties.
-        enum Kind {
-            case synchronous(Synchronous)
-            case asynchronous(Asynchronous)
+        var flattenedChildren : [Operation] {
+            
+            children.flatMap {
+                [$0] + $0.flattenedChildren
+            }
+            
+        }
+        
+        func allChildrenPass(_ passing : (Operation) -> Bool) -> Bool {
+            for child in children {
+                if passing(child) == false {
+                    return false
+                } else {
+                    return child.allChildrenPass(passing)
+                }
+            }
+            
+            return false
+        }
+        
+        func hasAnyChildren(passing : (Operation) -> Bool) -> Bool {
+            for child in children {
+                if passing(child) {
+                    return true
+                } else {
+                    return child.hasAnyChildren(passing: passing)
+                }
+            }
+            
+            return false
+        }
+        
+        func first(passing : (Operation) -> Bool) -> Operation? {
+            for child in children {
+                if passing(child) {
+                    return child
+                } else {
+                    return child.first(passing: passing)
+                }
+            }
+            
+            return nil
+        }
+        
+        func filter(passing keep : (Operation) -> Bool) {
+            children = children.compactMap { child in
+                keep(child) ? child : nil
+            }
+        }
+        
+        /// The state of the operation. As the operation progresses,
+        /// we proceed down each cases. Should never go backwards.
+        enum State {
+            case new(Content)
+            case running(Content)
+            case completed
+            
+            var isNew : Bool {
+                switch self {
+                case .new: return true
+                case .running, .completed: return false
+                }
+            }
             
             var isCompleted : Bool {
                 switch self {
-                case .synchronous(let sync): return sync.isCompleted
-                case .asynchronous(let async): return async.isCompleted
+                case .completed: return true
+                case .new, .running: return false
                 }
             }
             
-            enum Synchronous {
-                case new(Content)
-                case completed
-                
-                var isCompleted : Bool {
-                    switch self {
-                    case .new: return false
-                    case .completed: return true
-                    }
-                }
-                
-                struct Content {
-                    let body : () -> ()
+            var isRunning : Bool {
+                switch self {
+                case .running: return true
+                case .new, .completed: return false
                 }
             }
             
-            enum Asynchronous {
-                case new(Content)
-                case running(Content)
-                case completed
-                
-                var isCompleted : Bool {
-                    switch self {
-                    case .new, .running: return false
-                    case .completed: return true
-                    }
-                }
-                
-                struct Content {
-                    let completion : Completion
-                    let body : (Operation, Completion) -> ()
-                }
+            struct Content {
+                let completion : Completion
+                let body : (Operation, Completion) -> ()
             }
         }
     }

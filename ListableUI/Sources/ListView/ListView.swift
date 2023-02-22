@@ -1330,6 +1330,10 @@ public final class ListView : UIView
         to toIndexPath: IndexPath,
         scroll: @escaping Scrolling.Completion
     ) {
+        /// Preparation to scroll must be in an update queue, in order to ensure that
+        /// the index paths we compute are valid; otherwise they could change because
+        /// `updatePresentationState(for:)` queues its own updates.
+        
         self.updateQueue.add { operation in
             
             // Make sure we have a last loaded index path.
