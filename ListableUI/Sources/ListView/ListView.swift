@@ -731,9 +731,9 @@ public final class ListView : UIView
             guard let self = self else { return }
             guard self.sourceChangedTimer == nil else { return }
             
-            self.sourceChangedTimer = ReloadTimer {
-                self.sourceChangedTimer = nil
-                self.setContentFromSource(animated: true)
+            self.sourceChangedTimer = ReloadTimer { [weak self] in
+                self?.sourceChangedTimer = nil
+                self?.setContentFromSource(animated: true)
             }
         })
         
