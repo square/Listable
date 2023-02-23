@@ -1168,7 +1168,8 @@ public final class ListView : UIView
                 let animation = info.animation.and(with: animated)
                 
                 if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
+                    self.scrollTo(item: destination, position: info.position, animation: animation) { scrolled in
+                        guard scrolled else { return }
                         info.didPerform(self.scrollPositionInfo)
                     }
                 }
@@ -1180,7 +1181,8 @@ public final class ListView : UIView
                 let animation = pin.animation.and(with: animated)
                 
                 if let destination = pin.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: pin.position, animation: animation) { _ in
+                    self.scrollTo(item: destination, position: pin.position, animation: animation) { scrolled in
+                        guard scrolled else { return }
                         pin.didPerform(self.scrollPositionInfo)
                     }
                 }

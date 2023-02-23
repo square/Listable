@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Do not call auto scroll action didPeform blocks if the scroll action did not succeed.
+
 ### Added
 
 ### Removed
