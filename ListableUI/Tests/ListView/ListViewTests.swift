@@ -564,6 +564,112 @@ class ListViewTests: XCTestCase
             }
         }
     }
+    
+    func test_auto_scroll_action() {
+        
+        self.testcase("on insert") {
+            var didPerform : [ListScrollPositionInfo] = []
+            
+            var content = ListProperties.default { list in
+                
+                list.sections = (1...50).map { sectionID in
+                    Section(sectionID) {
+                        for itemID in 1...20 {
+                            TestContent(content: itemID)
+                        }
+                    }
+                }
+                
+                let ID = TestContent.identifier(with: "A")
+                
+                list.autoScrollAction = .scrollTo(
+                    .item(ID),
+                    onInsertOf: ID,
+                    position: .init(position: .centered),
+                    animation: .default,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                )
+            }
+
+            let vc = ViewController()
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: content)
+
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 0)
+                
+                vc.list.configure(with: content)
+
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 0)
+                
+                content.content += Section("new") {
+                    TestContent(content: "A")
+                }
+                
+                vc.list.configure(with: content)
+                
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 1)
+            }
+        }
+        
+        self.testcase("pin") {
+            var didPerform : [ListScrollPositionInfo] = []
+            
+            var content = ListProperties.default { list in
+                
+                list.sections = (1...50).map { sectionID in
+                    Section(sectionID) {
+                        for itemID in 1...20 {
+                            TestContent(content: itemID)
+                        }
+                    }
+                }
+                
+                let ID = TestContent.identifier(with: "A")
+                
+                list.autoScrollAction = .pin(
+                    .item(ID),
+                    position: .init(position: .bottom),
+                    animation: .default,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                )
+            }
+
+            let vc = ViewController()
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: content)
+
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 0)
+                
+                vc.list.configure(with: content)
+
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 0)
+                
+                content.content += Section("new") {
+                    TestContent(content: "A")
+                }
+                
+                vc.list.configure(with: content)
+                
+                waitFor { vc.list.updateQueue.isEmpty }
+                
+                XCTAssertEqual(didPerform.count, 1)
+            }
+        }
+    }
 }
 
 fileprivate final class ViewController : UIViewController {
