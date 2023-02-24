@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Do not call auto scroll action didPeform blocks if the scroll action did not succeed.
-
 ### Added
 
 ### Removed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [8.0.4] - 2023-02-24
+
+### Fixed
+
+- Do not call auto scroll action didPeform blocks if the scroll action did not succeed.
 
 # [8.0.3] - 2023-02-17
 
@@ -825,7 +829,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.0.3...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.0.4...HEAD
+[8.0.4]: https://github.com/kyleve/Listable/compare/8.0.3...8.0.4
 [8.0.3]: https://github.com/kyleve/Listable/compare/8.0.2...8.0.3
 [8.0.2]: https://github.com/kyleve/Listable/compare/8.0.1...8.0.2
 [8.0.1]: https://github.com/kyleve/Listable/compare/8.0.0...8.0.1
