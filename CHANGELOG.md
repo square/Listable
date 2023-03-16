@@ -4,8 +4,6 @@
 
 ### Added
 
-- Introduce an `OverlayDecoration`, which allows you to place a border, etc, around an item which is not affected by swipe action position.
-
 ### Removed
 
 ### Changed
@@ -13,6 +11,12 @@
 ### Misc
 
 # Past Releases
+
+# [8.1.0] - 2023-03-16
+
+### Added
+
+- Introduce an `OverlayDecoration`, which allows you to place a border, etc, around an item which is not affected by swipe action position.
 
 # [8.0.5] - 2023-03-07
 
@@ -837,7 +841,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.0.5...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.1.0...HEAD
+[8.1.0]: https://github.com/kyleve/Listable/compare/8.0.5...8.1.0
 [8.0.5]: https://github.com/kyleve/Listable/compare/8.0.4...8.0.5
 [8.0.4]: https://github.com/kyleve/Listable/compare/8.0.3...8.0.4
 [8.0.3]: https://github.com/kyleve/Listable/compare/8.0.2...8.0.3

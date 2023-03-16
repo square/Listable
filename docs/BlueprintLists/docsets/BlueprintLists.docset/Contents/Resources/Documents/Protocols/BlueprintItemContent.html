@@ -148,7 +148,8 @@
     <span class="k">where</span>
     <span class="kt">ContentView</span> <span class="o">==</span> <span class="kt">BlueprintView</span><span class="p">,</span>
     <span class="kt">BackgroundView</span> <span class="o">==</span> <span class="kt">BlueprintView</span><span class="p">,</span>
-    <span class="kt">SelectedBackgroundView</span> <span class="o">==</span> <span class="kt">BlueprintView</span></code></pre>
+    <span class="kt">SelectedBackgroundView</span> <span class="o">==</span> <span class="kt">BlueprintView</span><span class="p">,</span>
+    <span class="kt">OverlayDecorationView</span> <span class="o">==</span> <span class="kt">BlueprintView</span></code></pre>
 
                 </div>
               </div>
@@ -326,6 +327,48 @@ based on the current state of the item.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:16BlueprintUILists0A11ItemContentP24overlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"></a>
+                    <a name="//apple_ref/swift/Method/overlayDecorationElement(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:16BlueprintUILists0A11ItemContentP24overlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF">overlayDecorationElement(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Optional. Create and return the Blueprint element used to represent the overlay decoration of the content.
+The overlay decoration appears above all other content, and is not affected by swipe actions.</p>
+
+<p>You can use the provided <code>ApplyItemContentInfo</code> to vary the appearance of the element
+based on the current state of the item.</p>
+<h3 id='note' class='heading'>Note</h3>
+
+<p>The default implementation of this method returns nil, and provides no decoration.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>By default, content has no overlay decoration.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">overlayDecorationElement</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -372,9 +415,9 @@ based on the current state of the item.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16BlueprintUILists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ"></a>
+                    <a name="/s:10ListableUI11ItemContentP014createReusableD4View5frame0dG0QzSo6CGRectV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/createReusableContentView(frame:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16BlueprintUILists0A11ItemContentPAAE014createReusableD4View5frame0A2UI0aG0CSo6CGRectV_tFZ">createReusableContentView(frame:<wbr>)</a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP014createReusableD4View5frame0dG0QzSo6CGRectV_tFZ">createReusableContentView(frame:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -385,7 +428,7 @@ based on the current state of the item.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates the <code>BlueprintView</code> used to render the content of the item.</p>
+                        <p>If there&rsquo;s no element, clear out any past element, but only if the view was loaded.</p>
 
                       </div>
                       <div class="declaration">
@@ -402,9 +445,9 @@ based on the current state of the item.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:16BlueprintUILists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ"></a>
+                    <a name="/s:10ListableUI11ItemContentP28createReusableBackgroundView5frame0gH0QzSo6CGRectV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/createReusableBackgroundView(frame:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:16BlueprintUILists0A11ItemContentPAAE28createReusableBackgroundView5frame0A2UI0aH0CSo6CGRectV_tFZ">createReusableBackgroundView(frame:<wbr>)</a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP28createReusableBackgroundView5frame0gH0QzSo6CGRectV_tFZ">createReusableBackgroundView(frame:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -415,7 +458,6 @@ based on the current state of the item.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Creates the <code>BlueprintView</code> used to render the background of the item.</p>
 
                       </div>
                       <div class="declaration">
@@ -458,6 +500,35 @@ based on the current state of the item.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/createReusableOverlayDecorationView(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ">createReusableOverlayDecorationView(frame:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableOverlayDecorationView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">OverlayDecorationView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -466,7 +537,7 @@ based on the current state of the item.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-02-09)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-03-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
