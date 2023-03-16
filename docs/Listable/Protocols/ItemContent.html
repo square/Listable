@@ -633,6 +633,15 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/TableAppearance/Layout.html">– Layout</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ViewProperties.html">ViewProperties</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ViewProperties/CornerStyle.html">– CornerStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ViewProperties/CornerCurve.html">– CornerCurve</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -1362,7 +1371,7 @@ The content view is drawn at the top of the view hierarchy, above the background
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Create and return a new content view used to render the content.</p>
-<h2 id='note' class='heading'>Note</h2>
+<h3 id='note' class='heading'>Note</h3>
 
 <p>Do not do configuration in this method that will be changed by your view&rsquo;s theme or appearance – instead
 do that work in <code>apply(to:)</code>, so the appearance will be updated if the appearance of content changes.</p>
@@ -1373,6 +1382,40 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableContentView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP0D4ViewQa">ContentView</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP25contentAreaViewProperties4withAA0gH0VAA05ApplycD4InfoV_tF"></a>
+                    <a name="//apple_ref/swift/Method/contentAreaViewProperties(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP25contentAreaViewProperties4withAA0gH0VAA05ApplycD4InfoV_tF">contentAreaViewProperties(with:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Describes the properties to configure on the content area view for the item.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">contentAreaViewProperties</span><span class="p">(</span><span class="n">with</span> <span class="nv">info</span><span class="p">:</span> <span class="kt"><a href="../Structs/ApplyItemContentInfo.html">ApplyItemContentInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/ViewProperties.html">ViewProperties</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1407,7 +1450,7 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                       <div class="abstract">
                         <p>The background view used to draw the background of the content.
 The background view is drawn below the content view.</p>
-<h2 id='note' class='heading'>Note</h2>
+<h3 id='note' class='heading'>Note</h3>
 
 <p>Defaults to a <code>UIView</code> with no drawn appearance or state.
 You do not need to provide this <code>typealias</code> unless you would like
@@ -1519,6 +1562,79 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableSelectedBackgroundView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP22SelectedBackgroundViewQa">SelectedBackgroundView</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Creating%20%26%20Providing%20Decoration%20Views"></a>
+                <a name="//apple_ref/swift/Section/Creating &amp; Providing Decoration Views" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Creating%20%26%20Providing%20Decoration%20Views"></a>
+                  <h3 class="section-name"><span>Creating &amp; Providing Decoration Views</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP21OverlayDecorationViewQa"></a>
+                    <a name="//apple_ref/swift/Alias/OverlayDecorationView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP21OverlayDecorationViewQa">OverlayDecorationView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The content view used to draw the content.
+The content view is drawn at the top of the view hierarchy, above the background views.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">OverlayDecorationView</span> <span class="p">:</span> <span class="kt">UIView</span> <span class="o">=</span> <span class="kt">UIView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/createReusableOverlayDecorationView(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ">createReusableOverlayDecorationView(frame:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create and return a new overlay decoration view used to render any required decorations over the content.
+The decoration view appears above all content, and is not affected by swipe actions.</p>
+<h2 id='note' class='heading'>Note</h2>
+
+<p>Do not do configuration in this method that will be changed by your view&rsquo;s theme or appearance – instead
+do that work in <code>apply(to:)</code>, so the appearance will be updated if the appearance of content changes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableOverlayDecorationView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP21OverlayDecorationViewQa">OverlayDecorationView</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1896,7 +2012,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-02-09)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-03-16)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
