@@ -27,6 +27,19 @@ protocol AnyItemCell : UICollectionViewCell
 ///
 final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
+    private(set) lazy var overlayDecoration : OverlayDecorationView = {
+        let view = OverlayDecorationView(
+            content: Content.createReusableOverlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.overlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, aboveSubview: self.contentContainer)
+        
+        return view
+    }()
+    
     let contentContainer : ContentContainerView
 
     let background : Content.BackgroundView
@@ -34,10 +47,12 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     var isReorderable: Bool = false
     
+    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
+    
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
-                
+        
         self.contentContainer = ContentContainerView(frame: bounds)
         
         self.background = Content.createReusableBackgroundView(frame: bounds)
@@ -52,10 +67,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentView.backgroundColor = .clear
         
         self.layer.masksToBounds = false
-        
+    
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
+        
     }
     
     @available(*, unavailable)
@@ -126,8 +142,10 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     override func layoutSubviews()
     {
         super.layoutSubviews()
-                
+        
         self.contentContainer.frame = self.contentView.bounds
+        
+        self.overlayDecorationIfLoaded?.frame = self.contentView.bounds
     }
     
     // MARK: AnyItemCell
@@ -170,6 +188,49 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
                 return reorderingAccessibilityLabel
             }
             return accessibilityLabel
+        }
+    }
+}
+
+
+extension ItemCell {
+    
+    final class OverlayDecorationView : UIView {
+        
+        let content : Content.OverlayDecorationView
+        
+        init(content : Content.OverlayDecorationView, frame: CGRect) {
+            
+            self.content = content
+            
+            super.init(frame: frame)
+            
+            self.content.frame = bounds
+            self.addSubview(self.content)
+            
+            self.isUserInteractionEnabled = false
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            self.content.frame = self.bounds
+        }
+        
+        override var isAccessibilityElement: Bool {
+            get { false }
+            set { fatalError("Cannot set isAccessibilityElement.") }
+        }
+        
+        override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+            false
+        }
+        
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            nil
         }
     }
 }

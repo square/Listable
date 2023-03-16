@@ -371,11 +371,13 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
 
     /// Create and return a new content view used to render the content.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    /// Describes the properties to configure on the content area view for the item.
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties
     
     //
     // MARK: Creating & Providing Background Views
@@ -384,8 +386,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// The background view used to draw the background of the content.
     /// The background view is drawn below the content view.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Defaults to a `UIView` with no drawn appearance or state.
     /// You do not need to provide this `typealias` unless you would like
     /// to draw a background view.
@@ -426,6 +427,23 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     
     //
+    // MARK: Creating & Providing Decoration Views
+    //
+    
+    /// The content view used to draw the content.
+    /// The content view is drawn at the top of the view hierarchy, above the background views.
+    associatedtype OverlayDecorationView:UIView = UIView
+    
+
+    /// Create and return a new overlay decoration view used to render any required decorations over the content.
+    /// The decoration view appears above all content, and is not affected by swipe actions.
+    ///
+    /// ## Note
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
+    static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    
+    //
     // MARK: Content Coordination
     //
     
@@ -464,6 +482,25 @@ public struct ItemContentViews<Content:ItemContent>
     /// The selected background view of the content.
     /// Displayed when the content is highlighted or selected.
     public var selectedBackground : Content.SelectedBackgroundView
+    
+    /// The overlay decoration view of the content.
+    /// Always displayed over the content, and does not react to swipe actions.
+    public var overlayDecoration : Content.OverlayDecorationView {
+        overlayDecorationProvider()
+    }
+    
+    public var overlayDecorationIfLoaded : Content.OverlayDecorationView? {
+        overlayDecorationIfLoadedProvider()
+    }
+    
+    // MARK: Internal
+    
+    ///
+    var overlayDecorationProvider : () -> Content.OverlayDecorationView
+
+    ///
+    var overlayDecorationIfLoadedProvider : () -> Content.OverlayDecorationView?
+
 }
 
 
@@ -591,6 +628,14 @@ public extension ItemContent where Coordinator == DefaultItemContentCoordinator<
     }
 }
 
+/// Provides a default implementation of `ViewProperties` which configure no options.
+public extension ItemContent {
+    
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties {
+        .init()
+    }
+}
+
 
 /// Provide a UIView when no special background view is specified.
 public extension ItemContent where BackgroundView == UIView
@@ -603,11 +648,21 @@ public extension ItemContent where BackgroundView == UIView
 
 
 /// Provide a UIView when no special selected background view is specified.
-public extension ItemContent where BackgroundView == UIView
+public extension ItemContent where SelectedBackgroundView == UIView
 {
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     {
         SelectedBackgroundView(frame: frame)
+    }
+}
+
+
+/// Provide a UIView when no special overlay decoration view is specified.
+public extension ItemContent where OverlayDecorationView == UIView
+{
+    static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    {
+        OverlayDecorationView(frame: frame)
     }
 }
 

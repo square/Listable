@@ -58,7 +58,8 @@ public protocol BlueprintItemContent : ItemContent
     where
     ContentView == BlueprintView,
     BackgroundView == BlueprintView,
-    SelectedBackgroundView == BlueprintView
+    SelectedBackgroundView == BlueprintView,
+    OverlayDecorationView == BlueprintView
 {
     //
     // MARK: Creating Blueprint Element Representations
@@ -90,6 +91,16 @@ public protocol BlueprintItemContent : ItemContent
     /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
     func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
+    
+    /// Optional. Create and return the Blueprint element used to represent the overlay decoration of the content.
+    /// The overlay decoration appears above all other content, and is not affected by swipe actions.
+    ///
+    /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
+    /// based on the current state of the item.
+    ///
+    /// ### Note
+    /// The default implementation of this method returns nil, and provides no decoration.
+    func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element?
 }
 
 
@@ -110,6 +121,11 @@ public extension BlueprintItemContent
     {
         nil
     }
+    
+    /// By default, content has no overlay decoration.
+    func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element? {
+        nil
+    }
 }
 
 
@@ -122,22 +138,39 @@ public extension BlueprintItemContent
     /// Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.element = self.element(with: info).wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.backgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.selectedBackground.element = self.selectedBackgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.content.element = element(with: info)
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.background.element = backgroundElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.selectedBackground.element = selectedBackgroundElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        if let element = overlayDecorationElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `overlayDecoration` view and assign our element update.
+            views.overlayDecoration.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.overlayDecorationIfLoaded?.element = nil
+        }
     }
     
-    /// Creates the `BlueprintView` used to render the content of the item.
     static func createReusableContentView(frame: CGRect) -> ContentView {
         self.newBlueprintView(with: frame)
     }
     
-    /// Creates the `BlueprintView` used to render the background of the item.
     static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
         self.newBlueprintView(with: frame)
     }
     
     static func createReusableSelectedBackgroundView(frame: CGRect) -> SelectedBackgroundView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    static func createReusableOverlayDecorationView(frame: CGRect) -> OverlayDecorationView {
         self.newBlueprintView(with: frame)
     }
     
