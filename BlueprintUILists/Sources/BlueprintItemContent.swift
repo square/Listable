@@ -141,11 +141,25 @@ public extension BlueprintItemContent
         views.content.element = element(with: info)
             .wrapInBlueprintEnvironmentFrom(environment: info.environment)
         
-        views.background.element = backgroundElement(with: info)?
+        if let element = backgroundElement(with: info)?
             .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `background` view and assign our element update.
+            views.background.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.backgroundIfLoaded?.element = nil
+        }
         
-        views.selectedBackground.element = selectedBackgroundElement(with: info)?
+        if let element = selectedBackgroundElement(with: info)?
             .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `selectedBackground` view and assign our element update.
+            views.selectedBackground.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.selectedBackgroundIfLoaded?.element = nil
+        }
         
         if let element = overlayDecorationElement(with: info)?
             .wrapInBlueprintEnvironmentFrom(environment: info.environment)

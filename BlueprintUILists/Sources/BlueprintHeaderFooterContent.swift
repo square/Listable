@@ -113,9 +113,32 @@ public extension BlueprintHeaderFooterContent
         for reason: ApplyReason,
         with info: ApplyHeaderFooterContentInfo
     ) {
-        views.content.element = self.elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.content.element = self
+            .elementRepresentation
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        if let element = self
+            .background?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `background` view and assign our element update.
+            views.background.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.backgroundIfLoaded?.element = nil
+        }
+        
+        if let element = self
+            .pressedBackground?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `pressedBackground` view and assign our element update.
+            views.pressedBackground.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.pressedBackgroundIfLoaded?.element = nil
+        }
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView {

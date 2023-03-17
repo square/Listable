@@ -144,11 +144,7 @@ extension PresentationState
         ) {
             let view = view as! HeaderFooterContentView<Content>
             
-            let views = HeaderFooterContentViews<Content>(
-                content: view.content,
-                background: view.background,
-                pressed: view.pressedBackground
-            )
+            let views = HeaderFooterContentViews<Content>(view: view)
             
             view.onTap = self.model.onTap
             
@@ -218,11 +214,7 @@ extension PresentationState
                     create: {
                         return HeaderFooterContentView<Content>(frame: .zero)
                 }, { view in
-                    let views = HeaderFooterContentViews<Content>(
-                        content: view.content,
-                        background: view.background,
-                        pressed: view.pressedBackground
-                    )
+                    let views = HeaderFooterContentViews<Content>(view: view)
                     
                     self.model.content.apply(
                         to: views,

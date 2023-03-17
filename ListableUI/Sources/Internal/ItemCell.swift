@@ -40,14 +40,35 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return view
     }()
     
+    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
+    
     let contentContainer : ContentContainerView
 
-    let background : Content.BackgroundView
-    let selectedBackground : Content.SelectedBackgroundView
+    private(set) lazy var background : Content.BackgroundView = {
+        let background = Content.createReusableBackgroundView(frame: bounds)
+        
+        self.backgroundView = background
+        self.backgroundIfLoaded = background
+        
+        return background
+    }()
+    
+    private(set) var backgroundIfLoaded : Content.BackgroundView?
+    
+    private(set) lazy var selectedBackground : Content.SelectedBackgroundView = {
+        
+        let background = Content.createReusableSelectedBackgroundView(frame: bounds)
+        
+        self.selectedBackgroundView = background
+        self.selectedBackgroundIfLoaded = background
+        
+        return background
+        
+    }()
+    
+    private(set) var selectedBackgroundIfLoaded : Content.SelectedBackgroundView?
     
     var isReorderable: Bool = false
-    
-    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
     
     override init(frame: CGRect)
     {
@@ -55,13 +76,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         
         self.contentContainer = ContentContainerView(frame: bounds)
         
-        self.background = Content.createReusableBackgroundView(frame: bounds)
-        self.selectedBackground = Content.createReusableSelectedBackgroundView(frame: bounds)
-        
         super.init(frame: frame)
-            
-        self.backgroundView = self.background
-        self.selectedBackgroundView = self.selectedBackground
         
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
