@@ -128,7 +128,7 @@ extension ItemCell {
             }
 
             swipeConfiguration?.numberOfActions = actions.actions.count
-            swipeConfiguration?.swipeView.apply(actions: actions)
+            swipeConfiguration?.swipeView.apply(actions: actions, style: style)
             configureAccessibilityActions(for: actions.actions)
 
             if reason == .willDisplay {

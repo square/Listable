@@ -17,6 +17,8 @@ final class SwipeActionsViewController: UIViewController  {
     private var allowDeleting: Bool = true
 
     private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
+    
+    private var customItems = (100..<110).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
 
     override func loadView() {
         self.title = "Swipe Actions"
@@ -52,7 +54,7 @@ final class SwipeActionsViewController: UIViewController  {
             }
 
             list += Section("standardSwipeActionItems") { section in
-                section.header = DemoHeader(title: "Standard Style Swipable Items")
+                section.header = DemoHeader(title: "Standard Style Swipeable Items")
                 section += self.items.map { item in
                     Item(
                         SwipeActionsDemoItem(item: item, swipeActionsStyle: .default),
@@ -62,8 +64,8 @@ final class SwipeActionsViewController: UIViewController  {
             }
 
             list += Section("customSwipeActionItems") { section in
-                section.header = DemoHeader(title: "Custom Style Swipable Items")
-                section += self.items.map { item in
+                section.header = DemoHeader(title: "Custom Style Swipeable Items")
+                section += self.customItems.map { item in
                     Item(
                         SwipeActionsDemoItem(
                             item: item,
