@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue that could cause the wrong swipe action view style being applied when multiple styles were used in a single list.
+
 ### Added
 
 ### Removed

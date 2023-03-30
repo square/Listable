@@ -51,7 +51,14 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
 
     private var firstAction: SwipeAction?
     private var didPerformAction: SwipeAction.CompletionHandler
-    private let style: Style
+    
+    private var style: Style {
+        didSet {
+            if style != oldValue {
+                setNeedsLayout()
+            }
+        }
+    }
 
     public var swipeActionsWidth: CGFloat {
         calculatedNaturalWidth + safeAreaInsets.right
@@ -134,8 +141,12 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         } + CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing
     }
 
-    public func apply(actions: SwipeActionsConfiguration) {
-        if actionButtons.count != actions.actions.count {
+    public func apply(actions: SwipeActionsConfiguration, style: Style) {
+        let styleUpdateRequired = style != self.style
+        
+        self.style = style
+                
+        if actionButtons.count != actions.actions.count || styleUpdateRequired {
             actionButtons.forEach { $0.superview?.removeFromSuperview() }
             actionButtons = actions.actions.map { _ in
                 let button = DefaultSwipeActionButton()

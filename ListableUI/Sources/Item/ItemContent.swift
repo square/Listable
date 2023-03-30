@@ -679,7 +679,7 @@ public protocol ItemContentSwipeActionsView: UIView {
 
     init(style: Style, didPerformAction: @escaping SwipeAction.CompletionHandler)
 
-    func apply(actions: SwipeActionsConfiguration)
+    func apply(actions: SwipeActionsConfiguration, style: Style)
 
     func apply(state: SwipeActionState)
 }
