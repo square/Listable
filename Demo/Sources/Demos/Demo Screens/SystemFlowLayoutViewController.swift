@@ -37,10 +37,8 @@ final class SystemFlowLayoutViewController : UIViewController
         
         self.collectionView.register(FlowCell.self, forCellWithReuseIdentifier: "Cell")
         self.collectionView.register(FlowHeader.self, forSupplementaryViewOfKind:UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
-        self.collectionView.register(FlowFooter.self, forSupplementaryViewOfKind:UICollectionView.elementKindSectionFooter , withReuseIdentifier: "Footer")
         
         self.layout.headerReferenceSize = CGSize(width: 300.0, height: 50.0)
-        self.layout.footerReferenceSize = CGSize(width: 300.0, height: 50.0)
         self.layout.itemSize = CGSize(width: 300.0, height: 100.0)
         
         self.layout.minimumLineSpacing = 20.0
@@ -52,25 +50,18 @@ final class SystemFlowLayoutViewController : UIViewController
     
     fileprivate let items : [[FlowItem]] = [
         [
-            // Empty section.
+            FlowItem(title: "Item 1, Section 1"),
         ],
+        
         [
-            // Section with one item.
-            
-            FlowItem(title: "Item 0, Section 1")
+            FlowItem(title: "Item 1, Section 2"),
+            FlowItem(title: "Item 2, Section 2"),
         ],
+        
         [
-            // Section with two items.
-            
-            FlowItem(title: "Item 0, Section 2"),
-            FlowItem(title: "Item 1, Section 2")
-        ],
-        [
-            // Section with three items.
-            
-            FlowItem(title: "Item 0, Section 3"),
             FlowItem(title: "Item 1, Section 3"),
-            FlowItem(title: "Item 2, Section 3")
+            FlowItem(title: "Item 2, Section 3"),
+            FlowItem(title: "Item 3, Section 3"),
         ]
     ]
 }
@@ -99,16 +90,43 @@ extension SystemFlowLayoutViewController : UICollectionViewDataSource, UICollect
     {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
-        case UICollectionView.elementKindSectionFooter:
-            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath)
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: "Header",
+                for: indexPath
+            ) as! FlowHeader
+            
+            header.textField.onFocus = { [weak collectionView] in
+                
+                /// ⚠️⚠️⚠️ Triggers the issue. ⚠️⚠️⚠️
+                ///
+                /// Even though we're not actually delivering any updates (`.performBatchUpdates({})`),
+                /// `_resignOrRebaseFirstResponderViewWithIndexPathMapping` seems
+                /// to come along after the update and undo our first responder.
+                ///
+                /// ```
+                /// TextField.resignFirstResponder()
+                /// @objc TextField.resignFirstResponder()
+                /// -[UICollectionView _resignOrRebaseFirstResponderViewWithIndexPathMapping:]
+                /// -[UICollectionView _updateWithItems:tentativelyForReordering:propertyAnimator:collectionViewAnimator:]
+                /// -[UICollectionView _endItemAnimationsWithInvalidationContext:tentativelyForReordering:animator:collectionViewAnimator:]
+                /// -[UICollectionView _performBatchUpdates:completion:invalidationContext:tentativelyForReordering:animator:animationHandler:]
+                /// closure #1 in SystemFlowLayoutViewController.collectionView(_:viewForSupplementaryElementOfKind:at:)
+                /// TextField.becomeFirstResponder()
+
+                /// ```
+                ///
+                /// Note that even throwing this in a `DispathQueue.main.async`
+                /// doesn't seem to resolve the issue.
+                collectionView?.performBatchUpdates({})
+                
+            }
+            
+            return header
+            
         default: fatalError()
         }
     }
-    
-    // MARK: UICollectionViewDelegate
-    
-    // MARK: UICollectionViewDelegateFlowLayout
 }
 
 
@@ -133,24 +151,62 @@ final fileprivate class FlowCell : UICollectionViewCell
 
 final fileprivate class FlowHeader : UICollectionReusableView
 {
+    let textField : TextField
+    
     override init(frame: CGRect)
     {
+        self.textField = TextField()
+        
         super.init(frame: frame)
+        
+        self.addSubview(textField)
         
         self.backgroundColor = .init(white: 0.95, alpha: 1.0)
     }
     
     required init?(coder: NSCoder) { fatalError() }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textField.frame = bounds
+    }
 }
 
-final fileprivate class FlowFooter : UICollectionReusableView
-{
-    override init(frame: CGRect)
-    {
+
+fileprivate final class TextField : UITextField {
+    
+    var onFocus : () -> () = {}
+    
+    override init(frame: CGRect) {
+        print("Initializing NEW text field")
         super.init(frame: frame)
         
-        self.backgroundColor = .init(white: 0.8, alpha: 1.0)
+        self.placeholder = "I'm a text field, type in me!"
     }
     
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        let became = super.becomeFirstResponder()
+        
+        if became {
+            print("BECAME First Responder")
+            onFocus()
+        }
+
+        return became
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        let resigned = super.resignFirstResponder()
+        
+        if resigned {
+            print("RESIGNED First Responder")
+        }
+        
+        return resigned
+    }
 }

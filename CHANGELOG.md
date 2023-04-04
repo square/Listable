@@ -4,6 +4,8 @@
 
 - Fixed an issue that could cause the wrong swipe action view style being applied when multiple styles were used in a single list.
 
+- [Fixed a regression](https://github.com/square/Listable/pull/466/) in iOS 16.4, where on every collection view refresh, the collection view would force resign a first responder if it was within a header or footer (cells are not affected). See `ListView+iOS16.4Workaround.swift` for more.
+
 ### Added
 
 ### Removed

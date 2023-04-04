@@ -45,7 +45,7 @@ extension PresentationState.SectionState {
 extension PresentationState.HeaderFooterState {
     
     convenience init(_ headerFooter : HeaderFooter<Content>) {
-        self.init(headerFooter, performsContentCallbacks: true)
+        self.init(headerFooter, kind: .sectionHeader, performsContentCallbacks: true)
     }
 }
 
