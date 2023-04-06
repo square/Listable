@@ -357,8 +357,11 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// A default implementation, which matches `UITableView`, is provided.
     associatedtype SwipeActionsView: ItemContentSwipeActionsView = DefaultSwipeActionsView
 
-    /// Specify a swipe action style for this content.
-    var swipeActionsStyle: SwipeActionsView.Style { get }
+    /// The swipe action style for this content.
+    ///
+    /// If this is `nil`, the style specified in the environment will be used (if available) or else
+    /// the `SwipeActionsView.Style.default` will be used.
+    var swipeActionsStyle: SwipeActionsView.Style? { get }
 
     //
     // MARK: Creating & Providing Content Views
@@ -532,9 +535,9 @@ public struct ApplyItemContentInfo
     public var environment : ListEnvironment
 }
 
-public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
-    var swipeActionsStyle: SwipeActionsView.Style {
-        return .default
+public extension ItemContent {
+    var swipeActionsStyle: SwipeActionsView.Style? {
+        return nil
     }
 }
 
@@ -673,7 +676,12 @@ public extension ItemContent where OverlayDecorationView == UIView
 /// as well as updating the layout based on the swipe state.
 public protocol ItemContentSwipeActionsView: UIView {
     /// Swipe action styles (e.g. `standard`, `grouped`, etc.) that are supported by the view.
-    associatedtype Style: Equatable
+    associatedtype Style: Equatable, DefaultProviding
+    
+    /// The environment key used to fetch style information from the environment.
+    ///
+    /// The default implementation returns `nil`.
+    static var styleEnvironmentKey: (any ListEnvironmentKey.Type)? { get }
 
     var swipeActionsWidth: CGFloat { get }
 
@@ -682,4 +690,16 @@ public protocol ItemContentSwipeActionsView: UIView {
     func apply(actions: SwipeActionsConfiguration, style: Style)
 
     func apply(state: SwipeActionState)
+}
+
+extension ItemContentSwipeActionsView {
+    static var styleEnvironmentKey: (any ListEnvironmentKey.Type)? {
+        return nil
+    }
+}
+
+public protocol DefaultProviding {
+    
+    /// A default value for this type.
+    static var `default`: Self { get }
 }

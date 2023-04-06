@@ -7,10 +7,16 @@
 ### Added
 
 - Added `containerCornerRadius`, `equalButtonWidths`, and `minWidth` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
+- Added `defaultSwipeActionsViewStyle` to `ListEnvironment`. This allows a `DefaultSwipeActionsView.Style` to be set on the environment when customizing the appearance of the default swipe action view.
+- Added `styleEnvironmentKey` to the `ItemContentSwipeActionsView` protocol. 
+- Added the `DefaultProviding` protocol for providing a default value for a type.
 
 ### Removed
 
 ### Changed
+
+- The type of the `ItemContent.swipeActionsStyle` protocol requirement is now `SwipeActionsView.Style?` (previously `SwipeActionsView.Style`).
+- `ItemContentSwipeActionsView.Style` must now conform to `DefaultProviding`.
 
 ### Misc
 

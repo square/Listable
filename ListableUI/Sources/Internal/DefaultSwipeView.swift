@@ -7,11 +7,26 @@
 
 import UIKit
 
+extension ListEnvironment {
+    
+    public var defaultSwipeActionsViewStyle : DefaultSwipeActionsView.Style? {
+        get { self[DefaultSwipeActionsViewStyleKey.self] }
+        set { self[DefaultSwipeActionsViewStyleKey.self] = newValue }
+    }
+}
+
+public enum DefaultSwipeActionsViewStyleKey: ListEnvironmentKey {
+    
+    public static var defaultValue: DefaultSwipeActionsView.Style? {
+        return nil
+    }
+}
+
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
 public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView {
 
-    public struct Style: Equatable {
+    public struct Style: Equatable, DefaultProviding {
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
         }
@@ -47,6 +62,10 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
                 return cornerRadius
             }
         }
+    }
+    
+    public static var styleEnvironmentKey: (any ListEnvironmentKey.Type)? {
+        return DefaultSwipeActionsViewStyleKey.self
     }
 
     private var actionButtons: [DefaultSwipeActionButton] = []

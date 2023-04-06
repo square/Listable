@@ -313,7 +313,11 @@ extension PresentationState
                         
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
-                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
+                cell.contentContainer.registerSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: resolvedSwipeActionViewStyle(in: environment),
+                    reason: reason
+                )
             } else {
                 cell.contentContainer.deregisterSwipeIfNeeded()
             }
@@ -571,6 +575,17 @@ extension PresentationState
         }
         
         private(set) var activeReorderEventInfo : ActiveReorderEventInfo? = nil
+        
+        func resolvedSwipeActionViewStyle(in environment: ListEnvironment) -> Content.SwipeActionsView.Style {
+            if let contentStyle = model.content.swipeActionsStyle {
+                return contentStyle
+            } else if let environmentKey = Content.SwipeActionsView.styleEnvironmentKey,
+                      let environmentStyle = environment[environmentKey] as? Content.SwipeActionsView.Style {
+                return environmentStyle
+            } else {
+                return Content.SwipeActionsView.Style.default
+            }
+        }
     }
 }
 
