@@ -21,15 +21,24 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         public var actionShape: Shape
         public var interActionSpacing: CGFloat
         public var containerInsets: UIEdgeInsets
+        public var containerCornerRadius: CGFloat
+        public var equalButtonWidths: Bool
+        public var minWidth: CGFloat
 
         public init(
             actionShape: Shape = .rectangle(cornerRadius: 0),
             interActionSpacing: CGFloat = 0,
-            containerInsets: UIEdgeInsets = .zero
+            containerInsets: UIEdgeInsets = .zero,
+            containerCornerRadius: CGFloat = 0,
+            equalButtonWidths: Bool = false,
+            minWidth: CGFloat = 0
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
             self.containerInsets = containerInsets
+            self.containerCornerRadius = containerCornerRadius
+            self.equalButtonWidths = equalButtonWidths
+            self.minWidth = minWidth
         }
 
         var cornerRadius: CGFloat {
@@ -90,6 +99,8 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         container.frame.origin.x = insets.left
         container.frame.size.width = max(0, bounds.size.width - insets.left - insets.right)
         container.frame.size.height = max(0, bounds.size.height - insets.top - insets.bottom)
+        
+        container.layer.cornerRadius = style.containerCornerRadius
 
         // Calculates the x origin for each button based on the width of each button before it
         // and the percent that the actions are slid open for the overlapping parallax effect
@@ -101,8 +112,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         }
 
         for (index, button) in actionButtons.enumerated() {
-            // Size each button to its natural size, but always match the height
-            button.sizeToFit()
+            button.frame.size.width = width(ofButtons: [button])
             button.frame.size.height = container.bounds.height
 
             // Each button is wrapped in a container that enables the parallax effect.
@@ -136,9 +146,18 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
 
     private func width(ofButtons buttons: [DefaultSwipeActionButton]) -> CGFloat {
-        buttons.reduce(0) { width, button in
-            width + button.sizeThatFits(UIView.layoutFittingCompressedSize).width
-        } + CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing
+        let spacingWidth = (CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing)
+        
+        if style.equalButtonWidths {
+            let widest = actionButtons
+                .map { $0.sizeThatFits(UIView.layoutFittingCompressedSize) }
+                .max { $0.width < $1.width } ?? .zero
+            return CGFloat(buttons.count) * max(widest.width, style.minWidth) + spacingWidth
+        } else {
+            return buttons.reduce(0) { width, button in
+                width + max(button.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+            } + spacingWidth
+        }
     }
 
     public func apply(actions: SwipeActionsConfiguration, style: Style) {
@@ -223,7 +242,11 @@ private class DefaultSwipeActionButton: UIButton {
         
         self.didPerformAction = didPerformAction
         
-        backgroundColor = action.backgroundColor
+        // Note: We intentionally _do not_ set the background color here.
+        // The superview wrapper's background color is set instead.
+        // If we do both, then transparent colors will end up being stacked which leads to
+        // an incorrect visual appearance.
+        
         tintColor = action.tintColor
         
         setTitle(action.title, for: .normal)
