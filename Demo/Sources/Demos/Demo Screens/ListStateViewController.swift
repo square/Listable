@@ -35,6 +35,14 @@ final class ListStateViewController : ListViewController
                 print("Did Scroll")
             }
             
+            observer.onBeginDrag { info in
+                print("Will Begin Drag")
+            }
+            
+            observer.onDidEndDeceleration { info in
+                print("Did End Deceleration")
+            }
+            
             observer.onVisibilityChanged { info in
                 print("Displayed: \(info.displayed.map { $0.anyIdentifier })")
                 print("Ended Display: \(info.endedDisplay.map { $0.anyIdentifier })")

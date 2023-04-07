@@ -6,6 +6,9 @@
 
 ### Added
 
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+- Introduce `ListStateObserver.OnDidBeginDrag(_:)` callback, which allows an observer to become notified when the scrollview will begin dragging.
+
 ### Removed
 
 ### Changed
