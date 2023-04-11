@@ -121,6 +121,7 @@ extension ListView {
     
     // Note: If we need additional overrides, please subclass me, so we can
     // wholesale delete this subclass when we drop iOS 16.4.
+    @available(iOS, introduced: 14.0, obsoleted: 16.5, message: "This workaround is no longer applicable. Please remove!")
     class IOS16_4_First_Responder_Bug_CollectionView : UICollectionView {
         
         override init(
@@ -258,9 +259,17 @@ extension ListView {
             /// Make the pointer we got back into a Swift-callable function.
             let super_function = unsafeBitCast(super_impl, to: SuperFunction.self)
             
-                   
-            /// This bug was fixed in iOS 16.5.
-            if #available(iOS 16.5, *) {
+            /// Only perform the workaround on affected versions.
+            guard Self.isAffectedIOSVersion else {
+                return super_function(self, selector)
+            }
+            
+            /// In case this workaround goes wrong somehow, we'll write a go/feature controlled flag
+            /// into `UserDefaults` in POS, and then read it here. This will allow us to disable the workaround
+            /// remotely if needed.
+            ///
+            /// Note: We are explicitly **not** making this a static value, so it can be changed across reads.
+            guard UserDefaults.standard.bool(forKey: "Listable.EnableIOS164FirstResponderWorkaround") else {
                 return super_function(self, selector)
             }
             
@@ -321,6 +330,23 @@ extension ListView {
             
             return isRemoving
         }
+        
+        private static let isAffectedIOSVersion : Bool = {
+            
+            let isIOS16_4 = ProcessInfo
+                .processInfo
+                .isOperatingSystemAtLeast(
+                    .init(majorVersion: 16, minorVersion: 4, patchVersion: 0)
+                )
+            
+            let isIOS16_5 = ProcessInfo
+                .processInfo
+                .isOperatingSystemAtLeast(
+                    .init(majorVersion: 16, minorVersion: 5, patchVersion: 0)
+                )
+            
+            return isIOS16_4 && !isIOS16_5
+        }()
         
         private static let hasFirstResponderView : Bool = {
             
