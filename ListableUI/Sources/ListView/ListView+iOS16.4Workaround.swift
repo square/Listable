@@ -237,8 +237,7 @@ extension ListView {
             // Setup
             //
             
-            /// We can't see this selector, it's private, use `NSSelectorFromString`.
-            let selector = NSSelectorFromString("_isFirstResponderInDeletedSectionOrItem")
+            let selector = #selector(getter: self._isFirstResponderInDeletedSectionOrItem)
             
             /// This gets the (private) implementation from `UICollectionView`.
             let super_impl = class_getMethodImplementation(UICollectionView.self, selector)
@@ -273,7 +272,7 @@ extension ListView {
                 return super_function(self, selector)
             }
             
-            guard Self.hasFirstResponderView else {
+            guard Self.hasFirstResponderViewProperty else {
                 assertionFailure("UICollectionView no longer has an ivar named `_firstResponderView`.")
                 return false
             }
@@ -348,7 +347,7 @@ extension ListView {
             return isIOS16_4 && !isIOS16_5
         }()
         
-        private static let hasFirstResponderView : Bool = {
+        private static let hasFirstResponderViewProperty : Bool = {
             
             var ivarCount : UInt32 = 0
             
