@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue that could cause the wrong swipe action view style being applied when multiple styles were used in a single list.
-
 ### Added
 
 ### Removed
@@ -13,6 +11,14 @@
 ### Misc
 
 # Past Releases
+
+# [8.1.1] - 2023-04-11
+
+### Fixed
+
+- Fixed an issue that could cause the wrong swipe action view style being applied when multiple styles were used in a single list.
+
+- [Fixed a regression](https://github.com/square/Listable/pull/466/) in iOS 16.4, where on every collection view refresh, the collection view would force resign a first responder if it was within a header or footer (cells are not affected). See `ListView+iOS16.4Workaround.swift` for more.
 
 # [8.1.0] - 2023-03-16
 
@@ -843,7 +849,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.1.0...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.1.1...HEAD
+[8.1.1]: https://github.com/kyleve/Listable/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/kyleve/Listable/compare/8.0.5...8.1.0
 [8.0.5]: https://github.com/kyleve/Listable/compare/8.0.4...8.0.5
 [8.0.4]: https://github.com/kyleve/Listable/compare/8.0.3...8.0.4
