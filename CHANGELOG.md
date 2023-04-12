@@ -12,6 +12,12 @@
 
 # Past Releases
 
+# [8.1.2] - 2023-04-12
+
+### Fixed
+
+- A small defensive update to the iOS 16.4 Collection View workaround.
+
 # [8.1.1] - 2023-04-11
 
 ### Fixed
@@ -849,7 +855,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.1.1...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.1.2...HEAD
+[8.1.2]: https://github.com/kyleve/Listable/compare/8.1.1...8.1.2
 [8.1.1]: https://github.com/kyleve/Listable/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/kyleve/Listable/compare/8.0.5...8.1.0
 [8.0.5]: https://github.com/kyleve/Listable/compare/8.0.4...8.0.5
