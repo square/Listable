@@ -274,7 +274,7 @@ extension ListView {
             
             guard Self.hasFirstResponderViewProperty else {
                 assertionFailure("UICollectionView no longer has an ivar named `_firstResponderView`.")
-                return false
+                return super_function(self, selector)
             }
             
             //
