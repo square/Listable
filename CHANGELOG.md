@@ -6,7 +6,7 @@
 
 ### Added
 
-- Added `containerCornerRadius`, `equalButtonWidths`, and `minWidth` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
+- Added `containerCornerRadius`, `buttonSizing`, and `minWidth` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
 
 ### Removed
 

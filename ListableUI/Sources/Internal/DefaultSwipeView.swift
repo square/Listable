@@ -15,6 +15,15 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
         }
+        
+        /// The button sizing algorithm used when laying out swipe actions.
+        public enum ButtonSizing {
+            /// Each button button receives an equal width
+            case equalWidth
+            
+            /// Each button receives the amount of space required to fit its contents.
+            case sizeThatFits
+        }
 
         public static let `default` = Style()
 
@@ -22,7 +31,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         public var interActionSpacing: CGFloat
         public var containerInsets: UIEdgeInsets
         public var containerCornerRadius: CGFloat
-        public var equalButtonWidths: Bool
+        public var buttonSizing: ButtonSizing
         public var minWidth: CGFloat
 
         public init(
@@ -30,14 +39,14 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
             interActionSpacing: CGFloat = 0,
             containerInsets: UIEdgeInsets = .zero,
             containerCornerRadius: CGFloat = 0,
-            equalButtonWidths: Bool = false,
+            buttonSizing: ButtonSizing = .sizeThatFits,
             minWidth: CGFloat = 0
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
             self.containerInsets = containerInsets
             self.containerCornerRadius = containerCornerRadius
-            self.equalButtonWidths = equalButtonWidths
+            self.buttonSizing = buttonSizing
             self.minWidth = minWidth
         }
 
@@ -148,15 +157,16 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     private func width(ofButtons buttons: [DefaultSwipeActionButton]) -> CGFloat {
         let spacingWidth = (CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing)
         
-        if style.equalButtonWidths {
+        switch style.buttonSizing {
+        case .sizeThatFits:
+            return buttons.reduce(0) { width, button in
+                width + max(button.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+            } + spacingWidth
+        case .equalWidth:
             let widest = actionButtons
                 .map { $0.sizeThatFits(UIView.layoutFittingCompressedSize) }
                 .max { $0.width < $1.width } ?? .zero
             return CGFloat(buttons.count) * max(widest.width, style.minWidth) + spacingWidth
-        } else {
-            return buttons.reduce(0) { width, button in
-                width + max(button.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
-            } + spacingWidth
         }
     }
 
