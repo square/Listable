@@ -83,6 +83,14 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
 
     private var state: SwipeActionState = .closed
+    
+    private var availableButtonWidth: CGFloat {
+        guard let superview else {
+            return .greatestFiniteMagnitude
+        }
+        
+        return (superview.bounds.width * 0.80) - spacingWidth(numberOfButtons: actionButtons.count)
+    }
 
     public init(
         style: Style,
@@ -155,19 +163,32 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
 
     private func width(ofButtons buttons: [DefaultSwipeActionButton]) -> CGFloat {
-        let spacingWidth = (CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing)
+        let spacingWidth = spacingWidth(numberOfButtons: buttons.count)
         
         switch style.buttonSizing {
-        case .sizeThatFits:
-            return buttons.reduce(0) { width, button in
-                width + max(button.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
-            } + spacingWidth
         case .equalWidth:
-            let widest = actionButtons
-                .map { $0.sizeThatFits(UIView.layoutFittingCompressedSize) }
-                .max { $0.width < $1.width } ?? .zero
-            return CGFloat(buttons.count) * max(widest.width, style.minWidth) + spacingWidth
+            let maxWidth = availableButtonWidth / CGFloat(actionButtons.count)
+            let widestWidth = actionButtons
+                .map {
+                    // Note: The button width may end up being less than `style.minWidth` if the
+                    // calculated max width is smaller.
+                    let minWidth = max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+                    return min(minWidth, maxWidth)
+                }
+                .max() ?? .zero
+            
+            return CGFloat(buttons.count) * widestWidth + spacingWidth
+
+        case .sizeThatFits:
+            return buttons.map {
+                max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+            }
+            .reduce(0, +) + spacingWidth
         }
+    }
+    
+    private func spacingWidth(numberOfButtons: Int) -> CGFloat {
+        return (CGFloat(max(0, numberOfButtons - 1)) * style.interActionSpacing)
     }
 
     public func apply(actions: SwipeActionsConfiguration, style: Style) {
