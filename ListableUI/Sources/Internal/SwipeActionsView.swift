@@ -48,10 +48,6 @@ public final class SwipeActionsView: UIView {
             }
         }
     }
-    
-    public static var styleEnvironmentKey: (any ListEnvironmentKey.Type)? {
-        return SwipeActionsViewStyleKey.self
-    }
 
     private var actionButtons: [DefaultSwipeActionButton] = []
     private let container: UIView = {
@@ -279,6 +275,6 @@ extension ListEnvironment {
 public enum SwipeActionsViewStyleKey: ListEnvironmentKey {
     
     public static var defaultValue: SwipeActionsView.Style {
-        SwipeActionsView.Style.default
+        .default
     }
 }
