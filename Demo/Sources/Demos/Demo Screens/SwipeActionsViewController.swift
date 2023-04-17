@@ -69,7 +69,7 @@ final class SwipeActionsViewController: UIViewController  {
             }
             
             // The style can be customized at the environment level via
-            // `list.environment.defaultSwipeActionsViewStyle` or at the content level
+            // `list.environment.swipeActionsViewStyle` or at the content level
             // as demonstrated below.
 
             list += Section("customSwipeActionItems") { section in
@@ -164,7 +164,7 @@ final class SwipeActionsViewController: UIViewController  {
         }
         
         var item: SwipeActionItem
-        var swipeActionsStyle: DefaultSwipeActionsView.Style?
+        var swipeActionsStyle: SwipeActionsView.Style?
         var mode: Mode
 
         var identifierValue: String {

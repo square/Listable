@@ -127,8 +127,6 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     var identifierValue: String {
         return self.text
     }
-
-    typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemContentInfo) -> Element
     {

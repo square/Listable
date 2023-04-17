@@ -7,26 +7,11 @@
 
 import UIKit
 
-extension ListEnvironment {
-    
-    public var defaultSwipeActionsViewStyle : DefaultSwipeActionsView.Style? {
-        get { self[DefaultSwipeActionsViewStyleKey.self] }
-        set { self[DefaultSwipeActionsViewStyleKey.self] = newValue }
-    }
-}
-
-public enum DefaultSwipeActionsViewStyleKey: ListEnvironmentKey {
-    
-    public static var defaultValue: DefaultSwipeActionsView.Style? {
-        return nil
-    }
-}
-
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView {
+public final class SwipeActionsView: UIView {
 
-    public struct Style: Equatable, DefaultProviding {
+    public struct Style: Equatable {
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
         }
@@ -65,7 +50,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
     
     public static var styleEnvironmentKey: (any ListEnvironmentKey.Type)? {
-        return DefaultSwipeActionsViewStyleKey.self
+        return SwipeActionsViewStyleKey.self
     }
 
     private var actionButtons: [DefaultSwipeActionButton] = []
@@ -280,5 +265,20 @@ private class DefaultSwipeActionButton: UIButton {
     @objc private func onTap() {
         guard let action = action, let didPerformAction = didPerformAction else { return }
         action.handler(didPerformAction)
+    }
+}
+
+extension ListEnvironment {
+    
+    public var swipeActionsViewStyle : SwipeActionsView.Style {
+        get { self[SwipeActionsViewStyleKey.self] }
+        set { self[SwipeActionsViewStyleKey.self] = newValue }
+    }
+}
+
+public enum SwipeActionsViewStyleKey: ListEnvironmentKey {
+    
+    public static var defaultValue: SwipeActionsView.Style {
+        SwipeActionsView.Style.default
     }
 }
