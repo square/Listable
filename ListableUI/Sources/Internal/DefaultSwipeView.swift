@@ -260,6 +260,7 @@ private class DefaultSwipeActionButton: UIButton {
         super.init(frame: frame)
 
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        titleLabel?.lineBreakMode = .byTruncatingTail
         contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
