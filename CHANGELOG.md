@@ -11,6 +11,7 @@
 
 ### Removed
 
+- Removed the `SwipeActionsView` associated type on `ItemContent`.
 - Removed the `ItemContentSwipeActionsView` protocol.
 
 ### Changed
