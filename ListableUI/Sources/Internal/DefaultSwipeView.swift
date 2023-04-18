@@ -33,6 +33,13 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         public var containerCornerRadius: CGFloat
         public var buttonSizing: ButtonSizing
         public var minWidth: CGFloat
+        
+        /// The percentage of the row content width that is available for laying out swipe action buttons.
+        ///
+        /// For example, a value of `0.8` represents that the swipe action buttons should occupy no more than
+        /// 80% of the row content width when the swipe actions are opened.
+        /// - Note: Currently only applicable to `ButtonSizing.equalWidth` mode.
+        public var maxWidthRatio: CGFloat
 
         public init(
             actionShape: Shape = .rectangle(cornerRadius: 0),
@@ -40,7 +47,8 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
             containerInsets: UIEdgeInsets = .zero,
             containerCornerRadius: CGFloat = 0,
             buttonSizing: ButtonSizing = .sizeThatFits,
-            minWidth: CGFloat = 0
+            minWidth: CGFloat = 0,
+            maxWidthRatio: CGFloat = 0.8
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
@@ -48,6 +56,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
             self.containerCornerRadius = containerCornerRadius
             self.buttonSizing = buttonSizing
             self.minWidth = minWidth
+            self.maxWidthRatio = maxWidthRatio
         }
 
         var cornerRadius: CGFloat {
@@ -89,7 +98,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
             return .greatestFiniteMagnitude
         }
         
-        return (superview.bounds.width * 0.80) - spacingWidth(numberOfButtons: actionButtons.count)
+        return (superview.bounds.width * style.maxWidthRatio) - spacingWidth(numberOfButtons: actionButtons.count)
     }
 
     public init(
