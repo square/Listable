@@ -4,9 +4,6 @@
 
 ### Added
 
-- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
-- Introduce `ListStateObserver.OnDidBeginDrag(_:)` callback, which allows an observer to become notified when the scrollview will begin dragging.
-
 ### Removed
 
 ### Changed
@@ -14,6 +11,13 @@
 ### Misc
 
 # Past Releases
+
+# [8.2.0] - 2023-04-18
+
+### Added
+
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+- Introduce `ListStateObserver.OnDidBeginDrag(_:)` callback, which allows an observer to become notified when the scrollview will begin dragging.
 
 # [8.1.2] - 2023-04-12
 
@@ -858,7 +862,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/8.1.2...HEAD
+[Main]: https://github.com/kyleve/Listable/compare/8.2.0...HEAD
+[8.2.0]: https://github.com/kyleve/Listable/compare/8.1.2...8.2.0
 [8.1.2]: https://github.com/kyleve/Listable/compare/8.1.1...8.1.2
 [8.1.1]: https://github.com/kyleve/Listable/compare/8.1.0...8.1.1
 [8.1.0]: https://github.com/kyleve/Listable/compare/8.0.5...8.1.0
