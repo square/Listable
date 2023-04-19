@@ -244,14 +244,41 @@ struct Toggle : Element {
     {
         static let measurementSwitch = ToggleView()
         
-        func measure(in constraint: SizeConstraint, items: [(traits: (), content: Measurable)]) -> CGSize
+        func measure(
+            in constraint: SizeConstraint,
+            items: [(traits: (),
+            content: Measurable)]
+        ) -> CGSize
         {
-            return Layout.measurementSwitch.sizeThatFits(.init(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+            return Layout.measurementSwitch.sizeThatFits(constraint.maximum)
         }
         
-        func layout(size: CGSize, items: [(traits: (), content: Measurable)]) -> [LayoutAttributes]
+        func layout(
+            size: CGSize,
+            items: [(traits: (),
+            content: Measurable)]
+        ) -> [LayoutAttributes]
         {
+            // Nothing, we're a view-backed element.
             return []
+        }
+        
+        func sizeThatFits(
+            proposal: BlueprintUI.SizeConstraint,
+            subelements: Subelements,
+            environment: BlueprintUI.Environment,
+            cache: inout ()
+        ) -> CGSize {
+            Layout.measurementSwitch.sizeThatFits(proposal.maximum)
+        }
+        
+        func placeSubelements(
+            in size: CGSize,
+            subelements: Subelements,
+            environment: BlueprintUI.Environment,
+            cache: inout ()
+        ) {
+            // Nothing, we're a view-backed element.
         }
     }
 }
