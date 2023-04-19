@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.swift_versions = [LISTABLE_SWIFT_VERSION]
 
   s.dependency 'ListableUI'
-  s.dependency 'BlueprintUI', "~> #{BLUEPRINT_VERSION}"
+  s.dependency 'BlueprintUI', *BLUEPRINT_VERSION
 
   s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
 
@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
       test_spec.source_files = 'BlueprintUILists/Tests/**/*.{swift}'
       test_spec.ios.resource_bundle = { 'BlueprintUIListsResources' => 'BlueprintUILists/Tests/Resources/**/*.*' }
 
-      test_spec.dependency 'BlueprintUICommonControls'
+      test_spec.dependency 'BlueprintUICommonControls', *BLUEPRINT_VERSION
 
       test_spec.framework = 'XCTest'
 

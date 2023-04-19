@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-BLUEPRINT_VERSION ||= '0.50.0'
+BLUEPRINT_VERSION ||= ['~> 1.0'].freeze
 
 LISTABLE_VERSION ||= '8.2.0'
 
