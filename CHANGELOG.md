@@ -4,6 +4,8 @@
 
 ### Added
 
+- `List` adheres to Blueprint's new [sizing contract](https://square.github.io/Blueprint/Protocols/CaffeinatedLayout.html#/s:11BlueprintUI17CaffeinatedLayoutP12sizeThatFits8proposal11subelements11environment5cacheSo6CGSizeVAA14SizeConstraintV_SayAA0D10SubelementVGAA11EnvironmentV5CacheQzztF) when running in Caffeinated Layout mode.
+
 ### Removed
 
 ### Changed

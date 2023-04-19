@@ -65,9 +65,10 @@ class ListTests : XCTestCase {
                     contentSize: CGSize(width: 1200, height: 1000),
                     naturalWidth: 900
                 ),
-            in: constraint,
-            horizontalFill: .fillParent,
-            verticalFill: .fillParent
+                in: constraint,
+                layoutMode: .default,
+                horizontalFill: .fillParent,
+                verticalFill: .fillParent
             ),
             CGSize(width: 1234, height: 1235)
         )
@@ -79,6 +80,7 @@ class ListTests : XCTestCase {
                     naturalWidth: 900
                 ),
                 in: constraint,
+                layoutMode: .default,
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
@@ -92,6 +94,7 @@ class ListTests : XCTestCase {
                     naturalWidth: nil
                 ),
                 in: constraint,
+                layoutMode: .default,
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
@@ -105,6 +108,7 @@ class ListTests : XCTestCase {
                     naturalWidth: 900
                 ),
                 in: constraint,
+                layoutMode: .default,
                 horizontalFill: .natural,
                 verticalFill: .natural
             ),
