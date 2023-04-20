@@ -15,17 +15,10 @@ extension ItemCell {
     final class ContentContainerView : UIView {
 
         let contentView : Content.ContentView
-
-        private var leftSwipeConfiguration: SwipeConfiguration?
-        private var swipeConfiguration: SwipeConfiguration?
         
-        private var leftAccessibilityCustomActions: [AccessibilitySwipeAction]? {
-            didSet {
-                updateAccessibilityCustomActions()
-            }
-        }
+        private var configurations: [Side: SwipeConfiguration] = [:]
         
-        private var rightAccessibilityCustomActions: [AccessibilitySwipeAction]? {
+        private var swipeAccessibilityCustomActions: [Side: [AccessibilitySwipeAction]] = [:] {
             didSet {
                 updateAccessibilityCustomActions()
             }
@@ -34,8 +27,7 @@ extension ItemCell {
         private (set) var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
-                    leftSwipeConfiguration?.swipeView.apply(state: swipeState)
-                    swipeConfiguration?.swipeView.apply(state: swipeState)
+                    configurations.values.forEach { $0.swipeView.apply(state: swipeState) }
                 }
             }
         }
@@ -55,23 +47,16 @@ extension ItemCell {
 
         override func layoutSubviews() {
             super.layoutSubviews()
-            
-            if let leftSwipeConfiguration {
-                updateFrames(using: leftSwipeConfiguration)
-            }
-            
-            if let swipeConfiguration {
-                updateFrames(using: swipeConfiguration)
-            }
-            
-            if leftSwipeConfiguration == nil && swipeConfiguration == nil {
+
+            if configurations.isEmpty {
                 contentView.frame = bounds
+            } else {
+                configurations.values.forEach { updateFrames(using: $0) }
             }
         }
         
         func isTouchWithinSwipeActionView(touch: UITouch) -> Bool {
-            self.leftSwipeConfiguration?.swipeView.contains(touch: touch) == true ||
-            self.swipeConfiguration?.swipeView.contains(touch: touch) == true
+            configurations.values.first { $0.swipeView.contains(touch: touch) } != nil
         }
 
         private func updateFrames(using configuration: SwipeConfiguration) {
@@ -140,26 +125,26 @@ extension ItemCell {
         
         // TODO: consolidate with `deregisterSwipeIfNeeded`
         public func deregisterLeadingSwipeIfNeeded() {
-            guard let configuration = leftSwipeConfiguration else { return }
+            guard let configuration = configurations[.left] else { return }
 
             removeGestureRecognizer(configuration.panGestureRecognizer)
             configuration.swipeView.removeFromSuperview()
 
-            leftAccessibilityCustomActions = nil
-            leftSwipeConfiguration = nil
+            swipeAccessibilityCustomActions[.left] = nil
+            configurations[.left] = nil
             swipeState = .closed
 
             setNeedsLayout()
         }
 
         public func deregisterSwipeIfNeeded() {
-            guard let configuration = swipeConfiguration else { return }
+            guard let configuration = configurations[.right] else { return }
 
             removeGestureRecognizer(configuration.panGestureRecognizer)
             configuration.swipeView.removeFromSuperview()
 
-            rightAccessibilityCustomActions = nil
-            swipeConfiguration = nil
+            swipeAccessibilityCustomActions[.right] = nil
+            configurations[.right] = nil
             swipeState = .closed
 
             setNeedsLayout()
@@ -173,24 +158,13 @@ extension ItemCell {
             registerSwipeActionsIfNeeded(side: .left, actions: actions, style: style, reason: reason)
         }
         
-        private func swipeConfigurationKeyPath(for side: SwipeActionsView.Side) -> ReferenceWritableKeyPath<ItemCell.ContentContainerView, ItemCell<Content>.SwipeConfiguration?> {
-            switch side {
-            case .left:
-                return \.leftSwipeConfiguration
-            case .right:
-                return \.swipeConfiguration
-            }
-        }
-        
         private func registerSwipeActionsIfNeeded(
             side: SwipeActionsView.Side,
             actions: SwipeActionsConfiguration,
             style: SwipeActionsView.Style,
             reason: ApplyReason
         ) {
-            let configurationKeyPath = swipeConfigurationKeyPath(for: side)
-            
-            if self[keyPath: configurationKeyPath] == nil {
+            if configurations[side] == nil {
 
                 let swipeView = SwipeActionsView(
                     side: side,
@@ -203,18 +177,10 @@ extension ItemCell {
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true
                 
-                let panDirection: DirectionalPanGestureRecognizer.Direction
-                switch side {
-                case .left:
-                    panDirection = .leftToRight
-                case .right:
-                    panDirection = .rightToLeft
-                }
-                
-                let panGestureRecognizer = DirectionalPanGestureRecognizer(direction: panDirection, target: self, action: #selector(handlePan))
+                let panGestureRecognizer = DirectionalPanGestureRecognizer(direction: side.gestureDirection, target: self, action: #selector(handlePan))
                 addGestureRecognizer(panGestureRecognizer)
 
-                self[keyPath: configurationKeyPath] = SwipeConfiguration(
+                configurations[side] = SwipeConfiguration(
                     panGestureRecognizer: panGestureRecognizer,
                     swipeView: swipeView,
                     numberOfActions: actions.actions.count,
@@ -223,8 +189,8 @@ extension ItemCell {
                 )
             }
 
-            self[keyPath: configurationKeyPath]?.numberOfActions = actions.actions.count
-            self[keyPath: configurationKeyPath]?.swipeView.apply(actions: actions, style: style)
+            configurations[side]?.numberOfActions = actions.actions.count
+            configurations[side]?.swipeView.apply(actions: actions, style: style)
             configureAccessibilityActions(actions.actions, for: side)
 
             if reason == .willDisplay {
@@ -240,22 +206,13 @@ extension ItemCell {
                 self.listView = self.firstSuperview(ofType: ListView.self)
             }
             
-            let configuration: SwipeConfiguration
-            let side: SwipeActionsView.Side
-            
-            if let swipeConfiguration, swipeConfiguration.panGestureRecognizer == sender {
-                configuration = swipeConfiguration
-                side = .right
-            } else if let leftSwipeConfiguration, leftSwipeConfiguration.panGestureRecognizer == sender {
-                configuration = leftSwipeConfiguration
-                side = .left
-            } else {
+            guard let configuration = configurations.values.first(where: {
+                $0.panGestureRecognizer == sender
+            }) else {
                 return
             }
-            
-            //print("leftSwipeState", leftSwipeState)
-            print("swipeState", swipeState)
-            
+                        
+            let side = configuration.swipeView.side
             let offsetMultiplier = configuration.numberOfActions == 1 ? 0.5 : 0.7
             let performActionOffset = frame.width * CGFloat(offsetMultiplier)
             
@@ -269,11 +226,6 @@ extension ItemCell {
             
             let willPerformAction = currentSwipeOffset > performActionOffset
                 && configuration.performsFirstActionWithFullSwipe
-            
-            print("currentSwipeOffset", currentSwipeOffset)
-            print("willPerformAction", willPerformAction)
-            print("handlePan state:", sender.state.rawValue)
-            print("handlePan velocity.x:", sender.velocity(in: self).x)
 
             if sender.state == .began {
                 self.listView?.liveCells.perform {
@@ -289,54 +241,30 @@ extension ItemCell {
 
             case .ended, .cancelled:
 
-                let swipeActionsWidth = configuration.swipeView.swipeActionsWidth
-                let keepOpenOffset = swipeActionsWidth / 2
                 let velocity = sender.velocity(in: self).x
-                print(".ended, .cancelled velocity", velocity)
-
+                
+                let isClosing: Bool
+                
+                switch side {
+                case .left:
+                    isClosing = velocity <= 0
+                case .right:
+                    isClosing = velocity >= 0
+                }
+                
                 var swipeState: SwipeActionState
-
-                if velocity < 0 {
-
-                    switch side {
-                    case .left:
-                        swipeState = .closed
-                    case .right:
-                        if willPerformAction {
-                            swipeState = .willPerformFirstActionAutomatically(side)
-                        } else {
-                            swipeState = .open(side)
-                        }
-                    }
-
-
-                } else if velocity > 0 {
-
-                    switch side {
-                    case .left:
-                        if willPerformAction {
-                            swipeState = .willPerformFirstActionAutomatically(side)
-                        } else {
-                            swipeState = .open(side)
-                        }
-                    case .right:
-                        swipeState = .closed
-                    }
-
+                
+                if isClosing {
+                    swipeState = .closed
                 } else {
-
                     if willPerformAction {
                         swipeState = .willPerformFirstActionAutomatically(side)
-                    } else if currentSwipeOffset > keepOpenOffset {
-                        swipeState = .open(side)
                     } else {
-                        swipeState = .closed
+                        swipeState = .open(side)
                     }
-
                 }
 
                 set(state: swipeState, animated: true)
-
 
             default:
                 set(state: .closed)
@@ -378,23 +306,14 @@ extension ItemCell {
         }
 
         private func configureAccessibilityActions(_ actions: [SwipeAction], for side: Side) {
-            let actions = actions.map {
+            swipeAccessibilityCustomActions[side] = actions.map {
                 AccessibilitySwipeAction(action: $0, side: side, target: self, selector: #selector(performAccessibilityAction))
-            }
-            
-            switch side {
-            case .left:
-                leftAccessibilityCustomActions = actions
-            case .right:
-                rightAccessibilityCustomActions = actions
             }
         }
         
         private func updateAccessibilityCustomActions() {
-            self.accessibilityCustomActions = [
-                leftAccessibilityCustomActions,
-                rightAccessibilityCustomActions
-            ].compactMap { $0 }
+            self.accessibilityCustomActions = swipeAccessibilityCustomActions
+                .values
                 .flatMap { $0 }
         }
     }
@@ -449,6 +368,18 @@ public enum SwipeActionState: Equatable {
                 .willPerformFirstActionAutomatically(let stateSide),
                 .expandActions(let stateSide):
             return stateSide == side
+        }
+    }
+}
+
+private extension SwipeActionsView.Side {
+    
+    var gestureDirection: DirectionalPanGestureRecognizer.Direction {
+        switch self {
+        case .left:
+            return .leftToRight
+        case .right:
+            return .rightToLeft
         }
     }
 }
