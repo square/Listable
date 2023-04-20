@@ -322,6 +322,16 @@ extension PresentationState
                 cell.contentContainer.deregisterSwipeIfNeeded()
             }
             
+            if let actions = self.model.leadingSwipeActions {
+                cell.contentContainer.registerLeadingSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
+            } else {
+                cell.contentContainer.deregisterLeadingSwipeIfNeeded()
+            }
+            
             cell.isReorderable = self.model.reordering != nil
    
         }

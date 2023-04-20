@@ -33,6 +33,9 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
     
     public var swipeActions : SwipeActionsConfiguration?
+    
+    /// The configuration that provides the set of actions to display when swiping on the leading edge of the cell.
+    public var leadingSwipeActions : SwipeActionsConfiguration?
 
     public typealias OnWasReordered = (Self, ItemReordering.Result) -> ()
     
@@ -75,7 +78,8 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil,
+        leadingSwipeActions : SwipeActionsConfiguration? = nil,
+        swipeActions : SwipeActionsConfiguration? = nil, // TODO: Rename to `trailingSwipeActions`
         reordering : ItemReordering? = nil,
         onWasReordered : OnWasReordered? = nil,
         onDisplay : OnDisplay.Callback? = nil,
@@ -97,6 +101,7 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
         self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations
+        self.leadingSwipeActions = leadingSwipeActions ?? defaults.leadingSwipeActions
         self.swipeActions = swipeActions ?? defaults.swipeActions
         self.reordering = reordering ?? defaults.reordering
         self.onWasReordered = onWasReordered ?? defaults.onWasReordered
@@ -208,6 +213,7 @@ extension ItemContent {
         layouts : ItemLayouts? = nil,
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
+        leadingSwipeActions : SwipeActionsConfiguration? = nil,
         swipeActions : SwipeActionsConfiguration? = nil,
         reordering : ItemReordering? = nil,
         onWasReordered : Item<Self>.OnWasReordered? = nil,
@@ -227,6 +233,7 @@ extension ItemContent {
             layouts: layouts,
             selectionStyle: selectionStyle,
             insertAndRemoveAnimations: insertAndRemoveAnimations,
+            leadingSwipeActions: leadingSwipeActions,
             swipeActions: swipeActions,
             reordering: reordering,
             onWasReordered: onWasReordered,
