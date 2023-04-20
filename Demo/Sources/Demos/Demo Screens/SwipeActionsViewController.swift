@@ -38,6 +38,8 @@ final class SwipeActionsViewController: UIViewController  {
     func reloadData(animated: Bool = false) {
 
         self.blueprintView.element = List { list in
+            
+            list.appearance = .demoAppearance
 
             list.animatesChanges = animated
             
