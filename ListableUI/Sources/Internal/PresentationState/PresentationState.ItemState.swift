@@ -319,7 +319,7 @@ extension PresentationState
                     reason: reason
                 )
             } else {
-                cell.contentContainer.deregisterSwipeIfNeeded()
+                cell.contentContainer.deregisterTrailingSwipeIfNeeded()
             }
             
             if let actions = self.model.leadingSwipeActions {

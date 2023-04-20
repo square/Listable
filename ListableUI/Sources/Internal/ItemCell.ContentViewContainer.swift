@@ -10,7 +10,7 @@ import UIKit
 
 extension ItemCell {
     
-    typealias Side = SwipeActionsView.Side
+    private typealias Side = SwipeActionsView.Side
 
     final class ContentContainerView : UIView {
 
@@ -123,31 +123,12 @@ extension ItemCell {
 
         // MARK: - Swipe Registration
         
-        // TODO: consolidate with `deregisterSwipeIfNeeded`
         public func deregisterLeadingSwipeIfNeeded() {
-            guard let configuration = configurations[.left] else { return }
-
-            removeGestureRecognizer(configuration.panGestureRecognizer)
-            configuration.swipeView.removeFromSuperview()
-
-            swipeAccessibilityCustomActions[.left] = nil
-            configurations[.left] = nil
-            swipeState = .closed
-
-            setNeedsLayout()
+            deregisterSwipeIfNeeded(for: .left)
         }
 
-        public func deregisterSwipeIfNeeded() {
-            guard let configuration = configurations[.right] else { return }
-
-            removeGestureRecognizer(configuration.panGestureRecognizer)
-            configuration.swipeView.removeFromSuperview()
-
-            swipeAccessibilityCustomActions[.right] = nil
-            configurations[.right] = nil
-            swipeState = .closed
-
-            setNeedsLayout()
+        public func deregisterTrailingSwipeIfNeeded() {
+            deregisterSwipeIfNeeded(for: .right)
         }
 
         public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
@@ -316,9 +297,22 @@ extension ItemCell {
                 .values
                 .flatMap { $0 }
         }
+        
+        private func deregisterSwipeIfNeeded(for side: Side) {
+            guard let configuration = configurations[side] else { return }
+
+            removeGestureRecognizer(configuration.panGestureRecognizer)
+            configuration.swipeView.removeFromSuperview()
+
+            swipeAccessibilityCustomActions[side] = nil
+            configurations[side] = nil
+            swipeState = .closed
+
+            setNeedsLayout()
+        }
     }
 
-    struct SwipeConfiguration {
+    private struct SwipeConfiguration {
         let panGestureRecognizer: UIPanGestureRecognizer
         let swipeView: SwipeActionsView
         var numberOfActions: Int

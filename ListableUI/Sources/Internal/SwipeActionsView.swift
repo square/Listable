@@ -9,7 +9,6 @@ import UIKit
 
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-// TODO maybe doesn't need to be public (style does though...)
 public final class SwipeActionsView: UIView {
     
     public enum Side: Equatable {
@@ -81,7 +80,8 @@ public final class SwipeActionsView: UIView {
 
     private var state: SwipeActionState = .closed
     
-    var side: Side
+    /// The side this swipe actions view will originate from when presented.
+    let side: Side
 
     public init(
         side: Side,
