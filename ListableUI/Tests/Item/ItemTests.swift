@@ -29,8 +29,8 @@ class ItemTests: XCTestCase
         
         let item = Item(content)
         
-        XCTAssertEqual(item.swipeActions?.actions.count, 1)
-        XCTAssertEqual(item.swipeActions?.actions[0].title, "Test")
+        XCTAssertEqual(item.trailingSwipeActions?.actions.count, 1)
+        XCTAssertEqual(item.trailingSwipeActions?.actions[0].title, "Test")
     }
 }
 

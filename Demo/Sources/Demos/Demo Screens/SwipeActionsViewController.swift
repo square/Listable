@@ -63,7 +63,8 @@ final class SwipeActionsViewController: UIViewController  {
                             item: item,
                             mode: .roundedWithBorder
                         ),
-                        swipeActions: self.makeSwipeActions(for: item)
+                        leadingSwipeActions: self.leadingSwipeActions(for: item),
+                        trailingSwipeActions: self.trailingSwipeActions(for: item)
                     )
                 }
             }
@@ -86,14 +87,42 @@ final class SwipeActionsViewController: UIViewController  {
                                 ),
                             mode: .plain
                         ),
-                        swipeActions: self.makeSwipeActions(for: item)
+                        leadingSwipeActions: self.leadingSwipeActions(for: item),
+                        trailingSwipeActions: self.trailingSwipeActions(for: item)
                     )
                 }
             }
         }
     }
+    
+    private func leadingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
+        
+        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+            SwipeAction(
+                title: nil,
+                accessibilityLabel: "Open Video",
+                backgroundColor: .systemBlue,
+                image: UIImage(systemName: "video.fill")
+            ) { [weak self] expandActions in
+                self?.open(item: item) {
+                    expandActions(false)
+                }
+            }
+            
+            SwipeAction(
+                title: nil,
+                accessibilityLabel: "Share",
+                backgroundColor: .systemOrange,
+                image: UIImage(systemName: "square.and.arrow.up.fill")
+            ) { [weak self] expandActions in
+                self?.share(item: item) {
+                    expandActions(false)
+                }
+            }
+        }
+    }
 
-    private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
+    private func trailingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
         
         SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
             if allowDeleting {
@@ -155,6 +184,19 @@ final class SwipeActionsViewController: UIViewController  {
             sections[i][index].isSaved.toggle()
         }
         reloadData(animated: true)
+    }
+    
+    private let shareURL = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!
+    
+    private func share(item: SwipeActionItem, completion: (() -> Void)? = nil) {
+        let activityController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+        present(activityController, animated: true, completion: completion)
+    }
+    
+    private func open(item: SwipeActionItem, completion: (() -> Void)? = nil) {
+        UIApplication.shared.open(shareURL) { _ in
+            completion?()
+        }
     }
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
