@@ -94,7 +94,7 @@ extension ItemCell {
                 }
 
             case .swiping:
-                
+
                 let translation = configuration.panGestureRecognizer.translation(in: self)
                 configuration.panGestureRecognizer.setTranslation(.zero, in: self)
                 
@@ -108,6 +108,7 @@ extension ItemCell {
             case .willPerformFirstActionAutomatically:
 
                 return
+
             }
 
             contentView.frame = bounds
@@ -157,7 +158,7 @@ extension ItemCell {
 
                 insertSubview(swipeView, belowSubview: contentView)
                 swipeView.clipsToBounds = true
-                
+
                 let panGestureRecognizer = DirectionalPanGestureRecognizer(direction: side.gestureDirection, target: self, action: #selector(handlePan))
                 addGestureRecognizer(panGestureRecognizer)
 

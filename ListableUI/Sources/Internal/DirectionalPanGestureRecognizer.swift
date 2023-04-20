@@ -1,3 +1,5 @@
+import UIKit
+
 /// Tracks horizontal pans that begin in a particular direction.
 final class DirectionalPanGestureRecognizer: UIPanGestureRecognizer {
     

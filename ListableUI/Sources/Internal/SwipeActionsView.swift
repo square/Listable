@@ -128,7 +128,7 @@ public final class SwipeActionsView: UIView {
             let percentOpen = bounds.width / swipeActionsWidth
             return percentOpen * position
         }
-        
+
         for (index, button) in buttons.enumerated() {
             button.frame.size.width = width(ofButtons: [button])
             button.frame.size.height = container.bounds.height
@@ -140,21 +140,31 @@ public final class SwipeActionsView: UIView {
             wrapperView.frame = button.frame
             wrapperView.frame.origin.x = xOriginForButton(at: index) + CGFloat(index) * style.interActionSpacing
             wrapperView.frame.size.width = max(0, xOriginForButton(at: index + 1) - xOriginForButton(at: index))
-
-            switch side {
-            case .left:
-                if wrapperView.frame.width > button.frame.width && buttons.count == 1 {
-                    button.frame.origin.x = 0
-                } else {
-                    button.frame.origin.x = wrapperView.frame.width - button.frame.width
+            
+            func alignLeftEdge() {
+                button.frame.origin.x = 0
+            }
+            
+            func alignRightEdge() {
+                button.frame.origin.x = wrapperView.frame.width - button.frame.width
+            }
+            
+            // If there's only one action, the button stays aligned with the outer edge
+            // while the container stretches.
+            // For multiple actions, they stay aligned to the inner edge.
+            if wrapperView.frame.width > button.frame.width && buttons.count == 1 {
+                switch side {
+                case .left:
+                    alignLeftEdge()
+                case .right:
+                    alignRightEdge()
                 }
-            case .right:
-                // If there's only one action, the button stays right-aligned while the container stretches.
-                // For multiple actions, they stay left-aligned.
-                if wrapperView.frame.width > button.frame.width && buttons.count == 1 {
-                    button.frame.origin.x = wrapperView.frame.width - button.frame.width
-                } else {
-                    button.frame.origin.x = 0
+            } else {
+                switch side {
+                case .left:
+                    alignRightEdge()
+                case .right:
+                    alignLeftEdge()
                 }
             }
         }
@@ -236,7 +246,7 @@ public final class SwipeActionsView: UIView {
         case (.swiping, .swiping) where newState != priorState:
 
             haptics.impactOccurred()
-            
+
             UIViewPropertyAnimator {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()

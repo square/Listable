@@ -923,7 +923,7 @@ public final class ListView : UIView
         
         guard let cell = self.liveCells.activeSwipeCell else { return false }
         
-        return cell.isTouchWithinSwipeActionView(touch: touch) == false        
+        return cell.isTouchWithinSwipeActionView(touch: touch) == false
     }
     
     @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
