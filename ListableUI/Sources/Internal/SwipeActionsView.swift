@@ -111,15 +111,6 @@ public final class SwipeActionsView: UIView {
         container.frame.size.height = max(0, bounds.size.height - insets.top - insets.bottom)
         
         container.layer.cornerRadius = style.containerCornerRadius
-
-        // Calculates the x origin for each button based on the width of each button before it
-        // and the percent that the actions are slid open for the overlapping parallax effect
-        func xOriginForButton(at index: Int) -> CGFloat {
-            let previousButtons = Array(actionButtons[0..<index])
-            let position = width(ofButtons: previousButtons)
-            let percentOpen = bounds.width / swipeActionsWidth
-            return percentOpen * position
-        }
         
         let buttons: [DefaultSwipeActionButton]
         switch side {
@@ -127,6 +118,15 @@ public final class SwipeActionsView: UIView {
             buttons = actionButtons.reversed()
         case .right:
             buttons = actionButtons
+        }
+        
+        // Calculates the x origin for each button based on the width of each button before it
+        // and the percent that the actions are slid open for the overlapping parallax effect
+        func xOriginForButton(at index: Int) -> CGFloat {
+            let previousButtons = Array(buttons[0..<index])
+            let position = width(ofButtons: previousButtons)
+            let percentOpen = bounds.width / swipeActionsWidth
+            return percentOpen * position
         }
         
         for (index, button) in buttons.enumerated() {
