@@ -34,5 +34,8 @@ public protocol AnyHeaderFooter_Internal
     
     func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     
-    func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
+    func newPresentationHeaderFooterState(
+        kind : SupplementaryKind,
+        performsContentCallbacks : Bool
+    ) -> Any
 }

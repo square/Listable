@@ -206,6 +206,9 @@
                 <a class="nav-group-task-link" href="../Enums/Sizing/Constraint.html">– Constraint</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/SupplementaryKind.html">SupplementaryKind</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/SwipeActionState.html">SwipeActionState</a>
               </li>
               <li class="nav-group-task">
@@ -553,6 +556,12 @@
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidScroll.html">– DidScroll</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidEndDeceleration.html">– DidEndDeceleration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/BeginDrag.html">– BeginDrag</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/ContentUpdated.html">– ContentUpdated</a>
               </li>
               <li class="nav-group-task">
@@ -803,6 +812,138 @@ As such, make sure any work you do in the callback is efficient.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">onDidScroll</span><span class="p">(</span><span class="n">_</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ListStateObserver.html#/s:10ListableUI17ListStateObserverV11OnDidScrolla">OnDidScroll</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Responding%20to%20Scrolling%20Deceleration"></a>
+                <a name="//apple_ref/swift/Section/Responding to Scrolling Deceleration" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Responding%20to%20Scrolling%20Deceleration"></a>
+                  <h3 class="section-name"><span>Responding to Scrolling Deceleration</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListStateObserverV20OnDidEndDecelerationa"></a>
+                    <a name="//apple_ref/swift/Alias/OnDidEndDeceleration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV20OnDidEndDecelerationa">OnDidEndDeceleration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnDidEndDeceleration</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListStateObserver/DidEndDeceleration.html">DidEndDeceleration</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListStateObserverV20onDidEndDecelerationyyyAC0ghI0VcF"></a>
+                    <a name="//apple_ref/swift/Method/onDidEndDeceleration(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV20onDidEndDecelerationyyyAC0ghI0VcF">onDidEndDeceleration(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Registers a callback which will be called when the list view is finished decelerating.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">onDidEndDeceleration</span><span class="p">(</span><span class="n">_</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ListStateObserver.html#/s:10ListableUI17ListStateObserverV20OnDidEndDecelerationa">OnDidEndDeceleration</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Responding%20to%20Drag%20Begin"></a>
+                <a name="//apple_ref/swift/Section/Responding to Drag Begin" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Responding%20to%20Drag%20Begin"></a>
+                  <h3 class="section-name"><span>Responding to Drag Begin</span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListStateObserverV11OnBeginDraga"></a>
+                    <a name="//apple_ref/swift/Alias/OnBeginDrag" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV11OnBeginDraga">OnBeginDrag</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnBeginDrag</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListStateObserver/BeginDrag.html">BeginDrag</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListStateObserverV11onBeginDragyyyAC0gH0VcF"></a>
+                    <a name="//apple_ref/swift/Method/onBeginDrag(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV11onBeginDragyyyAC0gH0VcF">onBeginDrag(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Registers a callback which will be called when the list view will begin dragging.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">onBeginDrag</span><span class="p">(</span><span class="n">_</span> <span class="nv">callback</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ListStateObserver.html#/s:10ListableUI17ListStateObserverV11OnBeginDraga">OnBeginDrag</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1180,6 +1321,62 @@ May be called multiple times in a row for reorder events which contain multiple 
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI17ListStateObserverV18DidEndDecelerationV"></a>
+                    <a name="//apple_ref/swift/Struct/DidEndDeceleration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV18DidEndDecelerationV">DidEndDeceleration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Parameters available for <code><a href="../Structs/ListStateObserver.html#/s:10ListableUI17ListStateObserverV20OnDidEndDecelerationa">OnDidEndDeceleration</a></code> callbacks.</p>
+
+                        <a href="../Structs/ListStateObserver/DidEndDeceleration.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DidEndDeceleration</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI17ListStateObserverV9BeginDragV"></a>
+                    <a name="//apple_ref/swift/Struct/BeginDrag" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI17ListStateObserverV9BeginDragV">BeginDrag</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Parameters available for <code><a href="../Structs/ListStateObserver.html#/s:10ListableUI17ListStateObserverV11OnBeginDraga">OnBeginDrag</a></code> callbacks.</p>
+
+                        <a href="../Structs/ListStateObserver/BeginDrag.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">BeginDrag</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI17ListStateObserverV14ContentUpdatedV"></a>
                     <a name="//apple_ref/swift/Struct/ContentUpdated" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI17ListStateObserverV14ContentUpdatedV">ContentUpdated</a>
@@ -1325,7 +1522,7 @@ May be called multiple times in a row for reorder events which contain multiple 
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-03-16)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-04-18)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

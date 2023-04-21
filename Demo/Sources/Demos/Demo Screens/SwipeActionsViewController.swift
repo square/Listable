@@ -84,7 +84,7 @@ final class SwipeActionsViewController: UIViewController  {
                             swipeActionsStyle:
                                 .init(
                                     containerCornerRadius: 6,
-                                    equalButtonWidths: true,
+                                    buttonSizing: .equalWidth,
                                     minWidth: 80
                                 ),
                             mode: .plain
