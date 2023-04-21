@@ -15,10 +15,21 @@ final class SwipeActionsViewController: UIViewController  {
     private let blueprintView = BlueprintView()
 
     private var allowDeleting: Bool = true
+    private static var universalSwipeActionsEnabled: Bool = true
     
-    private var sections = (0..<2).map { _ in
-        (0..<10).map { _ in
-            SwipeActionItem(isSaved: Bool.random(), identifier: UUID().uuidString)
+    private var sections = generateSections()
+    
+    private static func generateSections() -> [[SwipeActionsViewController.SwipeActionItem]] {
+        (0..<2).map { _ in
+            (0..<20).map {
+                SwipeActionItem(
+                    isSaved: Bool.random(),
+                    identifier: UUID().uuidString,
+                    title: "Item \($0)",
+                    shouldConfigureLeadingSwipeActions: universalSwipeActionsEnabled || $0.isMultiple(of: 2),
+                    shouldConfigureTrailingSwipeActions: universalSwipeActionsEnabled ||  $0.isMultiple(of: 3)
+                )
+            }
         }
     }
     
@@ -30,6 +41,7 @@ final class SwipeActionsViewController: UIViewController  {
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(toggleDelete)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(toggleGlobalSwipeActions))
         ]
 
         self.reloadData()
@@ -97,9 +109,10 @@ final class SwipeActionsViewController: UIViewController  {
         }
     }
     
-    private func leadingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
+    private func leadingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration? {
+        guard item.shouldConfigureLeadingSwipeActions else { return nil }
         
-        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+        return SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
             SwipeAction(
                 title: nil,
                 accessibilityLabel: "Open Video",
@@ -124,9 +137,10 @@ final class SwipeActionsViewController: UIViewController  {
         }
     }
 
-    private func trailingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
+    private func trailingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration? {
+        guard item.shouldConfigureTrailingSwipeActions else { return nil }
         
-        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+        return SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
             if allowDeleting {
                 SwipeAction(
                     title: "Delete",
@@ -151,13 +165,27 @@ final class SwipeActionsViewController: UIViewController  {
 
     @objc private func addItem() {
         let identifier = UUID().uuidString
-        sections[0].append(SwipeActionItem(isSaved: false, identifier: identifier))
+        sections[0].append(
+            SwipeActionItem(
+                isSaved: false,
+                identifier: identifier,
+                title: "New Item",
+                shouldConfigureLeadingSwipeActions: true,
+                shouldConfigureTrailingSwipeActions: true
+            )
+        )
         reloadData(animated: true)
     }
 
     @objc private func toggleDelete() {
         allowDeleting.toggle()
         reloadData()
+    }
+
+    @objc func toggleGlobalSwipeActions() {
+        Self.universalSwipeActionsEnabled.toggle()
+        sections = Self.generateSections()
+        reloadData(animated: true)
     }
 
     private func confirmDelete(item: SwipeActionItem, expandActions: @escaping (Bool) -> Void) {
@@ -254,12 +282,29 @@ final class SwipeActionsViewController: UIViewController  {
         }
         
         func element(with info : ApplyItemContentInfo) -> Element {
-            return Column(alignment: .fill) {
+            Column(alignment: .fill) {
                 Row(alignment: .center, underflow: .spaceEvenly, minimumSpacing: 8) {
                     Column {
-                        Label(text: "Item")
+                        Label(text: item.title)
+                        
+                        if !item.universalSwipeActionsEnabled {
+                            Label(
+                                text: "Leading items: \(item.shouldConfigureLeadingSwipeActions)",
+                                configure: { label in
+                                    label.font = .systemFont(ofSize: 10)
+                                }
+                            )
+                            
+                            Label(
+                                text: "Trailing items: \(item.shouldConfigureTrailingSwipeActions)",
+                                configure: { label in
+                                    label.font = .systemFont(ofSize: 10)
+                                }
+                            )
+                        }
+                        
                         Label(
-                            text: self.item.title,
+                            text: item.subtitle,
                             configure: { label in
                                 label.font = .systemFont(ofSize: 10)
                             }
@@ -283,7 +328,10 @@ final class SwipeActionsViewController: UIViewController  {
     struct SwipeActionItem: Equatable, Hashable {
         var isSaved: Bool
         var identifier: String
-
-        var title: String { identifier }
+        var title: String
+        var subtitle: String { identifier }
+        var shouldConfigureLeadingSwipeActions: Bool
+        var shouldConfigureTrailingSwipeActions: Bool
+        var universalSwipeActionsEnabled: Bool { SwipeActionsViewController.universalSwipeActionsEnabled }
     }
 }
