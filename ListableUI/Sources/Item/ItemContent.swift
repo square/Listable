@@ -355,7 +355,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
 
     /// The swipe action style for this content.
     ///
-    /// If this is `nil`, the style specified in the environment will be used.
+    /// If this is `nil`, the style provided by the ``SwipeActionsViewStyleKey`` environment value will be used.
     var swipeActionsStyle: SwipeActionsView.Style? { get }
 
     //
