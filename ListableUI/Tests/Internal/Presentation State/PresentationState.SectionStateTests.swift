@@ -20,6 +20,7 @@ class PresentationState_SectionStateTests : XCTestCase
         let second = PresentationState.SectionState.headerFooterState(
             current: first,
             new: TestHeader1(),
+            kind: .sectionHeader,
             performsContentCallbacks: false
         )
         
@@ -28,6 +29,7 @@ class PresentationState_SectionStateTests : XCTestCase
         let third = PresentationState.SectionState.headerFooterState(
             current: first,
             new: HeaderFooter(TestHeader1()),
+            kind: .sectionHeader,
             performsContentCallbacks: false
         )
         
@@ -38,6 +40,7 @@ class PresentationState_SectionStateTests : XCTestCase
         let fourth = PresentationState.SectionState.headerFooterState(
             current: first,
             new: TestHeader2(),
+            kind: .sectionHeader,
             performsContentCallbacks: false
         )
         

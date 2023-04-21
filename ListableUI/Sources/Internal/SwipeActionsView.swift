@@ -15,6 +15,19 @@ public final class SwipeActionsView: UIView {
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
         }
+        
+        /// The button sizing algorithm used when laying out swipe actions.
+        public enum ButtonSizing {
+            /// Each button button will lay out with an equal width based on the widest button.
+            /// - Note: If the total width of all buttons exceeds the available width, each button 
+            /// will be scaled down equally to fit.
+            case equalWidth
+            
+            /// Each button receives the amount of space required to fit its contents.
+            /// - Note: If the total width exceeds the available width, the buttons _will not_
+            // be scaled down to fit.
+            case sizeThatFits
+        }
 
         public static let `default` = Style()
 
@@ -22,23 +35,32 @@ public final class SwipeActionsView: UIView {
         public var interActionSpacing: CGFloat
         public var containerInsets: UIEdgeInsets
         public var containerCornerRadius: CGFloat
-        public var equalButtonWidths: Bool
+        public var buttonSizing: ButtonSizing
         public var minWidth: CGFloat
+        
+        /// The percentage of the row content width that is available for laying out swipe action buttons.
+        ///
+        /// For example, a value of `0.8` represents that the swipe action buttons should occupy no more than
+        /// 80% of the row content width when the swipe actions are opened.
+        /// - Note: Currently only applicable to `ButtonSizing.equalWidth` mode.
+        public var maxWidthRatio: CGFloat
 
         public init(
             actionShape: Shape = .rectangle(cornerRadius: 0),
             interActionSpacing: CGFloat = 0,
             containerInsets: UIEdgeInsets = .zero,
             containerCornerRadius: CGFloat = 0,
-            equalButtonWidths: Bool = false,
-            minWidth: CGFloat = 0
+            buttonSizing: ButtonSizing = .sizeThatFits,
+            minWidth: CGFloat = 0,
+            maxWidthRatio: CGFloat = 0.8
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
             self.containerInsets = containerInsets
             self.containerCornerRadius = containerCornerRadius
-            self.equalButtonWidths = equalButtonWidths
+            self.buttonSizing = buttonSizing
             self.minWidth = minWidth
+            self.maxWidthRatio = maxWidthRatio
         }
 
         var cornerRadius: CGFloat {
@@ -74,6 +96,14 @@ public final class SwipeActionsView: UIView {
     }
 
     private var state: SwipeActionState = .closed
+    
+    private var availableButtonWidth: CGFloat {
+        guard let superview else {
+            return .greatestFiniteMagnitude
+        }
+        
+        return (superview.bounds.width * style.maxWidthRatio) - spacingWidth(numberOfButtons: actionButtons.count)
+    }
 
     public init(
         style: Style,
@@ -146,18 +176,32 @@ public final class SwipeActionsView: UIView {
     }
 
     private func width(ofButtons buttons: [DefaultSwipeActionButton]) -> CGFloat {
-        let spacingWidth = (CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing)
+        let spacingWidth = spacingWidth(numberOfButtons: buttons.count)
         
-        if style.equalButtonWidths {
-            let widest = actionButtons
-                .map { $0.sizeThatFits(UIView.layoutFittingCompressedSize) }
-                .max { $0.width < $1.width } ?? .zero
-            return CGFloat(buttons.count) * max(widest.width, style.minWidth) + spacingWidth
-        } else {
-            return buttons.reduce(0) { width, button in
-                width + max(button.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
-            } + spacingWidth
+        switch style.buttonSizing {
+        case .equalWidth:
+            let maxWidth = availableButtonWidth / CGFloat(actionButtons.count)
+            let widestWidth = actionButtons
+                .map {
+                    // Note: The button width may end up being less than `style.minWidth` if the
+                    // calculated max width is smaller.
+                    let minWidth = max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+                    return min(minWidth, maxWidth)
+                }
+                .max() ?? .zero
+            
+            return CGFloat(buttons.count) * widestWidth + spacingWidth
+
+        case .sizeThatFits:
+            return buttons.map {
+                max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+            }
+            .reduce(0, +) + spacingWidth
         }
+    }
+    
+    private func spacingWidth(numberOfButtons: Int) -> CGFloat {
+        return (CGFloat(max(0, numberOfButtons - 1)) * style.interActionSpacing)
     }
 
     public func apply(actions: SwipeActionsConfiguration, style: Style) {
@@ -229,6 +273,7 @@ private class DefaultSwipeActionButton: UIButton {
         super.init(frame: frame)
 
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        titleLabel?.lineBreakMode = .byTruncatingTail
         contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
