@@ -25,8 +25,8 @@ public struct DefaultItemProperties<ContentType:ItemContent>
     public var layouts : ItemLayouts?
     public var selectionStyle : ItemSelectionStyle?
     public var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations?
-    public var swipeActions : SwipeActionsConfiguration?
     public var leadingSwipeActions : SwipeActionsConfiguration?
+    public var trailingSwipeActions : SwipeActionsConfiguration?
     
     public var reordering : ItemReordering?
     public var onWasReordered : Item.OnWasReordered?
@@ -50,7 +50,7 @@ public struct DefaultItemProperties<ContentType:ItemContent>
         selectionStyle : ItemSelectionStyle? = nil,
         insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? = nil,
         leadingSwipeActions : SwipeActionsConfiguration? = nil,
-        swipeActions : SwipeActionsConfiguration? = nil,
+        trailingSwipeActions : SwipeActionsConfiguration? = nil,
         reordering : ItemReordering? = nil,
         onWasReordered : Item.OnWasReordered? = nil,
         onDisplay : Item.OnDisplay.Callback? = nil,
@@ -70,7 +70,7 @@ public struct DefaultItemProperties<ContentType:ItemContent>
         self.selectionStyle = selectionStyle
         self.insertAndRemoveAnimations = insertAndRemoveAnimations
         self.leadingSwipeActions = leadingSwipeActions
-        self.swipeActions = swipeActions
+        self.trailingSwipeActions = trailingSwipeActions
         self.reordering = reordering
         self.onWasReordered = onWasReordered
         self.onDisplay = onDisplay

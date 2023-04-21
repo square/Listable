@@ -54,10 +54,6 @@ extension ItemCell {
                 configurations.values.forEach { updateFrames(using: $0) }
             }
         }
-        
-        func isTouchWithinSwipeActionView(touch: UITouch) -> Bool {
-            configurations.values.first { $0.swipeView.contains(touch: touch) } != nil
-        }
 
         private func updateFrames(using configuration: SwipeConfiguration) {
             
@@ -121,23 +117,27 @@ extension ItemCell {
                 configuration.swipeView.frame = bounds.divided(atDistance: -xOriginOffset, from: .maxXEdge).slice
             }
         }
+        
+        func isTouchWithinSwipeActionView(touch: UITouch) -> Bool {
+            configurations.values.first { $0.swipeView.contains(touch: touch) } != nil
+        }
 
         // MARK: - Swipe Registration
         
-        public func deregisterLeadingSwipeIfNeeded() {
+        func deregisterLeadingSwipeIfNeeded() {
             deregisterSwipeIfNeeded(for: .left)
         }
 
-        public func deregisterTrailingSwipeIfNeeded() {
+        func deregisterTrailingSwipeIfNeeded() {
             deregisterSwipeIfNeeded(for: .right)
         }
-
-        public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
-            registerSwipeActionsIfNeeded(side: .right, actions: actions, style: style, reason: reason)
+        
+        func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+            registerSwipeActionsIfNeeded(side: .left, actions: actions, style: style, reason: reason)
         }
         
-        public func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
-            registerSwipeActionsIfNeeded(side: .left, actions: actions, style: style, reason: reason)
+        func registerTrailingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+            registerSwipeActionsIfNeeded(side: .right, actions: actions, style: style, reason: reason)
         }
         
         private func registerSwipeActionsIfNeeded(
@@ -188,12 +188,12 @@ extension ItemCell {
                 self.listView = self.firstSuperview(ofType: ListView.self)
             }
             
-            guard let configuration = configurations.values.first(where: {
-                $0.panGestureRecognizer == sender
-            }) else {
+            guard let configuration = configurations.values.first(
+                where: { $0.panGestureRecognizer == sender }
+            ) else {
                 return
             }
-                        
+
             let side = configuration.swipeView.side
             let offsetMultiplier = configuration.numberOfActions == 1 ? 0.5 : 0.7
             let performActionOffset = frame.width * CGFloat(offsetMultiplier)

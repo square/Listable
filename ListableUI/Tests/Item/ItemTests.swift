@@ -15,7 +15,7 @@ class ItemTests: XCTestCase
         let content = TestContent(
             name: "test",
             defaultItemProperties: .defaults { defaults in
-                defaults.swipeActions = .init(
+                defaults.trailingSwipeActions = .init(
                     action: .init(
                         title: "Test",
                         backgroundColor: .blue,

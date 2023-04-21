@@ -20,6 +20,7 @@
 - Renamed `DefaultSwipeActionsView` to `SwipeActionsView`.
 - The type of the `ItemContent.swipeActionsStyle` protocol requirement is now `SwipeActionsView.Style?` (previously `SwipeActionsView.Style`). When an item returns `nil` for this property the style set on the list environment will be used instead.
 - Renamed `Item.swipeActions` to `Item.leadingSwipeActions`.
+- Renamed `DefaultItemProperties.swipeActions` to `leadingSwipeActions`.
 
 ### Misc
 

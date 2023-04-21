@@ -103,7 +103,7 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
         self.selectionStyle = selectionStyle ?? defaults.selectionStyle ?? .notSelectable
         self.insertAndRemoveAnimations = insertAndRemoveAnimations ?? defaults.insertAndRemoveAnimations
         self.leadingSwipeActions = leadingSwipeActions ?? defaults.leadingSwipeActions
-        self.trailingSwipeActions = trailingSwipeActions ?? defaults.swipeActions
+        self.trailingSwipeActions = trailingSwipeActions ?? defaults.trailingSwipeActions
         self.reordering = reordering ?? defaults.reordering
         self.onWasReordered = onWasReordered ?? defaults.onWasReordered
         self.onDisplay = onDisplay ?? defaults.onDisplay
