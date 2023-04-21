@@ -15,11 +15,13 @@ final class SwipeActionsViewController: UIViewController  {
     private let blueprintView = BlueprintView()
 
     private var allowDeleting: Bool = true
-
-    private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
     
-    private var customItems = (100..<110).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
-
+    private var sections = (0..<2).map { _ in
+        (0..<10).map { _ in
+            SwipeActionItem(isSaved: Bool.random(), identifier: UUID().uuidString)
+        }
+    }
+    
     override func loadView() {
         self.title = "Swipe Actions"
 
@@ -50,14 +52,18 @@ final class SwipeActionsViewController: UIViewController  {
                     )
                 )
                 
-                $0.layout.itemSpacing = 8
+                $0.layout.itemSpacing = 4
             }
 
             list += Section("standardSwipeActionItems") { section in
                 section.header = DemoHeader(title: "Standard Style Swipeable Items")
-                section += self.items.map { item in
+                section += self.sections[0].map { item in
                     Item(
-                        SwipeActionsDemoItem(item: item, swipeActionsStyle: .default),
+                        SwipeActionsDemoItem(
+                            item: item,
+                            swipeActionsStyle: .default,
+                            mode: .roundedWithBorder
+                        ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
                 }
@@ -65,16 +71,17 @@ final class SwipeActionsViewController: UIViewController  {
 
             list += Section("customSwipeActionItems") { section in
                 section.header = DemoHeader(title: "Custom Style Swipeable Items")
-                section += self.customItems.map { item in
+                section += self.sections[1].map { item in
                     Item(
                         SwipeActionsDemoItem(
                             item: item,
                             swipeActionsStyle:
                                 .init(
-                                    actionShape: .rectangle(cornerRadius: 8),
-                                    interActionSpacing: 8,
-                                    containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
-                                )
+                                    containerCornerRadius: 6,
+                                    buttonSizing: .equalWidth,
+                                    minWidth: 80
+                                ),
+                            mode: .plain
                         ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
@@ -89,7 +96,7 @@ final class SwipeActionsViewController: UIViewController  {
             if allowDeleting {
                 SwipeAction(
                     title: "Delete",
-                    backgroundColor: .systemRed,
+                    backgroundColor: UIColor(red: 0.80, green: 0, blue: 0.137, alpha: 1.0),
                     image: nil
                 ) { [weak self] expandActions in
                     self?.confirmDelete(item: item, expandActions: expandActions)
@@ -98,8 +105,8 @@ final class SwipeActionsViewController: UIViewController  {
             
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
-                backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                tintColor: UIColor(red: 0.1843, green: 0.4, blue: 0.1922, alpha: 1.0),
+                backgroundColor: .black.withAlphaComponent(0.05),
+                tintColor: UIColor(red: 0, green: 0.353, blue: 0.851, alpha: 1.0),
                 image: item.isSaved ? nil : UIImage(named: "bookmark")!.withRenderingMode(.alwaysTemplate)
             ) { [weak self] expandActions in
                 self?.toggleSave(item: item)
@@ -109,8 +116,8 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     @objc private func addItem() {
-        let identifier = (items.last?.identifier ?? -1) + 1
-        items.append(SwipeActionItem(isSaved: false, identifier: identifier))
+        let identifier = UUID().uuidString
+        sections[0].append(SwipeActionItem(isSaved: false, identifier: identifier))
         reloadData(animated: true)
     }
 
@@ -127,8 +134,12 @@ final class SwipeActionsViewController: UIViewController  {
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.items.removeAll(where: { $0 == item })
-            self?.reloadData(animated: true)
+            guard let self else { return }
+            
+            for i in self.sections.indices {
+                self.sections[i].removeAll(where: { $0.identifier == item.identifier })
+            }
+            self.reloadData(animated: true)
             expandActions(true)
         })
 
@@ -136,73 +147,87 @@ final class SwipeActionsViewController: UIViewController  {
     }
 
     private func toggleSave(item: SwipeActionItem) {
-        guard let index = items.firstIndex(of: item) else { return }
-        items[index].isSaved.toggle()
+        for i in sections.indices {
+            guard let index = sections[i].firstIndex(of: item) else { continue }
+            sections[i][index].isSaved.toggle()
+        }
         reloadData(animated: true)
-
     }
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
+        enum Mode {
+            case plain
+            case roundedWithBorder
+        }
+        
         var item: SwipeActionItem
         var swipeActionsStyle: DefaultSwipeActionsView.Style
+        var mode: Mode
 
-        var identifierValue: Int {
+        var identifierValue: String {
             self.item.identifier
         }
 
         func overlayDecorationElement(with info: ApplyItemContentInfo) -> Element? {
-            Empty()
-                .box(background: .clear, corners: .rounded(radius: 6), borders: .solid(color: .black, width: 2))
+            switch mode {
+            case .plain:
+                return nil
+            case .roundedWithBorder:
+                return Empty()
+                    .box(background: .clear, corners: .rounded(radius: 6), borders: .solid(color: .black, width: 2))
+            }
         }
         
         func contentAreaViewProperties(with info: ApplyItemContentInfo) -> ViewProperties {
-            .init(clipsToBounds: true, cornerStyle: .rounded(radius: 6))
+            switch mode {
+            case .plain:
+                return .init()
+            case .roundedWithBorder:
+                return .init(clipsToBounds: true, cornerStyle: .rounded(radius: 6))
+            }
         }
         
         func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
-            Empty()
-                .box(
-                    background: .white,
-                    corners: .rounded(radius: 6),
-                    shadow: .simple(
-                        radius: 3,
-                        opacity: 0.2,
-                        offset: .init(width: 0, height: 2),
-                        color: .black
+            switch mode {
+            case .plain:
+                return nil
+            case .roundedWithBorder:
+                return Empty()
+                    .box(
+                        background: .white,
+                        corners: .rounded(radius: 6),
+                        shadow: .simple(
+                            radius: 3,
+                            opacity: 0.2,
+                            offset: .init(width: 0, height: 2),
+                            color: .black
+                        )
                     )
-                )
+            }
         }
         
         func element(with info : ApplyItemContentInfo) -> Element {
-            return Column { column in
-
-                column.horizontalAlignment = .fill
-
-                let row = Row { row in
-
-                    row.minimumHorizontalSpacing = 8
-                    row.horizontalUnderflow = .spaceEvenly
-                    row.verticalAlignment = .center
-                    row.add(child: Label(text: self.item.title))
-
+            return Column(alignment: .fill) {
+                Row(alignment: .center, underflow: .spaceEvenly, minimumSpacing: 8) {
+                    Column {
+                        Label(text: "Item")
+                        Label(
+                            text: self.item.title,
+                            configure: { label in
+                                label.font = .systemFont(ofSize: 10)
+                            }
+                        )
+                    }
+                    
                     let bookmark = UIImage(named: "bookmark")!
                     
                     if item.isSaved {
-                        var image = Image(image: bookmark)
-                        image.contentMode = .center
-                        row.add(child: image)
+                        Image(image: bookmark, contentMode: .center)
                     } else {
-                        let spacer = Spacer(size: bookmark.size)
-                        row.add(child: spacer)
+                        Spacer(size: bookmark.size)
                     }
                 }
-
-                let inset = Inset(uniformInset: 16, wrapping: row)
-                column.add(child: inset)
-
-                let color = UIColor(displayP3Red: 0.725, green: 0.729, blue: 0.741, alpha: 1)
-                let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
-                column.add(growPriority: 0, shrinkPriority: 0, child: separator)
+                .inset(uniform: 16)
             }
             .accessibilityElement(label: "Swipeable Item", value: item.title, traits: [.button])
         }
@@ -210,8 +235,8 @@ final class SwipeActionsViewController: UIViewController  {
 
     struct SwipeActionItem: Equatable, Hashable {
         var isSaved: Bool
-        var identifier: Int
+        var identifier: String
 
-        var title: String { "Item #\(identifier)" }
+        var title: String { identifier }
     }
 }

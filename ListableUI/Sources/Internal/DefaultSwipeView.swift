@@ -15,21 +15,52 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         public enum Shape: Equatable {
             case rectangle(cornerRadius: CGFloat)
         }
+        
+        /// The button sizing algorithm used when laying out swipe actions.
+        public enum ButtonSizing {
+            /// Each button button will lay out with an equal width based on the widest button.
+            /// - Note: If the total width of all buttons exceeds the available width, each button 
+            /// will be scaled down equally to fit.
+            case equalWidth
+            
+            /// Each button receives the amount of space required to fit its contents.
+            /// - Note: If the total width exceeds the available width, the buttons _will not_
+            // be scaled down to fit.
+            case sizeThatFits
+        }
 
         public static let `default` = Style()
 
         public var actionShape: Shape
         public var interActionSpacing: CGFloat
         public var containerInsets: UIEdgeInsets
+        public var containerCornerRadius: CGFloat
+        public var buttonSizing: ButtonSizing
+        public var minWidth: CGFloat
+        
+        /// The percentage of the row content width that is available for laying out swipe action buttons.
+        ///
+        /// For example, a value of `0.8` represents that the swipe action buttons should occupy no more than
+        /// 80% of the row content width when the swipe actions are opened.
+        /// - Note: Currently only applicable to `ButtonSizing.equalWidth` mode.
+        public var maxWidthRatio: CGFloat
 
         public init(
             actionShape: Shape = .rectangle(cornerRadius: 0),
             interActionSpacing: CGFloat = 0,
-            containerInsets: UIEdgeInsets = .zero
+            containerInsets: UIEdgeInsets = .zero,
+            containerCornerRadius: CGFloat = 0,
+            buttonSizing: ButtonSizing = .sizeThatFits,
+            minWidth: CGFloat = 0,
+            maxWidthRatio: CGFloat = 0.8
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
             self.containerInsets = containerInsets
+            self.containerCornerRadius = containerCornerRadius
+            self.buttonSizing = buttonSizing
+            self.minWidth = minWidth
+            self.maxWidthRatio = maxWidthRatio
         }
 
         var cornerRadius: CGFloat {
@@ -65,6 +96,14 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
 
     private var state: SwipeActionState = .closed
+    
+    private var availableButtonWidth: CGFloat {
+        guard let superview else {
+            return .greatestFiniteMagnitude
+        }
+        
+        return (superview.bounds.width * style.maxWidthRatio) - spacingWidth(numberOfButtons: actionButtons.count)
+    }
 
     public init(
         style: Style,
@@ -90,6 +129,8 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         container.frame.origin.x = insets.left
         container.frame.size.width = max(0, bounds.size.width - insets.left - insets.right)
         container.frame.size.height = max(0, bounds.size.height - insets.top - insets.bottom)
+        
+        container.layer.cornerRadius = style.containerCornerRadius
 
         // Calculates the x origin for each button based on the width of each button before it
         // and the percent that the actions are slid open for the overlapping parallax effect
@@ -101,8 +142,7 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         }
 
         for (index, button) in actionButtons.enumerated() {
-            // Size each button to its natural size, but always match the height
-            button.sizeToFit()
+            button.frame.size.width = width(ofButtons: [button])
             button.frame.size.height = container.bounds.height
 
             // Each button is wrapped in a container that enables the parallax effect.
@@ -136,9 +176,32 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
     }
 
     private func width(ofButtons buttons: [DefaultSwipeActionButton]) -> CGFloat {
-        buttons.reduce(0) { width, button in
-            width + button.sizeThatFits(UIView.layoutFittingCompressedSize).width
-        } + CGFloat(max(0, buttons.count - 1)) * style.interActionSpacing
+        let spacingWidth = spacingWidth(numberOfButtons: buttons.count)
+        
+        switch style.buttonSizing {
+        case .equalWidth:
+            let maxWidth = availableButtonWidth / CGFloat(actionButtons.count)
+            let widestWidth = actionButtons
+                .map {
+                    // Note: The button width may end up being less than `style.minWidth` if the
+                    // calculated max width is smaller.
+                    let minWidth = max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+                    return min(minWidth, maxWidth)
+                }
+                .max() ?? .zero
+            
+            return CGFloat(buttons.count) * widestWidth + spacingWidth
+
+        case .sizeThatFits:
+            return buttons.map {
+                max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+            }
+            .reduce(0, +) + spacingWidth
+        }
+    }
+    
+    private func spacingWidth(numberOfButtons: Int) -> CGFloat {
+        return (CGFloat(max(0, numberOfButtons - 1)) * style.interActionSpacing)
     }
 
     public func apply(actions: SwipeActionsConfiguration, style: Style) {
@@ -210,6 +273,7 @@ private class DefaultSwipeActionButton: UIButton {
         super.init(frame: frame)
 
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
+        titleLabel?.lineBreakMode = .byTruncatingTail
         contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
@@ -223,7 +287,11 @@ private class DefaultSwipeActionButton: UIButton {
         
         self.didPerformAction = didPerformAction
         
-        backgroundColor = action.backgroundColor
+        // Note: We intentionally _do not_ set the background color here.
+        // The superview wrapper's background color is set instead.
+        // If we do both, then transparent colors will end up being stacked which leads to
+        // an incorrect visual appearance.
+        
         tintColor = action.tintColor
         
         setTitle(action.title, for: .normal)
