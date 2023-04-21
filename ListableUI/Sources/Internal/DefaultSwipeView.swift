@@ -18,10 +18,14 @@ public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView 
         
         /// The button sizing algorithm used when laying out swipe actions.
         public enum ButtonSizing {
-            /// Each button button receives an equal width
+            /// Each button button will lay out with an equal width based on the widest button.
+            /// - Note: If the total width of all buttons exceeds the available width, each button 
+            /// will be scaled down equally to fit.
             case equalWidth
             
             /// Each button receives the amount of space required to fit its contents.
+            /// - Note: If the total width exceeds the available width, the buttons _will not_
+            // be scaled down to fit.
             case sizeThatFits
         }
 
