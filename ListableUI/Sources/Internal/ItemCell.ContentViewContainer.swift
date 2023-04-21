@@ -16,7 +16,7 @@ extension ItemCell {
 
         private var swipeConfiguration: SwipeConfiguration?
         
-        var swipeActionsView : Content.SwipeActionsView? {
+        var swipeActionsView : SwipeActionsView? {
             swipeConfiguration?.swipeView
         }
 
@@ -103,10 +103,10 @@ extension ItemCell {
             setNeedsLayout()
         }
 
-        public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: Content.SwipeActionsView.Style, reason: ApplyReason) {
+        public func registerSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
             if swipeConfiguration == nil {
 
-                let swipeView = Content.SwipeActionsView(
+                let swipeView = SwipeActionsView(
                     style: style,
                     didPerformAction: { [weak self] expandActions in
                         self?.didPerformAction(expandActions: expandActions)
@@ -245,7 +245,7 @@ extension ItemCell {
 
     struct SwipeConfiguration {
         let panGestureRecognizer: UIPanGestureRecognizer
-        let swipeView: Content.SwipeActionsView
+        let swipeView: SwipeActionsView
         var numberOfActions: Int
         var performsFirstActionWithFullSwipe: Bool
     }

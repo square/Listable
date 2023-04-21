@@ -9,7 +9,7 @@ import UIKit
 
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-public final class DefaultSwipeActionsView: UIView, ItemContentSwipeActionsView {
+public final class SwipeActionsView: UIView {
 
     public struct Style: Equatable {
         public enum Shape: Equatable {
@@ -306,5 +306,20 @@ private class DefaultSwipeActionButton: UIButton {
     @objc private func onTap() {
         guard let action = action, let didPerformAction = didPerformAction else { return }
         action.handler(didPerformAction)
+    }
+}
+
+extension ListEnvironment {
+    
+    public var swipeActionsViewStyle : SwipeActionsView.Style {
+        get { self[SwipeActionsViewStyleKey.self] }
+        set { self[SwipeActionsViewStyleKey.self] = newValue }
+    }
+}
+
+public enum SwipeActionsViewStyleKey: ListEnvironmentKey {
+    
+    public static var defaultValue: SwipeActionsView.Style {
+        .default
     }
 }

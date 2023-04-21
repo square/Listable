@@ -352,13 +352,11 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     //
     // MARK: Creating & Providing Swipe Action Views
     //
-    
-    /// The view type to use to render swipe actions (delete, etc) for this content.
-    /// A default implementation, which matches `UITableView`, is provided.
-    associatedtype SwipeActionsView: ItemContentSwipeActionsView = DefaultSwipeActionsView
 
-    /// Specify a swipe action style for this content.
-    var swipeActionsStyle: SwipeActionsView.Style { get }
+    /// The swipe action style for this content.
+    ///
+    /// If this is `nil`, the style provided by the ``SwipeActionsViewStyleKey`` environment value will be used.
+    var swipeActionsStyle: SwipeActionsView.Style? { get }
 
     //
     // MARK: Creating & Providing Content Views
@@ -366,7 +364,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     /// The content view used to draw the content.
     /// The content view is drawn at the top of the view hierarchy, above the background views.
-    associatedtype ContentView:UIView
+    associatedtype ContentView: UIView
     
 
     /// Create and return a new content view used to render the content.
@@ -532,9 +530,9 @@ public struct ApplyItemContentInfo
     public var environment : ListEnvironment
 }
 
-public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
-    var swipeActionsStyle: SwipeActionsView.Style {
-        return .default
+public extension ItemContent {
+    var swipeActionsStyle: SwipeActionsView.Style? {
+        return nil
     }
 }
 
@@ -664,22 +662,4 @@ public extension ItemContent where OverlayDecorationView == UIView
     {
         OverlayDecorationView(frame: frame)
     }
-}
-
-
-/// Conform to this protocol to implement a completely custom swipe action view.
-///
-/// If you do so, you're completely responsible for creating and laying out the actions,
-/// as well as updating the layout based on the swipe state.
-public protocol ItemContentSwipeActionsView: UIView {
-    /// Swipe action styles (e.g. `standard`, `grouped`, etc.) that are supported by the view.
-    associatedtype Style: Equatable
-
-    var swipeActionsWidth: CGFloat { get }
-
-    init(style: Style, didPerformAction: @escaping SwipeAction.CompletionHandler)
-
-    func apply(actions: SwipeActionsConfiguration, style: Style)
-
-    func apply(state: SwipeActionState)
 }

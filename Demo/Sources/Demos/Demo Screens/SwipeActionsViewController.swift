@@ -61,13 +61,16 @@ final class SwipeActionsViewController: UIViewController  {
                     Item(
                         SwipeActionsDemoItem(
                             item: item,
-                            swipeActionsStyle: .default,
                             mode: .roundedWithBorder
                         ),
                         swipeActions: self.makeSwipeActions(for: item)
                     )
                 }
             }
+            
+            // The style can be customized at the environment level via
+            // `list.environment.swipeActionsViewStyle` or at the content level
+            // as demonstrated below.
 
             list += Section("customSwipeActionItems") { section in
                 section.header = DemoHeader(title: "Custom Style Swipeable Items")
@@ -161,7 +164,7 @@ final class SwipeActionsViewController: UIViewController  {
         }
         
         var item: SwipeActionItem
-        var swipeActionsStyle: DefaultSwipeActionsView.Style
+        var swipeActionsStyle: SwipeActionsView.Style?
         var mode: Mode
 
         var identifierValue: String {

@@ -313,7 +313,11 @@ extension PresentationState
                         
             // Apply Swipe To Action Appearance
             if let actions = self.model.swipeActions {
-                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
+                cell.contentContainer.registerSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
             } else {
                 cell.contentContainer.deregisterSwipeIfNeeded()
             }
