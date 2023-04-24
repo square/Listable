@@ -331,7 +331,10 @@ private class AccessibilitySwipeAction: UIAccessibilityCustomAction {
     init(action: SwipeAction, side: Side, target: Any?, selector: Selector) {
         self.action = action
         self.side = side
-        super.init(name: action.title ?? "", target: target, selector: selector)
+        
+        let name = action.accessibilityLabel ?? action.title ?? ""
+        
+        super.init(name: name, target: target, selector: selector)
     }
 }
 
