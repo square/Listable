@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Swipe actions will now use the `accessibilityLabel` (if non-nil) when the user is using assistive technologies such as VoiceOver.
+
 ### Added
 
 - Added `containerCornerRadius`, `equalButtonWidths`, and `minWidth` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
