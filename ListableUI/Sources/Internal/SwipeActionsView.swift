@@ -38,7 +38,13 @@ public final class SwipeActionsView: UIView {
 
         public var actionShape: Shape
         public var interActionSpacing: CGFloat
-        public var containerInsets: UIEdgeInsets
+        
+        /// The insets to apply to the leading swipe actions container.
+        public var leadingContainerInsets: NSDirectionalEdgeInsets
+        
+        /// The insets to apply to the trailing swipe actions container.
+        public var trailingContainerInsets: NSDirectionalEdgeInsets
+        
         public var containerCornerRadius: CGFloat
         public var buttonSizing: ButtonSizing
         public var minWidth: CGFloat
@@ -53,7 +59,8 @@ public final class SwipeActionsView: UIView {
         public init(
             actionShape: Shape = .rectangle(cornerRadius: 0),
             interActionSpacing: CGFloat = 0,
-            containerInsets: UIEdgeInsets = .zero,
+            leadingContainerInsets: NSDirectionalEdgeInsets = .zero,
+            trailingContainerInsets: NSDirectionalEdgeInsets = .zero,
             containerCornerRadius: CGFloat = 0,
             buttonSizing: ButtonSizing = .sizeThatFits,
             minWidth: CGFloat = 0,
@@ -61,7 +68,8 @@ public final class SwipeActionsView: UIView {
         ) {
             self.actionShape = actionShape
             self.interActionSpacing = interActionSpacing
-            self.containerInsets = containerInsets
+            self.leadingContainerInsets = leadingContainerInsets
+            self.trailingContainerInsets = trailingContainerInsets
             self.containerCornerRadius = containerCornerRadius
             self.buttonSizing = buttonSizing
             self.minWidth = minWidth
@@ -112,6 +120,10 @@ public final class SwipeActionsView: UIView {
         
         return (superview.bounds.width * style.maxWidthRatio) - spacingWidth(numberOfButtons: actionButtons.count)
     }
+    
+    private var userInterfaceLayoutDirection: UIUserInterfaceLayoutDirection {
+        return UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+    }
 
     public init(
         side: Side,
@@ -134,7 +146,7 @@ public final class SwipeActionsView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        let insets = style.containerInsets
+        let insets = style.containerInsets(for: side, layoutDirection: userInterfaceLayoutDirection)
         container.frame.origin.y = insets.top
         container.frame.origin.x = insets.left
         container.frame.size.width = max(0, bounds.size.width - insets.left - insets.right)
@@ -272,8 +284,10 @@ public final class SwipeActionsView: UIView {
             actionButtons[index].set(action: action, didPerformAction: didPerformAction)
             actionButtons[index].superview?.backgroundColor = action.backgroundColor
         }
+        
+        let containerInsets = style.containerInsets(for: side, layoutDirection: userInterfaceLayoutDirection)
 
-        calculatedNaturalWidth = width(ofButtons: actionButtons) + style.containerInsets.left + style.containerInsets.right
+        calculatedNaturalWidth = width(ofButtons: actionButtons) + containerInsets.left + containerInsets.right
     }
 
     public func apply(state newState: SwipeActionState) {
@@ -366,5 +380,44 @@ public enum SwipeActionsViewStyleKey: ListEnvironmentKey {
     
     public static var defaultValue: SwipeActionsView.Style {
         .default
+    }
+}
+
+private extension SwipeActionsView.Style {
+    
+    /// The container insets to use for the given side and layout direction.
+    func containerInsets(for side: SwipeActionsView.Side, layoutDirection: UIUserInterfaceLayoutDirection) -> UIEdgeInsets {
+        
+        let directionalInsets: NSDirectionalEdgeInsets
+        
+        switch (side, layoutDirection) {
+        case (.left, .leftToRight):
+            directionalInsets = leadingContainerInsets
+        case (.right, .leftToRight):
+            directionalInsets = trailingContainerInsets
+        case (.left, .rightToLeft):
+            directionalInsets = trailingContainerInsets
+        case (.right, .rightToLeft):
+            directionalInsets = leadingContainerInsets
+        @unknown default:
+            assertionFailure("New UIUserInterfaceLayoutDirection")
+            directionalInsets = leadingContainerInsets
+        }
+        
+        return directionalInsets.edgeInsets(for: layoutDirection)
+    }
+}
+
+extension NSDirectionalEdgeInsets {
+    func edgeInsets(for layoutDirection: UIUserInterfaceLayoutDirection) -> UIEdgeInsets {
+        switch layoutDirection {
+        case .leftToRight:
+            return UIEdgeInsets(top: top, left: leading, bottom: bottom, right: trailing)
+        case .rightToLeft:
+            return UIEdgeInsets(top: top, left: trailing, bottom: bottom, right: leading)
+        @unknown default:
+            assertionFailure("New UIUserInterfaceLayoutDirection")
+            return UIEdgeInsets(top: top, left: leading, bottom: bottom, right: trailing)
+        }
     }
 }
