@@ -132,18 +132,18 @@ extension ItemCell {
             deregisterSwipeIfNeeded(for: .right)
         }
         
-        func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+        func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle, reason: ApplyReason) {
             registerSwipeActionsIfNeeded(side: .left, actions: actions, style: style, reason: reason)
         }
         
-        func registerTrailingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+        func registerTrailingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle, reason: ApplyReason) {
             registerSwipeActionsIfNeeded(side: .right, actions: actions, style: style, reason: reason)
         }
         
         private func registerSwipeActionsIfNeeded(
             side: SwipeActionsView.Side,
             actions: SwipeActionsConfiguration,
-            style: SwipeActionsView.Style,
+            style: SwipeActionsViewStyle,
             reason: ApplyReason
         ) {
             if configurations[side] == nil {
