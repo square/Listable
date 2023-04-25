@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public struct SwipeActionsViewStyle: Equatable {
     public enum Shape: Equatable {
