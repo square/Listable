@@ -108,9 +108,16 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         return self.content.isEquivalent(to: other.content)
     }
     
-    public func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
+    public func newPresentationHeaderFooterState(
+        kind : SupplementaryKind,
+        performsContentCallbacks : Bool
+    ) -> Any
     {
-        return PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
+        return PresentationState.HeaderFooterState(
+            self,
+            kind: kind,
+            performsContentCallbacks: performsContentCallbacks
+        )
     }
 }
 

@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         
         self.window = window
         
+        UserDefaults.standard.set(true, forKey: "Listable.EnableIOS164FirstResponderWorkaround")
+        
         window.makeKeyAndVisible()
         
         return true

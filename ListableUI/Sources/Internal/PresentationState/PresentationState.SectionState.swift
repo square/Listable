@@ -31,11 +31,13 @@ extension PresentationState
                         
             self.header = .init(state: SectionState.newHeaderFooterState(
                 with: model.header,
+                kind: .sectionHeader,
                 performsContentCallbacks: performsContentCallbacks
             ))
             
             self.footer = .init(state: SectionState.newHeaderFooterState(
                 with: model.footer,
+                kind: .sectionFooter,
                 performsContentCallbacks: performsContentCallbacks
             ))
             
@@ -71,6 +73,11 @@ extension PresentationState
             self.items.insert(item, at: index)
         }
         
+        func updateOldIndexPath(in section : Int) {
+            header.updateOldIndexPath(in: section)
+            footer.updateOldIndexPath(in: section)
+        }
+        
         func update(
             with oldSection : Section,
             new newSection : Section,
@@ -88,6 +95,7 @@ extension PresentationState
                 with: SectionState.headerFooterState(
                     current: self.header.state,
                     new: self.model.header,
+                    kind: .sectionHeader,
                     performsContentCallbacks: self.performsContentCallbacks
                 ),
                 new: self.model.header,
@@ -101,6 +109,7 @@ extension PresentationState
                 with: SectionState.headerFooterState(
                     current: self.footer.state,
                     new: self.model.footer,
+                    kind: .sectionFooter,
                     performsContentCallbacks: self.performsContentCallbacks
                 ),
                 new: self.model.footer,
@@ -143,11 +152,17 @@ extension PresentationState
         
         static func newHeaderFooterState(
             with new : AnyHeaderFooterConvertible?,
+            kind: SupplementaryKind,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
             if let new = new {
-                return (new.asAnyHeaderFooter().newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                return (new
+                    .asAnyHeaderFooter()
+                    .newPresentationHeaderFooterState(
+                        kind: kind,
+                        performsContentCallbacks: performsContentCallbacks
+                    ) as! AnyPresentationHeaderFooterState)
             } else {
                 return nil
             }
@@ -156,6 +171,7 @@ extension PresentationState
         static func headerFooterState(
             current : AnyPresentationHeaderFooterState?,
             new : AnyHeaderFooterConvertible?,
+            kind: SupplementaryKind,
             performsContentCallbacks : Bool
         ) -> AnyPresentationHeaderFooterState?
         {
@@ -170,14 +186,22 @@ extension PresentationState
                     if isSameType {
                         return current
                     } else {
-                        return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                        return (new
+                            .newPresentationHeaderFooterState(
+                                kind: kind,
+                                performsContentCallbacks: performsContentCallbacks
+                            ) as! AnyPresentationHeaderFooterState)
                     }
                 } else {
                     return nil
                 }
             } else {
                 if let new = new {
-                    return (new.newPresentationHeaderFooterState(performsContentCallbacks: performsContentCallbacks) as! AnyPresentationHeaderFooterState)
+                    return (new
+                        .newPresentationHeaderFooterState(
+                            kind: kind,
+                            performsContentCallbacks: performsContentCallbacks
+                        ) as! AnyPresentationHeaderFooterState)
                 } else {
                     return nil
                 }

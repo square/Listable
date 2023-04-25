@@ -40,7 +40,7 @@ public final class ListView : UIView
             behavior: self.behavior
         )
 
-        self.collectionView = UICollectionView(
+        self.collectionView = IOS16_4_First_Responder_Bug_CollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
@@ -131,7 +131,7 @@ public final class ListView : UIView
     //
     
     let storage : Storage
-    let collectionView : UICollectionView
+    let collectionView : IOS16_4_First_Responder_Bug_CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -923,7 +923,7 @@ public final class ListView : UIView
         
         guard let cell = self.liveCells.activeSwipeCell else { return false }
         
-        return cell.anySwipeActionsView?.contains(touch: touch) == false
+        return cell.isTouchWithinSwipeActionView(touch: touch) == false
     }
     
     @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
@@ -1278,7 +1278,7 @@ public final class ListView : UIView
 
         return true
     }
-
+    
     private func performBatchUpdates(
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
@@ -1339,12 +1339,18 @@ public final class ListView : UIView
         
         self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
+        let performUpdates = {
+            view.performBatchUpdates(
+                batchUpdates,
+                changes: changes,
+                completion: animationCompletion
+            )
+        }
+        
         if animated {
-            view.performBatchUpdates(batchUpdates, completion: animationCompletion)
+            performUpdates()
         } else {
-            UIView.performWithoutAnimation {
-                view.performBatchUpdates(batchUpdates, completion: animationCompletion)
-            }
+            UIView.performWithoutAnimation(performUpdates)
         }
     }
     

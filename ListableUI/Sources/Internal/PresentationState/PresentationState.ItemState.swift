@@ -302,10 +302,24 @@ extension PresentationState
                 )
                         
             // Apply Swipe To Action Appearance
-            if let actions = self.model.swipeActions {
-                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
+            if let actions = self.model.trailingSwipeActions {
+                cell.contentContainer.registerTrailingSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
             } else {
-                cell.contentContainer.deregisterSwipeIfNeeded()
+                cell.contentContainer.deregisterTrailingSwipeIfNeeded()
+            }
+            
+            if let actions = self.model.leadingSwipeActions {
+                cell.contentContainer.registerLeadingSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
+            } else {
+                cell.contentContainer.deregisterLeadingSwipeIfNeeded()
             }
             
             cell.isReorderable = self.model.reordering != nil
