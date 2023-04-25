@@ -24,6 +24,8 @@
 - Renamed `Item.swipeActions` to `Item.leadingSwipeActions`.
 - Renamed `DefaultItemProperties.swipeActions` to `leadingSwipeActions`.
 - Renamed `SwipeActionsView.Style.containerInsets` to `SwipeActionsView.Style.trailingContainerInsets` and changed the type to `NSDirectionalEdgeInsets`.
+- Renamed `SwipeActionsView.Style` to `SwipeActionsViewStyle`.
+- `SwipeActionsView` and `SwipeActionState` are no longer public types.
 
 ### Misc
 
