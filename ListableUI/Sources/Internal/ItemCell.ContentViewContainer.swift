@@ -339,8 +339,8 @@ private class AccessibilitySwipeAction: UIAccessibilityCustomAction {
 }
 
 /// These states dictate the layout of the swipe actions.
-public enum SwipeActionState: Equatable {
-    public typealias Side = SwipeActionsView.Side
+enum SwipeActionState: Equatable {
+    typealias Side = SwipeActionsView.Side
     
     /// The actions are completely collapsed.
     case closed

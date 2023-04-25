@@ -9,9 +9,9 @@ import UIKit
 
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-public final class SwipeActionsView: UIView {
+final class SwipeActionsView: UIView {
     
-    public enum Side: Equatable {
+    enum Side: Equatable {
         case left
         case right
     }
@@ -36,7 +36,7 @@ public final class SwipeActionsView: UIView {
         }
     }
 
-    public var swipeActionsWidth: CGFloat {
+    var swipeActionsWidth: CGFloat {
         calculatedNaturalWidth + safeAreaInsets.right
     }
 
@@ -57,7 +57,7 @@ public final class SwipeActionsView: UIView {
         return UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
     }
 
-    public init(
+    init(
         side: Side,
         style: SwipeActionsViewStyle,
         didPerformAction: @escaping SwipeAction.CompletionHandler
@@ -75,7 +75,7 @@ public final class SwipeActionsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
 
         let insets = style.containerInsets(for: side, layoutDirection: userInterfaceLayoutDirection)
@@ -192,7 +192,7 @@ public final class SwipeActionsView: UIView {
         return (CGFloat(max(0, numberOfButtons - 1)) * style.interActionSpacing)
     }
 
-    public func apply(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle) {
+    func apply(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle) {
         let styleUpdateRequired = style != self.style
         
         self.style = style
@@ -222,7 +222,7 @@ public final class SwipeActionsView: UIView {
         calculatedNaturalWidth = width(ofButtons: actionButtons) + containerInsets.left + containerInsets.right
     }
 
-    public func apply(state newState: SwipeActionState) {
+    func apply(state newState: SwipeActionState) {
         let priorState = state
         state = newState
         
