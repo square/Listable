@@ -9,79 +9,11 @@ import UIKit
 
 private let haptics = UIImpactFeedbackGenerator(style: .light)
 
-public final class SwipeActionsView: UIView {
+final class SwipeActionsView: UIView {
     
-    public enum Side: Equatable {
+    enum Side: Equatable {
         case left
         case right
-    }
-
-    public struct Style: Equatable {
-        public enum Shape: Equatable {
-            case rectangle(cornerRadius: CGFloat)
-        }
-        
-        /// The button sizing algorithm used when laying out swipe actions.
-        public enum ButtonSizing {
-            /// Each button button will lay out with an equal width based on the widest button.
-            /// - Note: If the total width of all buttons exceeds the available width, each button 
-            /// will be scaled down equally to fit.
-            case equalWidth
-            
-            /// Each button receives the amount of space required to fit its contents.
-            /// - Note: If the total width exceeds the available width, the buttons _will not_
-            // be scaled down to fit.
-            case sizeThatFits
-        }
-
-        public static let `default` = Style()
-
-        public var actionShape: Shape
-        public var interActionSpacing: CGFloat
-        
-        /// The insets to apply to the leading swipe actions container.
-        public var leadingContainerInsets: NSDirectionalEdgeInsets
-        
-        /// The insets to apply to the trailing swipe actions container.
-        public var trailingContainerInsets: NSDirectionalEdgeInsets
-        
-        public var containerCornerRadius: CGFloat
-        public var buttonSizing: ButtonSizing
-        public var minWidth: CGFloat
-        
-        /// The percentage of the row content width that is available for laying out swipe action buttons.
-        ///
-        /// For example, a value of `0.8` represents that the swipe action buttons should occupy no more than
-        /// 80% of the row content width when the swipe actions are opened.
-        /// - Note: Currently only applicable to `ButtonSizing.equalWidth` mode.
-        public var maxWidthRatio: CGFloat
-
-        public init(
-            actionShape: Shape = .rectangle(cornerRadius: 0),
-            interActionSpacing: CGFloat = 0,
-            leadingContainerInsets: NSDirectionalEdgeInsets = .zero,
-            trailingContainerInsets: NSDirectionalEdgeInsets = .zero,
-            containerCornerRadius: CGFloat = 0,
-            buttonSizing: ButtonSizing = .sizeThatFits,
-            minWidth: CGFloat = 0,
-            maxWidthRatio: CGFloat = 0.8
-        ) {
-            self.actionShape = actionShape
-            self.interActionSpacing = interActionSpacing
-            self.leadingContainerInsets = leadingContainerInsets
-            self.trailingContainerInsets = trailingContainerInsets
-            self.containerCornerRadius = containerCornerRadius
-            self.buttonSizing = buttonSizing
-            self.minWidth = minWidth
-            self.maxWidthRatio = maxWidthRatio
-        }
-
-        var cornerRadius: CGFloat {
-            switch actionShape {
-            case .rectangle(let cornerRadius):
-                return cornerRadius
-            }
-        }
     }
 
     private var actionButtons: [DefaultSwipeActionButton] = []
@@ -96,7 +28,7 @@ public final class SwipeActionsView: UIView {
     private var firstAction: SwipeAction?
     private var didPerformAction: SwipeAction.CompletionHandler
     
-    private var style: Style {
+    private var style: SwipeActionsViewStyle {
         didSet {
             if style != oldValue {
                 setNeedsLayout()
@@ -104,7 +36,7 @@ public final class SwipeActionsView: UIView {
         }
     }
 
-    public var swipeActionsWidth: CGFloat {
+    var swipeActionsWidth: CGFloat {
         calculatedNaturalWidth + safeAreaInsets.right
     }
 
@@ -125,9 +57,9 @@ public final class SwipeActionsView: UIView {
         return UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
     }
 
-    public init(
+    init(
         side: Side,
-        style: Style,
+        style: SwipeActionsViewStyle,
         didPerformAction: @escaping SwipeAction.CompletionHandler
     ) {
         self.side = side
@@ -143,7 +75,7 @@ public final class SwipeActionsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
 
         let insets = style.containerInsets(for: side, layoutDirection: userInterfaceLayoutDirection)
@@ -260,7 +192,7 @@ public final class SwipeActionsView: UIView {
         return (CGFloat(max(0, numberOfButtons - 1)) * style.interActionSpacing)
     }
 
-    public func apply(actions: SwipeActionsConfiguration, style: Style) {
+    func apply(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle) {
         let styleUpdateRequired = style != self.style
         
         self.style = style
@@ -290,7 +222,7 @@ public final class SwipeActionsView: UIView {
         calculatedNaturalWidth = width(ofButtons: actionButtons) + containerInsets.left + containerInsets.right
     }
 
-    public func apply(state newState: SwipeActionState) {
+    func apply(state newState: SwipeActionState) {
         let priorState = state
         state = newState
         
@@ -368,22 +300,7 @@ private class DefaultSwipeActionButton: UIButton {
     }
 }
 
-extension ListEnvironment {
-    
-    public var swipeActionsViewStyle : SwipeActionsView.Style {
-        get { self[SwipeActionsViewStyleKey.self] }
-        set { self[SwipeActionsViewStyleKey.self] = newValue }
-    }
-}
-
-public enum SwipeActionsViewStyleKey: ListEnvironmentKey {
-    
-    public static var defaultValue: SwipeActionsView.Style {
-        .default
-    }
-}
-
-private extension SwipeActionsView.Style {
+private extension SwipeActionsViewStyle {
     
     /// The container insets to use for the given side and layout direction.
     func containerInsets(for side: SwipeActionsView.Side, layoutDirection: UIUserInterfaceLayoutDirection) -> UIEdgeInsets {
@@ -408,7 +325,7 @@ private extension SwipeActionsView.Style {
     }
 }
 
-extension NSDirectionalEdgeInsets {
+private extension NSDirectionalEdgeInsets {
     func edgeInsets(for layoutDirection: UIUserInterfaceLayoutDirection) -> UIEdgeInsets {
         switch layoutDirection {
         case .leftToRight:

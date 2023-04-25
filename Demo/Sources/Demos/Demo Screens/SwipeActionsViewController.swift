@@ -236,7 +236,7 @@ final class SwipeActionsViewController: UIViewController  {
         }
         
         var item: SwipeActionItem
-        var swipeActionsStyle: SwipeActionsView.Style?
+        var swipeActionsStyle: SwipeActionsViewStyle?
         var mode: Mode
 
         var identifierValue: String {

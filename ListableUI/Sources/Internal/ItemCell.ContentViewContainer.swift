@@ -132,18 +132,18 @@ extension ItemCell {
             deregisterSwipeIfNeeded(for: .right)
         }
         
-        func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+        func registerLeadingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle, reason: ApplyReason) {
             registerSwipeActionsIfNeeded(side: .left, actions: actions, style: style, reason: reason)
         }
         
-        func registerTrailingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsView.Style, reason: ApplyReason) {
+        func registerTrailingSwipeActionsIfNeeded(actions: SwipeActionsConfiguration, style: SwipeActionsViewStyle, reason: ApplyReason) {
             registerSwipeActionsIfNeeded(side: .right, actions: actions, style: style, reason: reason)
         }
         
         private func registerSwipeActionsIfNeeded(
             side: SwipeActionsView.Side,
             actions: SwipeActionsConfiguration,
-            style: SwipeActionsView.Style,
+            style: SwipeActionsViewStyle,
             reason: ApplyReason
         ) {
             if configurations[side] == nil {
@@ -339,8 +339,8 @@ private class AccessibilitySwipeAction: UIAccessibilityCustomAction {
 }
 
 /// These states dictate the layout of the swipe actions.
-public enum SwipeActionState: Equatable {
-    public typealias Side = SwipeActionsView.Side
+enum SwipeActionState: Equatable {
+    typealias Side = SwipeActionsView.Side
     
     /// The actions are completely collapsed.
     case closed
