@@ -21,8 +21,37 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
     }
     
     let content : Content.ContentView
-    let background : Content.BackgroundView
-    let pressedBackground : Content.PressedBackgroundView
+    
+    private(set) lazy var background : Content.BackgroundView = {
+        
+        let background = Content.createReusableBackgroundView(frame: bounds)
+        
+        self.insertSubview(background, belowSubview: self.content)
+        
+        self.backgroundIfLoaded = background
+        
+        updateIsTappable()
+        
+        return background
+    }()
+    
+    private(set) var backgroundIfLoaded : Content.BackgroundView?
+    
+    private(set) lazy var pressedBackground : Content.PressedBackgroundView = {
+        
+        let background = Content.createReusablePressedBackgroundView(frame: bounds)
+
+        /// Loads the background so subviews are inserted in the proper order.
+        self.insertSubview(background, aboveSubview: self.background)
+        
+        self.pressedBackgroundIfLoaded = background
+        
+        updateIsTappable()
+        
+        return background
+    }()
+    
+    private(set) var pressedBackgroundIfLoaded : Content.PressedBackgroundView?
     
     private let pressRecognizer : PressGestureRecognizer
     
@@ -35,8 +64,6 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         let bounds = CGRect(origin: .zero, size: frame.size)
         
         self.content = Content.createReusableContentView(frame: bounds)
-        self.background = Content.createReusableBackgroundView(frame: bounds)
-        self.pressedBackground = Content.createReusablePressedBackgroundView(frame: bounds)
         
         self.pressRecognizer = PressGestureRecognizer()
         self.pressRecognizer.minimumPressDuration = 0.0
@@ -46,8 +73,6 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         
         self.pressRecognizer.addTarget(self, action: #selector(pressStateChanged))
      
-        self.addSubview(self.background)
-        self.addSubview(self.pressedBackground)
         self.addSubview(self.content)
         
         self.updateIsTappable()
@@ -84,8 +109,9 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         super.layoutSubviews()
         
         self.content.frame = self.bounds
-        self.background.frame = self.bounds
-        self.pressedBackground.frame = self.bounds
+        
+        self.backgroundIfLoaded?.frame = self.bounds
+        self.pressedBackgroundIfLoaded?.frame = self.bounds
     }
     
     //
@@ -99,14 +125,14 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
         if self.onTap != nil {
             self.accessibilityTraits = [.header, .button]
             
-            self.pressedBackground.isHidden = false
-            self.pressedBackground.alpha = 0.0
+            self.pressedBackgroundIfLoaded?.isHidden = false
+            self.pressedBackgroundIfLoaded?.alpha = 0.0
             
             self.addGestureRecognizer(self.pressRecognizer)
         } else {
             self.accessibilityTraits = [.header]
             
-            self.pressedBackground.isHidden = true
+            self.pressedBackgroundIfLoaded?.isHidden = true
         }
     }
     
@@ -126,7 +152,7 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
             let didEnd = state == .ended
             
             UIView.animate(withDuration: didEnd ? 0.1 : 0.0) {
-                self.pressedBackground.alpha = 0.0
+                self.pressedBackgroundIfLoaded?.alpha = 0.0
             }
             
             if didEnd {

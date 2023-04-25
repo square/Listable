@@ -28,6 +28,7 @@
 - `SwipeActionsView` and `SwipeActionState` are no longer public types.
 
 ### Misc
+- Improvement: Background and Selected Background views for rows and section headers will not be created unless requested. This reduces the overall number of views being allocated.
 
 ### Internal
 

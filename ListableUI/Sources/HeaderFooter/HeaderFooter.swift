@@ -90,11 +90,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     ) {
         let view = anyView as! HeaderFooterContentView<Content>
         
-        let views = HeaderFooterContentViews<Content>(
-            content: view.content,
-            background: view.background,
-            pressed: view.pressedBackground
-        )
+        let views = HeaderFooterContentViews<Content>(view: view)
         
         self.content.apply(
             to: views,

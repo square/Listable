@@ -471,34 +471,46 @@ public extension ItemContent {
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
 public struct ItemContentViews<Content:ItemContent>
 {
+    let cell : ItemCell<Content>
+    
     /// The content view of the content.
-    public var content : Content.ContentView
+    public var content : Content.ContentView {
+        cell.contentContainer.contentView
+    }
     
     /// The background view of the content.
-    public var background : Content.BackgroundView
+    public var background : Content.BackgroundView {
+        cell.background
+    }
+    
+    /// The background view of the content, if it has been loaded.
+    public var backgroundIfLoaded : Content.BackgroundView? {
+        cell.backgroundIfLoaded
+    }
     
     /// The selected background view of the content.
     /// Displayed when the content is highlighted or selected.
-    public var selectedBackground : Content.SelectedBackgroundView
+    public var selectedBackground : Content.SelectedBackgroundView {
+        cell.selectedBackground
+    }
+    
+    /// The selected background view of the content, if it has been loaded.
+    /// Displayed when the content is highlighted or selected.
+    public var selectedBackgroundIfLoaded : Content.SelectedBackgroundView? {
+        cell.selectedBackgroundIfLoaded
+    }
     
     /// The overlay decoration view of the content.
     /// Always displayed over the content, and does not react to swipe actions.
     public var overlayDecoration : Content.OverlayDecorationView {
-        overlayDecorationProvider()
+        cell.overlayDecoration.content
     }
     
+    /// The overlay decoration view of the content, if it has been loaded.
+    /// Always displayed over the content, and does not react to swipe actions.
     public var overlayDecorationIfLoaded : Content.OverlayDecorationView? {
-        overlayDecorationIfLoadedProvider()
+        cell.overlayDecorationIfLoaded?.content
     }
-    
-    // MARK: Internal
-    
-    ///
-    var overlayDecorationProvider : () -> Content.OverlayDecorationView
-
-    ///
-    var overlayDecorationIfLoadedProvider : () -> Content.OverlayDecorationView?
-
 }
 
 

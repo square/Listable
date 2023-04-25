@@ -296,20 +296,10 @@ extension PresentationState
                 .model
                 .content
                 .apply(
-                to: ItemContentViews(
-                    content: cell.contentContainer.contentView,
-                    background: cell.background,
-                    selectedBackground: cell.selectedBackground,
-                    overlayDecorationProvider: {
-                        cell.overlayDecoration.content
-                    },
-                    overlayDecorationIfLoadedProvider: {
-                        cell.overlayDecorationIfLoaded?.content
-                    }
-                ),
-                for: reason,
-                with: applyInfo
-            )
+                    to: ItemContentViews(cell: cell),
+                    for: reason,
+                    with: applyInfo
+                )
                         
             // Apply Swipe To Action Appearance
             if let actions = self.model.trailingSwipeActions {
