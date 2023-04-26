@@ -60,12 +60,6 @@
                 <a class="nav-group-task-link" href="../Classes/DefaultItemContentCoordinator.html">DefaultItemContentCoordinator</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DefaultSwipeActionsView.html">DefaultSwipeActionsView</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Classes/DefaultSwipeActionsView/Style.html">– Style</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/DynamicSource.html">DynamicSource</a>
               </li>
               <li class="nav-group-task">
@@ -209,7 +203,7 @@
                 <a class="nav-group-task-link" href="../Enums/SupplementaryKind.html">SupplementaryKind</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/SwipeActionState.html">SwipeActionState</a>
+                <a class="nav-group-task-link" href="../Enums/SwipeActionsViewStyleKey.html">SwipeActionsViewStyleKey</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ViewAnimation.html">ViewAnimation</a>
@@ -321,9 +315,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ItemContentCoordinator.html">ItemContentCoordinator</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ItemLayoutsValue.html">ItemLayoutsValue</a>
@@ -626,6 +617,15 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SwipeActionsViewStyle.html">SwipeActionsViewStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SwipeActionsViewStyle/Shape.html">– Shape</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SwipeActionsViewStyle/ButtonSizing.html">– ButtonSizing</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/TableAppearance.html">TableAppearance</a>
@@ -1273,52 +1273,33 @@ to the view.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ItemContentP16SwipeActionsViewQa"></a>
-                    <a name="//apple_ref/swift/Alias/SwipeActionsView" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP16SwipeActionsViewQa">SwipeActionsView</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The view type to use to render swipe actions (delete, etc) for this content.
-A default implementation, which matches <code>UITableView</code>, is provided.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">SwipeActionsView</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContentSwipeActionsView.html">ItemContentSwipeActionsView</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/DefaultSwipeActionsView.html">DefaultSwipeActionsView</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI11ItemContentP17swipeActionsStyle05SwipeF4View_0G0QZvp"></a>
+                    <a name="/s:10ListableUI11ItemContentP17swipeActionsStyleAA05Swipef4ViewG0VSgvp"></a>
                     <a name="//apple_ref/swift/Property/swipeActionsStyle" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentP17swipeActionsStyle05SwipeF4View_0G0QZvp">swipeActionsStyle</a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP17swipeActionsStyleAA05Swipef4ViewG0VSgvp">swipeActionsStyle</a>
                     </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Specify a swipe action style for this content.</p>
+                        <p>The swipe action style for this content.</p>
+
+<p>If this is <code>nil</code>, the style provided by the <code><a href="../Enums/SwipeActionsViewStyleKey.html">SwipeActionsViewStyleKey</a></code> environment value will be used.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">swipeActionsStyle</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP16SwipeActionsViewQa">SwipeActionsView</a></span><span class="o">.</span><span class="kt">Style</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">swipeActionsStyle</span><span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionsViewStyle.html">SwipeActionsViewStyle</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1776,9 +1757,9 @@ etc.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ItemContentPAAE4with6sizing7layouts14selectionStyle25insertAndRemoveAnimations12swipeActions10reordering14onWasReordered0Q7Display0q3EndT00Q6Select0Q8Deselect0Q6Insert0qL00Q4Move0Q6UpdateAA0C0VyxGAA6SizingOSg_AA0C7LayoutsVSgAA0c9SelectionI0OSgAA0cxklM0VSgAA05SwipeO13ConfigurationVSgAA0C10ReorderingVSgyAV_A11_6ResultVtcSgyAU02OnT0Vyx_GcSgyAU02OnuT0Vyx_GcSgyAU02OnV0Vyx_GcSgyAU02OnW0Vyx_GcSgyAU02OnX0Vyx_GcSgyAU02OnL0Vyx_GcSgyAU02OnY0Vyx_GcSgyAU02OnZ0Vyx_GcSgtF"></a>
-                    <a name="//apple_ref/swift/Method/with(sizing:layouts:selectionStyle:insertAndRemoveAnimations:swipeActions:reordering:onWasReordered:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ItemContentPAAE4with6sizing7layouts14selectionStyle25insertAndRemoveAnimations12swipeActions10reordering14onWasReordered0Q7Display0q3EndT00Q6Select0Q8Deselect0Q6Insert0qL00Q4Move0Q6UpdateAA0C0VyxGAA6SizingOSg_AA0C7LayoutsVSgAA0c9SelectionI0OSgAA0cxklM0VSgAA05SwipeO13ConfigurationVSgAA0C10ReorderingVSgyAV_A11_6ResultVtcSgyAU02OnT0Vyx_GcSgyAU02OnuT0Vyx_GcSgyAU02OnV0Vyx_GcSgyAU02OnW0Vyx_GcSgyAU02OnX0Vyx_GcSgyAU02OnL0Vyx_GcSgyAU02OnY0Vyx_GcSgyAU02OnZ0Vyx_GcSgtF">with(sizing:<wbr>layouts:<wbr>selectionStyle:<wbr>insertAndRemoveAnimations:<wbr>swipeActions:<wbr>reordering:<wbr>onWasReordered:<wbr>onDisplay:<wbr>onEndDisplay:<wbr>onSelect:<wbr>onDeselect:<wbr>onInsert:<wbr>onRemove:<wbr>onMove:<wbr>onUpdate:<wbr>)</a>
+                    <a name="/s:10ListableUI11ItemContentPAAE4with6sizing7layouts14selectionStyle25insertAndRemoveAnimations19leadingSwipeActions08trailingoP010reordering14onWasReordered0S7Display0s3EndV00S6Select0S8Deselect0S6Insert0sL00S4Move0S6UpdateAA0C0VyxGAA6SizingOSg_AA0C7LayoutsVSgAA0c9SelectionI0OSgAA0czklM0VSgAA0oP13ConfigurationVSgA10_AA0C10ReorderingVSgyAW_A12_6ResultVtcSgyAV02OnV0Vyx_GcSgyAV02OnwV0Vyx_GcSgyAV02OnX0Vyx_GcSgyAV02OnY0Vyx_GcSgyAV02OnZ0Vyx_GcSgyAV02OnL0Vyx_GcSgyAV6OnMoveVyx_GcSgyAV8OnUpdateVyx_GcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/with(sizing:layouts:selectionStyle:insertAndRemoveAnimations:leadingSwipeActions:trailingSwipeActions:reordering:onWasReordered:onDisplay:onEndDisplay:onSelect:onDeselect:onInsert:onRemove:onMove:onUpdate:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentPAAE4with6sizing7layouts14selectionStyle25insertAndRemoveAnimations19leadingSwipeActions08trailingoP010reordering14onWasReordered0S7Display0s3EndV00S6Select0S8Deselect0S6Insert0sL00S4Move0S6UpdateAA0C0VyxGAA6SizingOSg_AA0C7LayoutsVSgAA0c9SelectionI0OSgAA0czklM0VSgAA0oP13ConfigurationVSgA10_AA0C10ReorderingVSgyAW_A12_6ResultVtcSgyAV02OnV0Vyx_GcSgyAV02OnwV0Vyx_GcSgyAV02OnX0Vyx_GcSgyAV02OnY0Vyx_GcSgyAV02OnZ0Vyx_GcSgyAV02OnL0Vyx_GcSgyAV6OnMoveVyx_GcSgyAV8OnUpdateVyx_GcSgtF">with(sizing:<wbr>layouts:<wbr>selectionStyle:<wbr>insertAndRemoveAnimations:<wbr>leadingSwipeActions:<wbr>trailingSwipeActions:<wbr>reordering:<wbr>onWasReordered:<wbr>onDisplay:<wbr>onEndDisplay:<wbr>onSelect:<wbr>onDeselect:<wbr>onInsert:<wbr>onRemove:<wbr>onMove:<wbr>onUpdate:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -1815,7 +1796,8 @@ to avoid additional nesting, and to hoist your content up in your code.</p>
     <span class="nv">layouts</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ItemLayouts.html">ItemLayouts</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">selectionStyle</span> <span class="p">:</span> <span class="kt"><a href="../Enums/ItemSelectionStyle.html">ItemSelectionStyle</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">insertAndRemoveAnimations</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ItemInsertAndRemoveAnimations.html">ItemInsertAndRemoveAnimations</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">swipeActions</span> <span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">leadingSwipeActions</span> <span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">trailingSwipeActions</span> <span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">reordering</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ItemReordering.html">ItemReordering</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">onWasReordered</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Item.html">Item</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnWasReordered</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">onDisplay</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Item.html">Item</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnDisplay</span><span class="o">.</span><span class="kt">Callback</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
@@ -2021,7 +2003,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-04-18)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-04-25)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
