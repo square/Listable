@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [10.0.1] - 2023-04-26
+
+### Fixed
+
+- Fix an issue when a header or footer has an `onTap` handler, and no pressed background, the first tap would be ignored.
+
 # [10.0.0] - 2023-04-25
 
 ### Fixed
@@ -906,7 +912,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/10.0.0...HEAD
+[Main]: https://github.com/square/Listable/square/10.0.1...HEAD
+[10.0.1]: https://github.com/square/Listable/compare/10.0.0...10.0.1
 [10.0.0]: https://github.com/square/Listable/compare/9.0.0...10.0.0
 [9.0.0]: https://github.com/square/Listable/compare/8.2.0...9.0.0
 [8.2.0]: https://github.com/square/Listable/compare/8.1.2...8.2.0
