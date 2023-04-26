@@ -146,7 +146,7 @@ final class HeaderFooterContentView<Content:HeaderFooterContent> : UIView
             break
         
         case .began, .changed:
-            self.pressedBackground.alpha = 1.0
+            self.pressedBackgroundIfLoaded?.alpha = 1.0
             
         case .ended, .cancelled, .failed:
             let didEnd = state == .ended
