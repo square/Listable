@@ -2,6 +2,22 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# [10.0.0] - 2023-04-25
+
+### Fixed
+
 - Swipe actions will now use the `accessibilityLabel` (if non-nil) when the user is using assistive technologies such as VoiceOver.
 
 ### Added
@@ -28,11 +44,8 @@
 - `SwipeActionsView` and `SwipeActionState` are no longer public types.
 
 ### Misc
+
 - Improvement: Background and Selected Background views for rows and section headers will not be created unless requested. This reduces the overall number of views being allocated.
-
-### Internal
-
-# Past Releases
 
 # [9.0.0] - 2023-04-19
 
@@ -893,7 +906,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/9.0.0...HEAD
+[Main]: https://github.com/square/Listable/square/10.0.0...HEAD
+[10.0.0]: https://github.com/square/Listable/compare/9.0.0...10.0.0
 [9.0.0]: https://github.com/square/Listable/compare/8.2.0...9.0.0
 [8.2.0]: https://github.com/square/Listable/compare/8.1.2...8.2.0
 [8.1.2]: https://github.com/square/Listable/compare/8.1.1...8.1.2
