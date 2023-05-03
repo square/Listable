@@ -8,6 +8,8 @@
 
 ### Changed
 
+- BlueprintUILists now depends on Blueprint 2.0.
+
 ### Misc
 
 ### Internal
