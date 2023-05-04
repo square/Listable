@@ -79,8 +79,11 @@ jobs:
       - name: Switch To Xcode 14
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
-      - name: Install iOS 15.2
-        run: xcversion simulators --install="iOS 15.2"
+      - name: Install xcodes
+        run: brew install robotsandpencils/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        run: sudo xcodes runtimes install "iOS 15.2"
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -125,8 +128,11 @@ jobs:
       - name: Switch To Xcode 14
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
-      - name: Install iOS 14
-        run: xcversion simulators --install="iOS 14.5"
+      - name: Install xcodes
+        run: brew install robotsandpencils/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        run: sudo xcodes runtimes install "iOS 14.5"
 
       - name: Checkout repository
         uses: actions/checkout@v1
