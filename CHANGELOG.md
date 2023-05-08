@@ -8,13 +8,17 @@
 
 ### Changed
 
-- BlueprintUILists now depends on Blueprint 2.0.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [10.1.0] - 2023-05-08
+
+### Changed
+
+- BlueprintUILists now depends on Blueprint 2.0.
 
 # [10.0.1] - 2023-04-26
 
@@ -914,7 +918,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/10.0.1...HEAD
+[Main]: https://github.com/square/Listable/square/10.1.0...HEAD
+[10.1.0]: https://github.com/square/Listable/compare/10.0.1...10.1.0
 [10.0.1]: https://github.com/square/Listable/compare/10.0.0...10.0.1
 [10.0.0]: https://github.com/square/Listable/compare/9.0.0...10.0.0
 [9.0.0]: https://github.com/square/Listable/compare/8.2.0...9.0.0
