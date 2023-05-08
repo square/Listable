@@ -8,13 +8,17 @@
 
 ### Changed
 
-- BlueprintUILists now depends on Blueprint 2.0.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [10.1.0] - 2023-05-08
+
+### Changed
+
+- BlueprintUILists now depends on Blueprint 2.0.
 
 # [10.0.1] - 2023-04-26
 
