@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a confusing compilation error when omitting the `.content` property on read-only `KeyPath` lookups on `ListProperties`. 
+
 ### Added
 
 ### Removed
