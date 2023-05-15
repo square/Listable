@@ -432,7 +432,10 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// The content view is drawn at the top of the view hierarchy, above the background views.
     associatedtype OverlayDecorationView:UIView = UIView
     
-
+    /// The content view used to draw the content.
+    /// The content view is drawn at the bottom of the view hierarchy, above the background views.
+    associatedtype UnderlayDecorationView:UIView = UIView
+    
     /// Create and return a new overlay decoration view used to render any required decorations over the content.
     /// The decoration view appears above all content, and is not affected by swipe actions.
     ///
@@ -447,7 +450,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// ## Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
-    static func createReusableUnderlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> UnderlayDecorationView
     
     //
     // MARK: Content Coordination
@@ -522,14 +525,14 @@ public struct ItemContentViews<Content:ItemContent>
 
     /// The underlay decoration view of the content.
     /// Always displayed under the content, and does not react to swipe actions.
-    public var underlayDecoration : Content.OverlayDecorationView {
+    public var underlayDecoration : Content.UnderlayDecorationView {
         cell.underlayDecoration.content
     }
     
     /// The underlay decoration view of the content, if it has been loaded.
     /// Always displayed under the content, and does not react to swipe actions.
-    public var underlayDecorationIfLoaded : Content.OverlayDecorationView? {
-        cell.overlayDecorationIfLoaded?.content
+    public var underlayDecorationIfLoaded : Content.UnderlayDecorationView? {
+        cell.underlayDecorationIfLoaded?.content
     }
 }
 
@@ -698,10 +701,10 @@ public extension ItemContent where OverlayDecorationView == UIView
 
 
 /// Provide a UIView when no special underlay decoration view is specified.
-public extension ItemContent where OverlayDecorationView == UIView
+public extension ItemContent where UnderlayDecorationView == UIView
 {
-    static func createReusableUnderlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> UnderlayDecorationView
     {
-        OverlayDecorationView(frame: frame)
+        UnderlayDecorationView(frame: frame)
     }
 }

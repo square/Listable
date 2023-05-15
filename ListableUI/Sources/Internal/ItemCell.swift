@@ -42,8 +42,8 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
     
-    private(set) lazy var underlayDecoration : OverlayDecorationView = {
-        let view = OverlayDecorationView(
+    private(set) lazy var underlayDecoration : UnderlayDecorationView = {
+        let view = UnderlayDecorationView(
             content: Content.createReusableUnderlayDecorationView(frame:bounds),
             frame: bounds
         )
@@ -55,7 +55,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return view
     }()
     
-    private(set) var underlayDecorationIfLoaded : OverlayDecorationView? = nil
+    private(set) var underlayDecorationIfLoaded : UnderlayDecorationView? = nil
     
     let contentContainer : ContentContainerView
 
@@ -236,6 +236,45 @@ extension ItemCell {
         let content : Content.OverlayDecorationView
         
         init(content : Content.OverlayDecorationView, frame: CGRect) {
+            
+            self.content = content
+            
+            super.init(frame: frame)
+            
+            self.content.frame = bounds
+            self.addSubview(self.content)
+            
+            self.isUserInteractionEnabled = false
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            self.content.frame = self.bounds
+        }
+        
+        override var isAccessibilityElement: Bool {
+            get { false }
+            set { fatalError("Cannot set isAccessibilityElement.") }
+        }
+        
+        override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+            false
+        }
+        
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            nil
+        }
+    }
+    
+    final class UnderlayDecorationView : UIView {
+        
+        let content : Content.UnderlayDecorationView
+        
+        init(content : Content.UnderlayDecorationView, frame: CGRect) {
             
             self.content = content
             

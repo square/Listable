@@ -59,7 +59,8 @@ public protocol BlueprintItemContent : ItemContent
     ContentView == BlueprintView,
     BackgroundView == BlueprintView,
     SelectedBackgroundView == BlueprintView,
-    OverlayDecorationView == BlueprintView
+    OverlayDecorationView == BlueprintView,
+    UnderlayDecorationView == BlueprintView
 {
     //
     // MARK: Creating Blueprint Element Representations
@@ -213,7 +214,7 @@ public extension BlueprintItemContent
         self.newBlueprintView(with: frame)
     }
     
-    static func createReusableUnderlayDecorationView(frame: CGRect) -> OverlayDecorationView {
+    static func createReusableUnderlayDecorationView(frame: CGRect) -> UnderlayDecorationView {
         self.newBlueprintView(with: frame)
     }
     
