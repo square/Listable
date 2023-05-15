@@ -27,8 +27,8 @@ protocol AnyItemCell : UICollectionViewCell
 ///
 final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
-    private(set) lazy var overlayDecoration : OverlayDecorationView = {
-        let view = OverlayDecorationView(
+    private(set) lazy var overlayDecoration : DecorationView<Content.OverlayDecorationView> = {
+        let view = DecorationView<Content.OverlayDecorationView>(
             content: Content.createReusableOverlayDecorationView(frame:bounds),
             frame: bounds
         )
@@ -40,7 +40,22 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return view
     }()
     
-    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
+    private(set) var overlayDecorationIfLoaded : DecorationView<Content.OverlayDecorationView>? = nil
+    
+    private(set) lazy var underlayDecoration : DecorationView<Content.UnderlayDecorationView> = {
+        let view = DecorationView<Content.UnderlayDecorationView>(
+            content: Content.createReusableUnderlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.underlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, belowSubview: self.contentContainer)
+        
+        return view
+    }()
+    
+    private(set) var underlayDecorationIfLoaded : DecorationView<Content.UnderlayDecorationView>? = nil
     
     let contentContainer : ContentContainerView
 
@@ -161,6 +176,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentContainer.frame = self.contentView.bounds
         
         self.overlayDecorationIfLoaded?.frame = self.contentView.bounds
+        self.underlayDecorationIfLoaded?.frame = self.contentView.bounds
     }
     
     // MARK: AnyItemCell
@@ -215,11 +231,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 
 extension ItemCell {
     
-    final class OverlayDecorationView : UIView {
+    final class DecorationView<ContentView:UIView> : UIView {
         
-        let content : Content.OverlayDecorationView
+        let content : ContentView
         
-        init(content : Content.OverlayDecorationView, frame: CGRect) {
+        init(content : ContentView, frame: CGRect) {
             
             self.content = content
             
