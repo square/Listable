@@ -441,6 +441,14 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
     
+    /// Create and return a new underrlay decoration view used to render any required decorations under the content.
+    /// The decoration view appears under all content as a background, and is not affected by swipe actions.
+    ///
+    /// ## Note
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    
     //
     // MARK: Content Coordination
     //
@@ -509,6 +517,18 @@ public struct ItemContentViews<Content:ItemContent>
     /// The overlay decoration view of the content, if it has been loaded.
     /// Always displayed over the content, and does not react to swipe actions.
     public var overlayDecorationIfLoaded : Content.OverlayDecorationView? {
+        cell.overlayDecorationIfLoaded?.content
+    }
+
+    /// The underlay decoration view of the content.
+    /// Always displayed under the content, and does not react to swipe actions.
+    public var underlayDecoration : Content.OverlayDecorationView {
+        cell.underlayDecoration.content
+    }
+    
+    /// The underlay decoration view of the content, if it has been loaded.
+    /// Always displayed under the content, and does not react to swipe actions.
+    public var underlayDecorationIfLoaded : Content.OverlayDecorationView? {
         cell.overlayDecorationIfLoaded?.content
     }
 }
@@ -671,6 +691,16 @@ public extension ItemContent where SelectedBackgroundView == UIView
 public extension ItemContent where OverlayDecorationView == UIView
 {
     static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    {
+        OverlayDecorationView(frame: frame)
+    }
+}
+
+
+/// Provide a UIView when no special underlay decoration view is specified.
+public extension ItemContent where OverlayDecorationView == UIView
+{
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> OverlayDecorationView
     {
         OverlayDecorationView(frame: frame)
     }

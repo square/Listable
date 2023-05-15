@@ -101,6 +101,16 @@ public protocol BlueprintItemContent : ItemContent
     /// ### Note
     /// The default implementation of this method returns nil, and provides no decoration.
     func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element?
+    
+    /// Optional. Create and return the Blueprint element used to represent the underlay decoration of the content.
+    /// The underlay decoration appears below all other content, and is not affected by swipe actions.
+    ///
+    /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
+    /// based on the current state of the item.
+    ///
+    /// ### Note
+    /// The default implementation of this method returns nil, and provides no decoration.
+    func underlayDecorationElement(with info : ApplyItemContentInfo) -> Element?
 }
 
 
@@ -124,6 +134,11 @@ public extension BlueprintItemContent
     
     /// By default, content has no overlay decoration.
     func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element? {
+        nil
+    }
+    
+    /// By default, content has no underlay decoration.
+    func underlayDecorationElement(with info : ApplyItemContentInfo) -> Element? {
         nil
     }
 }
@@ -170,6 +185,16 @@ public extension BlueprintItemContent
             /// If there's no element, clear out any past element, but only if the view was loaded.
             views.overlayDecorationIfLoaded?.element = nil
         }
+        
+        if let element = underlayDecorationElement(with: info)?
+            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        {
+            /// Load the `underlayDecoration` view and assign our element update.
+            views.underlayDecoration.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.underlayDecorationIfLoaded?.element = nil
+        }
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView {
@@ -185,6 +210,10 @@ public extension BlueprintItemContent
     }
     
     static func createReusableOverlayDecorationView(frame: CGRect) -> OverlayDecorationView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    static func createReusableUnderlayDecorationView(frame: CGRect) -> OverlayDecorationView {
         self.newBlueprintView(with: frame)
     }
     

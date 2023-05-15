@@ -42,6 +42,21 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     
     private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
     
+    private(set) lazy var underlayDecoration : OverlayDecorationView = {
+        let view = OverlayDecorationView(
+            content: Content.createReusableUnderlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.underlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, belowSubview: self.contentContainer)
+        
+        return view
+    }()
+    
+    private(set) var underlayDecorationIfLoaded : OverlayDecorationView? = nil
+    
     let contentContainer : ContentContainerView
 
     private(set) lazy var background : Content.BackgroundView = {
@@ -161,6 +176,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentContainer.frame = self.contentView.bounds
         
         self.overlayDecorationIfLoaded?.frame = self.contentView.bounds
+        self.underlayDecorationIfLoaded?.frame = self.contentView.bounds
     }
     
     // MARK: AnyItemCell
