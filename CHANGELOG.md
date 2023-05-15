@@ -6,6 +6,8 @@
 
 ### Added
 
+- Added optional underlay view for item cells that can be styled  
+
 ### Removed
 
 ### Changed
