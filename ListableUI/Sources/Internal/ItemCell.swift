@@ -27,8 +27,8 @@ protocol AnyItemCell : UICollectionViewCell
 ///
 final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
-    private(set) lazy var overlayDecoration : OverlayDecorationView = {
-        let view = OverlayDecorationView(
+    private(set) lazy var overlayDecoration : DecorationView<Content.OverlayDecorationView> = {
+        let view = DecorationView<Content.OverlayDecorationView>(
             content: Content.createReusableOverlayDecorationView(frame:bounds),
             frame: bounds
         )
@@ -40,10 +40,10 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return view
     }()
     
-    private(set) var overlayDecorationIfLoaded : OverlayDecorationView? = nil
+    private(set) var overlayDecorationIfLoaded : DecorationView<Content.OverlayDecorationView>? = nil
     
-    private(set) lazy var underlayDecoration : UnderlayDecorationView = {
-        let view = UnderlayDecorationView(
+    private(set) lazy var underlayDecoration : DecorationView<Content.UnderlayDecorationView> = {
+        let view = DecorationView<Content.UnderlayDecorationView>(
             content: Content.createReusableUnderlayDecorationView(frame:bounds),
             frame: bounds
         )
@@ -55,7 +55,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         return view
     }()
     
-    private(set) var underlayDecorationIfLoaded : UnderlayDecorationView? = nil
+    private(set) var underlayDecorationIfLoaded : DecorationView<Content.UnderlayDecorationView>? = nil
     
     let contentContainer : ContentContainerView
 
@@ -231,50 +231,11 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 
 extension ItemCell {
     
-    final class OverlayDecorationView : UIView {
+    final class DecorationView<ContentView:UIView> : UIView {
         
-        let content : Content.OverlayDecorationView
+        let content : ContentView
         
-        init(content : Content.OverlayDecorationView, frame: CGRect) {
-            
-            self.content = content
-            
-            super.init(frame: frame)
-            
-            self.content.frame = bounds
-            self.addSubview(self.content)
-            
-            self.isUserInteractionEnabled = false
-        }
-        
-        @available(*, unavailable)
-        required init?(coder: NSCoder) { fatalError() }
-        
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            
-            self.content.frame = self.bounds
-        }
-        
-        override var isAccessibilityElement: Bool {
-            get { false }
-            set { fatalError("Cannot set isAccessibilityElement.") }
-        }
-        
-        override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-            false
-        }
-        
-        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-            nil
-        }
-    }
-    
-    final class UnderlayDecorationView : UIView {
-        
-        let content : Content.UnderlayDecorationView
-        
-        init(content : Content.UnderlayDecorationView, frame: CGRect) {
+        init(content : ContentView, frame: CGRect) {
             
             self.content = content
             

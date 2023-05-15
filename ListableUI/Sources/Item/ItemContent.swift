@@ -444,7 +444,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
     
-    /// Create and return a new underrlay decoration view used to render any required decorations under the content.
+    /// Create and return a new underlay decoration view used to render any required decorations under the content.
     /// The decoration view appears under all content as a background, and is not affected by swipe actions.
     ///
     /// ## Note
