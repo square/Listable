@@ -2,11 +2,7 @@
 
 ### Fixed
 
-- Fixed a confusing compilation error when omitting the `.content` property on read-only `KeyPath` lookups on `ListProperties`. 
-
 ### Added
-
-- Added optional underlay view for item cells that can be styled  
 
 ### Removed
 
@@ -17,6 +13,16 @@
 ### Internal
 
 # Past Releases
+
+# [10.2.0] - 2023-05-15
+
+### Fixed
+
+- Fixed a confusing compilation error when omitting the `.content` property on read-only `KeyPath` lookups on `ListProperties`. 
+
+### Added
+
+- Added optional underlay view for item cells that can be styled  
 
 # [10.1.0] - 2023-05-08
 
@@ -922,7 +928,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/10.1.0...HEAD
+[Main]: https://github.com/square/Listable/square/10.2.0...HEAD
+[10.2.0]: https://github.com/square/Listable/compare/10.1.0...10.2.0
 [10.1.0]: https://github.com/square/Listable/compare/10.0.1...10.1.0
 [10.0.1]: https://github.com/square/Listable/compare/10.0.0...10.0.1
 [10.0.0]: https://github.com/square/Listable/compare/9.0.0...10.0.0
