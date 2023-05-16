@@ -1602,6 +1602,34 @@ The content view is drawn at the top of the view hierarchy, above the background
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI11ItemContentP22UnderlayDecorationViewQa"></a>
+                    <a name="//apple_ref/swift/Alias/UnderlayDecorationView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP22UnderlayDecorationViewQa">UnderlayDecorationView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The content view used to draw the content.
+The content view is drawn at the bottom of the view hierarchy, above the background views.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">UnderlayDecorationView</span> <span class="p">:</span> <span class="kt">UIView</span> <span class="o">=</span> <span class="kt">UIView</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ"></a>
                     <a name="//apple_ref/swift/Method/createReusableOverlayDecorationView(frame:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI11ItemContentP35createReusableOverlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ">createReusableOverlayDecorationView(frame:<wbr>)</a>
@@ -1625,6 +1653,38 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableOverlayDecorationView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP21OverlayDecorationViewQa">OverlayDecorationView</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11ItemContentP36createReusableUnderlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/createReusableUnderlayDecorationView(frame:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ItemContentP36createReusableUnderlayDecorationView5frame0ghI0QzSo6CGRectV_tFZ">createReusableUnderlayDecorationView(frame:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create and return a new underlay decoration view used to render any required decorations under the content.
+The decoration view appears under all content as a background, and is not affected by swipe actions.</p>
+<h2 id='note' class='heading'>Note</h2>
+
+<p>Do not do configuration in this method that will be changed by your view&rsquo;s theme or appearance – instead
+do that work in <code>apply(to:)</code>, so the appearance will be updated if the appearance of content changes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">createReusableUnderlayDecorationView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/ItemContent.html#/s:10ListableUI11ItemContentP22UnderlayDecorationViewQa">UnderlayDecorationView</a></span></code></pre>
 
                         </div>
                       </div>
@@ -2003,7 +2063,7 @@ this variable will provide an <code>Identifier&lt;MyContent, UUID&gt;</code>.</p
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-05-08)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-05-15)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
