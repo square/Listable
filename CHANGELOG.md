@@ -4,6 +4,8 @@
 
 ### Added
 
+- You may now programatically reveal leading and trailing swipe actions, by calling the `showLeadingSwipeActions` or `showTrailingSwipeActions` closures on `ApplyItemContentInfo`.
+
 ### Removed
 
 ### Changed

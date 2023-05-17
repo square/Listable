@@ -10,6 +10,9 @@ import UIKit
 
 protocol AnyItemCell : UICollectionViewCell
 {
+    func openLeadingSwipeActions()
+    func openTrailingSwipeActions()
+    
     func closeSwipeActions()
     
     var areSwipeActionsVisible : Bool  { get }
@@ -180,6 +183,14 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     }
     
     // MARK: AnyItemCell
+    
+    func openLeadingSwipeActions() {
+        self.contentContainer.openSwipeActionsAnimated(on: .left)
+    }
+    
+    func openTrailingSwipeActions() {
+        self.contentContainer.openSwipeActionsAnimated(on: .right)
+    }
     
     func closeSwipeActions() {
         self.contentContainer.performAnimatedClose()

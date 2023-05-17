@@ -281,6 +281,12 @@ extension PresentationState
                 state: itemState,
                 position: self.itemPosition,
                 reorderingActions: self.reorderingActions,
+                showLeadingSwipeActions: { [weak cell] in
+                    cell?.openLeadingSwipeActions()
+                },
+                showTrailingSwipeActions: { [weak cell] in
+                    cell?.openTrailingSwipeActions()
+                },
                 isReorderable: self.model.reordering != nil,
                 environment: environment
             )

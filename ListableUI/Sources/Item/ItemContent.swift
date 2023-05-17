@@ -556,6 +556,12 @@ public struct ApplyItemContentInfo
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reorderingActions : ReorderingActions
     
+    /// When invoked, will show the leading swipe actions.
+    public var showLeadingSwipeActions : () -> ()
+    
+    /// When invoked, will show the trailing swipe actions.
+    public var showTrailingSwipeActions : () -> ()
+    
     /// If the item can be reordered.
     /// Use this property to determine if your `ItemContent` should display a reorder control.
     public var isReorderable : Bool
