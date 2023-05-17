@@ -262,6 +262,10 @@ extension ItemCell {
             }
         }
 
+        func openSwipeActionsAnimated(on side : SwipeActionState.Side) {
+            self.set(state: .open(side), animated: true)
+        }
+        
         func performAnimatedClose() {
             self.set(state: .closed, animated: true)
         }

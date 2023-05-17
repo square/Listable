@@ -284,6 +284,17 @@ final class SwipeActionsViewController: UIViewController  {
         func element(with info : ApplyItemContentInfo) -> Element {
             Column(alignment: .fill) {
                 Row(alignment: .center, underflow: .spaceEvenly, minimumSpacing: 8) {
+                    
+                    Label(text: "T")
+                        .tappable {
+                            info.showTrailingSwipeActions()
+                        }
+                    
+                    Label(text: "L")
+                        .tappable {
+                            info.showLeadingSwipeActions()
+                        }
+                    
                     Column {
                         Label(text: item.title)
                         
