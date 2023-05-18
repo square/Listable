@@ -4,8 +4,6 @@
 
 ### Added
 
-- You may now programatically reveal leading and trailing swipe actions, by calling the `showLeadingSwipeActions` or `showTrailingSwipeActions` closures on `ApplyItemContentInfo`.
-
 ### Removed
 
 ### Changed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [10.3.0] - 2023-05-17
+
+### Added
+
+- You may now programatically reveal leading and trailing swipe actions, by calling the `showLeadingSwipeActions` or `showTrailingSwipeActions` closures on `ApplyItemContentInfo`.
 
 # [10.2.0] - 2023-05-15
 
@@ -930,7 +934,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/10.2.0...HEAD
+[Main]: https://github.com/square/Listable/square/10.3.0...HEAD
+[10.3.0]: https://github.com/square/Listable/compare/10.2.0...10.3.0
 [10.2.0]: https://github.com/square/Listable/compare/10.1.0...10.2.0
 [10.1.0]: https://github.com/square/Listable/compare/10.0.1...10.1.0
 [10.0.1]: https://github.com/square/Listable/compare/10.0.0...10.0.1
