@@ -4,6 +4,8 @@
 
 ### Added
 
+- `ApplyItemContentInfo` and `ApplyHeaderFooterContentInfo` are now available in the Blueprint `Environment` for each `BlueprintItemContent`.
+
 ### Removed
 
 ### Changed

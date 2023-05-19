@@ -1,19 +1,9 @@
 //
-//  BlueprintEnvironment.swift
+//  ListEnvironment+Blueprint.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 10/27/20.
 //
-
-
-extension Element {
-    
-    func wrapInBlueprintEnvironmentFrom(environment : ListEnvironment) -> Element {
-        self.adaptedEnvironment { env in
-            env = environment.blueprintEnvironment
-        }
-    }
-}
 
 
 extension ListEnvironment {

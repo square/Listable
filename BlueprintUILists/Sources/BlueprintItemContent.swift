@@ -115,6 +115,20 @@ public protocol BlueprintItemContent : ItemContent
 }
 
 
+extension Environment {
+        
+    public internal(set) var applyItemContentInfo : ApplyItemContentInfo? {
+        get { self[ApplyItemContentInfoKey.self] }
+        set { self[ApplyItemContentInfoKey.self] = newValue }
+    }
+    
+    private enum ApplyItemContentInfoKey : EnvironmentKey {
+        static let defaultValue : ApplyItemContentInfo? = nil
+    }
+}
+
+
+
 public extension BlueprintItemContent
 {
     //
@@ -155,10 +169,10 @@ public extension BlueprintItemContent
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
         views.content.element = element(with: info)
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .wrapInBlueprintEnvironment(with: info)
         
         if let element = backgroundElement(with: info)?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .wrapInBlueprintEnvironment(with: info)
         {
             /// Load the `background` view and assign our element update.
             views.background.element = element
@@ -168,7 +182,7 @@ public extension BlueprintItemContent
         }
         
         if let element = selectedBackgroundElement(with: info)?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .wrapInBlueprintEnvironment(with: info)
         {
             /// Load the `selectedBackground` view and assign our element update.
             views.selectedBackground.element = element
@@ -178,7 +192,7 @@ public extension BlueprintItemContent
         }
         
         if let element = overlayDecorationElement(with: info)?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .wrapInBlueprintEnvironment(with: info)
         {
             /// Load the `overlayDecoration` view and assign our element update.
             views.overlayDecoration.element = element
@@ -188,7 +202,7 @@ public extension BlueprintItemContent
         }
         
         if let element = underlayDecorationElement(with: info)?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .wrapInBlueprintEnvironment(with: info)
         {
             /// Load the `underlayDecoration` view and assign our element update.
             views.underlayDecoration.element = element
@@ -223,5 +237,16 @@ public extension BlueprintItemContent
         view.backgroundColor = .clear
         
         return view
+    }
+}
+
+
+fileprivate extension Element {
+    
+    func wrapInBlueprintEnvironment(with info : ApplyItemContentInfo) -> Element {
+        self.adaptedEnvironment { env in
+            env = info.environment.blueprintEnvironment
+            env.applyItemContentInfo = info
+        }
     }
 }
