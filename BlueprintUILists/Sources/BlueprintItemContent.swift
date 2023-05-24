@@ -117,6 +117,8 @@ public protocol BlueprintItemContent : ItemContent
 
 extension Environment {
         
+    /// The `ApplyItemContentInfo` which was passed to the `Item` before it was
+    /// last displayed or updated. Nil if not in a Listable `Item`.
     public internal(set) var applyItemContentInfo : ApplyItemContentInfo? {
         get { self[ApplyItemContentInfoKey.self] }
         set { self[ApplyItemContentInfoKey.self] = newValue }

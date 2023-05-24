@@ -92,6 +92,8 @@ where
 
 extension Environment {
         
+    /// The `ApplyHeaderFooterContentInfo` which was passed to the `Item` before it was
+    /// last displayed or updated. Nil if not in a Listable `Item`.
     public internal(set) var applyHeaderFooterContentInfo : ApplyHeaderFooterContentInfo? {
         get { self[ApplyHeaderFooterContentInfoKey.self] }
         set { self[ApplyHeaderFooterContentInfoKey.self] = newValue }
