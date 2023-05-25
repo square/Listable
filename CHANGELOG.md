@@ -6,7 +6,7 @@
 
 ### Added
 
-- Adding Blueprint Elements to your list content has become easier: Just add them directly! You no longer need to use the `ElementItem` wrapper, unless you need to provide an isEquivalent implementation, a background view, or a selected background view, in which case, you are encouraged to use `BlueprintItemContent` or `BlueprintHeaderFooterContent` directly. The `ElementItem` and `ElementHeaderFooter` APIs will be deprecated in a future release, and are now soft-deprecated.
+- Adding Blueprint Elements to your list content has become easier: Just add them directly! Elements just need to to conform to `Equatable` or `LayoutEquivalent`. If you need more advanced behaviors such as backgrounds, etc, you are encouraged to continue to create content types which conforms `BlueprintItemContent` or `BlueprintHeaderFooterContent` . The `ElementItem` and `ElementHeaderFooter` APIs will be deprecated in a future release, and are now soft-deprecated.
 
     ```swift
     Section("an id") {

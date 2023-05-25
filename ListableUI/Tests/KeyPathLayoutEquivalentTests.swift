@@ -1,5 +1,5 @@
 //
-//  LayoutKeyPathEquivalentTests.swift
+//  KeyPathLayoutEquivalentTests.swift
 //  ListableUI-Unit-Tests
 //
 //  Created by Kyle Van Essen on 5/24/23.
@@ -8,11 +8,11 @@
 import ListableUI
 import XCTest
 
-class LayoutKeyPathEquivalentTests : XCTestCase {
+class KeyPathLayoutEquivalentTests : XCTestCase {
     
     func test_isEquivalent() {
         
-        struct TestingThing : LayoutKeyPathEquivalent {
+        struct TestingThing : KeyPathLayoutEquivalent {
             
             var name : String
             var age : Int

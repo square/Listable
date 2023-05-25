@@ -43,6 +43,7 @@ extension Element where Self:Equatable {
 /// Ensures that the `LayoutEquivalent` initializer for `WrappedElementContent` is called.
 extension Element where Self:LayoutEquivalent {
     
+    @_disfavoredOverload
     public func listItem(
         id : AnyHashable? = nil,
         selection: ItemSelectionStyle = .notSelectable,

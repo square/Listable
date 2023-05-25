@@ -32,6 +32,7 @@ extension Section {
     ///     section.add(Element2())
     /// }
     /// ```
+    @_disfavoredOverload
     public mutating func add<ElementType:Element>(_ element : ElementType) where ElementType:LayoutEquivalent
     {
         self.items.append(element.listItem())

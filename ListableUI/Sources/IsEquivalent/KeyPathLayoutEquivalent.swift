@@ -1,5 +1,5 @@
 //
-//  LayoutKeyPathEquivalent.swift
+//  KeyPathLayoutEquivalent.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 5/24/23.
@@ -14,9 +14,10 @@ import Foundation
 /// ## Note
 /// If you conform to `Equatable`, your value will receive `LayoutEquivalent`
 /// conformance for free.
-public protocol LayoutKeyPathEquivalent : LayoutEquivalent {
+public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     
-    typealias KeyPaths = [LayoutKeyPathEquivalentKeyPath<Self>]
+    typealias KeyPaths = [KeyPathLayoutEquivalentKeyPath<Self>]
+    typealias Builder = KeyPathLayoutEquivalentBuilder<Self>
     
     ///
     /// Used by the list to determine when the content of content has changed; in order to
@@ -83,12 +84,11 @@ public protocol LayoutKeyPathEquivalent : LayoutEquivalent {
     /// If your ``ItemContent`` conforms to ``Equatable``, there is a default
     /// implementation of this method which simply returns `self == other`.
     ///
-    @KeyPathEquivalentBuilder<Self>
-    static var isEquivalentKeyPaths : KeyPaths { get }
+    @Builder static var isEquivalentKeyPaths : KeyPaths { get }
 }
 
 
-extension LayoutKeyPathEquivalent {
+extension KeyPathLayoutEquivalent {
     
     /// Implements `isEquivalent(to:)` based on `isEquivalentKeyPaths`.
     public func isEquivalent(to other: Self) -> Bool {
@@ -106,7 +106,7 @@ extension LayoutKeyPathEquivalent {
 }
 
 
-public struct LayoutKeyPathEquivalentKeyPath<Value> {
+public struct KeyPathLayoutEquivalentKeyPath<Value> {
     
     let compare : (Value, Value) -> Bool
     
@@ -124,7 +124,7 @@ public struct LayoutKeyPathEquivalentKeyPath<Value> {
 }
 
 
-@resultBuilder public struct KeyPathEquivalentBuilder<Value:LayoutKeyPathEquivalent> {
+@resultBuilder public struct KeyPathLayoutEquivalentBuilder<Value:KeyPathLayoutEquivalent> {
     
     // https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
     
@@ -142,7 +142,7 @@ public struct LayoutKeyPathEquivalentKeyPath<Value> {
         [.init(keyPath)]
     }
     
-    @available(*, unavailable, message: "A KeyPath must conform to Equatable or LayoutEquivalent to be used with `LayoutKeyPathEquivalent`.")
+    @available(*, unavailable, message: "A KeyPath must conform to Equatable or LayoutEquivalent to be used with `KeyPathLayoutEquivalent`.")
     public static func buildExpression(
         _ keyPath: KeyPath<Value, some Any>
     ) -> Component {
