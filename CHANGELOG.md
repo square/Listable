@@ -27,7 +27,7 @@
 
 ### Changed
 
-- Definition of `isEquivalent(to:)` has been moved to `EquivalentComparable`.
+- Definition of `isEquivalent(to:)` has been moved to `LayoutEquivalent`.
 
 - The `ListableBuilder` result builder is now `ListableArrayBuilder`.
 

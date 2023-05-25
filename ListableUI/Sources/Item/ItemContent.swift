@@ -40,7 +40,7 @@ import UIKit
 /// z-index 2) `SelectedBackgroundView` (Only if the item supports a `selectionStyle` and is selected or highlighted.)
 /// z-index 1) `BackgroundView`
 ///
-public protocol ItemContent : EquivalentComparable, AnyItemConvertible where Coordinator.ItemContentType == Self
+public protocol ItemContent : LayoutEquivalent, AnyItemConvertible where Coordinator.ItemContentType == Self
 {
     //
     // MARK: Identification

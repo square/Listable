@@ -1,5 +1,5 @@
 //
-//  EquivalentComparable.swift
+//  LayoutEquivalent.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 11/28/21.
@@ -12,16 +12,11 @@ import Foundation
 /// remeasure the content and re-layout the list.
 ///
 /// ## Note
-/// You should rarely need to implement ``EquivalentComparable/isEquivalent(to:)-15tcq``
-/// yourself. By default, Listable will...
-/// - For regular objects, compare all `Equatable` properties on your object to see if they changed.
-/// - For `Equatable` objects, check to see if the object is equal.
-///
-/// If you do need to implement this method yourself (eg, your object has no equatable properties,
-/// or cannot conform to `Equatable`, see ``EquivalentComparable/isEquivalent(to:)-15tcq``
-/// for a full discussion of correct (and incorrect) implementations.
-///
-public protocol EquivalentComparable {
+/// If you conform to `Equatable`, your value will receive `LayoutEquivalent`
+/// conformance for free. If you need to implement `LayoutEquivalent` manually,
+/// consider using `LayoutKeyPathEquivalent` as a more declarative way to denote
+/// which key paths should be used in the `isEquivalent(to:)` comparison
+public protocol LayoutEquivalent {
     
     ///
     /// Used by the list to determine when the content of content has changed; in order to
@@ -90,66 +85,10 @@ public protocol EquivalentComparable {
 }
 
 
-public extension EquivalentComparable
-{
-    /// Our default implementation compares the `Equatable` properties of the
-    /// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
-    /// 
-    func isEquivalent(to other : Self) -> Bool {
-        defaultIsEquivalentImplementation(self, other)
-    }
-}
-
-
-public extension EquivalentComparable where Self:Equatable
+public extension LayoutEquivalent where Self:Equatable
 {
     /// If your content is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
     func isEquivalent(to other : Self) -> Bool {
         self == other
-    }
-}
-
-
-@_spi(ListableInternal)
-/// Our default implementation compares the `Equatable` properties of the
-/// provided `Element` to approximate an `isEquivalent` or `Equatable` implementation.
-public func defaultIsEquivalentImplementation<Value>(_ lhs : Value, _ rhs : Value) -> Bool {
-    let result = compareEquatableProperties(lhs, rhs)
-    
-    switch result {
-    case .equal:
-        return true
-        
-    case .notEqual:
-        return false
-        
-    case .hasNoFields:
-        return true
-        
-    case .error(let error):
-        
-        switch error {
-        case .noEquatableProperties, .unknownCollectionType:
-            assertionFailure(
-                """
-                FAILURE: The default `isEquivalent(to:)` implementation could not find any `Equatable` properties \
-                on \(Value.self), but there were other properties.
-                
-                In release versions, `isEquivalent(to:)` will always return false, which will affect performance.
-                
-                You should implement `isEquivalent(to:)` and check the relevant sub-properties to provide proper conformance:
-                
-                ```
-                func isEquivalent(to other : Self) -> Bool {
-                    myVar.subProperty == other.myVar.subProperty && ...
-                }
-                ```
-                
-                If your object can conform to `Equatable`, you can also add that conformance to provide `isEquivalent(to:)`.
-                """
-            )
-        }
-        
-        return false
     }
 }

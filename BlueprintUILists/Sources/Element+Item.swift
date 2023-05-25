@@ -6,53 +6,11 @@
 //
 
 import BlueprintUI
-@_spi(ListableInternal)
 import ListableUI
 
 
 // MARK: Item / ItemContent Extensions
 
-extension Element {
-    
-    /// Converts the given `Element` into a Listable `Item` with the provided ID. You can use this ID
-    /// to scroll to or later access the item through the regular list access APIs.
-    ///
-    /// You many also optionally configure the item, setting its values such as the `onDisplay` callbacks, etc.
-    ///
-    /// You can also provide a background or selected background via the `background` and `selectedBackground` modifiers.
-    ///
-    /// ```swift
-    /// MyElement(...)
-    ///     .listItem(id: "my-provided-id", selection: .tappable) { item in
-    ///         item.insertAndRemoveAnimations = .scaleUp
-    ///     } background: { _ in
-    ///         Box(backgroundColor: ...).inset(...)
-    ///     } selectedBackground: { _ in
-    ///         Box(backgroundColor: ...).inset(...)
-    ///     }
-    /// ```
-    public func listItem(
-        id : AnyHashable? = nil,
-        selection: ItemSelectionStyle = .notSelectable,
-        background : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
-        selectedBackground : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
-        configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
-    ) -> Item<WrappedElementContent<Self>> {
-        Item(
-            WrappedElementContent(
-                identifierValue: id,
-                represented: self,
-                background: background,
-                selectedBackground: selectedBackground
-            ),
-            configure: {
-                $0.selectionStyle = selection
-                
-                configure(&$0)
-            }
-        )
-    }
-}
 
 
 /// Ensures that the `Equatable` initializer for `WrappedElementContent` is called.
@@ -82,8 +40,8 @@ extension Element where Self:Equatable {
 }
 
 
-/// Ensures that the `EquivalentComparable` initializer for `WrappedElementContent` is called.
-extension Element where Self:EquivalentComparable {
+/// Ensures that the `LayoutEquivalent` initializer for `WrappedElementContent` is called.
+extension Element where Self:LayoutEquivalent {
     
     public func listItem(
         id : AnyHashable? = nil,
@@ -122,23 +80,6 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
         represented: ElementType,
         background : @escaping (ApplyItemContentInfo) -> Element?,
         selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
-    ) {
-        self.represented = represented
-        self.identifierValue = identifierValue
-        
-        self.backgroundProvider = background
-        self.selectedBackgroundProvider = selectedBackground
-        
-        self.isEquivalent = {
-            defaultIsEquivalentImplementation($0.represented, $1.represented)
-        }
-    }
-    
-    init(
-        identifierValue: AnyHashable?,
-        represented: ElementType,
-        background : @escaping (ApplyItemContentInfo) -> Element?,
-        selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
     ) where ElementType:Equatable
     {
         self.represented = represented
@@ -157,7 +98,7 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
         represented: ElementType,
         background : @escaping (ApplyItemContentInfo) -> Element?,
         selectedBackground : @escaping (ApplyItemContentInfo) -> Element?
-    ) where ElementType:EquivalentComparable
+    ) where ElementType:LayoutEquivalent
     {
         self.represented = represented
         self.identifierValue = identifierValue

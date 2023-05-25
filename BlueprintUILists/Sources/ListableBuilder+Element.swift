@@ -21,17 +21,14 @@ import ListableUI
 /// ```
 public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 
-    static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component {
-        [element.listItem()]
-    }
-    
     /// Ensures that the `Equatable`version of `.listItem()` is called.
     static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:Equatable {
         [element.listItem()]
     }
     
-    /// Ensures that the `EquivalentComparable`version of `.listItem()` is called.
-    static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:EquivalentComparable {
+    /// Ensures that the `LayoutEquivalent`version of `.listItem()` is called.
+    @_disfavoredOverload
+    static func buildExpression<ElementType:Element>(_ element: ElementType) -> Component where ElementType:LayoutEquivalent {
         [element.listItem()]
     }
     
@@ -43,18 +40,15 @@ public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 
 
 public extension ListableValueBuilder where ContentType == AnyHeaderFooterConvertible {
-
-    static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType {
-        return element.listHeaderFooter()
-    }
     
     /// Ensures that the `Equatable`version of `.listHeaderFooter()` is called.
     static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:Equatable {
         return element.listHeaderFooter()
     }
     
-    /// Ensures that the `EquivalentComparable`version of `.listHeaderFooter()` is called.
-    static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:EquivalentComparable {
+    /// Ensures that the `LayoutEquivalent`version of `.listHeaderFooter()` is called.
+    @_disfavoredOverload
+    static func buildBlock<ElementType:Element>(_ element: ElementType) -> ContentType where ElementType:LayoutEquivalent {
         return element.listHeaderFooter()
     }
     

@@ -184,7 +184,7 @@ fileprivate struct NonConvertibleElement : ProxyElement, ListElementNonConvertib
 }
 
 
-fileprivate struct Element1 : ProxyElement {
+fileprivate struct Element1 : ProxyElement, Equatable, LayoutEquivalent {
     
     var elementRepresentation: Element {
         Empty()
@@ -192,7 +192,7 @@ fileprivate struct Element1 : ProxyElement {
 }
 
 
-fileprivate struct Element2 : ProxyElement {
+fileprivate struct Element2 : ProxyElement, Equatable, LayoutEquivalent {
     
     var elementRepresentation: Element {
         Empty()
@@ -215,7 +215,7 @@ fileprivate struct EquatableElement : ProxyElement, Equatable {
 }
 
 
-fileprivate struct EquivalentElement : ProxyElement, EquivalentComparable {
+fileprivate struct EquivalentElement : ProxyElement, LayoutEquivalent {
     
     var calledIsEquivalent : () -> ()
     

@@ -292,7 +292,7 @@ fileprivate struct EquatableContent : ItemContent, Equatable {
 }
 
 
-fileprivate struct EquivalentContent : ItemContent, EquivalentComparable {
+fileprivate struct EquivalentContent : ItemContent, LayoutEquivalent {
     
     var identifierValue: String {
         ""
@@ -330,7 +330,7 @@ fileprivate struct EquatableHeaderFooter : HeaderFooterContent, Equatable {
 }
 
 
-fileprivate struct EquivalentHeaderFooter : HeaderFooterContent, EquivalentComparable {
+fileprivate struct EquivalentHeaderFooter : HeaderFooterContent, LayoutEquivalent {
     
     var calledIsEquivalent : () -> ()
     
