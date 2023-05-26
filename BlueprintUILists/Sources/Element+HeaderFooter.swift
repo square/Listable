@@ -12,6 +12,19 @@ import ListableUI
 // MARK: HeaderFooter / HeaderFooterContent Extensions
 
 
+extension Element {
+    
+    /// Ensures that a well-formed error is presented when a non-Equatable or non-LayoutEquivalent element is provided.
+    @available(*, unavailable, message: "To be directly added to a List, an Element must conform to Equatable or LayoutEquivalent.")
+    public func listHeaderFooter(
+        background : @escaping () -> Element? = { nil },
+        pressedBackground : @escaping () -> Element? = { nil },
+        configure : (inout HeaderFooter<WrappedHeaderFooterContent<Self>>) -> () = { _ in }
+    ) -> HeaderFooter<WrappedHeaderFooterContent<Self>> {
+        fatalError()
+    }
+}
+
 /// Ensures that the `Equatable` initializer for `WrappedHeaderFooterContent` is called.
 extension Element where Self:Equatable {
     

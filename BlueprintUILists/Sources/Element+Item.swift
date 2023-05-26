@@ -12,6 +12,21 @@ import ListableUI
 // MARK: Item / ItemContent Extensions
 
 
+extension Element {
+    
+    /// Ensures that a well-formed error is presented when a non-Equatable or non-LayoutEquivalent element is provided.
+    @available(*, unavailable, message: "To be directly added to a List, an Element must conform to Equatable or LayoutEquivalent.")
+    public func listItem(
+        id : AnyHashable? = nil,
+        selection: ItemSelectionStyle = .notSelectable,
+        background : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
+        selectedBackground : @escaping (ApplyItemContentInfo) -> Element? = { _ in nil },
+        configure : (inout Item<WrappedElementContent<Self>>) -> () = { _ in }
+    ) -> Item<WrappedElementContent<Self>> {
+        fatalError()
+    }
+}
+
 
 /// Ensures that the `Equatable` initializer for `WrappedElementContent` is called.
 extension Element where Self:Equatable {

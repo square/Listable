@@ -184,6 +184,14 @@ fileprivate struct NonConvertibleElement : ProxyElement, ListElementNonConvertib
 }
 
 
+fileprivate struct NonIncludableElement : ProxyElement {
+    
+    var elementRepresentation: Element {
+        Empty()
+    }
+}
+
+
 fileprivate struct Element1 : ProxyElement, Equatable, LayoutEquivalent {
     
     var elementRepresentation: Element {
@@ -242,7 +250,11 @@ fileprivate struct TestContent1 : BlueprintItemContent, Equatable {
 }
 
 
-fileprivate struct TestContent2 : BlueprintItemContent, Equatable {
+fileprivate struct TestContent2 : BlueprintItemContent, LayoutEquivalent {
+    
+    func isEquivalent(to other: TestContent2) -> Bool {
+        true
+    }
     
     var identifierValue: String {
         "1"
