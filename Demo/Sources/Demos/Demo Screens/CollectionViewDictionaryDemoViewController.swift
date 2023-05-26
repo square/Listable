@@ -143,7 +143,7 @@ final public class CollectionViewDictionaryDemoViewController : UIViewController
     }
 }
 
-fileprivate struct SearchBarElement : ItemContent
+fileprivate struct SearchBarElement : ItemContent, KeyPathLayoutEquivalent
 {
     var text : String
     
@@ -161,8 +161,8 @@ fileprivate struct SearchBarElement : ItemContent
         views.content.text = self.text
     }
     
-    func isEquivalent(to other: SearchBarElement) -> Bool {
-        return self.text == other.text
+    static var isEquivalentKeyPaths: KeyPaths {
+        \.text
     }
     
     typealias ContentView = SearchBar
