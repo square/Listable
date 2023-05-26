@@ -123,8 +123,4 @@ public struct WrappedHeaderFooterContent<ElementType:Element> : BlueprintHeaderF
     public var pressedBackground: Element? {
         pressedBackgroundProvider()
     }
-    
-    public var reappliesToVisibleView: ReappliesToVisibleView {
-        .ifNotEquivalent
-    }
 }

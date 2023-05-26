@@ -146,8 +146,4 @@ public struct WrappedElementContent<ElementType:Element> : BlueprintItemContent
     public func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element? {
         selectedBackgroundProvider(info)
     }
-    
-    public var reappliesToVisibleView: ReappliesToVisibleView {
-        .ifNotEquivalent
-    }
 }
