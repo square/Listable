@@ -105,8 +105,12 @@ public struct SwipeAction {
     /// The animation to perform when the action is completed.
     public enum OnDidPerformActionAnimation : Equatable {
         
-        /// The animation to perform when the action has been performed.
+        /// The swipe actions will be closed.
         case closeActions
+        
+        /// The swipe actions will be expanded, revealing the last swipe action.
+        /// You usually use this option when performing the action will remove the
+        /// row from the list, eg during a deletion, archive, etc.
         case expandActions
     }
 }
