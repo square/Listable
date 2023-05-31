@@ -235,14 +235,14 @@ final class SwipeActionsView: UIView {
         switch (newState, priorState) {
         case (.swiping, .swiping) where newState != priorState:
 
-            haptics.impactOccurred()
-
             UIViewPropertyAnimator {
                 self.setNeedsLayout()
                 self.layoutIfNeeded()
             }.startAnimation()
 
         case (.willPerformFirstActionAutomatically, _):
+            
+            haptics.impactOccurred()
 
             firstAction?.onTap(didPerformAction)
 
