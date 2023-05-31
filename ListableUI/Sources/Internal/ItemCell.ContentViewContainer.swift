@@ -255,10 +255,11 @@ extension ItemCell {
         }
 
         private func didPerformAction(animation: SwipeAction.OnDidPerformActionAnimation, side: SwipeActionsView.Side) {
-            if animation == .expandActions {
-                self.set(state: .expandActions(side), animated: true)
-            } else {
+            switch animation {
+            case .closeActions:
                 self.set(state: .closed, animated: true)
+            case .expandActions:
+                self.set(state: .expandActions(side), animated: true)
             }
         }
 
