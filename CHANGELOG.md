@@ -10,6 +10,8 @@
 
 ### Changed
 
+- `SwipeAction` property names have been updated to better reflect what they're for. `Completion` also now takes in a more descriptive enum, instead of a boolean, to make reading callsites clearer. Eg, `completion(.expandActions)` instead of `completion(true)`.
+
 ### Misc
 
 ### Internal
