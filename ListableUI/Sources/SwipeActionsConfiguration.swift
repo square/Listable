@@ -55,10 +55,10 @@ public struct SwipeAction {
     ///
     /// Pass in `true` to expand the actions (typically only used when deleting the row)
     /// or `false` to collapse them.
-    public typealias CompletionHandler = (_ expandActions: Bool) -> Void
+    public typealias OnDidPerformAction = (OnDidPerformActionAnimation) -> Void
 
     /// The completion handler called when the action is tapped.
-    public typealias Handler = (@escaping CompletionHandler) -> Void
+    public typealias OnTap = (@escaping OnDidPerformAction) -> Void
 
     public var title: String?
     
@@ -71,7 +71,7 @@ public struct SwipeAction {
     public var tintColor: UIColor
     public var image: UIImage?
 
-    public var handler: Handler
+    public var onTap: OnTap
     
     /// Creates a new swipe action with the provided options.
     public init(
@@ -82,7 +82,7 @@ public struct SwipeAction {
         backgroundColor: UIColor,
         tintColor: UIColor = .white,
         image: UIImage? = nil,
-        handler: @escaping Handler
+        onTap: @escaping OnTap
     ) {
         if title == nil || title?.isEmpty == true {
             precondition(
@@ -99,6 +99,14 @@ public struct SwipeAction {
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         self.image = image
-        self.handler = handler
+        self.onTap = onTap
+    }
+    
+    /// The animation to perform when the action is completed.
+    public enum OnDidPerformActionAnimation : Equatable {
+        
+        /// The animation to perform when the action has been performed.
+        case closeActions
+        case expandActions
     }
 }

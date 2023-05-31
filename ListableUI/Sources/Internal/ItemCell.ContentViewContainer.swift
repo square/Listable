@@ -151,8 +151,8 @@ extension ItemCell {
                 let swipeView = SwipeActionsView(
                     side: side,
                     style: style,
-                    didPerformAction: { [weak self] expandActions in
-                        self?.didPerformAction(expandActions: expandActions, side: side)
+                    didPerformAction: { [weak self] animation in
+                        self?.didPerformAction(animation: animation, side: side)
                     }
                 )
 
@@ -254,8 +254,8 @@ extension ItemCell {
             }
         }
 
-        private func didPerformAction(expandActions: Bool, side: SwipeActionsView.Side) {
-            if expandActions {
+        private func didPerformAction(animation: SwipeAction.OnDidPerformActionAnimation, side: SwipeActionsView.Side) {
+            if animation == .expandActions {
                 self.set(state: .expandActions(side), animated: true)
             } else {
                 self.set(state: .closed, animated: true)
@@ -285,9 +285,10 @@ extension ItemCell {
         }
 
         @objc private func performAccessibilityAction(_ action: AccessibilitySwipeAction) -> Bool {
-            action.action.handler { _ in
-                self.didPerformAction(expandActions: false, side: action.side)
+            action.action.onTap { _ in
+                self.didPerformAction(animation: .closeActions, side: action.side)
             }
+            
             return true
         }
 

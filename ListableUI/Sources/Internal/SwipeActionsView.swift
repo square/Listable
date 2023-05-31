@@ -26,7 +26,7 @@ final class SwipeActionsView: UIView {
     private var calculatedNaturalWidth: CGFloat = 0
 
     private var firstAction: SwipeAction?
-    private var didPerformAction: SwipeAction.CompletionHandler
+    private var didPerformAction: SwipeAction.OnDidPerformAction
     
     private var style: SwipeActionsViewStyle {
         didSet {
@@ -60,7 +60,7 @@ final class SwipeActionsView: UIView {
     init(
         side: Side,
         style: SwipeActionsViewStyle,
-        didPerformAction: @escaping SwipeAction.CompletionHandler
+        didPerformAction: @escaping SwipeAction.OnDidPerformAction
     ) {
         self.side = side
         self.style = style
@@ -244,7 +244,7 @@ final class SwipeActionsView: UIView {
 
         case (.willPerformFirstActionAutomatically, _):
 
-            firstAction?.handler(didPerformAction)
+            firstAction?.onTap(didPerformAction)
 
         default:
 
@@ -258,7 +258,7 @@ private class DefaultSwipeActionButton: UIButton {
 
     private let inset: CGFloat = 16
     private var action: SwipeAction?
-    private var didPerformAction: ((Bool) -> Void)?
+    private var didPerformAction: SwipeAction.OnDidPerformAction?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -273,7 +273,7 @@ private class DefaultSwipeActionButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(action: SwipeAction, didPerformAction: @escaping SwipeAction.CompletionHandler) {
+    func set(action: SwipeAction, didPerformAction: @escaping SwipeAction.OnDidPerformAction) {
         self.action = action
         
         self.didPerformAction = didPerformAction
@@ -296,7 +296,7 @@ private class DefaultSwipeActionButton: UIButton {
 
     @objc private func onTap() {
         guard let action = action, let didPerformAction = didPerformAction else { return }
-        action.handler(didPerformAction)
+        action.onTap(didPerformAction)
     }
 }
 
