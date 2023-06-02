@@ -41,6 +41,8 @@ public struct Behavior : Equatable
 
     /// The rate at which scrolling decelerates.
     public var decelerationRate: DecelerationRate
+    
+    public var verticalLayoutGravity : VerticalLayoutGravity
 
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
@@ -52,7 +54,8 @@ public struct Behavior : Equatable
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
         isPagingEnabled : Bool = false,
-        decelerationRate : DecelerationRate = .normal
+        decelerationRate : DecelerationRate = .normal,
+        verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
@@ -66,6 +69,8 @@ public struct Behavior : Equatable
         self.delaysContentTouches = delaysContentTouches
         self.isPagingEnabled = false
         self.decelerationRate = decelerationRate
+        
+        self.verticalLayoutGravity = verticalLayoutGravity
     }
 }
 
@@ -165,6 +170,11 @@ extension Behavior
                 }
             }
         }
+    }
+    
+    public enum VerticalLayoutGravity {
+        case top
+        case bottom
     }
 }
 

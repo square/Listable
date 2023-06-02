@@ -40,7 +40,7 @@ public final class ListView : UIView
             behavior: self.behavior
         )
 
-        self.collectionView = IOS16_4_First_Responder_Bug_CollectionView(
+        self.collectionView = CollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
@@ -131,7 +131,7 @@ public final class ListView : UIView
     //
     
     let storage : Storage
-    let collectionView : IOS16_4_First_Responder_Bug_CollectionView
+    let collectionView : CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -248,6 +248,8 @@ public final class ListView : UIView
     private func applyBehavior()
     {
         self.collectionViewLayout.behavior = self.behavior
+        
+        self.collectionView.verticalLayoutGravity = self.behavior.verticalLayoutGravity
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
@@ -1573,5 +1575,32 @@ fileprivate extension UIScrollView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
+    }
+}
+
+
+final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
+    
+    var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top {
+        didSet {
+            guard oldValue != verticalLayoutGravity else { return }
+        }
+    }
+    
+    override var contentSize: CGSize {
+        
+        willSet {
+            //print("Setting Content Size")
+        }
+        
+        didSet {
+            guard verticalLayoutGravity == .bottom else { return }
+            
+            guard oldValue != contentSize else { return }
+            
+            let heightChange = oldValue.height - contentSize.height
+            
+            self.contentOffset.y -= heightChange
+        }
     }
 }
