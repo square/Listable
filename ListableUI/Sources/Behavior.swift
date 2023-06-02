@@ -172,6 +172,7 @@ extension Behavior
         }
     }
     
+    // TODO: Remove 'vertical', rename to start/end
     public enum VerticalLayoutGravity {
         case top
         case bottom

@@ -1581,22 +1581,16 @@ fileprivate extension UIScrollView
 
 final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
     
-    var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top {
-        didSet {
-            guard oldValue != verticalLayoutGravity else { return }
-        }
-    }
+    var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top
     
     override var contentSize: CGSize {
-        
-        willSet {
-            //print("Setting Content Size")
-        }
         
         didSet {
             guard verticalLayoutGravity == .bottom else { return }
             
             guard oldValue != contentSize else { return }
+            
+            guard contentSize.height >= bounds.height else { return } // TODO uhh right?
             
             let heightChange = oldValue.height - contentSize.height
             
