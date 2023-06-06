@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Enabled collection view first responder workaround for iOS 17.0; it is broken in the first beta.
+
 ### Added
 
 ### Removed
