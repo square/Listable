@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Enabled collection view first responder workaround for iOS 17.0; it is broken in the first beta.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [10.3.1] - 2023-06-06
+
+### Fixed
+
+- Enabled collection view first responder workaround for iOS 17.0; it is broken in the first beta.
 
 # [10.3.0] - 2023-05-17
 
@@ -936,7 +940,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/10.3.0...HEAD
+[Main]: https://github.com/square/Listable/square/10.3.1...HEAD
+[10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1
 [10.3.0]: https://github.com/square/Listable/compare/10.2.0...10.3.0
 [10.2.0]: https://github.com/square/Listable/compare/10.1.0...10.2.0
 [10.1.0]: https://github.com/square/Listable/compare/10.0.1...10.1.0
