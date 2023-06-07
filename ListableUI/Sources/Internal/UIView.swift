@@ -30,4 +30,20 @@ extension UIView {
         
         return nil
     }
+    
+    func containsFirstResponder() -> Bool {
+        
+        for view in subviews {
+            
+            if view.isFirstResponder {
+                return true
+            } else {
+                if view.containsFirstResponder() {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
 }
