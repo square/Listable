@@ -94,7 +94,7 @@
 /// You provide a result builder in an API by specifying it as a method parameter, like so:
 ///
 /// ```
-/// init(@ListableValueBuilder<SomeContent> thing : () -> SomeContent) {
+/// init(@ListableOptionalBuilder<SomeContent> thing : () -> SomeContent?) {
 ///     self.thing = thing()
 /// }
 /// ```
@@ -105,13 +105,27 @@
 /// https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/
 /// https://www.avanderlee.com/swift/result-builders/
 ///
-@resultBuilder public enum ListableValueBuilder<ContentType> {
-
+@resultBuilder public enum ListableOptionalBuilder<ContentType> {
+    
+    typealias Component = ContentType?
+    
     public static func buildBlock() -> ContentType? {
         nil
     }
 
     public static func buildBlock(_ content: ContentType?) -> ContentType? {
-        return content
+        content
+    }
+    
+    public static func buildOptional(_ component: ContentType??) -> ContentType? {
+        component ?? nil
+    }
+
+    public static func buildEither(first component: ContentType?) -> ContentType? {
+        component
+    }
+
+    public static func buildEither(second component: ContentType?) -> ContentType? {
+        component
     }
 }

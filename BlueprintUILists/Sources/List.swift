@@ -77,10 +77,10 @@ public struct List : Element
         measurement : List.Measurement = .fillParent,
         configure : ListProperties.Configure = { _ in },
         @ListableArrayBuilder<Section> sections : () -> [Section],
-        @ListableValueBuilder<AnyHeaderFooterConvertible> containerHeader : () -> AnyHeaderFooterConvertible? = { nil },
-        @ListableValueBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
-        @ListableValueBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil },
-        @ListableValueBuilder<AnyHeaderFooterConvertible> overscrollFooter : () -> AnyHeaderFooterConvertible? = { nil }
+        @AnyHeaderFooterBuilder containerHeader : () -> AnyHeaderFooterConvertible? = { nil },
+        @AnyHeaderFooterBuilder header : () -> AnyHeaderFooterConvertible? = { nil },
+        @AnyHeaderFooterBuilder footer : () -> AnyHeaderFooterConvertible? = { nil },
+        @AnyHeaderFooterBuilder overscrollFooter : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.measurement = measurement
         

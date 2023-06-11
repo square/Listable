@@ -121,8 +121,8 @@ public struct Section
         layouts : SectionLayouts = .init(),
         reordering : SectionReordering = .init(),
         @ListableArrayBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        @ListableValueBuilder<AnyHeaderFooterConvertible> header : () -> AnyHeaderFooterConvertible? = { nil },
-        @ListableValueBuilder<AnyHeaderFooterConvertible> footer : () -> AnyHeaderFooterConvertible? = { nil }
+        @AnyHeaderFooterBuilder header : () -> AnyHeaderFooterConvertible? = { nil },
+        @AnyHeaderFooterBuilder footer : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.identifier = Identifier(identifier)
         

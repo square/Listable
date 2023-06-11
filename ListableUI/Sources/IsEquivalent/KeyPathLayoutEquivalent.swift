@@ -88,12 +88,24 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
 }
 
 
+fileprivate var cachedIsEquivalentKeyPaths : [ObjectIdentifier:Any] = [:]
+
 extension KeyPathLayoutEquivalent {
     
     /// Implements `isEquivalent(to:)` based on `isEquivalentKeyPaths`.
     public func isEquivalent(to other: Self) -> Bool {
-
-        let keyPaths = Self.isEquivalentKeyPaths
+        
+        let keyPaths : KeyPaths = {
+            let id = ObjectIdentifier(Self.self)
+            
+            if let existing = cachedIsEquivalentKeyPaths[id] {
+                return existing as! KeyPaths
+            } else {
+                let new = Self.isEquivalentKeyPaths
+                cachedIsEquivalentKeyPaths[id] = new
+                return new
+            }
+        }()
         
         for keyPath in keyPaths {
             if keyPath.compare(self, other) == false {

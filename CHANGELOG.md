@@ -21,7 +21,7 @@
     }
     ```
     
-- Added `ListableValueBuilder`, a result builder for single-value results.
+- Added `ListableOptionalBuilder`, a result builder for single-value results.
 
 ### Removed
 
@@ -30,8 +30,6 @@
 - Definition of `isEquivalent(to:)` has been moved to `LayoutEquivalent`.
 
 - The `ListableBuilder` result builder is now `ListableArrayBuilder`.
-
-- In many cases, you no longer need to implement `isEquivalent(to:)`. Listable will traverse the `Equatable` properties on your contents to determine when content should be re-measured. To improve performance for long lists or complex content objects, you're still encouraged to either make those content objects conform to `Equatable`, or implement `isEquivalent(to:)`.
 
 ### Misc
 

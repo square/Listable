@@ -9,7 +9,7 @@ import ListableUI
 import XCTest
 
 
-class ListableBuilderTests : XCTestCase {
+class ListableArrayBuilderTests : XCTestCase {
     
     func test_empty() {
         let content : [String] = build {}
@@ -210,6 +210,46 @@ class ListableBuilderTests : XCTestCase {
         }
     }
     
+    private func build<Content>(
+        @ListableArrayBuilder<Content> using builder : () -> [Content]
+    ) -> [Content]
+    {
+        builder()
+    }
+}
+
+
+public class ListableOptionalBuilderTests : XCTestCase {
+    
+    func test_empty() {
+        let result : String? = build { }
+        
+        XCTAssertNil(result)
+    }
+    
+    func test_if() {
+        
+        /// If we use just `true` or `false`, the compiler (rightly) complains about unreachable code.
+        let trueValue = "true" == "true"
+        let falseValue = "true" == "false"
+        
+        let falseResult : String? = build {
+            if falseValue {
+                "string"
+            }
+        }
+        
+        XCTAssertNil(falseResult)
+        
+        let trueResult : String? = build {
+            if trueValue {
+                "string"
+            }
+        }
+        
+        XCTAssertEqual(trueResult, "string")
+    }
+    
     func test_headerfooter_default_implementation_resolution() {
         
         var callCount : Int = 0
@@ -248,9 +288,9 @@ class ListableBuilderTests : XCTestCase {
         XCTAssertEqual(callCount, 4)
     }
     
-    fileprivate func build<Content>(
-        @ListableArrayBuilder<Content> using builder : () -> [Content]
-    ) -> [Content]
+    private func build<Content>(
+        @ListableOptionalBuilder<Content> using builder : () -> Content?
+    ) -> Content?
     {
         builder()
     }

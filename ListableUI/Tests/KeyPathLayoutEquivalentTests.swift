@@ -49,5 +49,11 @@ class KeyPathLayoutEquivalentTests : XCTestCase {
         
         XCTAssertTrue(value1.isEquivalent(to: equivalentToValue1))
         XCTAssertFalse(value1.isEquivalent(to: notEquivalentToValue1))
+        
+        /// Our implementation caches the result of `isEquivalentKeyPaths`,
+        /// ensure calling the above again does not crash when retrieving values from the cache.
+        
+        XCTAssertTrue(value1.isEquivalent(to: equivalentToValue1))
+        XCTAssertFalse(value1.isEquivalent(to: notEquivalentToValue1))
     }
 }

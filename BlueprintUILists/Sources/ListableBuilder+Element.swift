@@ -45,7 +45,7 @@ public extension ListableArrayBuilder where ContentType == AnyItemConvertible {
 }
 
 
-public extension ListableValueBuilder where ContentType == AnyHeaderFooterConvertible {
+public extension ListableOptionalBuilder where ContentType == AnyHeaderFooterConvertible {
 
     /// Ensures that a well-formed error is presented when a non-Equatable or non-LayoutEquivalent element is provided.
     @available(*, unavailable, message: "To be directly added to a List, an Element must conform to Equatable or LayoutEquivalent.")

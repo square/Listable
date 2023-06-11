@@ -15,7 +15,7 @@ import Foundation
 /// If you conform to `Equatable`, your value will receive `LayoutEquivalent`
 /// conformance for free. If you need to implement `LayoutEquivalent` manually,
 /// consider using `KeyPathLayoutEquivalent` as a more declarative way to denote
-/// which key paths should be used in the `isEquivalent(to:)` comparison
+/// which key paths should be used in the `isEquivalent(to:)` comparison.
 public protocol LayoutEquivalent {
     
     ///
