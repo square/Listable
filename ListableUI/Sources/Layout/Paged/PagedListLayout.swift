@@ -79,7 +79,7 @@ public struct PagedAppearance : ListLayoutAppearance
         )
     }
     
-    public let bounds: ListContentBounds? = nil
+    public var bounds: ListContentBounds?
     
     public func toLayoutDescription() -> LayoutDescription {
         LayoutDescription(layoutType: PagedListLayout.self, appearance: self)
@@ -90,22 +90,19 @@ public struct PagedAppearance : ListLayoutAppearance
     /// If scroll indicators should be visible along the scrollable axis.
     public var showsScrollIndicators : Bool
     
-    /// How far each item in the list should be inset from the edges of the view.
-    public var itemInsets : UIEdgeInsets
-    
     /// Internal property for test harness only.
     internal var pagingSize : PagingSize
     
     public init(
         direction: LayoutDirection = .vertical,
         showsScrollIndicators : Bool = false,
-        itemInsets : UIEdgeInsets = .zero
+        bounds: ListContentBounds? = nil
     ) {
         self.pagingSize = .view
         
         self.direction = direction
         self.showsScrollIndicators = showsScrollIndicators
-        self.itemInsets = itemInsets
+        self.bounds = bounds
     }
     
     enum PagingSize : Equatable {
@@ -175,30 +172,76 @@ final class PagedListLayout : ListLayout
         in context : ListLayoutLayoutContext
     ) -> ListLayoutResult
     {
-        let viewSize = self.layoutAppearance.pagingSize.size(
+        let bounds = self.resolvedBounds(in: context)
+        
+        /// The size of each page to use during the layout.
+        /// Defaults to the size of the view, but some cases (eg tests) override.
+        
+        let pageSize = self.layoutAppearance.pagingSize.size(
             for: context.viewBounds.size,
             direction: self.direction
         )
         
-        var lastMaxY : CGFloat = 0.0
+        /// The size of the containing view.
+        
+        let viewSize = context.viewBounds.size
+        
+        let itemWidth = CustomWidth.custom(.init(
+            padding: HorizontalPadding(
+                leading: bounds.padding.left,
+                trailing: bounds.padding.right
+            ),
+            width: bounds.width,
+            alignment: .center
+        ))
+        
+        let itemPosition = itemWidth.position(
+            with: pageSize.width,
+            defaultWidth: bounds.width.clamp(pageSize.width)
+        )
+        
+        var lastMaxY : CGFloat = 0
         
         for item in content.all {
             
-            let containerFrame : CGRect
-                            
-            switch direction {
-            case .vertical: containerFrame = CGRect(x: 0.0, y: lastMaxY, width: viewSize.width, height: viewSize.height)
-            case .horizontal: containerFrame = CGRect(x: lastMaxY, y: 0.0, width: viewSize.width, height: viewSize.height)
+            var itemFrame : CGRect = direction.switch {
+                CGRect(
+                    x: itemPosition.origin,
+                    y: lastMaxY,
+                    width: itemPosition.width,
+                    height: pageSize.height
+                )
+            } horizontal: {
+                CGRect(
+                    x: lastMaxY + itemPosition.origin,
+                    y: 0,
+                    width: itemPosition.width,
+                    height: pageSize.height
+                )
             }
             
-            let viewFrame = containerFrame.inset(by: self.layoutAppearance.itemInsets)
+            itemFrame = itemFrame.inset(
+                by: bounds.padding.masked(
+                    by: [.top, .bottom]
+                )
+            )
+
+            item.x = itemFrame.origin.x
+            item.y = itemFrame.origin.y
+            item.size = itemFrame.size
             
-            item.x = viewFrame.origin.x
-            item.y = viewFrame.origin.y
-            item.size = viewFrame.size
-            
-            lastMaxY = direction.maxY(for: containerFrame)
+            lastMaxY += direction.switch(
+                vertical: pageSize.height,
+                horizontal: pageSize.width
+            )
         }
+        
+        /// Add the remaining bounds padding to the bottom of the collection view.
+        
+        lastMaxY += direction.switch(
+            vertical: bounds.padding.bottom,
+            horizontal: bounds.padding.right
+        )
         
         return .init(
             contentSize: direction.switch(

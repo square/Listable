@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `.paged` layouts now respect `bounds` for each page. `itemInsets` has been removed; use `bounds.padding` instead.
+
 ### Misc
 
 ### Internal
