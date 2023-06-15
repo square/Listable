@@ -9,7 +9,7 @@ import BlueprintUILists
 import XCTest
 
 
-class ListableBuilder_Element_Tests : XCTestCase {
+class ListableArrayBuilder_Element_Tests : XCTestCase {
     
     func test_builders() {
         
@@ -79,7 +79,11 @@ class ListableBuilder_Element_Tests : XCTestCase {
         XCTAssertEqual(list.properties.content.sections[1].count, 4)
         XCTAssertEqual(list.properties.content.sections[2].count, 3)
     }
-        
+}
+
+
+class ListableOptionalBuilder_Element_Tests : XCTestCase {
+    
     func test_item_default_implementation_resolution() {
         
         var callCount : Int = 0
