@@ -214,7 +214,7 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent, KeyPathLayoutEquivalen
         )
     }
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.type
     }
 }

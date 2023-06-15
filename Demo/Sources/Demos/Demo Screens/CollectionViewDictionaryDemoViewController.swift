@@ -161,7 +161,7 @@ fileprivate struct SearchBarElement : ItemContent, KeyPathLayoutEquivalent
         views.content.text = self.text
     }
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.text
     }
     

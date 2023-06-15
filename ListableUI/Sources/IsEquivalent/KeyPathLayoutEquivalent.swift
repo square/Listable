@@ -30,7 +30,7 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     /// any cached sizing it has stored for the content, and re-measure + re-layout the content.
     ///
     /// ## ⚠️ Important
-    /// `isEquivalentKeyPaths` is **not** an identifier check. That is what the `identifierValue`
+    /// `isEquivalent` is **not** an identifier check. That is what the `identifierValue`
     /// on your `ItemContent` is for. It is to determine when content has meaningfully changed.
     ///
     /// ## 🤔 Examples & How To
@@ -44,7 +44,7 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     ///     var theme : MyTheme
     ///     var onTapDetail : () -> ()
     ///
-    ///     static var isEquivalentKeyPaths : KeyPaths {
+    ///     static var isEquivalent : KeyPaths {
     ///         // 🚫 Missing checks for title and detail.
     ///         // If they change, they likely affect sizing,
     ///         // which would result in incorrect item sizing.
@@ -52,7 +52,7 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     ///         \.theme
     ///     }
     ///
-    ///     static var isEquivalentKeyPaths : KeyPaths {
+    ///     static var isEquivalent : KeyPaths {
     ///         // 🚫 Missing check for theme.
     ///         // If the theme changed; its likely that the device's
     ///         // accessibility settings changed; dark mode was enabled,
@@ -63,7 +63,7 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     ///         \.detail
     ///     }
     ///
-    ///    static var isEquivalentKeyPaths : KeyPaths {
+    ///    static var isEquivalent : KeyPaths {
     ///         // ✅ Checking all parameters which can affect appearance + layout.
     ///         // 💡 Not checking identifierValue or onTapDetail, since they
     ///         // do not affect appearance + layout.
@@ -84,7 +84,7 @@ public protocol KeyPathLayoutEquivalent : LayoutEquivalent {
     /// If your ``ItemContent`` conforms to ``Equatable``, there is a default
     /// implementation of this method which simply returns `self == other`.
     ///
-    @Builder static var isEquivalentKeyPaths : KeyPaths { get }
+    @Builder static var isEquivalent : KeyPaths { get }
 }
 
 
@@ -92,7 +92,7 @@ fileprivate var cachedIsEquivalentKeyPaths : [ObjectIdentifier:Any] = [:]
 
 extension KeyPathLayoutEquivalent {
     
-    /// Implements `isEquivalent(to:)` based on `isEquivalentKeyPaths`.
+    /// Implements `isEquivalent(to:)` based on `isEquivalent`.
     public func isEquivalent(to other: Self) -> Bool {
         
         let keyPaths : KeyPaths = {
@@ -101,7 +101,7 @@ extension KeyPathLayoutEquivalent {
             if let existing = cachedIsEquivalentKeyPaths[id] {
                 return existing as! KeyPaths
             } else {
-                let new = Self.isEquivalentKeyPaths
+                let new = Self.isEquivalent
                 cachedIsEquivalentKeyPaths[id] = new
                 return new
             }

@@ -253,7 +253,7 @@ struct ToggleItem : BlueprintItemContent, KeyPathLayoutEquivalent
     
     var onToggle : (Bool) -> ()
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.content
     }
     

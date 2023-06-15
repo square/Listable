@@ -273,7 +273,7 @@ fileprivate struct ToggleRow : BlueprintItemContent, KeyPathLayoutEquivalent
         self.content.text
     }
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.content
     }
 }
@@ -388,7 +388,7 @@ fileprivate struct AmountRow : BlueprintItemContent, KeyPathLayoutEquivalent
         self.content.title
     }
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.content
     }
 }
@@ -407,7 +407,7 @@ fileprivate struct ButtonRow : BlueprintItemContent, KeyPathLayoutEquivalent
         self.text
     }
     
-    static var isEquivalentKeyPaths: KeyPaths {
+    static var isEquivalent: KeyPaths {
         \.text
     }
 }

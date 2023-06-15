@@ -12,19 +12,19 @@ class KeyPathLayoutEquivalentTests : XCTestCase {
     
     func test_isEquivalent() {
         
-        struct TestingThing : KeyPathLayoutEquivalent {
-            
-            var name : String
-            var age : Int
-            var birthdate : Date
-            var nonCompared : Bool
-            
-            static var isEquivalentKeyPaths: KeyPaths {
-                \.name
-                \.age
-                \.birthdate
-            }
-        }
+struct TestingThing : KeyPathLayoutEquivalent {
+    
+    var name : String
+    var age : Int
+    var birthdate : Date
+    var nonCompared : Bool
+    
+    static var isEquivalent: KeyPaths {
+        \.name
+        \.age
+        \.birthdate
+    }
+}
         
         let value1 = TestingThing(
             name: "1",
@@ -50,7 +50,7 @@ class KeyPathLayoutEquivalentTests : XCTestCase {
         XCTAssertTrue(value1.isEquivalent(to: equivalentToValue1))
         XCTAssertFalse(value1.isEquivalent(to: notEquivalentToValue1))
         
-        /// Our implementation caches the result of `isEquivalentKeyPaths`,
+        /// Our implementation caches the result of `isEquivalent`,
         /// ensure calling the above again does not crash when retrieving values from the cache.
         
         XCTAssertTrue(value1.isEquivalent(to: equivalentToValue1))

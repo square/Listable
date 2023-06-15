@@ -21,7 +21,25 @@
     }
     ```
     
-- Added `ListableOptionalBuilder`, a result builder for single-value results.
+- Added `ListableOptionalBuilder`, a result builder for single-value results. This is used for header and footer builders.
+
+- Introduced `KeyPathLayoutEquivalent`, an easier way to write `isEquivalent` implementations using just key paths:
+
+    ```swift
+    struct MyValue : KeyPathLayoutEquivalent {
+        
+        var name : String
+        var age : Int
+        var birthdate : Date
+        var nonCompared : Bool
+        
+        static var isEquivalent: KeyPaths {
+            \.name
+            \.age
+            \.birthdate
+        }
+    }    
+    ```
 
 ### Removed
 
