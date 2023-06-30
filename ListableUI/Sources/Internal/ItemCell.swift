@@ -104,6 +104,7 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
+        print("create!")
         
     }
     

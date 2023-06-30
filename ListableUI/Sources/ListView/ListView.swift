@@ -44,6 +44,7 @@ public final class ListView : UIView
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
+        self.collectionView.clipsToBounds = false
         
         self.layoutManager = LayoutManager(
             layout: initialLayout,

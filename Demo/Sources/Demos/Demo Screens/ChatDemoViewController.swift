@@ -47,7 +47,7 @@ final class ChatDemoViewController : ListViewController {
                 width: .atMost(600)
             )
             
-            layout.layout.itemSpacing = 20
+            layout.layout.itemSpacing = 0
         }
         
         list.behavior.verticalLayoutGravity = .bottom

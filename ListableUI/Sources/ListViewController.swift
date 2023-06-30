@@ -112,11 +112,23 @@ open class ListViewController : UIViewController
     
     private var listView : ListView?
     
-    public override func loadView() {
+//    public override func loadView() {
+//        let listView = ListView()
+//
+//        self.listView = listView
+////        self.view = listView
+//        self.view.addSubview(listView)
+//    }
+    open override func viewDidLoad() {
         let listView = ListView()
-        
+        view.clipsToBounds = false
+        listView.clipsToBounds = false
+        self.view.addSubview(listView)
         self.listView = listView
-        self.view = listView
+    }
+
+    open override func viewDidLayoutSubviews() {
+        self.listView?.frame = CGRectInset(self.view.frame, 200, 300)
     }
     
     private var hasViewAppeared : Bool = false
