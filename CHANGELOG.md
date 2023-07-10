@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a bug that resulted in header/footer views not properly updating, by fixing the underlying tracking of collection view supplementary views.
+
 ### Added
 
 - `ApplyItemContentInfo` and `ApplyHeaderFooterContentInfo` are now available in the Blueprint `Environment` for each `BlueprintItemContent`.
