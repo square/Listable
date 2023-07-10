@@ -171,10 +171,10 @@ public extension BlueprintItemContent
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
         views.content.element = element(with: info)
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         
         if let element = backgroundElement(with: info)?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `background` view and assign our element update.
             views.background.element = element
@@ -184,7 +184,7 @@ public extension BlueprintItemContent
         }
         
         if let element = selectedBackgroundElement(with: info)?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `selectedBackground` view and assign our element update.
             views.selectedBackground.element = element
@@ -194,7 +194,7 @@ public extension BlueprintItemContent
         }
         
         if let element = overlayDecorationElement(with: info)?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `overlayDecoration` view and assign our element update.
             views.overlayDecoration.element = element
@@ -204,7 +204,7 @@ public extension BlueprintItemContent
         }
         
         if let element = underlayDecorationElement(with: info)?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `underlayDecoration` view and assign our element update.
             views.underlayDecoration.element = element
@@ -245,7 +245,7 @@ public extension BlueprintItemContent
 
 fileprivate extension Element {
     
-    func wrapInBlueprintEnvironment(with info : ApplyItemContentInfo) -> Element {
+    func adaptedEnvironment(with info : ApplyItemContentInfo) -> Element {
         self.adaptedEnvironment { env in
             env = info.environment.blueprintEnvironment
             env.applyItemContentInfo = info

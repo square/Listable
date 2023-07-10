@@ -131,11 +131,11 @@ public extension BlueprintHeaderFooterContent
         
         views.content.element = self
             .elementRepresentation
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         
         if let element = self
             .background?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `background` view and assign our element update.
             views.background.element = element
@@ -146,7 +146,7 @@ public extension BlueprintHeaderFooterContent
         
         if let element = self
             .pressedBackground?
-            .wrapInBlueprintEnvironment(with: info)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `pressedBackground` view and assign our element update.
             views.pressedBackground.element = element
@@ -179,7 +179,7 @@ public extension BlueprintHeaderFooterContent
 
 fileprivate extension Element {
     
-    func wrapInBlueprintEnvironment(with info : ApplyHeaderFooterContentInfo) -> Element {
+    func adaptedEnvironment(with info : ApplyHeaderFooterContentInfo) -> Element {
         self.adaptedEnvironment { env in
             env = info.environment.blueprintEnvironment
             env.applyHeaderFooterContentInfo = info
