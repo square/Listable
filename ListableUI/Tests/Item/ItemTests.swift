@@ -19,7 +19,7 @@ class ItemTests: XCTestCase
                     action: .init(
                         title: "Test",
                         backgroundColor: .blue,
-                        handler: { _ in }
+                        onTap: { _ in }
                     )
                 )
             }

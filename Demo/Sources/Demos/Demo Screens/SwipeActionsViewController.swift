@@ -120,7 +120,7 @@ final class SwipeActionsViewController: UIViewController  {
                 image: UIImage(systemName: "video.fill")
             ) { [weak self] expandActions in
                 self?.open(item: item) {
-                    expandActions(false)
+                    expandActions(.closeActions)
                 }
             }
             
@@ -131,7 +131,7 @@ final class SwipeActionsViewController: UIViewController  {
                 image: UIImage(systemName: "square.and.arrow.up.fill")
             ) { [weak self] expandActions in
                 self?.share(item: item) {
-                    expandActions(false)
+                    expandActions(.closeActions)
                 }
             }
         }
@@ -158,7 +158,7 @@ final class SwipeActionsViewController: UIViewController  {
                 image: item.isSaved ? nil : UIImage(named: "bookmark")!.withRenderingMode(.alwaysTemplate)
             ) { [weak self] expandActions in
                 self?.toggleSave(item: item)
-                expandActions(false)
+                expandActions(.closeActions)
             }
         }
     }
@@ -188,11 +188,11 @@ final class SwipeActionsViewController: UIViewController  {
         reloadData(animated: true)
     }
 
-    private func confirmDelete(item: SwipeActionItem, expandActions: @escaping (Bool) -> Void) {
+    private func confirmDelete(item: SwipeActionItem, expandActions: @escaping (SwipeAction.OnDidPerformActionAnimation) -> Void) {
         let alert = UIAlertController(title: item.title, message: nil, preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            expandActions(false)
+            expandActions(.closeActions)
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
@@ -202,7 +202,7 @@ final class SwipeActionsViewController: UIViewController  {
                 self.sections[i].removeAll(where: { $0.identifier == item.identifier })
             }
             self.reloadData(animated: true)
-            expandActions(true)
+            expandActions(.expandActions)
         })
 
         present(alert, animated: true, completion: nil)
