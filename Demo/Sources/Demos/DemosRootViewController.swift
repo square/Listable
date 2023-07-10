@@ -34,14 +34,6 @@ public final class DemosRootViewController : ListViewController
         list.add {
             Section("list") { [weak self] in
                 Item(
-                    DemoItem(text: "Testing Headers"),
-                    selectionStyle: .selectable(),
-                    onSelect : { _ in
-                        self?.push(SupplementaryTestingViewController())
-                    }
-                )
-                
-                Item(
                     DemoItem(text: "Basic Demo"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
@@ -309,6 +301,14 @@ public final class DemosRootViewController : ListViewController
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(UpdateFuzzingViewController())
+                    }
+                )
+                
+                Item(
+                    DemoItem(text: "Testing Header Association"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(SupplementaryTestingViewController())
                     }
                 )
             } header: {

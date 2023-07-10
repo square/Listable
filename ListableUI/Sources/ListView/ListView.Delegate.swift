@@ -154,9 +154,7 @@ extension ListView
             
             item.didEndDisplay()
         }
-        
-        private var displayedSupplementaryItems : [ObjectIdentifier:PresentationState.HeaderFooterViewStatePair] = [:]
-        
+                
         func collectionView(
             _ collectionView: UICollectionView,
             willDisplaySupplementaryView anyView: UICollectionReusableView,
@@ -167,49 +165,30 @@ extension ListView
             let container = anyView as! SupplementaryContainerView
             let kind = SupplementaryKind(rawValue: kindString)!
             
-            let headerFooter : PresentationState.HeaderFooterViewStatePair = {
-                switch kind {
-                case .listContainerHeader: return self.presentationState.containerHeader
-                case .listHeader: return self.presentationState.header
-                case .listFooter: return self.presentationState.footer
-                case .sectionHeader: return self.presentationState.sections[indexPath.section].header
-                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer
-                case .overscrollFooter: return self.presentationState.overscrollFooter
-                }
-            }()
+            let headerFooter = self.presentationState.headerFooter(
+                of: kind,
+                in: indexPath.section
+            )
             
-            headerFooter.willDisplay(view: container)
-            
-            /// We track the views that the collection view is using, because we handle our own
-            /// view reuse tracking for our header and footer views – this allows us to insert
-            /// or remove headers without having to reload the entire associated section.
-            
-            self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
+            headerFooter.collectionViewWillDisplay(view: container)
         }
         
         func collectionView(
             _ collectionView: UICollectionView,
             didEndDisplayingSupplementaryView anyView: UICollectionReusableView,
-            forElementOfKind elementKind: String,
+            forElementOfKind kindString: String,
             at indexPath: IndexPath
             )
         {
             let container = anyView as! SupplementaryContainerView
+            let kind = SupplementaryKind(rawValue: kindString)!
             
-            let id = ObjectIdentifier(container)
-            
-            guard let headerFooter = self.displayedSupplementaryItems[id] else {
-                return
-            }
-            
-            /// Because we reuse the inner views associated with our headers or footers,
-            /// its possible the view that our inner view is already associated with a new container view.
-            /// We need to guard against us accidentally then clearing out that view from its newer container view.
+            let headerFooter = self.presentationState.headerFooter(
+                of: kind,
+                in: indexPath.section
+            )
                         
-            if headerFooter.visibleContainer == container {
-                self.displayedSupplementaryItems.removeValue(forKey: id)
-                headerFooter.didEndDisplay()
-            }
+            headerFooter.collectionViewDidEndDisplay(of: container)
         }
         
         func collectionView(

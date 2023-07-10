@@ -21,7 +21,7 @@ final class SupplementaryTestingViewController : ListViewController
         
         list.add {
             Section("id \(count)") {
-                for _ in 1...(5 + (count % 2 == 0 ? 50 : 0)) {
+                for _ in 1...10 {
                     DemoItem(text: "Count: \(count)")
                 }
             }
