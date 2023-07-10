@@ -13,9 +13,14 @@ import Snapshot
 
 class PagedListLayoutTests : XCTestCase
 {
-    func test_layout_vertical()
+    private enum TestCase : String {
+        case hasBounds
+        case fullSize
+    }
+    
+    func test_layout_vertical_full()
     {
-        let listView = self.list(for: .vertical)
+        let listView = self.list(for: .vertical, testCase: .fullSize)
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
@@ -23,9 +28,9 @@ class PagedListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func test_layout_horizontal()
+    func test_layout_horizontal_full()
     {
-        let listView = self.list(for: .horizontal)
+        let listView = self.list(for: .horizontal, testCase: .fullSize)
         
         let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
         
@@ -33,16 +38,45 @@ class PagedListLayoutTests : XCTestCase
         snapshot.test(output: LayoutAttributesSnapshot.self)
     }
     
-    func list(for direction : LayoutDirection) -> ListView
+    func test_layout_vertical_bounds()
     {
-        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 200.0, height: 200.0)))
+        let listView = self.list(for: .vertical, testCase: .hasBounds)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    func test_layout_horizontal_bounds()
+    {
+        let listView = self.list(for: .horizontal, testCase: .hasBounds)
+        
+        let snapshot = Snapshot(for: SizedViewIteration(size: listView.contentSize), input: listView)
+        
+        snapshot.test(output: ViewImageSnapshot.self)
+        snapshot.test(output: LayoutAttributesSnapshot.self)
+    }
+    
+    private func list(for direction : LayoutDirection, testCase: TestCase) -> ListView
+    {
+        let listView = ListView(frame: CGRect(origin: .zero, size: CGSize(width: 100.0, height: 100.0)))
 
         listView.configure { list in
             
             list.layout = .paged {
                 $0.direction = direction
-                $0.pagingSize = .fixed(50.0)
-                $0.itemInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+                $0.pagingSize = .fixed(100.0)
+                
+                switch testCase {
+                case .fullSize:
+                    $0.bounds = nil
+                case .hasBounds:
+                    $0.bounds = .init(
+                        padding: UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0),
+                        width: .atMost(40)
+                    )
+                }
             }
             
             list.header = TestingHeaderFooterContent(color: .blue)
@@ -81,7 +115,7 @@ class PagedAppearanceTests : XCTestCase
         
         XCTAssertEqual(appearance.direction, .vertical)
         XCTAssertEqual(appearance.showsScrollIndicators, false)
-        XCTAssertEqual(appearance.itemInsets, .zero)
+        XCTAssertEqual(appearance.bounds, nil)
     }
 }
 

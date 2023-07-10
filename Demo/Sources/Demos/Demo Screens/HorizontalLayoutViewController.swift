@@ -47,7 +47,10 @@ final class HorizontalLayoutViewController : UIViewController
                     
                     horizontal.layout = .paged {
                         $0.direction = .horizontal
-                        $0.itemInsets = UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0)
+                        $0.bounds = .init(
+                            padding: UIEdgeInsets(top: 0.0, left: 20.0, bottom: 0.0, right: 20.0),
+                            width: .noConstraint
+                        )
                     }
 
                     horizontal += Section("cards") {

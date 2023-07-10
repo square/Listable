@@ -1,0 +1,120 @@
+▿ ListableUI.ListLayoutAttributes
+  ▿ contentSize: (1100.0, 100.0)
+    - width: 1100.0
+    - height: 100.0
+  - naturalContentWidth: nil
+  - containerHeader: nil
+  ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (0.0, 0.0, 100.0, 100.0)))
+    ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+      ▿ frame: (0.0, 0.0, 100.0, 100.0)
+        ▿ origin: (0.0, 0.0)
+          - x: 0.0
+          - y: 0.0
+        ▿ size: (100.0, 100.0)
+          - width: 100.0
+          - height: 100.0
+  ▿ footer: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (1000.0, 0.0, 100.0, 100.0)))
+    ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+      ▿ frame: (1000.0, 0.0, 100.0, 100.0)
+        ▿ origin: (1000.0, 0.0)
+          - x: 1000.0
+          - y: 0.0
+        ▿ size: (100.0, 100.0)
+          - width: 100.0
+          - height: 100.0
+  - overscrollFooter: nil
+  ▿ sections: 2 elements
+    ▿ ListableUI.ListLayoutAttributes.Section
+      ▿ frame: (100.0, 0.0, 500.0, 100.0)
+        ▿ origin: (100.0, 0.0)
+          - x: 100.0
+          - y: 0.0
+        ▿ size: (500.0, 100.0)
+          - width: 500.0
+          - height: 100.0
+      ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (100.0, 0.0, 100.0, 100.0)))
+        ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+          ▿ frame: (100.0, 0.0, 100.0, 100.0)
+            ▿ origin: (100.0, 0.0)
+              - x: 100.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+      ▿ footer: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (500.0, 0.0, 100.0, 100.0)))
+        ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+          ▿ frame: (500.0, 0.0, 100.0, 100.0)
+            ▿ origin: (500.0, 0.0)
+              - x: 500.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+      ▿ items: 3 elements
+        ▿ ListableUI.ListLayoutAttributes.Item
+          ▿ frame: (200.0, 0.0, 100.0, 100.0)
+            ▿ origin: (200.0, 0.0)
+              - x: 200.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+        ▿ ListableUI.ListLayoutAttributes.Item
+          ▿ frame: (300.0, 0.0, 100.0, 100.0)
+            ▿ origin: (300.0, 0.0)
+              - x: 300.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+        ▿ ListableUI.ListLayoutAttributes.Item
+          ▿ frame: (400.0, 0.0, 100.0, 100.0)
+            ▿ origin: (400.0, 0.0)
+              - x: 400.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+    ▿ ListableUI.ListLayoutAttributes.Section
+      ▿ frame: (600.0, 0.0, 400.0, 100.0)
+        ▿ origin: (600.0, 0.0)
+          - x: 600.0
+          - y: 0.0
+        ▿ size: (400.0, 100.0)
+          - width: 400.0
+          - height: 100.0
+      ▿ header: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (600.0, 0.0, 100.0, 100.0)))
+        ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+          ▿ frame: (600.0, 0.0, 100.0, 100.0)
+            ▿ origin: (600.0, 0.0)
+              - x: 600.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+      ▿ footer: Optional(ListableUI.ListLayoutAttributes.Supplementary(frame: (900.0, 0.0, 100.0, 100.0)))
+        ▿ some: ListableUI.ListLayoutAttributes.Supplementary
+          ▿ frame: (900.0, 0.0, 100.0, 100.0)
+            ▿ origin: (900.0, 0.0)
+              - x: 900.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+      ▿ items: 2 elements
+        ▿ ListableUI.ListLayoutAttributes.Item
+          ▿ frame: (700.0, 0.0, 100.0, 100.0)
+            ▿ origin: (700.0, 0.0)
+              - x: 700.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0
+        ▿ ListableUI.ListLayoutAttributes.Item
+          ▿ frame: (800.0, 0.0, 100.0, 100.0)
+            ▿ origin: (800.0, 0.0)
+              - x: 800.0
+              - y: 0.0
+            ▿ size: (100.0, 100.0)
+              - width: 100.0
+              - height: 100.0

@@ -332,11 +332,15 @@ extension ListView {
         
         private static let isAffectedIOSVersion : Bool = {
             
+            /// First regressed in 16.4.
+            
             let isIOS16_4 = ProcessInfo
                 .processInfo
                 .isOperatingSystemAtLeast(
                     .init(majorVersion: 16, minorVersion: 4, patchVersion: 0)
                 )
+            
+            /// Fixed in 16.5.
             
             let isIOS16_5 = ProcessInfo
                 .processInfo
@@ -344,7 +348,16 @@ extension ListView {
                     .init(majorVersion: 16, minorVersion: 5, patchVersion: 0)
                 )
             
-            return isIOS16_4 && !isIOS16_5
+            /// ...But is broken again in the first iOS 17.0 beta.
+            /// Likely, the fixes from 16.5 have not been merged down into 17.0 yet.
+            
+            let isIOS17_0 = ProcessInfo
+                .processInfo
+                .isOperatingSystemAtLeast(
+                    .init(majorVersion: 17, minorVersion: 0, patchVersion: 0)
+                )
+            
+            return isIOS16_4 && !isIOS16_5 || isIOS17_0
         }()
         
         private static let hasFirstResponderViewProperty : Bool = {
