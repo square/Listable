@@ -88,21 +88,25 @@ final class PresentationState
         
         self.containerHeader = .init(state: SectionState.newHeaderFooterState(
             with: content.containerHeader,
+            kind: .listContainerHeader,
             performsContentCallbacks: false
         ))
         
         self.header = .init(state: SectionState.newHeaderFooterState(
             with: content.header,
+            kind: .listHeader,
             performsContentCallbacks: false
         ))
         
         self.footer = .init(state: SectionState.newHeaderFooterState(
             with: content.footer,
+            kind: .listFooter,
             performsContentCallbacks: false
         ))
         
         self.overscrollFooter = .init(state: SectionState.newHeaderFooterState(
             with: content.overscrollFooter,
+            kind: .overscrollFooter,
             performsContentCallbacks: false
         ))
         
@@ -310,10 +314,13 @@ final class PresentationState
         
         let environment = dependencies.environmentProvider()
         
+        updateOldIndexPaths()
+        
         self.containerHeader.update(
             with: SectionState.headerFooterState(
                 current: self.containerHeader.state,
                 new: slice.content.containerHeader,
+                kind: .listContainerHeader,
                 performsContentCallbacks: self.performsContentCallbacks
             ),
             new: slice.content.containerHeader,
@@ -327,6 +334,7 @@ final class PresentationState
             with: SectionState.headerFooterState(
                 current: self.header.state,
                 new: slice.content.header,
+                kind: .listHeader,
                 performsContentCallbacks: self.performsContentCallbacks
             ),
             new: slice.content.header,
@@ -340,6 +348,7 @@ final class PresentationState
             with: SectionState.headerFooterState(
                 current: self.footer.state,
                 new: slice.content.footer,
+                kind: .listFooter,
                 performsContentCallbacks: self.performsContentCallbacks
             ),
             new: slice.content.footer,
@@ -353,6 +362,7 @@ final class PresentationState
             with: SectionState.headerFooterState(
                 current: self.overscrollFooter.state,
                 new: slice.content.overscrollFooter,
+                kind: .overscrollFooter,
                 performsContentCallbacks: self.performsContentCallbacks
             ),
             new: slice.content.overscrollFooter,
@@ -362,8 +372,8 @@ final class PresentationState
             environment: environment
         )
         
-        self.sections = diff.changes.transform(
-            old: self.sections,
+        self.sections = diff.transform(
+            input: self.sections,
             removed: { _, section in
                 section.wasRemoved(updateCallbacks: updateCallbacks)
             },
@@ -396,8 +406,22 @@ final class PresentationState
                     dependencies: dependencies,
                     updateCallbacks: updateCallbacks
                 )
-            }
+            },
+            mappedItemCount: \.items.count,
+            sectionItemCount: \.items.count
         )
+    }
+    
+    private func updateOldIndexPaths() {
+        
+        self.containerHeader.updateOldIndexPath(in: 0)
+        self.header.updateOldIndexPath(in: 0)
+        self.footer.updateOldIndexPath(in: 0)
+        self.overscrollFooter.updateOldIndexPath(in: 0)
+        
+        for (index, section) in sections.enumerated() {
+            section.updateOldIndexPath(in: index)
+        }
     }
     
     internal func updateRefreshControl(with new : RefreshControl?, in view : UIScrollView, color : UIColor?)

@@ -73,15 +73,13 @@ public final class DemosRootViewController : ListViewController
                     }
                 )
 
-                if #available(iOS 13.0, *) {
-                    Item(
-                        DemoItem(text: "List State & State Reader"),
-                        selectionStyle: .selectable(),
-                        onSelect: { _ in
-                            self?.push(ListStateViewController())
-                        }
-                    )
-                }
+                Item(
+                    DemoItem(text: "List State & State Reader"),
+                    selectionStyle: .selectable(),
+                    onSelect: { _ in
+                        self?.push(ListStateViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "Itemization Editor"),
@@ -95,7 +93,7 @@ public final class DemosRootViewController : ListViewController
                     DemoItem(text: "English Dictionary Search"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
-                        self?.push(CollectionViewDictionaryDemoViewController())
+                        self?.push(SearchableDictionaryViewController())
                     }
                 )
                 
@@ -217,7 +215,12 @@ public final class DemosRootViewController : ListViewController
                 DemoHeader(title: "List Views")
             }
             
-            Section("coordinator") { [weak self] in
+            Section(
+                "coordinator",
+                layouts: .table {
+                    $0.isHeaderSticky = false
+                }
+            ) { [weak self] in
                 
                 Item(
                     DemoItem(text: "Expand / Collapse Items"),
@@ -255,6 +258,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(PagedViewController())
                     }
                 )
+
+                Item(
+                    DemoItem(text: "Center-Snapping Table Layout"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(CenterSnappingTableViewController())
+                    }
+                )
                 
                 Item(
                     DemoItem(text: "Carousel-Style Layouts"),
@@ -289,6 +300,19 @@ public final class DemosRootViewController : ListViewController
                 )
             } header: {
                 DemoHeader(title: "Other Layouts")
+            }
+            
+            Section("fuzzing") { [weak self] in
+
+                Item(
+                    DemoItem(text: "Fuzz Testing"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(UpdateFuzzingViewController())
+                    }
+                )
+            } header: {
+                DemoHeader(title: "Fuzz Testing")
             }
             
             Section("selection-state") {

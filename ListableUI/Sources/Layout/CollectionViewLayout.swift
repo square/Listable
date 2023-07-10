@@ -80,7 +80,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
         self.previousLayout = self.layout
 
-        self.changesDuringCurrentUpdate = UpdateItems()
+        self.changesDuringCurrentUpdate = UpdateItems(with: [])
 
         self.viewProperties = CollectionViewLayoutProperties()
 
@@ -388,7 +388,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.prepare()
 
-        self.changesDuringCurrentUpdate = UpdateItems()
+        self.changesDuringCurrentUpdate = UpdateItems(with: [])
 
         let size = self.collectionView?.bounds.size ?? .zero
 
@@ -421,11 +421,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.prepare(forCollectionViewUpdates: updateItems)
 
-        self.changesDuringCurrentUpdate = UpdateItems(
-            with: updateItems,
-            oldContent: self.previousLayout.content,
-            newContent: self.layout.content
-        )
+        self.changesDuringCurrentUpdate = UpdateItems(with: updateItems)
     }
 
     //
@@ -436,7 +432,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         super.finalizeCollectionViewUpdates()
 
-        self.changesDuringCurrentUpdate = UpdateItems()
+        self.changesDuringCurrentUpdate = UpdateItems(with: [])
     }
 
     //
@@ -493,8 +489,8 @@ final class CollectionViewLayout : UICollectionViewLayout
             environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
 
-        self.layout.positionStickyListHeaderIfNeeded(in: view)
-        self.layout.positionStickySectionHeadersIfNeeded(in: view)
+        self.layout.positionStickyListHeaderIfNeeded(in: context)
+        self.layout.positionStickySectionHeadersIfNeeded(in: context)
 
         self.layout.updateLayout(in: context)
     }
@@ -542,23 +538,9 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let changes = self.changesDuringCurrentUpdate
-        
-        let wasInserted = changes.insertedItems.contains(.init(newIndexPath: itemIndexPath))
-        
-        // If we are the only item in a newly inserted section, and that section has
-        // no header or footer, we can effectively treat the insertion as a row insertion,
-        // and use the item's row insertion animation.
-        
-        func wasInsertedInSingleItemSection() -> Bool {
-            guard let section = changes.insertedSection(at: itemIndexPath.section) else {
-                return false
-            }
-            
-            return section.isSingleItemSection
-        }
+        let wasInserted = self.changesDuringCurrentUpdate.insertedItems.contains(.init(newIndexPath: itemIndexPath))
 
-        if wasInserted || wasInsertedInSingleItemSection() {
+        if wasInserted {
             let item = self.layout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
             let animations = self.animations(for: item)
@@ -569,7 +551,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            let wasSectionInserted = changes.insertedSectionIndexes.contains(itemIndexPath.section)
+            let wasSectionInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: itemIndexPath.section))
 
             let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
@@ -583,23 +565,9 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let changes = self.changesDuringCurrentUpdate
-        
-        let wasItemDeleted = changes.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
+        let wasItemDeleted = self.changesDuringCurrentUpdate.deletedItems.contains(.init(oldIndexPath: itemIndexPath))
 
-        // If we are the only item in a deleted section, and that section has
-        // no header or footer, we can effectively treat the insertion as a row deletion,
-        // and use the item's row deletion animation.
-        
-        func wasDeletedFromSingleItemSection() -> Bool {
-            guard let section = changes.deletedSection(at: itemIndexPath.section) else {
-                return false
-            }
-            
-            return section.isSingleItemSection
-        }
-        
-        if wasItemDeleted || wasDeletedFromSingleItemSection() {
+        if wasItemDeleted {
             let item = self.previousLayout.content.item(at: itemIndexPath)
             let attributes = item.layoutAttributes(with: itemIndexPath)
             let animations = self.animations(for: item)
@@ -610,7 +578,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
             return attributes
         } else {
-            let wasSectionDeleted = changes.deletedSectionIndexes.contains(itemIndexPath.section)
+            let wasSectionDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: itemIndexPath.section))
 
             let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
 
@@ -624,7 +592,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let wasInserted = self.changesDuringCurrentUpdate.insertedSectionIndexes.contains(elementIndexPath.section)
+        let wasInserted = self.changesDuringCurrentUpdate.insertedSections.contains(.init(newIndex: elementIndexPath.section))
         let attributes = super.initialLayoutAttributesForAppearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
 
         if wasInserted == false {
@@ -636,7 +604,7 @@ final class CollectionViewLayout : UICollectionViewLayout
 
     override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
-        let wasDeleted = self.changesDuringCurrentUpdate.deletedSectionIndexes.contains(elementIndexPath.section)
+        let wasDeleted = self.changesDuringCurrentUpdate.deletedSections.contains(.init(oldIndex: elementIndexPath.section))
         let attributes = super.finalLayoutAttributesForDisappearingSupplementaryElement(ofKind: elementKind, at: elementIndexPath)
 
         if wasDeleted == false {
@@ -740,30 +708,15 @@ public protocol CollectionViewLayoutDelegate : AnyObject
 fileprivate struct UpdateItems : Equatable
 {
     let insertedSections : Set<InsertSection>
-    let insertedSectionIndexes : Set<Int>
-    
     let deletedSections : Set<DeleteSection>
-    let deletedSectionIndexes : Set<Int>
 
     let insertedItems : Set<InsertItem>
     let deletedItems : Set<DeleteItem>
-    
-    init() {
-        self.insertedSections = []
-        self.insertedSectionIndexes = []
-        self.deletedSections = []
-        self.deletedSectionIndexes = []
-        self.insertedItems = []
-        self.deletedItems = []
-    }
 
-    init(with updateItems : [UICollectionViewUpdateItem], oldContent : ListLayoutContent, newContent: ListLayoutContent)
+    init(with updateItems : [UICollectionViewUpdateItem])
     {
         var insertedSections = Set<InsertSection>()
-        var insertedSectionIndexes = Set<Int>()
-        
         var deletedSections = Set<DeleteSection>()
-        var deletedSectionIndexes = Set<Int>()
 
         var insertedItems = Set<InsertItem>()
         var deletedItems = Set<DeleteItem>()
@@ -774,18 +727,7 @@ fileprivate struct UpdateItems : Equatable
                 let indexPath = item.indexPathAfterUpdate!
 
                 if indexPath.item == NSNotFound {
-                    insertedSectionIndexes.insert(indexPath.section)
-                    
-                    let section = newContent.sections[indexPath.section]
-                    
-                    insertedSections.insert(
-                        .init(
-                            newIndex: indexPath.section,
-                            itemCount: section.items.count,
-                            hasHeader: section.header.isPopulated,
-                            hasFooter: section.footer.isPopulated
-                        )
-                    )
+                    insertedSections.insert(.init(newIndex: indexPath.section))
                 } else {
                     insertedItems.insert(.init(newIndexPath: indexPath))
                 }
@@ -794,19 +736,7 @@ fileprivate struct UpdateItems : Equatable
                 let indexPath = item.indexPathBeforeUpdate!
 
                 if indexPath.item == NSNotFound {
-                    deletedSectionIndexes.insert(indexPath.section)
-                    
-                    let section = oldContent.sections[indexPath.section]
-                    
-                    deletedSections.insert(
-                        .init(
-                            oldIndex: indexPath.section,
-                            itemCount: section.items.count,
-                            hasHeader: section.header.isPopulated,
-                            hasFooter: section.footer.isPopulated
-                        )
-                    )
-                    
+                    deletedSections.insert(.init(oldIndex: indexPath.section))
                 } else {
                     deletedItems.insert(.init(oldIndexPath: indexPath))
                 }
@@ -820,57 +750,20 @@ fileprivate struct UpdateItems : Equatable
         }
 
         self.insertedSections = insertedSections
-        self.insertedSectionIndexes = insertedSectionIndexes
-        
         self.deletedSections = deletedSections
-        self.deletedSectionIndexes = deletedSectionIndexes
 
         self.insertedItems = insertedItems
         self.deletedItems = deletedItems
-    }
-    
-    func insertedSection(at index : Int) -> InsertSection? {
-        guard insertedSectionIndexes.contains(index) else { return nil }
-        
-        return insertedSections.first {
-            $0.newIndex == index
-        }
-    }
-    
-    func deletedSection(at index : Int) -> DeleteSection? {
-        guard deletedSectionIndexes.contains(index) else { return nil }
-        
-        return deletedSections.first {
-            $0.oldIndex == index
-        }
     }
 
     struct InsertSection : Hashable
     {
         var newIndex : Int
-        
-        var itemCount : Int
-        
-        var hasHeader : Bool
-        var hasFooter : Bool
-        
-        var isSingleItemSection : Bool {
-            itemCount == 1 && hasHeader == false && hasFooter == false
-        }
     }
 
     struct DeleteSection : Hashable
     {
         var oldIndex : Int
-        
-        var itemCount : Int
-        
-        var hasHeader : Bool
-        var hasFooter : Bool
-        
-        var isSingleItemSection : Bool {
-            itemCount == 1 && hasHeader == false && hasFooter == false
-        }
     }
 
     struct InsertItem : Hashable

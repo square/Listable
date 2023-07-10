@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.5
 
 import PackageDescription
 
@@ -6,7 +6,8 @@ let package = Package(
     name: "Listable",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v12),
+        .iOS(.v14),
+        .macCatalyst(.v14),
     ],
     products: [
         .library(
@@ -19,17 +20,21 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "0.19.0"),
+        .package(url: "https://github.com/square/Blueprint", from: "2.0.0"),
     ],
     targets: [
         .target(
             name: "ListableUI",
-            path: "ListableUI/Sources",
+            path: "ListableUI",
             exclude: [
-                "Internal/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
-                "Layout/Paged/PagedAppearance.monopic",
-                "ContentBounds/ListContentBounds.monopic",
-                "Layout/Table/TableAppearance.monopic",
+                "Sources/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
+                "Sources/Layout/Paged/PagedAppearance.monopic",
+                "Sources/ContentBounds/ListContentBounds.monopic",
+                "Sources/Layout/Table/TableAppearance.monopic",
+                "Tests",
+            ],
+            resources: [
+                .process("Resources"),
             ]
         ),
         .target(
@@ -40,7 +45,7 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-        .target(
+        .testTarget(
             name: "Snapshot",
             path: "Internal Pods/Snapshot/Sources"
         ),
@@ -55,8 +60,8 @@ let package = Package(
             dependencies: ["ListableUI", "EnglishDictionary", "Snapshot"],
             path: "ListableUI/Tests",
             exclude: [
+                "Layout/Flow/Snapshot Results",
                 "Layout/Paged/Snapshot Results",
-                "Layout/Retail Grid/Snapshot Results",
                 "Layout/Table/Snapshot Results",
                 "Previews/Snapshot Results",
             ],
@@ -70,7 +75,13 @@ let package = Package(
                 "ListableUI",
                 .product(name: "BlueprintUI", package: "Blueprint")
             ],
-            path: "BlueprintUILists/Sources"
+            path: "BlueprintUILists",
+            exclude: [
+                "Tests",
+            ],
+            resources: [
+                .process("Resources"),
+            ]
         ),
         .testTarget(
             name: "BlueprintUIListsTests",

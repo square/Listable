@@ -10,7 +10,206 @@
 
 ### Misc
 
+### Internal
+
 # Past Releases
+
+# [11.0.0] - 2023-06-15
+
+### Removed
+
+- `.paged` layout's `itemInsets` has been removed; use `bounds.padding` instead.
+
+### Changed
+
+- `.paged` layouts now respect `bounds` for each page.
+
+# [10.3.1] - 2023-06-06
+
+### Fixed
+
+- Enabled collection view first responder workaround for iOS 17.0; it is broken in the first beta.
+
+# [10.3.0] - 2023-05-17
+
+### Added
+
+- You may now programatically reveal leading and trailing swipe actions, by calling the `showLeadingSwipeActions` or `showTrailingSwipeActions` closures on `ApplyItemContentInfo`.
+
+# [10.2.0] - 2023-05-15
+
+### Fixed
+
+- Fixed a confusing compilation error when omitting the `.content` property on read-only `KeyPath` lookups on `ListProperties`. 
+
+### Added
+
+- Added optional underlay view for item cells that can be styled  
+
+# [10.1.0] - 2023-05-08
+
+### Changed
+
+- BlueprintUILists now depends on Blueprint 2.0.
+
+# [10.0.1] - 2023-04-26
+
+### Fixed
+
+- Fix an issue when a header or footer has an `onTap` handler, and no pressed background, the first tap would be ignored.
+
+# [10.0.0] - 2023-04-25
+
+### Fixed
+
+- Swipe actions will now use the `accessibilityLabel` (if non-nil) when the user is using assistive technologies such as VoiceOver.
+
+### Added
+
+- Added `containerCornerRadius`, `equalButtonWidths`, and `minWidth` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
+- Added `swipeActionsViewStyle` to `ListEnvironment`. This allows a `SwipeActionsView.Style` to be set on the list environment when customizing the appearance of the swipe action view.
+- Added the ability to configure leading swipe actions on `Item`s via the `leadingSwipeActions` property.
+- Added `containerCornerRadius`, `buttonSizing`, `minWidth`, and `maxWidthRatio` to `DefaultSwipeActionsView.Style` for additional swipe action style customization.
+- Added `SwipeActionsView.Style.leadingContainerInsets` to specify container insets for the leading swipe action container.
+
+### Removed
+
+- Removed the `SwipeActionsView` associated type on `ItemContent`.
+- Removed the `ItemContentSwipeActionsView` protocol.
+
+### Changed
+
+- Renamed `DefaultSwipeActionsView` to `SwipeActionsView`.
+- The type of the `ItemContent.swipeActionsStyle` protocol requirement is now `SwipeActionsView.Style?` (previously `SwipeActionsView.Style`). When an item returns `nil` for this property the style set on the list environment will be used instead.
+- Renamed `Item.swipeActions` to `Item.trailingSwipeActions`.
+- Renamed `DefaultItemProperties.swipeActions` to `trailingSwipeActions`.
+- Renamed `SwipeActionsView.Style.containerInsets` to `SwipeActionsView.Style.trailingContainerInsets` and changed the type to `NSDirectionalEdgeInsets`.
+- Renamed `SwipeActionsView.Style` to `SwipeActionsViewStyle`.
+- `SwipeActionsView` and `SwipeActionState` are no longer public types.
+
+### Misc
+
+- Improvement: Background and Selected Background views for rows and section headers will not be created unless requested. This reduces the overall number of views being allocated.
+
+# [9.0.0] - 2023-04-19
+
+### Added
+
+- `List` adheres to Blueprint's new [sizing contract](https://square.github.io/Blueprint/Protocols/CaffeinatedLayout.html#/s:11BlueprintUI17CaffeinatedLayoutP12sizeThatFits8proposal11subelements11environment5cacheSo6CGSizeVAA14SizeConstraintV_SayAA0D10SubelementVGAA11EnvironmentV5CacheQzztF) when running in Caffeinated Layout mode.
+
+### Changed
+
+- BlueprintUILists now depends on Blueprint 1.0.
+
+# [8.2.0] - 2023-04-18
+
+### Added
+
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+- Introduce `ListStateObserver.OnDidBeginDrag(_:)` callback, which allows an observer to become notified when the scrollview will begin dragging.
+
+# [8.1.2] - 2023-04-12
+
+### Fixed
+
+- A small defensive update to the iOS 16.4 Collection View workaround.
+
+# [8.1.1] - 2023-04-11
+
+### Fixed
+
+- Fixed an issue that could cause the wrong swipe action view style being applied when multiple styles were used in a single list.
+
+- [Fixed a regression](https://github.com/square/Listable/pull/466/) in iOS 16.4, where on every collection view refresh, the collection view would force resign a first responder if it was within a header or footer (cells are not affected). See `ListView+iOS16.4Workaround.swift` for more.
+
+# [8.1.0] - 2023-03-16
+
+### Added
+
+- Introduce an `OverlayDecoration`, which allows you to place a border, etc, around an item which is not affected by swipe action position.
+
+# [8.0.5] - 2023-03-07
+
+### Misc
+
+- Updated `BlueprintUI` and `BlueprintUICommonControls` to version `0.50.0`.
+
+# [8.0.4] - 2023-02-24
+
+### Fixed
+
+- Do not call auto scroll action didPeform blocks if the scroll action did not succeed.
+
+# [8.0.3] - 2023-02-17
+
+### Fixed
+
+- Speculative, low effort fix for a scrolling crash that occurred when the list view was under high update load, with many changes enqueued.
+
+# [8.0.2] - 2023-02-09
+
+### Misc
+
+- Updated `BlueprintUI` and `BlueprintUICommonControls` to version `0.49.0`.
+
+# [8.0.1] - 2023-01-10
+
+### Fixed
+
+- Fix Catalyst version specifier in SPM package.
+
+# [8.0.0] - 2022-12-19
+
+### Changed
+
+- iOS 12 and 13 have been deprecated.
+
+- Marks pod as `APPLICATION_EXTENSION_API_ONLY`
+
+- `KeyboardObserver` is now a SPI accessible API
+    - When using SPM, you are responsible for initializing this singleton in non-extension contexts
+    - `ListView.configure(with: application)` should be called when your app has finished launching
+    - Failure to do so will continue to `print()` the existing LISTABLE WARNING
+
+# [7.2.0] - 2022-10-24
+
+### Fixed
+
+- Fixed an issue where submitting many frequent updates in a large list would cause crashes due to state getting out of sync, hopefully.
+
+### Added
+
+- You may now control the stickiness of headers within individual sections, eg by setting `section.layouts.table.isHeaderSticky = true/false/nil`, or by implementing `isStickySectionHeader` on your `HeaderFooterContent`. Providing nil for either value falls back to the list-level stickiness setting.
+
+### Changed
+
+- `ListHeaderPosition.fixed` will now only apply if the list's top padding is zero, to avoid the header shifting around during layout if the position is changed.
+
+# [7.1.2] - 2022-09-12
+
+### Removed
+
+- **Revert from 7.0.0**: _"When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead."_ This was causing crashes in `initialLayoutAttributesForAppearingItem` and `finalLayoutAttributesForDisappearingItem` due to index path mismatches.
+
+# [7.1.1] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+- Fixed SPM-based builds.
+
+# [7.1.0] - 2022-09-06
+
+### Fixed
+
+- Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
+
+### Added
+
+- `Behavior.decelerationRate` - Controls the rate at which scrolling decelerates. The default value, `normal`, maintains the status quo.
+
+- `ListPagingBehavior.firstVisibleItemCentered` - When the user stops scrolling, the final offset of the scroll event will be adjusted so that the first visible item is centered within the visible bounds.
+
 
 # [7.0.0] - 2022-08-16
 
@@ -64,7 +263,7 @@
 
 ### Added
 
-- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.  
+- Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.
 
 # [5.0.1] - 2022-07-19
 
@@ -86,7 +285,7 @@
 
 ### Fixed
 
-- Fixed a bug where child accessibility views could be exposed when they should be hidden. 
+- Fixed a bug where child accessibility views could be exposed when they should be hidden.
 
 ### Added
 
@@ -121,8 +320,8 @@
 
 - Enabled accessibility ordering, but only propagating the accessibility label reordering is possible and VoiceOver is active to avoid conflicting matches in KIF tests.
 
-- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously, 
-they were inset with the content. 
+- `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously,
+they were inset with the content.
 
 # [4.0.0] - 2022-04-07
 
@@ -270,7 +469,7 @@ they were inset with the content.
 
 ### Added
 
-- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).  
+- [Introduced `swipeActionsStyle` property in `ItemContent` protocol](https://github.com/kyleve/Listable/pull/335). This allows clients to configure and specify different visual styles for swipe action views (such as `rounded` swipe actions).
 
 ### Changed
 
@@ -281,11 +480,11 @@ they were inset with the content.
 ### Changed
 
 - [Introduced `AnyHeaderFooterConvertible` for `HeaderFooters`](https://github.com/kyleve/Listable/pull/332) contained in lists and sections, so you no longer need to wrap your `HeaderFooterContent` in a `HeaderFooter` to receive default values. Eg, you can now do:
-    
+
     ```swift
     section.header = MyHeaderContent(title: "Albums")
     ```
-    
+
     Instead of:
 
     ```swift
@@ -334,7 +533,7 @@ they were inset with the content.
 
 ### Added
 
-- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied. 
+- [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied.
 
 # [0.23.2] - 2021-08-05
 
@@ -414,7 +613,7 @@ they were inset with the content.
 
 ### Changed
 
-- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used. 
+- [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used.
 
 # [0.19.0] - 2021-03-22
 
@@ -435,11 +634,11 @@ list.content.refreshControl = RefreshControl(
 
 ### Fixed
 
-- When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279). 
+- When calling `scrollToItem` with a `.top` scroll position, [the item no longer appears underneath sticky section headers](https://github.com/kyleve/Listable/pull/279).
 
 ### Added
 
-- [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`. 
+- [Adds `scrollToSection`](https://github.com/kyleve/Listable/pull/277) to `ListActions` and `ListView`. To support this functionality, `Section` can now be queried with an `Identifier`. Also added `SectionPosition` to specify the top or bottom within a `Section`.
 
 Example usage:
 
@@ -467,7 +666,7 @@ listActions.scrolling.scrollToSection(
 
 ### Fixed
 
-- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers. 
+- [When updating `contentInset`, retain the values pulled from the `CollectionView`](https://github.com/kyleve/Listable/pull/267). This is to avoid clobbering the content inset potentially set by other things like navigation controllers.
 
 ### Changed
 
@@ -501,7 +700,7 @@ listActions.scrolling.scrollToSection(
 
 ### Fixed
 
-- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/243). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance. 
+- [Ensure that `ItemContent`s and `HeaderFooter`s are a value type](https://github.com/kyleve/Listable/pull/243). This is generally assumed by Listable, but was previously not validated. This is only validated in `DEBUG` builds, to avoid otherwise affecting performance.
 
 - [Fix a regression](https://github.com/kyleve/Listable/pull/246/) that caused content to be re-measured during each application of an `Appearance`, even if the new `Appearance` was equal.
 
@@ -539,12 +738,11 @@ listActions.scrolling.scrollToSection(
 
 - [Introduce `onSelectionChanged` on `ListStateObserver`](https://github.com/kyleve/Listable/pull/223) to allow observing when the selected rows change.
 
-- [Pass through `BlueprintUI.Environment` to the `Element`s being rendered from `BlueprintItemContent` and `BlueprintHeaderFooterContent`](https://github.com/kyleve/Listable/pull/225). This ensures that the content you put into a `List` respects the `BlueprintUI.Environment` of the `List` itself. This PR also introduces `ListEnvironment` to facilitate this, which allows similar passthrough of environment variables within Listable. 
+- [Pass through `BlueprintUI.Environment` to the `Element`s being rendered from `BlueprintItemContent` and `BlueprintHeaderFooterContent`](https://github.com/kyleve/Listable/pull/225). This ensures that the content you put into a `List` respects the `BlueprintUI.Environment` of the `List` itself. This PR also introduces `ListEnvironment` to facilitate this, which allows similar passthrough of environment variables within Listable.
 
 - [Add a `didPerform` callback to `AutoScrollAction`](https://github.com/kyleve/Listable/pull/229), which allows registering a callback when an auto scroll action occurs.
 
-- [Change `animated` option on scrolling to an `animation` option`](https://github.com/kyleve/Listable/pull/229), to allow customizing the animation's behavior.
-
+- [Change `animated` option on scrolling to an `animation` option](https://github.com/kyleve/Listable/pull/229), to allow customizing the animation's behavior.
 
 # [0.11.0] - 2020-10-20
 
@@ -607,19 +805,19 @@ listActions.scrolling.scrollToSection(
       list += Section("first") { section in ... }
   }
   ```
-  
+
   With this:
-  
+
   ```
   List { list in
       list("first") { section in ... }
   }
   ```
-  
+
   Improving terseness when building sections in a list.
 
-- [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.  
-  
+- [`.paged()` is now a supported layout type.](https://github.com/kyleve/Listable/pull/178) This allows implementing your list to render similarly to a `UIPageViewController`, in either horizontal or vertical alignment.
+
 
 ### Removed
 
@@ -647,7 +845,7 @@ listActions.scrolling.scrollToSection(
 
   ```
   let view = ItemPreviewView()
-          
+
   view.update(
       with: 300.0,
       state: .init(isSelected: false, isHighlighted: false),
@@ -670,7 +868,7 @@ listActions.scrolling.scrollToSection(
       }
   }
   ```
-  
+
   There are included options like `withAllItemStates` which allow seeing previews across the various possible selection and highlight states.
 
 - Add `customInterSectionSpacing` property to `Section.Layout` which allows the user to specify [custom spacing after a section](https://github.com/kyleve/Listable/pull/172), overriding the calculated spacing.
@@ -752,63 +950,85 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/kyleve/Listable/compare/7.0.0...HEAD
-[7.0.0]: https://github.com/kyleve/Listable/compare/6.0.0...7.0.0
-[6.0.0]: https://github.com/kyleve/Listable/compare/5.2.1...6.0.0
-[5.2.1]: https://github.com/kyleve/Listable/compare/5.2.0...5.2.1
-[5.2.0]: https://github.com/kyleve/Listable/compare/5.1.0...5.2.0
-[5.1.0]: https://github.com/kyleve/Listable/compare/5.0.1...5.1.0
-[5.0.1]: https://github.com/kyleve/Listable/compare/5.0.0...5.0.1
-[5.0.0]: https://github.com/kyleve/Listable/compare/4.4.0...5.0.0
-[4.4.0]: https://github.com/kyleve/Listable/compare/4.3.1...4.4.0
-[4.3.1]: https://github.com/kyleve/Listable/compare/4.3.0...4.3.1
-[4.3.0]: https://github.com/kyleve/Listable/compare/4.2.0...4.3.0
-[4.2.0]: https://github.com/kyleve/Listable/compare/4.1.0...4.2.0
-[4.1.0]: https://github.com/kyleve/Listable/compare/4.0.0...4.1.0
-[4.0.0]: https://github.com/kyleve/Listable/compare/3.2.1...4.0.0
-[3.2.1]: https://github.com/kyleve/Listable/compare/3.2.0...3.2.1
-[3.2.0]: https://github.com/kyleve/Listable/compare/3.1.0...3.2.0
-[3.1.0]: https://github.com/kyleve/Listable/compare/3.0.0...3.1.0
-[3.0.0]: https://github.com/kyleve/Listable/compare/2.0.0...3.0.0
-[2.0.0]: https://github.com/kyleve/Listable/compare/1.0.2...2.0.0
-[1.0.2]: https://github.com/kyleve/Listable/compare/1.0.1...1.0.2
-[1.0.1]: https://github.com/kyleve/Listable/compare/1.0.0...1.0.1
-[1.0.0]: https://github.com/kyleve/Listable/compare/0.30.1...1.0.0
-[0.30.1]: https://github.com/kyleve/Listable/compare/0.30.0...0.30.1
-[0.30.0]: https://github.com/kyleve/Listable/compare/0.29.3...0.30.0
-[0.29.3]: https://github.com/kyleve/Listable/compare/0.29.2...0.29.3
-[0.29.2]: https://github.com/kyleve/Listable/compare/0.29.1...0.29.2
-[0.29.1]: https://github.com/kyleve/Listable/compare/0.29.0...0.29.1
-[0.29.0]: https://github.com/kyleve/Listable/compare/0.28.0...0.29.0
-[0.28.0]: https://github.com/kyleve/Listable/compare/0.27.1...0.28.0
-[0.27.1]: https://github.com/kyleve/Listable/compare/0.27.0...0.27.1
-[0.27.0]: https://github.com/kyleve/Listable/compare/0.26.1...0.27.0
-[0.26.1]: https://github.com/kyleve/Listable/compare/0.26.0...0.26.1
-[0.26.0]: https://github.com/kyleve/Listable/compare/0.25.1...0.26.0
-[0.25.0]: https://github.com/kyleve/Listable/compare/0.25.0...0.25.1
-[0.25.0]: https://github.com/kyleve/Listable/compare/0.24.0...0.25.0
-[0.24.0]: https://github.com/kyleve/Listable/compare/0.23.2...0.24.0
-[0.23.2]: https://github.com/kyleve/Listable/compare/0.23.1...0.23.2
-[0.23.1]: https://github.com/kyleve/Listable/compare/0.23.0...0.23.1
-[0.23.0]: https://github.com/kyleve/Listable/compare/0.22.2...0.23.0
-[0.22.2]: https://github.com/kyleve/Listable/compare/0.22.1...0.22.2
-[0.22.1]: https://github.com/kyleve/Listable/compare/0.22.0...0.22.1
-[0.22.0]: https://github.com/kyleve/Listable/compare/0.21.0...0.22.0
-[0.21.0]: https://github.com/kyleve/Listable/compare/0.20.2...0.21.0
-[0.20.2]: https://github.com/kyleve/Listable/compare/0.20.1...0.20.2
-[0.20.1]: https://github.com/kyleve/Listable/compare/0.20.0...0.20.1
-[0.20.0]: https://github.com/kyleve/Listable/compare/0.19.0...0.20.0
-[0.19.0]: https://github.com/kyleve/Listable/compare/0.18.0...0.19.0
-[0.18.0]: https://github.com/kyleve/Listable/compare/0.17.0...0.18.0
-[0.17.0]: https://github.com/kyleve/Listable/compare/0.16.0...0.17.0
-[0.16.0]: https://github.com/kyleve/Listable/compare/0.15.1...0.16.0
-[0.15.1]: https://github.com/kyleve/Listable/compare/0.15.0...0.15.1
-[0.15.0]: https://github.com/kyleve/Listable/compare/0.14.2...0.15.0
-[0.14.1]: https://github.com/kyleve/Listable/compare/0.14.1...0.14.2
-[0.14.1]: https://github.com/kyleve/Listable/compare/0.13.0...0.14.1
-[0.13.0]: https://github.com/kyleve/Listable/compare/0.12.1...0.13.0
-[0.12.1]: https://github.com/kyleve/Listable/compare/0.12.0...0.12.1
-[0.12.0]: https://github.com/kyleve/Listable/compare/0.11.0...0.12.0
-[0.11.0]: https://github.com/kyleve/Listable/compare/0.10.1...0.11.0
-[0.10.1]: https://github.com/kyleve/Listable/compare/0.10.0...0.10.1
-[0.10.0]: https://github.com/kyleve/Listable/compare/0.9.0...0.10.0
+[Main]: https://github.com/square/Listable/square/11.0.0...HEAD
+[11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
+[10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1
+[10.3.0]: https://github.com/square/Listable/compare/10.2.0...10.3.0
+[10.2.0]: https://github.com/square/Listable/compare/10.1.0...10.2.0
+[10.1.0]: https://github.com/square/Listable/compare/10.0.1...10.1.0
+[10.0.1]: https://github.com/square/Listable/compare/10.0.0...10.0.1
+[10.0.0]: https://github.com/square/Listable/compare/9.0.0...10.0.0
+[9.0.0]: https://github.com/square/Listable/compare/8.2.0...9.0.0
+[8.2.0]: https://github.com/square/Listable/compare/8.1.2...8.2.0
+[8.1.2]: https://github.com/square/Listable/compare/8.1.1...8.1.2
+[8.1.1]: https://github.com/square/Listable/compare/8.1.0...8.1.1
+[8.1.0]: https://github.com/square/Listable/compare/8.0.5...8.1.0
+[8.0.5]: https://github.com/square/Listable/compare/8.0.4...8.0.5
+[8.0.4]: https://github.com/square/Listable/compare/8.0.3...8.0.4
+[8.0.3]: https://github.com/square/Listable/compare/8.0.2...8.0.3
+[8.0.2]: https://github.com/square/Listable/compare/8.0.1...8.0.2
+[8.0.1]: https://github.com/square/Listable/compare/8.0.0...8.0.1
+[8.0.0]: https://github.com/square/Listable/compare/7.2.0...8.0.0
+[7.2.0]: https://github.com/square/Listable/compare/7.1.2...7.2.0
+[7.1.2]: https://github.com/square/Listable/compare/7.1.1...7.1.2
+[7.1.1]: https://github.com/square/Listable/compare/7.1.0...7.1.1
+[7.1.0]: https://github.com/square/Listable/compare/7.0.0...7.1.0
+[7.0.0]: https://github.com/square/Listable/compare/6.0.0...7.0.0
+[6.0.0]: https://github.com/square/Listable/compare/5.2.1...6.0.0
+[5.2.1]: https://github.com/square/Listable/compare/5.2.0...5.2.1
+[5.2.0]: https://github.com/square/Listable/compare/5.1.0...5.2.0
+[5.1.0]: https://github.com/square/Listable/compare/5.0.1...5.1.0
+[5.0.1]: https://github.com/square/Listable/compare/5.0.0...5.0.1
+[5.0.0]: https://github.com/square/Listable/compare/4.4.0...5.0.0
+[4.4.0]: https://github.com/square/Listable/compare/4.3.1...4.4.0
+[4.3.1]: https://github.com/square/Listable/compare/4.3.0...4.3.1
+[4.3.0]: https://github.com/square/Listable/compare/4.2.0...4.3.0
+[4.2.0]: https://github.com/square/Listable/compare/4.1.0...4.2.0
+[4.1.0]: https://github.com/square/Listable/compare/4.0.0...4.1.0
+[4.0.0]: https://github.com/square/Listable/compare/3.2.1...4.0.0
+[3.2.1]: https://github.com/square/Listable/compare/3.2.0...3.2.1
+[3.2.0]: https://github.com/square/Listable/compare/3.1.0...3.2.0
+[3.1.0]: https://github.com/square/Listable/compare/3.0.0...3.1.0
+[3.0.0]: https://github.com/square/Listable/compare/2.0.0...3.0.0
+[2.0.0]: https://github.com/square/Listable/compare/1.0.2...2.0.0
+[1.0.2]: https://github.com/square/Listable/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/square/Listable/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/square/Listable/compare/0.30.1...1.0.0
+[0.30.1]: https://github.com/square/Listable/compare/0.30.0...0.30.1
+[0.30.0]: https://github.com/square/Listable/compare/0.29.3...0.30.0
+[0.29.3]: https://github.com/square/Listable/compare/0.29.2...0.29.3
+[0.29.2]: https://github.com/square/Listable/compare/0.29.1...0.29.2
+[0.29.1]: https://github.com/square/Listable/compare/0.29.0...0.29.1
+[0.29.0]: https://github.com/square/Listable/compare/0.28.0...0.29.0
+[0.28.0]: https://github.com/square/Listable/compare/0.27.1...0.28.0
+[0.27.1]: https://github.com/square/Listable/compare/0.27.0...0.27.1
+[0.27.0]: https://github.com/square/Listable/compare/0.26.1...0.27.0
+[0.26.1]: https://github.com/square/Listable/compare/0.26.0...0.26.1
+[0.26.0]: https://github.com/square/Listable/compare/0.25.1...0.26.0
+[0.25.0]: https://github.com/square/Listable/compare/0.25.0...0.25.1
+[0.25.0]: https://github.com/square/Listable/compare/0.24.0...0.25.0
+[0.24.0]: https://github.com/square/Listable/compare/0.23.2...0.24.0
+[0.23.2]: https://github.com/square/Listable/compare/0.23.1...0.23.2
+[0.23.1]: https://github.com/square/Listable/compare/0.23.0...0.23.1
+[0.23.0]: https://github.com/square/Listable/compare/0.22.2...0.23.0
+[0.22.2]: https://github.com/square/Listable/compare/0.22.1...0.22.2
+[0.22.1]: https://github.com/square/Listable/compare/0.22.0...0.22.1
+[0.22.0]: https://github.com/square/Listable/compare/0.21.0...0.22.0
+[0.21.0]: https://github.com/square/Listable/compare/0.20.2...0.21.0
+[0.20.2]: https://github.com/square/Listable/compare/0.20.1...0.20.2
+[0.20.1]: https://github.com/square/Listable/compare/0.20.0...0.20.1
+[0.20.0]: https://github.com/square/Listable/compare/0.19.0...0.20.0
+[0.19.0]: https://github.com/square/Listable/compare/0.18.0...0.19.0
+[0.18.0]: https://github.com/square/Listable/compare/0.17.0...0.18.0
+[0.17.0]: https://github.com/square/Listable/compare/0.16.0...0.17.0
+[0.16.0]: https://github.com/square/Listable/compare/0.15.1...0.16.0
+[0.15.1]: https://github.com/square/Listable/compare/0.15.0...0.15.1
+[0.15.0]: https://github.com/square/Listable/compare/0.14.2...0.15.0
+[0.14.1]: https://github.com/square/Listable/compare/0.14.1...0.14.2
+[0.14.1]: https://github.com/square/Listable/compare/0.13.0...0.14.1
+[0.13.0]: https://github.com/square/Listable/compare/0.12.1...0.13.0
+[0.12.1]: https://github.com/square/Listable/compare/0.12.0...0.12.1
+[0.12.0]: https://github.com/square/Listable/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/square/Listable/compare/0.10.1...0.11.0
+[0.10.1]: https://github.com/square/Listable/compare/0.10.0...0.10.1
+[0.10.0]: https://github.com/square/Listable/compare/0.9.0...0.10.0

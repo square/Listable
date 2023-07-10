@@ -83,7 +83,7 @@ import UIKit
     /// list.layout = .table {
     ///     $0.stickySectionHeaders = true
     ///
-    ///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    ///     $0.bounds = .init(padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
     ///     $0.layout.itemSpacing = 10.0
     /// }
     /// ```
@@ -197,6 +197,31 @@ import UIKit
     }
     
     //
+    // MARK: Reading Content
+    //
+    
+    /// Allows directly reading properties on the list's `Content`, without having to explicitly specify
+    /// the `.content` component.
+    ///
+    /// Eg, you can now replace:
+    /// ```
+    /// ListProperties { list in
+    ///     ... = list.content.firstItem
+    ///     ... = list.content.lastItem
+    /// }
+    /// ```
+    /// With:
+    /// ```
+    /// ListProperties { list in
+    ///     ... = list.firstItem
+    ///     ... = list.lastItem
+    /// }
+    /// ```
+    public subscript<Value>(dynamicMember keyPath: KeyPath<Content, Value>) -> Value {
+        get { self.content[keyPath: keyPath] }
+    }
+    
+    //
     // MARK: Adding Content
     //
     
@@ -208,7 +233,6 @@ import UIKit
     /// ListProperties { list in
     ///     list.content.header = ...
     ///     list.content.footer = ...
-    ///     ...
     /// }
     /// ```
     /// With:
@@ -216,7 +240,6 @@ import UIKit
     /// ListProperties { list in
     ///     list.header = ...
     ///     list.footer = ...
-    ///     ...
     /// }
     /// ```
     public subscript<Value>(dynamicMember keyPath: WritableKeyPath<Content, Value>) -> Value {

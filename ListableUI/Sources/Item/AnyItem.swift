@@ -22,7 +22,7 @@ public protocol AnyItem : AnyItemConvertible, AnyItem_Internal
     
     var selectionStyle : ItemSelectionStyle { get set }
     var insertAndRemoveAnimations : ItemInsertAndRemoveAnimations? { get set }
-    var swipeActions : SwipeActionsConfiguration? { get set }
+    var trailingSwipeActions : SwipeActionsConfiguration? { get set }
     
     var reordering : ItemReordering? { get set }
     

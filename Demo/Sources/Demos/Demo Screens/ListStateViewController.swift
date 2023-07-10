@@ -11,7 +11,6 @@ import BlueprintUICommonControls
 import Combine
 
 /// Includes combine examples, so only available on iOS 13.0+.
-@available(iOS 13.0, *)
 final class ListStateViewController : ListViewController
 {
     let actions = ListActions()
@@ -34,6 +33,14 @@ final class ListStateViewController : ListViewController
         list.stateObserver = ListStateObserver { observer in
             observer.onDidScroll { info in
                 print("Did Scroll")
+            }
+            
+            observer.onBeginDrag { info in
+                print("Will Begin Drag")
+            }
+            
+            observer.onDidEndDeceleration { info in
+                print("Did End Deceleration")
             }
             
             observer.onVisibilityChanged { info in

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BlueprintUI",
+        "repositoryURL": "https://github.com/square/Blueprint",
+        "state": {
+          "branch": null,
+          "revision": "3720f9556c954f875cc484eb0490651669fe6519",
+          "version": "2.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

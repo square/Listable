@@ -30,11 +30,11 @@ final class PagedViewController : UIViewController
             }
         } sections: {
             Section("first") {
-                DemoElement(color: .black)
-                DemoElement(color: .white)
-                DemoElement(color: .black)
-                DemoElement(color: .white)
-                DemoElement(color: .black)
+                DemoElement(color: .red)
+                DemoElement(color: .orange)
+                DemoElement(color: .yellow)
+                DemoElement(color: .green)
+                DemoElement(color: .blue)
             }
         }
     }

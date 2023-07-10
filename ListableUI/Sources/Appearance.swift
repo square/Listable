@@ -43,19 +43,15 @@ public struct Appearance : Equatable
     
     /// The default background color for the `Appearance`.
     public static var defaultBackgroundColor : UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor { traits in
-                switch traits.userInterfaceStyle {
-                case .unspecified, .light:
-                    return .white
-                case .dark:
-                    return .black
-                @unknown default:
-                    return .white
-                }
+        return UIColor { traits in
+            switch traits.userInterfaceStyle {
+            case .unspecified, .light:
+                return .white
+            case .dark:
+                return .black
+            @unknown default:
+                return .white
             }
-        } else {
-            return .white
         }
     }
 }

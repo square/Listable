@@ -346,6 +346,10 @@ extension ListLayoutContent
             self.state.model.layouts
         }
         
+        public var isHeaderSticky : Bool? {
+            state.header.state?.anyModel.isStickySectionHeader
+        }
+        
         var all : [ListLayoutContentItem] {
             var all : [ListLayoutContentItem] = []
             

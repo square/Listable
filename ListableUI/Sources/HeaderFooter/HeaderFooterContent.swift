@@ -63,6 +63,15 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     var defaultHeaderFooterProperties : DefaultProperties { get }
     
     //
+    // MARK: Properties
+    //
+    
+    /// If this `HeaderFooterContent` is used as a header in a section,
+    /// setting this value to `true` will result in the header being sticky at the
+    /// top of the list while the section's rect is visible.
+    var isStickySectionHeader : Bool? { get }
+    
+    //
     // MARK: Applying To Displayed View
     //
     
@@ -161,14 +170,32 @@ public struct ApplyHeaderFooterContentInfo
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
 public struct HeaderFooterContentViews<Content:HeaderFooterContent>
 {
+    let view : HeaderFooterContentView<Content>
+    
     /// The content view of the content.
-    public var content : Content.ContentView
+    public var content : Content.ContentView {
+        view.content
+    }
     
     /// The background view of the content.
-    public var background : Content.BackgroundView
+    public var background : Content.BackgroundView {
+        view.background
+    }
+    
+    /// The background view of the content, if it has been used.
+    public var backgroundIfLoaded : Content.BackgroundView? {
+        view.backgroundIfLoaded
+    }
     
     /// The background view of the content that's displayed while a press is active.
-    public var pressed : Content.PressedBackgroundView
+    public var pressedBackground : Content.PressedBackgroundView {
+        view.pressedBackground
+    }
+    
+    /// The background view of the content that's displayed while a press is active, if it has been used.
+    public var pressedBackgroundIfLoaded : Content.PressedBackgroundView? {
+        view.pressedBackgroundIfLoaded
+    }
 }
 
 
@@ -224,5 +251,14 @@ public extension HeaderFooterContent
 {
     var defaultHeaderFooterProperties : DefaultProperties {
         .init()
+    }
+}
+
+
+public extension HeaderFooterContent {
+    
+    /// By default, headers will be sticky depending on their content or section configuration.
+    var isStickySectionHeader : Bool? {
+        nil
     }
 }

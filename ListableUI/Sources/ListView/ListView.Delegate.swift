@@ -307,11 +307,23 @@ extension ListView
             self.view.liveCells.perform {
                 $0.closeSwipeActions()
             }
+            
+            ListStateObserver.perform(self.view.stateObserver.onBeginDrag, "Will Begin Drag", with: self.view) { _ in
+                ListStateObserver.BeginDrag(
+                    positionInfo: self.view.scrollPositionInfo
+                )
+            }
         }
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
+            
+            ListStateObserver.perform(self.view.stateObserver.onDidEndDeceleration, "Did End Deceleration", with: self.view) { _ in
+                ListStateObserver.DidEndDeceleration(
+                    positionInfo: self.view.scrollPositionInfo
+                )
+            }
         }
                 
         func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool
@@ -364,7 +376,8 @@ extension ListView
         ) {
             guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
                 for: scrollView.contentOffset,
-                velocity: velocity
+                velocity: velocity,
+                visibleContentSize: scrollView.visibleContentFrame.size
             ) else {
                 return
             }

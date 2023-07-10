@@ -10,11 +10,14 @@ import UIKit
 
 protocol AnyItemCell : UICollectionViewCell
 {
+    func openLeadingSwipeActions()
+    func openTrailingSwipeActions()
+    
     func closeSwipeActions()
     
     var areSwipeActionsVisible : Bool  { get }
     
-    var anySwipeActionsView : UIView? { get }
+    func isTouchWithinSwipeActionView(touch: UITouch) -> Bool
     
     func wasDequeued(with liveCells : LiveCells)
 }
@@ -27,35 +30,81 @@ protocol AnyItemCell : UICollectionViewCell
 ///
 final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
 {
+    private(set) lazy var overlayDecoration : DecorationView<Content.OverlayDecorationView> = {
+        let view = DecorationView<Content.OverlayDecorationView>(
+            content: Content.createReusableOverlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.overlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, aboveSubview: self.contentContainer)
+        
+        return view
+    }()
+    
+    private(set) var overlayDecorationIfLoaded : DecorationView<Content.OverlayDecorationView>? = nil
+    
+    private(set) lazy var underlayDecoration : DecorationView<Content.UnderlayDecorationView> = {
+        let view = DecorationView<Content.UnderlayDecorationView>(
+            content: Content.createReusableUnderlayDecorationView(frame:bounds),
+            frame: bounds
+        )
+        
+        self.underlayDecorationIfLoaded = view
+        
+        self.contentView.insertSubview(view, belowSubview: self.contentContainer)
+        
+        return view
+    }()
+    
+    private(set) var underlayDecorationIfLoaded : DecorationView<Content.UnderlayDecorationView>? = nil
+    
     let contentContainer : ContentContainerView
 
-    let background : Content.BackgroundView
-    let selectedBackground : Content.SelectedBackgroundView
+    private(set) lazy var background : Content.BackgroundView = {
+        let background = Content.createReusableBackgroundView(frame: bounds)
+        
+        self.backgroundView = background
+        self.backgroundIfLoaded = background
+        
+        return background
+    }()
+    
+    private(set) var backgroundIfLoaded : Content.BackgroundView?
+    
+    private(set) lazy var selectedBackground : Content.SelectedBackgroundView = {
+        
+        let background = Content.createReusableSelectedBackgroundView(frame: bounds)
+        
+        self.selectedBackgroundView = background
+        self.selectedBackgroundIfLoaded = background
+        
+        return background
+        
+    }()
+    
+    private(set) var selectedBackgroundIfLoaded : Content.SelectedBackgroundView?
     
     var isReorderable: Bool = false
     
     override init(frame: CGRect)
     {
         let bounds = CGRect(origin: .zero, size: frame.size)
-                
+        
         self.contentContainer = ContentContainerView(frame: bounds)
         
-        self.background = Content.createReusableBackgroundView(frame: bounds)
-        self.selectedBackground = Content.createReusableSelectedBackgroundView(frame: bounds)
-        
         super.init(frame: frame)
-            
-        self.backgroundView = self.background
-        self.selectedBackgroundView = self.selectedBackground
         
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         
         self.layer.masksToBounds = false
-        
+    
         self.contentView.layer.masksToBounds = false
 
         self.contentView.addSubview(self.contentContainer)
+        
     }
     
     @available(*, unavailable)
@@ -126,22 +175,38 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
     override func layoutSubviews()
     {
         super.layoutSubviews()
-                
+        
         self.contentContainer.frame = self.contentView.bounds
+        
+        self.overlayDecorationIfLoaded?.frame = self.contentView.bounds
+        self.underlayDecorationIfLoaded?.frame = self.contentView.bounds
     }
     
     // MARK: AnyItemCell
+    
+    func openLeadingSwipeActions() {
+        self.contentContainer.openSwipeActionsAnimated(on: .left)
+    }
+    
+    func openTrailingSwipeActions() {
+        self.contentContainer.openSwipeActionsAnimated(on: .right)
+    }
     
     func closeSwipeActions() {
         self.contentContainer.performAnimatedClose()
     }
     
     var areSwipeActionsVisible : Bool {
-        self.contentContainer.swipeState == .open
+        switch self.contentContainer.swipeState {
+        case .open:
+            return true
+        default:
+            return false
+        }
     }
     
-    var anySwipeActionsView : UIView? {
-        self.contentContainer.swipeActionsView
+    func isTouchWithinSwipeActionView(touch: UITouch) -> Bool {
+        self.contentContainer.isTouchWithinSwipeActionView(touch: touch)
     }
     
     private var hasBeenDequeued = false
@@ -170,6 +235,49 @@ final class ItemCell<Content:ItemContent> : UICollectionViewCell, AnyItemCell
                 return reorderingAccessibilityLabel
             }
             return accessibilityLabel
+        }
+    }
+}
+
+
+extension ItemCell {
+    
+    final class DecorationView<ContentView:UIView> : UIView {
+        
+        let content : ContentView
+        
+        init(content : ContentView, frame: CGRect) {
+            
+            self.content = content
+            
+            super.init(frame: frame)
+            
+            self.content.frame = bounds
+            self.addSubview(self.content)
+            
+            self.isUserInteractionEnabled = false
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError() }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            
+            self.content.frame = self.bounds
+        }
+        
+        override var isAccessibilityElement: Bool {
+            get { false }
+            set { fatalError("Cannot set isAccessibilityElement.") }
+        }
+        
+        override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+            false
+        }
+        
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            nil
         }
     }
 }

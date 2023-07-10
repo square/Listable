@@ -8,7 +8,7 @@
 import UIKit
 
 
-public final class ListView : UIView, KeyboardObserverDelegate
+public final class ListView : UIView
 {
     //
     // MARK: Initialization
@@ -40,7 +40,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             behavior: self.behavior
         )
 
-        self.collectionView = UICollectionView(
+        self.collectionView = IOS16_4_First_Responder_Bug_CollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
@@ -107,7 +107,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     }
     
     deinit
-    {
+    {        
         self.keyboardObserver.remove(delegate: self)
         
         /**
@@ -131,7 +131,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
     //
     
     let storage : Storage
-    let collectionView : UICollectionView
+    let collectionView : IOS16_4_First_Responder_Bug_CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -159,6 +159,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
     private let dataSource : DataSource
     
     private let keyboardObserver : KeyboardObserver
+
+    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
     
     //
     // MARK: Debugging
@@ -251,7 +253,12 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
         self.collectionView.delaysContentTouches = self.behavior.delaysContentTouches
-        
+
+        let newDecelerationRate = UICollectionView.DecelerationRate(behaviorValue: self.behavior.decelerationRate)
+        if newDecelerationRate != self.collectionView.decelerationRate {
+            self.collectionView.decelerationRate = newDecelerationRate
+        }
+
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
         
@@ -303,20 +310,24 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
     private func updateScrollViewInsets()
     {
-        let (contentInsets, scrollIndicatorInsets) = self.calculateScrollViewInsets(
+        let insets = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
         
-        if self.collectionView.contentInset != contentInsets {
-            self.collectionView.contentInset = contentInsets
+        if self.collectionView.contentInset != insets.content {
+            self.collectionView.contentInset = insets.content
         }
         
-        if self.collectionView.scrollIndicatorInsets != scrollIndicatorInsets {
-            self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets
+        if self.collectionView.horizontalScrollIndicatorInsets != insets.horizontalScroll {
+            self.collectionView.horizontalScrollIndicatorInsets = insets.horizontalScroll
+        }
+
+        if self.collectionView.verticalScrollIndicatorInsets != insets.verticalScroll {
+            self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
         }
     }
-    
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (UIEdgeInsets, UIEdgeInsets)
+
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
@@ -342,8 +353,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 }
             }
         }()
-        
-        let scrollIndicatorInsets = modified(self.scrollIndicatorInsets) {
+
+        let scrollInsets = modified(self.scrollIndicatorInsets) {
             $0.bottom = max($0.bottom, keyboardBottomInset)
         }
         
@@ -351,31 +362,23 @@ public final class ListView : UIView, KeyboardObserverDelegate
             $0.bottom = keyboardBottomInset
         }
         
-        return (contentInsets, scrollIndicatorInsets)
+        return (
+            content: contentInsets,
+            horizontalScroll: UIEdgeInsets(
+                top: 0,
+                left: scrollInsets.left,
+                bottom: 0,
+                right: scrollInsets.right
+            ),
+            verticalScroll: UIEdgeInsets(
+                top: scrollInsets.top,
+                left: 0,
+                bottom: scrollInsets.bottom,
+                right: 0
+            )
+        )
     }
-    
-    //
-    // MARK: KeyboardObserverDelegate
-    //
-    
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
-    
-    func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
-        
-        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
-            return
-        }
-        
-        guard self.lastKeyboardFrame != frame else {
-            return
-        }
-        
-        self.lastKeyboardFrame = frame
-        
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
-        })
-    }
+
     
     //
     // MARK: List State Observation
@@ -469,10 +472,20 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+            completion(false)
             return false
         }
         
         return self.preparePresentationStateForScroll(to: toIndexPath) {
+            
+            /// `preparePresentationStateForScroll(to:)` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+                completion(false)
+                return
+            }
+            
             let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
 
             let isAlreadyVisible = self.collectionView.visibleContentFrame.contains(itemFrame)
@@ -547,17 +560,29 @@ public final class ListView : UIView, KeyboardObserverDelegate
         // Make sure the section identifier is valid.
 
         guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+            completion(false)
             return false
         }
 
         return preparePresentationStateForScrollToSection(index: sectionIndex) {
+            
+            /// `preparePresentationStateForScrollToSection` is asynchronous in some
+            /// cases, we need to re-query our section index in case it changed or is no longer valid.
+            
+            guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+                completion(false)
+                return
+            }
+            
             let layoutContent = self.collectionViewLayout.layout.content
 
             // Make sure the section has content.
 
             guard layoutContent.sections[sectionIndex].all.isEmpty == false else {
+                completion(false)
                 return
             }
+            
             let header = layoutContent.sections[sectionIndex].header
             let footer = layoutContent.sections[sectionIndex].footer
             let items = storageContent.sections[sectionIndex].items
@@ -898,7 +923,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         guard let cell = self.liveCells.activeSwipeCell else { return false }
         
-        return cell.anySwipeActionsView?.contains(touch: touch) == false
+        return cell.isTouchWithinSwipeActionView(touch: touch) == false
     }
     
     @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
@@ -1004,80 +1029,103 @@ public final class ListView : UIView, KeyboardObserverDelegate
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> ()
     ) {
-        // Figure out visible content.
+        /// We must put the updates to the collection view and our presentation state into the update queue,
+        /// to ensure that the calls to `presentationState.update` is done serially. It seems like some times,
+        /// in particular under high load, the call to `UICollectionView.performBatchUpdates` will not
+        /// call the update block synchronously, meaning if many updates are queued and submitted at once,
+        /// things can get out of sync, and we end up applying an incorrect diff to the presentation state.
+        ///
+        /// By placing the update within our serial update queue, and only marking the event as done in
+        /// `collectionViewUpdateCompletion`, we can guarantee that out of order updates do not occur.
         
-        let presentationState = self.storage.presentationState
-        
-        let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
+        self.updateQueue.add { [weak self] completion in
+            
+            guard let self = self else {
+                completion.finish()
+                return
+            }
+            
+            // Figure out visible content.
+            
+            let presentationState = self.storage.presentationState
+            
+            let indexPath = indexPath ?? IndexPath(item: 0, section: 0)
 
-        let visibleSlice = self.newVisibleSlice(to: indexPath)
+            let visibleSlice = self.newVisibleSlice(to: indexPath)
 
-        let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
-            ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
-        }
+            let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
+                ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
+            }
 
-        let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
-        
-        let updateBackingData = {
-            let dependencies = ItemStateDependencies(
-                reorderingDelegate: self,
-                coordinatorDelegate: self,
-                environmentProvider: { [weak self] in self?.environment ?? .empty }
+            let updateCallbacks = UpdateCallbacks(.queue, wantsAnimations: reason.animated)
+            
+            let updateBackingData = {
+                let dependencies = ItemStateDependencies(
+                    reorderingDelegate: self,
+                    coordinatorDelegate: self,
+                    environmentProvider: { [weak self] in self?.environment ?? .empty }
+                )
+                
+                presentationState.update(
+                    with: diff,
+                    slice: visibleSlice,
+                    reason: .wasUpdated,
+                    animated: reason.animated,
+                    dependencies: dependencies,
+                    updateCallbacks: updateCallbacks,
+                    loggable: self
+                )
+            }
+                    
+            // Update Refresh Control
+            
+            /**
+             Update Refresh Control
+             
+             Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
+             we trigger a bug where updated indexes are calculated incorrectly.
+             */
+            presentationState.updateRefreshControl(
+                with: visibleSlice.content.refreshControl,
+                in: self.collectionView,
+                color: self.appearance.refreshControlColor
             )
             
-            presentationState.update(
+            // Update Collection View
+            
+            self.performBatchUpdates(
                 with: diff,
-                slice: visibleSlice,
-                reason: .wasUpdated,
                 animated: reason.animated,
-                dependencies: dependencies,
-                updateCallbacks: updateCallbacks,
-                loggable: self
+                updateBackingData: updateBackingData,
+                collectionViewUpdateCompletion: completion.finish,
+                animationCompletion: callerCompletion
             )
-        }
-                
-        // Update Refresh Control
-        
-        /**
-         Update Refresh Control
-         
-         Note: Must be called *OUTSIDE* of CollectionView's `performBatchUpdates:`, otherwise
-         we trigger a bug where updated indexes are calculated incorrectly.
-         */
-        presentationState.updateRefreshControl(
-            with: visibleSlice.content.refreshControl,
-            in: self.collectionView,
-            color: appearance.refreshControlColor
-        )
-        
-        // Update Collection View
-        
-        self.performBatchUpdates(with: diff, animated: reason.animated, updateBackingData: updateBackingData, completion: callerCompletion)
 
-        // Update the offset of the scroll view to show the refresh control if needed
-        presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
+            // Update the offset of the scroll view to show the refresh control if needed
+            presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
 
-        // Perform any needed auto scroll actions.
-        self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
+            // Perform any needed auto scroll actions.
+            self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
-        // Update info for new contents.
-        
-        self.updateCollectionViewSelections(animated: reason.animated)
-        
-        // Notify updates.
-        
-        updateCallbacks.perform()
-        
-        // Notify state reader the content updated.
-        
-        if case .contentChanged(_, _) = reason {
-            ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
-                ListStateObserver.ContentUpdated(
-                    hadChanges: diff.changes.isEmpty == false,
-                    insertionsAndRemovals: .init(diff: diff),
-                    actions: actions,
-                    positionInfo: self.scrollPositionInfo
-                )
+            // Update info for new contents.
+            
+            self.updateCollectionViewSelections(animated: reason.animated)
+            
+            // Notify updates.
+            
+            updateCallbacks.perform()
+            
+            // Notify state reader the content updated.
+            
+            if case .contentChanged(_, _) = reason {
+                ListStateObserver.perform(self.stateObserver.onContentUpdated, "Content Updated", with: self) { actions in
+                    ListStateObserver.ContentUpdated(
+                        hadChanges: diff.changes.isEmpty == false,
+                        insertionsAndRemovals: .init(diff: diff),
+                        actions: actions,
+                        positionInfo: self.scrollPositionInfo
+                    )
+                }
             }
         }
     }
@@ -1090,6 +1138,7 @@ public final class ListView : UIView, KeyboardObserverDelegate
             switch self.autoScrollAction {
             case .scrollToItem(let insertInfo):
                 let itemPath = self.storage.allContent.firstIndexPathForItem(with: insertInfo.insertedIdentifier)
+                
                 guard let autoScrollIndexPath = itemPath else {
                     fallthrough
                 }
@@ -1119,7 +1168,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 let animation = info.animation.and(with: animated)
                 
                 if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animation: animation) { _ in
+                    self.scrollTo(item: destination, position: info.position, animation: animation) { scrolled in
+                        guard scrolled else { return }
                         info.didPerform(self.scrollPositionInfo)
                     }
                 }
@@ -1131,7 +1181,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
                 let animation = pin.animation.and(with: animated)
                 
                 if let destination = pin.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: pin.position, animation: animation) { _ in
+                    self.scrollTo(item: destination, position: pin.position, animation: animation) { scrolled in
+                        guard scrolled else { return }
                         pin.didPerform(self.scrollPositionInfo)
                     }
                 }
@@ -1227,18 +1278,19 @@ public final class ListView : UIView, KeyboardObserverDelegate
 
         return true
     }
-
+    
     private func performBatchUpdates(
         with diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>,
         animated: Bool,
         updateBackingData : @escaping () -> (),
-        completion callerCompletion : @escaping (Bool) -> ()
+        collectionViewUpdateCompletion callerCollectionViewUpdateCompletion : @escaping () -> (),
+        animationCompletion callerAnimationCompletion : @escaping (Bool) -> ()
     )
     {
         SignpostLogger.log(.begin, log: .updateContent, name: "Update UICollectionView", for: self)
         
-        let completion = { (completed : Bool) in
-            callerCompletion(completed)
+        let animationCompletion = { (completed : Bool) in
+            callerAnimationCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "Update UICollectionView", for: self)
         }
         
@@ -1266,6 +1318,8 @@ public final class ListView : UIView, KeyboardObserverDelegate
             changes.movedItems.forEach {
                 view.moveItem(at: $0.oldIndex, to: $0.newIndex)
             }
+            
+            callerCollectionViewUpdateCompletion()
         }
         
         if changes.hasIndexAffectingChanges {
@@ -1285,12 +1339,18 @@ public final class ListView : UIView, KeyboardObserverDelegate
         
         self.collectionViewLayout.setShouldAskForItemSizesDuringLayoutInvalidation()
         
+        let performUpdates = {
+            view.performBatchUpdates(
+                batchUpdates,
+                changes: changes,
+                completion: animationCompletion
+            )
+        }
+        
         if animated {
-            view.performBatchUpdates(batchUpdates, completion: completion)
+            performUpdates()
         } else {
-            UIView.performWithoutAnimation {
-                view.performBatchUpdates(batchUpdates, completion: completion)
-            }
+            UIView.performWithoutAnimation(performUpdates)
         }
     }
     
@@ -1333,6 +1393,28 @@ public extension ListView
         }
         
         self.collectionView.reloadData()
+    }
+}
+
+
+@_spi(ListableKeyboard)
+extension ListView : KeyboardObserverDelegate
+{
+    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+
+        guard let frame = self.keyboardObserver.currentFrame(in: self) else {
+            return
+        }
+
+        guard self.lastKeyboardFrame != frame else {
+            return
+        }
+
+        self.lastKeyboardFrame = frame
+
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            self.updateScrollViewInsets()
+        })
     }
 }
 
