@@ -180,6 +180,10 @@ extension ListView
             
             headerFooter.willDisplay(view: container)
             
+            /// We track the views that the collection view is using, because we handle our own
+            /// view reuse tracking for our header and footer views – this allows us to insert
+            /// or remove headers without having to reload the entire associated section.
+            
             self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
         }
         
@@ -197,12 +201,14 @@ extension ListView
             guard let headerFooter = self.displayedSupplementaryItems[id] else {
                 return
             }
+            
+            /// Because we reuse the inner views associated with our headers or footers,
+            /// its possible the view that our inner view is already associated with a new container view.
+            /// We need to guard against us accidentally then clearing out that view from its newer container view.
                         
             if headerFooter.visibleContainer == container {
                 self.displayedSupplementaryItems.removeValue(forKey: id)
                 headerFooter.didEndDisplay()
-            } else {
-                print("Not the same header: \(headerFooter.visibleContainer), \(container)")
             }
         }
         
