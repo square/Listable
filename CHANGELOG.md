@@ -16,6 +16,9 @@
 
 ### Internal
 
+- Update CI script to reference the `xcodesorg/made/xcodes` package for installing simulator runtimes.
+- Update CI script to install `aria2` to improve simulator runtime download speeds.
+
 # Past Releases
 
 # [11.0.0] - 2023-06-15
