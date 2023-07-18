@@ -470,18 +470,6 @@ extension PresentationState
 
 extension PresentationState
 {
-    struct SizeKey : Hashable
-    {
-        var width : CGFloat
-        var height : CGFloat
-        var layoutDirection : LayoutDirection
-        var sizing : Sizing
-    }
-}
-
-
-extension PresentationState
-{
     func toListLayoutContent(
         defaults: ListLayoutDefaults,
         environment : ListEnvironment

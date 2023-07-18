@@ -446,7 +446,7 @@ extension PresentationState
             }
         }
         
-        private var cachedSizes : [SizeKey:CGSize] = [:]
+        private var cachedSizes : [MeasurementContextKey:CGSize] = [:]
         
         func resetCachedSizes()
         {
@@ -463,9 +463,8 @@ extension PresentationState
                 return .zero
             }
             
-            let key = SizeKey(
-                width: info.sizeConstraint.width,
-                height: info.sizeConstraint.height,
+            let key = MeasurementContextKey(
+                constraint: .init(info.sizeConstraint),
                 layoutDirection: info.direction,
                 sizing: self.model.sizing
             )
@@ -475,22 +474,13 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return ItemCell<Content>()
-                }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
-                    
-                    self.applyTo(
-                        cell: cell,
-                        itemState: itemState,
-                        reason: .measurement,
-                        environment: environment
-                    )
-                    
-                    return self.model.sizing.measure(with: cell, info: info)
-                })
+                let size = self.model.content.measure(
+                    for: info,
+                    with: cache,
+                    in: environment,
+                    applyInfo: <#T##ApplyItemContentInfo#>,
+                    sizing: self.model.sizing
+                )
                 
                 self.cachedSizes[key] = size
                 

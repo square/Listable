@@ -183,7 +183,7 @@ extension PresentationState
             }
         }
         
-        private var cachedSizes : [SizeKey:CGSize] = [:]
+        private var cachedSizes : [MeasurementContextKey:CGSize] = [:]
         
         func resetCachedSizes()
         {
@@ -200,9 +200,8 @@ extension PresentationState
                 return .zero
             }
             
-            let key = SizeKey(
-                width: info.sizeConstraint.width,
-                height: info.sizeConstraint.height,
+            let key = MeasurementContextKey(
+                constraint: .init(info.sizeConstraint),
                 layoutDirection: info.direction,
                 sizing: self.model.sizing
             )
@@ -212,11 +211,9 @@ extension PresentationState
             } else {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                 
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return HeaderFooterContentView<Content>(frame: .zero)
-                }, { view in
+                let size : CGSize = cache.use(with: self.model.reuseIdentifier) {
+                    HeaderFooterContentView<Content>(frame: .zero)
+                } use: { view in
                     let views = HeaderFooterContentViews<Content>(
                         content: view.content,
                         background: view.background,
@@ -230,7 +227,7 @@ extension PresentationState
                     )
                     
                     return self.model.sizing.measure(with: view, info: info)
-                })
+                }
                 
                 self.cachedSizes[key] = size
                 

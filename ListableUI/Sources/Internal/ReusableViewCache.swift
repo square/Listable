@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class ReusableViewCache
+public final class ReusableViewCache
 {
     private var views : [String:[AnyObject]] = [:]
     
@@ -32,7 +32,10 @@ final class ReusableViewCache
         self.views[reuseIdentifier.stringValue] = views
     }
     
-    func pop<Content,View:AnyObject>(with reuseIdentifier: ReuseIdentifier<Content>, _ create : () -> View) -> View
+    func pop<Content,View:AnyObject>(
+        with reuseIdentifier: ReuseIdentifier<Content>,
+        create : () -> View
+    ) -> View
     {
         var views = self.views[reuseIdentifier.stringValue, default: []]
         
@@ -44,7 +47,11 @@ final class ReusableViewCache
         }
     }
     
-    func use<Content,View:AnyObject, Result>(with reuseIdentifier: ReuseIdentifier<Content>, create : () -> View, _ use : (View) -> Result) -> Result
+    func use<Content,View:AnyObject, Result>(
+        with reuseIdentifier: ReuseIdentifier<Content>,
+        create : () -> View,
+        use : (View) -> Result
+    ) -> Result
     {
         let views = self.views[reuseIdentifier.stringValue, default: []]
         
@@ -53,7 +60,7 @@ final class ReusableViewCache
             return use(view as! View)
         } else {
             // Create a new view since one is not available to be used.
-            let view = self.pop(with: reuseIdentifier, create)
+            let view = self.pop(with: reuseIdentifier, create: create)
             let result = use(view)
             
             self.push(view, with: reuseIdentifier)

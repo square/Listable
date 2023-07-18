@@ -426,6 +426,18 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     
     //
+    // MARK: Measurement
+    //
+    
+    func measure(
+        for info : Sizing.MeasureInfo,
+        with cache : ReusableViewCache,
+        in environment : ListEnvironment,
+        applyInfo: ApplyItemContentInfo,
+        sizing: Sizing
+    ) -> CGSize
+    
+    //
     // MARK: Content Coordination
     //
     
@@ -579,6 +591,35 @@ public extension ItemContent
 {
     var defaultItemProperties : DefaultProperties {
         .init()
+    }
+}
+
+public extension ItemContent {
+    
+    func measure(
+        for info : Sizing.MeasureInfo,
+        with cache : ReusableViewCache,
+        in environment : ListEnvironment,
+        applyInfo: ApplyItemContentInfo,
+        sizing: Sizing
+    ) -> CGSize
+    {
+        cache.use(with: .identifier(for: Self.self)) {
+            ItemCell<Self>()
+        } use: { cell in
+            
+            self.apply(
+                to: .init(
+                    content: cell.contentContainer.contentView,
+                    background: cell.background,
+                    selectedBackground: cell.selectedBackground
+                ),
+                for: .measurement,
+                with: applyInfo
+            )
+            
+            return sizing.measure(with: cell, info: info)
+        }
     }
 }
 

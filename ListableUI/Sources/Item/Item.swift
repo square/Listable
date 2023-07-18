@@ -49,10 +49,10 @@ public struct Item<Content:ItemContent> : AnyItem, AnyItemConvertible
     public var onRemove : OnRemove.Callback?
     public var onMove : OnMove.Callback?
     public var onUpdate : OnUpdate.Callback?
+        
+    public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
-    
-    public var debuggingIdentifier : String? = nil
     
     //
     // MARK: Initialization
