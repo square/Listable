@@ -53,6 +53,8 @@ final class KeyboardTestingViewController : UIViewController
             self.listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
         case .adjustsWhenVisible:
             self.listView.behavior.keyboardAdjustmentMode = .none
+        case .custom:
+            self.listView.behavior.keyboardAdjustmentMode = .custom
         }
     }
 }

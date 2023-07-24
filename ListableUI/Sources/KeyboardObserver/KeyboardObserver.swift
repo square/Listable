@@ -7,6 +7,20 @@
 
 import UIKit
 
+public protocol KeyboardCurrentFrameProviding {
+    func currentFrame(in view : UIView) -> KeyboardFrame?
+}
+
+public enum KeyboardFrame : Equatable {
+
+    /// The current frame does not overlap the current view at all.
+    case nonOverlapping
+
+    /// The current frame does overlap the view, by the provided rect, in the view's coordinate space.
+    case overlapping(frame: CGRect)
+}
+
+extension KeyboardObserver: KeyboardCurrentFrameProviding {}
 
 @_spi(ListableKeyboard)
 public protocol KeyboardObserverDelegate : AnyObject {
@@ -122,15 +136,6 @@ public final class KeyboardObserver {
     //
     // MARK: Handling Changes
     //
-
-    public enum KeyboardFrame : Equatable {
-
-        /// The current frame does not overlap the current view at all.
-        case nonOverlapping
-
-        /// The current frame does overlap the view, by the provided rect, in the view's coordinate space.
-        case overlapping(frame: CGRect)
-    }
 
     /// How the keyboard overlaps the view provided. If the view is not on screen (eg, no window),
     /// or the observer has not yet learned about the keyboard's position, this method returns nil.

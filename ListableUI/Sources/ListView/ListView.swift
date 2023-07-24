@@ -40,7 +40,7 @@ public final class ListView : UIView
             behavior: self.behavior
         )
 
-        self.collectionView = IOS16_4_First_Responder_Bug_CollectionView(
+        self.collectionView = CollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
@@ -131,7 +131,7 @@ public final class ListView : UIView
     //
     
     let storage : Storage
-    let collectionView : IOS16_4_First_Responder_Bug_CollectionView
+    let collectionView : CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -160,7 +160,7 @@ public final class ListView : UIView
     
     private let keyboardObserver : KeyboardObserver
 
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
+    private var lastKeyboardFrame : KeyboardFrame? = nil
     
     //
     // MARK: Debugging
@@ -249,6 +249,8 @@ public final class ListView : UIView
     {
         self.collectionViewLayout.behavior = self.behavior
         
+        self.collectionView.verticalLayoutGravity = self.behavior.verticalLayoutGravity
+        
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
         self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
@@ -307,9 +309,31 @@ public final class ListView : UIView
             self.updateScrollViewInsets()
         }
     }
-        
-    private func updateScrollViewInsets()
+
+    /// Callback for when the keyboard changes
+    public typealias KeyboardFrameWillChangeCallback = (
+        KeyboardCurrentFrameProviding,
+        (animationDuration: Double, options: UIView.AnimationOptions)
+    ) -> Void
+
+    /// Called whenever a keyboard change is detected
+    public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback? = nil
+
+    /// This callback determines the scroll view's insets only when
+    /// `behavior.keyboardAdjustmentMode` is `.custom`
+    public var customScrollViewInsets: () -> UIEdgeInsets = { .zero }
+
+    /// Call this to trigger an insets update.
+    /// When the `keyboardAdjustmentMode` is `.custom`, you should set
+    /// a `customScrollViewInsets` callback and then call this method
+    /// whenever insets require an update.
+    public func updateScrollViewInsets()
     {
+        if case .custom = self.behavior.keyboardAdjustmentMode {
+            self.collectionView.contentInset = self.customScrollViewInsets()
+            return
+        }
+
         let insets = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
@@ -327,7 +351,7 @@ public final class ListView : UIView
         }
     }
 
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
@@ -351,6 +375,8 @@ public final class ListView : UIView
                 case .overlapping(let frame):
                     return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
                 }
+            case .custom:
+                fatalError("Shouldn't call calculateScrollViewInsets for custom case")
             }
         }()
 
@@ -1412,9 +1438,16 @@ extension ListView : KeyboardObserverDelegate
 
         self.lastKeyboardFrame = frame
 
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
-        })
+        if .custom != behavior.keyboardAdjustmentMode {
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+                self.updateScrollViewInsets()
+            })
+        }
+
+        self.onKeyboardFrameWillChange?(
+            self.keyboardObserver,
+            (animationDuration: animationDuration, options: options)
+        )
     }
 }
 
@@ -1573,5 +1606,68 @@ fileprivate extension UIScrollView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
+    }
+}
+
+
+final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
+    
+    var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top
+
+    override var contentSize: CGSize {
+
+        didSet {
+            // Normally when the `contentSize` height increases the distance required to
+            // scroll to the bottom increases by the height delta. But with bottom gravity enabled
+            // we need to keep the scroll distance to the bottom unchanged, which we do by
+            // adjusting the `contentOffset`.
+            if verticalLayoutGravity == .bottom {
+                guard oldValue != contentSize else { return }
+                guard isContentScrollable else { return }
+                
+                let heightDelta = contentSize.height - oldValue.height
+                guard heightDelta > 0 else { return }
+                
+                let maxContentOffsetY = contentSize.height - bounds.height + contentInset.bottom
+                let targetY = self.contentOffset.y + heightDelta
+
+                self.contentOffset.y = min(targetY, maxContentOffsetY)
+            }
+        }
+    }
+ 
+    override var contentInset: UIEdgeInsets {
+        didSet {
+            // When bottom gravity is enabled, we may need to adjust the `contentOffset`
+            // when the `contentInset` changes in order to keep the scroll distance to
+            // the bottom unchanged.
+            if verticalLayoutGravity == .bottom {
+                guard oldValue != contentInset else { return }
+                guard isContentScrollable else { return }
+
+                let delta = contentInset.bottom - oldValue.bottom
+                if delta < 0 {
+                    // we have to reference the previous `contentOffset` value because
+                    // UIKit has already changed it.
+                    self.contentOffset.y = previousContentOffset.y + delta
+                } else {
+                    self.contentOffset.y += delta
+                }
+            }
+        }
+    }
+
+    private var previousContentOffset: CGPoint = .zero
+    override var contentOffset: CGPoint {
+        didSet {
+            previousContentOffset = oldValue
+        }
+    }
+
+    /// Returns true when the content size is large enough that scrolling is possible
+    private var isContentScrollable: Bool {
+        return contentSize.height > bounds.height - contentInset.bottom - contentInset.top + (
+            contentOffset.y < 0 ? contentOffset.y : 0
+        )
     }
 }
