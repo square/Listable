@@ -250,6 +250,7 @@ public final class ListView : UIView
         self.collectionViewLayout.behavior = self.behavior
         
         self.collectionView.verticalLayoutGravity = self.behavior.verticalLayoutGravity
+        self.collectionView.layoutDirection = self.collectionViewLayout.layout.direction
         
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
@@ -315,6 +316,11 @@ public final class ListView : UIView
         KeyboardCurrentFrameProviding,
         (animationDuration: Double, options: UIView.AnimationOptions)
     ) -> Void
+
+    /// Returns true when the content size is large enough that scrolling is possible
+    public var isContentScrollable: Bool {
+        collectionView.isContentScrollable
+    }
 
     /// Called whenever a keyboard change is detected
     public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback? = nil
@@ -1613,6 +1619,7 @@ fileprivate extension UIScrollView
 final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
     
     var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top
+    var layoutDirection: LayoutDirection = .vertical
 
     override var contentSize: CGSize {
 
@@ -1665,9 +1672,17 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
     }
 
     /// Returns true when the content size is large enough that scrolling is possible
-    private var isContentScrollable: Bool {
-        return contentSize.height > bounds.height - contentInset.bottom - contentInset.top + (
-            contentOffset.y < 0 ? contentOffset.y : 0
-        )
+    var isContentScrollable: Bool {
+        switch layoutDirection {
+        case .vertical:
+            return contentSize.height > bounds.height - contentInset.bottom - contentInset.top + (
+                contentOffset.y < 0 ? contentOffset.y : 0
+            )
+        case .horizontal:
+            return contentSize.width > bounds.width - contentInset.left - contentInset.right + (
+                contentOffset.x < 0 ? contentOffset.x : 0
+            )
+
+        }
     }
 }

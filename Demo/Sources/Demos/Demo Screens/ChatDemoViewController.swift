@@ -70,7 +70,13 @@ final class ChatDemoViewController : UIViewController {
         messages.insert((UUID(), .random), at: 0)
         messages.insert((UUID(), .random), at: 0)
         messages.insert((UUID(), .random), at: 0)
-        self.reload()
+        if listView.isContentScrollable {
+            UIView.performWithoutAnimation {
+                self.reload()
+            }
+        } else {
+            self.reload()
+        }
     }
     
     @objc private func addAtBottom() {
