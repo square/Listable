@@ -40,7 +40,7 @@ public final class ListView : UIView
             behavior: self.behavior
         )
 
-        self.collectionView = IOS16_4_First_Responder_Bug_CollectionView(
+        self.collectionView = CollectionView(
             frame: CGRect(origin: .zero, size: frame.size),
             collectionViewLayout: initialLayout
         )
@@ -131,7 +131,7 @@ public final class ListView : UIView
     //
     
     let storage : Storage
-    let collectionView : IOS16_4_First_Responder_Bug_CollectionView
+    let collectionView : CollectionView
     let delegate : Delegate
     let layoutManager : LayoutManager
     let liveCells : LiveCells
@@ -297,7 +297,13 @@ public final class ListView : UIView
     //
     // MARK: Scroll Insets
     //
-    
+
+    /// Returns true when the content size is large enough that scrolling is possible
+    public var isContentScrollable: Bool {
+        collectionView.isContentScrollable
+    }
+
+
     public var scrollIndicatorInsets : UIEdgeInsets {
         didSet {
             guard oldValue != self.scrollIndicatorInsets else {
@@ -1573,5 +1579,26 @@ fileprivate extension UIScrollView
         
         // We are within one half view height from the bottom of the content.
         return self.contentOffset.y + (viewHeight * 1.5) > self.contentSize.height
+    }
+}
+
+
+final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
+    
+    var layoutDirection: LayoutDirection = .vertical
+
+    /// Returns true when the content size is large enough that scrolling is possible
+    var isContentScrollable: Bool {
+        switch layoutDirection {
+        case .vertical:
+            return contentSize.height > bounds.height - adjustedContentInset.bottom - adjustedContentInset.top + (
+                contentOffset.y < 0 ? contentOffset.y : 0
+            )
+        case .horizontal:
+            return contentSize.width > bounds.width - adjustedContentInset.left - adjustedContentInset.right + (
+                contentOffset.x < 0 ? contentOffset.x : 0
+            )
+
+        }
     }
 }
