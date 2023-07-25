@@ -250,6 +250,9 @@ public final class ListView : UIView
     {
         self.collectionViewLayout.behavior = self.behavior
         
+        self.collectionView.verticalLayoutGravity = self.behavior.verticalLayoutGravity
+        self.collectionView.layoutDirection = self.collectionViewLayout.layout.direction
+        
         self.collectionView.keyboardDismissMode = self.behavior.keyboardDismissMode
         
         self.collectionView.canCancelContentTouches = self.behavior.canCancelContentTouches
@@ -1620,7 +1623,62 @@ fileprivate extension UIScrollView
 
 final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView {
     
+    var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top
     var layoutDirection: LayoutDirection = .vertical
+
+    override var contentSize: CGSize {
+
+        didSet {
+            // Normally when the `contentSize` height increases the distance required to
+            // scroll to the bottom increases by the height delta. But with bottom gravity enabled
+            // we need to keep the scroll distance to the bottom unchanged, which we do by
+            // adjusting the `contentOffset`.
+            if verticalLayoutGravity == .bottom {
+                guard layoutDirection == .vertical else {
+                    assertionFailure("bottom gravity is only supported for vertical layouts")
+                    return
+                }
+                guard oldValue != contentSize else { return }
+                guard isContentScrollable else { return }
+                
+                let heightDelta = contentSize.height - oldValue.height
+                guard heightDelta > 0 else { return }
+                
+                let maxContentOffsetY = contentSize.height - bounds.height + adjustedContentInset.bottom
+                let targetY = self.contentOffset.y + heightDelta
+
+                self.contentOffset.y = min(targetY, maxContentOffsetY)
+            }
+        }
+    }
+ 
+    override var contentInset: UIEdgeInsets {
+        didSet {
+            // When bottom gravity is enabled, we may need to adjust the `contentOffset`
+            // when the `contentInset` changes in order to keep the scroll distance to
+            // the bottom unchanged.
+            if layoutDirection == .vertical && verticalLayoutGravity == .bottom {
+                guard oldValue != contentInset else { return }
+                guard isContentScrollable else { return }
+
+                let delta = contentInset.bottom - oldValue.bottom
+                if delta < 0 {
+                    // we have to reference the previous `contentOffset` value because
+                    // UIKit has already changed it.
+                    self.contentOffset.y = previousContentOffset.y + delta
+                } else {
+                    self.contentOffset.y += delta
+                }
+            }
+        }
+    }
+
+    private var previousContentOffset: CGPoint = .zero
+    override var contentOffset: CGPoint {
+        didSet {
+            previousContentOffset = oldValue
+        }
+    }
 
     /// Returns true when the content size is large enough that scrolling is possible
     /// without bouncing back to it's original position.
