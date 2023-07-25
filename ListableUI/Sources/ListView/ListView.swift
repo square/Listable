@@ -160,7 +160,7 @@ public final class ListView : UIView
     
     private let keyboardObserver : KeyboardObserver
 
-    private var lastKeyboardFrame : KeyboardObserver.KeyboardFrame? = nil
+    private var lastKeyboardFrame : KeyboardFrame? = nil
     
     //
     // MARK: Debugging
@@ -314,8 +314,30 @@ public final class ListView : UIView
         }
     }
         
-    private func updateScrollViewInsets()
+    /// Callback for when the keyboard changes
+    public typealias KeyboardFrameWillChangeCallback = (
+        KeyboardCurrentFrameProvider,
+        (animationDuration: Double, options: UIView.AnimationOptions)
+    ) -> Void
+
+    /// Called whenever a keyboard change is detected
+    public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback? = nil
+
+    /// This callback determines the scroll view's insets only when
+    /// `behavior.keyboardAdjustmentMode` is `.custom`
+    public var customScrollViewInsets: () -> UIEdgeInsets = { .zero }
+
+    /// Call this to trigger an insets update.
+    /// When the `keyboardAdjustmentMode` is `.custom`, you should set
+    /// a `customScrollViewInsets` callback and then call this method
+    /// whenever insets require an update.
+    public func updateScrollViewInsets()
     {
+        if case .custom = self.behavior.keyboardAdjustmentMode {
+            self.collectionView.contentInset = self.customScrollViewInsets()
+            return
+        }
+
         let insets = self.calculateScrollViewInsets(
             with: self.keyboardObserver.currentFrame(in: self)
         )
@@ -333,7 +355,7 @@ public final class ListView : UIView
         }
     }
 
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardObserver.KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
     {
         let keyboardBottomInset : CGFloat = {
             
@@ -357,6 +379,9 @@ public final class ListView : UIView
                 case .overlapping(let frame):
                     return (self.bounds.size.height - frame.origin.y) - self.safeAreaInsets.bottom
                 }
+
+            case .custom:
+                fatalError("Shouldn't call calculateScrollViewInsets for custom case")
             }
         }()
 
@@ -1418,9 +1443,16 @@ extension ListView : KeyboardObserverDelegate
 
         self.lastKeyboardFrame = frame
 
-        UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
-            self.updateScrollViewInsets()
-        })
+        if .custom != behavior.keyboardAdjustmentMode {
+            UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+                self.updateScrollViewInsets()
+            })
+        }
+        
+        self.onKeyboardFrameWillChange?(
+            self.keyboardObserver,
+            (animationDuration: animationDuration, options: options)
+        )
     }
 }
 
