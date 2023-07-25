@@ -18,8 +18,7 @@ final class ChatDemoViewController : UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "Top", style: .plain, target: self, action: #selector(addAtTop)),
-            UIBarButtonItem(title: "Bottom", style: .plain, target: self, action: #selector(addAtBottom)),
+            UIBarButtonItem(title: "New message", style: .plain, target: self, action: #selector(addAtBottom)),
         ]
 
         self.view.addSubview(listView)
@@ -70,6 +69,11 @@ final class ChatDemoViewController : UIViewController {
         messages.insert((UUID(), .random), at: 0)
         messages.insert((UUID(), .random), at: 0)
         messages.insert((UUID(), .random), at: 0)
+        messages.insert((UUID(), .random), at: 0)
+        messages.insert((UUID(), .random), at: 0)
+        messages.insert((UUID(), .random), at: 0)
+        messages.insert((UUID(), .random), at: 0)
+        messages.insert((UUID(), .random), at: 0)
         if listView.isContentScrollable {
             UIView.performWithoutAnimation {
                 self.reload()
@@ -88,6 +92,8 @@ final class ChatDemoViewController : UIViewController {
     private var keyboardHeight: CGFloat = 0
     private let listView = ListView()
     private var footerView = BlueprintView()
+    private var pagingId = UUID()
+    private var isPaging = false
 
     private func reload()
     {
@@ -152,9 +158,28 @@ final class ChatDemoViewController : UIViewController {
             
             list.behavior.verticalLayoutGravity = .bottom
             list.behavior.keyboardAdjustmentMode = .custom
-            
-            list.refreshControl = .init(isRefreshing: false) {
-                print("Refreshy")
+
+            if messages.count > 15 {
+                list.add {
+                    Section("paging") {
+                        ActivityIndicatorContent(identifierValue: pagingId.uuidString)
+                            .with(
+                                onDisplay: { info in
+                                    // onDisplay can be triggered multiple times so
+                                    // we use `isPaging` to avoid paging more than necessary
+                                    guard !self.isPaging else { return }
+                                    self.isPaging = true
+                                    // simulate loading:
+                                    Task { [weak self] in
+                                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 3)
+                                        self?.addAtTop()
+                                        self?.pagingId = UUID()
+                                        self?.isPaging = false
+                                    }
+                                }
+                            )
+                    }
+                }
             }
             
             list.add {
@@ -215,6 +240,27 @@ fileprivate struct MessageContent : BlueprintItemContent, Equatable {
         switch sender {
         case .me: return .trailing
         case .other: return .leading
+        }
+    }
+}
+
+fileprivate struct ActivityIndicatorContent: BlueprintItemContent, Equatable {
+    var identifierValue: AnyHashable
+
+    func element(with info: ListableUI.ApplyItemContentInfo) -> BlueprintUI.Element {
+        ActivityIndicatorElement().inset(top: 10, bottom: 30)
+    }
+}
+
+fileprivate struct ActivityIndicatorElement: UIViewElement {
+    func makeUIView() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView()
+        return activityIndicator
+    }
+
+    func updateUIView(_ view: UIActivityIndicatorView, with context: UIViewElementContext) {
+        if !context.isMeasuring && !view.isAnimating {
+            view.startAnimating()
         }
     }
 }
