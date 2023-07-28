@@ -1588,16 +1588,13 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
     var layoutDirection: LayoutDirection = .vertical
 
     /// Returns true when the content size is large enough that scrolling is possible
+    /// without bouncing back to it's original position.
     var isContentScrollable: Bool {
         switch layoutDirection {
         case .vertical:
-            return contentSize.height > bounds.height - adjustedContentInset.bottom - adjustedContentInset.top + (
-                contentOffset.y < 0 ? contentOffset.y : 0
-            )
+            return contentSize.height > visibleContentFrame.height
         case .horizontal:
-            return contentSize.width > bounds.width - adjustedContentInset.left - adjustedContentInset.right + (
-                contentOffset.x < 0 ? contentOffset.x : 0
-            )
+            return contentSize.width > visibleContentFrame.width
 
         }
     }
