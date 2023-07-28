@@ -82,7 +82,7 @@ extension Behavior
         case adjustsWhenVisible
 
         /// Consumer calculates the edge insets and handles setting them
-        /// via the `ListView#customScrollViewInsets` callback. Only use this option
+        /// via the ``ListView/customScrollViewInsets`` callback. Only use this option
         /// when managing the `ListView` directly.
         case custom
     }

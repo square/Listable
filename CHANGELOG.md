@@ -8,7 +8,7 @@
 
 - A new `isContentScrollable` property is added to `ListView` to determine if the content size is large enough that the list can be scrolled to a new position without springing back to it's original position.
 
-- A new `custom` case is added to `KeyboardAdjustmentMode` which allows the consumer to fully customize the inset behavior. `onKeyboardFrameWillChange` and `customScrollViewInsets` have been added to `ListView` and `updateScrollViewInsets` is now public. All of these can be utilized in conjunction to respond to the keyboard and fully control the insets. They are only availble to consumers utilizing `ListView` directly.
+- A new `custom` case is added to `KeyboardAdjustmentMode` which allows the consumer to fully customize the inset behavior. `onKeyboardFrameWillChange` and `customScrollViewInsets` have been added to `ListView` and `updateScrollViewInsets` is now public. All of these can be utilized in conjunction to respond to the keyboard and fully control the insets. For now, these are available through `ListView` only.
 
 ### Removed
 
