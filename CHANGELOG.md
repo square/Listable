@@ -6,6 +6,8 @@
 
 - `ApplyItemContentInfo` and `ApplyHeaderFooterContentInfo` are now available in the Blueprint `Environment` for each `BlueprintItemContent`.
 
+- A new `isContentScrollable` property is added to `ListView` to determine if the content size is large enough that the list can be scrolled to a new position without springing back to it's original position.
+
 ### Removed
 
 ### Changed
