@@ -83,6 +83,7 @@ public struct EmbeddedList : ItemContent
             scrollIndicatorInsets: .init(),
             behavior: .init(),
             autoScrollAction: .none,
+            onKeyboardFrameWillChange: nil,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
             configure: configure

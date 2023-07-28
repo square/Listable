@@ -22,6 +22,7 @@ public final class ListView : UIView
         
         self.behavior = Behavior()
         self.autoScrollAction = .none
+        self.onKeyboardFrameWillChange = nil
         self.scrollIndicatorInsets = .zero
         
         self.storage = Storage()
@@ -321,7 +322,7 @@ public final class ListView : UIView
     ) -> Void
 
     /// Called whenever a keyboard change is detected
-    public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback? = nil
+    public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback?
 
     /// This callback determines the scroll view's insets only when
     /// `behavior.keyboardAdjustmentMode` is `.custom`
@@ -788,6 +789,7 @@ public final class ListView : UIView
             scrollIndicatorInsets: self.scrollIndicatorInsets,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
+            onKeyboardFrameWillChange: self.onKeyboardFrameWillChange,
             accessibilityIdentifier: self.collectionView.accessibilityIdentifier,
             debuggingIdentifier: self.debuggingIdentifier,
             configure: configure
@@ -813,6 +815,7 @@ public final class ListView : UIView
             self.appearance = properties.appearance
             self.behavior = properties.behavior
             self.autoScrollAction = properties.autoScrollAction
+            self.onKeyboardFrameWillChange = properties.onKeyboardFrameWillChange
             self.scrollIndicatorInsets = properties.scrollIndicatorInsets
             self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
             self.debuggingIdentifier = properties.debuggingIdentifier
