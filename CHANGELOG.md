@@ -10,6 +10,8 @@
 
 - A new `custom` case is added to `KeyboardAdjustmentMode` which allows the consumer to fully customize the inset behavior. `onKeyboardFrameWillChange` and `customScrollViewInsets` have been added to `ListView` and `updateScrollViewInsets` is now public. All of these can be utilized in conjunction to respond to the keyboard and fully control the insets. For now, these are available through `ListView` only.
 
+- A new `verticalLayoutGravity` behavior to accomodate vertical-layout lists where the normal scroll position of the list is at the bottom of the list. Setting `verticalLayoutGravity` to `.bottom` enables the new behavior. It's designed to accomodate a messaging client. Adds a new demo called Chat App.
+
 ### Removed
 
 ### Changed
