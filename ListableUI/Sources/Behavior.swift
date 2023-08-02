@@ -80,6 +80,11 @@ extension Behavior
         
         /// The `contentInset` of the list is adjusted when the keyboard appears or disappears.
         case adjustsWhenVisible
+
+        /// Consumer calculates the edge insets and handles setting them
+        /// via the ``ListView/customScrollViewInsets`` callback. Only use this option
+        /// when managing the `ListView` directly.
+        case custom
     }
     
     

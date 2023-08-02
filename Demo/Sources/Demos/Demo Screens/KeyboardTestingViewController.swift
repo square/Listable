@@ -16,7 +16,8 @@ import BlueprintUICommonControls
 final class KeyboardTestingViewController : UIViewController
 {
     let listView = ListView()
-    
+    private var insets: UIEdgeInsets = .zero
+
     override func loadView()
     {
         self.view = self.listView
@@ -24,21 +25,28 @@ final class KeyboardTestingViewController : UIViewController
         self.listView.layout = .table {
             $0.layout.itemSpacing = 10.0
         }
-        
-        self.listView.configure { list in
-            list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
-            
-            list += Section("section") {
-                for index in 1...14 {
-                    Item(TextFieldElement(content: "Item \(index)"), sizing: .fixed(height: 100.0))
-                }
+
+        self.listView.customScrollViewInsets = { [weak self] in
+            self?.insets ?? .zero
+        }
+
+        self.listView.onKeyboardFrameWillChange = { [weak self] keyboardCurrentFrameProvider, animation in
+            guard let self = self else { return }
+            switch keyboardCurrentFrameProvider.currentFrame(in: self.listView) {
+            case .nonOverlapping, .none:
+                self.insets.bottom = 0
+            case .overlapping(let frame):
+                self.insets.bottom = frame.height - self.view.safeAreaInsets.bottom
             }
+            self.listView.updateScrollViewInsets()
         }
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "Dismiss Keyboard", style: .plain, target: self, action: #selector(dismissKeyboard)),
             UIBarButtonItem(title: "Toggle Mode", style: .plain, target: self, action: #selector(toggleMode)),
         ]
+        
+        reload()
     }
     
     @objc func dismissKeyboard()
@@ -52,8 +60,36 @@ final class KeyboardTestingViewController : UIViewController
         case .none:
             self.listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
         case .adjustsWhenVisible:
+            self.listView.behavior.keyboardAdjustmentMode = .custom
+        case .custom:
             self.listView.behavior.keyboardAdjustmentMode = .none
         }
+        reload()
+    }
+
+    private func reload() {
+        let mode: String = {
+            switch self.listView.behavior.keyboardAdjustmentMode {
+            case .none:
+                return "none"
+            case .adjustsWhenVisible:
+                return "adjustsWhenVisible"
+            case .custom:
+                return "custom"
+            }
+        }()
+        
+        self.listView.configure { list in
+            list.content.overscrollFooter = DemoHeader(title: "Thanks for using Listable!!")
+            
+            list += Section("section") {
+                for index in 1...14 {
+                    Item(TextFieldElement(content: "Item \(index) (mode: \(mode))"), sizing: .fixed(height: 100.0))
+                }
+            }
+        }
+
+        self.listView.updateScrollViewInsets()
     }
 }
 
