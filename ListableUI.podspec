@@ -2,7 +2,7 @@ require_relative 'version'
 
 Pod::Spec.new do |s|
   s.name         = 'ListableUI'
-  s.version      = LISTABLE_VERSION
+  s.version      = '10.3.1'
   s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 14.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = 'Apache License, Version 2.0'
