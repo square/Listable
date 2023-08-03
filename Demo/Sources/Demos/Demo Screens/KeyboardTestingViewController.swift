@@ -27,7 +27,11 @@ final class KeyboardTestingViewController : UIViewController
         }
 
         self.listView.customScrollViewInsets = { [weak self] in
-            self?.insets ?? .zero
+            if let insets = self?.insets {
+                return (insets, insets, insets)
+            } else {
+                return (.zero, .zero, .zero)
+            }
         }
 
         self.listView.onKeyboardFrameWillChange = { [weak self] keyboardCurrentFrameProvider, animation in

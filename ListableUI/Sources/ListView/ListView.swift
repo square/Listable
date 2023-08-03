@@ -329,7 +329,11 @@ public final class ListView : UIView
 
     /// This callback determines the scroll view's insets only when
     /// `behavior.keyboardAdjustmentMode` is `.custom`
-    public var customScrollViewInsets: () -> UIEdgeInsets = { .zero }
+    public var customScrollViewInsets: () -> (
+        content: UIEdgeInsets,
+        horizontalScroll: UIEdgeInsets,
+        verticalScroll: UIEdgeInsets
+    ) = { (.zero, .zero, .zero) }
 
     /// Call this to trigger an insets update.
     /// When the `keyboardAdjustmentMode` is `.custom`, you should set
@@ -338,7 +342,10 @@ public final class ListView : UIView
     public func updateScrollViewInsets()
     {
         if case .custom = self.behavior.keyboardAdjustmentMode {
-            self.collectionView.contentInset = self.customScrollViewInsets()
+            let insets = self.customScrollViewInsets()
+            self.collectionView.contentInset = insets.content
+            self.collectionView.horizontalScrollIndicatorInsets = insets.horizontalScroll
+            self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
             return
         }
 
