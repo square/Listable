@@ -341,18 +341,15 @@ public final class ListView : UIView
     /// whenever insets require an update.
     public func updateScrollViewInsets()
     {
+        let insets: (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
         if case .custom = self.behavior.keyboardAdjustmentMode {
-            let insets = self.customScrollViewInsets()
-            self.collectionView.contentInset = insets.content
-            self.collectionView.horizontalScrollIndicatorInsets = insets.horizontalScroll
-            self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
-            return
+            insets = self.customScrollViewInsets()
+        } else {
+            insets = self.calculateScrollViewInsets(
+                with: self.keyboardObserver.currentFrame(in: self)
+            )
         }
 
-        let insets = self.calculateScrollViewInsets(
-            with: self.keyboardObserver.currentFrame(in: self)
-        )
-        
         if self.collectionView.contentInset != insets.content {
             self.collectionView.contentInset = insets.content
         }
