@@ -27,7 +27,7 @@ final class ChatDemoViewController : UIViewController {
         listView.frame = view.bounds
 
         listView.customScrollViewInsets = { [weak self] in
-            guard let self = self else { return (.zero, .zero, .zero) }
+            guard let self = self else { return .init() }
             let inset = max(self.footerHeight, self.keyboardHeight - self.view.safeAreaInsets.bottom)
             print("new bottom inset:", inset)
             let insets = UIEdgeInsets(
@@ -36,7 +36,7 @@ final class ChatDemoViewController : UIViewController {
                 bottom: inset,
                 right: 0
             )
-            return (insets, .zero, insets)
+            return .init(content: insets, verticalScroll: insets)
         }
         listView.onKeyboardFrameWillChange = { [weak self] keyboardCurrentFrameProvider, keyboardAnimation in
             guard let self = self else { return }

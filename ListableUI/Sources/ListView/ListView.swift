@@ -327,13 +327,35 @@ public final class ListView : UIView
     /// Called whenever a keyboard change is detected
     public var onKeyboardFrameWillChange: KeyboardFrameWillChangeCallback?
 
+    public struct ScrollViewInsets {
+        /// Insets for the content view
+        public let content: UIEdgeInsets
+
+        /// Insets for the horizontal scroll bar
+        public let horizontalScroll: UIEdgeInsets
+
+        /// Insets for the vertical scroll bar
+        public let verticalScroll: UIEdgeInsets
+        
+        /// All values are optional, and default to `.zero`
+        /// - Parameters:
+        ///   - content: Insets for the content view
+        ///   - horizontalScroll: Insets for the horizontal scroll bar
+        ///   - verticalScroll: Insets for the vertical scroll bar
+        public init(
+            content: UIEdgeInsets = .zero,
+            horizontalScroll: UIEdgeInsets = .zero,
+            verticalScroll: UIEdgeInsets = .zero
+        ) {
+            self.content = content
+            self.horizontalScroll = horizontalScroll
+            self.verticalScroll = verticalScroll
+        }
+    }
+
     /// This callback determines the scroll view's insets only when
     /// `behavior.keyboardAdjustmentMode` is `.custom`
-    public var customScrollViewInsets: () -> (
-        content: UIEdgeInsets,
-        horizontalScroll: UIEdgeInsets,
-        verticalScroll: UIEdgeInsets
-    ) = { (.zero, .zero, .zero) }
+    public var customScrollViewInsets: () -> ScrollViewInsets = { .init() }
 
     /// Call this to trigger an insets update.
     /// When the `keyboardAdjustmentMode` is `.custom`, you should set
@@ -341,7 +363,7 @@ public final class ListView : UIView
     /// whenever insets require an update.
     public func updateScrollViewInsets()
     {
-        let insets: (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
+        let insets: ScrollViewInsets
         if case .custom = self.behavior.keyboardAdjustmentMode {
             insets = self.customScrollViewInsets()
         } else {
@@ -363,8 +385,7 @@ public final class ListView : UIView
         }
     }
 
-    func calculateScrollViewInsets(with keyboardFrame : KeyboardFrame?) -> (content: UIEdgeInsets, horizontalScroll: UIEdgeInsets, verticalScroll: UIEdgeInsets)
-    {
+    func calculateScrollViewInsets(with keyboardFrame : KeyboardFrame?) -> ScrollViewInsets    {
         let keyboardBottomInset : CGFloat = {
             
             guard let keyboardFrame = keyboardFrame else {
@@ -401,7 +422,7 @@ public final class ListView : UIView
             $0.bottom = keyboardBottomInset
         }
         
-        return (
+        return .init(
             content: contentInsets,
             horizontalScroll: UIEdgeInsets(
                 top: 0,

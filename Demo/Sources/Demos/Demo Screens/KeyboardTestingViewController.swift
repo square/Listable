@@ -28,9 +28,9 @@ final class KeyboardTestingViewController : UIViewController
 
         self.listView.customScrollViewInsets = { [weak self] in
             if let insets = self?.insets {
-                return (insets, insets, insets)
+                return .init(content: insets, verticalScroll: insets)
             } else {
-                return (.zero, .zero, .zero)
+                return .init()
             }
         }
 
