@@ -1716,4 +1716,24 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
 
         }
     }
+
+    override var frame: CGRect {
+        get {
+            super.frame
+        }
+        set {
+            // With bottom gravity enabled keep the scroll distance to the bottom unchanged
+            if layoutDirection == .vertical && verticalLayoutGravity == .bottom {
+                guard newValue != super.frame else {
+                    return
+                }
+                let oldValue = super.frame
+                let offsetY = contentOffset.y
+                super.frame = newValue
+                contentOffset.y = offsetY - (newValue.height - oldValue.height)
+            } else {
+                super.frame = newValue
+            }
+        }
+    }
 }
