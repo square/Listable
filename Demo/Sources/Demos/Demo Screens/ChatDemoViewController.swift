@@ -19,6 +19,8 @@ final class ChatDemoViewController : UIViewController {
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "New message", style: .plain, target: self, action: #selector(addAtBottom)),
+            UIBarButtonItem(title: "Grow Frame", style: .plain, target: self, action: #selector(growFrame)),
+            UIBarButtonItem(title: "Shrink Frame", style: .plain, target: self, action: #selector(shrinkFrame)),
         ]
 
         self.view.addSubview(listView)
@@ -29,7 +31,6 @@ final class ChatDemoViewController : UIViewController {
         listView.customScrollViewInsets = { [weak self] in
             guard let self = self else { return .init() }
             let inset = max(self.footerHeight, self.keyboardHeight - self.view.safeAreaInsets.bottom)
-            print("new bottom inset:", inset)
             let insets = UIEdgeInsets(
                 top: 0,
                 left: 0,
@@ -86,6 +87,20 @@ final class ChatDemoViewController : UIViewController {
     @objc private func addAtBottom() {
         messages.append((UUID(), .random))
         self.reload()
+    }
+
+    @objc private func shrinkFrame() {
+        view.frame.size.height -= 22
+        reload()
+    }
+
+    @objc private func growFrame() {
+        guard view.frame.size.height < view.superview!.frame.size
+            .height else {
+            return
+        }
+        view.frame.size.height += 22
+        reload()
     }
 
     private var footerHeight: CGFloat = 80

@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- The `verticalLayoutGravity` behavior now takes into account `frame` changes so that the scroll position relative to the bottom remains unchanged when the `frame` changes.
+
 ### Added
 
 ### Removed
