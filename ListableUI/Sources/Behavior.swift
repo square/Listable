@@ -42,6 +42,10 @@ public struct Behavior : Equatable
     /// The rate at which scrolling decelerates.
     public var decelerationRate: DecelerationRate
 
+    /// Applicable when the `layoutDirection` is `vertical`. The gravity determines
+    /// how inserting new elements or changing the `contentInset` affects the scroll position.
+    public var verticalLayoutGravity : VerticalLayoutGravity
+
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
@@ -52,7 +56,8 @@ public struct Behavior : Equatable
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
         isPagingEnabled : Bool = false,
-        decelerationRate : DecelerationRate = .normal
+        decelerationRate : DecelerationRate = .normal,
+        verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
@@ -66,6 +71,8 @@ public struct Behavior : Equatable
         self.delaysContentTouches = delaysContentTouches
         self.isPagingEnabled = false
         self.decelerationRate = decelerationRate
+        
+        self.verticalLayoutGravity = verticalLayoutGravity
     }
 }
 
@@ -170,6 +177,18 @@ extension Behavior
                 }
             }
         }
+    }
+    
+    /// Applicable when the `layoutDirection` is `vertical`. The gravity determines
+    /// how inserting new elements or changing the `contentInset` affects the scroll position.
+    public enum VerticalLayoutGravity {
+        /// This is how a scroll view normally behaves.
+        /// When a new element is inserted, the scroll distance from the top is unchanged.
+        case top
+
+        /// Intended for cases where the default scroll position is scrolled all the way down.
+        /// When a new element is inserted, the scroll distance from the bottom is unchanged.
+        case bottom
     }
 }
 
