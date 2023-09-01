@@ -48,14 +48,12 @@ final class ChatDemoViewController : UIViewController {
                 self.keyboardHeight = 0
             }
             
-            UIView.animate(
-                withDuration: keyboardAnimation.animationDuration,
-                delay: 0.0,
-                options: keyboardAnimation.options,
-                animations: {
-                    self.listView.updateScrollViewInsets()
-                }
-            )
+            UIViewPropertyAnimator(
+                duration: keyboardAnimation.animationDuration,
+                curve: keyboardAnimation.animationCurve
+            ) {
+                self.listView.updateScrollViewInsets()
+            }.startAnimation()
         }
         
         self.view.addSubview(footerView)

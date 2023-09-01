@@ -1,10 +1,3 @@
-//
-//  KeyboardObserver.swift
-//  ListableUI
-//
-//  Created by Kyle Van Essen on 2/16/20.
-//
-
 import UIKit
 
 /// Publicly exposes the current frame provider for consumers
@@ -30,9 +23,9 @@ extension KeyboardObserver: KeyboardCurrentFrameProvider {}
 public protocol KeyboardObserverDelegate : AnyObject {
 
     func keyboardFrameWillChange(
-        for observer : KeyboardObserver,
-        animationDuration : Double,
-        options : UIView.AnimationOptions
+        for observer: KeyboardObserver,
+        animationDuration: Double,
+        animationCurve: UIView.AnimationCurve
     )
 }
 
@@ -65,31 +58,30 @@ public final class KeyboardObserver {
     /// The global shared keyboard observer. Why is it a global shared instance?
     /// We can only know the keyboard position via the keyboard frame notifications.
     ///
-    /// If a `ListView` is created while a keyboard is already on-screen, we'd have
-    /// no way to determine the keyboard frame, and thus couldn't provide the correct
-    /// content insets to avoid the visible keyboard.
+    /// If a keyboard observing view is created while a keyboard is already on-screen, we'd have no way to determine the
+    /// keyboard frame, and thus couldn't provide the correct content insets to avoid the visible keyboard.
     ///
     /// Thus, the `shared` observer is set up on app startup
     /// (see `SetupKeyboardObserverOnAppStartup.m`) to avoid this problem.
-    public static let shared : KeyboardObserver = KeyboardObserver(center: .default)
+    public static let shared: KeyboardObserver = KeyboardObserver(center: .default)
 
     /// Allow logging to the console if app startup-timed shared instance startup did not
     /// occur; this could cause bugs for the reasons outlined above.
     fileprivate static var didSetupSharedInstanceDuringAppStartup = false
 
-    private let center : NotificationCenter
+    private let center: NotificationCenter
 
-    internal private(set) var delegates : [Delegate] = []
+    private(set) var delegates: [Delegate] = []
 
-    internal struct Delegate {
-        private(set) weak var value : KeyboardObserverDelegate?
+    struct Delegate {
+        private(set) weak var value: KeyboardObserverDelegate?
     }
 
     //
     // MARK: Initialization
     //
 
-    public init(center : NotificationCenter) {
+    public init(center: NotificationCenter) {
 
         self.center = center
 
@@ -102,37 +94,47 @@ public final class KeyboardObserver {
         /// which ensures that the delegate is notified if the frame really changes, and
         /// prevents duplicate calls.
 
-        self.center.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIWindow.keyboardWillChangeFrameNotification, object: nil)
-        self.center.addObserver(self, selector: #selector(keyboardFrameChanged(_:)), name: UIWindow.keyboardDidChangeFrameNotification, object: nil)
+        self.center.addObserver(
+            self,
+            selector: #selector(keyboardFrameChanged(_:)),
+            name: UIWindow.keyboardWillChangeFrameNotification,
+            object: nil
+        )
+        self.center.addObserver(
+            self,
+            selector: #selector(keyboardFrameChanged(_:)),
+            name: UIWindow.keyboardDidChangeFrameNotification,
+            object: nil
+        )
     }
 
-    private var latestNotification : NotificationInfo?
+    private var latestNotification: NotificationInfo?
 
     //
     // MARK: Delegates
     //
 
-    public func add(delegate : KeyboardObserverDelegate) {
+    public func add(delegate: KeyboardObserverDelegate) {
 
-        if self.delegates.contains(where: { $0.value === delegate}) {
+        if delegates.contains(where: { $0.value === delegate }) {
             return
         }
 
-        self.delegates.append(Delegate(value: delegate))
+        delegates.append(Delegate(value: delegate))
 
-        self.removeDeallocatedDelegates()
+        removeDeallocatedDelegates()
     }
 
-    public func remove(delegate : KeyboardObserverDelegate) {
-        self.delegates.removeAll {
+    public func remove(delegate: KeyboardObserverDelegate) {
+        delegates.removeAll {
             $0.value === delegate
         }
 
-        self.removeDeallocatedDelegates()
+        removeDeallocatedDelegates()
     }
 
     private func removeDeallocatedDelegates() {
-        self.delegates.removeAll {
+        delegates.removeAll {
             $0.value == nil
         }
     }
@@ -144,17 +146,22 @@ public final class KeyboardObserver {
 
     /// How the keyboard overlaps the view provided. If the view is not on screen (eg, no window),
     /// or the observer has not yet learned about the keyboard's position, this method returns nil.
-    public func currentFrame(in view : UIView) -> KeyboardFrame? {
+    public func currentFrame(in view: UIView) -> KeyboardFrame? {
 
-        guard view.window != nil else {
+        guard let window = view.window else {
             return nil
         }
 
-        guard let notification = self.latestNotification else {
+        guard let notification = latestNotification else {
             return nil
         }
 
-        let frame = view.convert(notification.endingFrame, from: nil)
+        let screen = notification.screen ?? window.screen
+
+        let frame = screen.coordinateSpace.convert(
+            notification.endingFrame,
+            to: view
+        )
 
         if frame.intersects(view.bounds) {
             return .overlapping(frame: frame)
@@ -167,11 +174,11 @@ public final class KeyboardObserver {
     // MARK: Receiving Updates
     //
 
-    private func receivedUpdatedKeyboardInfo(_ new : NotificationInfo) {
+    private func receivedUpdatedKeyboardInfo(_ new: NotificationInfo) {
 
-        let old = self.latestNotification
+        let old = latestNotification
 
-        self.latestNotification = new
+        latestNotification = new
 
         /// Only communicate a frame change to the delegate if the frame actually changed.
 
@@ -179,19 +186,11 @@ public final class KeyboardObserver {
             return
         }
 
-        /**
-         Create an animation curve with the correct curve for showing or hiding the keyboard.
-
-         This is unfortunately a private UIView curve. However, we can map it to the animation options' curve
-         like so: https://stackoverflow.com/questions/26939105/keyboard-animation-curve-as-int
-         */
-        let animationOptions = UIView.AnimationOptions(rawValue: new.animationCurve << 16)
-
-        self.delegates.forEach {
+        delegates.forEach {
             $0.value?.keyboardFrameWillChange(
                 for: self,
                 animationDuration: new.animationDuration,
-                options: animationOptions
+                animationCurve: new.animationCurve
             )
         }
     }
@@ -200,27 +199,40 @@ public final class KeyboardObserver {
     // MARK: Notification Listeners
     //
 
-    @objc private func keyboardFrameChanged(_ notification : Notification) {
+    @objc private func keyboardFrameChanged(_ notification: Notification) {
 
         do {
             let info = try NotificationInfo(with: notification)
-            self.receivedUpdatedKeyboardInfo(info)
+            receivedUpdatedKeyboardInfo(info)
         } catch {
-            assertionFailure("Blueprint could not read system keyboard notification. This error needs to be fixed in Blueprint. Error: \(error)")
+            assertionFailure("Could not read system keyboard notification: \(error)")
         }
     }
 }
 
-extension KeyboardObserver
-{
-    struct NotificationInfo : Equatable {
+extension KeyboardObserver {
+    struct NotificationInfo: Equatable {
 
-        var endingFrame : CGRect = .zero
+        var endingFrame: CGRect = .zero
 
-        var animationDuration : Double = 0.0
-        var animationCurve : UInt = 0
+        var animationDuration: Double = 0.0
+        var animationCurve: UIView.AnimationCurve = .easeInOut
 
-        init(with notification : Notification) throws {
+        /// The `UIScreen` that the keyboard appears on.
+        ///
+        /// This may influence the `KeyboardFrame` calculation when the app is not in full screen,
+        /// such as in Split View, Slide Over, and Stage Manager.
+        ///
+        /// - note: In iOS 16.1 and later, every `keyboardWillChangeFrameNotification` and
+        /// `keyboardDidChangeFrameNotification` is _supposed_ to include a `UIScreen`
+        /// in a the notification, however we've had reports that this isn't always the case (at least when
+        /// using the iOS 16.1 simulator runtime). If a screen is _not_ included in an iOS 16.1+ notification,
+        /// we do not throw a `ParseError` as it would cause the entire notification to be discarded.
+        ///
+        /// [Apple Documentation](https://developer.apple.com/documentation/uikit/uiresponder/1621623-keyboardwillchangeframenotificat)
+        var screen: UIScreen?
+
+        init(with notification: Notification) throws {
 
             guard let userInfo = notification.userInfo else {
                 throw ParseError.missingUserInfo
@@ -238,14 +250,18 @@ extension KeyboardObserver
 
             self.animationDuration = animationDuration
 
-            guard let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue else {
+            guard let curveValue = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.intValue,
+                  let animationCurve = UIView.AnimationCurve(rawValue: curveValue)
+            else {
                 throw ParseError.missingAnimationCurve
             }
 
             self.animationCurve = animationCurve
+
+            screen = notification.object as? UIScreen
         }
 
-        enum ParseError : Error, Equatable {
+        enum ParseError: Error, Equatable {
 
             case missingUserInfo
             case missingEndingFrame
@@ -268,8 +284,8 @@ extension KeyboardObserver {
         }
     }()
 
-    /// Called by `ListView` on setup, to warn developers
-    /// if something has gone wrong with keyboard setup.
+    /// This should be called by a keyboard-observing view on setup, to warn developers if something has gone wrong with
+    /// keyboard setup.
     static func logKeyboardSetupWarningIfNeeded() {
         guard !isExtensionContext else {
             return

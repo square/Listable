@@ -321,7 +321,7 @@ public final class ListView : UIView
     /// Callback for when the keyboard changes
     public typealias KeyboardFrameWillChangeCallback = (
         KeyboardCurrentFrameProvider,
-        (animationDuration: Double, options: UIView.AnimationOptions)
+        (animationDuration: Double, animationCurve: UIView.AnimationCurve)
     ) -> Void
 
     /// Called whenever a keyboard change is detected
@@ -1462,7 +1462,7 @@ public extension ListView
 @_spi(ListableKeyboard)
 extension ListView : KeyboardObserverDelegate
 {
-    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, options: UIView.AnimationOptions) {
+    public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, animationCurve: UIView.AnimationCurve) {
 
         guard let frame = self.keyboardObserver.currentFrame(in: self) else {
             return
@@ -1475,14 +1475,15 @@ extension ListView : KeyboardObserverDelegate
         self.lastKeyboardFrame = frame
 
         if .custom != behavior.keyboardAdjustmentMode {
-            UIView.animate(withDuration: animationDuration, delay: 0.0, options: options, animations: {
+            UIViewPropertyAnimator(duration: animationDuration, curve: animationCurve) {
                 self.updateScrollViewInsets()
-            })
+            }
+            .startAnimation()
         }
         
         self.onKeyboardFrameWillChange?(
             self.keyboardObserver,
-            (animationDuration: animationDuration, options: options)
+            (animationDuration: animationDuration, animationCurve: animationCurve)
         )
     }
 }

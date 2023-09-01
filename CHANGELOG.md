@@ -2,6 +2,7 @@
 
 ### Fixed
 
+- `KeyboardObserver` has been updated to handle iOS 16.1+ changes that use the screen's coordinate space to report keyboard position. This can impact reported values when the app isn't full screen in Split View, Slide Over, and Stage Manager.
 - The `verticalLayoutGravity` behavior now takes into account `frame` changes so that the scroll position relative to the bottom remains unchanged when the `frame` changes.
 
 ### Added
@@ -28,6 +29,7 @@
 ### Changed
 
 - `SwipeAction` property names have been updated to better reflect what they're for. `Completion` also now takes in a more descriptive enum, instead of a boolean, to make reading callsites clearer. Eg, `completion(.expandActions)` instead of `completion(true)`.
+- `KeyboardObserverDelegate` now provides `UIView.AnimationCurve` instead of `UIView.AnimationOptions`.
 
 ### Internal
 
