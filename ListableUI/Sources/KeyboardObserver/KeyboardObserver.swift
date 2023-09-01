@@ -146,7 +146,7 @@ public final class KeyboardObserver {
 
     /// How the keyboard overlaps the view provided. If the view is not on screen (eg, no window),
     /// or the observer has not yet learned about the keyboard's position, this method returns nil.
-    func currentFrame(in view: UIView) -> KeyboardFrame? {
+    public func currentFrame(in view: UIView) -> KeyboardFrame? {
 
         guard let window = view.window else {
             return nil
