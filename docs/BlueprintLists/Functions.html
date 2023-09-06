@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
-
+    
     <script src="js/lunr.min.js" defer></script>
     <script src="js/typeahead.jquery.js" defer></script>
     <script src="js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (100% documented)
       </p>
-
+    
       <div class="header-col--secondary">
         <form role="search" action="search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </div>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -196,15 +196,15 @@ create a <code><a href="Protocols/BlueprintHeaderFooterContent.html">BlueprintHe
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">ElementHeaderFooter</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">represented</span> <span class="p">:</span> <span class="kt">Represented</span><span class="p">,</span>
-
+    
     <span class="nv">isEquivalent</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">,</span>
-
+    
     <span class="nv">element</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">,</span>
     <span class="nv">background</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
     <span class="nv">pressedBackground</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
-
+    
     <span class="nv">configure</span> <span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">HeaderFooter</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementHeaderFooterContent.html">ElementHeaderFooterContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
-
+    
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">HeaderFooter</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementHeaderFooterContent.html">ElementHeaderFooterContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="o">&gt;&gt;</span></code></pre>
 
                         </div>
@@ -256,13 +256,13 @@ create a <code><a href="Protocols/BlueprintHeaderFooterContent.html">BlueprintHe
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">ElementHeaderFooter</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">:</span><span class="kt">Equatable</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">represented</span> <span class="p">:</span> <span class="kt">Represented</span><span class="p">,</span>
-
+                    
     <span class="nv">element</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">,</span>
     <span class="nv">background</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
     <span class="nv">pressedBackground</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
-
+    
     <span class="nv">configure</span> <span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">HeaderFooter</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementHeaderFooterContent.html">ElementHeaderFooterContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
-
+    
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">HeaderFooter</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementHeaderFooterContent.html">ElementHeaderFooterContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="o">&gt;&gt;</span></code></pre>
 
                         </div>
@@ -349,15 +349,15 @@ create a <code><a href="Protocols/BlueprintItemContent.html">BlueprintItemConten
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">ElementItem</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="p">:</span><span class="kt">Hashable</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">represented</span> <span class="p">:</span> <span class="kt">Represented</span><span class="p">,</span>
-
+    
     <span class="nv">id</span> <span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;</span><span class="p">,</span>
-
+    
     <span class="nv">isEquivalent</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">Represented</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">,</span>
 
     <span class="nv">element</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">,</span>
     <span class="nv">background</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
     <span class="nv">selectedBackground</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
-
+    
     <span class="nv">configure</span> <span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementItemContent.html">ElementItemContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementItemContent.html">ElementItemContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;&gt;</span></code></pre>
 
@@ -410,13 +410,13 @@ create a <code><a href="Protocols/BlueprintItemContent.html">BlueprintItemConten
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="kt">ElementItem</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">:</span><span class="kt">Equatable</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="p">:</span><span class="kt">Hashable</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">represented</span> <span class="p">:</span> <span class="kt">Represented</span><span class="p">,</span>
-
+    
     <span class="nv">id</span> <span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;</span><span class="p">,</span>
 
     <span class="nv">element</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">,</span>
     <span class="nv">background</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
     <span class="nv">selectedBackground</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">ApplyItemContentInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">nil</span> <span class="p">},</span>
-
+    
     <span class="nv">configure</span> <span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementItemContent.html">ElementItemContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Item</span><span class="o">&lt;</span><span class="kt"><a href="Structs/ElementItemContent.html">ElementItemContent</a></span><span class="o">&lt;</span><span class="kt">Represented</span><span class="p">,</span> <span class="kt">IdentifierValue</span><span class="o">&gt;&gt;</span></code></pre>
 
@@ -433,7 +433,7 @@ create a <code><a href="Protocols/BlueprintItemContent.html">BlueprintItemConten
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-08-08)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-09-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
