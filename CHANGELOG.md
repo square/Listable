@@ -2,9 +2,6 @@
 
 ### Fixed
 
-- `KeyboardObserver` has been updated to handle iOS 16.1+ changes that use the screen's coordinate space to report keyboard position. This can impact reported values when the app isn't full screen in Split View, Slide Over, and Stage Manager.
-- The `verticalLayoutGravity` behavior now takes into account `frame` changes so that the scroll position relative to the bottom remains unchanged when the `frame` changes.
-
 ### Added
 
 ### Removed
@@ -16,6 +13,13 @@
 ### Internal
 
 # Past Releases
+
+# [13.0.0] - 2023-09-06
+
+### Fixed
+
+- `KeyboardObserver` has been updated to handle iOS 16.1+ changes that use the screen's coordinate space to report keyboard position. This can impact reported values when the app isn't full screen in Split View, Slide Over, and Stage Manager.
+- The `verticalLayoutGravity` behavior now takes into account `frame` changes so that the scroll position relative to the bottom remains unchanged when the `frame` changes.
 
 # [12.0.0] - 2023-08-08
 
@@ -899,8 +903,6 @@ listActions.scrolling.scrollToSection(
 
 - [Add `ListViewController`](https://github.com/kyleve/Listable/pull/176) make it easy to create view controllers backed by a Listable `ListView`.
 
-### Removed
-
 ### Changed
 
 - Update `Item` callbacks to [allow for providing more info to the callback parameters](https://github.com/kyleve/Listable/pull/160).
@@ -932,8 +934,6 @@ listActions.scrolling.scrollToSection(
   }
   ```
 
-### Misc
-
 ## 0.6.1 - Internal Only
 
 ### Changed
@@ -951,8 +951,6 @@ listActions.scrolling.scrollToSection(
 
 - Added type aliases for `HeaderFooter` and `HeaderFooterContent` to reduce verbosity of use. Now instead of typing `HeaderFooter(MyHeader())`, you can use `Header(MyHeader())`.
 - Replace unused / experimental `Binding` type [with `Coordinator`](https://github.com/kyleve/Listable/pull/143), which allows you to independently manage item state in a similar manner to SwiftUI's `UIViewRepresentable`'s `Coordinator`.
-
-### Removed
 
 ### Changed
 
@@ -972,7 +970,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/12.0.0...HEAD
+[Main]: https://github.com/square/Listable/square/13.0.0...HEAD
+[13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
 [10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1
