@@ -12,9 +12,10 @@ import UIKit
 
 /// ## ⚠️⚠️⚠️ Good Morning! iOS Bug Workaround Ahead ⚠️⚠️⚠️
 ///
-/// iOS 16.4 introduced a regression, where on every `performBatchUpdates` applied
-/// to a `UICollectionView`, it would resign the first responder if it was within a supplementary
-/// (header, footer) view. This is a common position for search bars. Regular cells are not affected.
+/// iOS 16.4 introduced a regression (which was fixed in 16.5, then again broken in 17.0),
+/// where on every `performBatchUpdates` applie to a `UICollectionView`, it would resign
+/// the first responder if it was within a supplementary (header, footer) view.
+/// This is a common position for search bars. Regular cells are not affected.
 ///
 /// Square SEV: https://jira.sqprod.co/browse/ALERT-11928
 ///
@@ -120,8 +121,8 @@ import UIKit
 extension ListView {
     
     // Note: If we need additional overrides, please subclass me, so we can
-    // wholesale delete this subclass when we drop iOS 16.4.
-    @available(iOS, introduced: 14.0, obsoleted: 16.5, message: "This workaround is no longer applicable. Please remove!")
+    // wholesale delete this subclass when we drop iOS 17.0.
+    @available(iOS, introduced: 14.0, obsoleted: 17.0, message: "This workaround is no longer applicable. Please remove!")
     class IOS16_4_First_Responder_Bug_CollectionView : UICollectionView {
         
         override init(
