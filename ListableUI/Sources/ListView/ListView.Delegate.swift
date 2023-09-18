@@ -155,6 +155,8 @@ extension ListView
             item.didEndDisplay()
         }
                 
+        private var displayedSupplementaryItems : [ObjectIdentifier:PresentationState.HeaderFooterViewStatePair] = [:]
+        
         func collectionView(
             _ collectionView: UICollectionView,
             willDisplaySupplementaryView anyView: UICollectionReusableView,
@@ -171,6 +173,8 @@ extension ListView
             )
             
             headerFooter.collectionViewWillDisplay(view: container)
+            
+            self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
         }
         
         func collectionView(
@@ -183,10 +187,9 @@ extension ListView
             let container = anyView as! SupplementaryContainerView
             let kind = SupplementaryKind(rawValue: kindString)!
             
-            let headerFooter = self.presentationState.headerFooter(
-                of: kind,
-                in: indexPath.section
-            )
+            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
+                return
+            }
                         
             headerFooter.collectionViewDidEndDisplay(of: container)
         }
