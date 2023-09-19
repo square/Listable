@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where supplementary views (headers or footers) that contained a first responder would result in the view being duplicated when scrolled off-screen.
+
 ### Added
 
 ### Removed

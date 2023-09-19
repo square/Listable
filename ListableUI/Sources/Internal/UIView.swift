@@ -30,4 +30,10 @@ extension UIView {
         
         return nil
     }
+    
+    func isInside(superview : UIView) -> Bool {
+        
+        sequence(first: self, next: \.superview)
+            .contains(superview)
+    }
 }

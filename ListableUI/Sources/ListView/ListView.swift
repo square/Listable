@@ -105,6 +105,24 @@ public final class ListView : UIView
         self.applyAppearance()
         self.applyBehavior()
         self.updateScrollViewInsets()
+        
+        // We register for first responder notifications so we can
+        // avoid recycling supplementary views that contain text fields,
+        // as this somehow breaks cell recycling.
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(textDidBeginEditingNotification(_:)),
+            name: UITextField.textDidBeginEditingNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(textDidEndEditingNotification(_:)),
+            name: UITextField.textDidEndEditingNotification,
+            object: nil
+        )
     }
     
     deinit
@@ -973,6 +991,32 @@ public final class ListView : UIView
         
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
         self.updateScrollViewInsets()
+    }
+    
+    //
+    // MARK: Internal – First Responder Tracking
+    //
+        
+    @objc private func textDidBeginEditingNotification(_ notification : Notification) {
+        
+        guard let field = notification.object as? UIView else {
+            return
+        }
+        
+        if let containingSupplementaryView = field.firstSuperview(ofType: SupplementaryContainerView.self) {
+            containingSupplementaryView.headerFooter?.containsFirstResponder = true
+        }
+    }
+    
+    @objc private func textDidEndEditingNotification(_ notification : Notification) {
+                
+        guard let field = notification.object as? UIView else {
+            return
+        }
+        
+        if let containingSupplementaryView = field.firstSuperview(ofType: SupplementaryContainerView.self) {
+            containingSupplementaryView.headerFooter?.containsFirstResponder = false
+        }
     }
     
     //

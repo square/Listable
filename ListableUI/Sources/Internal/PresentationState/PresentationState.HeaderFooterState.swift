@@ -17,6 +17,8 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     
     var oldIndexPath : IndexPath? { get }
     
+    var containsFirstResponder : Bool { get set }
+    
     func updateOldIndexPath(in section : Int)
         
     func dequeueAndPrepareReusableHeaderFooterView(
@@ -131,6 +133,8 @@ extension PresentationState
         private(set) var kind : SupplementaryKind
         
         var oldIndexPath : IndexPath? = nil
+        
+        var containsFirstResponder : Bool = false
         
         func updateOldIndexPath(in section : Int) {
             oldIndexPath = kind.indexPath(in: section)

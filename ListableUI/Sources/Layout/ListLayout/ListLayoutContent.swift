@@ -142,7 +142,7 @@ public final class ListLayoutContent
         
         // Container Header
         
-        if rect.intersects(self.containerHeader.visibleFrame) && include(self.containerHeader) {
+        if (rect.intersects(self.containerHeader.visibleFrame) || self.containerHeader.containsFirstResponder) && include(self.containerHeader) {
             attributes.append(
                 .supplementary(
                     self.containerHeader,
@@ -153,7 +153,7 @@ public final class ListLayoutContent
         
         // List Header
         
-        if rect.intersects(self.header.visibleFrame) && include(self.header) {
+        if (rect.intersects(self.header.visibleFrame) || self.header.containsFirstResponder) && include(self.header) {
             attributes.append(
                 .supplementary(
                     self.header,
@@ -172,7 +172,7 @@ public final class ListLayoutContent
             
             // Section Header
             
-            if rect.intersects(section.header.visibleFrame) && include(section.header) {
+            if (rect.intersects(section.header.visibleFrame) || section.header.containsFirstResponder) && include(section.header) {
                 attributes.append(
                     .supplementary(
                         section.header,
@@ -434,6 +434,10 @@ extension ListLayoutContent
         
         public var layouts : HeaderFooterLayouts {
             self.state?.anyModel.layouts ?? .init()
+        }
+        
+        public var containsFirstResponder : Bool {
+            self.state?.containsFirstResponder ?? false
         }
         
         public var defaultFrame : CGRect {
