@@ -57,22 +57,30 @@ internal extension ListView
             at indexPath: IndexPath
             ) -> UICollectionReusableView
         {
-            let container = SupplementaryContainerView.dequeue(
-                in: collectionView,
-                for: kind,
-                at: indexPath,
-                reuseCache: self.headerFooterReuseCache,
-                environment: self.view.environment
-            )
-            
-            let headerFooter : AnyPresentationHeaderFooterState? = {
+            let statePair : PresentationState.HeaderFooterViewStatePair = {
                 switch SupplementaryKind(rawValue: kind)! {
-                case .listContainerHeader: return self.presentationState.containerHeader.state
-                case .listHeader: return self.presentationState.header.state
-                case .listFooter: return self.presentationState.footer.state
-                case .sectionHeader: return self.presentationState.sections[indexPath.section].header.state
-                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer.state
-                case .overscrollFooter: return self.presentationState.overscrollFooter.state
+                case .listContainerHeader: return self.presentationState.containerHeader
+                case .listHeader: return self.presentationState.header
+                case .listFooter: return self.presentationState.footer
+                case .sectionHeader: return self.presentationState.sections[indexPath.section].header
+                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer
+                case .overscrollFooter: return self.presentationState.overscrollFooter
+                }
+            }()
+            
+            let headerFooter = statePair.state
+            
+            let container : SupplementaryContainerView = {
+                if let view = statePair.visibleContainer {
+                    return view
+                } else {
+                    return SupplementaryContainerView.dequeue(
+                        in: collectionView,
+                        for: kind,
+                        at: indexPath,
+                        reuseCache: self.headerFooterReuseCache,
+                        environment: self.view.environment
+                    )
                 }
             }()
             
