@@ -83,7 +83,9 @@ internal extension ListView
                 /// This is paired with a behavior change in `CollectionViewLayout`, where if a
                 /// supplementary item contains a first responder, we never remove it from the
                 /// list of items returned for the given rect, even if it's offscreen. That keeps the view
-                /// alive so we can access it here.
+                /// alive so we can access it here. **Note**: I'd originally expected that this second
+                /// change would be sufficient to fix the issue, but it was not. Even though the supplementary
+                /// view is still alive within the collection view, it doesn't know to dequeue it properly.
                 
                 if let view = statePair.visibleContainer {
                     return view

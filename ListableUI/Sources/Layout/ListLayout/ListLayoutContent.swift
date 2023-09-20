@@ -153,7 +153,7 @@ public final class ListLayoutContent
         
         // List Header
         
-        if (rect.intersects(self.header.visibleFrame) || self.header.containsFirstResponder) && include(self.header) {            
+        if (rect.intersects(self.header.visibleFrame) || self.header.containsFirstResponder) && include(self.header) {
             attributes.append(
                 .supplementary(
                     self.header,
