@@ -74,10 +74,16 @@ internal extension ListView
                 
                 /// Fixes a bug (https://github.com/square/Listable/pull/507) wherein
                 /// for supplementary views that contain a first responder, the collection view
-                /// seems to "forget" that there's already a supplementary view dequeued,
-                /// and ends up requesting another one, leading to a phantom "left over" supplementary
+                /// keeps them around... somewhere instead of immediately recycling the view, but then
+                /// seems to later forget that that view is already being kept around, and then
+                /// ends up requesting another view, leading to a phantom "left over" supplementary
                 /// view. Our fix is to see if we already have a visible supplementary view, and just
-                /// return it.
+                /// return it instead of dequeueing a new one.
+                ///
+                /// This is paired with a behavior change in `CollectionViewLayout`, where if a
+                /// supplementary item contains a first responder, we never remove it from the
+                /// list of items returned for the given rect, even if it's offscreen. That keeps the view
+                /// alive so we can access it here.
                 
                 if let view = statePair.visibleContainer {
                     return view
