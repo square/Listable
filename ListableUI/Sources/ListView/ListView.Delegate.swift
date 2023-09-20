@@ -185,7 +185,6 @@ extension ListView
             )
         {
             let container = anyView as! SupplementaryContainerView
-            let kind = SupplementaryKind(rawValue: kindString)!
             
             guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
                 return
