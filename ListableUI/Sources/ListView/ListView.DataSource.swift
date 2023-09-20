@@ -72,20 +72,40 @@ internal extension ListView
             
             let container : SupplementaryContainerView = {
                 
-                /// Fixes a bug (https://github.com/square/Listable/pull/507) wherein
-                /// for supplementary views that contain a first responder, the collection view
-                /// keeps them around... somewhere instead of immediately recycling the view, but then
-                /// seems to later forget that that view is already being kept around, and then
-                /// ends up requesting another view, leading to a phantom "left over" supplementary
-                /// view. Our fix is to see if we already have a visible supplementary view, and just
-                /// return it instead of dequeueing a new one.
+                /// The below works around a (seeming?) bug or odd behavior in `UICollectionView`,
+                /// where it tries to be smart about recycling supplementary views that contain a
+                /// first responder such as a text field. Specifically, it holds onto a supplementary view
+                /// that contains a first responder, not immediately recycling it when it is scrolled out
+                /// of view. That ensures that the keyboard isn't immediately dismissed, which would
+                /// be jarring.
                 ///
-                /// This is paired with a behavior change in `CollectionViewLayout`, where if a
-                /// supplementary item contains a first responder, we never remove it from the
-                /// list of items returned for the given rect, even if it's offscreen. That keeps the view
-                /// alive so we can access it here. **Note**: I'd originally expected that this second
-                /// change would be sufficient to fix the issue, but it was not. Even though the supplementary
-                /// view is still alive within the collection view, it doesn't know to dequeue it properly.
+                /// ...Unfortunately, this doesn't seem to actually work in practice very well. When the
+                /// supplementary view  is scrolled back _into_ view, and we're asked to dequeue
+                /// a view, the collection view hands us back a _different_ view, leading to double
+                /// views that get stacked on top of each other in the layout, leading to a bunch
+                /// of weirdness.
+                ///
+                /// So, to work around this, we do a few things:
+                ///
+                /// 1) We begin tracking which supplementary views currently contain a first responder.
+                /// For practicality of implementation, we only track text fields right now. This could
+                /// change, but is harder, given there's no generic "first responder changed" notification.
+                /// This code lives in `ListView`.
+                ///
+                /// 2) We update `ListLayoutContent.content(in: ...)` to _always_ return
+                /// supplementary info when a supplementary view contains a first responder,
+                /// even when out of frame. This ensures the supplementary view
+                /// instance is kept alive by the collection view.
+                ///
+                /// 3) Within this method, we check to see if there's a live, existing `visibleContainer`
+                /// (aka the supplementary view) view, and if there is, we return _that_, instead of
+                /// just dequeuing a new, wrong view.
+                ///
+                /// After all that, the correct thing happens.
+                ///
+                /// PR with more info and screenshots, etc:
+                /// https://github.com/square/Listable/pull/507
+                ///
                 
                 if let view = statePair.visibleContainer {
                     return view
