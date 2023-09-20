@@ -71,6 +71,14 @@ internal extension ListView
             let headerFooter = statePair.state
             
             let container : SupplementaryContainerView = {
+                
+                /// Fixes a bug (https://github.com/square/Listable/pull/507) wherein
+                /// for supplementary views that contain a first responder, the collection view
+                /// seems to "forget" that there's already a supplementary view dequeued,
+                /// and ends up requesting another one, leading to a phantom "left over" supplementary
+                /// view. Our fix is to see if we already have a visible supplementary view, and just
+                /// return it.
+                
                 if let view = statePair.visibleContainer {
                     return view
                 } else {
