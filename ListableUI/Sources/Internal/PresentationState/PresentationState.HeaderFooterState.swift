@@ -175,11 +175,15 @@ extension PresentationState
                 HeaderFooterContentView<Content>(frame: frame)
             }
             
-            self.applyTo(
-                view: view,
-                for: .willDisplay,
-                with: .init(environment: environment)
-            )
+            UIView.performWithoutAnimation {
+                self.applyTo(
+                    view: view,
+                    for: .willDisplay,
+                    with: .init(environment: environment)
+                )
+                
+                view.layoutIfNeeded()
+            }
             
             return view
         }
