@@ -106,9 +106,11 @@ public final class ListView : UIView
         self.applyBehavior()
         self.updateScrollViewInsets()
         
-        // We register for first responder notifications so we can
-        // avoid recycling supplementary views that contain text fields,
-        // as this somehow breaks cell recycling.
+        /// We track first responder status in supplementary views
+        /// to fix a view recycling issue.
+        ///
+        /// See the comment in `collectionView(_:viewForSupplementaryElementOfKind:at:)
+        /// within `ListView.DataSource.swift` for more.
         
         NotificationCenter.default.addObserver(
             self,
@@ -996,7 +998,7 @@ public final class ListView : UIView
     //
     // MARK: Internal – First Responder Tracking
     //
-        
+    
     @objc private func textDidBeginEditingNotification(_ notification : Notification) {
         
         guard let field = notification.object as? UIView else {
