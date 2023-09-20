@@ -82,6 +82,14 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Chat App"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ChatDemoViewController())
+                    }
+                )
+                
+                Item(
                     DemoItem(text: "English Dictionary Search"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
@@ -301,6 +309,14 @@ public final class DemosRootViewController : ListViewController
                     selectionStyle: .selectable(),
                     onSelect : { _ in
                         self?.push(UpdateFuzzingViewController())
+                    }
+                )
+                
+                Item(
+                    DemoItem(text: "Testing Header Association"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(SupplementaryTestingViewController())
                     }
                 )
             } header: {

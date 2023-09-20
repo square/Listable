@@ -285,11 +285,35 @@ extension PresentationState
                 state: itemState,
                 position: self.itemPosition,
                 reorderingActions: self.reorderingActions,
-                showLeadingSwipeActions: { [weak cell] in
-                    cell?.openLeadingSwipeActions()
+                showLeadingSwipeActions: { [weak cell, weak self] in
+                    guard let cell, let self else { return }
+                    
+                    guard let swipeActions = self.model.leadingSwipeActions else {
+                        assertionFailure("Cannot showLeadingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    guard swipeActions.actions.isEmpty == false else {
+                        assertionFailure("Cannot showLeadingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    cell.openLeadingSwipeActions()
                 },
-                showTrailingSwipeActions: { [weak cell] in
-                    cell?.openTrailingSwipeActions()
+                showTrailingSwipeActions: { [weak cell, weak self] in
+                    guard let cell, let self else { return }
+                    
+                    guard let swipeActions = self.model.trailingSwipeActions else {
+                        assertionFailure("Cannot showTrailingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    guard swipeActions.actions.isEmpty == false else {
+                        assertionFailure("Cannot showTrailingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+
+                    cell.openTrailingSwipeActions()
                 },
                 isReorderable: self.model.reordering != nil,
                 environment: environment

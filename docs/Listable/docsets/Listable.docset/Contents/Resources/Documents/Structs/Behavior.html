@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (100% documented)
       </p>
-
+    
       <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </div>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -97,6 +97,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ListView.html">ListView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ListView/ScrollViewInsets.html">– ScrollViewInsets</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ListViewController.html">ListViewController</a>
@@ -170,6 +173,9 @@
                 <a class="nav-group-task-link" href="../Enums/ItemSelectionStyle.html">ItemSelectionStyle</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/KeyboardFrame.html">KeyboardFrame</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/LayoutDirection.html">LayoutDirection</a>
               </li>
               <li class="nav-group-task">
@@ -236,6 +242,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/ArrayDiff.html#/s:10ListableUI9ArrayDiffV8NoChangeV">– NoChange</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions.html#/s:10ListableUI16KeyboardObserverC">KeyboardObserver</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/PresentationState.html">PresentationState</a>
@@ -320,6 +329,9 @@
                 <a class="nav-group-task-link" href="../Protocols/ItemLayoutsValue.html">ItemLayoutsValue</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/KeyboardCurrentFrameProvider.html">KeyboardCurrentFrameProvider</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
               </li>
               <li class="nav-group-task">
@@ -371,6 +383,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Behavior/Underflow.html">– Underflow</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Behavior/VerticalLayoutGravity.html">– VerticalLayoutGravity</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Color.html">Color</a>
@@ -616,6 +631,9 @@
                 <a class="nav-group-task-link" href="../Structs/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SwipeAction/OnDidPerformActionAnimation.html">– OnDidPerformActionAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a>
               </li>
               <li class="nav-group-task">
@@ -679,7 +697,7 @@
             <h1>Behavior</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Behavior</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
@@ -942,9 +960,37 @@ TODO: This should move to individual layout types.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRateACSo020UIScrollViewKeyboardeF0V_AC0ygF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0Otcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:isPagingEnabled:decelerationRate:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRateACSo020UIScrollViewKeyboardeF0V_AC0ygF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0Otcfc">init(keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>isPagingEnabled:<wbr>decelerationRate:<wbr>)</a>
+                    <a name="/s:10ListableUI8BehaviorV21verticalLayoutGravityAC08VerticaleF0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/verticalLayoutGravity" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV21verticalLayoutGravityAC08VerticaleF0Ovp">verticalLayoutGravity</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Applicable when the <code>layoutDirection</code> is <code>vertical</code>. The gravity determines
+how inserting new elements or changing the <code>contentInset</code> affects the scroll position.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">verticalLayoutGravity</span><span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/VerticalLayoutGravity.html">VerticalLayoutGravity</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRate21verticalLayoutGravityACSo020UIScrollViewKeyboardeF0V_AC08KeyboardgF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0OAC08VerticalxY0Otcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:isPagingEnabled:decelerationRate:verticalLayoutGravity:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRate21verticalLayoutGravityACSo020UIScrollViewKeyboardeF0V_AC08KeyboardgF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0OAC08VerticalxY0Otcfc">init(keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>isPagingEnabled:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -968,7 +1014,8 @@ TODO: This should move to individual layout types.</p>
     <span class="nv">canCancelContentTouches</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nv">delaysContentTouches</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nv">isPagingEnabled</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="nv">decelerationRate</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/DecelerationRate.html">DecelerationRate</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">normal</span>
+    <span class="nv">decelerationRate</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/DecelerationRate.html">DecelerationRate</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">normal</span><span class="p">,</span>
+    <span class="nv">verticalLayoutGravity</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/VerticalLayoutGravity.html">VerticalLayoutGravity</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">top</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -1117,6 +1164,35 @@ the layout of the list content should be adjusted.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV21VerticalLayoutGravityO"></a>
+                    <a name="//apple_ref/swift/Enum/VerticalLayoutGravity" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV21VerticalLayoutGravityO">VerticalLayoutGravity</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Applicable when the <code>layoutDirection</code> is <code>vertical</code>. The gravity determines
+how inserting new elements or changing the <code>contentInset</code> affects the scroll position.</p>
+
+                        <a href="../Structs/Behavior/VerticalLayoutGravity.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">VerticalLayoutGravity</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -1125,7 +1201,7 @@ the layout of the list content should be adjusted.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-05-17)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-09-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

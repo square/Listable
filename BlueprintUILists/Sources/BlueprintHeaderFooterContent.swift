@@ -90,6 +90,21 @@ where
 }
 
 
+extension Environment {
+        
+    /// The `ApplyHeaderFooterContentInfo` which was passed to the `HeaderFooter` before it was
+    /// last displayed or updated. Nil if not in a Listable `HeaderFooter`.
+    public internal(set) var applyHeaderFooterContentInfo : ApplyHeaderFooterContentInfo? {
+        get { self[ApplyHeaderFooterContentInfoKey.self] }
+        set { self[ApplyHeaderFooterContentInfoKey.self] = newValue }
+    }
+    
+    private enum ApplyHeaderFooterContentInfoKey : EnvironmentKey {
+        static let defaultValue : ApplyHeaderFooterContentInfo? = nil
+    }
+}
+
+
 public extension BlueprintHeaderFooterContent
 {
     //
@@ -116,11 +131,11 @@ public extension BlueprintHeaderFooterContent
         
         views.content.element = self
             .elementRepresentation
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .adaptedEnvironment(with: info)
         
         if let element = self
             .background?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `background` view and assign our element update.
             views.background.element = element
@@ -131,7 +146,7 @@ public extension BlueprintHeaderFooterContent
         
         if let element = self
             .pressedBackground?
-            .wrapInBlueprintEnvironmentFrom(environment: info.environment)
+            .adaptedEnvironment(with: info)
         {
             /// Load the `pressedBackground` view and assign our element update.
             views.pressedBackground.element = element
@@ -158,5 +173,16 @@ public extension BlueprintHeaderFooterContent
         view.backgroundColor = .clear
         
         return view
+    }
+}
+
+
+fileprivate extension Element {
+    
+    func adaptedEnvironment(with info : ApplyHeaderFooterContentInfo) -> Element {
+        self.adaptedEnvironment { env in
+            env = info.environment.blueprintEnvironment
+            env.applyHeaderFooterContentInfo = info
+        }
     }
 }

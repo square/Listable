@@ -18,6 +18,7 @@ class ListPropertiesTests : XCTestCase
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
+            onKeyboardFrameWillChange: nil,
             accessibilityIdentifier: "",
             debuggingIdentifier: "") { _ in }
     }
