@@ -132,6 +132,9 @@ import UIKit
     /// scroll to a given item on insert depending on the current state
     /// of the view.
     public var autoScrollAction : AutoScrollAction
+
+    /// Called whenever a keyboard change is detected
+    public var onKeyboardFrameWillChange: ListView.KeyboardFrameWillChangeCallback?
     
     //
     // MARK: Identifiers
@@ -161,6 +164,7 @@ import UIKit
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
+            onKeyboardFrameWillChange: nil,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
             configure: configure
@@ -175,6 +179,7 @@ import UIKit
         scrollIndicatorInsets : UIEdgeInsets,
         behavior : Behavior,
         autoScrollAction : AutoScrollAction,
+        onKeyboardFrameWillChange: ListView.KeyboardFrameWillChangeCallback?,
         accessibilityIdentifier: String?,
         debuggingIdentifier: String?,
         configure : Configure
@@ -185,6 +190,7 @@ import UIKit
         self.scrollIndicatorInsets = scrollIndicatorInsets
         self.behavior = behavior
         self.autoScrollAction = autoScrollAction
+        self.onKeyboardFrameWillChange = onKeyboardFrameWillChange
         self.accessibilityIdentifier = accessibilityIdentifier
         self.debuggingIdentifier = debuggingIdentifier
         

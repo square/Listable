@@ -82,6 +82,14 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Chat App"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ChatDemoViewController())
+                    }
+                )
+                
+                Item(
                     DemoItem(text: "English Dictionary Search"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in

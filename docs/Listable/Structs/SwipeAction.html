@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
-
+    
     <script src="../js/lunr.min.js" defer></script>
     <script src="../js/typeahead.jquery.js" defer></script>
     <script src="../js/jazzy.search.js" defer></script>
@@ -25,20 +25,20 @@
         </a>
          (100% documented)
       </p>
-
+    
       <div class="header-col--secondary">
         <form role="search" action="../search.json">
           <input type="text" placeholder="Search documentation" data-typeahead>
         </form>
       </div>
-
+    
         <p class="header-col header-col--secondary">
           <a class="header-link" href="https://github.com/kyleve/Listable">
             <img class="header-icon" src="../img/gh.png" alt="GitHub"/>
             View on GitHub
           </a>
         </p>
-
+    
     </header>
 
     <p class="breadcrumbs">
@@ -97,6 +97,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ListView.html">ListView</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ListView/ScrollViewInsets.html">– ScrollViewInsets</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Classes/ListViewController.html">ListViewController</a>
@@ -170,6 +173,9 @@
                 <a class="nav-group-task-link" href="../Enums/ItemSelectionStyle.html">ItemSelectionStyle</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/KeyboardFrame.html">KeyboardFrame</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/LayoutDirection.html">LayoutDirection</a>
               </li>
               <li class="nav-group-task">
@@ -236,6 +242,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/ArrayDiff.html#/s:10ListableUI9ArrayDiffV8NoChangeV">– NoChange</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions.html#/s:10ListableUI16KeyboardObserverC">KeyboardObserver</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/PresentationState.html">PresentationState</a>
@@ -320,6 +329,9 @@
                 <a class="nav-group-task-link" href="../Protocols/ItemLayoutsValue.html">ItemLayoutsValue</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/KeyboardCurrentFrameProvider.html">KeyboardCurrentFrameProvider</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
               </li>
               <li class="nav-group-task">
@@ -371,6 +383,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Behavior/Underflow.html">– Underflow</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Behavior/VerticalLayoutGravity.html">– VerticalLayoutGravity</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Color.html">Color</a>
@@ -616,6 +631,9 @@
                 <a class="nav-group-task-link" href="../Structs/SwipeAction.html">SwipeAction</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/SwipeAction/OnDidPerformActionAnimation.html">– OnDidPerformActionAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/SwipeActionsConfiguration.html">SwipeActionsConfiguration</a>
               </li>
               <li class="nav-group-task">
@@ -679,7 +697,7 @@
             <h1>SwipeAction</h1>
               <div class="declaration">
                 <div class="language">
-
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SwipeAction</span></code></pre>
 
                 </div>
@@ -696,9 +714,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11SwipeActionV17CompletionHandlera"></a>
-                    <a name="//apple_ref/swift/Alias/CompletionHandler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11SwipeActionV17CompletionHandlera">CompletionHandler</a>
+                    <a name="/s:10ListableUI11SwipeActionV012OnDidPerformD0a"></a>
+                    <a name="//apple_ref/swift/Alias/OnDidPerformAction" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11SwipeActionV012OnDidPerformD0a">OnDidPerformAction</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -716,7 +734,7 @@ or <code>false</code> to collapse them.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">CompletionHandler</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span> <span class="nv">expandActions</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnDidPerformAction</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/SwipeAction/OnDidPerformActionAnimation.html">OnDidPerformActionAnimation</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>
@@ -726,9 +744,9 @@ or <code>false</code> to collapse them.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11SwipeActionV7Handlera"></a>
-                    <a name="//apple_ref/swift/Alias/Handler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11SwipeActionV7Handlera">Handler</a>
+                    <a name="/s:10ListableUI11SwipeActionV5OnTapa"></a>
+                    <a name="//apple_ref/swift/Alias/OnTap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11SwipeActionV5OnTapa">OnTap</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -743,7 +761,7 @@ or <code>false</code> to collapse them.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Handler</span> <span class="o">=</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV17CompletionHandlera">CompletionHandler</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnTap</span> <span class="o">=</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV012OnDidPerformD0a">OnDidPerformAction</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>
@@ -763,7 +781,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -789,7 +807,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -815,7 +833,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -841,7 +859,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -867,7 +885,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -920,7 +938,7 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -936,9 +954,9 @@ or <code>false</code> to collapse them.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11SwipeActionV7handleryyySbccvp"></a>
-                    <a name="//apple_ref/swift/Property/handler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11SwipeActionV7handleryyySbccvp">handler</a>
+                    <a name="/s:10ListableUI11SwipeActionV5onTapyyyAC012OnDidPerformD9AnimationOccvp"></a>
+                    <a name="//apple_ref/swift/Property/onTap" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11SwipeActionV5onTapyyyAC012OnDidPerformD9AnimationOccvp">onTap</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -946,13 +964,13 @@ or <code>false</code> to collapse them.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">handler</span><span class="p">:</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV7Handlera">Handler</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onTap</span><span class="p">:</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV5OnTapa">OnTap</a></span></code></pre>
 
                         </div>
                       </div>
@@ -962,9 +980,9 @@ or <code>false</code> to collapse them.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11SwipeActionV5title18accessibilityLabel0F5Value0F4Hint15backgroundColor04tintK05image7handlerACSSSg_A3LSo7UIColorCANSo7UIImageCSgyySbcctcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(title:accessibilityLabel:accessibilityValue:accessibilityHint:backgroundColor:tintColor:image:handler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11SwipeActionV5title18accessibilityLabel0F5Value0F4Hint15backgroundColor04tintK05image7handlerACSSSg_A3LSo7UIColorCANSo7UIImageCSgyySbcctcfc">init(title:<wbr>accessibilityLabel:<wbr>accessibilityValue:<wbr>accessibilityHint:<wbr>backgroundColor:<wbr>tintColor:<wbr>image:<wbr>handler:<wbr>)</a>
+                    <a name="/s:10ListableUI11SwipeActionV5title18accessibilityLabel0F5Value0F4Hint15backgroundColor04tintK05image5onTapACSSSg_A3LSo7UIColorCANSo7UIImageCSgyyAC012OnDidPerformD9AnimationOcctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(title:accessibilityLabel:accessibilityValue:accessibilityHint:backgroundColor:tintColor:image:onTap:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11SwipeActionV5title18accessibilityLabel0F5Value0F4Hint15backgroundColor04tintK05image5onTapACSSSg_A3LSo7UIColorCANSo7UIImageCSgyyAC012OnDidPerformD9AnimationOcctcfc">init(title:<wbr>accessibilityLabel:<wbr>accessibilityValue:<wbr>accessibilityHint:<wbr>backgroundColor:<wbr>tintColor:<wbr>image:<wbr>onTap:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -987,8 +1005,36 @@ or <code>false</code> to collapse them.</p>
     <span class="nv">backgroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="p">,</span>
     <span class="nv">tintColor</span><span class="p">:</span> <span class="kt">UIColor</span> <span class="o">=</span> <span class="o">.</span><span class="n">white</span><span class="p">,</span>
     <span class="nv">image</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">handler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV7Handlera">Handler</a></span>
+    <span class="nv">onTap</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/SwipeAction.html#/s:10ListableUI11SwipeActionV5OnTapa">OnTap</a></span>
 <span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI11SwipeActionV012OnDidPerformD9AnimationO"></a>
+                    <a name="//apple_ref/swift/Enum/OnDidPerformActionAnimation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11SwipeActionV012OnDidPerformD9AnimationO">OnDidPerformActionAnimation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The animation to perform when the action is completed.</p>
+
+                        <a href="../Structs/SwipeAction/OnDidPerformActionAnimation.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">OnDidPerformActionAnimation</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -1003,7 +1049,7 @@ or <code>false</code> to collapse them.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-05-17)</p>
+      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-09-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>

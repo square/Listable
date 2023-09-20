@@ -23,16 +23,16 @@
   
    The changelog uses [reference links](https://daringfireball.net/projects/markdown/syntax#link) to link each version's changes. Remember to add a link to the new version at the bottom of the file, and to update the link to `[main]`.
 
-1. Re-generate the documentation.
-   ```bash
-   bundle exec Scripts/generate_docs.sh
-   ```
-
 1. Run `bundle exec pod install` to update the `Podfile.lock` with the new versions.
 
 1. Commit the podspec version bumps and the `Podfile.lock` update.
    ```bash
    git commit -am "Bumping versions to 0.1.0."
+   ```
+
+1. Re-generate the documentation.
+   ```bash
+   bundle exec Scripts/generate_docs.sh
    ```
 
 1. Push your branch and open a PR into `main`.

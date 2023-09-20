@@ -80,7 +80,7 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
       - name: Install xcodes
-        run: brew install robotsandpencils/made/xcodes
+        run: brew install aria2 xcodesorg/made/xcodes
 
       - name: Install iOS ${{ matrix.sdk }}
         run: sudo xcodes runtimes install "iOS 15.2"
@@ -129,7 +129,7 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
       - name: Install xcodes
-        run: brew install robotsandpencils/made/xcodes
+        run: brew install aria2 xcodesorg/made/xcodes
 
       - name: Install iOS ${{ matrix.sdk }}
         run: sudo xcodes runtimes install "iOS 14.5"

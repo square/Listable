@@ -6,19 +6,44 @@
 
 ### Added
 
-- `ApplyItemContentInfo` and `ApplyHeaderFooterContentInfo` are now available in the Blueprint `Environment` for each `BlueprintItemContent`.
-
 ### Removed
 
 ### Changed
-
-- `SwipeAction` property names have been updated to better reflect what they're for. `Completion` also now takes in a more descriptive enum, instead of a boolean, to make reading callsites clearer. Eg, `completion(.expandActions)` instead of `completion(true)`.
 
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [13.0.0] - 2023-09-06
+
+### Fixed
+
+- `KeyboardObserver` has been updated to handle iOS 16.1+ changes that use the screen's coordinate space to report keyboard position. This can impact reported values when the app isn't full screen in Split View, Slide Over, and Stage Manager.
+- The `verticalLayoutGravity` behavior now takes into account `frame` changes so that the scroll position relative to the bottom remains unchanged when the `frame` changes.
+
+### Changed
+
+- `KeyboardObserverDelegate` now provides `UIView.AnimationCurve` instead of `UIView.AnimationOptions`.
+
+# [12.0.0] - 2023-08-08
+
+### Added
+
+- `ApplyItemContentInfo` and `ApplyHeaderFooterContentInfo` are now available in the Blueprint `Environment` for each `BlueprintItemContent`.
+- A new `isContentScrollable` property is added to `ListView` to determine if the content size is large enough that the list can be scrolled to a new position without springing back to it's original position.
+- A new `custom` case is added to `KeyboardAdjustmentMode` which allows the consumer to fully customize the inset behavior. `onKeyboardFrameWillChange` and `customScrollViewInsets` have been added to `ListView` and `updateScrollViewInsets` is now public. All of these can be utilized in conjunction to respond to the keyboard and fully control the insets. For now, these are available through `ListView` only.
+- A new `verticalLayoutGravity` behavior to accomodate vertical-layout lists where the normal scroll position of the list is at the bottom of the list. Setting `verticalLayoutGravity` to `.bottom` enables the new behavior. It's designed to accomodate a messaging client. Adds a new demo called Chat App.
+
+### Changed
+
+- `SwipeAction` property names have been updated to better reflect what they're for. `Completion` also now takes in a more descriptive enum, instead of a boolean, to make reading callsites clearer. Eg, `completion(.expandActions)` instead of `completion(true)`.
+
+### Internal
+
+- Update CI script to reference the `xcodesorg/made/xcodes` package for installing simulator runtimes.
+- Update CI script to install `aria2` to improve simulator runtime download speeds.
 
 # [11.0.0] - 2023-06-15
 
@@ -883,8 +908,6 @@ listActions.scrolling.scrollToSection(
 
 - [Add `ListViewController`](https://github.com/kyleve/Listable/pull/176) make it easy to create view controllers backed by a Listable `ListView`.
 
-### Removed
-
 ### Changed
 
 - Update `Item` callbacks to [allow for providing more info to the callback parameters](https://github.com/kyleve/Listable/pull/160).
@@ -916,8 +939,6 @@ listActions.scrolling.scrollToSection(
   }
   ```
 
-### Misc
-
 ## 0.6.1 - Internal Only
 
 ### Changed
@@ -935,8 +956,6 @@ listActions.scrolling.scrollToSection(
 
 - Added type aliases for `HeaderFooter` and `HeaderFooterContent` to reduce verbosity of use. Now instead of typing `HeaderFooter(MyHeader())`, you can use `Header(MyHeader())`.
 - Replace unused / experimental `Binding` type [with `Coordinator`](https://github.com/kyleve/Listable/pull/143), which allows you to independently manage item state in a similar manner to SwiftUI's `UIViewRepresentable`'s `Coordinator`.
-
-### Removed
 
 ### Changed
 
@@ -956,7 +975,9 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/11.0.0...HEAD
+[Main]: https://github.com/square/Listable/square/13.0.0...HEAD
+[13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
+[12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
 [10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1
 [10.3.0]: https://github.com/square/Listable/compare/10.2.0...10.3.0
