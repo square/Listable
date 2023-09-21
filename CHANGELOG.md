@@ -977,7 +977,7 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/square/13.0.0...HEAD
+[Main]: https://github.com/square/Listable/compare/13.0.0...main
 [13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
