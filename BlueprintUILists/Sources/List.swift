@@ -252,6 +252,13 @@ extension List {
 //                        return min(size.contentSize.height, maxHeight)
 //                    }
                     
+//                    switch size.layoutDirection {
+//                    case .vertical:
+//                        
+//                    case .horizontal:
+//                        
+//                    }
+                    
                     /// Temporary
                     if size.layoutDirection == .horizontal {
                         return size.naturalWidth ?? size.contentSize.height

@@ -44,7 +44,8 @@ class ListView_ContentSizeTests : XCTestCase
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 300.0, height: 190.0),
-                        naturalWidth: 200.0
+                        naturalWidth: 200.0,
+                        layoutDirection: .vertical
                     )
                 )
             }
@@ -65,7 +66,8 @@ class ListView_ContentSizeTests : XCTestCase
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 100.0, height: 300.0),
-                        naturalWidth: nil
+                        naturalWidth: nil,
+                        layoutDirection: .vertical
                     )
                 )
             }
@@ -85,7 +87,8 @@ class ListView_ContentSizeTests : XCTestCase
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 510.0, height: 100.0),
-                        naturalWidth: 50.0
+                        naturalWidth: 50.0,
+                        layoutDirection: .horizontal
                     )
                 )
             }
@@ -106,7 +109,8 @@ class ListView_ContentSizeTests : XCTestCase
                     
                     MeasuredListSize(
                         contentSize: CGSize(width: 300.0, height: 100.0),
-                        naturalWidth: nil
+                        naturalWidth: nil,
+                        layoutDirection: .horizontal
                     )
                 )
             }

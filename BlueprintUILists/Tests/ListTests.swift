@@ -63,7 +63,8 @@ class ListTests : XCTestCase {
             List.ListContent.size(
                 with: .init(
                     contentSize: CGSize(width: 1200, height: 1000),
-                    naturalWidth: 900
+                    naturalWidth: 900,
+                    layoutDirection: .vertical
                 ),
                 in: constraint,
                 layoutMode: .default,
@@ -77,7 +78,8 @@ class ListTests : XCTestCase {
             List.ListContent.size(
                 with: .init(
                     contentSize: CGSize(width: 1200, height: 1000),
-                    naturalWidth: 900
+                    naturalWidth: 900,
+                    layoutDirection: .vertical
                 ),
                 in: constraint,
                 layoutMode: .default,
@@ -91,7 +93,8 @@ class ListTests : XCTestCase {
             List.ListContent.size(
                 with: .init(
                     contentSize: CGSize(width: 1200, height: 1000),
-                    naturalWidth: nil
+                    naturalWidth: nil,
+                    layoutDirection: .vertical
                 ),
                 in: constraint,
                 layoutMode: .default,
@@ -105,7 +108,8 @@ class ListTests : XCTestCase {
             List.ListContent.size(
                 with: .init(
                     contentSize: CGSize(width: 1200, height: 1000),
-                    naturalWidth: 900
+                    naturalWidth: 900,
+                    layoutDirection: .vertical
                 ),
                 in: constraint,
                 layoutMode: .default,
