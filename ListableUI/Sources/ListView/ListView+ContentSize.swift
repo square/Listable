@@ -69,7 +69,8 @@ extension ListView
                 width: fittingSize.width > 0 ? min(fittingSize.width, totalSize.width) : totalSize.width,
                 height: fittingSize.height > 0 ? min(fittingSize.height, totalSize.height) : totalSize.height
             ),
-            naturalWidth: layout.content.naturalContentWidth
+            naturalWidth: layout.content.naturalContentWidth,
+            layoutDirection: layout.direction
         )
     }
 }
@@ -90,11 +91,16 @@ public struct MeasuredListSize : Equatable {
     /// cannot provide a natural width because it takes up as much space as it as given.
     public var naturalWidth : CGFloat?
     
+    /// The layout direction of the list.
+    public var layoutDirection : LayoutDirection
+    
     public init(
         contentSize: CGSize,
-        naturalWidth: CGFloat?
+        naturalWidth: CGFloat?,
+        layoutDirection : LayoutDirection
     ) {
         self.contentSize = contentSize
         self.naturalWidth = naturalWidth
+        self.layoutDirection = layoutDirection
     }
 }

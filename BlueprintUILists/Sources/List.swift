@@ -219,6 +219,7 @@ extension List {
             }()
             
             let height : CGFloat = {
+                
                 switch verticalFill {
                 case .fillParent:
                     if let max = constraint.height.constrainedValue {
@@ -250,7 +251,13 @@ extension List {
                     if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
                         return min(size.contentSize.height, maxHeight)
                     }
-                    return size.contentSize.height
+                    
+                    /// Temporary
+                    if size.layoutDirection == .horizontal {
+                        return size.naturalWidth ?? size.contentSize.height
+                    } else {
+                        return size.contentSize.height
+                    }
                 }
             }()
             

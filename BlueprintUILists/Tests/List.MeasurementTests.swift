@@ -23,4 +23,8 @@ class List_MeasurementTests : XCTestCase {
             XCTFail()
         }
     }
+    
+    func test_vertical_measurement() {
+    
+    }
 }
