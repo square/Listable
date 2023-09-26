@@ -248,9 +248,9 @@ extension List {
                         )
                     }
                 case .natural:
-                    if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
-                        return min(size.contentSize.height, maxHeight)
-                    }
+//                    if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
+//                        return min(size.contentSize.height, maxHeight)
+//                    }
                     
                     /// Temporary
                     if size.layoutDirection == .horizontal {
