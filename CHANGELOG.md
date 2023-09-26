@@ -2,9 +2,7 @@
 
 ### Fixed
 
-- Fixed a bug that resulted in header/footer views not properly updating, by fixing the underlying tracking of collection view supplementary views.
 - Fixed an issue where supplementary views (headers or footers) that contained a first responder would result in the view being duplicated when scrolled off-screen.
-- Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
 
 ### Added
 
