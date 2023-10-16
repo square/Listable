@@ -88,7 +88,7 @@ public struct MeasuredListSize : Equatable {
     ///
     /// ### Note
     /// Not all layouts support or provide a natural width. For example, a `.flow` layout
-    /// cannot provide a natural width because it takes up as much space as it as given.
+    /// cannot provide a natural width because it takes up as much space as it as given in both dimensions.
     public var naturalWidth : CGFloat?
     
     /// The layout direction of the list.
