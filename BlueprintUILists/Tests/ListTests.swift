@@ -67,7 +67,7 @@ class ListTests : XCTestCase {
                     layoutDirection: .vertical
                 ),
                 in: constraint,
-                layoutMode: .default,
+                layoutMode: .caffeinated,
                 horizontalFill: .fillParent,
                 verticalFill: .fillParent
             ),
@@ -82,7 +82,7 @@ class ListTests : XCTestCase {
                     layoutDirection: .vertical
                 ),
                 in: constraint,
-                layoutMode: .default,
+                layoutMode: .caffeinated,
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
@@ -97,7 +97,7 @@ class ListTests : XCTestCase {
                     layoutDirection: .vertical
                 ),
                 in: constraint,
-                layoutMode: .default,
+                layoutMode: .caffeinated,
                 horizontalFill: .natural,
                 verticalFill: .fillParent
             ),
@@ -112,11 +112,26 @@ class ListTests : XCTestCase {
                     layoutDirection: .vertical
                 ),
                 in: constraint,
-                layoutMode: .default,
+                layoutMode: .caffeinated,
                 horizontalFill: .natural,
                 verticalFill: .natural
             ),
             CGSize(width: 900, height: 1000)
+        )
+        
+        XCTAssertEqual(
+            List.ListContent.size(
+                with: .init(
+                    contentSize: CGSize(width: 1200, height: 1000),
+                    naturalWidth: 900,
+                    layoutDirection: .horizontal
+                ),
+                in: constraint,
+                layoutMode: .caffeinated,
+                horizontalFill: .natural,
+                verticalFill: .natural
+            ),
+            CGSize(width: 1200, height: 900)
         )
     }
     
