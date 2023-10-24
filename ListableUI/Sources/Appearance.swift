@@ -19,16 +19,22 @@ public struct Appearance : Equatable
     /// The background color for the list.
     @Color public var backgroundColor : UIColor
     
+    /// The tint color of the refresh control.
+    public var refreshControlColor : UIColor?
+    
     /// If the list should display its scroll indicators.
     public var showsScrollIndicators : Bool
         
     /// Creates a new appearance object with the provided options.
     public init(
         backgroundColor : UIColor = Self.defaultBackgroundColor,
+        refreshControlColor : UIColor? = nil,
         showsScrollIndicators : Bool = true,
         configure : (inout Self) -> () = { _ in }
     ) {
         self._backgroundColor = Color(backgroundColor)
+        
+        self.refreshControlColor = refreshControlColor
         
         self.showsScrollIndicators = showsScrollIndicators
         
@@ -37,19 +43,15 @@ public struct Appearance : Equatable
     
     /// The default background color for the `Appearance`.
     public static var defaultBackgroundColor : UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor { traits in
-                switch traits.userInterfaceStyle {
-                case .unspecified, .light:
-                    return .white
-                case .dark:
-                    return .black
-                @unknown default:
-                    return .white
-                }
+        return UIColor { traits in
+            switch traits.userInterfaceStyle {
+            case .unspecified, .light:
+                return .white
+            case .dark:
+                return .black
+            @unknown default:
+                return .white
             }
-        } else {
-            return .white
         }
     }
 }

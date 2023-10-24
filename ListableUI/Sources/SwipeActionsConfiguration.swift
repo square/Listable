@@ -55,31 +55,62 @@ public struct SwipeAction {
     ///
     /// Pass in `true` to expand the actions (typically only used when deleting the row)
     /// or `false` to collapse them.
-    public typealias CompletionHandler = (_ expandActions: Bool) -> Void
+    public typealias OnDidPerformAction = (OnDidPerformActionAnimation) -> Void
 
     /// The completion handler called when the action is tapped.
-    public typealias Handler = (@escaping CompletionHandler) -> Void
+    public typealias OnTap = (@escaping OnDidPerformAction) -> Void
 
     public var title: String?
+    
+    public var accessibilityLabel : String?
+    public var accessibilityValue : String?
+    public var accessibilityHint : String?
+    
     public var backgroundColor: UIColor?
     /// Sets the text and image (image must use the template rendering mode) color.
     public var tintColor: UIColor
     public var image: UIImage?
 
-    public var handler: Handler
+    public var onTap: OnTap
     
     /// Creates a new swipe action with the provided options.
     public init(
-        title: String,
+        title: String?,
+        accessibilityLabel: String? = nil,
+        accessibilityValue: String? = nil,
+        accessibilityHint: String? = nil,
         backgroundColor: UIColor,
         tintColor: UIColor = .white,
         image: UIImage? = nil,
-        handler: @escaping Handler
+        onTap: @escaping OnTap
     ) {
+        if title == nil || title?.isEmpty == true {
+            precondition(
+                accessibilityLabel?.isEmpty == false,
+                "You must provide a title or an accessibilityLabel to a SwipeAction to ensure proper VoiceOver support."
+            )
+        }
+        
         self.title = title
+        self.accessibilityLabel = accessibilityLabel
+        self.accessibilityValue = accessibilityValue
+        self.accessibilityHint = accessibilityHint
+        
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         self.image = image
-        self.handler = handler
+        self.onTap = onTap
+    }
+    
+    /// The animation to perform when the action is completed.
+    public enum OnDidPerformActionAnimation : Equatable {
+        
+        /// The swipe actions will be closed.
+        case closeActions
+        
+        /// The swipe actions will be expanded, revealing the last swipe action.
+        /// You usually use this option when performing the action will remove the
+        /// row from the list, eg during a deletion, archive, etc.
+        case expandActions
     }
 }

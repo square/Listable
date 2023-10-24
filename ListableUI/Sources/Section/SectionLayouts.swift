@@ -110,4 +110,23 @@ public protocol SectionLayoutsValue {
 
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
+    
+    /// Indicates if the header for the section will be sticky.
+    /// Setting this value explicitly overrides the list-level stickiness for headers.
+    var isHeaderSticky : Bool? { get }
+}
+
+
+/// Use this type if you have no `SectionLayout` for your `ListLayout`.
+public struct EmptySectionLayoutsValue : SectionLayoutsValue {
+    
+    public init() {}
+    
+    public static var defaultValue: EmptySectionLayoutsValue {
+        .init()
+    }
+    
+    public var isHeaderSticky : Bool? {
+        nil
+    }
 }

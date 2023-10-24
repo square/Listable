@@ -38,7 +38,14 @@ public struct Behavior : Equatable
     
     /// Is paging enabled on the underlying scroll view.
     public var isPagingEnabled : Bool
-    
+
+    /// The rate at which scrolling decelerates.
+    public var decelerationRate: DecelerationRate
+
+    /// Applicable when the `layoutDirection` is `vertical`. The gravity determines
+    /// how inserting new elements or changing the `contentInset` affects the scroll position.
+    public var verticalLayoutGravity : VerticalLayoutGravity
+
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
@@ -48,7 +55,9 @@ public struct Behavior : Equatable
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
-        isPagingEnabled : Bool = false
+        isPagingEnabled : Bool = false,
+        decelerationRate : DecelerationRate = .normal,
+        verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
@@ -61,6 +70,9 @@ public struct Behavior : Equatable
         self.canCancelContentTouches = canCancelContentTouches
         self.delaysContentTouches = delaysContentTouches
         self.isPagingEnabled = false
+        self.decelerationRate = decelerationRate
+        
+        self.verticalLayoutGravity = verticalLayoutGravity
     }
 }
 
@@ -75,6 +87,11 @@ extension Behavior
         
         /// The `contentInset` of the list is adjusted when the keyboard appears or disappears.
         case adjustsWhenVisible
+
+        /// Consumer calculates the edge insets and handles setting them
+        /// via the ``ListView/customScrollViewInsets`` callback. Only use this option
+        /// when managing the `ListView` directly.
+        case custom
     }
     
     
@@ -87,8 +104,17 @@ extension Behavior
         /// When the user taps on the status bar, scroll to the top of the list.
         case enabled
     }
+
+
+    /// The rate at which scrolling decelerates.
+    public enum DecelerationRate
+    {
+        case normal
+
+        case fast
+    }
     
-    
+
     /// The selection mode of the list view, which controls how many items (if any) can be selected at once.
     public enum SelectionMode : Equatable
     {
@@ -150,6 +176,32 @@ extension Behavior
                 case .bottom: return viewHeight - contentHeight
                 }
             }
+        }
+    }
+    
+    /// Applicable when the `layoutDirection` is `vertical`. The gravity determines
+    /// how inserting new elements or changing the `contentInset` affects the scroll position.
+    public enum VerticalLayoutGravity {
+        /// This is how a scroll view normally behaves.
+        /// When a new element is inserted, the scroll distance from the top is unchanged.
+        case top
+
+        /// Intended for cases where the default scroll position is scrolled all the way down.
+        /// When a new element is inserted, the scroll distance from the bottom is unchanged.
+        case bottom
+    }
+}
+
+extension UICollectionView.DecelerationRate
+{
+
+    init(behaviorValue: Behavior.DecelerationRate)
+    {
+        switch behaviorValue {
+        case .fast:
+            self.init(rawValue: UICollectionView.DecelerationRate.fast.rawValue)
+        case .normal:
+            self.init(rawValue: UICollectionView.DecelerationRate.normal.rawValue)
         }
     }
 }

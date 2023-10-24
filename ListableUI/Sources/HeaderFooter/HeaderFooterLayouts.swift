@@ -69,8 +69,7 @@ public struct HeaderFooterLayouts {
     /// Allows accessing the various `HeaderFooterLayoutValue`s stored within the object.
     /// This method will return the `defaultValue` for a value if none is set.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// When implementing your own custom layout, you should add an extension to `HeaderFooterLayouts`,
     /// to provide easier access to your layout-specific `HeaderFooterLayoutsValue` type.
     ///
@@ -111,4 +110,15 @@ public protocol HeaderFooterLayoutsValue {
 
     /// The default value used when accessing the value, if none is set.
     static var defaultValue : Self { get }
+}
+
+
+/// Use this type if you have no `HeaderFooterLayout` for your `ListLayout`.
+public struct EmptyHeaderFooterLayoutsValue : HeaderFooterLayoutsValue {
+    
+    public init() {}
+    
+    public static var defaultValue: EmptyHeaderFooterLayoutsValue {
+        .init()
+    }
 }

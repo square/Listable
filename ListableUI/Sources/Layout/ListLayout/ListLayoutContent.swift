@@ -142,7 +142,7 @@ public final class ListLayoutContent
         
         // Container Header
         
-        if rect.intersects(self.containerHeader.visibleFrame) && include(self.containerHeader) {
+        if (rect.intersects(self.containerHeader.visibleFrame) || self.containerHeader.containsFirstResponder) && include(self.containerHeader) {
             attributes.append(
                 .supplementary(
                     self.containerHeader,
@@ -153,7 +153,7 @@ public final class ListLayoutContent
         
         // List Header
         
-        if rect.intersects(self.header.visibleFrame) && include(self.header) {
+        if (rect.intersects(self.header.visibleFrame) || self.header.containsFirstResponder) && include(self.header) {
             attributes.append(
                 .supplementary(
                     self.header,
@@ -172,7 +172,7 @@ public final class ListLayoutContent
             
             // Section Header
             
-            if rect.intersects(section.header.visibleFrame) && include(section.header) {
+            if (rect.intersects(section.header.visibleFrame) || section.header.containsFirstResponder) && include(section.header) {
                 attributes.append(
                     .supplementary(
                         section.header,
@@ -196,7 +196,7 @@ public final class ListLayoutContent
             
             // Section Footer
             
-            if rect.intersects(section.footer.visibleFrame) && include(section.footer) {
+            if (rect.intersects(section.footer.visibleFrame) || section.footer.containsFirstResponder) && include(section.footer) {
                 attributes.append(
                     .supplementary(
                         section.footer,
@@ -208,7 +208,7 @@ public final class ListLayoutContent
         
         // List Footer
         
-        if rect.intersects(self.footer.visibleFrame) && include(self.footer) {
+        if (rect.intersects(self.footer.visibleFrame) || self.footer.containsFirstResponder) && include(self.footer) {
             attributes.append(
                 .supplementary(
                     self.footer,
@@ -220,8 +220,10 @@ public final class ListLayoutContent
         // Overscroll Footer
         
         if alwaysIncludeOverscroll || (rect.intersects(self.overscrollFooter.visibleFrame) && include(self.overscrollFooter)) {
+            
             // Don't check the rect for the overscroll view as we do with other views; it's always outside of the contentSize.
             // Instead, just return it all the time to ensure the collection view will display it when needed.
+            
             attributes.append(
                 .supplementary(
                     self.overscrollFooter,
@@ -346,6 +348,10 @@ extension ListLayoutContent
             self.state.model.layouts
         }
         
+        public var isHeaderSticky : Bool? {
+            state.header.state?.anyModel.isStickySectionHeader
+        }
+        
         var all : [ListLayoutContentItem] {
             var all : [ListLayoutContentItem] = []
             
@@ -430,6 +436,10 @@ extension ListLayoutContent
         
         public var layouts : HeaderFooterLayouts {
             self.state?.anyModel.layouts ?? .init()
+        }
+        
+        public var containsFirstResponder : Bool {
+            self.state?.containsFirstResponder ?? false
         }
         
         public var defaultFrame : CGRect {

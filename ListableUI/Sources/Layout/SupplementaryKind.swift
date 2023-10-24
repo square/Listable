@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum SupplementaryKind : String, CaseIterable
+public enum SupplementaryKind : String, CaseIterable
 {
     case listContainerHeader = "Listable.ListContainerHeader"
     case listHeader = "Listable.ListHeader"

@@ -85,10 +85,10 @@ extension UIImage
 {
     static func compareImages(lhs : UIImage, rhs : UIImage) -> Bool
     {
-        return lhs.pngData() == rhs.pngData()
+        UIImage.compare(lhs, rhs, precision: 1)
     }
     
-    private func compare(_ old: UIImage, _ new: UIImage, precision: Float) -> Bool {
+    private static func compare(_ old: UIImage, _ new: UIImage, precision: Float) -> Bool {
       guard let oldCgImage = old.cgImage else { return false }
       guard let newCgImage = new.cgImage else { return false }
       guard oldCgImage.width != 0 else { return false }
@@ -127,7 +127,7 @@ extension UIImage
       return true
     }
     
-    private func context(for cgImage: CGImage, bytesPerRow: Int, data: UnsafeMutableRawPointer? = nil) -> CGContext? {
+    private static func context(for cgImage: CGImage, bytesPerRow: Int, data: UnsafeMutableRawPointer? = nil) -> CGContext? {
       guard
         let space = cgImage.colorSpace,
         let context = CGContext(

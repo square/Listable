@@ -50,7 +50,7 @@ func listableInternalPrecondition(
 
 
 /// By default, `precondition` error messages are not included in release builds. We would like that!
-/// https://bugs.swift.org/browse/SR-905
+/// https://github.com/apple/swift/issues/43517
 @inline(__always)
 func precondition(
     _ condition: @autoclosure () -> Bool,
@@ -64,7 +64,7 @@ func precondition(
 }
 
 /// By default, `preconditionFailure` error messages are not included in release builds. We would like that!
-/// https://bugs.swift.org/browse/SR-905
+/// https://github.com/apple/swift/issues/43517
 @inline(__always)
 public func preconditionFailure(
     _ message: @autoclosure () -> String = String(),

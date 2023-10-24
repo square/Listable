@@ -165,6 +165,7 @@ extension List {
                     return Self.size(
                         with: measurements,
                         in: constraint,
+                        layoutMode: environment.layoutMode,
                         horizontalFill: horizontalFill,
                         verticalFill: verticalFill
                     )
@@ -192,6 +193,7 @@ extension List {
         static func size(
             with size : MeasuredListSize,
             in constraint : SizeConstraint,
+            layoutMode: LayoutMode,
             horizontalFill : Measurement.FillRule,
             verticalFill : Measurement.FillRule
         ) -> CGSize
@@ -201,6 +203,8 @@ extension List {
                 case .fillParent:
                     if let max = constraint.width.constrainedValue {
                         return max
+                    } else if case .caffeinated = layoutMode {
+                        return .infinity
                     } else {
                         fatalError(
                             """
@@ -232,6 +236,8 @@ extension List {
                 case .fillParent:
                     if let max = constraint.height.constrainedValue {
                         return max
+                    } else if case .caffeinated = layoutMode {
+                        return .infinity
                     } else {
                         fatalError(
                             """
@@ -254,6 +260,9 @@ extension List {
                         )
                     }
                 case .natural:
+                    if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
+                        return min(size.contentSize.height, maxHeight)
+                    }
                     return size.contentSize.height
                 }
             }()

@@ -57,7 +57,7 @@ public struct ListStateObserver {
     /// Registers a callback which will be called when the list view is scrolled, or is
     /// scrolled to top.
     ///
-    /// ### Important Note!
+    /// ### ⚠️ Important Note!
     /// This callback is called very frequently when the user is scrolling the list (eg, every frame!).
     /// As such, make sure any work you do in the callback is efficient.
     public mutating func onDidScroll( _ callback : @escaping OnDidScroll)
@@ -66,6 +66,34 @@ public struct ListStateObserver {
     }
     
     private(set) var onDidScroll : [OnDidScroll] = []
+    
+    //
+    // MARK: Responding to Scrolling Deceleration
+    //
+    
+    public typealias OnDidEndDeceleration = (DidEndDeceleration) -> ()
+    
+    /// Registers a callback which will be called when the list view is finished decelerating.
+    public mutating func onDidEndDeceleration( _ callback : @escaping OnDidEndDeceleration)
+    {
+        self.onDidEndDeceleration.append(callback)
+    }
+    
+    private(set) var onDidEndDeceleration: [OnDidEndDeceleration] = []
+    
+    //
+    // MARK: Responding to Drag Begin
+    //
+    
+    public typealias OnBeginDrag = (BeginDrag) -> ()
+    
+    /// Registers a callback which will be called when the list view will begin dragging.
+    public mutating func onBeginDrag( _ callback: @escaping OnBeginDrag)
+    {
+        self.onBeginDrag.append(callback)
+    }
+    
+    private(set) var onBeginDrag: [OnBeginDrag] = []
     
     //
     // MARK: Responding To Content Updates
@@ -92,8 +120,11 @@ public struct ListStateObserver {
     
     public typealias OnVisibilityChanged = (VisibilityChanged) -> ()
     
-    /// Registers a callback which will be called when the list view's content is changed – eg through
-    /// inserted, removed, updated, moved items or sections.
+    /// Registers a callback which will be called when the visiblity of content within the list changes,
+    /// either due to the user scrolling the list, or due to an update changing the visible content.
+    ///
+    /// If you'd like to (eg) update a pagination indicator or other indicator of what
+    /// items / pages / etc are visible, use this method.
     public mutating func onVisibilityChanged( _ callback : @escaping OnVisibilityChanged)
     {
         self.onVisibilityChanged.append(callback)
@@ -181,6 +212,15 @@ extension ListStateObserver
         public let positionInfo : ListScrollPositionInfo
     }
     
+    /// Parameters available for ``OnDidEndDeceleration`` callbacks.
+    public struct DidEndDeceleration {
+        public let positionInfo : ListScrollPositionInfo
+    }
+    
+    /// Parameters available for ``OnBeginDrag`` callbacks.
+    public struct BeginDrag {
+        public let positionInfo : ListScrollPositionInfo
+    }
     
     /// Parameters available for ``OnContentUpdated`` callbacks.
     public struct ContentUpdated {

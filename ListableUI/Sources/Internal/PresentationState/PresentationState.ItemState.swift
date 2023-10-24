@@ -281,23 +281,75 @@ extension PresentationState
                 state: itemState,
                 position: self.itemPosition,
                 reorderingActions: self.reorderingActions,
+                showLeadingSwipeActions: { [weak cell, weak self] in
+                    guard let cell, let self else { return }
+                    
+                    guard let swipeActions = self.model.leadingSwipeActions else {
+                        assertionFailure("Cannot showLeadingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    guard swipeActions.actions.isEmpty == false else {
+                        assertionFailure("Cannot showLeadingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    cell.openLeadingSwipeActions()
+                },
+                showTrailingSwipeActions: { [weak cell, weak self] in
+                    guard let cell, let self else { return }
+                    
+                    guard let swipeActions = self.model.trailingSwipeActions else {
+                        assertionFailure("Cannot showTrailingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+                    
+                    guard swipeActions.actions.isEmpty == false else {
+                        assertionFailure("Cannot showTrailingSwipeActions for `\(self.model.identifier)`, as no swipe actions have been provided.")
+                        return
+                    }
+
+                    cell.openTrailingSwipeActions()
+                },
                 isReorderable: self.model.reordering != nil,
                 environment: environment
             )
             
             // Apply Model State
             
-            self.model.content.apply(
-                to: ItemContentViews(content: cell.contentContainer.contentView, background: cell.background, selectedBackground: cell.selectedBackground),
-                for: reason,
-                with: applyInfo
-            )
+            model
+                .content
+                .contentAreaViewProperties(with: applyInfo)
+                .apply(to: cell.contentContainer)
+            
+            self
+                .model
+                .content
+                .apply(
+                    to: ItemContentViews(cell: cell),
+                    for: reason,
+                    with: applyInfo
+                )
                         
             // Apply Swipe To Action Appearance
-            if let actions = self.model.swipeActions {
-                cell.contentContainer.registerSwipeActionsIfNeeded(actions: actions, style: model.content.swipeActionsStyle, reason: reason)
+            if let actions = self.model.trailingSwipeActions {
+                cell.contentContainer.registerTrailingSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
             } else {
-                cell.contentContainer.deregisterSwipeIfNeeded()
+                cell.contentContainer.deregisterTrailingSwipeIfNeeded()
+            }
+            
+            if let actions = self.model.leadingSwipeActions {
+                cell.contentContainer.registerLeadingSwipeActionsIfNeeded(
+                    actions: actions,
+                    style: model.content.swipeActionsStyle ?? environment[SwipeActionsViewStyleKey.self],
+                    reason: reason
+                )
+            } else {
+                cell.contentContainer.deregisterLeadingSwipeIfNeeded()
             }
             
             cell.isReorderable = self.model.reordering != nil

@@ -28,6 +28,7 @@ class BehaviorTests: XCTestCase
         // These values should match the default values from the collection view.
         XCTAssertEqual(behavior.canCancelContentTouches, listView.collectionView.canCancelContentTouches)
         XCTAssertEqual(behavior.delaysContentTouches, listView.collectionView.delaysContentTouches)
+        XCTAssertEqual(.init(behaviorValue: behavior.decelerationRate), listView.collectionView.decelerationRate)
     }
 }
 

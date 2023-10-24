@@ -58,7 +58,9 @@ public protocol BlueprintItemContent : ItemContent
     where
     ContentView == BlueprintView,
     BackgroundView == BlueprintView,
-    SelectedBackgroundView == BlueprintView
+    SelectedBackgroundView == BlueprintView,
+    OverlayDecorationView == BlueprintView,
+    UnderlayDecorationView == BlueprintView
 {
     //
     // MARK: Creating Blueprint Element Representations
@@ -90,7 +92,43 @@ public protocol BlueprintItemContent : ItemContent
     /// ### Note
     /// The default implementation of this method returns nil, and provides no selected background.
     func selectedBackgroundElement(with info : ApplyItemContentInfo) -> Element?
+    
+    /// Optional. Create and return the Blueprint element used to represent the overlay decoration of the content.
+    /// The overlay decoration appears above all other content, and is not affected by swipe actions.
+    ///
+    /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
+    /// based on the current state of the item.
+    ///
+    /// ### Note
+    /// The default implementation of this method returns nil, and provides no decoration.
+    func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element?
+    
+    /// Optional. Create and return the Blueprint element used to represent the underlay decoration of the content.
+    /// The underlay decoration appears below all other content, and is not affected by swipe actions.
+    ///
+    /// You can use the provided `ApplyItemContentInfo` to vary the appearance of the element
+    /// based on the current state of the item.
+    ///
+    /// ### Note
+    /// The default implementation of this method returns nil, and provides no decoration.
+    func underlayDecorationElement(with info : ApplyItemContentInfo) -> Element?
 }
+
+
+extension Environment {
+        
+    /// The `ApplyItemContentInfo` which was passed to the `Item` before it was
+    /// last displayed or updated. Nil if not in a Listable `Item`.
+    public internal(set) var applyItemContentInfo : ApplyItemContentInfo? {
+        get { self[ApplyItemContentInfoKey.self] }
+        set { self[ApplyItemContentInfoKey.self] = newValue }
+    }
+    
+    private enum ApplyItemContentInfoKey : EnvironmentKey {
+        static let defaultValue : ApplyItemContentInfo? = nil
+    }
+}
+
 
 
 public extension BlueprintItemContent
@@ -110,6 +148,16 @@ public extension BlueprintItemContent
     {
         nil
     }
+    
+    /// By default, content has no overlay decoration.
+    func overlayDecorationElement(with info : ApplyItemContentInfo) -> Element? {
+        nil
+    }
+    
+    /// By default, content has no underlay decoration.
+    func underlayDecorationElement(with info : ApplyItemContentInfo) -> Element? {
+        nil
+    }
 }
 
 
@@ -122,17 +170,54 @@ public extension BlueprintItemContent
     /// Maps the `BlueprintItemContent` methods into the underlying `BlueprintView`s used to render the element.
     func apply(to views : ItemContentViews<Self>, for reason: ApplyReason, with info : ApplyItemContentInfo)
     {
-        views.content.element = self.element(with: info).wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.backgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.selectedBackground.element = self.selectedBackgroundElement(with: info)?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        views.content.element = element(with: info)
+            .adaptedEnvironment(with: info)
+        
+        if let element = backgroundElement(with: info)?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `background` view and assign our element update.
+            views.background.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.backgroundIfLoaded?.element = nil
+        }
+        
+        if let element = selectedBackgroundElement(with: info)?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `selectedBackground` view and assign our element update.
+            views.selectedBackground.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.selectedBackgroundIfLoaded?.element = nil
+        }
+        
+        if let element = overlayDecorationElement(with: info)?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `overlayDecoration` view and assign our element update.
+            views.overlayDecoration.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.overlayDecorationIfLoaded?.element = nil
+        }
+        
+        if let element = underlayDecorationElement(with: info)?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `underlayDecoration` view and assign our element update.
+            views.underlayDecoration.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.underlayDecorationIfLoaded?.element = nil
+        }
     }
     
-    /// Creates the `BlueprintView` used to render the content of the item.
     static func createReusableContentView(frame: CGRect) -> ContentView {
         self.newBlueprintView(with: frame)
     }
     
-    /// Creates the `BlueprintView` used to render the background of the item.
     static func createReusableBackgroundView(frame: CGRect) -> BackgroundView {
         self.newBlueprintView(with: frame)
     }
@@ -141,10 +226,29 @@ public extension BlueprintItemContent
         self.newBlueprintView(with: frame)
     }
     
+    static func createReusableOverlayDecorationView(frame: CGRect) -> OverlayDecorationView {
+        self.newBlueprintView(with: frame)
+    }
+    
+    static func createReusableUnderlayDecorationView(frame: CGRect) -> UnderlayDecorationView {
+        self.newBlueprintView(with: frame)
+    }
+    
     private static func newBlueprintView(with frame : CGRect) -> BlueprintView {
         let view = BlueprintView(frame: frame)
         view.backgroundColor = .clear
         
         return view
+    }
+}
+
+
+fileprivate extension Element {
+    
+    func adaptedEnvironment(with info : ApplyItemContentInfo) -> Element {
+        self.adaptedEnvironment { env in
+            env = info.environment.blueprintEnvironment
+            env.applyItemContentInfo = info
+        }
     }
 }

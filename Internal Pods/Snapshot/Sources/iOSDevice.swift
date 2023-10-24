@@ -269,9 +269,7 @@ public extension iOSDevice
             
             self.layer.contentsScale = self.device.scale
             
-            if #available(iOS 11, *) {
-                self.viewController.additionalSafeAreaInsets = self.device.safeAreaInsets
-            }
+            self.viewController.additionalSafeAreaInsets = self.device.safeAreaInsets
             
             self.addSubview(self.viewController.view)
             

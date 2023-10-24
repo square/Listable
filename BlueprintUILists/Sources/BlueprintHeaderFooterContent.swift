@@ -90,6 +90,21 @@ where
 }
 
 
+extension Environment {
+        
+    /// The `ApplyHeaderFooterContentInfo` which was passed to the `HeaderFooter` before it was
+    /// last displayed or updated. Nil if not in a Listable `HeaderFooter`.
+    public internal(set) var applyHeaderFooterContentInfo : ApplyHeaderFooterContentInfo? {
+        get { self[ApplyHeaderFooterContentInfoKey.self] }
+        set { self[ApplyHeaderFooterContentInfoKey.self] = newValue }
+    }
+    
+    private enum ApplyHeaderFooterContentInfoKey : EnvironmentKey {
+        static let defaultValue : ApplyHeaderFooterContentInfo? = nil
+    }
+}
+
+
 public extension BlueprintHeaderFooterContent
 {
     //
@@ -113,9 +128,32 @@ public extension BlueprintHeaderFooterContent
         for reason: ApplyReason,
         with info: ApplyHeaderFooterContentInfo
     ) {
-        views.content.element = self.elementRepresentation.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.background.element = self.background?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
-        views.pressed.element = self.pressedBackground?.wrapInBlueprintEnvironmentFrom(environment: info.environment)
+        
+        views.content.element = self
+            .elementRepresentation
+            .adaptedEnvironment(with: info)
+        
+        if let element = self
+            .background?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `background` view and assign our element update.
+            views.background.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.backgroundIfLoaded?.element = nil
+        }
+        
+        if let element = self
+            .pressedBackground?
+            .adaptedEnvironment(with: info)
+        {
+            /// Load the `pressedBackground` view and assign our element update.
+            views.pressedBackground.element = element
+        } else {
+            /// If there's no element, clear out any past element, but only if the view was loaded.
+            views.pressedBackgroundIfLoaded?.element = nil
+        }
     }
     
     static func createReusableContentView(frame: CGRect) -> ContentView {
@@ -135,5 +173,16 @@ public extension BlueprintHeaderFooterContent
         view.backgroundColor = .clear
         
         return view
+    }
+}
+
+
+fileprivate extension Element {
+    
+    func adaptedEnvironment(with info : ApplyHeaderFooterContentInfo) -> Element {
+        self.adaptedEnvironment { env in
+            env = info.environment.blueprintEnvironment
+            env.applyHeaderFooterContentInfo = info
+        }
     }
 }

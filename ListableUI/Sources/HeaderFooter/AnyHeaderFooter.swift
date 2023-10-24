@@ -22,6 +22,8 @@ public protocol AnyHeaderFooter : AnyHeaderFooterConvertible, AnyHeaderFooter_In
 
 public protocol AnyHeaderFooter_Internal
 {
+    var isStickySectionHeader : Bool? { get }
+    
     var layouts : HeaderFooterLayouts { get }
     
     func apply(
@@ -32,5 +34,8 @@ public protocol AnyHeaderFooter_Internal
     
     func anyIsEquivalent(to other : AnyHeaderFooter) -> Bool
     
-    func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
+    func newPresentationHeaderFooterState(
+        kind : SupplementaryKind,
+        performsContentCallbacks : Bool
+    ) -> Any
 }

@@ -79,6 +79,10 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     
     // MARK: AnyHeaderFooter_Internal
     
+    public var isStickySectionHeader: Bool? {
+        content.isStickySectionHeader
+    }
+    
     public func apply(
         to anyView : UIView,
         for reason : ApplyReason,
@@ -86,11 +90,7 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     ) {
         let view = anyView as! HeaderFooterContentView<Content>
         
-        let views = HeaderFooterContentViews<Content>(
-            content: view.content,
-            background: view.background,
-            pressed: view.pressedBackground
-        )
+        let views = HeaderFooterContentViews<Content>(view: view)
         
         self.content.apply(
             to: views,
@@ -108,9 +108,16 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         return self.content.isEquivalent(to: other.content)
     }
     
-    public func newPresentationHeaderFooterState(performsContentCallbacks : Bool) -> Any
+    public func newPresentationHeaderFooterState(
+        kind : SupplementaryKind,
+        performsContentCallbacks : Bool
+    ) -> Any
     {
-        return PresentationState.HeaderFooterState(self, performsContentCallbacks: performsContentCallbacks)
+        return PresentationState.HeaderFooterState(
+            self,
+            kind: kind,
+            performsContentCallbacks: performsContentCallbacks
+        )
     }
 }
 

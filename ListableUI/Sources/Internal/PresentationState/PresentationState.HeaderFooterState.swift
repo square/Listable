@@ -12,6 +12,14 @@ import UIKit
 protocol AnyPresentationHeaderFooterState : AnyObject
 {
     var anyModel : AnyHeaderFooter { get }
+    
+    var kind : SupplementaryKind { get }
+    
+    var oldIndexPath : IndexPath? { get }
+    
+    var containsFirstResponder : Bool { get set }
+    
+    func updateOldIndexPath(in section : Int)
         
     func dequeueAndPrepareReusableHeaderFooterView(
         in cache : ReusableViewCache,
@@ -92,6 +100,10 @@ extension PresentationState
         {
             self.visibleContainer = nil
         }
+        
+        func updateOldIndexPath(in section : Int) {
+            state?.updateOldIndexPath(in: section)
+        }
     }
     
     
@@ -101,9 +113,14 @@ extension PresentationState
         
         let performsContentCallbacks : Bool
                 
-        init(_ model : HeaderFooter<Content>, performsContentCallbacks : Bool)
+        init(
+            _ model : HeaderFooter<Content>,
+            kind: SupplementaryKind,
+            performsContentCallbacks : Bool
+        )
         {
             self.model = model
+            self.kind = kind
             self.performsContentCallbacks = performsContentCallbacks
         }
         
@@ -111,6 +128,16 @@ extension PresentationState
         
         var anyModel: AnyHeaderFooter {
             return self.model
+        }
+        
+        private(set) var kind : SupplementaryKind
+        
+        var oldIndexPath : IndexPath? = nil
+        
+        var containsFirstResponder : Bool = false
+        
+        func updateOldIndexPath(in section : Int) {
+            oldIndexPath = kind.indexPath(in: section)
         }
                 
         func dequeueAndPrepareReusableHeaderFooterView(
@@ -144,11 +171,7 @@ extension PresentationState
         ) {
             let view = view as! HeaderFooterContentView<Content>
             
-            let views = HeaderFooterContentViews<Content>(
-                content: view.content,
-                background: view.background,
-                pressed: view.pressedBackground
-            )
+            let views = HeaderFooterContentViews<Content>(view: view)
             
             view.onTap = self.model.onTap
             
@@ -218,11 +241,7 @@ extension PresentationState
                     create: {
                         return HeaderFooterContentView<Content>(frame: .zero)
                 }, { view in
-                    let views = HeaderFooterContentViews<Content>(
-                        content: view.content,
-                        background: view.background,
-                        pressed: view.pressedBackground
-                    )
+                    let views = HeaderFooterContentViews<Content>(view: view)
                     
                     self.model.content.apply(
                         to: views,

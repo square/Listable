@@ -294,13 +294,11 @@ public protocol ItemContent : LayoutEquivalent, AnyItemConvertible where Coordin
     //
     // MARK: Creating & Providing Swipe Action Views
     //
-    
-    /// The view type to use to render swipe actions (delete, etc) for this content.
-    /// A default implementation, which matches `UITableView`, is provided.
-    associatedtype SwipeActionsView: ItemContentSwipeActionsView = DefaultSwipeActionsView
 
-    /// Specify a swipe action style for this content.
-    var swipeActionsStyle: SwipeActionsView.Style { get }
+    /// The swipe action style for this content.
+    ///
+    /// If this is `nil`, the style provided by the ``SwipeActionsViewStyleKey`` environment value will be used.
+    var swipeActionsStyle: SwipeActionsViewStyle? { get }
 
     //
     // MARK: Creating & Providing Content Views
@@ -308,16 +306,18 @@ public protocol ItemContent : LayoutEquivalent, AnyItemConvertible where Coordin
     
     /// The content view used to draw the content.
     /// The content view is drawn at the top of the view hierarchy, above the background views.
-    associatedtype ContentView:UIView
+    associatedtype ContentView: UIView
     
 
     /// Create and return a new content view used to render the content.
     ///
-    /// Note
-    /// ----
+    /// ### Note
     /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
     /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
     static func createReusableContentView(frame : CGRect) -> ContentView
+    
+    /// Describes the properties to configure on the content area view for the item.
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties
     
     //
     // MARK: Creating & Providing Background Views
@@ -364,6 +364,34 @@ public protocol ItemContent : LayoutEquivalent, AnyItemConvertible where Coordin
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     
     //
+    // MARK: Creating & Providing Decoration Views
+    //
+    
+    /// The content view used to draw the content.
+    /// The content view is drawn at the top of the view hierarchy, above the background views.
+    associatedtype OverlayDecorationView:UIView = UIView
+    
+    /// The content view used to draw the content.
+    /// The content view is drawn at the bottom of the view hierarchy, above the background views.
+    associatedtype UnderlayDecorationView:UIView = UIView
+    
+    /// Create and return a new overlay decoration view used to render any required decorations over the content.
+    /// The decoration view appears above all content, and is not affected by swipe actions.
+    ///
+    /// ## Note
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
+    static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    
+    /// Create and return a new underlay decoration view used to render any required decorations under the content.
+    /// The decoration view appears under all content as a background, and is not affected by swipe actions.
+    ///
+    /// ## Note
+    /// Do not do configuration in this method that will be changed by your view's theme or appearance – instead
+    /// do that work in `apply(to:)`, so the appearance will be updated if the appearance of content changes.
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> UnderlayDecorationView
+    
+    //
     // MARK: Content Coordination
     //
     
@@ -393,15 +421,58 @@ public extension ItemContent {
 /// The views owned by the item content, passed to the `apply(to:) method to theme and provide content.`
 public struct ItemContentViews<Content:ItemContent>
 {
+    let cell : ItemCell<Content>
+    
     /// The content view of the content.
-    public var content : Content.ContentView
+    public var content : Content.ContentView {
+        cell.contentContainer.contentView
+    }
     
     /// The background view of the content.
-    public var background : Content.BackgroundView
+    public var background : Content.BackgroundView {
+        cell.background
+    }
+    
+    /// The background view of the content, if it has been loaded.
+    public var backgroundIfLoaded : Content.BackgroundView? {
+        cell.backgroundIfLoaded
+    }
     
     /// The selected background view of the content.
     /// Displayed when the content is highlighted or selected.
-    public var selectedBackground : Content.SelectedBackgroundView
+    public var selectedBackground : Content.SelectedBackgroundView {
+        cell.selectedBackground
+    }
+    
+    /// The selected background view of the content, if it has been loaded.
+    /// Displayed when the content is highlighted or selected.
+    public var selectedBackgroundIfLoaded : Content.SelectedBackgroundView? {
+        cell.selectedBackgroundIfLoaded
+    }
+    
+    /// The overlay decoration view of the content.
+    /// Always displayed over the content, and does not react to swipe actions.
+    public var overlayDecoration : Content.OverlayDecorationView {
+        cell.overlayDecoration.content
+    }
+    
+    /// The overlay decoration view of the content, if it has been loaded.
+    /// Always displayed over the content, and does not react to swipe actions.
+    public var overlayDecorationIfLoaded : Content.OverlayDecorationView? {
+        cell.overlayDecorationIfLoaded?.content
+    }
+
+    /// The underlay decoration view of the content.
+    /// Always displayed under the content, and does not react to swipe actions.
+    public var underlayDecoration : Content.UnderlayDecorationView {
+        cell.underlayDecoration.content
+    }
+    
+    /// The underlay decoration view of the content, if it has been loaded.
+    /// Always displayed under the content, and does not react to swipe actions.
+    public var underlayDecorationIfLoaded : Content.UnderlayDecorationView? {
+        cell.underlayDecorationIfLoaded?.content
+    }
 }
 
 
@@ -424,6 +495,12 @@ public struct ApplyItemContentInfo
     /// Provides access to actions to handle re-ordering the content within the list.
     public var reorderingActions : ReorderingActions
     
+    /// When invoked, will show the leading swipe actions.
+    public var showLeadingSwipeActions : () -> ()
+    
+    /// When invoked, will show the trailing swipe actions.
+    public var showTrailingSwipeActions : () -> ()
+    
     /// If the item can be reordered.
     /// Use this property to determine if your `ItemContent` should display a reorder control.
     public var isReorderable : Bool
@@ -433,9 +510,9 @@ public struct ApplyItemContentInfo
     public var environment : ListEnvironment
 }
 
-public extension ItemContent where SwipeActionsView.Style == DefaultSwipeActionsView.Style {
-    var swipeActionsStyle: SwipeActionsView.Style {
-        return .default
+public extension ItemContent {
+    var swipeActionsStyle: SwipeActionsViewStyle? {
+        return nil
     }
 }
 
@@ -475,7 +552,6 @@ public extension ItemContent {
 
 
 /// Provides a default implementation of `identifierValue` when self conforms to Swift's `Identifiable` protocol.
-@available(iOS 13.0, *)
 public extension ItemContent where Self:Identifiable
 {
     var identifierValue : ID {
@@ -522,6 +598,14 @@ public extension ItemContent where Coordinator == DefaultItemContentCoordinator<
     }
 }
 
+/// Provides a default implementation of `ViewProperties` which configure no options.
+public extension ItemContent {
+    
+    func contentAreaViewProperties(with info : ApplyItemContentInfo) -> ViewProperties {
+        .init()
+    }
+}
+
 
 /// Provide a UIView when no special background view is specified.
 public extension ItemContent where BackgroundView == UIView
@@ -534,7 +618,7 @@ public extension ItemContent where BackgroundView == UIView
 
 
 /// Provide a UIView when no special selected background view is specified.
-public extension ItemContent where BackgroundView == UIView
+public extension ItemContent where SelectedBackgroundView == UIView
 {
     static func createReusableSelectedBackgroundView(frame : CGRect) -> SelectedBackgroundView
     {
@@ -543,19 +627,21 @@ public extension ItemContent where BackgroundView == UIView
 }
 
 
-/// Conform to this protocol to implement a completely custom swipe action view.
-///
-/// If you do so, you're completely responsible for creating and laying out the actions,
-/// as well as updating the layout based on the swipe state.
-public protocol ItemContentSwipeActionsView: UIView {
-    /// Swipe action styles (e.g. `standard`, `grouped`, etc.) that are supported by the view.
-    associatedtype Style: Equatable
+/// Provide a UIView when no special overlay decoration view is specified.
+public extension ItemContent where OverlayDecorationView == UIView
+{
+    static func createReusableOverlayDecorationView(frame : CGRect) -> OverlayDecorationView
+    {
+        OverlayDecorationView(frame: frame)
+    }
+}
 
-    var swipeActionsWidth: CGFloat { get }
 
-    init(style: Style, didPerformAction: @escaping SwipeAction.CompletionHandler)
-
-    func apply(actions: SwipeActionsConfiguration)
-
-    func apply(state: SwipeActionState)
+/// Provide a UIView when no special underlay decoration view is specified.
+public extension ItemContent where UnderlayDecorationView == UIView
+{
+    static func createReusableUnderlayDecorationView(frame : CGRect) -> UnderlayDecorationView
+    {
+        UnderlayDecorationView(frame: frame)
+    }
 }

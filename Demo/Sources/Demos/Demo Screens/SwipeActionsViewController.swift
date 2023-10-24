@@ -15,9 +15,24 @@ final class SwipeActionsViewController: UIViewController  {
     private let blueprintView = BlueprintView()
 
     private var allowDeleting: Bool = true
-
-    private var items = (0..<10).map { SwipeActionItem(isSaved: Bool.random(), identifier: $0) }
-
+    private static var universalSwipeActionsEnabled: Bool = true
+    
+    private var sections = generateSections()
+    
+    private static func generateSections() -> [[SwipeActionsViewController.SwipeActionItem]] {
+        (0..<2).map { _ in
+            (0..<20).map {
+                SwipeActionItem(
+                    isSaved: Bool.random(),
+                    identifier: UUID().uuidString,
+                    title: "Item \($0)",
+                    shouldConfigureLeadingSwipeActions: universalSwipeActionsEnabled || $0.isMultiple(of: 2),
+                    shouldConfigureTrailingSwipeActions: universalSwipeActionsEnabled ||  $0.isMultiple(of: 3)
+                )
+            }
+        }
+    }
+    
     override func loadView() {
         self.title = "Swipe Actions"
 
@@ -26,6 +41,7 @@ final class SwipeActionsViewController: UIViewController  {
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(toggleDelete)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(toggleGlobalSwipeActions))
         ]
 
         self.reloadData()
@@ -34,61 +50,101 @@ final class SwipeActionsViewController: UIViewController  {
     func reloadData(animated: Bool = false) {
 
         self.blueprintView.element = List { list in
+            
+            list.appearance = .demoAppearance
 
             list.animatesChanges = animated
             
-            list.layout = .table { [weak self] in
-                guard let self = self else { return }
+            list.layout = .table {
                 
-                if #available(iOS 11, *) {
-                    $0.bounds = .init(
-                        padding: UIEdgeInsets(
-                            top: 0.0,
-                            left: self.view.safeAreaInsets.left,
-                            bottom: 0.0,
-                            right: self.view.safeAreaInsets.right
-                        )
+                $0.bounds = .init(
+                    padding: UIEdgeInsets(
+                        top: 0.0,
+                        left: self.view.safeAreaInsets.left + 4,
+                        bottom: 0.0,
+                        right: self.view.safeAreaInsets.right + 4
                     )
-                }
+                )
+                
+                $0.layout.itemSpacing = 4
             }
 
             list += Section("standardSwipeActionItems") { section in
-                section.header = DemoHeader(title: "Standard Style Swipable Items")
-                section += self.items.map { item in
+                section.header = DemoHeader(title: "Standard Style Swipeable Items")
+                section += self.sections[0].map { item in
                     Item(
-                        SwipeActionsDemoItem(item: item, swipeActionsStyle: .default),
-                        swipeActions: self.makeSwipeActions(for: item)
+                        SwipeActionsDemoItem(
+                            item: item,
+                            mode: .roundedWithBorder
+                        ),
+                        leadingSwipeActions: self.leadingSwipeActions(for: item),
+                        trailingSwipeActions: self.trailingSwipeActions(for: item)
                     )
                 }
             }
+            
+            // The style can be customized at the environment level via
+            // `list.environment.swipeActionsViewStyle` or at the content level
+            // as demonstrated below.
 
             list += Section("customSwipeActionItems") { section in
-                section.header = DemoHeader(title: "Custom Style Swipable Items")
-                section += self.items.map { item in
+                section.header = DemoHeader(title: "Custom Style Swipeable Items")
+                section += self.sections[1].map { item in
                     Item(
                         SwipeActionsDemoItem(
                             item: item,
                             swipeActionsStyle:
                                 .init(
-                                    actionShape: .rectangle(cornerRadius: 8),
-                                    interActionSpacing: 8,
-                                    containerInsets: .init(top: 8, left: 8, bottom: 8, right: 8)
-                                )
+                                    containerCornerRadius: 6,
+                                    buttonSizing: .equalWidth,
+                                    minWidth: 80
+                                ),
+                            mode: .plain
                         ),
-                        swipeActions: self.makeSwipeActions(for: item)
+                        leadingSwipeActions: self.leadingSwipeActions(for: item),
+                        trailingSwipeActions: self.trailingSwipeActions(for: item)
                     )
                 }
             }
         }
     }
-
-    private func makeSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration {
+    
+    private func leadingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration? {
+        guard item.shouldConfigureLeadingSwipeActions else { return nil }
         
-        SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+        return SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
+            SwipeAction(
+                title: nil,
+                accessibilityLabel: "Open Video",
+                backgroundColor: .systemBlue,
+                image: UIImage(systemName: "video.fill")
+            ) { [weak self] expandActions in
+                self?.open(item: item) {
+                    expandActions(.closeActions)
+                }
+            }
+            
+            SwipeAction(
+                title: nil,
+                accessibilityLabel: "Share",
+                backgroundColor: .systemOrange,
+                image: UIImage(systemName: "square.and.arrow.up.fill")
+            ) { [weak self] expandActions in
+                self?.share(item: item) {
+                    expandActions(.closeActions)
+                }
+            }
+        }
+    }
+
+    private func trailingSwipeActions(for item: SwipeActionItem) -> SwipeActionsConfiguration? {
+        guard item.shouldConfigureTrailingSwipeActions else { return nil }
+        
+        return SwipeActionsConfiguration(performsFirstActionWithFullSwipe: true) {
             if allowDeleting {
                 SwipeAction(
                     title: "Delete",
-                    backgroundColor: .systemRed,
+                    backgroundColor: UIColor(red: 0.80, green: 0, blue: 0.137, alpha: 1.0),
                     image: nil
                 ) { [weak self] expandActions in
                     self?.confirmDelete(item: item, expandActions: expandActions)
@@ -97,19 +153,27 @@ final class SwipeActionsViewController: UIViewController  {
             
             SwipeAction(
                 title: item.isSaved ? "Unsave" : "Save",
-                backgroundColor: UIColor(displayP3Red: 0, green: 0.741, blue: 0.149, alpha: 1),
-                tintColor: UIColor(red: 0.1843, green: 0.4, blue: 0.1922, alpha: 1.0),
+                backgroundColor: .black.withAlphaComponent(0.05),
+                tintColor: UIColor(red: 0, green: 0.353, blue: 0.851, alpha: 1.0),
                 image: item.isSaved ? nil : UIImage(named: "bookmark")!.withRenderingMode(.alwaysTemplate)
             ) { [weak self] expandActions in
                 self?.toggleSave(item: item)
-                expandActions(false)
+                expandActions(.closeActions)
             }
         }
     }
 
     @objc private func addItem() {
-        let identifier = (items.last?.identifier ?? -1) + 1
-        items.append(SwipeActionItem(isSaved: false, identifier: identifier))
+        let identifier = UUID().uuidString
+        sections[0].append(
+            SwipeActionItem(
+                isSaved: false,
+                identifier: identifier,
+                title: "New Item",
+                shouldConfigureLeadingSwipeActions: true,
+                shouldConfigureTrailingSwipeActions: true
+            )
+        )
         reloadData(animated: true)
     }
 
@@ -118,67 +182,155 @@ final class SwipeActionsViewController: UIViewController  {
         reloadData()
     }
 
-    private func confirmDelete(item: SwipeActionItem, expandActions: @escaping (Bool) -> Void) {
+    @objc func toggleGlobalSwipeActions() {
+        Self.universalSwipeActionsEnabled.toggle()
+        sections = Self.generateSections()
+        reloadData(animated: true)
+    }
+
+    private func confirmDelete(item: SwipeActionItem, expandActions: @escaping (SwipeAction.OnDidPerformActionAnimation) -> Void) {
         let alert = UIAlertController(title: item.title, message: nil, preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            expandActions(false)
+            expandActions(.closeActions)
         })
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.items.removeAll(where: { $0 == item })
-            self?.reloadData(animated: true)
-            expandActions(true)
+            guard let self else { return }
+            
+            for i in self.sections.indices {
+                self.sections[i].removeAll(where: { $0.identifier == item.identifier })
+            }
+            self.reloadData(animated: true)
+            expandActions(.expandActions)
         })
 
         present(alert, animated: true, completion: nil)
     }
 
     private func toggleSave(item: SwipeActionItem) {
-        guard let index = items.firstIndex(of: item) else { return }
-        items[index].isSaved.toggle()
+        for i in sections.indices {
+            guard let index = sections[i].firstIndex(of: item) else { continue }
+            sections[i][index].isSaved.toggle()
+        }
         reloadData(animated: true)
-
+    }
+    
+    private let shareURL = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!
+    
+    private func share(item: SwipeActionItem, completion: (() -> Void)? = nil) {
+        let activityController = UIActivityViewController(activityItems: [shareURL], applicationActivities: nil)
+        present(activityController, animated: true, completion: completion)
+    }
+    
+    private func open(item: SwipeActionItem, completion: (() -> Void)? = nil) {
+        UIApplication.shared.open(shareURL) { _ in
+            completion?()
+        }
     }
 
     struct SwipeActionsDemoItem: BlueprintItemContent, Equatable {
+        enum Mode {
+            case plain
+            case roundedWithBorder
+        }
+        
         var item: SwipeActionItem
-        var swipeActionsStyle: DefaultSwipeActionsView.Style
+        var swipeActionsStyle: SwipeActionsViewStyle?
+        var mode: Mode
 
-        var identifierValue: Int {
+        var identifierValue: String {
             self.item.identifier
         }
 
+        func overlayDecorationElement(with info: ApplyItemContentInfo) -> Element? {
+            switch mode {
+            case .plain:
+                return nil
+            case .roundedWithBorder:
+                return Empty()
+                    .box(background: .clear, corners: .rounded(radius: 6), borders: .solid(color: .black, width: 2))
+            }
+        }
+        
+        func contentAreaViewProperties(with info: ApplyItemContentInfo) -> ViewProperties {
+            switch mode {
+            case .plain:
+                return .init()
+            case .roundedWithBorder:
+                return .init(clipsToBounds: true, cornerStyle: .rounded(radius: 6))
+            }
+        }
+        
+        func backgroundElement(with info: ApplyItemContentInfo) -> Element? {
+            switch mode {
+            case .plain:
+                return nil
+            case .roundedWithBorder:
+                return Empty()
+                    .box(
+                        background: .white,
+                        corners: .rounded(radius: 6),
+                        shadow: .simple(
+                            radius: 3,
+                            opacity: 0.2,
+                            offset: .init(width: 0, height: 2),
+                            color: .black
+                        )
+                    )
+            }
+        }
+        
         func element(with info : ApplyItemContentInfo) -> Element {
-            return Column { column in
-
-                column.horizontalAlignment = .fill
-
-                let row = Row { row in
-
-                    row.minimumHorizontalSpacing = 8
-                    row.horizontalUnderflow = .spaceEvenly
-                    row.verticalAlignment = .center
-                    row.add(child: Label(text: self.item.title))
-
+            Column(alignment: .fill) {
+                Row(alignment: .center, underflow: .spaceEvenly, minimumSpacing: 8) {
+                    
+                    Label(text: "T")
+                        .tappable {
+                            info.showTrailingSwipeActions()
+                        }
+                    
+                    Label(text: "L")
+                        .tappable {
+                            info.showLeadingSwipeActions()
+                        }
+                    
+                    Column {
+                        Label(text: item.title)
+                        
+                        if !item.universalSwipeActionsEnabled {
+                            Label(
+                                text: "Leading items: \(item.shouldConfigureLeadingSwipeActions)",
+                                configure: { label in
+                                    label.font = .systemFont(ofSize: 10)
+                                }
+                            )
+                            
+                            Label(
+                                text: "Trailing items: \(item.shouldConfigureTrailingSwipeActions)",
+                                configure: { label in
+                                    label.font = .systemFont(ofSize: 10)
+                                }
+                            )
+                        }
+                        
+                        Label(
+                            text: item.subtitle,
+                            configure: { label in
+                                label.font = .systemFont(ofSize: 10)
+                            }
+                        )
+                    }
+                    
                     let bookmark = UIImage(named: "bookmark")!
                     
                     if item.isSaved {
-                        var image = Image(image: bookmark)
-                        image.contentMode = .center
-                        row.add(child: image)
+                        Image(image: bookmark, contentMode: .center)
                     } else {
-                        let spacer = Spacer(size: bookmark.size)
-                        row.add(child: spacer)
+                        Spacer(size: bookmark.size)
                     }
                 }
-
-                let inset = Inset(uniformInset: 16, wrapping: row)
-                column.add(child: inset)
-
-                let color = UIColor(displayP3Red: 0.725, green: 0.729, blue: 0.741, alpha: 1)
-                let separator = Inset(left: 16, wrapping: Rule(orientation: .horizontal, color: color))
-                column.add(growPriority: 0, shrinkPriority: 0, child: separator)
+                .inset(uniform: 16)
             }
             .accessibilityElement(label: "Swipeable Item", value: item.title, traits: [.button])
         }
@@ -186,8 +338,11 @@ final class SwipeActionsViewController: UIViewController  {
 
     struct SwipeActionItem: Equatable, Hashable {
         var isSaved: Bool
-        var identifier: Int
-
-        var title: String { "Item #\(identifier)" }
+        var identifier: String
+        var title: String
+        var subtitle: String { identifier }
+        var shouldConfigureLeadingSwipeActions: Bool
+        var shouldConfigureTrailingSwipeActions: Bool
+        var universalSwipeActionsEnabled: Bool { SwipeActionsViewController.universalSwipeActionsEnabled }
     }
 }

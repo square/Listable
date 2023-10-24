@@ -359,7 +359,7 @@ class ArrayDiffTests: XCTestCase
     
     func test_transform_with_random_mutations()
     {
-        let iterations : Int = 500
+        let iterations : Int = 2000
         
         var rng = StableRNG()
         

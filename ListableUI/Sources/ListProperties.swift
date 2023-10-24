@@ -83,7 +83,7 @@ import UIKit
     /// list.layout = .table {
     ///     $0.stickySectionHeaders = true
     ///
-    ///     $0.layout.padding = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    ///     $0.bounds = .init(padding: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
     ///     $0.layout.itemSpacing = 10.0
     /// }
     /// ```
@@ -132,6 +132,9 @@ import UIKit
     /// scroll to a given item on insert depending on the current state
     /// of the view.
     public var autoScrollAction : AutoScrollAction
+
+    /// Called whenever a keyboard change is detected
+    public var onKeyboardFrameWillChange: ListView.KeyboardFrameWillChangeCallback?
     
     //
     // MARK: Identifiers
@@ -161,6 +164,7 @@ import UIKit
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
+            onKeyboardFrameWillChange: nil,
             accessibilityIdentifier: nil,
             debuggingIdentifier: nil,
             configure: configure
@@ -175,6 +179,7 @@ import UIKit
         scrollIndicatorInsets : UIEdgeInsets,
         behavior : Behavior,
         autoScrollAction : AutoScrollAction,
+        onKeyboardFrameWillChange: ListView.KeyboardFrameWillChangeCallback?,
         accessibilityIdentifier: String?,
         debuggingIdentifier: String?,
         configure : Configure
@@ -185,6 +190,7 @@ import UIKit
         self.scrollIndicatorInsets = scrollIndicatorInsets
         self.behavior = behavior
         self.autoScrollAction = autoScrollAction
+        self.onKeyboardFrameWillChange = onKeyboardFrameWillChange
         self.accessibilityIdentifier = accessibilityIdentifier
         self.debuggingIdentifier = debuggingIdentifier
         
@@ -194,6 +200,31 @@ import UIKit
         self.stateObserver = ListStateObserver()
 
         configure(&self)
+    }
+    
+    //
+    // MARK: Reading Content
+    //
+    
+    /// Allows directly reading properties on the list's `Content`, without having to explicitly specify
+    /// the `.content` component.
+    ///
+    /// Eg, you can now replace:
+    /// ```
+    /// ListProperties { list in
+    ///     ... = list.content.firstItem
+    ///     ... = list.content.lastItem
+    /// }
+    /// ```
+    /// With:
+    /// ```
+    /// ListProperties { list in
+    ///     ... = list.firstItem
+    ///     ... = list.lastItem
+    /// }
+    /// ```
+    public subscript<Value>(dynamicMember keyPath: KeyPath<Content, Value>) -> Value {
+        get { self.content[keyPath: keyPath] }
     }
     
     //
@@ -208,7 +239,6 @@ import UIKit
     /// ListProperties { list in
     ///     list.content.header = ...
     ///     list.content.footer = ...
-    ///     ...
     /// }
     /// ```
     /// With:
@@ -216,7 +246,6 @@ import UIKit
     /// ListProperties { list in
     ///     list.header = ...
     ///     list.footer = ...
-    ///     ...
     /// }
     /// ```
     public subscript<Value>(dynamicMember keyPath: WritableKeyPath<Content, Value>) -> Value {

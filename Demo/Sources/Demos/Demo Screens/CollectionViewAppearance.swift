@@ -28,7 +28,7 @@ extension LayoutDescription
     static func demoLayout(_ configure : @escaping (inout TableAppearance) -> () = { _ in }) -> Self {
         .table {
             $0.bounds = .init(
-                padding: UIEdgeInsets(top: 30.0, left: 20.0, bottom: 30.0, right: 20.0),
+                padding: UIEdgeInsets(top: 20.0, left: 20.0, bottom: 30.0, right: 20.0),
                 width: .atMost(600.0)
             )
             
@@ -42,20 +42,8 @@ extension LayoutDescription
             )
 
             $0.listHeaderPosition = .fixed
-            $0.stickySectionHeaders = true
             
             configure(&$0)
-        }
-    }
-    
-    static func retailGridDemo(columns: Int, rows: RetailGridAppearance.Layout.Rows = .infinite(tileAspectRatio: 9.0/16.0)) -> Self {
-        .retailGrid {
-            $0.layout = .init(
-                padding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
-                itemSpacing: 20,
-                columns: columns,
-                rows: rows
-            )
         }
     }
 }
@@ -90,7 +78,7 @@ struct DemoHeader : BlueprintHeaderFooterContent, Equatable
     var elementRepresentation: Element {
         Column(alignment: .fill, minimumSpacing: 10.0) {
             Label(text: self.title) {
-                if #available(iOS 13.0, *), useMonospacedTitleFont {
+                if useMonospacedTitleFont {
                     $0.font = .monospacedSystemFont(ofSize: 21.0, weight: .semibold)
                 } else {
                     $0.font = .systemFont(ofSize: 21.0, weight: .semibold)
@@ -139,8 +127,6 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
     var identifierValue: String {
         return self.text
     }
-
-    typealias SwipeActionsView = DefaultSwipeActionsView
     
     func element(with info : ApplyItemContentInfo) -> Element
     {
@@ -256,14 +242,41 @@ struct Toggle : Element {
     {
         static let measurementSwitch = ToggleView()
         
-        func measure(in constraint: SizeConstraint, items: [(traits: (), content: Measurable)]) -> CGSize
+        func measure(
+            in constraint: SizeConstraint,
+            items: [(traits: (),
+            content: Measurable)]
+        ) -> CGSize
         {
-            return Layout.measurementSwitch.sizeThatFits(.init(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+            return Layout.measurementSwitch.sizeThatFits(constraint.maximum)
         }
         
-        func layout(size: CGSize, items: [(traits: (), content: Measurable)]) -> [LayoutAttributes]
+        func layout(
+            size: CGSize,
+            items: [(traits: (),
+            content: Measurable)]
+        ) -> [LayoutAttributes]
         {
+            // Nothing, we're a view-backed element.
             return []
+        }
+        
+        func sizeThatFits(
+            proposal: BlueprintUI.SizeConstraint,
+            subelements: Subelements,
+            environment: BlueprintUI.Environment,
+            cache: inout ()
+        ) -> CGSize {
+            Layout.measurementSwitch.sizeThatFits(proposal.maximum)
+        }
+        
+        func placeSubelements(
+            in size: CGSize,
+            subelements: Subelements,
+            environment: BlueprintUI.Environment,
+            cache: inout ()
+        ) {
+            // Nothing, we're a view-backed element.
         }
     }
 }
