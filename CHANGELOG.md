@@ -14,6 +14,8 @@
 
 ### Internal
 
+- Remove override of `performBatchUpdates` from our internal `UICollectionView` subclass, it causes warnings for consumers.
+
 # Past Releases
 
 # [13.0.0] - 2023-09-06
