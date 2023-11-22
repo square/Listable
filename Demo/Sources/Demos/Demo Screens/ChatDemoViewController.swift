@@ -19,8 +19,9 @@ final class ChatDemoViewController : UIViewController {
         
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(title: "New message", style: .plain, target: self, action: #selector(addAtBottom)),
-            UIBarButtonItem(title: "Grow Frame", style: .plain, target: self, action: #selector(growFrame)),
-            UIBarButtonItem(title: "Shrink Frame", style: .plain, target: self, action: #selector(shrinkFrame)),
+            UIBarButtonItem(title: "Grow", style: .plain, target: self, action: #selector(growFrame)),
+            UIBarButtonItem(title: "Shrink", style: .plain, target: self, action: #selector(shrinkFrame)),
+            UIBarButtonItem(title: "Scroll Down", style: .plain, target: self, action: #selector(scrollDown)),
         ]
 
         self.view.addSubview(listView)
@@ -99,6 +100,10 @@ final class ChatDemoViewController : UIViewController {
         }
         view.frame.size.height += 22
         reload()
+    }
+
+    @objc private func scrollDown() {
+        listView.scrollToLastItem(animation: .animated(1.0))
     }
 
     private var footerHeight: CGFloat = 80
