@@ -16,6 +16,10 @@ PODS:
     - Snapshot
   - Snapshot (1.0.0.LOCAL)
   - Snapshot/Tests (1.0.0.LOCAL)
+  - SwiftUILists (13.0.0):
+    - ListableUI
+  - SwiftUILists/Tests (13.0.0):
+    - ListableUI
 
 DEPENDENCIES:
   - BlueprintUI
@@ -27,6 +31,8 @@ DEPENDENCIES:
   - ListableUI/Tests (from `ListableUI.podspec`)
   - Snapshot (from `Internal Pods/Snapshot/Snapshot.podspec`)
   - Snapshot/Tests (from `Internal Pods/Snapshot/Snapshot.podspec`)
+  - SwiftUILists (from `SwiftUILists.podspec`)
+  - SwiftUILists/Tests (from `SwiftUILists.podspec`)
 
 SPEC REPOS:
   trunk:
@@ -42,15 +48,18 @@ EXTERNAL SOURCES:
     :path: ListableUI.podspec
   Snapshot:
     :path: Internal Pods/Snapshot/Snapshot.podspec
+  SwiftUILists:
+    :path: SwiftUILists.podspec
 
 SPEC CHECKSUMS:
   BlueprintUI: a1adeb91f76c88dd499ad693251aa96919b1c2a4
   BlueprintUICommonControls: 9e02875bc6b8ef64aa9634c32d7156bd50c7b88d
-  BlueprintUILists: 2962f5944139e4e88b60f67e26c1555e1bdd61f5
+  BlueprintUILists: 7b7e30176417c43828d7675b5e846ee3f22b2468
   EnglishDictionary: 277ff15917abc170362afbd2ad11cbe15c2ae6ad
-  ListableUI: d510180c325505294d7da3d4bf7f56977f863dd8
+  ListableUI: 56cbcafd28d2ea216bb23e82894d2d8366c88cbe
   Snapshot: a936e73ede9570c80fb55e20542903e81efbad82
+  SwiftUILists: 638c8d623dcba7fdaed9679ab1ade67b36b4d548
 
-PODFILE CHECKSUM: 2ca1d80570fc765312a79bcaa886ee9034caabd2
+PODFILE CHECKSUM: ef931c73a8cb3c9e3cc779683c88d4a90771a94e
 
 COCOAPODS: 1.11.3

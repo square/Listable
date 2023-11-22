@@ -48,6 +48,20 @@
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8EAE60389045F4E9793AE5E00C75EAEC"
+               BuildableName = "SwiftUILists-Unit-Tests.xctest"
+               BlueprintName = "SwiftUILists-Unit-Tests"
+               ReferencedContainer = "container:../Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -83,6 +97,16 @@
                BlueprintIdentifier = "FE995140B25147403F401CCAA5BEB178"
                BuildableName = "ListableUI-Unit-Tests.xctest"
                BlueprintName = "ListableUI-Unit-Tests"
+               ReferencedContainer = "container:../Pods/Pods.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8EAE60389045F4E9793AE5E00C75EAEC"
+               BuildableName = "SwiftUILists-Unit-Tests.xctest"
+               BlueprintName = "SwiftUILists-Unit-Tests"
                ReferencedContainer = "container:../Pods/Pods.xcodeproj">
             </BuildableReference>
          </TestableReference>

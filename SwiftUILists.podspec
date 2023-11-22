@@ -1,9 +1,9 @@
 require_relative 'version'
 
 Pod::Spec.new do |s|
-  s.name         = 'BlueprintUILists'
+  s.name         = 'SwiftUILists'
   s.version      = LISTABLE_VERSION
-  s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 14.0.'
+  s.summary      = 'Declarative list views for SwiftUI'
   s.homepage     = 'https://github.com/square/Listable'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'UI Systems iOS' => 'ui-systems-ios@squareup.com' }
@@ -14,9 +14,10 @@ Pod::Spec.new do |s|
   s.swift_versions = [LISTABLE_SWIFT_VERSION]
 
   s.dependency 'ListableUI'
-  s.dependency 'BlueprintUI', *BLUEPRINT_VERSION
+  
+  s.frameworks = 'SwiftUI'
 
-  s.source_files = 'BlueprintUILists/Sources/**/*.{swift}'
+  s.source_files = 'SwiftUILists/Sources/**/*.{swift}'
 
   s.pod_target_xcconfig = {
     'APPLICATION_EXTENSION_API_ONLY' => 'YES',
@@ -27,12 +28,10 @@ Pod::Spec.new do |s|
    # These tests can only be run locally, because they depend on local pods.
 
     s.test_spec 'Tests' do |test_spec|
-      test_spec.source_files = 'BlueprintUILists/Tests/**/*.{swift}'
-      test_spec.ios.resource_bundle = { 'BlueprintUIListsResources' => 'BlueprintUILists/Tests/Resources/**/*.*' }
+      test_spec.source_files = 'SwiftUILists/Tests/**/*.{swift}'
+      test_spec.ios.resource_bundle = { 'SwiftUIListsResources' => 'SwiftUILists/Tests/Resources/**/*.*' }
 
-      test_spec.dependency 'BlueprintUICommonControls', *BLUEPRINT_VERSION
-
-      test_spec.framework = 'XCTest'
+      test_spec.frameworks = 'XCTest', 'SwiftUI'
 
       test_spec.libraries = 'swiftsimd', 'swiftCoreGraphics', 'swiftFoundation', 'swiftUIKit'
 
