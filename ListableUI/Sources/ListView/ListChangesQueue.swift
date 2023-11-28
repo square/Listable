@@ -11,7 +11,7 @@ import Foundation
 /// A queue used to synchronized and serialize changes made to the backing collection view,
 /// to work around either bugs or confusing behavior.
 ///
-/// ## Handling Re-ordering (`isQueuingForReorderEvent`)
+/// ## Handling Re-ordering (`isQueuingToApplyReorderEvent`)
 /// Collection View has an issue wherein if you perform a re-order event, and then within
 /// the same runloop, deliver an update to the collection view as a result of that re-order event
 /// that removes a row or section, the collection view will crash because it's internal index path
@@ -104,18 +104,24 @@ final class ListChangesQueue {
         self.runIfNeeded()
     }
     
-    /// Set by consumers to enable and disable queueing during a reorder event.
-    var isQueuingForReorderEvent : Bool = false {
+    /// Set by consumers to enable and disable queueing when a reorder event is being applied.
+    var isQueuingToApplyReorderEvent : Bool = false {
         didSet {
             self.runIfNeeded()
         }
     }
     
-    /// Prevents processing other events in the queue.
+    /// Should be set to `{ collectionView.hasUncommittedUpdates }`.
     ///
-    /// Note: Right now this just checks `isQueuingForReorderEvent`, but may check more props in the future.
+    /// When this closure returns `true`, the queue is paused, to avoid crashes when applying
+    /// content updates while there are index-changing reorder events in process.
+    var listHasUncommittedReorderUpdates : () -> Bool = {
+        fatalError("Must set `listHasUncommittedReorderUpdates` before using `ListChangesQueue`.")
+    }
+    
+    /// Prevents processing other events in the queue.
     var isPaused : Bool {
-        self.isQueuingForReorderEvent
+        self.isQueuingToApplyReorderEvent || self.listHasUncommittedReorderUpdates()
     }
     
     var isEmpty : Bool {

@@ -16,7 +16,7 @@ class ListChangesQueueTests : XCTestCase {
         let queue = ListChangesQueue()
         
         XCTAssertFalse(queue.isPaused)
-        XCTAssertFalse(queue.isQueuingForReorderEvent)
+        XCTAssertFalse(queue.isQueuingToApplyReorderEvent)
         
         var calls : [Int] = []
         
@@ -35,10 +35,10 @@ class ListChangesQueueTests : XCTestCase {
         XCTAssertEqual(queue.count, 0)
         XCTAssertEqual(calls, [1, 2])
         
-        queue.isQueuingForReorderEvent = true
+        queue.isQueuingToApplyReorderEvent = true
         
         XCTAssertTrue(queue.isPaused)
-        XCTAssertTrue(queue.isQueuingForReorderEvent)
+        XCTAssertTrue(queue.isQueuingToApplyReorderEvent)
         
         queue.add {
             calls += [3]
@@ -57,10 +57,10 @@ class ListChangesQueueTests : XCTestCase {
         XCTAssertEqual(queue.count, 3)
         XCTAssertEqual(calls, [1, 2])
         
-        queue.isQueuingForReorderEvent = false
+        queue.isQueuingToApplyReorderEvent = false
         
         XCTAssertFalse(queue.isPaused)
-        XCTAssertFalse(queue.isQueuingForReorderEvent)
+        XCTAssertFalse(queue.isQueuingToApplyReorderEvent)
         
         waitFor {
             queue.isEmpty

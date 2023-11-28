@@ -288,7 +288,7 @@ extension ListView
         }
         
         func listViewShouldEndQueueingEditsForReorder() {
-            self.view.updateQueue.isQueuingForReorderEvent = false
+            self.view.updateQueue.isQueuingToApplyReorderEvent = false
         }
 
         // MARK: UIScrollViewDelegate

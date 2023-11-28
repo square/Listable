@@ -12,12 +12,21 @@ import BlueprintUICommonControls
 
 final class PaymentTypesViewController : ListViewController {
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            self?.reload(animated: true)
+        }
+    }
+    
     override func configure(list: inout ListProperties) {
         
         list.layout = .table { table in
             table.layout.interSectionSpacingWithNoFooter = 10.0
             table.bounds = .init(
-                padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+                padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0),
+                width: .atMost(600)
             )
         }
         
@@ -30,21 +39,31 @@ final class PaymentTypesViewController : ListViewController {
         list += Section(SectionID.main) { section in
             
             section.header = PaymentTypeHeader(title: SectionID.main.title)
-            
+                        
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain }
             .sorted { $0.sortOrder < $1.sortOrder }
             .map(makeItem(with:))
+            
+            if section.items.isEmpty {
+                section += EmptyRow()
+            }
         }
         
         list += Section(SectionID.more) { section in
             
             section.header = PaymentTypeHeader(title: SectionID.more.title)
             
+            section.reordering.minItemCount = 0
+            
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain == false }
             .sorted { $0.sortOrder < $1.sortOrder }
             .map(makeItem(with:))
+            
+            if section.items.isEmpty {
+                section += EmptyRow()
+            }
         }
         
         list += Section(SectionID.disabled) { section in
@@ -136,7 +155,7 @@ fileprivate struct PaymentTypeHeader : BlueprintHeaderFooterContent, Equatable {
     
     var elementRepresentation: Element {
         Label(text: title) {
-            $0.font = .systemFont(ofSize: 18.0, weight: .medium)
+            $0.font = .systemFont(ofSize: 18.0, weight: .bold)
         }
         .inset(uniform: 15.0)
     }
