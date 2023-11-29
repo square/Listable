@@ -12,12 +12,10 @@ import BlueprintUICommonControls
 
 final class PaymentTypesViewController : ListViewController {
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.reload(animated: true)
-        }
+        self.updateNavigationItems()
     }
     
     override func configure(list: inout ListProperties) {
@@ -80,6 +78,56 @@ final class PaymentTypesViewController : ListViewController {
                 section += EmptyRow()
             }
         }
+    }
+    
+    private var reloadingListTimer : Timer? = nil {
+        didSet {
+            oldValue?.invalidate()
+        }
+    }
+    
+    private func updateNavigationItems() {
+        
+        if reloadingListTimer == nil {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "Start Reloading",
+                style: .plain,
+                target: self,
+                action: #selector(beginReloading)
+            )
+        } else {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+                title: "Stop Reloading",
+                style: .plain,
+                target: self,
+                action: #selector(endReloading)
+            )
+        }
+    }
+    
+    @objc private func beginReloading() {
+        
+        let alert = UIAlertController(
+            title: "Will Repeatedly Reload List",
+            message: "The list will be reloaded every 0.5 seconds to verify that reordering + reloading does not cause a crash.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(.init(title: "OK", style: .default) { [weak self] _ in
+            self?.reloadingListTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
+                self?.reload(animated: true)
+            })
+            
+            self?.updateNavigationItems()
+        })
+        
+        self.present(alert, animated: true)
+    }
+    
+    @objc private func endReloading() {
+        self.reloadingListTimer = nil
+        
+        updateNavigationItems()
     }
     
     private func save(with info : ListStateObserver.ItemReordered) {

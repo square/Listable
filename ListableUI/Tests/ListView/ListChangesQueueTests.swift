@@ -14,6 +14,7 @@ class ListChangesQueueTests : XCTestCase {
     func test_pausing() {
         
         let queue = ListChangesQueue()
+        queue.listHasUncommittedReorderUpdates = { false }
         
         XCTAssertFalse(queue.isPaused)
         XCTAssertFalse(queue.isQueuingToApplyReorderEvent)
@@ -72,6 +73,7 @@ class ListChangesQueueTests : XCTestCase {
     func test_synchronous() {
         
         let queue = ListChangesQueue()
+        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -99,6 +101,7 @@ class ListChangesQueueTests : XCTestCase {
     func test_asynchronous() {
         
         let queue = ListChangesQueue()
+        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -157,6 +160,7 @@ class ListChangesQueueTests : XCTestCase {
     func test_both() {
         
         let queue = ListChangesQueue()
+        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -225,6 +229,7 @@ class ListChangesQueueTests : XCTestCase {
     func test_fuzzing() {
         
         let queue = ListChangesQueue()
+        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
