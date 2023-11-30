@@ -98,8 +98,8 @@ internal extension ListView
                 /// instance is kept alive by the collection view.
                 ///
                 /// 3) Within this method, we check to see if there's a live, existing `visibleContainer`
-                /// (aka the supplementary view) view, and if there is, we return _that_, instead of
-                /// just dequeuing a new, wrong view.
+                /// (aka the supplementary view) view with a first responder in it,
+                /// and if there is, we return _that_, instead of just dequeuing a new, wrong view.
                 ///
                 /// After all that, the correct thing happens.
                 ///
@@ -107,7 +107,7 @@ internal extension ListView
                 /// https://github.com/square/Listable/pull/507
                 ///
                 
-                if let view = statePair.visibleContainer {
+                if let view = statePair.visibleContainer, let state = statePair.state, state.containsFirstResponder {
                     return view
                 } else {
                     return SupplementaryContainerView.dequeue(
