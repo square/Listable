@@ -2,9 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where supplementary views (headers or footers) that contained a first responder would result in the view being duplicated when scrolled off-screen.
-- Fixed an issue where a crash would occur when applying an external update to list content while a live reorder event was occurring.
-
 ### Added
 
 ### Removed
@@ -15,9 +12,16 @@
 
 ### Internal
 
-- Remove override of `performBatchUpdates` from our internal `UICollectionView` subclass, it causes warnings for consumers.
-
 # Past Releases
+
+# [13.1.0] - 2023-11-30
+
+- Fixed an issue where supplementary views (headers or footers) that contained a first responder would result in the view being duplicated when scrolled off-screen.
+- Fixed an issue where a crash would occur when applying an external update to list content while a live reorder event was occurring.
+
+### Internal
+
+- Remove override of `performBatchUpdates` from our internal `UICollectionView` subclass, it causes warnings for consumers.
 
 # [13.0.0] - 2023-09-06
 
@@ -978,7 +982,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/13.0.0...main
+[Main]: https://github.com/square/Listable/compare/13.1.0...main
+[13.1.0]: https://github.com/square/Listable/square/13.0.0...13.1.0
 [13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
