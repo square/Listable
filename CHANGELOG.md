@@ -16,6 +16,8 @@
 
 # [13.1.0] - 2023-11-30
 
+### Fixed
+
 - Fixed an issue where supplementary views (headers or footers) that contained a first responder would result in the view being duplicated when scrolled off-screen.
 - Fixed an issue where a crash would occur when applying an external update to list content while a live reorder event was occurring.
 
