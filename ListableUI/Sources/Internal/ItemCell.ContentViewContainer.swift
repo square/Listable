@@ -161,6 +161,9 @@ extension ItemCell {
 
                 let panGestureRecognizer = DirectionalPanGestureRecognizer(direction: side.gestureDirection, target: self, action: #selector(handlePan))
                 addGestureRecognizer(panGestureRecognizer)
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+                tapGestureRecognizer.require(toFail: panGestureRecognizer)
+                addGestureRecognizer(tapGestureRecognizer)
 
                 configurations[side] = SwipeConfiguration(
                     panGestureRecognizer: panGestureRecognizer,
@@ -181,6 +184,11 @@ extension ItemCell {
         }
 
         private weak var listView : ListView? = nil
+
+        @objc private func handleTap(sender: UITapGestureRecognizer) {
+            // if we're tapped (and we're not panning, which is required to fail above) just close
+            set(state: .closed, animated: true)
+        }
 
         @objc private func handlePan(sender: UIPanGestureRecognizer) {
 
@@ -210,8 +218,12 @@ extension ItemCell {
                 && configuration.performsFirstActionWithFullSwipe
 
             if sender.state == .began {
-                self.listView?.liveCells.perform {
-                    $0.closeSwipeActions()
+                // If currently open, and attempting to swipe the other side, close.
+                if case let .open(currentSide) = swipeState, currentSide != side {
+                    self.performAnimatedClose()
+                    // Cancel the current pan gesture
+                    sender.isEnabled = false
+                    sender.isEnabled = true
                 }
             }
 
@@ -221,7 +233,7 @@ extension ItemCell {
                 let swipeState = SwipeActionState.swiping(side, willPerformAction: willPerformAction)
                 set(state: swipeState)
 
-            case .ended, .cancelled:
+            case .ended:
 
                 let velocity = sender.velocity(in: self).x
                 
@@ -248,6 +260,8 @@ extension ItemCell {
 
                 set(state: swipeState, animated: true)
 
+            case .cancelled:
+                set(state: .closed)
             default:
                 set(state: .closed)
 

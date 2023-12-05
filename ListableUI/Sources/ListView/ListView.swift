@@ -1037,7 +1037,8 @@ public final class ListView : UIView
         
         guard let cell = self.liveCells.activeSwipeCell else { return false }
         
-        return cell.isTouchWithinSwipeActionView(touch: touch) == false
+        // If the user is touching down anywhere in the `activeSwipeCell` the `activeSwipeCell` will handle it.
+        return cell.contains(touch: touch) == false
     }
     
     @objc private func closeActiveSwipeGestureIfNeeded(with recognizer : UIGestureRecognizer) {
