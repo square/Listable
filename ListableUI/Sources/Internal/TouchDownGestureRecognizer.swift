@@ -30,11 +30,16 @@ final class TouchDownGestureRecognizer : UIGestureRecognizer {
         
         // We want to allow the pan gesture of our containing scroll view to continue to track
         // when the user moves their finger vertically or horizontally, when we are cancelled.
-        
         if let panGesture = gesture as? UIPanGestureRecognizer, panGesture.view is UIScrollView {
             return false
         }
-        
+
+        // We want to allow other pan gesture recognizers for swipe actions to continue to work
+        if let panGesture = gesture as? DirectionalPanGestureRecognizer {
+            return false
+        }
+
+
         return super.canPrevent(gesture)
     }
 }

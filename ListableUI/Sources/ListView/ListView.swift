@@ -66,7 +66,7 @@ public final class ListView : UIView
         self.collectionView.dataSource = self.dataSource
         
         self.closeActiveSwipesGesture = TouchDownGestureRecognizer()
-        
+
         self.updateQueue = ListChangesQueue()
         
         // Super init.
