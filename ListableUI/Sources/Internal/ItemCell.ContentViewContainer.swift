@@ -118,10 +118,6 @@ extension ItemCell {
             }
         }
         
-        func isTouchWithinSwipeActionView(touch: UITouch) -> Bool {
-            configurations.values.first { $0.swipeView.contains(touch: touch) } != nil
-        }
-
         // MARK: - Swipe Registration
         
         func deregisterLeadingSwipeIfNeeded() {
@@ -286,7 +282,6 @@ extension ItemCell {
         }
 
         private func set(state: SwipeActionState, animated: Bool = false) {
-
             swipeState = state
 
             if animated {
