@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed cross-axis measurements when using a `.natural` measurement size.
+
 ### Added
 
 ### Removed
