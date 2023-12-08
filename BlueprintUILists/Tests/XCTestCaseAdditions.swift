@@ -34,9 +34,4 @@ extension XCTestCase
         
         print("Iterations: \(iterations), Average Time: \(average)")
     }
-    
-    func testcase(_ name : String = "", _ block : () -> ())
-    {
-        block()
-    }
 }

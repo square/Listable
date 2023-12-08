@@ -6,7 +6,6 @@
 //
 
 @testable import BlueprintUILists
-import BlueprintUI
 import XCTest
 
 class List_MeasurementTests : XCTestCase {
@@ -23,24 +22,5 @@ class List_MeasurementTests : XCTestCase {
         } else {
             XCTFail()
         }
-    }
-    
-    private struct TestingItem : BlueprintItemContent, Equatable {
-        
-        var identifierValue: AnyHashable
-        
-        func element(with info: ApplyItemContentInfo) -> Element {
-            Empty()
-                .constrainedTo(size: .init(width: 100, height: 50))
-        }
-    }
-}
-
-
-fileprivate extension Element {
-    func measure(in constraint : SizeConstraint, environment : Environment = .empty) -> CGSize {
-        self
-            .content
-            .measure(in: constraint, environment: environment)
     }
 }
