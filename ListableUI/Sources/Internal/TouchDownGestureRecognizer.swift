@@ -35,7 +35,7 @@ final class TouchDownGestureRecognizer : UIGestureRecognizer {
         }
 
         // We want to allow other pan gesture recognizers for swipe actions to continue to work
-        if let panGesture = gesture as? DirectionalPanGestureRecognizer {
+        if gesture is DirectionalPanGestureRecognizer {
             return false
         }
 
