@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Update the swipe action interactions to more closely match iOS behavior.
+
 ### Misc
 
 ### Internal
