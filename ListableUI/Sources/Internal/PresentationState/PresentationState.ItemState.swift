@@ -259,16 +259,12 @@ extension PresentationState
             
             let itemState = ListableUI.ItemState(cell: cell, isReordering: false)
             
-            UIView.performWithoutAnimation {
-                self.applyTo(
-                    cell: cell,
-                    itemState: itemState,
-                    reason: .willDisplay,
-                    environment: environment
-                )
-                
-                cell.layoutIfNeeded()
-            }
+            self.applyTo(
+                cell: cell,
+                itemState: itemState,
+                reason: .willDisplay,
+                environment: environment
+            )
             
             return cell
         }

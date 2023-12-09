@@ -140,6 +140,10 @@ extension ListView
             item.willDisplay(cell: cell, in: collectionView, for: indexPath)
             
             self.displayedItems[ObjectIdentifier(cell)] = item
+            
+            UIView.performWithoutAnimation {
+                cell.layoutIfNeeded()
+            }
         }
         
         func collectionView(
@@ -181,6 +185,10 @@ extension ListView
             headerFooter.willDisplay(view: container)
             
             self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
+            
+            UIView.performWithoutAnimation {
+                container.layoutIfNeeded()
+            }
         }
         
         func collectionView(
