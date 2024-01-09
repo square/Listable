@@ -9,6 +9,12 @@
 ### Changed
 
 - Update the swipe action interactions to more closely match iOS behavior.
+  - Maximum button size for `.sizeThatFits` style is now 120pts
+  - Button text can span up to two lines now
+  - Automatically adjust text size for text that is too long
+  - Touching anywhere outside of the cell will close swipe actions
+  - Tapping inside of a cell with open swipe actions will close them
+  - Allow the panning gesture to remain interactive even when swipe actions are open
 
 ### Misc
 

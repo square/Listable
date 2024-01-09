@@ -32,7 +32,11 @@ public struct SwipeActionsViewStyle: Equatable {
     public var containerCornerRadius: CGFloat
     public var buttonSizing: ButtonSizing
     public var minWidth: CGFloat
-    
+
+    /// The maximum width of individual items. Defaults to 120, matching `UITableView`
+    /// - Note: Currently only applicable to `ButtonSizing.sizeThatFits` mode.
+    public var maxItemWidth: CGFloat
+
     /// The percentage of the row content width that is available for laying out swipe action buttons.
     ///
     /// For example, a value of `0.8` represents that the swipe action buttons should occupy no more than
@@ -48,7 +52,8 @@ public struct SwipeActionsViewStyle: Equatable {
         containerCornerRadius: CGFloat = 0,
         buttonSizing: ButtonSizing = .sizeThatFits,
         minWidth: CGFloat = 0,
-        maxWidthRatio: CGFloat = 0.8
+        maxWidthRatio: CGFloat = 0.8,
+        maxItemWidth: CGFloat = 120
     ) {
         self.actionShape = actionShape
         self.interActionSpacing = interActionSpacing
@@ -57,6 +62,7 @@ public struct SwipeActionsViewStyle: Equatable {
         self.containerCornerRadius = containerCornerRadius
         self.buttonSizing = buttonSizing
         self.minWidth = minWidth
+        self.maxItemWidth = maxItemWidth
         self.maxWidthRatio = maxWidthRatio
     }
 

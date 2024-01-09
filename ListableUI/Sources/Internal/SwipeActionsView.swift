@@ -182,7 +182,8 @@ final class SwipeActionsView: UIView {
 
         case .sizeThatFits:
             return buttons.map {
-                max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+                let minWidth = max($0.sizeThatFits(UIView.layoutFittingCompressedSize).width, style.minWidth)
+                return min(style.maxItemWidth, minWidth)
             }
             .reduce(0, +) + spacingWidth
         }
@@ -265,6 +266,10 @@ private class DefaultSwipeActionButton: UIButton {
 
         titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
         titleLabel?.lineBreakMode = .byTruncatingTail
+        titleLabel?.numberOfLines = 2
+        titleLabel?.minimumScaleFactor = 0.8
+        titleLabel?.adjustsFontSizeToFitWidth = true
+        titleLabel?.textAlignment = .center
         contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
