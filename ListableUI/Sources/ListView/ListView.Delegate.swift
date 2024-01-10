@@ -142,7 +142,9 @@ extension ListView
             self.displayedItems[ObjectIdentifier(cell)] = item
             
             UIView.performWithoutAnimation {
-                cell.layoutIfNeeded()
+                /// Force a layout of the cell before it is displayed, so that any implicit animations
+                /// are avoided. This ensures that cases like toggling a switch on and off are
+                /// not animated as the cell comes into view.
             }
         }
         
@@ -187,6 +189,9 @@ extension ListView
             self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
             
             UIView.performWithoutAnimation {
+                /// Force a layout of the cell before it is displayed, so that any implicit animations
+                /// are avoided. This ensures that cases like toggling a switch on and off are
+                /// not animated as the cell comes into view.
                 container.layoutIfNeeded()
             }
         }
