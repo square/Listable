@@ -59,7 +59,7 @@ extension PresentationState
     {
         private(set) var state : AnyPresentationHeaderFooterState?
         
-        private(set) weak var visibleContainer : SupplementaryContainerView?
+        private(set) var visibleContainer : SupplementaryContainerView?
         
         init(state : AnyPresentationHeaderFooterState?) {
             self.state = state
