@@ -145,6 +145,7 @@ extension ListView
                 /// Force a layout of the cell before it is displayed, so that any implicit animations
                 /// are avoided. This ensures that cases like toggling a switch on and off are
                 /// not animated as the cell comes into view.
+                cell.layoutIfNeeded()
             }
         }
         
