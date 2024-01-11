@@ -159,6 +159,7 @@ extension ItemCell {
                 addGestureRecognizer(panGestureRecognizer)
                 let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
                 tapGestureRecognizer.require(toFail: panGestureRecognizer)
+                tapGestureRecognizer.cancelsTouchesInView = false
                 addGestureRecognizer(tapGestureRecognizer)
 
                 configurations[side] = SwipeConfiguration(
