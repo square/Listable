@@ -311,6 +311,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(UpdateFuzzingViewController())
                     }
                 )
+                
+                Item(
+                    DemoItem(text: "Testing Header Association"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(SupplementaryTestingViewController())
+                    }
+                )
             } header: {
                 DemoHeader(title: "Fuzz Testing")
             }
