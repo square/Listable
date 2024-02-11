@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "BlueprintUI",
-        "repositoryURL": "https://github.com/square/Blueprint",
-        "state": {
-          "branch": null,
-          "revision": "3720f9556c954f875cc484eb0490651669fe6519",
-          "version": "2.0.0"
-        }
+  "pins" : [
+    {
+      "identity" : "blueprint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/square/Blueprint",
+      "state" : {
+        "revision" : "b8acc6f183fa0d3c0c916a2e4fe0e0db77adc801",
+        "version" : "2.2.0"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
