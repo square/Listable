@@ -11,11 +11,11 @@ jobs:
   spm:
     name: Swift Package Manager
 
-    runs-on: macos-12
+    runs-on: macos-13-xlarge
 
     steps:
-      - name: Switch To Xcode 14.2
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+      - name: Switch To Xcode 15.1
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -25,14 +25,58 @@ jobs:
       - name: Build
         run: swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator"
 
+  ios_17:
+    name: iOS 17
+
+    runs-on: macos-13-xlarge
+
+    steps:
+      - name: Switch To Xcode 15.1
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
+
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      # Build Caching
+
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      # Install & Build
+
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
+
+      - name: Run Tests
+        run: Scripts/run_ios17_tests.sh
+
+
   ios_16:
     name: iOS 16
 
-    runs-on: macos-12
+    runs-on: macos-13-xlarge
 
     steps:
-      - name: Switch To Xcode 14.2
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+      - name: Switch To Xcode 15.1
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -71,11 +115,11 @@ jobs:
   ios_15:
     name: iOS 15
 
-    runs-on: macos-12
+    runs-on: macos-13-xlarge
 
     steps:
-      - name: Switch To Xcode 14
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+      - name: Switch To Xcode 15.1
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
       - name: Install xcodes
         run: brew install aria2 xcodesorg/made/xcodes
@@ -120,11 +164,11 @@ jobs:
   ios_14:
     name: iOS 14
 
-    runs-on: macos-12
+    runs-on: macos-13-xlarge
 
     steps:
       - name: Switch To Xcode 14
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
       - name: Install xcodes
         run: brew install aria2 xcodesorg/made/xcodes
