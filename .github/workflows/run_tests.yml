@@ -1,7 +1,6 @@
-  # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
-  # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-  # https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
-
+# https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
+# https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+# https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
 
 name: Tests
 
@@ -9,7 +8,6 @@ on:
   pull_request:
 
 jobs:
-
   spm:
     name: Swift Package Manager
 
@@ -28,47 +26,47 @@ jobs:
         run: swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator"
 
   ios_16:
-        name: iOS 16
+    name: iOS 16
 
-        runs-on: macos-12
+    runs-on: macos-12
 
-        steps:
-          - name: Switch To Xcode 14.2
-            run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+    steps:
+      - name: Switch To Xcode 14.2
+        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
 
-          - name: Checkout repository
-            uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v1
 
-          # Build Caching
+      # Build Caching
 
-          - name: Cache Bundler
-            uses: actions/cache@v2
-            with:
-              path: vendor/bundle
-              key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-              restore-keys: |
-                ${{ runner.os }}-gems-
+      - name: Cache Bundler
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
 
-          - name: Cache Cocoapods
-            uses: actions/cache@v2
-            with:
-              path: Pods
-              key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-              restore-keys: |
-                ${{ runner.os }}-pods-
+      - name: Cache Cocoapods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
-          # Install & Build
+      # Install & Build
 
-          - name: Bundle install
-            run: |
-              bundle config path vendor/bundle
-              bundle install --jobs 4 --retry 3
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
-          - name: Pod Install
-            run: bundle exec pod install --repo-update
+      - name: Pod Install
+        run: bundle exec pod install --repo-update
 
-          - name: Run Tests
-            run: Scripts/run_ios16_tests.sh
+      - name: Run Tests
+        run: Scripts/run_ios16_tests.sh
 
   ios_15:
     name: iOS 15
