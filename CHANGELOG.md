@@ -22,6 +22,9 @@
 
 ### Internal
 
+- Bumped CI to use Xcode 15.1.
+- Updated Gems and set Ruby version to 3.2.2.
+
 # Past Releases
 
 # [13.1.0] - 2023-11-30
