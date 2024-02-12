@@ -17,6 +17,7 @@
   - Touching anywhere outside of the cell will close swipe actions
   - Tapping inside of a cell with open swipe actions will close them
   - Allow the panning gesture to remain interactive even when swipe actions are open
+- Updated deployment target from iOS 14.0 to iOS 15.0.
 
 ### Misc
 
