@@ -45,7 +45,7 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-        .testTarget(
+        .target(
             name: "Snapshot",
             path: "Internal Pods/Snapshot/Sources"
         ),
@@ -85,7 +85,10 @@ let package = Package(
         ),
         .testTarget(
             name: "BlueprintUIListsTests",
-            dependencies: ["BlueprintUILists"],
+            dependencies: [
+                "BlueprintUILists",
+                .product(name: "BlueprintUICommonControls", package: "Blueprint")
+            ],
             path: "BlueprintUILists/Tests"
         ),
     ],
