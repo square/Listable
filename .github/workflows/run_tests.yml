@@ -87,6 +87,12 @@ jobs:
           # Uses version specified in .ruby_version
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
+      - name: Install xcodes
+        run: brew install aria2 xcodesorg/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        run: sudo xcodes runtimes install "iOS 16.2"
+
       # Build Caching
 
       - name: Cache Cocoapods
@@ -121,17 +127,17 @@ jobs:
       - name: Switch to Xcode ${{ env.xcode_version }}
         run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
-      - name: Install xcodes
-        run: brew install aria2 xcodesorg/made/xcodes
-
-      - name: Install iOS ${{ matrix.sdk }}
-        run: sudo xcodes runtimes install "iOS 15.2"
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           # Uses version specified in .ruby_version
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Install xcodes
+        run: brew install aria2 xcodesorg/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        run: sudo xcodes runtimes install "iOS 15.2"
 
       # Build Caching
 
@@ -167,17 +173,17 @@ jobs:
       - name: Switch to Xcode ${{ env.xcode_version }}
         run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
-      - name: Install xcodes
-        run: brew install aria2 xcodesorg/made/xcodes
-
-      - name: Install iOS ${{ matrix.sdk }}
-        run: sudo xcodes runtimes install "iOS 14.5"
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           # Uses version specified in .ruby_version
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Install xcodes
+        run: brew install aria2 xcodesorg/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        run: sudo xcodes runtimes install "iOS 14.5"
 
       # Build Caching
 
