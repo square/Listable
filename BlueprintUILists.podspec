@@ -3,7 +3,7 @@ require_relative 'version'
 Pod::Spec.new do |s|
   s.name         = 'BlueprintUILists'
   s.version      = LISTABLE_VERSION
-  s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 14.0.'
+  s.summary      = 'Declarative list views for iOS apps that deploy back to iOS 15.0.'
   s.homepage     = 'https://github.com/kyleve/Listable'
   s.license      = 'Apache License, Version 2.0'
   s.author       = { 'Kyle' => 'k@squareup.com' }

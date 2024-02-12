@@ -6,8 +6,8 @@ let package = Package(
     name: "Listable",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v14),
-        .macCatalyst(.v14),
+        .iOS(.v15),
+        .macCatalyst(.v15),
     ],
     products: [
         .library(
