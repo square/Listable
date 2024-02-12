@@ -23,7 +23,7 @@ jobs:
       # Build
 
       - name: Build
-        run: swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator"
+        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2" -sdk iphonesimulator build
 
   ios_17:
     name: iOS 17
