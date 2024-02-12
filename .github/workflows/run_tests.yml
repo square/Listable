@@ -43,7 +43,9 @@ jobs:
 
           - sdk: "17.2"
             simulator_name: iPhone SE (3rd generation)
-            installation_required: true
+            # The iOS 17.2 SDK is pre-installed on the macOS 13 image.
+            # Attempting to install it will fail with an error.
+            installation_required: false
 
     steps:
 
