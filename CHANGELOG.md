@@ -2,11 +2,23 @@
 
 ### Fixed
 
-- Fixed a bug that resulted in header/footer views not properly updating, by fixing the underlying tracking of collection view supplementary views.
-
 ### Added
 
 ### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# [14.0.0] - 2024-02-21
+
+### Fixed
+
+- Fixed a bug that resulted in header/footer views not properly updating, by fixing the underlying tracking of collection view supplementary views.
 
 ### Changed
 
@@ -19,14 +31,10 @@
   - Allow the panning gesture to remain interactive even when swipe actions are open
 - Updated deployment target from iOS 14.0 to iOS 15.0.
 
-### Misc
-
 ### Internal
 
 - Bumped CI to use Xcode 15.1.
 - Updated Gems and set Ruby version to 3.2.2.
-
-# Past Releases
 
 # [13.1.0] - 2023-11-30
 
