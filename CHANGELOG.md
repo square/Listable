@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [14.0.1] - 2024-02-21
+
+### Fixed
+
+- Fix SPM dependency on listable
+
 # [14.0.0] - 2024-02-21
 
 ### Fixed
