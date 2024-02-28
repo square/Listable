@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a bug that resulted in some swipe action buttons not being tappable.
+
 ### Added
 
 ### Removed
