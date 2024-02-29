@@ -12,6 +12,8 @@
 
 ### Internal
 
+- Generated documentation now uses a static copyright notice to avoid noisy diffs.
+
 # Past Releases
 
 # [14.0.2] - 2024-02-29
