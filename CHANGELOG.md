@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed a bug that resulted in some swipe action buttons not being tappable.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [14.0.2] - 2024-02-29
+
+### Fixed
+
+- Fixed a bug that resulted in some swipe action buttons not being tappable.
 
 # [14.0.1] - 2024-02-21
 
