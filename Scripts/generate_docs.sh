@@ -15,10 +15,12 @@ jazzy \
 	--clean \
 	--config docs/ListableUI.yml \
 	--sourcekitten-sourcefile docs/JSON/ListableUI.json \
-	--output docs/Listable
+	--output docs/Listable \
+	--copyright "&copy; Square, Inc. All rights reserved."
 
 jazzy \
 	--clean \
 	--config docs/BlueprintUILists.yml \
 	--sourcekitten-sourcefile docs/JSON/BlueprintUILists.json \
-	--output docs/BlueprintLists
+	--output docs/BlueprintLists \
+	--copyright "&copy; Square, Inc. All rights reserved."
