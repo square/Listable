@@ -186,7 +186,7 @@ extension ListView
         {
             let container = anyView as! SupplementaryContainerView
             
-            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
+            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(container)) else {
                 return
             }
                         

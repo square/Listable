@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue that could cause a crash during view reuse when the list contained different types of headers.
+
 ### Added
 
 ### Removed
