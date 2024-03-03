@@ -152,7 +152,7 @@ internal extension ListView
             ///
             /// See `sendEndQueuingEditsAfterDelay` for a more in-depth explanation.
             ///
-            self.view.updateQueue.isQueuingToApplyReorderEvent = true
+            self.view.updateQueue.isQueuingForReorderEvent = true
             
             /// Perform the change in our data source.
             

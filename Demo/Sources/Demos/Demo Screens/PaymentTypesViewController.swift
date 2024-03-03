@@ -12,19 +12,12 @@ import BlueprintUICommonControls
 
 final class PaymentTypesViewController : ListViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.updateNavigationItems()
-    }
-    
     override func configure(list: inout ListProperties) {
         
         list.layout = .table { table in
             table.layout.interSectionSpacingWithNoFooter = 10.0
             table.bounds = .init(
-                padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0),
-                width: .atMost(600)
+                padding: UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
             )
         }
         
@@ -37,31 +30,21 @@ final class PaymentTypesViewController : ListViewController {
         list += Section(SectionID.main) { section in
             
             section.header = PaymentTypeHeader(title: SectionID.main.title)
-                        
+            
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain }
             .sorted { $0.sortOrder < $1.sortOrder }
             .map(makeItem(with:))
-            
-            if section.items.isEmpty {
-                section += EmptyRow()
-            }
         }
         
         list += Section(SectionID.more) { section in
             
             section.header = PaymentTypeHeader(title: SectionID.more.title)
             
-            section.reordering.minItemCount = 0
-            
             section += types.filter { $0.isEnabled }
             .filter { $0.isMain == false }
             .sorted { $0.sortOrder < $1.sortOrder }
             .map(makeItem(with:))
-            
-            if section.items.isEmpty {
-                section += EmptyRow()
-            }
         }
         
         list += Section(SectionID.disabled) { section in
@@ -78,56 +61,6 @@ final class PaymentTypesViewController : ListViewController {
                 section += EmptyRow()
             }
         }
-    }
-    
-    private var reloadingListTimer : Timer? = nil {
-        didSet {
-            oldValue?.invalidate()
-        }
-    }
-    
-    private func updateNavigationItems() {
-        
-        if reloadingListTimer == nil {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: "Start Reloading",
-                style: .plain,
-                target: self,
-                action: #selector(beginReloading)
-            )
-        } else {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                title: "Stop Reloading",
-                style: .plain,
-                target: self,
-                action: #selector(endReloading)
-            )
-        }
-    }
-    
-    @objc private func beginReloading() {
-        
-        let alert = UIAlertController(
-            title: "Will Repeatedly Reload List",
-            message: "The list will be reloaded every 0.5 seconds to verify that reordering + reloading does not cause a crash.",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(.init(title: "OK", style: .default) { [weak self] _ in
-            self?.reloadingListTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
-                self?.reload(animated: true)
-            })
-            
-            self?.updateNavigationItems()
-        })
-        
-        self.present(alert, animated: true)
-    }
-    
-    @objc private func endReloading() {
-        self.reloadingListTimer = nil
-        
-        updateNavigationItems()
     }
     
     private func save(with info : ListStateObserver.ItemReordered) {
@@ -203,7 +136,7 @@ fileprivate struct PaymentTypeHeader : BlueprintHeaderFooterContent, Equatable {
     
     var elementRepresentation: Element {
         Label(text: title) {
-            $0.font = .systemFont(ofSize: 18.0, weight: .bold)
+            $0.font = .systemFont(ofSize: 18.0, weight: .medium)
         }
         .inset(uniform: 15.0)
     }

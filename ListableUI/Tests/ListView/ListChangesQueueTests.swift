@@ -14,10 +14,9 @@ class ListChangesQueueTests : XCTestCase {
     func test_pausing() {
         
         let queue = ListChangesQueue()
-        queue.listHasUncommittedReorderUpdates = { false }
         
         XCTAssertFalse(queue.isPaused)
-        XCTAssertFalse(queue.isQueuingToApplyReorderEvent)
+        XCTAssertFalse(queue.isQueuingForReorderEvent)
         
         var calls : [Int] = []
         
@@ -36,10 +35,10 @@ class ListChangesQueueTests : XCTestCase {
         XCTAssertEqual(queue.count, 0)
         XCTAssertEqual(calls, [1, 2])
         
-        queue.isQueuingToApplyReorderEvent = true
+        queue.isQueuingForReorderEvent = true
         
         XCTAssertTrue(queue.isPaused)
-        XCTAssertTrue(queue.isQueuingToApplyReorderEvent)
+        XCTAssertTrue(queue.isQueuingForReorderEvent)
         
         queue.add {
             calls += [3]
@@ -58,10 +57,10 @@ class ListChangesQueueTests : XCTestCase {
         XCTAssertEqual(queue.count, 3)
         XCTAssertEqual(calls, [1, 2])
         
-        queue.isQueuingToApplyReorderEvent = false
+        queue.isQueuingForReorderEvent = false
         
         XCTAssertFalse(queue.isPaused)
-        XCTAssertFalse(queue.isQueuingToApplyReorderEvent)
+        XCTAssertFalse(queue.isQueuingForReorderEvent)
         
         waitFor {
             queue.isEmpty
@@ -73,7 +72,6 @@ class ListChangesQueueTests : XCTestCase {
     func test_synchronous() {
         
         let queue = ListChangesQueue()
-        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -101,7 +99,6 @@ class ListChangesQueueTests : XCTestCase {
     func test_asynchronous() {
         
         let queue = ListChangesQueue()
-        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -160,7 +157,6 @@ class ListChangesQueueTests : XCTestCase {
     func test_both() {
         
         let queue = ListChangesQueue()
-        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         
@@ -229,7 +225,6 @@ class ListChangesQueueTests : XCTestCase {
     func test_fuzzing() {
         
         let queue = ListChangesQueue()
-        queue.listHasUncommittedReorderUpdates = { false }
         
         var calls : [Int] = []
         

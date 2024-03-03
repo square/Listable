@@ -11,7 +11,7 @@ import Foundation
 /// A queue used to synchronized and serialize changes made to the backing collection view,
 /// to work around either bugs or confusing behavior.
 ///
-/// ## Handling Applying Re-ordering / Move Events (`isQueuingToApplyReorderEvent`)
+/// ## Handling Re-ordering (`isQueuingForReorderEvent`)
 /// Collection View has an issue wherein if you perform a re-order event, and then within
 /// the same runloop, deliver an update to the collection view as a result of that re-order event
 /// that removes a row or section, the collection view will crash because it's internal index path
@@ -19,46 +19,8 @@ import Foundation
 /// we set this value to `true`, and then after one runloop, we set it back to `false`, after
 /// the collection view's updates have "settled". Please see `sendEndQueuingEditsAfterDelay` for more.
 ///
-/// ## Disabling Updates During In-Progress Re-orders (`listHasUncommittedReorderUpdates`)
-/// If an update is pushed into a `UICollectionView` while a reorder is in progress, there will be a crash
-/// as the collection view tries to layout an index path that does not exist in the data source, as the reordering event
-/// has not yet been committed. As such, we'll queue external updates while reordering is in progress.
-///
-/// ```
-/// 💥
-/// Array.subscript.getter ()
-/// ListLayoutContent.item(at:)
-/// ListLayoutContent.layoutAttributes(at:)
-/// CollectionViewLayout.layoutAttributesForItem(at:)
-/// @objc CollectionViewLayout.layoutAttributesForItem(at:)
-/// -[UICollectionViewData layoutAttributesForItemAtIndexPath:]
-/// -[UICollectionViewData layoutAttributesForGlobalItemIndex:]
-/// __107-[UICollectionView _attributesForItemsVisibleDuringCurrentUpdateWithOldVisibleViews:attributesForNewModel:]_block_invoke
-/// __NSDICTIONARY_IS_CALLING_OUT_TO_A_BLOCK__
-/// -[__NSDictionaryM enumerateKeysAndObjectsWithOptions:usingBlock:]
-/// -[_UICollectionViewSubviewManager enumerateCellsWithEnumerator:]
-/// -[UICollectionView _attributesForItemsVisibleDuringCurrentUpdateWithOldVisibleViews:attributesForNewModel:]
-/// -[UICollectionView /// _createAndAppendViewAnimationsForExistingAndNewlyVisibleItemsInCurrentUpdate:animationsForOnScreenViews:newSubviewManager:oldVisibleViews:attributesF/// orNewModel:]
-/// -[UICollectionView _viewAnimationsForCurrentUpdateWithCollectionViewAnimator:]
-/// __102-[UICollectionView _updateWithItems:tentativelyForReordering:propertyAnimator:collectionViewAnimator:]_block_invoke.632
-/// +[UIView(Animation) performWithoutAnimation:]
-/// -[UICollectionView _updateWithItems:tentativelyForReordering:propertyAnimator:collectionViewAnimator:]
-/// -[UICollectionView _endItemAnimationsWithInvalidationContext:tentativelyForReordering:animator:collectionViewAnimator:]
-/// -[UICollectionView _performBatchUpdates:completion:invalidationContext:tentativelyForReordering:animator:animationHandler:]
-/// ListView.IOS16_4_First_Responder_Bug_CollectionView.performBatchUpdates(_:changes:completion:)
-/// closure #3 in ListView.performBatchUpdates(with:animated:updateBackingData:collectionViewUpdateCompletion:animationCompletion:)
-/// ListView.performBatchUpdates(with:animated:updateBackingData:collectionViewUpdateCompletion:animationCompletion:)
-/// closure #1 in ListView.updatePresentationStateWith(firstVisibleIndexPath:for:completion:)
-/// closure #1 in ListChangesQueue.add(async:)
-/// closure #2 in ListChangesQueue.runIfNeeded()
-/// ListChangesQueue.Operation.ifSynchronous(_:ifAsynchronous:)
-/// ListChangesQueue.runIfNeeded()
-/// ListChangesQueue.add(sync:)
-/// ListView.configure(with:)
-/// ```
-///
 /// ## Handling async batch updates (`add(async:)`)
-/// Because we perform updates to _our_ backing data model (`PresentationState`) alongside
+/// Because we peform updates to _our_ backing data model (`PresentationState`) alongside
 /// our collection view in order to make sure they remain in sync, we need to handle cases where
 /// `UICollectionView.performBatchUpdates(_:completion:)` does not synchronously
 /// invoke its `update` block, which means state can get out of sync.
@@ -142,24 +104,18 @@ final class ListChangesQueue {
         self.runIfNeeded()
     }
     
-    /// Set by consumers to enable and disable queueing when a reorder event is being applied.
-    var isQueuingToApplyReorderEvent : Bool = false {
+    /// Set by consumers to enable and disable queueing during a reorder event.
+    var isQueuingForReorderEvent : Bool = false {
         didSet {
             self.runIfNeeded()
         }
     }
     
-    /// Should be set to `{ collectionView.hasUncommittedUpdates }`.
-    ///
-    /// When this closure returns `true`, the queue is paused, to avoid crashes when applying
-    /// content updates while there are index-changing reorder events in process.
-    var listHasUncommittedReorderUpdates : () -> Bool = {
-        fatalError("Must set `listHasUncommittedReorderUpdates` before using `ListChangesQueue`.")
-    }
-    
     /// Prevents processing other events in the queue.
+    ///
+    /// Note: Right now this just checks `isQueuingForReorderEvent`, but may check more props in the future.
     var isPaused : Bool {
-        self.isQueuingToApplyReorderEvent || self.listHasUncommittedReorderUpdates()
+        self.isQueuingForReorderEvent
     }
     
     var isEmpty : Bool {

@@ -6,6 +6,8 @@
 
 ### Removed
 
+- Reverted "Fixed an issue where a crash would occur when applying an external update to list content while a live reorder event was occurring.", as this caused crashes when re-ordering in certain cases.
+
 ### Changed
 
 ### Misc

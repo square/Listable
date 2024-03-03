@@ -67,8 +67,6 @@ public final class ListView : UIView
         
         self.closeActiveSwipesGesture = TouchDownGestureRecognizer()
 
-        self.updateQueue = ListChangesQueue()
-        
         // Super init.
         
         super.init(frame: frame)
@@ -91,10 +89,6 @@ public final class ListView : UIView
 
         self.closeActiveSwipesGesture.shouldRecognize = { [weak self] touch in
             self?.shouldRecognizeCloseSwipeTouch(touch) ?? false
-        }
-        
-        self.updateQueue.listHasUncommittedReorderUpdates = { [weak collectionView] in
-            collectionView?.hasUncommittedUpdates ?? false
         }
         
         // Register supplementary views.
@@ -852,7 +846,7 @@ public final class ListView : UIView
         self.configure(with: description)
     }
     
-    let updateQueue : ListChangesQueue
+    let updateQueue = ListChangesQueue()
     
     public func configure(with properties : ListProperties)
     {
