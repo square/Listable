@@ -34,6 +34,20 @@ final class PaymentTypesViewController : ListViewController {
             self?.save(with: info)
         }
         
+        list += Section(SectionID.general) { section in
+            section.header = SectionHeader(title: SectionID.general.title)
+            
+            section += EmptyRow()
+            section += EmptyRow()
+        }
+        
+        list += Section(SectionID.allPaymentTypes) { section in
+            section.header = SectionHeader(title: SectionID.allPaymentTypes.title)
+            
+            section += EmptyRow()
+            section += EmptyRow()
+        }
+        
         list += Section(SectionID.main) { section in
             
             section.header = PaymentTypeHeader(title: SectionID.main.title)
@@ -183,17 +197,37 @@ final class PaymentTypesViewController : ListViewController {
     }
     
     enum SectionID : Hashable {
+        case general
+        case allPaymentTypes
         case main
         case more
         case disabled
         
         var title : String {
             switch self {
+            case .general: return "General"
+            case .allPaymentTypes: return "All Payment Types"
             case .main: return "Main payment types"
             case .more: return "More payment types"
             case .disabled: return "Disabled payment types"
             }
         }
+    }
+}
+
+fileprivate struct SectionHeader : BlueprintHeaderFooterContent, Equatable {
+    
+    var title : String
+    
+    var elementRepresentation: Element {
+        Label(text: title) {
+            $0.font = .systemFont(ofSize: 24.0, weight: .bold)
+        }
+        .inset(uniform: 15.0)
+    }
+    
+    var background: Element? {
+        Box(backgroundColor: .white)
     }
 }
 
