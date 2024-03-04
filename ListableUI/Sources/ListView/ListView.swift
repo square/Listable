@@ -222,6 +222,34 @@ public final class ListView : UIView
     }
     
     //
+    // MARK: Replace UICollectionView Feature Flag
+    //
+    
+    public static var isNewBackingViewEnabled : Bool {
+        get {
+            UserDefaults.standard.bool(forKey: "Listable.isNewBackingViewEnabled")
+        }
+        
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "Listable.isNewBackingViewEnabled")
+        }
+    }
+    
+    public let isNewBackingViewEnabled : Bool = ListView.isNewBackingViewEnabled
+    
+    public func ifNew<Output>(
+        _ ifNew : () throws -> Output,
+        ifOld : () throws -> Output
+    ) rethrows -> Output {
+        
+        if Self.isNewBackingViewEnabled {
+            try ifNew()
+        } else {
+            try ifOld()
+        }
+    }
+    
+    //
     // MARK: Layout
     //
         

@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class LSTCollectionView : UIView {
+final class LSTCollectionView : UIScrollView {
     
     private let queue : ListChangesQueue
     
@@ -30,6 +30,12 @@ final class LSTCollectionView : UIView {
         super.init(frame: frame)
         
         self.addSubview(self.view)
+    }
+    
+    // MARK: UIScrollView
+    
+    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+        super.setContentOffset(contentOffset, animated: animated)
     }
     
     // MARK: UIView
