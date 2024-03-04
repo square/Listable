@@ -12,9 +12,17 @@
 
 ### Internal
 
-- Generated documentation now uses a static copyright notice to avoid noisy diffs.
-
 # Past Releases
+
+# [14.0.3] – 2024-03-03
+
+### Fixed
+
+- Fixed an issue that could cause a crash during view reuse when the list contained different types of headers.
+
+### Internal
+
+- Generated documentation now uses a static copyright notice to avoid noisy diffs.
 
 # [14.0.2] - 2024-02-29
 
@@ -1020,7 +1028,11 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/13.1.0...main
+[Main]: https://github.com/square/Listable/compare/14.0.3...main
+[14.0.3]: https://github.com/square/Listable/square/14.0.2...14.0.3
+[14.0.2]: https://github.com/square/Listable/square/14.0.1...14.0.2
+[14.0.1]: https://github.com/square/Listable/square/14.0.0...14.0.1
+[14.0.0]: https://github.com/square/Listable/square/13.1.0...14.0.0
 [13.1.0]: https://github.com/square/Listable/square/13.0.0...13.1.0
 [13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
