@@ -161,12 +161,16 @@ extension ItemReordering {
         private var onMove : OnMove? = nil
         private var onEnd : OnEnd? = nil
         
+        // If this is set the gesture recognizer will only fire when the accessibilityProxy is selected by voiceover.
+        public var accessibilityProxy: NSObject?
+        
         /// Creates a gesture recognizer with the provided target and selector.
         public override init(target: Any?, action: Selector?)
         {
             super.init(target: target, action: action)
             
             self.addTarget(self, action: #selector(updated))
+            
             self.minimumPressDuration = 0
         }
         
@@ -206,6 +210,10 @@ extension ItemReordering {
 
         @objc private func updated()
         {
+            guard accessibilityShouldContinue() else {
+                self.state = .cancelled
+                return
+            }
             switch self.state {
             case .possible: break
             case .began:
@@ -227,6 +235,13 @@ extension ItemReordering {
                 
             @unknown default: listableInternalFatal()
             }
+        }
+        
+        private func accessibilityShouldContinue() -> Bool {
+            guard UIAccessibility.isVoiceOverRunning, let proxy = accessibilityProxy else {
+                return true
+            }
+            return UIAccessibility.focusedElement(using: .notificationVoiceOver) as? NSObject == proxy
         }
     }
 }
