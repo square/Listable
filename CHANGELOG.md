@@ -1,6 +1,7 @@
 # [Main]
 
 ### Fixed
+- `ListReorderGesture` no longer blocks child accessibility, now exposing a proxy element for accessible control. 
 
 ### Added
 

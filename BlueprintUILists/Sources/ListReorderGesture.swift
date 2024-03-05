@@ -5,6 +5,7 @@
 //  Created by Kyle Van Essen on 11/14/19.
 //
 
+import Accessibility
 import BlueprintUI
 import ListableUI
 import UIKit
@@ -38,6 +39,7 @@ import UIKit
 /// ```
 public struct ListReorderGesture : Element
 {
+    
     public enum Begins {
         case onTap
         case onLongPress
@@ -54,9 +56,8 @@ public struct ListReorderGesture : Element
     
     let actions : ReorderingActions
     
-    /// The acccessibility Label of the item that will be reordered.
-    /// This will be set as the gesture's accessibilityValue to provide a richer VoiceOver utterance.
-    public var reorderItemAccessibilityLabel : String? = nil
+    /// The acccessibility label for the reorder element. Defaults  to "Reorder".
+    public var accessibilityLabel : String?
     
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
@@ -66,6 +67,7 @@ public struct ListReorderGesture : Element
         isEnabled : Bool = true,
         actions : ReorderingActions,
         begins: Begins = .onTap,
+        accessibilityLabel: String? = nil,
         wrapping element : Element
     ) {
         self.isEnabled =  isEnabled
@@ -73,6 +75,8 @@ public struct ListReorderGesture : Element
         self.actions = actions
 
         self.begins = begins
+        
+        self.accessibilityLabel = accessibilityLabel
         
         self.element = element
     }
@@ -88,24 +92,16 @@ public struct ListReorderGesture : Element
     public func backingViewDescription(with context: ViewDescriptionContext) -> ViewDescription?
     {
         return ViewDescription(View.self) { config in
+
             config.builder = {
                 View(frame: context.bounds, wrapping: self)
             }
+            config.contentView = { $0.containerView }
             
             config.apply { view in
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = ListableLocalizedStrings.ReorderGesture.accessibilityLabel
-                view.accessibilityValue = reorderItemAccessibilityLabel
-                view.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
-                view.accessibilityTraits.formUnion(.button)
-                view.accessibilityCustomActions = accessibilityActions()
-                
-                view.recognizer.isEnabled = self.isEnabled
-                
-                view.recognizer.apply(actions: self.actions)
-                
-                view.recognizer.minimumPressDuration = begins == .onLongPress ? 0.5 : 0.0
+                view.apply(self)
             }
+            
         }
     }
 
@@ -118,9 +114,14 @@ public extension Element
     func listReorderGesture(
         with actions : ReorderingActions,
         isEnabled : Bool = true,
-        begins: ListReorderGesture.Begins = .onTap
+        begins: ListReorderGesture.Begins = .onTap,
+        accessibilityLabel: String? = nil
     ) -> Element {
-        ListReorderGesture(isEnabled: isEnabled, actions: actions, begins: begins, wrapping: self)
+        ListReorderGesture(isEnabled: isEnabled,
+                           actions: actions,
+                           begins: begins,
+                           accessibilityLabel: accessibilityLabel,
+                           wrapping: self)
     }
 }
 
@@ -129,24 +130,83 @@ fileprivate extension ListReorderGesture
 {
     private final class View : UIView
     {
+        
+        let containerView = UIView()
         let recognizer : ItemReordering.GestureRecognizer
+        private lazy var proxyElement = UIAccessibilityElement(accessibilityContainer: self)
+        private var minimumPressDuration: TimeInterval = 0.0 {
+            didSet {
+                updateGesturePressDuration()
+            }
+        }
+        
+        @objc private func updateGesturePressDuration() {
+            self.recognizer.minimumPressDuration = UIAccessibility.isVoiceOverRunning ? 0.0 : self.minimumPressDuration
+        }
         
         init(frame: CGRect, wrapping : ListReorderGesture)
         {
             self.recognizer = .init()
             
             super.init(frame: frame)
-            
+            recognizer.accessibilityProxy = proxyElement
+            NotificationCenter.default.addObserver(self, selector: #selector(updateGesturePressDuration) , name: UIAccessibility.voiceOverStatusDidChangeNotification, object: nil)
+
             self.isOpaque = false
             self.clipsToBounds = false
             self.backgroundColor = .clear
             
             self.addGestureRecognizer(self.recognizer)
+            
+            self.isAccessibilityElement = false
+            
+            containerView.isOpaque = false
+            containerView.backgroundColor = .clear
+            addSubview(containerView)
         }
         
         @available(*, unavailable)
         required init?(coder aDecoder: NSCoder) {
             listableInternalFatal()
+        }
+        
+        func apply(_ model: ListReorderGesture) {
+            proxyElement.accessibilityLabel = model.accessibilityLabel ?? ListableLocalizedStrings.ReorderGesture.accessibilityLabel
+            proxyElement.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
+            proxyElement.accessibilityTraits.formUnion(.button)
+            proxyElement.accessibilityCustomActions = model.accessibilityActions()
+            
+            recognizer.isEnabled = model.isEnabled
+            
+            recognizer.apply(actions: model.actions)
+            minimumPressDuration = model.begins == .onLongPress ? 0.5 : 0.0
+        }
+        
+        override func layoutSubviews() {
+            super.layoutSubviews()
+            containerView.frame = bounds
+        }
+        
+        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            if UIAccessibility.isVoiceOverRunning,
+               UIAccessibility.focusedElement(using: .notificationVoiceOver) as? NSObject == proxyElement {
+                // Intercept touch events to avoid activating contained elements.
+                return self
+            }
+            
+            return super.hitTest(point, with: event)
+        }
+        
+        override var accessibilityElements: [Any]? {
+            get {
+                guard recognizer.isEnabled else { return super.accessibilityElements }
+                proxyElement.accessibilityFrame = self.accessibilityFrame
+                proxyElement.accessibilityActivationPoint = self.accessibilityActivationPoint
+                return [containerView, proxyElement]
+            }
+            set {
+                fatalError("Cannot set accessibility elements directly")
+            }
         }
     }
 }
