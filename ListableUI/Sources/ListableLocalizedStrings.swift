@@ -19,6 +19,12 @@ public struct ListableLocalizedStrings {
                                                                  value: "Reorder",
                                                                  comment: "Accessibility label for the reorder control on an item")
         
+        public static let accessibilityLabelFormat = NSLocalizedString("reorder.AccessibilityLabelFormat",
+                                                                 tableName: nil,
+                                                                 bundle:  .listableUIResources,
+                                                                 value: "Reorder %@",
+                                                                 comment: "Accessibility label for a reorder control with a provided name" )
+        
         public static let accessibilityHint = NSLocalizedString("reorder.AccessibilityHint",
                                                                 tableName: nil,
                                                                 bundle:  .listableUIResources,
