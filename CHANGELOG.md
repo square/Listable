@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added `backgroundView` to `ListProperties`, enabling developers to set a background on their Lists.
+
 ### Removed
 
 ### Changed

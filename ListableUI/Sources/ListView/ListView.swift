@@ -840,6 +840,7 @@ public final class ListView : UIView
             animatesChanges: true,
             layout: self.layout,
             appearance: self.appearance,
+            backgroundView: self.backgroundView,
             scrollIndicatorInsets: self.scrollIndicatorInsets,
             behavior: self.behavior,
             autoScrollAction: self.autoScrollAction,
@@ -872,6 +873,7 @@ public final class ListView : UIView
             self.onKeyboardFrameWillChange = properties.onKeyboardFrameWillChange
             self.scrollIndicatorInsets = properties.scrollIndicatorInsets
             self.collectionView.accessibilityIdentifier = properties.accessibilityIdentifier
+            self.collectionView.backgroundView = properties.backgroundView
             self.debuggingIdentifier = properties.debuggingIdentifier
             self.actions = properties.actions
 
@@ -970,6 +972,12 @@ public final class ListView : UIView
     public override var backgroundColor: UIColor? {
         didSet {
             self.collectionView.backgroundColor = self.backgroundColor
+        }
+    }
+    
+    public var backgroundView: UIView? {
+        didSet {
+            self.collectionView.backgroundView = self.backgroundView
         }
     }
     

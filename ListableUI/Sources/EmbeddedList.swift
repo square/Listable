@@ -80,6 +80,7 @@ public struct EmbeddedList : ItemContent
             appearance: .init {
                 $0.showsScrollIndicators = false
             },
+            backgroundView: nil,
             scrollIndicatorInsets: .init(),
             behavior: .init(),
             autoScrollAction: .none,
