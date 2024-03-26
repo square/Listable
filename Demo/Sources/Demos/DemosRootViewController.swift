@@ -366,6 +366,18 @@ public final class DemosRootViewController : ListViewController
             } header: {
                 DemoHeader(title: "UIScrollViews")
             }
+            
+            Section("list-background") { [weak self] in
+                Item(
+                    DemoItem(text: "Background View"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ListBackgroundViewController())
+                    }
+                )
+            } header: {
+                DemoHeader(title: "backgroundView")
+            }
         }
     }
 }

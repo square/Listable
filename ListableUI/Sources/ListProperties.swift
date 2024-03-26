@@ -92,6 +92,9 @@ import UIKit
     /// The appearance to use with the list.
     public var appearance : Appearance
     
+    /// The view to use as the background of the list view.
+    public var backgroundView : UIView?
+    
     /// The scroll insets to apply to the list view.
     public var scrollIndicatorInsets : UIEdgeInsets
     
@@ -161,6 +164,7 @@ import UIKit
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
             layout: .table(),
             appearance: .init(),
+            backgroundView: nil,
             scrollIndicatorInsets: .zero,
             behavior: .init(),
             autoScrollAction: .none,
@@ -176,6 +180,7 @@ import UIKit
         animatesChanges: Bool,
         layout : LayoutDescription,
         appearance : Appearance,
+        backgroundView: UIView?,
         scrollIndicatorInsets : UIEdgeInsets,
         behavior : Behavior,
         autoScrollAction : AutoScrollAction,
@@ -187,6 +192,7 @@ import UIKit
         self.animatesChanges = animatesChanges
         self.layout = layout
         self.appearance = appearance
+        self.backgroundView = backgroundView
         self.scrollIndicatorInsets = scrollIndicatorInsets
         self.behavior = behavior
         self.autoScrollAction = autoScrollAction
