@@ -1,7 +1,6 @@
 # [Main]
 
 ### Fixed
-- `ListReorderGesture` no longer blocks child accessibility, now exposing a proxy element for accessible control. 
 
 ### Added
 
@@ -14,6 +13,11 @@
 ### Internal
 
 # Past Releases
+
+# [14.1.0] – 2024-03-28
+
+### Fixed
+- `ListReorderGesture` no longer blocks child accessibility, now exposing a proxy element for accessible control.
 
 # [14.0.3] – 2024-03-03
 
@@ -1029,13 +1033,14 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.0.3...main
-[14.0.3]: https://github.com/square/Listable/square/14.0.2...14.0.3
-[14.0.2]: https://github.com/square/Listable/square/14.0.1...14.0.2
-[14.0.1]: https://github.com/square/Listable/square/14.0.0...14.0.1
-[14.0.0]: https://github.com/square/Listable/square/13.1.0...14.0.0
-[13.1.0]: https://github.com/square/Listable/square/13.0.0...13.1.0
-[13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
+[Main]: https://github.com/square/Listable/compare/14.1.0...main
+[14.1.0]: https://github.com/square/Listable/compare/14.0.3...14.1.0
+[14.0.3]: https://github.com/square/Listable/compare/14.0.2...14.0.3
+[14.0.2]: https://github.com/square/Listable/compare/14.0.1...14.0.2
+[14.0.1]: https://github.com/square/Listable/compare/14.0.0...14.0.1
+[14.0.0]: https://github.com/square/Listable/compare/13.1.0...14.0.0
+[13.1.0]: https://github.com/square/Listable/compare/13.0.0...13.1.0
+[13.0.0]: https://github.com/square/Listable/compare/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
 [10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1
