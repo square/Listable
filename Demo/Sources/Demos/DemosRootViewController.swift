@@ -258,6 +258,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(PagedViewController())
                     }
                 )
+                
+                Item(
+                    DemoItem(text: "Carousel Layout"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(CarouselViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "Center-Snapping Table Layout"),

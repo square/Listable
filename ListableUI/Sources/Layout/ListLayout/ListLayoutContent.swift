@@ -497,9 +497,30 @@ extension ListLayoutContent
         public var measuredSize : CGSize = .zero
         
         public var size : CGSize = .zero
+        
+        public var center : CGPoint = .zero
+        
+        public var transform : CATransform3D = CATransform3DIdentity
                 
-        public var x : CGFloat = .zero
-        public var y : CGFloat = .zero
+        public var x : CGFloat {
+            get {
+                center.x - (size.width / 2)
+            }
+            
+            set {
+                center.x = newValue + (size.width / 2)
+            }
+        }
+        
+        public var y : CGFloat {
+            get {
+                center.y - (size.height / 2)
+            }
+            
+            set {
+                center.y = newValue + (size.height / 2)
+            }
+        }
         
         public var zIndex : Int = 0
         
@@ -530,7 +551,11 @@ extension ListLayoutContent
         {
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
-            attributes.frame = self.frame
+            attributes.transform3D = self.transform
+            
+            attributes.center = self.center
+            attributes.size = self.size
+            
             attributes.zIndex = self.zIndex
             
             return attributes
