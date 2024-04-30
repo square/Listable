@@ -14,6 +14,12 @@
 
 # Past Releases
 
+# [14.2.0] – 2024-04-29
+
+### Internal
+
+- `BlueprintUILists` now depends on `BlueprintUI` 4.0.0.
+
 # [14.1.0] – 2024-03-28
 
 ### Fixed
@@ -1033,7 +1039,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.1.0...main
+[Main]: https://github.com/square/Listable/compare/14.2.0...main
+[14.2.0]: https://github.com/square/Listable/compare/14.1.0...14.2.0
 [14.1.0]: https://github.com/square/Listable/compare/14.0.3...14.1.0
 [14.0.3]: https://github.com/square/Listable/compare/14.0.2...14.0.3
 [14.0.2]: https://github.com/square/Listable/compare/14.0.1...14.0.2
