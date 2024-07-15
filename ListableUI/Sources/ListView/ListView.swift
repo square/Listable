@@ -18,6 +18,8 @@ public final class ListView : UIView
     {
         // Create all default values.
 
+        self.animation = .default
+        
         self.appearance = appearance
         
         self.behavior = Behavior()
@@ -198,6 +200,8 @@ public final class ListView : UIView
     //
     // MARK: Appearance
     //
+    
+    public var animation : ListAnimation
     
     public var appearance : Appearance {
         didSet {
@@ -838,6 +842,7 @@ public final class ListView : UIView
     {
         let description = ListProperties(
             animatesChanges: true,
+            animation: self.animation,
             layout: self.layout,
             appearance: self.appearance,
             scrollIndicatorInsets: self.scrollIndicatorInsets,
@@ -866,6 +871,7 @@ public final class ListView : UIView
             
             let animated = properties.animatesChanges
             
+            self.animation = properties.animation
             self.appearance = properties.appearance
             self.behavior = properties.behavior
             self.autoScrollAction = properties.autoScrollAction
@@ -1463,7 +1469,7 @@ public final class ListView : UIView
         }
         
         if animated {
-            performUpdates()
+            self.animation.perform(performUpdates)
         } else {
             UIView.performWithoutAnimation(performUpdates)
         }
