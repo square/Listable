@@ -23,6 +23,6 @@ public struct ListAnimation {
     }
     
     public static let fast : Self = .init { animations in
-        UIView.animate(withDuration: 0.1, animations: animations)
+        UIView.animate(withDuration: 0.15, animations: animations)
     }
 }
