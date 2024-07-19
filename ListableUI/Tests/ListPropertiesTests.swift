@@ -13,6 +13,7 @@ class ListPropertiesTests : XCTestCase
     private func properties() -> ListProperties {
         ListProperties(
             animatesChanges: true,
+            animation: .default,
             layout: .flow(),
             appearance: .init(),
             scrollIndicatorInsets: .zero,
