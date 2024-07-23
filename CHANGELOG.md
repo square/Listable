@@ -4,6 +4,8 @@
 
 ### Added
 
+- You may now control list update animations with the `ListAnimation` type.
+
 ### Removed
 
 ### Changed
