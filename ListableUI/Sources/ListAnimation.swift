@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 /// Controls the animation to use when updating the content of a list.
