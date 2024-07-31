@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ApplyHeaderFooterContentInfo Structure Reference</title>
+    <title>ListAnimation Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Struct/ApplyHeaderFooterContentInfo" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Struct/ListAnimation" class="dashAnchor"></a>
 
-    <a title="ApplyHeaderFooterContentInfo Structure Reference"></a>
+    <a title="ListAnimation Structure Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">Listable Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ApplyHeaderFooterContentInfo Structure Reference
+      ListAnimation Structure Reference
     </p>
 
     <div class="content-wrapper">
@@ -697,18 +697,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ApplyHeaderFooterContentInfo</h1>
+            <h1>ListAnimation</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ApplyHeaderFooterContentInfo</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ListAnimation</span></code></pre>
 
                 </div>
               </div>
-            <p>Information about the current state of the content, which is passed to <code>apply(to:for:with:)</code>
-during configuration and preparation for display.</p>
-
-<p>TODO: Rename to <code>ApplyHeaderFooterContext</code></p>
+            <p>Controls the animation to use when updating the content of a list.</p>
 
           </div>
         </section>
@@ -720,9 +717,9 @@ during configuration and preparation for display.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI28ApplyHeaderFooterContentInfoV11environmentAA15ListEnvironmentVvp"></a>
-                    <a name="//apple_ref/swift/Property/environment" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI28ApplyHeaderFooterContentInfoV11environmentAA15ListEnvironmentVvp">environment</a>
+                    <a name="/s:10ListableUI13ListAnimationV10Animationsa"></a>
+                    <a name="//apple_ref/swift/Alias/Animations" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI13ListAnimationV10Animationsa">Animations</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -730,15 +727,96 @@ during configuration and preparation for display.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The environment of the containing list.
-See <code><a href="../Structs/ListEnvironment.html">ListEnvironment</a></code> for usage information.</p>
+                        <p>The animation block.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEnvironment.html">ListEnvironment</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Animations</span> <span class="o">=</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI13ListAnimationVyACyyycccfc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI13ListAnimationVyACyyycccfc">init(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new animation. in your custom animation, you <em>must</em> invoke the passed
+in <code><a href="../Structs/ListAnimation.html#/s:10ListableUI13ListAnimationV10Animationsa">Animations</a></code> block within <code>UIView.animate(...)</code> or other animation such as a <code>UIViewPropertyAnimator</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">perform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="kt"><a href="../Structs/ListAnimation.html#/s:10ListableUI13ListAnimationV10Animationsa">Animations</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">())</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI13ListAnimationV7defaultACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/default" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI13ListAnimationV7defaultACvpZ">default</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The default animation provided by <code>UICollectionView</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">let</span> <span class="err">`</span><span class="k">default</span><span class="err">`</span><span class="p">:</span> <span class="err">`</span><span class="k">Self</span><span class="err">`</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI13ListAnimationV4fastACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/fast" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI13ListAnimationV4fastACvpZ">fast</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A faster animation than the default <code>UICollectionView</code> animation.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">fast</span><span class="p">:</span> <span class="err">`</span><span class="k">Self</span><span class="err">`</span></code></pre>
 
                         </div>
                       </div>

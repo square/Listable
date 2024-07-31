@@ -523,6 +523,9 @@
                 <a class="nav-group-task-link" href="../Structs/LayoutDescription/Configuration.html">– Configuration</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListAnimation.html">ListAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListContentBounds.html">ListContentBounds</a>
               </li>
               <li class="nav-group-task">
@@ -768,6 +771,33 @@ Defaults to <code>true</code> if <code>ListProperties</code> is created inside a
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">animatesChanges</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI14ListPropertiesV9animationAA0C9AnimationVvp"></a>
+                    <a name="//apple_ref/swift/Property/animation" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI14ListPropertiesV9animationAA0C9AnimationVvp">animation</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The animation to use for any changes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListAnimation.html">ListAnimation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1275,9 +1305,9 @@ you can observe through Instruments.app.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ListPropertiesV15animatesChanges6layout10appearance21scrollIndicatorInsets8behavior16autoScrollAction25onKeyboardFrameWillChange23accessibilityIdentifier09debuggingV09configureACSb_AA17LayoutDescriptionVAA10AppearanceVSo06UIEdgeK0VAA8BehaviorVAA04AutonO0OyAA0q7CurrentR8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV14animationCurvettcSgSSSgA2_yACzXEtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(animatesChanges:layout:appearance:scrollIndicatorInsets:behavior:autoScrollAction:onKeyboardFrameWillChange:accessibilityIdentifier:debuggingIdentifier:configure:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ListPropertiesV15animatesChanges6layout10appearance21scrollIndicatorInsets8behavior16autoScrollAction25onKeyboardFrameWillChange23accessibilityIdentifier09debuggingV09configureACSb_AA17LayoutDescriptionVAA10AppearanceVSo06UIEdgeK0VAA8BehaviorVAA04AutonO0OyAA0q7CurrentR8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV14animationCurvettcSgSSSgA2_yACzXEtcfc">init(animatesChanges:<wbr>layout:<wbr>appearance:<wbr>scrollIndicatorInsets:<wbr>behavior:<wbr>autoScrollAction:<wbr>onKeyboardFrameWillChange:<wbr>accessibilityIdentifier:<wbr>debuggingIdentifier:<wbr>configure:<wbr>)</a>
+                    <a name="/s:10ListableUI14ListPropertiesV15animatesChanges9animation6layout10appearance21scrollIndicatorInsets8behavior16autoScrollAction25onKeyboardFrameWillChange23accessibilityIdentifier09debuggingW09configureACSb_AA0C9AnimationVAA17LayoutDescriptionVAA10AppearanceVSo06UIEdgeL0VAA8BehaviorVAA04AutooP0OyAA0r7CurrentS8Provider_p_Sd0G8Duration_So06UIViewZ5CurveV0G5CurvettcSgSSSgA5_yACzXEtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(animatesChanges:animation:layout:appearance:scrollIndicatorInsets:behavior:autoScrollAction:onKeyboardFrameWillChange:accessibilityIdentifier:debuggingIdentifier:configure:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI14ListPropertiesV15animatesChanges9animation6layout10appearance21scrollIndicatorInsets8behavior16autoScrollAction25onKeyboardFrameWillChange23accessibilityIdentifier09debuggingW09configureACSb_AA0C9AnimationVAA17LayoutDescriptionVAA10AppearanceVSo06UIEdgeL0VAA8BehaviorVAA04AutooP0OyAA0r7CurrentS8Provider_p_Sd0G8Duration_So06UIViewZ5CurveV0G5CurvettcSgSSSgA5_yACzXEtcfc">init(animatesChanges:<wbr>animation:<wbr>layout:<wbr>appearance:<wbr>scrollIndicatorInsets:<wbr>behavior:<wbr>autoScrollAction:<wbr>onKeyboardFrameWillChange:<wbr>accessibilityIdentifier:<wbr>debuggingIdentifier:<wbr>configure:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1294,6 +1324,7 @@ you can observe through Instruments.app.</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">animatesChanges</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
+    <span class="nv">animation</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ListAnimation.html">ListAnimation</a></span><span class="p">,</span>
     <span class="nv">layout</span> <span class="p">:</span> <span class="kt"><a href="../Structs/LayoutDescription.html">LayoutDescription</a></span><span class="p">,</span>
     <span class="nv">appearance</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span><span class="p">,</span>
     <span class="nv">scrollIndicatorInsets</span> <span class="p">:</span> <span class="kt">UIEdgeInsets</span><span class="p">,</span>

@@ -4,8 +4,6 @@
 
 ### Added
 
-- You may now control list update animations with the `ListAnimation` type.
-
 ### Removed
 
 ### Changed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [14.3.0] - 2024-07-31
+
+### Added
+
+- You may now control list update animations with the `ListAnimation` type.
 
 # [14.2.0] – 2024-04-29
 
@@ -1041,7 +1045,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.2.0...main
+[Main]: https://github.com/square/Listable/compare/14.3.0...main
+[14.3.0]: https://github.com/square/Listable/compare/14.2.0...14.3.0
 [14.2.0]: https://github.com/square/Listable/compare/14.1.0...14.2.0
 [14.1.0]: https://github.com/square/Listable/compare/14.0.3...14.1.0
 [14.0.3]: https://github.com/square/Listable/compare/14.0.2...14.0.3
