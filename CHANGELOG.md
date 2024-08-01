@@ -10,6 +10,59 @@
 
 ### Changed
 
+### Misc
+
+### Internal
+
+# Past Releases
+
+# [14.3.0] - 2024-07-31
+
+### Added
+
+- You may now control list update animations with the `ListAnimation` type.
+
+# [14.2.0] – 2024-04-29
+
+### Internal
+
+- `BlueprintUILists` now depends on `BlueprintUI` 4.0.0.
+
+# [14.1.0] – 2024-03-28
+
+### Fixed
+- `ListReorderGesture` no longer blocks child accessibility, now exposing a proxy element for accessible control.
+
+# [14.0.3] – 2024-03-03
+
+### Fixed
+
+- Fixed an issue that could cause a crash during view reuse when the list contained different types of headers.
+
+### Internal
+
+- Generated documentation now uses a static copyright notice to avoid noisy diffs.
+
+# [14.0.2] - 2024-02-29
+
+### Fixed
+
+- Fixed a bug that resulted in some swipe action buttons not being tappable.
+
+# [14.0.1] - 2024-02-21
+
+### Fixed
+
+- Fix SPM dependency on listable
+
+# [14.0.0] - 2024-02-21
+
+### Fixed
+
+- Fixed a bug that resulted in header/footer views not properly updating, by fixing the underlying tracking of collection view supplementary views.
+
+### Changed
+
 - Update the swipe action interactions to more closely match iOS behavior.
   - Maximum button size for `.sizeThatFits` style is now 120pts
   - Button text can span up to two lines now
@@ -17,12 +70,12 @@
   - Touching anywhere outside of the cell will close swipe actions
   - Tapping inside of a cell with open swipe actions will close them
   - Allow the panning gesture to remain interactive even when swipe actions are open
-
-### Misc
+- Updated deployment target from iOS 14.0 to iOS 15.0.
 
 ### Internal
 
-# Past Releases
+- Bumped CI to use Xcode 15.1.
+- Updated Gems and set Ruby version to 3.2.2.
 
 # [13.1.0] - 2023-11-30
 
@@ -994,9 +1047,16 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/13.1.0...main
-[13.1.0]: https://github.com/square/Listable/square/13.0.0...13.1.0
-[13.0.0]: https://github.com/square/Listable/square/12.0.0...13.0.0
+[Main]: https://github.com/square/Listable/compare/14.3.0...main
+[14.3.0]: https://github.com/square/Listable/compare/14.2.0...14.3.0
+[14.2.0]: https://github.com/square/Listable/compare/14.1.0...14.2.0
+[14.1.0]: https://github.com/square/Listable/compare/14.0.3...14.1.0
+[14.0.3]: https://github.com/square/Listable/compare/14.0.2...14.0.3
+[14.0.2]: https://github.com/square/Listable/compare/14.0.1...14.0.2
+[14.0.1]: https://github.com/square/Listable/compare/14.0.0...14.0.1
+[14.0.0]: https://github.com/square/Listable/compare/13.1.0...14.0.0
+[13.1.0]: https://github.com/square/Listable/compare/13.0.0...13.1.0
+[13.0.0]: https://github.com/square/Listable/compare/12.0.0...13.0.0
 [12.0.0]: https://github.com/square/Listable/compare/11.0.0...12.0.0
 [11.0.0]: https://github.com/square/Listable/compare/10.3.1...11.0.0
 [10.3.1]: https://github.com/square/Listable/compare/10.3.0...10.3.1

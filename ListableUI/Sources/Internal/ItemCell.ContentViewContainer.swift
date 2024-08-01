@@ -12,7 +12,7 @@ extension ItemCell {
     
     private typealias Side = SwipeActionsView.Side
 
-    final class ContentContainerView : UIView {
+    final class ContentContainerView : UIView, UIGestureRecognizerDelegate {
 
         let contentView : Content.ContentView
         
@@ -159,6 +159,7 @@ extension ItemCell {
                 addGestureRecognizer(panGestureRecognizer)
                 let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
                 tapGestureRecognizer.require(toFail: panGestureRecognizer)
+                tapGestureRecognizer.delegate = self
                 tapGestureRecognizer.cancelsTouchesInView = false
                 addGestureRecognizer(tapGestureRecognizer)
 
@@ -326,6 +327,15 @@ extension ItemCell {
             swipeState = .closed
 
             setNeedsLayout()
+        }
+
+        // Mark: - UITapGestureDelegate
+        override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard let tapRecognizer = gestureRecognizer as? UITapGestureRecognizer else { return true }
+
+            // If the tap gesture is happening in the open swipe items then it shouldn't begin
+            let location = tapRecognizer.location(ofTouch: 0, in: self.contentView)
+            return self.contentView.bounds.contains(location)
         }
     }
 

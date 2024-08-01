@@ -119,6 +119,65 @@ struct DemoHeader2 : BlueprintHeaderFooterContent, Equatable
 }
 
 
+struct DemoTile : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
+{
+    var text : String
+    var secondaryText: String
+    
+    var identifierValue: String {
+        return "\(text) \(secondaryText)"
+    }
+    
+    func element(with info : ApplyItemContentInfo) -> Element
+    {
+        Button(onTap:{
+            print("\(text) tapped!")
+        }, wrapping: Row { row in
+            row.verticalAlignment = .center
+           
+            row.add(child:
+                Column { col in
+                    col.add(child: Label(text: text) {
+                        $0.font = .systemFont(ofSize: 17.0, weight: .medium)
+                        $0.color = info.state.isActive ? .white : .darkGray
+                    })
+                    col.add(child: Label(text: secondaryText) {
+                        $0.font = .systemFont(ofSize: 12.0, weight: .light)
+                        $0.color = info.state.isActive ? .white : .gray
+                    })
+                }
+                .inset(horizontal: 15.0, vertical: 24.0)
+            )
+        })
+        .accessibilityElement(label: text, value: secondaryText, traits: [.button])
+        .listReorderGesture(with: info.reorderingActions, begins: .onLongPress, accessibilityLabel: "Reorder \(text)")
+
+        
+    }
+    
+    func backgroundElement(with info: ApplyItemContentInfo) -> Element?
+    {
+        Box(
+            backgroundColor: info.state.isReordering ? .white(0.8) : .white,
+            cornerStyle: .rounded(radius: 8.0)
+        )
+    }
+    
+    func selectedBackgroundElement(with info: ApplyItemContentInfo) -> Element?
+    {
+        Box(
+            backgroundColor: .white(0.2),
+            cornerStyle: .rounded(radius: 8.0),
+            shadowStyle: .simple(radius: 2.0, opacity: 0.15, offset: .init(width: 0.0, height: 1.0), color: .black)
+        )
+    }
+    
+    var collationString: String {
+        return "\(text) \(secondaryText)"
+    }
+}
+
+
 struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemContent
 {
     var text : String
@@ -142,10 +201,11 @@ struct DemoItem : BlueprintItemContent, Equatable, LocalizedCollatableItemConten
             
             if info.isReorderable {
                 row.addFixed(
-                    child: Image(
-                        image: UIImage(named: "ReorderControl"),
-                        contentMode: .center
-                    )
+                    child: 
+                        Image(
+                            image: UIImage(named: "ReorderControl"),
+                            contentMode: .center
+                        )
                         .listReorderGesture(with: info.reorderingActions, begins: requiresLongPress ? .onLongPress : .onTap)
                 )
             }

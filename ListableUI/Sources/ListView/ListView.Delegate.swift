@@ -161,7 +161,7 @@ extension ListView
             
             item.didEndDisplay()
         }
-        
+                
         private var displayedSupplementaryItems : [ObjectIdentifier:PresentationState.HeaderFooterViewStatePair] = [:]
         
         func collectionView(
@@ -174,18 +174,12 @@ extension ListView
             let container = anyView as! SupplementaryContainerView
             let kind = SupplementaryKind(rawValue: kindString)!
             
-            let headerFooter : PresentationState.HeaderFooterViewStatePair = {
-                switch kind {
-                case .listContainerHeader: return self.presentationState.containerHeader
-                case .listHeader: return self.presentationState.header
-                case .listFooter: return self.presentationState.footer
-                case .sectionHeader: return self.presentationState.sections[indexPath.section].header
-                case .sectionFooter: return self.presentationState.sections[indexPath.section].footer
-                case .overscrollFooter: return self.presentationState.overscrollFooter
-                }
-            }()
+            let headerFooter = self.presentationState.headerFooter(
+                of: kind,
+                in: indexPath.section
+            )
             
-            headerFooter.willDisplay(view: container)
+            headerFooter.collectionViewWillDisplay(view: container)
             
             self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
             
@@ -199,16 +193,18 @@ extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            didEndDisplayingSupplementaryView view: UICollectionReusableView,
-            forElementOfKind elementKind: String,
+            didEndDisplayingSupplementaryView anyView: UICollectionReusableView,
+            forElementOfKind kindString: String,
             at indexPath: IndexPath
             )
         {
-            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(view)) else {
+            let container = anyView as! SupplementaryContainerView
+            
+            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(container)) else {
                 return
             }
-            
-            headerFooter.didEndDisplay()
+                        
+            headerFooter.collectionViewDidEndDisplay(of: container)
         }
         
         func collectionView(

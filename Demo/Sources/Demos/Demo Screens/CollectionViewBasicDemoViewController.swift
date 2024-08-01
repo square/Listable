@@ -65,6 +65,8 @@ final class CollectionViewBasicDemoViewController : UIViewController
             
             list.animatesChanges = animated
             
+            list.animation = .fast
+            
             list += self.rows.map { sectionRows in
                 Section("Demo Section") { section in
                     

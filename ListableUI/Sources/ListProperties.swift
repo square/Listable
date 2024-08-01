@@ -46,6 +46,9 @@ import UIKit
     /// Defaults to `true` if `ListProperties` is created inside an existing `UIView` animation block.
     public var animatesChanges : Bool
     
+    /// The animation to use for any changes.
+    public var animation : ListAnimation
+    
     //
     // MARK: List Content
     //
@@ -159,6 +162,7 @@ import UIKit
     ) -> Self {
         Self(
             animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+            animation: .default,
             layout: .table(),
             appearance: .init(),
             scrollIndicatorInsets: .zero,
@@ -174,6 +178,7 @@ import UIKit
     /// Create a new instance of `ListProperties` with the provided values.
     public init(
         animatesChanges: Bool,
+        animation : ListAnimation,
         layout : LayoutDescription,
         appearance : Appearance,
         scrollIndicatorInsets : UIEdgeInsets,
@@ -185,6 +190,7 @@ import UIKit
         configure : Configure
     ) {
         self.animatesChanges = animatesChanges
+        self.animation = animation
         self.layout = layout
         self.appearance = appearance
         self.scrollIndicatorInsets = scrollIndicatorInsets

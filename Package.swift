@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -6,8 +6,8 @@ let package = Package(
     name: "Listable",
     defaultLocalization: "en",
     platforms: [
-        .iOS(.v14),
-        .macCatalyst(.v14),
+        .iOS(.v15),
+        .macCatalyst(.v15),
     ],
     products: [
         .library(
@@ -20,7 +20,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "2.2.0"),
+        .package(url: "https://github.com/square/Blueprint", from: "4.0.0"),
     ],
     targets: [
         .target(
@@ -45,7 +45,7 @@ let package = Package(
                 .process("Resources"),
             ]
         ),
-        .testTarget(
+        .target(
             name: "Snapshot",
             path: "Internal Pods/Snapshot/Sources"
         ),
@@ -85,7 +85,10 @@ let package = Package(
         ),
         .testTarget(
             name: "BlueprintUIListsTests",
-            dependencies: ["BlueprintUILists"],
+            dependencies: [
+                "BlueprintUILists",
+                .product(name: "BlueprintUICommonControls", package: "Blueprint")
+            ],
             path: "BlueprintUILists/Tests"
         ),
     ],

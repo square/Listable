@@ -1,7 +1,6 @@
-  # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
-  # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-  # https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
-
+# https://github.com/actions/virtual-environments/blob/main/images/macos/macos-11-Readme.md
+# https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+# https://github.com/actions/cache/blob/ff937cc95032836a535d249de4ce2fc52aeae834/examples.md
 
 name: Tests
 
@@ -9,15 +8,14 @@ on:
   pull_request:
 
 jobs:
-
   spm:
     name: Swift Package Manager
 
-    runs-on: macos-12
+    runs-on: macos-13-xlarge
 
     steps:
-      - name: Switch To Xcode 14.2
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+      - name: Switch To Xcode 15.1
+        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -25,78 +23,56 @@ jobs:
       # Build
 
       - name: Build
-        run: swift build -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator"
+        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2" -sdk iphonesimulator build
 
-  ios_16:
-        name: iOS 16
+  test:
+    name: "iOS ${{ matrix.sdk }}"
 
-        runs-on: macos-12
+    runs-on: macos-13-xlarge
 
-        steps:
-          - name: Switch To Xcode 14.2
-            run: sudo xcode-select -switch /Applications/Xcode_14.2.app
+    strategy:
+      matrix:
+        include:
+          - sdk: "15.4"
+            simulator_name: iPhone SE (3rd generation)
+            installation_required: true
 
-          - name: Checkout repository
-            uses: actions/checkout@v1
+          - sdk: "16.2"
+            simulator_name: iPhone SE (3rd generation)
+            installation_required: true
 
-          # Build Caching
-
-          - name: Cache Bundler
-            uses: actions/cache@v2
-            with:
-              path: vendor/bundle
-              key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-              restore-keys: |
-                ${{ runner.os }}-gems-
-
-          - name: Cache Cocoapods
-            uses: actions/cache@v2
-            with:
-              path: Pods
-              key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-              restore-keys: |
-                ${{ runner.os }}-pods-
-
-          # Install & Build
-
-          - name: Bundle install
-            run: |
-              bundle config path vendor/bundle
-              bundle install --jobs 4 --retry 3
-
-          - name: Pod Install
-            run: bundle exec pod install --repo-update
-
-          - name: Run Tests
-            run: Scripts/run_ios16_tests.sh
-
-  ios_15:
-    name: iOS 15
-
-    runs-on: macos-12
+          - sdk: "17.2"
+            simulator_name: iPhone SE (3rd generation)
+            # The iOS 17.2 SDK is pre-installed on the macOS 13 image.
+            # Attempting to install it will fail with an error.
+            installation_required: false
 
     steps:
-      - name: Switch To Xcode 14
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
-
-      - name: Install xcodes
-        run: brew install aria2 xcodesorg/made/xcodes
-
-      - name: Install iOS ${{ matrix.sdk }}
-        run: sudo xcodes runtimes install "iOS 15.2"
 
       - name: Checkout repository
         uses: actions/checkout@v1
 
-      # Build Caching
+      - name: Read env
+        run: cat .github/workflows/env.properties >> $GITHUB_ENV
 
-      - name: Cache Bundler
-        uses: actions/cache@v2
+      - name: Switch to Xcode ${{ env.xcode_version }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+          # Uses version specified in .ruby_version
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Install xcodes
+        if: ${{ matrix.installation_required }}
+        run: brew install aria2 xcodesorg/made/xcodes
+
+      - name: Install iOS ${{ matrix.sdk }}
+        if: ${{ matrix.installation_required }}
+        run: sudo xcodes runtimes install "iOS ${{ matrix.sdk }}"
+
+      # Build Caching
 
       - name: Cache Cocoapods
         uses: actions/cache@v2
@@ -108,62 +84,9 @@ jobs:
 
       # Install & Build
 
-      - name: Bundle install
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
       - name: Pod Install
         run: bundle exec pod install --repo-update
 
-      - name: Run Tests
-        run: Scripts/run_ios15_tests.sh
-
-  ios_14:
-    name: iOS 14
-
-    runs-on: macos-12
-
-    steps:
-      - name: Switch To Xcode 14
-        run: sudo xcode-select -switch /Applications/Xcode_14.2.app
-
-      - name: Install xcodes
-        run: brew install aria2 xcodesorg/made/xcodes
-
-      - name: Install iOS ${{ matrix.sdk }}
-        run: sudo xcodes runtimes install "iOS 14.5"
-
-      - name: Checkout repository
-        uses: actions/checkout@v1
-
-      # Build Caching
-
-      - name: Cache Bundler
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: Cache Cocoapods
-        uses: actions/cache@v2
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
-      # Install & Build
-
-      - name: Bundle install
+      - name: Build & Test
         run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
-      - name: Pod Install
-        run: bundle exec pod install --repo-update
-
-      - name: Run Tests
-        run: Scripts/run_ios14_tests.sh
+          xcodebuild -workspace Demo/Demo.xcworkspace -scheme "Demo" -destination "platform=iOS Simulator,OS=${{ matrix.sdk }},name=${{ matrix.simulator_name }}" build test

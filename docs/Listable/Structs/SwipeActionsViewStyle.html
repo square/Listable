@@ -523,6 +523,9 @@
                 <a class="nav-group-task-link" href="../Structs/LayoutDescription/Configuration.html">– Configuration</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListAnimation.html">ListAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListContentBounds.html">ListContentBounds</a>
               </li>
               <li class="nav-group-task">
@@ -978,6 +981,38 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI21SwipeActionsViewStyleV12maxItemWidth14CoreFoundation7CGFloatVvp"></a>
+                    <a name="//apple_ref/swift/Property/maxItemWidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI21SwipeActionsViewStyleV12maxItemWidth14CoreFoundation7CGFloatVvp">maxItemWidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The maximum width of individual items. Defaults to 120, matching <code>UITableView</code></p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Currently only applicable to <code><a href="../Structs/SwipeActionsViewStyle/ButtonSizing.html#/s:10ListableUI21SwipeActionsViewStyleV12ButtonSizingO12sizeThatFitsyA2EmF">ButtonSizing.sizeThatFits</a></code> mode.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">maxItemWidth</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI21SwipeActionsViewStyleV13maxWidthRatio14CoreFoundation7CGFloatVvp"></a>
                     <a name="//apple_ref/swift/Property/maxWidthRatio" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI21SwipeActionsViewStyleV13maxWidthRatio14CoreFoundation7CGFloatVvp">maxWidthRatio</a>
@@ -1013,9 +1048,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI21SwipeActionsViewStyleV11actionShape18interActionSpacing22leadingContainerInsets08trailingmN021containerCornerRadius12buttonSizing8minWidth03maxV5RatioA2C0H0O_14CoreFoundation7CGFloatVSo017NSDirectionalEdgeN0VArpC06ButtonT0OA2Ptcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(actionShape:interActionSpacing:leadingContainerInsets:trailingContainerInsets:containerCornerRadius:buttonSizing:minWidth:maxWidthRatio:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI21SwipeActionsViewStyleV11actionShape18interActionSpacing22leadingContainerInsets08trailingmN021containerCornerRadius12buttonSizing8minWidth03maxV5RatioA2C0H0O_14CoreFoundation7CGFloatVSo017NSDirectionalEdgeN0VArpC06ButtonT0OA2Ptcfc">init(actionShape:<wbr>interActionSpacing:<wbr>leadingContainerInsets:<wbr>trailingContainerInsets:<wbr>containerCornerRadius:<wbr>buttonSizing:<wbr>minWidth:<wbr>maxWidthRatio:<wbr>)</a>
+                    <a name="/s:10ListableUI21SwipeActionsViewStyleV11actionShape18interActionSpacing22leadingContainerInsets08trailingmN021containerCornerRadius12buttonSizing8minWidth03maxV5Ratio0w4ItemV0A2C0H0O_14CoreFoundation7CGFloatVSo017NSDirectionalEdgeN0VAsqC06ButtonT0OA3Qtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(actionShape:interActionSpacing:leadingContainerInsets:trailingContainerInsets:containerCornerRadius:buttonSizing:minWidth:maxWidthRatio:maxItemWidth:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI21SwipeActionsViewStyleV11actionShape18interActionSpacing22leadingContainerInsets08trailingmN021containerCornerRadius12buttonSizing8minWidth03maxV5Ratio0w4ItemV0A2C0H0O_14CoreFoundation7CGFloatVSo017NSDirectionalEdgeN0VAsqC06ButtonT0OA3Qtcfc">init(actionShape:<wbr>interActionSpacing:<wbr>leadingContainerInsets:<wbr>trailingContainerInsets:<wbr>containerCornerRadius:<wbr>buttonSizing:<wbr>minWidth:<wbr>maxWidthRatio:<wbr>maxItemWidth:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1037,7 +1072,8 @@
     <span class="nv">containerCornerRadius</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="nv">buttonSizing</span><span class="p">:</span> <span class="kt"><a href="../Structs/SwipeActionsViewStyle/ButtonSizing.html">ButtonSizing</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">sizeThatFits</span><span class="p">,</span>
     <span class="nv">minWidth</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nv">maxWidthRatio</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mf">0.8</span>
+    <span class="nv">maxWidthRatio</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="nv">maxItemWidth</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">120</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -1053,8 +1089,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="https://github.com/kyleve/Listable" target="_blank" rel="external noopener">Kyle</a>. All rights reserved. (Last updated: 2023-09-06)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+      <p>&copy; Square, Inc. All rights reserved.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
 </html>

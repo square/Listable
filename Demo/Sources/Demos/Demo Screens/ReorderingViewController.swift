@@ -108,5 +108,23 @@ final class ReorderingViewController : ListViewController
                 item.reordering = ItemReordering(sections: .current)
             }
         }
+        
+        list += Section("5") { section in
+            section.header = DemoHeader(title: "Tile Section")
+            section.layouts.table.columns = .init(count: 2, spacing: 15.0)
+            
+            section += Item(DemoTile(text: "Item 0", secondaryText: "Section 4")) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+            section += Item(DemoTile(text: "Item 1", secondaryText: "Section 4")) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+            section += Item(DemoTile(text: "Item 2", secondaryText: "Section 4")) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+            section += Item(DemoTile(text: "Item 3", secondaryText: "Section 4")) { item in
+                item.reordering = ItemReordering(sections: .current)
+            }
+        }
     }
 }
