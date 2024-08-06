@@ -18,7 +18,7 @@ public struct ListableLocalizedStrings {
                                                                  bundle:  .listableUIResources,
                                                                  value: "Reorder",
                                                                  comment: "Accessibility label for the reorder control on an item")
-        
+                
         public static let accessibilityHint = NSLocalizedString("reorder.AccessibilityHint",
                                                                 tableName: nil,
                                                                 bundle:  .listableUIResources,

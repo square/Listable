@@ -76,6 +76,7 @@ public struct EmbeddedList : ItemContent
         
         self.properties = ListProperties(
             animatesChanges: true,
+            animation: .default,
             layout: .table(),
             appearance: .init {
                 $0.showsScrollIndicators = false

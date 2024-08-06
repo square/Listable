@@ -91,13 +91,38 @@ extension PresentationState
             }
         }
         
-        func willDisplay(view : SupplementaryContainerView)
+        func collectionViewWillDisplay(view : SupplementaryContainerView)
         {
+            /// **Note**: It's possible for this method and the below
+            /// to be called in an unbalanced manner (eg, we get moved to a new supplementary view),
+            /// _without_ an associated call to `collectionViewDidEndDisplay(of:)`.
+            ///
+            /// Thus, if any logic added to this method depends on the instance
+            /// of `visibleContainer` changing, wrap it in a `===` check.
+            
             self.visibleContainer = view
         }
         
-        func didEndDisplay()
+        func collectionViewDidEndDisplay(of view : SupplementaryContainerView)
         {
+            /// **Note**: This method is called _after_ the animation that removes
+            /// supplementary views from the collection view, so the ordering can be:
+            ///
+            /// 1) `collectionViewWillDisplay` of new supplementary view
+            /// 2) We're moved to that new supplementary view.
+            /// 2) Collection view finishes animation
+            /// 3) `collectionViewDidEndDisplay` is called.
+            ///
+            /// Because we manage the `HeaderFooter` view instances ourselves,
+            /// and simply insert them into a whatever supplementary view the collection view
+            /// is currently vending us, it's possible that `collectionViewWillDisplay`
+            /// has already assigned us a new supplementary view. Make sure the one
+            /// we're being asked to remove is the one we know about, otherwise, do nothing.
+            
+            guard view === visibleContainer else {
+                return
+            }
+            
             self.visibleContainer = nil
         }
         

@@ -134,11 +134,6 @@ extension ListView {
         
         required init?(coder: NSCoder) { fatalError() }
         
-        @available(*, unavailable, message: "Please use performBatchUpdates:changes:completion:.")
-        override func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
-            super.performBatchUpdates(updates, completion: completion)
-        }
-        
         func performBatchUpdates(
             _ updates: @escaping () -> Void,
             changes : CollectionViewChanges,

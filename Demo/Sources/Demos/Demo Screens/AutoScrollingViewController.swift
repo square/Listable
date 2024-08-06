@@ -62,6 +62,8 @@ final class AutoScrollingViewController : UIViewController
             list.appearance = .demoAppearance
             list.layout = .demoLayout
 
+            list.animation = .fast
+            
             list += Section("items", items: self.items)
 
             if let last = self.items.last {
