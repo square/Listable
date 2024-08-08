@@ -24,6 +24,13 @@ extension ListView
             let removed = self.items.subtracting(newItems)
             let added = newItems.subtracting(self.items)
             
+            // Note: We set these values _before_ we invoke `setAndPerform`,
+            // incase `setAndPerform` causes an external callback to trigger
+            // an update, which could cause this method to be re-entrant.
+            
+            self.items = newItems
+            self.headerFooters = newHeaderFooters
+            
             removed.forEach {
                 $0.item.setAndPerform(isDisplayed: false)
             }
@@ -31,9 +38,6 @@ extension ListView
             added.forEach {
                 $0.item.setAndPerform(isDisplayed: true)
             }
-                        
-            self.items = newItems
-            self.headerFooters = newHeaderFooters
             
             // Inform any state reader callbacks of the changes.
             
