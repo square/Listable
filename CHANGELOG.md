@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [14.3.1] - 2024-08-08
+
+### Fixed
+
+- Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
 
 # [14.3.0] - 2024-07-31
 
@@ -1047,7 +1051,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.3.0...main
+[Main]: https://github.com/square/Listable/compare/14.3.1...main
+[14.3.1]: https://github.com/square/Listable/compare/14.3.0...14.3.1
 [14.3.0]: https://github.com/square/Listable/compare/14.2.0...14.3.0
 [14.2.0]: https://github.com/square/Listable/compare/14.1.0...14.2.0
 [14.1.0]: https://github.com/square/Listable/compare/14.0.3...14.1.0
