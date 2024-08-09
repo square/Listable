@@ -39,3 +39,5 @@ public protocol AnyHeaderFooterConvertible {
 }
 
 
+/// A result builder that creates and returns a header or footer convertible value.
+public typealias AnyHeaderFooterBuilder = ListableOptionalBuilder<AnyHeaderFooterConvertible>
