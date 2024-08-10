@@ -140,13 +140,6 @@ extension ListView
             item.willDisplay(cell: cell, in: collectionView, for: indexPath)
             
             self.displayedItems[ObjectIdentifier(cell)] = item
-            
-            UIView.performWithoutAnimation {
-                /// Force a layout of the cell before it is displayed, so that any implicit animations
-                /// are avoided. This ensures that cases like toggling a switch on and off are
-                /// not animated as the cell comes into view.
-                cell.layoutIfNeeded()
-            }
         }
         
         func collectionView(
@@ -182,13 +175,6 @@ extension ListView
             headerFooter.collectionViewWillDisplay(view: container)
             
             self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
-            
-            UIView.performWithoutAnimation {
-                /// Force a layout of the cell before it is displayed, so that any implicit animations
-                /// are avoided. This ensures that cases like toggling a switch on and off are
-                /// not animated as the cell comes into view.
-                container.layoutIfNeeded()
-            }
         }
         
         func collectionView(
