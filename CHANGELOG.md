@@ -6,6 +6,8 @@
 
 ### Removed
 
+- Revert: Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
+
 ### Changed
 
 ### Misc
