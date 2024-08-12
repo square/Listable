@@ -13,6 +13,9 @@ import UIKit
 /// when the list content underflows the available space in the list view.
 public struct Behavior : Equatable
 {
+    /// Whether the list scroll view should be enabled.
+    public var isScrollEnabled: Bool
+
     /// How the keyboard should be dismissed (if at all) based on scrolling of the list view.
     public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
     
@@ -48,6 +51,7 @@ public struct Behavior : Equatable
 
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
+        isScrollEnabled: Bool = true,
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
         scrollsToTop : ScrollsToTop = .enabled,
@@ -59,6 +63,7 @@ public struct Behavior : Equatable
         decelerationRate : DecelerationRate = .normal,
         verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
+        self.isScrollEnabled = isScrollEnabled
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
         
