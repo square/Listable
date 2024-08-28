@@ -718,6 +718,33 @@ when the list content underflows the available space in the list view.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabledSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isScrollEnabled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabledSbvp">isScrollEnabled</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the list scroll view should be enabled.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isScrollEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI8BehaviorV19keyboardDismissModeSo020UIScrollViewKeyboardeF0Vvp"></a>
                     <a name="//apple_ref/swift/Property/keyboardDismissMode" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI8BehaviorV19keyboardDismissModeSo020UIScrollViewKeyboardeF0Vvp">keyboardDismissMode</a>
@@ -991,9 +1018,9 @@ how inserting new elements or changing the <code>contentInset</code> affects the
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRate21verticalLayoutGravityACSo020UIScrollViewKeyboardeF0V_AC08KeyboardgF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0OAC08VerticalxY0Otcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:isPagingEnabled:decelerationRate:verticalLayoutGravity:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV19keyboardDismissMode0d10AdjustmentF012scrollsToTop09selectionF09underflow23canCancelContentTouches06delaysoP015isPagingEnabled16decelerationRate21verticalLayoutGravityACSo020UIScrollViewKeyboardeF0V_AC08KeyboardgF0OAC07ScrollsiJ0OAC09SelectionF0OAC9UnderflowVS3bAC012DecelerationV0OAC08VerticalxY0Otcfc">init(keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>isPagingEnabled:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>)</a>
+                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS00d6PagingF016decelerationRate21verticalLayoutGravityACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS3bAC012DecelerationW0OAC08VerticalyZ0Otcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(isScrollEnabled:keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:isPagingEnabled:decelerationRate:verticalLayoutGravity:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS00d6PagingF016decelerationRate21verticalLayoutGravityACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS3bAC012DecelerationW0OAC08VerticalyZ0Otcfc">init(isScrollEnabled:<wbr>keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>isPagingEnabled:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1009,6 +1036,7 @@ how inserting new elements or changing the <code>contentInset</code> affects the
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">isScrollEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nv">keyboardDismissMode</span> <span class="p">:</span> <span class="kt">UIScrollView</span><span class="o">.</span><span class="kt">KeyboardDismissMode</span> <span class="o">=</span> <span class="o">.</span><span class="n">interactive</span><span class="p">,</span>
     <span class="nv">keyboardAdjustmentMode</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/KeyboardAdjustmentMode.html">KeyboardAdjustmentMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">adjustsWhenVisible</span><span class="p">,</span>
     <span class="nv">scrollsToTop</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/ScrollsToTop.html">ScrollsToTop</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">enabled</span><span class="p">,</span>

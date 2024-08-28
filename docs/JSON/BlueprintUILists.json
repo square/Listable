@@ -40,7 +40,7 @@
         "key.parsed_scope.end" : 14,
         "key.parsed_scope.start" : 14,
         "key.reusingastcontext" : false,
-        "key.typename" : "BlueprintHeaderFooterContent.Protocol",
+        "key.typename" : "BlueprintHeaderFooterContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A19HeaderFooterContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A13HeaderContenta"
       },
@@ -80,7 +80,7 @@
         "key.parsed_scope.end" : 17,
         "key.parsed_scope.start" : 17,
         "key.reusingastcontext" : false,
-        "key.typename" : "BlueprintHeaderFooterContent.Protocol",
+        "key.typename" : "BlueprintHeaderFooterContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A19HeaderFooterContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A13FooterContenta"
       },
@@ -195,7 +195,7 @@
             "key.parsed_scope.end" : 72,
             "key.parsed_scope.start" : 72,
             "key.reusingastcontext" : false,
-            "key.typename" : "Element",
+            "key.typename" : "any Element",
             "key.typeusr" : "$s11BlueprintUI7Element_pD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP21elementRepresentation0A2UI7Element_pvp"
           },
@@ -240,7 +240,7 @@
               }
             ],
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp"
           },
@@ -285,12 +285,12 @@
               }
             ],
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp"
           }
         ],
-        "key.typename" : "BlueprintHeaderFooterContent.Protocol",
+        "key.typename" : "BlueprintHeaderFooterContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A19HeaderFooterContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP"
       },
@@ -587,7 +587,7 @@
               }
             ],
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp"
           },
@@ -632,7 +632,7 @@
               }
             ],
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp"
           },
@@ -889,7 +889,7 @@
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentPAAE03newA4View33_02A79BC97C366F3BDEC29D56D447731DLL4with0A2UI0aG0CSo6CGRectV_tFZ"
           }
         ],
-        "key.typename" : "BlueprintHeaderFooterContent.Protocol",
+        "key.typename" : "BlueprintHeaderFooterContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A19HeaderFooterContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP"
       },
@@ -978,12 +978,12 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : Element> (Self) -> (ApplyHeaderFooterContentInfo) -> Element",
+            "key.typename" : "<Self where Self : Element> (Self) -> (ApplyHeaderFooterContentInfo) -> any Element",
             "key.typeusr" : "$s4with11BlueprintUI7Element_p08ListableC028ApplyHeaderFooterContentInfoV_tcD",
             "key.usr" : "s:11BlueprintUI7ElementP0A7UIListsE18adaptedEnvironment33_02A79BC97C366F3BDEC29D56D447731DLL4withAaB_p08ListableB028ApplyHeaderFooterContentInfoV_tF"
           }
         ],
-        "key.typename" : "Element.Protocol",
+        "key.typename" : "Element.Type",
         "key.typeusr" : "$s11BlueprintUI7Element_pmD",
         "key.usr" : "s:11BlueprintUI7ElementP"
       }
@@ -1103,7 +1103,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> any Element",
             "key.typeusr" : "$s4with11BlueprintUI7Element_p08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP7element4with0A2UI7Element_p08ListableG005ApplycD4InfoV_tF"
           },
@@ -1152,7 +1152,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF"
           },
@@ -1201,7 +1201,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           },
@@ -1250,7 +1250,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP24overlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           },
@@ -1299,12 +1299,12 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP25underlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           }
         ],
-        "key.typename" : "BlueprintItemContent.Protocol",
+        "key.typename" : "BlueprintItemContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A11ItemContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A11ItemContentP"
       },
@@ -1590,7 +1590,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF"
           },
@@ -1633,7 +1633,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           },
@@ -1676,7 +1676,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE24overlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           },
@@ -1719,12 +1719,12 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Self where Self : BlueprintItemContent> (Self) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE25underlayDecorationElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           }
         ],
-        "key.typename" : "BlueprintItemContent.Protocol",
+        "key.typename" : "BlueprintItemContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A11ItemContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A11ItemContentP"
       },
@@ -2143,7 +2143,7 @@
             "key.usr" : "s:16BlueprintUILists0A11ItemContentPAAE03newA4View33_00A2BB1FCE0BEE1B772989891DE46E9ALL4with0A2UI0aF0CSo6CGRectV_tFZ"
           }
         ],
-        "key.typename" : "BlueprintItemContent.Protocol",
+        "key.typename" : "BlueprintItemContent.Type",
         "key.typeusr" : "$s16BlueprintUILists0A11ItemContent_pmD",
         "key.usr" : "s:16BlueprintUILists0A11ItemContentP"
       },
@@ -2232,12 +2232,12 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : Element> (Self) -> (ApplyItemContentInfo) -> Element",
+            "key.typename" : "<Self where Self : Element> (Self) -> (ApplyItemContentInfo) -> any Element",
             "key.typeusr" : "$s4with11BlueprintUI7Element_p08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:11BlueprintUI7ElementP0A7UIListsE18adaptedEnvironment33_00A2BB1FCE0BEE1B772989891DE46E9ALL4withAaB_p08ListableB020ApplyItemContentInfoV_tF"
           }
         ],
-        "key.typename" : "Element.Protocol",
+        "key.typename" : "Element.Type",
         "key.typeusr" : "$s11BlueprintUI7Element_pmD",
         "key.usr" : "s:11BlueprintUI7ElementP"
       }
@@ -2353,7 +2353,7 @@
             "key.usr" : "s:16BlueprintUILists19ElementHeaderFooter_12isEquivalent7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_Sbx_xtc0aN00C0_pxcAoP_pSgxcAQxcyANzXEtlF11RepresentedL_xmfp"
           }
         ],
-        "key.typename" : "<Represented> (Represented, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented) -> Element, background: @escaping (Represented) -> Element?, pressedBackground: @escaping (Represented) -> Element?, configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> ()) -> HeaderFooter<ElementHeaderFooterContent<Represented>>",
+        "key.typename" : "<Represented> (Represented, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented) -> any Element, background: @escaping (Represented) -> (any Element)?, pressedBackground: @escaping (Represented) -> (any Element)?, configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> ()) -> HeaderFooter<ElementHeaderFooterContent<Represented>>",
         "key.typeusr" : "$s_12isEquivalent7element10background17pressedBackground9configure10ListableUI12HeaderFooterVy16BlueprintUILists07ElementjK7ContentVyxGGx_Sbx_xtc0lI00N0_pxcAnO_pSgxcAPxcyAMzXEtcluD",
         "key.usr" : "s:16BlueprintUILists19ElementHeaderFooter_12isEquivalent7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_Sbx_xtc0aN00C0_pxcAoP_pSgxcAQxcyANzXEtlF"
       },
@@ -2450,7 +2450,7 @@
             "key.usr" : "s:16BlueprintUILists19ElementHeaderFooter_7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_0aL00C0_pxcAnO_pSgxcAPxcyAMzXEtSQRzlF11RepresentedL_xmfp"
           }
         ],
-        "key.typename" : "<Represented where Represented : Equatable> (Represented, element: @escaping (Represented) -> Element, background: @escaping (Represented) -> Element?, pressedBackground: @escaping (Represented) -> Element?, configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> ()) -> HeaderFooter<ElementHeaderFooterContent<Represented>>",
+        "key.typename" : "<Represented where Represented : Equatable> (Represented, element: @escaping (Represented) -> any Element, background: @escaping (Represented) -> (any Element)?, pressedBackground: @escaping (Represented) -> (any Element)?, configure: (inout HeaderFooter<ElementHeaderFooterContent<Represented>>) -> ()) -> HeaderFooter<ElementHeaderFooterContent<Represented>>",
         "key.typeusr" : "$s_7element10background17pressedBackground9configure10ListableUI12HeaderFooterVy16BlueprintUILists07ElementhI7ContentVyxGGx_0jG00L0_pxcAmN_pSgxcAOxcyALzXEtcSQRzluD",
         "key.usr" : "s:16BlueprintUILists19ElementHeaderFooter_7element10background17pressedBackground9configure10ListableUI0dE0VyAA0cdE7ContentVyxGGx_0aL00C0_pxcAnO_pSgxcAPxcyAMzXEtSQRzlF"
       },
@@ -2599,7 +2599,7 @@
             "key.parsed_scope.end" : 124,
             "key.parsed_scope.start" : 124,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented) -> Element",
+            "key.typename" : "(Represented) -> any Element",
             "key.typeusr" : "$sy11BlueprintUI7Element_pxcD",
             "key.usr" : "s:16BlueprintUILists26ElementHeaderFooterContentV15elementProvidery0A2UI0C0_pxcvp"
           },
@@ -2622,7 +2622,7 @@
             "key.parsed_scope.end" : 125,
             "key.parsed_scope.start" : 125,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented) -> Element?",
+            "key.typename" : "(Represented) -> (any Element)?",
             "key.typeusr" : "$sy11BlueprintUI7Element_pSgxcD",
             "key.usr" : "s:16BlueprintUILists26ElementHeaderFooterContentV18backgroundProvidery0A2UI0C0_pSgxcvp"
           },
@@ -2645,7 +2645,7 @@
             "key.parsed_scope.end" : 126,
             "key.parsed_scope.start" : 126,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented) -> Element?",
+            "key.typename" : "(Represented) -> (any Element)?",
             "key.typeusr" : "$sy11BlueprintUI7Element_pSgxcD",
             "key.usr" : "s:16BlueprintUILists26ElementHeaderFooterContentV25pressedBackgroundProvidery0A2UI0C0_pSgxcvp"
           },
@@ -2734,7 +2734,7 @@
             "key.parsed_scope.end" : 134,
             "key.parsed_scope.start" : 132,
             "key.reusingastcontext" : false,
-            "key.typename" : "Element",
+            "key.typename" : "any Element",
             "key.typeusr" : "$s11BlueprintUI7Element_pD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP21elementRepresentation0A2UI7Element_pvp"
           },
@@ -2786,7 +2786,7 @@
             "key.parsed_scope.end" : 138,
             "key.parsed_scope.start" : 136,
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP10background0A2UI7Element_pSgvp"
           },
@@ -2838,7 +2838,7 @@
             "key.parsed_scope.end" : 142,
             "key.parsed_scope.start" : 140,
             "key.reusingastcontext" : false,
-            "key.typename" : "Element?",
+            "key.typename" : "(any Element)?",
             "key.typeusr" : "$s11BlueprintUI7Element_pSgD",
             "key.usr" : "s:16BlueprintUILists0A19HeaderFooterContentP17pressedBackground0A2UI7Element_pSgvp"
           }
@@ -3156,7 +3156,7 @@
             "key.usr" : "s:16BlueprintUILists11ElementItem_2id12isEquivalent7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_GSbx_xtc0aN00C0_px_AI05ApplydO4InfoVtcAsT_pSgx_AVtcAWx_AVtcyAOzXEtSHR_r0_lF15IdentifierValueL_q_mfp"
           }
         ],
-        "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (Represented, id: KeyPath<Represented, IdentifierValue>, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented, ApplyItemContentInfo) -> Element, background: @escaping (Represented, ApplyItemContentInfo) -> Element?, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element?, configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> ()) -> Item<ElementItemContent<Represented, IdentifierValue>>",
+        "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (Represented, id: KeyPath<Represented, IdentifierValue>, isEquivalent: @escaping (Represented, Represented) -> Bool, element: @escaping (Represented, ApplyItemContentInfo) -> any Element, background: @escaping (Represented, ApplyItemContentInfo) -> (any Element)?, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> (any Element)?, configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> ()) -> Item<ElementItemContent<Represented, IdentifierValue>>",
         "key.typeusr" : "$s_2id12isEquivalent7element10background18selectedBackground9configure10ListableUI4ItemVy16BlueprintUILists07ElementK7ContentVyxq_GGx_s7KeyPathCyxq_GSbx_xtc0lJ00N0_px_AG05ApplykO4InfoVtcArS_pSgx_AUtcAVx_AUtcyANzXEtcSHR_r0_luD",
         "key.usr" : "s:16BlueprintUILists11ElementItem_2id12isEquivalent7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_GSbx_xtc0aN00C0_px_AI05ApplydO4InfoVtcAsT_pSgx_AVtcAWx_AVtcyAOzXEtSHR_r0_lF"
       },
@@ -3287,7 +3287,7 @@
             "key.usr" : "s:16BlueprintUILists11ElementItem_2id7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_G0aL00C0_px_AH05ApplydM4InfoVtcArS_pSgx_AUtcAVx_AUtcyANzXEtSQRzSHR_r0_lF15IdentifierValueL_q_mfp"
           }
         ],
-        "key.typename" : "<Represented, IdentifierValue where Represented : Equatable, IdentifierValue : Hashable> (Represented, id: KeyPath<Represented, IdentifierValue>, element: @escaping (Represented, ApplyItemContentInfo) -> Element, background: @escaping (Represented, ApplyItemContentInfo) -> Element?, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> Element?, configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> ()) -> Item<ElementItemContent<Represented, IdentifierValue>>",
+        "key.typename" : "<Represented, IdentifierValue where Represented : Equatable, IdentifierValue : Hashable> (Represented, id: KeyPath<Represented, IdentifierValue>, element: @escaping (Represented, ApplyItemContentInfo) -> any Element, background: @escaping (Represented, ApplyItemContentInfo) -> (any Element)?, selectedBackground: @escaping (Represented, ApplyItemContentInfo) -> (any Element)?, configure: (inout Item<ElementItemContent<Represented, IdentifierValue>>) -> ()) -> Item<ElementItemContent<Represented, IdentifierValue>>",
         "key.typeusr" : "$s_2id7element10background18selectedBackground9configure10ListableUI4ItemVy16BlueprintUILists07ElementI7ContentVyxq_GGx_s7KeyPathCyxq_G0jH00L0_px_AF05ApplyiM4InfoVtcAqR_pSgx_ATtcAUx_ATtcyAMzXEtcSQRzSHR_r0_luD",
         "key.usr" : "s:16BlueprintUILists11ElementItem_2id7element10background18selectedBackground9configure10ListableUI0D0VyAA0cD7ContentVyxq_GGx_s7KeyPathCyxq_G0aL00C0_px_AH05ApplydM4InfoVtcArS_pSgx_AUtcAVx_AUtcyANzXEtSQRzSHR_r0_lF"
       },
@@ -3498,7 +3498,7 @@
             "key.parsed_scope.end" : 133,
             "key.parsed_scope.start" : 133,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element",
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> any Element",
             "key.typeusr" : "$sy11BlueprintUI7Element_px_08ListableB020ApplyItemContentInfoVtcD",
             "key.usr" : "s:16BlueprintUILists18ElementItemContentV15elementProvidery0A2UI0C0_px_08ListableH005ApplydE4InfoVtcvp"
           },
@@ -3521,7 +3521,7 @@
             "key.parsed_scope.end" : 134,
             "key.parsed_scope.start" : 134,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element?",
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$sy11BlueprintUI7Element_pSgx_08ListableB020ApplyItemContentInfoVtcD",
             "key.usr" : "s:16BlueprintUILists18ElementItemContentV18backgroundProvidery0A2UI0C0_pSgx_08ListableH005ApplydE4InfoVtcvp"
           },
@@ -3544,7 +3544,7 @@
             "key.parsed_scope.end" : 135,
             "key.parsed_scope.start" : 135,
             "key.reusingastcontext" : false,
-            "key.typename" : "(Represented, ApplyItemContentInfo) -> Element?",
+            "key.typename" : "(Represented, ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$sy11BlueprintUI7Element_pSgx_08ListableB020ApplyItemContentInfoVtcD",
             "key.usr" : "s:16BlueprintUILists18ElementItemContentV26selectedBackgroundProvidery0A2UI0C0_pSgx_08ListableI005ApplydE4InfoVtcvp"
           },
@@ -3748,7 +3748,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> Element",
+            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> any Element",
             "key.typeusr" : "$s4with11BlueprintUI7Element_p08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP7element4with0A2UI7Element_p08ListableG005ApplycD4InfoV_tF"
           },
@@ -3806,7 +3806,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP17backgroundElement4with0A2UI0F0_pSg08ListableH005ApplycD4InfoV_tF"
           },
@@ -3864,7 +3864,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> Element?",
+            "key.typename" : "<Represented, IdentifierValue where IdentifierValue : Hashable> (ElementItemContent<Represented, IdentifierValue>) -> (ApplyItemContentInfo) -> (any Element)?",
             "key.typeusr" : "$s4with11BlueprintUI7Element_pSg08ListableC020ApplyItemContentInfoV_tcD",
             "key.usr" : "s:16BlueprintUILists0A11ItemContentP25selectedBackgroundElement4with0A2UI0G0_pSg08ListableI005ApplycD4InfoV_tF"
           }
@@ -4084,7 +4084,7 @@
     "key.offset" : 0,
     "key.substructure" : [
       {
-        "key.annotated_decl" : "<Declaration>public struct List : Element<\/Declaration>",
+        "key.annotated_decl" : "<Declaration>public struct List : <Type usr=\"s:11BlueprintUI7ElementP\">Element<\/Type><\/Declaration>",
         "key.bodylength" : 3429,
         "key.bodyoffset" : 1301,
         "key.column" : 15,
@@ -4114,7 +4114,7 @@
         "key.doclength" : 1152,
         "key.docoffset" : 133,
         "key.filepath" : "\/Users\/k\/Development\/Listable2\/BlueprintUILists\/Sources\/List.swift",
-        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>List<\/decl.name> : Element<\/decl.struct>",
+        "key.fully_annotated_decl" : "<decl.struct><syntaxtype.keyword>public<\/syntaxtype.keyword> <syntaxtype.keyword>struct<\/syntaxtype.keyword> <decl.name>List<\/decl.name> : <ref.protocol usr=\"s:11BlueprintUI7ElementP\">Element<\/ref.protocol><\/decl.struct>",
         "key.kind" : "source.lang.swift.decl.extension",
         "key.length" : 3446,
         "key.line" : 42,
@@ -5927,7 +5927,7 @@
             "key.parsed_scope.start" : 49,
             "key.reusingastcontext" : false,
             "key.setter_accessibility" : "source.lang.swift.accessibility.public",
-            "key.typename" : "Element",
+            "key.typename" : "any Element",
             "key.typeusr" : "$s11BlueprintUI7Element_pD",
             "key.usr" : "s:16BlueprintUILists18ListReorderGestureV7element0A2UI7Element_pvp"
           },
@@ -6123,7 +6123,7 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "(ListReorderGesture.Type) -> (Bool, ReorderingActions, ListReorderGesture.Begins, String?, Element) -> ListReorderGesture",
+            "key.typename" : "(ListReorderGesture.Type) -> (Bool, ReorderingActions, ListReorderGesture.Begins, String?, any Element) -> ListReorderGesture",
             "key.typeusr" : "$s9isEnabled7actions6begins18accessibilityLabel8wrapping16BlueprintUILists18ListReorderGestureVSb_10ListableUI17ReorderingActionsCAH6BeginsOSSSg0hN07Element_ptcD",
             "key.usr" : "s:16BlueprintUILists18ListReorderGestureV9isEnabled7actions6begins18accessibilityLabel8wrappingACSb_10ListableUI17ReorderingActionsCAC6BeginsOSSSg0aN07Element_ptcfc"
           },
@@ -6347,12 +6347,12 @@
             "key.substructure" : [
 
             ],
-            "key.typename" : "<Self where Self : Element> (Self) -> (ReorderingActions, Bool, ListReorderGesture.Begins, String?) -> Element",
+            "key.typename" : "<Self where Self : Element> (Self) -> (ReorderingActions, Bool, ListReorderGesture.Begins, String?) -> any Element",
             "key.typeusr" : "$s4with9isEnabled6begins18accessibilityLabel11BlueprintUI7Element_p08ListableH017ReorderingActionsC_Sb0G7UILists18ListReorderGestureV6BeginsOSSSgtcD",
             "key.usr" : "s:11BlueprintUI7ElementP0A7UIListsE18listReorderGesture4with9isEnabled6begins18accessibilityLabelAaB_p08ListableB017ReorderingActionsC_SbAD04ListfG0V6BeginsOSSSgtF"
           }
         ],
-        "key.typename" : "Element.Protocol",
+        "key.typename" : "Element.Type",
         "key.typeusr" : "$s11BlueprintUI7Element_pmD",
         "key.usr" : "s:11BlueprintUI7ElementP"
       },
