@@ -48,6 +48,10 @@ public struct ListLayoutScrollViewProperties : Equatable
         /// because some UIScrollView properties, even when set to the same value, can affect or stop scrolling if it
         /// is in progress. Hard to tell which across iOS versions, so just always be defensive.
         
+        if view.isScrollEnabled != behavior.isScrollEnabled {
+            view.isScrollEnabled = behavior.isScrollEnabled
+        }
+
         let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
                 
         if view.isPagingEnabled != isPagingEnabled {

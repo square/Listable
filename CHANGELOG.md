@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added new `isScrollEnabled` property to `Behavior` to disable scrolling on a list if needed.
+
 ### Removed
 
 - Revert: Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
