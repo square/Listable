@@ -572,6 +572,8 @@ class ListViewTests: XCTestCase
             
             var content = ListProperties.default { list in
                 
+                list.animatesChanges = false
+                
                 list.sections = (1...50).map { sectionID in
                     Section(sectionID) {
                         for itemID in 1...20 {
