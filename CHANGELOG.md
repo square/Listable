@@ -6,6 +6,8 @@
 
 ### Removed
 
+- Removed "magic" behavior that automatically loaded our internal keyboard observer. You must now manually call `ListView.configure(with:)` early in your application's lifecycle.
+
 ### Changed
 
 - `animatesChanges` now always defaults to `true`.

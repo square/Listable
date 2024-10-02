@@ -297,10 +297,13 @@ extension KeyboardObserver {
 
         print(
             """
-            LISTABLE WARNING: The shared instance of the `KeyboardObserver` was not instantiated
-            during app startup. While not fatal, this could result in a list being created
-            that does not properly position itself to account for the keyboard, if the list is created
+            LISTABLE WARNING: The shared instance of the `KeyboardObserver` was not instantiated \
+            during app startup. While not fatal, this could result in a list being created \
+            that does not properly position itself to account for the keyboard, if the list is created \
             while the keyboard is already visible.
+            
+            Please ensure you invoke `ListView.configure(with: application)` before the first `ListView` \
+            is placed on screen to ensure proper keyboard handling.
             """
         )
     }

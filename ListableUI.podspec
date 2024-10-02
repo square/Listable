@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.swift_versions = [LISTABLE_SWIFT_VERSION]
 
-  s.source_files = 'ListableUI/Sources/**/*.{swift,h,m}'
+  s.source_files = 'ListableUI/Sources/**/*.swift'
   s.resource_bundle = { 'ListableUIResources' => 'ListableUI/Resources/**/*' }
 
   s.weak_framework = 'SwiftUI'
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
     # These tests can only be run locally, because they depend on local pods.
 
     s.test_spec 'Tests' do |test_spec|
-      test_spec.source_files = 'ListableUI/Tests/**/*.{swift}'
+      test_spec.source_files = 'ListableUI/Tests/**/*.swift'
       test_spec.ios.resource_bundle = { 'ListableUITestsResources' => 'ListableUI/Tests/Resources/**/*.*' }
 
       test_spec.framework = 'XCTest'
