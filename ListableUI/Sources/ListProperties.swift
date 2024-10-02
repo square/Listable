@@ -161,7 +161,7 @@ import UIKit
         with configure : Configure = { _ in }
     ) -> Self {
         Self(
-            animatesChanges: UIView.inheritedAnimationDuration > 0.0,
+            animatesChanges: true,
             animation: .default,
             layout: .table(),
             appearance: .init(),

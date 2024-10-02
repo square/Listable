@@ -8,6 +8,8 @@
 
 ### Changed
 
+- `animatesChanges` now always defaults to `true`.
+
 ### Misc
 
 ### Internal
