@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/square/Blueprint",
       "state" : {
-        "revision" : "93ccf388f656db030750ac2a895dc80205e5ae20",
-        "version" : "4.0.0"
+        "branch" : "sgrosmark/fix/stack-measurement",
+        "revision" : "b368bb7008e92368f5ac892aca41f321eaa1e6b5"
       }
     }
   ],

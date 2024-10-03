@@ -20,7 +20,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "4.0.0"),
+        .package(url: "https://github.com/square/Blueprint", branch: "sgrosmark/fix/stack-measurement"),
     ],
     targets: [
         .target(
