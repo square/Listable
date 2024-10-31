@@ -8,13 +8,21 @@
 
 ### Changed
 
-- `animatesChanges` now always defaults to `true`.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [14.4.1] - 2024-10-31
+
+### Changed
+
+- `animatesChanges` now always defaults to `true`.
+
+### Internal
+
+- `BlueprintUILists` now depends on `BlueprintUI` 5.0.0.
 
 # [14.4.0] - 2024-08-27
 
@@ -1063,7 +1071,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.4.0...main
+[Main]: https://github.com/square/Listable/compare/14.4.1...main
+[14.4.0]: https://github.com/square/Listable/compare/14.4.0...14.4.1
 [14.4.0]: https://github.com/square/Listable/compare/14.3.1...14.4.0
 [14.3.1]: https://github.com/square/Listable/compare/14.3.0...14.3.1
 [14.3.0]: https://github.com/square/Listable/compare/14.2.0...14.3.0
