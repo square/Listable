@@ -11,11 +11,11 @@ jobs:
   spm:
     name: Swift Package Manager
 
-    runs-on: macos-13-xlarge
+    runs-on: macos-14-xlarge
 
     steps:
-      - name: Switch To Xcode 15.1
-        run: sudo xcode-select -switch /Applications/Xcode_15.1.app
+      - name: Switch To Xcode 15.4
+        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -28,7 +28,7 @@ jobs:
   test:
     name: "iOS ${{ matrix.sdk }}"
 
-    runs-on: macos-13-xlarge
+    runs-on: macos-14-xlarge
 
     strategy:
       matrix:

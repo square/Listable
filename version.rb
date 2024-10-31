@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-BLUEPRINT_VERSION ||= ['~> 4.0'].freeze
+BLUEPRINT_VERSION ||= ['~> 5.0'].freeze
 
-LISTABLE_VERSION ||= '14.4.0'
+LISTABLE_VERSION ||= '14.4.1'
 
 LISTABLE_IOS_DEPLOYMENT_TARGET ||= '15.0'
 
