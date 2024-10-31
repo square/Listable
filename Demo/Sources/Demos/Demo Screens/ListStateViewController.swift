@@ -61,7 +61,7 @@ final class ListStateViewController : ListViewController
             self?.actions.scrolling.scrollTo(
                 item: DemoItem.identifier(with: "Item #\(value)"),
                 position: .init(position: .top, ifAlreadyVisible: .scrollToPosition),
-                animation: .default
+                animated: true
             )
         }
         
@@ -74,12 +74,12 @@ final class ListStateViewController : ListViewController
     
     @objc private func scrollUp()
     {
-        self.actions.scrolling.scrollToTop(animation: .default)
+        self.actions.scrolling.scrollToTop(animated: true)
     }
     
     @objc private func scrollDown()
     {
-        self.actions.scrolling.scrollToLastItem(animation: .default)
+        self.actions.scrolling.scrollToLastItem(animated: true)
     }
     
     @objc private func doSignal()

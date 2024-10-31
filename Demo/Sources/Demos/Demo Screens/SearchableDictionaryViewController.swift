@@ -52,7 +52,7 @@ final public class SearchableDictionaryViewController : UIViewController
         self.listView.scrollTo(
             item: WordRow.identifier(with: "clam"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
-            animation: .default
+            animated: true
         )
     }
     
@@ -61,7 +61,7 @@ final public class SearchableDictionaryViewController : UIViewController
         self.listView.scrollTo(
             item: WordRow.identifier(with: "aard-vark"),
             position: .init(position: .centered, ifAlreadyVisible: .doNothing),
-            animation: .default
+            animated: true
         )
     }
 

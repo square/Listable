@@ -72,7 +72,7 @@ final class AutoScrollingViewController : UIViewController
                     .lastItem,
                     onInsertOf: last.identifier,
                     position: .init(position: .bottom),
-                    animation: .default,
+                    animated: true,
                     shouldPerform: { info in
                         // Only scroll to the bottom if the bottom item is already visible.
                         if let identifier = lastItem {

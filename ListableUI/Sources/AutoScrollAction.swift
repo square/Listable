@@ -58,7 +58,7 @@ public enum AutoScrollAction {
         _ destination : ScrollDestination? = nil,
         onInsertOf insertedIdentifier: AnyIdentifier,
         position: ScrollPosition,
-        animation: ViewAnimation = .none,
+        animated : Bool = false,
         shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
         didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
     ) -> AutoScrollAction
@@ -68,7 +68,7 @@ public enum AutoScrollAction {
                 destination: destination ?? .item(insertedIdentifier),
                 insertedIdentifier: insertedIdentifier,
                 position: position,
-                animation: animation,
+                animated: animated,
                 shouldPerform: shouldPerform,
                 didPerform: didPerform
             )
@@ -109,7 +109,7 @@ public enum AutoScrollAction {
     public static func pin(
         _ destination : ScrollDestination,
         position: ScrollPosition,
-        animation: ViewAnimation = .none,
+        animated : Bool = false,
         shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
         didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
     ) -> AutoScrollAction
@@ -118,7 +118,7 @@ public enum AutoScrollAction {
             to: .init(
                 destination: destination,
                 position: position,
-                animation: animation,
+                animated: animated,
                 shouldPerform: shouldPerform,
                 didPerform: didPerform
             )
@@ -163,12 +163,12 @@ extension AutoScrollAction
         /// The desired scroll position,
         public var position : ScrollPosition
         
-        /// How to animate the change.
+        /// If the change should be animated.
         ///
         /// ### Note
         /// The action will only be animated if it is animated, **and** the list update itself is
         /// animated. Otherwise, no animation occurs.
-        public var animation : ViewAnimation
+        public var animated : Bool
         
         /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool
@@ -186,12 +186,12 @@ extension AutoScrollAction
         /// The desired scroll position,
         public var position : ScrollPosition
         
-        /// How to animate the change.
+        /// If the change should be animated.
         ///
         /// ### Note
         /// The action will only be animated if it is animated, **and** the list update itself is
         /// animated. Otherwise, no animation occurs.
-        public var animation : ViewAnimation
+        public var animated : Bool
         
         /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool

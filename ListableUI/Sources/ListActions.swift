@@ -94,8 +94,7 @@ public final class ListActions {
         public func scrollTo(
             item : AnyItem,
             position : ScrollPosition,
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
+            animated : Bool = false
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -105,8 +104,7 @@ public final class ListActions {
             return listView.scrollTo(
                 item: item,
                 position: position,
-                animation: animation,
-                completion: completion
+                animated: animated
             )
         }
         
@@ -119,8 +117,7 @@ public final class ListActions {
         public func scrollTo(
             item : AnyIdentifier,
             position : ScrollPosition,
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
+            animated : Bool = false
             ) -> Bool
         {
             guard let listView = self.listView else {
@@ -130,8 +127,7 @@ public final class ListActions {
             return listView.scrollTo(
                 item: item,
                 position: position,
-                animation: animation,
-                completion: completion
+                animated: animated
             )
         }
 
@@ -155,8 +151,7 @@ public final class ListActions {
             with identifier : AnyIdentifier,
             sectionPosition : SectionPosition = .top,
             scrollPosition : ScrollPosition,
-            animation: ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
+            animated: Bool = false
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -167,16 +162,14 @@ public final class ListActions {
                 with: identifier,
                 sectionPosition: sectionPosition,
                 scrollPosition: scrollPosition,
-                animation: animation,
-                completion: completion
+                animated: animated
             )
         }
         
         /// Scrolls to the very top of the list, which includes displaying the list header.
         @discardableResult
         public func scrollToTop(
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
+            animated: Bool = false
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -184,16 +177,14 @@ public final class ListActions {
             }
             
             return listView.scrollToTop(
-                animation: animation,
-                completion: completion
+                animated: animated
             )
         }
 
         /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
         @discardableResult
         public func scrollToLastItem(
-            animation : ViewAnimation = .none,
-            completion : @escaping ScrollCompletion = { _ in }
+            animated: Bool = false
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -201,8 +192,7 @@ public final class ListActions {
             }
            
             return listView.scrollToLastItem(
-                animation: animation,
-                completion: completion
+                animated: animated
             )
         }
     }

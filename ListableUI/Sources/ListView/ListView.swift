@@ -510,15 +510,13 @@ public final class ListView : UIView
     public func scrollTo(
         item : AnyItem,
         position : ScrollPosition,
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        animated : Bool = false
     ) -> Bool
     {
         self.scrollTo(
             item: item.anyIdentifier,
             position: position,
-            animation: animation,
-            completion: completion
+            animated: animated
         )
     }
     
@@ -553,8 +551,7 @@ public final class ListView : UIView
     public func scrollTo(
         item : AnyIdentifier,
         position : ScrollPosition,
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        animated : Bool = false
     ) -> Bool
     {
         self.logHorizontalScrollToWarning()
@@ -562,7 +559,6 @@ public final class ListView : UIView
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
-            completion(false)
             return false
         }
         
@@ -572,7 +568,6 @@ public final class ListView : UIView
             /// cases, we need to re-query our section index in case it changed or is no longer valid.
             
             guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
-                completion(false)
                 return
             }
             
@@ -586,36 +581,29 @@ public final class ListView : UIView
                 return
             }
 
-            let scroll: () -> Void = {
-                let sectionHeader = self.collectionViewLayout.layout.content.sections[toIndexPath.section].header
+            let sectionHeader = self.collectionViewLayout.layout.content.sections[toIndexPath.section].header
 
-                // Prevent the item from appearing underneath a sticky section header.
+            // Prevent the item from appearing underneath a sticky section header.
 
-                if sectionHeader.isPopulated,
-                   self.collectionViewLayout.layout.stickySectionHeaders,
-                   position.position == .top {
+            if sectionHeader.isPopulated,
+               self.collectionViewLayout.layout.stickySectionHeaders,
+               position.position == .top {
 
-                    let itemFrameAdjustedForStickyHeaders = CGRect(
-                        x: itemFrame.minX,
-                        y: itemFrame.minY - sectionHeader.size.height,
-                        width: itemFrame.width,
-                        height: itemFrame.height
-                    )
-                    self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position)
+                let itemFrameAdjustedForStickyHeaders = CGRect(
+                    x: itemFrame.minX,
+                    y: itemFrame.minY - sectionHeader.size.height,
+                    width: itemFrame.width,
+                    height: itemFrame.height
+                )
+                self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position, animated: animated)
 
-                } else {
-                    self.collectionView.scrollToItem(
-                        at: toIndexPath,
-                        at: position.position.toUICollectionViewScrollPosition(for: self.collectionViewLayout.layout.direction),
-                        animated: false
-                    )
-                }
+            } else {
+                self.collectionView.scrollToItem(
+                    at: toIndexPath,
+                    at: position.position.toUICollectionViewScrollPosition(for: self.collectionViewLayout.layout.direction),
+                    animated: animated
+                )
             }
-            
-            animation.perform(
-                animations: scroll,
-                completion: completion
-            )
         }
     }
 
@@ -639,8 +627,7 @@ public final class ListView : UIView
         with identifier : AnyIdentifier,
         sectionPosition : SectionPosition = .top,
         scrollPosition : ScrollPosition,
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        animated: Bool = false
     ) -> Bool
     {
         self.logHorizontalScrollToWarning()
@@ -650,7 +637,6 @@ public final class ListView : UIView
         // Make sure the section identifier is valid.
 
         guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
-            completion(false)
             return false
         }
 
@@ -660,7 +646,6 @@ public final class ListView : UIView
             /// cases, we need to re-query our section index in case it changed or is no longer valid.
             
             guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
-                completion(false)
                 return
             }
             
@@ -669,7 +654,6 @@ public final class ListView : UIView
             // Make sure the section has content.
 
             guard layoutContent.sections[sectionIndex].all.isEmpty == false else {
-                completion(false)
                 return
             }
             
@@ -702,22 +686,19 @@ public final class ListView : UIView
                 self.performScroll(
                     to: footerFrameAdjustedForStickyHeaders ?? targetSupplementaryView.defaultFrame,
                     scrollPosition: scrollPosition,
-                    animation: animation,
-                    completion: completion
+                    animated: animated
                 )
             } else if let adjacentItem = adjacentItem {
                 self.scrollTo(
                     item: adjacentItem,
                     position: scrollPosition,
-                    animation: animation,
-                    completion: completion
+                    animated: animated
                 )
             } else {
                 self.performScroll(
                     to: fallbackSupplementaryView.defaultFrame,
                     scrollPosition: scrollPosition,
-                    animation: animation,
-                    completion: completion
+                    animated: animated
                 )
             }
         }
@@ -726,8 +707,7 @@ public final class ListView : UIView
     /// Scrolls to the very top of the list, which includes displaying the list header.
     @discardableResult
     public func scrollToTop(
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        animated: Bool = false
     ) -> Bool {
         
         self.logHorizontalScrollToWarning()
@@ -736,20 +716,14 @@ public final class ListView : UIView
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
         
         return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
-            animation.perform(
-                animations: {
-                    self.collectionView.scrollRectToVisible(rect, animated: false)
-                },
-                completion: completion
-            )
+            self.collectionView.scrollRectToVisible(rect, animated: animated)
         }
     }
 
     /// Scrolls to the last item in the list. If the list contains no items, no action is performed.
     @discardableResult
     public func scrollToLastItem(
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
+        animated: Bool = false
     ) -> Bool {
         
         self.logHorizontalScrollToWarning()
@@ -773,12 +747,7 @@ public final class ListView : UIView
             let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
             
-            animation.perform(
-                animations: {
-                    self.collectionView.setContentOffset(contentOffset, animated: false)
-                },
-                completion: completion
-            )
+            self.collectionView.setContentOffset(contentOffset, animated: animated)
         }
     }
     
@@ -1286,26 +1255,26 @@ public final class ListView : UIView
             if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
                 
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let animation = info.animation.and(with: animated)
+                let animated = info.animated && animated
                 
                 if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animation: animation) { scrolled in
-                        guard scrolled else { return }
-                        info.didPerform(self.scrollPositionInfo)
-                    }
+                    self.scrollTo(item: destination, position: info.position, animated: animated)
+                    
+                    // TODO: Need to call this in a completion block somehow...
+                    info.didPerform(self.scrollPositionInfo)
                 }
             }
             
         case .pin(let pin):
             if pin.shouldPerform(self.scrollPositionInfo) {
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let animation = pin.animation.and(with: animated)
+                let animated = pin.animated && animated
                 
                 if let destination = pin.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: pin.position, animation: animation) { scrolled in
-                        guard scrolled else { return }
-                        pin.didPerform(self.scrollPositionInfo)
-                    }
+                    self.scrollTo(item: destination, position: pin.position, animated: animated)
+                    
+                    // TODO: Need to call this in a completion block somehow...
+                    pin.didPerform(self.scrollPositionInfo)
                 }
             }
         }
@@ -1314,10 +1283,8 @@ public final class ListView : UIView
     private func performScroll(
         to targetFrame : CGRect,
         scrollPosition : ScrollPosition,
-        animation: ViewAnimation = .none,
-        completion : @escaping ScrollCompletion = { _ in }
-    )
-    {
+        animated: Bool = false
+    ) {
         // If the item is already visible and that's good enough, return.
 
         let isAlreadyVisible = collectionView.visibleContentFrame.contains(targetFrame)
@@ -1349,12 +1316,7 @@ public final class ListView : UIView
 
         resultOffset.y = max(resultOffset.y, -topInset)
 
-        animation.perform(
-            animations: {
-                self.collectionView.setContentOffset(resultOffset, animated: false)
-            },
-            completion: completion
-        )
+        self.collectionView.setContentOffset(resultOffset, animated: animated)
     }
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {
