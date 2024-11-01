@@ -155,9 +155,6 @@ final class ExampleListLayout : ListLayout {
 }
 
 
-
-
-
 struct ExampleItemLayout : ItemLayoutsValue {
     static var defaultValue: Self {
         fatalError()
