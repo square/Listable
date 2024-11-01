@@ -9,6 +9,16 @@ import Foundation
 import UIKit
 
 
+/// `ListLayout` is the type that you implement in order to create a custom
+/// layout for your `ListView`. Most of the time you don't need to do this, as there
+/// are standard layout types provided: `.table`, `.flow`, `.paged`. However,
+/// these don't cover everything, and so you can create your own.
+///
+/// ## Example
+/// To see a basic example layout, check out `ExampleListLayout.swift`. You can
+/// make a copy of this file and update the type names and such to get started with a custom layout type.
+///
+/// ### 
 public protocol ListLayout : AnyListLayout
 {
     associatedtype LayoutAppearance:ListLayoutAppearance
