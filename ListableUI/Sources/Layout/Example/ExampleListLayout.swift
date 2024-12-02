@@ -142,8 +142,16 @@ final class ExampleListLayout : ListLayout {
         self.content = content
     }
     
+    /// This is involved on each layout pass, which occurs on every frame.
+    ///
+    /// You rarely need to implement this method yourself unless you want to do more
+    /// beyond standard pinned header behavior. Eg, if you want to change layout of a subset
+    /// of items on a frame by frame basis, do it here.
+    ///
+    /// Note that this must be an entirely "functional" method – it must update the values
+    /// of content based on the passed in context, not in any other aggregate way.
     func updateLayout(in context: ListLayoutLayoutContext) {
-        
+    
     }
     
     func layout(
