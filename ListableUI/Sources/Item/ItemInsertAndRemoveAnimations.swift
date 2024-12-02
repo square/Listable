@@ -10,8 +10,7 @@ import UIKit
 
 /// Controls the animations that are displayed when an item is inserted into, or removed from, a list.
 ///
-/// ### Note
-/// If `UIAccessibility.isReduceMotionEnabled` is `true`, animations will fall
+/// > If `UIAccessibility.isReduceMotionEnabled` is `true`, animations will fall
 /// back to a `.fade` style animation when displayed by the list view.
 public struct ItemInsertAndRemoveAnimations
 {

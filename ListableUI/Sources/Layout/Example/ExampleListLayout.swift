@@ -5,6 +5,8 @@
 //  Created by Kyle Van Essen on 10/31/24.
 //
 
+#if DEBUG
+
 import Foundation
 
 
@@ -113,20 +115,33 @@ final class ExampleListLayout : ListLayout {
     typealias SectionLayout = ExampleSectionLayout
     
     /// Provides the layout defaults.
+    ///
+    /// In terms of which animations to use here, do what looks best for your given layout type.
+    /// Figuring this out may take some experimentation. If an existing value does not meet your
+    /// needs, you can define a new `static var` on `ItemInsertAndRemoveAnimations`.
     static var defaults: ListLayoutDefaults {
         .init(itemInsertAndRemoveAnimations: .fade)
     }
     
     /// The layout appearance type associated with this layout.
+    ///
+    ///
+    /// > This is a type you define yourself, and then it's passed in in the `init` method.
     var layoutAppearance: ExampleLayoutAppearance
     
     /// The appearance type associated with the containing list.
+    ///
+    /// > This is not a value you define yourself. It's passed in in the `init` method.
     var appearance: Appearance
     
     /// The behavior values associated with the containing list.
+    ///
+    /// > This is not a value you define yourself. It's passed in in the `init` method.
     var behavior: Behavior
     
     /// The content associated with the containing list.
+    ///
+    /// > This is not a value you define yourself. It's passed in in the `init` method.
     var content: ListLayoutContent
     
     /// Creates a new layout – this`init` is required by the `ListLayout` protocol.
@@ -154,6 +169,10 @@ final class ExampleListLayout : ListLayout {
     
     }
     
+    /// This is the method you perform your layouts in. It is called on invalidations of the layout,
+    /// which occur during content updates and other invalidations such as safe area changes.
+    ///
+    /// This method should run quickly, as blocking more than a frame will cause visual glitches.
     func layout(
         delegate: (any CollectionViewLayoutDelegate)?,
         in context: ListLayoutLayoutContext
@@ -211,3 +230,6 @@ struct ExampleLayoutAppearance : ListLayoutAppearance {
         LayoutDescription(layoutType: ExampleListLayout.self, appearance: self)
     }
 }
+
+
+#endif
