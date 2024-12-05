@@ -177,7 +177,13 @@ final class ExampleListLayout : ListLayout {
         delegate: (any CollectionViewLayoutDelegate)?,
         in context: ListLayoutLayoutContext
     ) -> ListLayoutResult {
+        
         fatalError("TODO")
+        
+        return ListLayoutResult(
+            contentSize: .zero,
+            naturalContentWidth: nil
+        )
     }
 }
 
@@ -186,6 +192,8 @@ struct ExampleItemLayout : ItemLayoutsValue {
     static var defaultValue: Self {
         fatalError()
     }
+    
+    var isCentered : Bool = true
 }
 
 
@@ -193,6 +201,8 @@ struct ExampleHeaderFooterLayout : HeaderFooterLayoutsValue {
     static var defaultValue: Self {
         fatalError()
     }
+    
+    var isCentered : Bool = true
 }
 
 
@@ -205,6 +215,8 @@ struct ExampleSectionLayout : SectionLayoutsValue {
     var isHeaderSticky: Bool? {
         nil
     }
+    
+    var width : CGFloat? = nil
 }
 
 
@@ -225,10 +237,6 @@ struct ExampleLayoutAppearance : ListLayoutAppearance {
     var pagingBehavior: ListPagingBehavior
     
     var scrollViewProperties: ListLayoutScrollViewProperties
-    
-    func toLayoutDescription() -> LayoutDescription {
-        LayoutDescription(layoutType: ExampleListLayout.self, appearance: self)
-    }
 }
 
 

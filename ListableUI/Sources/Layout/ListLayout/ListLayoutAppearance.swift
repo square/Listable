@@ -25,8 +25,6 @@ public protocol ListLayoutAppearance : Equatable
     var pagingBehavior : ListPagingBehavior { get }
     
     var scrollViewProperties : ListLayoutScrollViewProperties { get }
-    
-    func toLayoutDescription() -> LayoutDescription
 }
 
 

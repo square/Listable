@@ -127,10 +127,6 @@ public struct FlowAppearance : ListLayoutAppearance {
         )
     }
     
-    public func toLayoutDescription() -> LayoutDescription {
-        LayoutDescription(layoutType: FlowListLayout.self, appearance: self)
-    }
-    
     // MARK: Properties
     
     /// How to align the items in a row when they do not take up the full amount of available space.
