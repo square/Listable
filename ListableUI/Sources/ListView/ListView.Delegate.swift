@@ -15,12 +15,7 @@ extension ListView
         unowned var view : ListView!
         unowned var presentationState : PresentationState!
         unowned var layoutManager : LayoutManager!
-        
-        private let itemMeasurementCache = ReusableViewCache()
-        private let headerFooterMeasurementCache = ReusableViewCache()
-        
-        private let headerFooterViewCache = ReusableViewCache()
-        
+
         // MARK: UICollectionViewDelegate
         
         func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool

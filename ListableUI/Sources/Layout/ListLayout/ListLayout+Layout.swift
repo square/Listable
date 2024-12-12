@@ -11,9 +11,6 @@ import UIKit
 
 extension ListProperties {
     
-    private static let headerFooterMeasurementCache = ReusableViewCache()
-    private static let itemMeasurementCache = ReusableViewCache()
-    
     /// **Note**: For testing or measuring content sizes only.
     ///
     /// Uses the properties from the list properties to create a `PresentationState`
@@ -37,8 +34,8 @@ extension ListProperties {
                 }
             }(),
             environment: self.environment,
-            itemMeasurementCache: Self.itemMeasurementCache,
-            headerFooterMeasurementCache: Self.headerFooterMeasurementCache
+            itemMeasurementCache: ReusableViewCache(),
+            headerFooterMeasurementCache: ReusableViewCache()
         )
         
         /// 2) Create the layout used to measure the content.
