@@ -14,9 +14,6 @@ extension ListView
     // MARK: Measuring Lists
     //
     
-    static let headerFooterMeasurementCache = ReusableViewCache()
-    static let itemMeasurementCache = ReusableViewCache()
-    
     public static let defaultContentSizeItemLimit = 50
     
     ///
@@ -47,12 +44,14 @@ extension ListView
         in fittingSize : CGSize,
         for properties : ListProperties,
         safeAreaInsets : UIEdgeInsets,
+        cache: ContentSizeCache,
         itemLimit : Int? = ListView.defaultContentSizeItemLimit
     ) -> MeasuredListSize
     {
         let (layout, layoutContext) = properties.makeLayout(
             in: fittingSize,
             safeAreaInsets: safeAreaInsets,
+            cache: cache,
             itemLimit: itemLimit
         )
         
@@ -96,5 +95,17 @@ public struct MeasuredListSize : Equatable {
     ) {
         self.contentSize = contentSize
         self.naturalWidth = naturalWidth
+    }
+}
+
+
+extension ListView {
+    
+    public final class ContentSizeCache {
+        
+        public init() {}
+        
+        let itemMeasurementCache = ReusableViewCache()
+        let headerFooterMeasurementCache = ReusableViewCache()
     }
 }

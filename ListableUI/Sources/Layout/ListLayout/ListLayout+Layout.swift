@@ -11,8 +11,8 @@ import UIKit
 
 extension ListProperties {
     
-    private static let headerFooterMeasurementCache = ReusableViewCache()
-    private static let itemMeasurementCache = ReusableViewCache()
+    //private static let headerFooterMeasurementCache = ReusableViewCache()
+    //private static let itemMeasurementCache = ReusableViewCache()
     
     /// **Note**: For testing or measuring content sizes only.
     ///
@@ -22,6 +22,7 @@ extension ListProperties {
     internal func makeLayout(
         in fittingSize : CGSize,
         safeAreaInsets : UIEdgeInsets,
+        cache: ListView.ContentSizeCache,
         itemLimit : Int?
     ) -> (AnyListLayout, ListLayoutLayoutContext)
     {
@@ -37,8 +38,8 @@ extension ListProperties {
                 }
             }(),
             environment: self.environment,
-            itemMeasurementCache: Self.itemMeasurementCache,
-            headerFooterMeasurementCache: Self.headerFooterMeasurementCache
+            itemMeasurementCache: cache.itemMeasurementCache,
+            headerFooterMeasurementCache: cache.headerFooterMeasurementCache
         )
         
         /// 2) Create the layout used to measure the content.

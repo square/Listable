@@ -5,6 +5,10 @@
 build/
 DerivedData/
 
+## Tuist generated
+Derived/
+Listable.xcodeproj/
+
 ## Various settings
 *.pbxuser
 !default.pbxuser
