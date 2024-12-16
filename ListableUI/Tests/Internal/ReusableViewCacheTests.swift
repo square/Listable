@@ -168,6 +168,36 @@ class ReusableViewCacheTests: XCTestCase
             XCTAssertEqual(result, "result")
         }
     }
+
+    func test_removeAllObjects() {
+        self.testcase("empty") {
+            let cache = ReusableViewCache()
+            
+            XCTAssertEqual(cache.cachedViewCount, 0)
+
+            cache.removeAllObjects()
+
+            XCTAssertEqual(cache.cachedViewCount, 0)
+        }
+
+        self.testcase("non-empty") {
+            let cache = ReusableViewCache()
+
+            let view1 = TestView1()
+            view1.identifier = "pushed_1"
+            cache.push(view1, with: ReuseIdentifier.identifier(for: TestView1.self))
+
+            let view2 = TestView1()
+            view2.identifier = "pushed_2"
+            cache.push(view2, with: ReuseIdentifier.identifier(for: TestView1.self))
+
+            XCTAssertEqual(cache.cachedViewCount, 2)
+
+            cache.removeAllObjects()
+
+            XCTAssertEqual(cache.cachedViewCount, 0)
+        }
+    }
 }
 
 
