@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added `CacheCleaner` which exposes a method to force Listable's static caches to be cleared. 
+
 ### Removed
 
 ### Changed
