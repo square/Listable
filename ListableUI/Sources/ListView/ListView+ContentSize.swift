@@ -14,9 +14,6 @@ extension ListView
     // MARK: Measuring Lists
     //
     
-    static let headerFooterMeasurementCache = ReusableViewCache()
-    static let itemMeasurementCache = ReusableViewCache()
-    
     public static let defaultContentSizeItemLimit = 50
     
     ///

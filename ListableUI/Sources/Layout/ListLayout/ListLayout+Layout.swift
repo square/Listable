@@ -11,8 +11,8 @@ import UIKit
 
 extension ListProperties {
     
-    private static let headerFooterMeasurementCache = ReusableViewCache()
-    private static let itemMeasurementCache = ReusableViewCache()
+    static let headerFooterMeasurementCache = ReusableViewCache()
+    static let itemMeasurementCache = ReusableViewCache()
     
     /// **Note**: For testing or measuring content sizes only.
     ///
