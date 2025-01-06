@@ -11,7 +11,11 @@ import Foundation
 final class ReusableViewCache
 {
     private var views : [String:[AnyObject]] = [:]
-    
+
+    var cachedViewCount : Int {
+        return self.views.values.reduce(0) { $0 + $1.count }
+    }
+
     init() {}
     
     func count<Content>(for reuseIdentifier : ReuseIdentifier<Content>) -> Int
@@ -60,5 +64,9 @@ final class ReusableViewCache
             
             return result
         }
+    }
+
+    func removeAllObjects() {
+        self.views = [:]
     }
 }
