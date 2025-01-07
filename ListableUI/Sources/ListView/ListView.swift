@@ -1273,9 +1273,9 @@ public final class ListView : UIView
                 
                 if let destination = pin.destination.destination(with: self.content) {
                     self.scrollTo(item: destination, position: pin.position, animated: animated)
-                    
-                    // TODO: Need to call this in a completion block somehow...
-                    pin.didPerform(self.scrollPositionInfo)
+                    stateObserver.onDidEndScrollingAnimation { state in
+                        pin.didPerform(self.scrollPositionInfo)
+                    }
                 }
             }
         }
