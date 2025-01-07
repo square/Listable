@@ -1259,9 +1259,10 @@ public final class ListView : UIView
                 
                 if let destination = info.destination.destination(with: self.content) {
                     self.scrollTo(item: destination, position: info.position, animated: animated)
-                    
-                    // TODO: Need to call this in a completion block somehow...
-                    info.didPerform(self.scrollPositionInfo)
+
+                    stateObserver.onDidEndScrollingAnimation { state in
+                        info.didPerform(state.positionInfo)
+                    }
                 }
             }
             

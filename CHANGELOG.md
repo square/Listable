@@ -4,9 +4,14 @@
 
 ### Added
 
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+
+
 ### Removed
 
 ### Changed
+
+`AutoScrollAction.scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)` has been changed to no longer take an animation block, and renamed to `AutoScrollAction.scrollTo(_:onInsertOf:position:animated:shouldPerform:didPerform:)`, taking a `Bool` `animated` parameter instead.
 
 ### Misc
 

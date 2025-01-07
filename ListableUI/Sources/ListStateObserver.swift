@@ -70,17 +70,31 @@ public struct ListStateObserver {
     //
     // MARK: Responding to Scrolling Deceleration
     //
-    
+
     public typealias OnDidEndDeceleration = (DidEndDeceleration) -> ()
-    
+
     /// Registers a callback which will be called when the list view is finished decelerating.
     public mutating func onDidEndDeceleration( _ callback : @escaping OnDidEndDeceleration)
     {
         self.onDidEndDeceleration.append(callback)
     }
-    
+
     private(set) var onDidEndDeceleration: [OnDidEndDeceleration] = []
-    
+
+    //
+    // MARK: Responding to Scrolling Animation Ending
+    //
+
+    public typealias OnDidEndScrollingAnimation = (DidEndScrollingAnimation) -> ()
+
+    /// Registers a callback which will be called when the list view had ended scrolling animation.
+    public mutating func onDidEndScrollingAnimation( _ callback : @escaping OnDidEndScrollingAnimation)
+    {
+        self.onDidEndScrollingAnimation.append(callback)
+    }
+
+    private(set) var onDidEndScrollingAnimation: [OnDidEndScrollingAnimation] = []
+
     //
     // MARK: Responding to Drag Begin
     //
@@ -216,7 +230,12 @@ extension ListStateObserver
     public struct DidEndDeceleration {
         public let positionInfo : ListScrollPositionInfo
     }
-    
+
+    /// Parameters available for ``OnDidEndScrollingAnimation`` callbacks.
+    public struct DidEndScrollingAnimation {
+        public let positionInfo : ListScrollPositionInfo
+    }
+
     /// Parameters available for ``OnBeginDrag`` callbacks.
     public struct BeginDrag {
         public let positionInfo : ListScrollPositionInfo
