@@ -1258,10 +1258,13 @@ public final class ListView : UIView
                 let animated = info.animated && animated
                 
                 if let destination = info.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: info.position, animated: animated)
-
-                    stateObserver.onDidEndScrollingAnimation { state in
-                        info.didPerform(state.positionInfo)
+                    guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
+                    if animated {
+                        stateObserver.onDidEndScrollingAnimation { state in
+                            info.didPerform(state.positionInfo)
+                        }
+                    } else {
+                        info.didPerform(self.scrollPositionInfo)
                     }
                 }
             }
@@ -1272,8 +1275,12 @@ public final class ListView : UIView
                 let animated = pin.animated && animated
                 
                 if let destination = pin.destination.destination(with: self.content) {
-                    self.scrollTo(item: destination, position: pin.position, animated: animated)
-                    stateObserver.onDidEndScrollingAnimation { state in
+                    guard self.scrollTo(item: destination, position: pin.position, animated: animated) else { return }
+                    if animated {
+                        stateObserver.onDidEndScrollingAnimation { state in
+                            pin.didPerform(self.scrollPositionInfo)
+                        }
+                    } else {
                         pin.didPerform(self.scrollPositionInfo)
                     }
                 }
