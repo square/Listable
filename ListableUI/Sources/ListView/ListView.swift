@@ -606,8 +606,7 @@ public final class ListView : UIView
         animated: Bool = false
     ) -> Bool
     {
-        self.logHorizontalScrollToWarning()
-        
+
         let storageContent = storage.allContent
 
         // Make sure the section identifier is valid.
@@ -686,8 +685,6 @@ public final class ListView : UIView
         animated: Bool = false
     ) -> Bool {
         
-        self.logHorizontalScrollToWarning()
-        
         // The rect we scroll to must have an area – an empty rect will result in no scrolling.
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
         
@@ -701,8 +698,6 @@ public final class ListView : UIView
     public func scrollToLastItem(
         animated: Bool = false
     ) -> Bool {
-        
-        self.logHorizontalScrollToWarning()
 
         // Make sure we have a valid last index path.
 
