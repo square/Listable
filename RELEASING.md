@@ -12,14 +12,14 @@
   
    The changelog uses [reference links](https://daringfireball.net/projects/markdown/syntax#link) to link each version's changes. Remember to add a link to the new version at the bottom of the file, and to update the link to `[main]`.
 
-1. Commit the version bumps.
-   ```bash
-   git commit -am "Bumping versions to 0.1.0."
-   ```
-
 1. Re-generate the documentation.
    ```bash
    bundle exec Scripts/generate_docs.sh
+   ```
+
+1. Commit the version bumps and doc changes.
+   ```bash
+   git commit -am "Bumping versions to 0.1.0."
    ```
 
 1. Push your branch and open a PR into `main`.
