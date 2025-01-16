@@ -97,7 +97,16 @@ extension ListView
             
             self.performOnSelectChanged()
         }
-        
+
+        func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView)
+        {
+            ListStateObserver.perform(self.view.stateObserver.onDidEndScrollingAnimation, "Did End Scrolling Animation", with: self.view) { _ in
+                ListStateObserver.DidEndScrollingAnimation(
+                    positionInfo: self.view.scrollPositionInfo
+                )
+            }
+        }
+
         private var oldSelectedItems : Set<AnyIdentifier> = []
         
         private func performOnSelectChanged() {

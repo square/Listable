@@ -4,11 +4,16 @@
 
 ### Added
 
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+
+
 ### Removed
 
 - CocoaPods is no longer a supported installation method, and new releases will no longer be published to CocoaPods. Please switch to using Swift Package Manager to install Listable.
 
 ### Changed
+
+`AutoScrollAction.scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)` has been changed to no longer take an animation block, and renamed to `AutoScrollAction.scrollTo(_:onInsertOf:position:animated:shouldPerform:didPerform:)`, taking a `Bool` `animated` parameter instead.
 
 ### Misc
 

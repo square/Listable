@@ -66,7 +66,7 @@ final class AutoScrollingViewController2 : UIViewController
             list.autoScrollAction = .pin(
                 .lastItem,
                 position: .init(position: .bottom),
-                animation: .default,
+                animated: true,
                 shouldPerform: { info in
                     // Only auto-scroll if we're currently scrolled less than a
                     // screen's-height from the bottom

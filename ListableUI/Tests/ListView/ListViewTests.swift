@@ -588,7 +588,7 @@ class ListViewTests: XCTestCase
                     .item(ID),
                     onInsertOf: ID,
                     position: .init(position: .centered),
-                    animation: .default,
+                    animated: true,
                     shouldPerform: { _ in true },
                     didPerform: { didPerform.append($0) }
                 )
@@ -639,7 +639,7 @@ class ListViewTests: XCTestCase
                 list.autoScrollAction = .pin(
                     .item(ID),
                     position: .init(position: .bottom),
-                    animation: .default,
+                    animated: true,
                     shouldPerform: { _ in true },
                     didPerform: { didPerform.append($0) }
                 )
