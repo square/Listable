@@ -6,6 +6,8 @@
 
 ### Removed
 
+- CocoaPods is no longer a supported installation method. Please switch to using Swift Package Manager to install Listable.
+
 ### Changed
 
 ### Misc
