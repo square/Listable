@@ -519,29 +519,7 @@ public final class ListView : UIView
             animated: animated
         )
     }
-    
-    private var hasLoggedHorizontalScrollToWarning : Bool = false
-    
-    private func logHorizontalScrollToWarning() {
         
-        guard self.collectionViewLayout.layout.direction == .horizontal else { return }
-        
-        if self.hasLoggedHorizontalScrollToWarning { return }
-        
-        self.hasLoggedHorizontalScrollToWarning = true
-        
-        print(
-        """
-        Hello! It looks like you are using one of the `scrollTo...` family of APIs.
-        
-        These have not yet been updated to support `.horizontal` layouts, and thus, will
-        likely not work as expected.
-        
-        Please let us know you're looking for this feature in #listable on Slack.
-        """
-        )
-    }
-    
     ///
     /// Scrolls to the item with the provided identifier, with the provided positioning.
     /// If there is more than one item with the same identifier, the list scrolls to the first.
@@ -554,8 +532,6 @@ public final class ListView : UIView
         animated : Bool = false
     ) -> Bool
     {
-        self.logHorizontalScrollToWarning()
-        
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
