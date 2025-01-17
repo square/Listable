@@ -42,9 +42,11 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html">Listable Reference</a>
+      <a class="breadcrumb" href="../index.html">Listable</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      ListView Class Reference
+      <a class="breadcrumb" href="../Classes.html">Classes</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      ListableUI.ListView Class Reference
     </p>
 
     <div class="content-wrapper">
@@ -568,6 +570,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidEndDeceleration.html">– DidEndDeceleration</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidEndScrollingAnimation.html">– DidEndScrollingAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/BeginDrag.html">– BeginDrag</a>
               </li>
               <li class="nav-group-task">
@@ -701,7 +706,8 @@
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
 
                 </div>
               </div>
@@ -741,7 +747,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="o">=</span> <span class="o">.</span><span class="n">zero</span><span class="p">,</span> <span class="nv">appearance</span><span class="p">:</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span><span class="p">())</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="o">=</span> <span class="o">.</span><span class="n">zero</span><span class="p">,</span> <span class="nv">appearance</span><span class="p">:</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span><span class="p">())</span></code></pre>
 
                         </div>
                       </div>
@@ -780,7 +787,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">debuggingIdentifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">debuggingIdentifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -819,7 +827,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListAnimation.html">ListAnimation</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListAnimation.html">ListAnimation</a></span></code></pre>
 
                         </div>
                       </div>
@@ -845,7 +854,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">appearance</span><span class="p">:</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">appearance</span><span class="p">:</span> <span class="kt"><a href="../Structs/Appearance.html">Appearance</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -884,7 +894,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scrollPositionInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">scrollPositionInfo</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -910,7 +921,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">layout</span><span class="p">:</span> <span class="kt"><a href="../Structs/LayoutDescription.html">LayoutDescription</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">layout</span><span class="p">:</span> <span class="kt"><a href="../Structs/LayoutDescription.html">LayoutDescription</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -936,7 +948,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">set</span><span class="p">(</span><span class="n"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC6layoutAA17LayoutDescriptionVvp">layout</a></span> <span class="nv">new</span><span class="p">:</span> <span class="kt"><a href="../Structs/LayoutDescription.html">LayoutDescription</a></span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{})</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">set</span><span class="p">(</span><span class="n"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC6layoutAA17LayoutDescriptionVvp">layout</a></span> <span class="nv">new</span><span class="p">:</span> <span class="kt"><a href="../Structs/LayoutDescription.html">LayoutDescription</a></span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{})</span></code></pre>
 
                         </div>
                       </div>
@@ -962,7 +975,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">contentSize</span><span class="p">:</span> <span class="kt">CGSize</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">contentSize</span><span class="p">:</span> <span class="kt">CGSize</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1001,7 +1015,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">behavior</span><span class="p">:</span> <span class="kt"><a href="../Structs/Behavior.html">Behavior</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">behavior</span><span class="p">:</span> <span class="kt"><a href="../Structs/Behavior.html">Behavior</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1041,7 +1056,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isContentScrollable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">isContentScrollable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1067,7 +1083,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">scrollIndicatorInsets</span><span class="p">:</span> <span class="kt">UIEdgeInsets</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">scrollIndicatorInsets</span><span class="p">:</span> <span class="kt">UIEdgeInsets</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1124,7 +1141,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onKeyboardFrameWillChange</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC31KeyboardFrameWillChangeCallbacka">KeyboardFrameWillChangeCallback</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">onKeyboardFrameWillChange</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC31KeyboardFrameWillChangeCallbacka">KeyboardFrameWillChangeCallback</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1179,7 +1197,8 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">customScrollViewInsets</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ListView/ScrollViewInsets.html">ScrollViewInsets</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">customScrollViewInsets</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/ListView/ScrollViewInsets.html">ScrollViewInsets</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1209,7 +1228,8 @@ whenever insets require an update.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateScrollViewInsets</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateScrollViewInsets</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1253,7 +1273,8 @@ content change events, frame change events, or item visibility changes.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">stateObserver</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListStateObserver.html">ListStateObserver</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">stateObserver</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListStateObserver.html">ListStateObserver</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1305,9 +1326,9 @@ of the current layout.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA7AnyItem_p_AA14ScrollPositionVAA0D9AnimationOySbctF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animation:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA7AnyItem_p_AA14ScrollPositionVAA0D9AnimationOySbctF">scrollTo(item:<wbr>position:<wbr>animation:<wbr>completion:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA14ScrollPositionVSbtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA14ScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1324,11 +1345,11 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
     <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyItem.html">AnyItem</a></span><span class="p">,</span>
     <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
-    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -1339,9 +1360,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA13AnyIdentifierC_AA14ScrollPositionVAA0D9AnimationOySbctF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animation:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position9animation10completionSbAA13AnyIdentifierC_AA14ScrollPositionVAA0D9AnimationOySbctF">scrollTo(item:<wbr>position:<wbr>animation:<wbr>completion:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA14ScrollPositionVSbtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA14ScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1359,11 +1380,11 @@ If the item is contained in the list, true is returned. If it is not, false is r
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
     <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
-    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -1374,9 +1395,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC15scrollToSection4with15sectionPosition0eJ09animation10completionSbAA13AnyIdentifierC_AA0gJ0OAA06ScrollJ0VAA0D9AnimationOySbctF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToSection(with:sectionPosition:scrollPosition:animation:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC15scrollToSection4with15sectionPosition0eJ09animation10completionSbAA13AnyIdentifierC_AA0gJ0OAA06ScrollJ0VAA0D9AnimationOySbctF">scrollToSection(with:<wbr>sectionPosition:<wbr>scrollPosition:<wbr>animation:<wbr>completion:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC15scrollToSection4with15sectionPosition0eJ08animatedSbAA13AnyIdentifierC_AA0gJ0OAA06ScrollJ0VSbtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToSection(with:sectionPosition:scrollPosition:animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC15scrollToSection4with15sectionPosition0eJ08animatedSbAA13AnyIdentifierC_AA0gJ0OAA06ScrollJ0VSbtF">scrollToSection(with:<wbr>sectionPosition:<wbr>scrollPosition:<wbr>animated:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1404,12 +1425,12 @@ If the section has any content and is contained in the list, true is returned. I
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToSection</span><span class="p">(</span>
     <span class="n">with</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">sectionPosition</span> <span class="p">:</span> <span class="kt"><a href="../Enums/SectionPosition.html">SectionPosition</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">top</span><span class="p">,</span>
     <span class="nv">scrollPosition</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
-    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -1420,9 +1441,9 @@ If the section has any content and is contained in the list, true is returned. I
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC11scrollToTop9animation10completionSbAA0D9AnimationO_ySbctF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToTop(animation:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC11scrollToTop9animation10completionSbAA0D9AnimationO_ySbctF">scrollToTop(animation:<wbr>completion:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC11scrollToTop8animatedS2b_tF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToTop(animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC11scrollToTop8animatedS2b_tF">scrollToTop(animated:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1438,9 +1459,9 @@ If the section has any content and is contained in the list, true is returned. I
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToTop</span><span class="p">(</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
-    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -1451,9 +1472,9 @@ If the section has any content and is contained in the list, true is returned. I
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC16scrollToLastItem9animation10completionSbAA0D9AnimationO_ySbctF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToLastItem(animation:completion:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC16scrollToLastItem9animation10completionSbAA0D9AnimationO_ySbctF">scrollToLastItem(animation:<wbr>completion:<wbr>)</a>
+                    <a name="/s:10ListableUI8ListViewC16scrollToLastItem8animatedS2b_tF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToLastItem(animated:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC16scrollToLastItem8animatedS2b_tF">scrollToLastItem(animated:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1469,9 +1490,9 @@ If the section has any content and is contained in the list, true is returned. I
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollToLastItem</span><span class="p">(</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
-    <span class="nv">completion</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -1519,7 +1540,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEnvironment.html">ListEnvironment</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListEnvironment.html">ListEnvironment</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1545,7 +1567,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">content</span><span class="p">:</span> <span class="kt"><a href="../Structs/Content.html">Content</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">content</span><span class="p">:</span> <span class="kt"><a href="../Structs/Content.html">Content</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1571,7 +1594,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setContent</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt"><a href="../Structs/Content.html">Content</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">setContent</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="n">_</span> <span class="nv">content</span><span class="p">:</span> <span class="kt"><a href="../Structs/Content.html">Content</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1598,6 +1622,7 @@ of the list view. The newly provided environment values will be used during the 
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">func</span> <span class="k">set</span><span class="o">&lt;</span><span class="kt">Source</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">source</span><span class="p">:</span> <span class="kt">Source</span><span class="p">,</span> <span class="nv">initial</span><span class="p">:</span> <span class="kt">Source</span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/StateAccessor.html">StateAccessor</a></span><span class="o">&lt;</span><span class="kt">Source</span><span class="o">.</span><span class="kt">State</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">Source</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/ListViewSource.html">ListViewSource</a></span></code></pre>
 
                         </div>
@@ -1624,7 +1649,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">configure</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="o">.</span><span class="kt">Configure</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">configure</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="o">.</span><span class="kt">Configure</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1650,7 +1676,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">properties</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">properties</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1689,7 +1716,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">frame</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1715,7 +1743,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">bounds</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">bounds</span><span class="p">:</span> <span class="kt">CGRect</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1742,7 +1771,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">backgroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">override</span> <span class="k">var</span> <span class="nv">backgroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -1768,7 +1798,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">didMoveToWindow</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">didMoveToWindow</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1794,7 +1825,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">didMoveToSuperview</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">didMoveToSuperview</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1820,7 +1852,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">layoutSubviews</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">layoutSubviews</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1859,7 +1892,8 @@ of the list view. The newly provided environment values will be used during the 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">defaultContentSizeItemLimit</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">defaultContentSizeItemLimit</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
 
                         </div>
                       </div>
@@ -1897,7 +1931,8 @@ calculate a height – especially if the <code>fittingSize</code> is known and f
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">contentSize</span><span class="p">(</span>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">contentSize</span><span class="p">(</span>
     <span class="k">in</span> <span class="nv">fittingSize</span> <span class="p">:</span> <span class="kt">CGSize</span><span class="p">,</span>
     <span class="k">for</span> <span class="nv">properties</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ListProperties.html">ListProperties</a></span><span class="p">,</span>
     <span class="nv">safeAreaInsets</span> <span class="p">:</span> <span class="kt">UIEdgeInsets</span><span class="p">,</span>
@@ -1993,7 +2028,8 @@ to be rendered asynchronously.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">testing_forceLayoutUpdateNow</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">testing_forceLayoutUpdateNow</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -2029,7 +2065,8 @@ in the case that you do not have access to your list view at all, such as when u
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">clearSelectionDuringViewWillAppear</span><span class="p">(</span><span class="n">alongside</span> <span class="nv">coordinator</span><span class="p">:</span> <span class="kt">UIViewControllerTransitionCoordinator</span><span class="p">?,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">func</span> <span class="nf">clearSelectionDuringViewWillAppear</span><span class="p">(</span><span class="n">alongside</span> <span class="nv">coordinator</span><span class="p">:</span> <span class="kt">UIViewControllerTransitionCoordinator</span><span class="p">?,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -2045,7 +2082,7 @@ in the case that you do not have access to your list view at all, such as when u
     </div>
     <section class="footer">
       <p>&copy; Square, Inc. All rights reserved.</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
 </html>
