@@ -12,13 +12,13 @@
 
 ### Internal
 
-- While no longer published, CocoaPods is still used for demo project generation.
-
 # Past Releases
 
 # [15.0.0] - 2025-01-16
 
 ### Fixed
+
+- Programmatic scrolling animations could be janky.
 
 ### Added
 
@@ -31,8 +31,6 @@
 ### Changed
 
 - `AutoScrollAction.scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)` has been changed to no longer take an animation block, and renamed to `AutoScrollAction.scrollTo(_:onInsertOf:position:animated:shouldPerform:didPerform:)`, taking a `Bool` `animated` parameter instead.
-
-### Misc
 
 ### Internal
 
