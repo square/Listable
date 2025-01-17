@@ -4,8 +4,25 @@
 
 ### Added
 
-- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
+### Removed
 
+### Changed
+
+### Misc
+
+### Internal
+
+- While no longer published, CocoaPods is still used for demo project generation.
+
+# Past Releases
+
+# [15.0.0] - 2025-01-16
+
+### Fixed
+
+### Added
+
+- Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
 
 ### Removed
 
@@ -20,8 +37,6 @@
 ### Internal
 
 - While no longer published, CocoaPods is still used for demo project generation.
-
-# Past Releases
 
 # [14.5.0] - 2024-12-18
 
@@ -1086,7 +1101,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/14.5.0...main
+[Main]: https://github.com/square/Listable/compare/15.0.0...main
+[15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0
 [14.5.0]: https://github.com/square/Listable/compare/14.4.1...14.5.0
 [14.4.1]: https://github.com/square/Listable/compare/14.4.0...14.4.1
 [14.4.0]: https://github.com/square/Listable/compare/14.3.1...14.4.0

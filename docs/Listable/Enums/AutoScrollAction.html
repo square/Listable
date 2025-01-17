@@ -42,9 +42,11 @@
     </header>
 
     <p class="breadcrumbs">
-      <a class="breadcrumb" href="../index.html">Listable Reference</a>
+      <a class="breadcrumb" href="../index.html">Listable</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      AutoScrollAction Enumeration Reference
+      <a class="breadcrumb" href="../Enums.html">Enumerations</a>
+      <img class="carat" src="../img/carat.png" alt=""/>
+      ListableUI.AutoScrollAction Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -568,6 +570,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidEndDeceleration.html">– DidEndDeceleration</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListStateObserver/DidEndScrollingAnimation.html">– DidEndScrollingAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver/BeginDrag.html">– BeginDrag</a>
               </li>
               <li class="nav-group-task">
@@ -798,9 +803,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animation:shouldPerform:didPerform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position9animation13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVAA13ViewAnimationOSbAA04ListdS4InfoVcyATctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVS2bAA04ListdS4InfoVcyARctFZ"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animated:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVS2bAA04ListdS4InfoVcyARctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animated:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -841,7 +846,7 @@ the action will be performed on insert.</p>
     <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">onInsertOf</span> <span class="nv">insertedIdentifier</span><span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
     <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
@@ -934,9 +939,9 @@ this block will be called multiple times.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI16AutoScrollActionO3pin_8position9animation13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVAA13ViewAnimationOSbAA04ListdM4InfoVcyAPctFZ"></a>
-                    <a name="//apple_ref/swift/Method/pin(_:position:animation:shouldPerform:didPerform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_8position9animation13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVAA13ViewAnimationOSbAA04ListdM4InfoVcyAPctFZ">pin(_:<wbr>position:<wbr>animation:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO3pin_8position8animated13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVS2bAA04ListdM4InfoVcyANctFZ"></a>
+                    <a name="//apple_ref/swift/Method/pin(_:position:animated:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_8position8animated13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVS2bAA04ListdM4InfoVcyANctFZ">pin(_:<wbr>position:<wbr>animated:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -974,7 +979,7 @@ the action will be performed on insert.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">pin</span><span class="p">(</span>
     <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">,</span>
     <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animation</span><span class="p">:</span> <span class="kt"><a href="../Enums/ViewAnimation.html">ViewAnimation</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
     <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
@@ -1145,7 +1150,7 @@ this block will be called multiple times.</p>
     </div>
     <section class="footer">
       <p>&copy; Square, Inc. All rights reserved.</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
 </html>
