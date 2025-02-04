@@ -1042,6 +1042,8 @@ public final class ListView : UIView
     // MARK: Internal - Updating Presentation State
     //
     
+    private var updateOverrideIndexPath : IndexPath? = nil
+    
     internal func updatePresentationState(
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> () = { _ in }
@@ -1055,7 +1057,7 @@ public final class ListView : UIView
         
         let indexPaths = self.collectionView.indexPathsForVisibleItems
         
-        let indexPath = indexPaths.first
+        let indexPath = updateOverrideIndexPath ?? indexPaths.first
         
         let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
         
@@ -1090,7 +1092,13 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
             
         case .programaticScrollDownTo(let scrollToIndexPath):
-            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
+            
+            updateOverrideIndexPath = scrollToIndexPath
+            
+            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: {
+                self.updateOverrideIndexPath = nil
+                completion($0)
+            })
         }
     }
         
