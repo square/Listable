@@ -1057,6 +1057,7 @@ public final class ListView : UIView
         
         let indexPaths = self.collectionView.indexPathsForVisibleItems
         
+        // TODO: Pick biggest index path here? Does it matter?
         let indexPath = updateOverrideIndexPath ?? indexPaths.first
         
         let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
