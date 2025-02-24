@@ -557,6 +557,9 @@ public final class ListView : UIView
                 return
             }
 
+            // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+            let shouldAnimate = animated && UIView.areAnimationsEnabled
+
             let sectionHeader = self.collectionViewLayout.layout.content.sections[toIndexPath.section].header
 
             // Prevent the item from appearing underneath a sticky section header.
@@ -571,13 +574,13 @@ public final class ListView : UIView
                     width: itemFrame.width,
                     height: itemFrame.height
                 )
-                self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position, animated: animated)
+                self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position, animated: shouldAnimate)
 
             } else {
                 self.collectionView.scrollToItem(
                     at: toIndexPath,
                     at: position.position.toUICollectionViewScrollPosition(for: self.collectionViewLayout.layout.direction),
-                    animated: animated
+                    animated: shouldAnimate
                 )
             }
         }
