@@ -1097,7 +1097,14 @@ public final class ListView : UIView
             updateOverrideIndexPath = scrollToIndexPath
             
             self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: {
-                self.updateOverrideIndexPath = nil
+                
+                /// Verify this is the same as inputted index path – if it's not, that means
+                /// _another_ `programaticScrollDownTo` has occurred and thus has
+                /// overridden this value, so we shouldn't clear it out.
+                if self.updateOverrideIndexPath == scrollToIndexPath {
+                    self.updateOverrideIndexPath = nil
+                }
+
                 completion($0)
             })
         }
