@@ -537,7 +537,10 @@ public final class ListView : UIView
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
             return false
         }
-        
+
+        // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+        let shouldAnimate = animated && UIView.areAnimationsEnabled
+
         return self.preparePresentationStateForScroll(to: toIndexPath) {
             
             /// `preparePresentationStateForScroll(to:)` is asynchronous in some
@@ -571,13 +574,13 @@ public final class ListView : UIView
                     width: itemFrame.width,
                     height: itemFrame.height
                 )
-                self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position, animated: animated)
+                self.performScroll(to: itemFrameAdjustedForStickyHeaders, scrollPosition: position, animated: shouldAnimate)
 
             } else {
                 self.collectionView.scrollToItem(
                     at: toIndexPath,
                     at: position.position.toUICollectionViewScrollPosition(for: self.collectionViewLayout.layout.direction),
-                    animated: animated
+                    animated: shouldAnimate
                 )
             }
         }
@@ -687,9 +690,12 @@ public final class ListView : UIView
         
         // The rect we scroll to must have an area – an empty rect will result in no scrolling.
         let rect = CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0))
-        
+
+        // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+        let shouldAnimate = animated && UIView.areAnimationsEnabled
+
         return self.preparePresentationStateForScroll(to: IndexPath(item: 0, section: 0))  {
-            self.collectionView.scrollRectToVisible(rect, animated: animated)
+            self.collectionView.scrollRectToVisible(rect, animated: shouldAnimate)
         }
     }
 
@@ -705,6 +711,9 @@ public final class ListView : UIView
             return false
         }
 
+        // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+        let shouldAnimate = animated && UIView.areAnimationsEnabled
+
         // Perform scrolling.
 
         return self.preparePresentationStateForScroll(to: toIndexPath)  {
@@ -718,7 +727,7 @@ public final class ListView : UIView
             let contentOffsetY = contentHeight - contentFrameHeight - self.collectionView.adjustedContentInset.top
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: contentOffsetY)
             
-            self.collectionView.setContentOffset(contentOffset, animated: animated)
+            self.collectionView.setContentOffset(contentOffset, animated: shouldAnimate)
         }
     }
     
@@ -1271,6 +1280,9 @@ public final class ListView : UIView
             return
         }
 
+        // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+        let shouldAnimate = animated && UIView.areAnimationsEnabled
+
         let topInset = collectionView.adjustedContentInset.top
         let contentFrameHeight = collectionView.visibleContentFrame.height
         let adjustedOriginY = targetFrame.origin.y - topInset
@@ -1295,7 +1307,7 @@ public final class ListView : UIView
 
         resultOffset.y = max(resultOffset.y, -topInset)
 
-        self.collectionView.setContentOffset(resultOffset, animated: animated)
+        self.collectionView.setContentOffset(resultOffset, animated: shouldAnimate)
     }
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, scroll: @escaping () -> Void) -> Bool {

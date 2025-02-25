@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed behavior change introduced in 15.0.0 where scrolling could animate when `UIView.areAnimationsEnabled` is `false`.
+
 ### Added
 
 ### Removed
