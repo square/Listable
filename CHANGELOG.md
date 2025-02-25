@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed behavior change introduced in 15.0.0 where scrolling could animate when `UIView.areAnimationsEnabled` is `false`.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [15.0.1] - 2025-02-25
+
+### Fixed
+
+- Fixed behavior change introduced in 15.0.0 where scrolling could animate when `UIView.areAnimationsEnabled` is `false`.
 
 # [15.0.0] - 2025-01-16
 
@@ -1101,7 +1105,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/15.0.0...main
+[Main]: https://github.com/square/Listable/compare/15.0.1...main
+[15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
 [15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0
 [14.5.0]: https://github.com/square/Listable/compare/14.4.1...14.5.0
 [14.4.1]: https://github.com/square/Listable/compare/14.4.0...14.4.1
