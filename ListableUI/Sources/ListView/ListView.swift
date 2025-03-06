@@ -1042,7 +1042,29 @@ public final class ListView : UIView
     // MARK: Internal - Updating Presentation State
     //
     
+    /// An index path we store in order to ensure if multiple updates are processed in quick succession, we do not
+    /// end up overriding a previous attempt to programmatically trigger a scroll event.
+    ///
+    /// https://github.com/square/Listable/pull/557
+    ///
     private var updateOverrideIndexPath : IndexPath? = nil
+    
+    private var firstVisibleIndexPath : IndexPath? {
+        
+        /// 1) Get the first visible index path.
+        
+        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems.sorted(by: <)
+        
+        /// 2) Pick the largest index path of two to return.
+        
+        return [
+            updateOverrideIndexPath,
+            visibleIndexPaths.first
+        ]
+        .compactMap(\.self)
+        .sorted(by: >)
+        .first
+    }
     
     internal func updatePresentationState(
         for reason : PresentationState.UpdateReason,
@@ -1054,11 +1076,8 @@ public final class ListView : UIView
             callerCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "List Update", for: self)
         }
-        
-        let indexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        // TODO: Pick biggest index path here? Does it matter?
-        let indexPath = updateOverrideIndexPath ?? indexPaths.first
+                
+        let indexPath = firstVisibleIndexPath
         
         let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
         
