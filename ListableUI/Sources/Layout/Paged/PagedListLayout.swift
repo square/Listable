@@ -66,11 +66,11 @@ public struct PagedAppearance : ListLayoutAppearance
 
     public let stickySectionHeaders: Bool = false
     
-    public let pagingBehavior: ListPagingBehavior = .none
+    public let pagingBehavior: ListPagingBehavior = .firstVisibleItemCentered
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            isPagingEnabled: self.pagingSize == .view,
+            pagingStyle: self.pagingSize == .view ? .native : .custom,
             contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: false,
             allowsBounceHorizontal: false,

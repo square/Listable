@@ -10,7 +10,7 @@ import UIKit
 
 public struct ListLayoutScrollViewProperties : Equatable
 {
-    public var isPagingEnabled : Bool
+    public var pagingStyle : PagingStyle?
     
     public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
@@ -21,14 +21,14 @@ public struct ListLayoutScrollViewProperties : Equatable
     public var allowsVerticalScrollIndicator : Bool
     
     public init(
-        isPagingEnabled: Bool,
+        pagingStyle: PagingStyle?,
         contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior,
         allowsBounceVertical : Bool,
         allowsBounceHorizontal : Bool,
         allowsVerticalScrollIndicator : Bool,
         allowsHorizontalScrollIndicator : Bool
     ) {
-        self.isPagingEnabled = isPagingEnabled
+        self.pagingStyle = pagingStyle
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
         
         self.allowsBounceVertical = allowsBounceVertical
@@ -52,10 +52,10 @@ public struct ListLayoutScrollViewProperties : Equatable
             view.isScrollEnabled = behavior.isScrollEnabled
         }
 
-        let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
-                
-        if view.isPagingEnabled != isPagingEnabled {
-            view.isPagingEnabled = isPagingEnabled
+        let isNativePagingEnabled = self.pagingStyle == .native || behavior.pagingStyle == .native
+
+        if view.isPagingEnabled != isNativePagingEnabled {
+            view.isPagingEnabled = isNativePagingEnabled
         }
         
         if view.contentInsetAdjustmentBehavior != self.contentInsetAdjustmentBehavior.toUIScrollViewValue {
@@ -111,4 +111,17 @@ public enum ContentInsetAdjustmentBehavior : Equatable {
         case .always: return .always
         }
     }
+}
+
+
+/// The paging style of the scroll view.
+public enum PagingStyle {
+    
+    /// Applies native `UIScrollView` paging, where each page is the full width of the
+    /// scroll view's bounds.
+    case native
+    
+    /// Applies custom paging logic; used when the page isn't the full width of the scroll
+    /// view's bounds.
+    case custom
 }

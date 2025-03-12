@@ -39,8 +39,8 @@ public struct Behavior : Equatable
     /// A Boolean value that determines whether the scroll view delays the handling of touch-down gestures.
     public var delaysContentTouches : Bool
     
-    /// Is paging enabled on the underlying scroll view.
-    public var isPagingEnabled : Bool
+    /// The paging style of underlying scroll view. When `.none`, no paging is performed.
+    public var pagingStyle : PagingStyle?
 
     /// The rate at which scrolling decelerates.
     public var decelerationRate: DecelerationRate
@@ -59,7 +59,7 @@ public struct Behavior : Equatable
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
-        isPagingEnabled : Bool = false,
+        pagingStyle : PagingStyle? = nil,
         decelerationRate : DecelerationRate = .normal,
         verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
@@ -74,7 +74,7 @@ public struct Behavior : Equatable
         
         self.canCancelContentTouches = canCancelContentTouches
         self.delaysContentTouches = delaysContentTouches
-        self.isPagingEnabled = false
+        self.pagingStyle = .none
         self.decelerationRate = decelerationRate
         
         self.verticalLayoutGravity = verticalLayoutGravity
