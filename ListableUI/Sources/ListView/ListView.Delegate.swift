@@ -365,15 +365,38 @@ extension ListView
             withVelocity velocity: CGPoint,
             targetContentOffset: UnsafeMutablePointer<CGPoint>
         ) {
-            guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
-                for: scrollView.contentOffset,
-                velocity: velocity,
-                visibleContentSize: scrollView.visibleContentFrame.size
-            ) else {
-                return
+            func findTarget() -> CGPoint? {
+                layoutManager.layout.onDidEndDraggingTargetContentOffset(
+                    for: scrollView.contentOffset,
+                    velocity: velocity,
+                    visibleContentSize: scrollView.visibleContentFrame.size
+                )
             }
             
-            targetContentOffset.pointee = target
+            switch layoutManager.layout.scrollViewProperties.pagingStyle {
+            case .native:
+                // With a native paging style, leverage the system's target offset.
+                break
+            case .custom:
+                guard let target = findTarget() else { return }
+                let mainAxisVelocity = layoutManager.layout.direction.switch(
+                    vertical: { velocity.y.magnitude },
+                    horizontal: { velocity.x.magnitude }
+                )
+                if mainAxisVelocity < 1.25 {
+                    // With a custom paging style, when the velocity is low, programatically
+                    // scroll to the target. This avoids cases where it takes too long for
+                    // the scroll view to reach the target.
+                    DispatchQueue.main.async {
+                        scrollView.setContentOffset(target, animated: true)
+                    }
+                } else {
+                    targetContentOffset.pointee = target
+                }
+            case .none:
+                guard let target = findTarget() else { return }
+                targetContentOffset.pointee = target
+            }
         }
     }
 }

@@ -461,9 +461,7 @@ extension AnyListLayout
         velocity : CGPoint,
         visibleContentSize: CGSize
     ) -> CGPoint?
-    {
-        guard self.pagingBehavior != .none else { return nil }
-        
+    {        
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
             velocity: velocity
