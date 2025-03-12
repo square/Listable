@@ -81,6 +81,21 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public var bounds: ListContentBounds?
     
+    public var peek: Peek? {
+        get {
+            switch pagingSize {
+            case .view, .fixed: nil
+            case .insetForPeek(let peek): peek
+            }
+        } set {
+            if let newValue = newValue {
+                pagingSize = .insetForPeek(newValue)
+            } else {
+                pagingSize = .view
+            }
+        }
+    }
+    
     public func toLayoutDescription() -> LayoutDescription {
         LayoutDescription(layoutType: PagedListLayout.self, appearance: self)
     }
@@ -96,20 +111,26 @@ public struct PagedAppearance : ListLayoutAppearance
     public init(
         direction: LayoutDirection = .vertical,
         showsScrollIndicators : Bool = false,
-        bounds: ListContentBounds? = nil
+        bounds: ListContentBounds? = nil,
+        peek: Peek? = nil
     ) {
-        self.pagingSize = .view
-        
+        if let peek {
+            self.pagingSize = .insetForPeek(peek)
+        } else {
+            self.pagingSize = .view
+        }
         self.direction = direction
         self.showsScrollIndicators = showsScrollIndicators
         self.bounds = bounds
+        self.peek = peek
     }
     
     enum PagingSize : Equatable {
         case view
         case fixed(CGFloat)
+        case insetForPeek(Peek)
         
-        func size(for viewSize : CGSize, direction : LayoutDirection) -> CGSize {
+        func size(for viewSize : CGSize, itemIndex: Int, direction : LayoutDirection) -> CGSize {
             switch self {
             case .view: return viewSize
             case .fixed(let fixed):
@@ -117,7 +138,52 @@ public struct PagedAppearance : ListLayoutAppearance
                 case .vertical: return CGSize(width: viewSize.width, height: fixed)
                 case .horizontal: return CGSize(width: fixed, height: viewSize.height)
                 }
+            case .insetForPeek(let peek):
+                switch direction {
+                case .vertical:
+                    return CGSize(
+                        width: viewSize.width,
+                        height: viewSize.height - ((itemIndex == 0 ? peek.firstItemPeek : peek.secondaryItemPeek) + peek.trailing)
+                    )
+                case .horizontal:
+                    return CGSize(
+                        width: viewSize.width - ((itemIndex == 0 ? peek.firstItemPeek : peek.secondaryItemPeek) + peek.trailing),
+                        height: viewSize.height
+                    )
+                }
             }
+        }
+    }
+}
+
+public extension PagedAppearance {
+    struct Peek: Equatable {
+        
+        public enum Leading: Equatable {
+            case uniform( CGFloat)
+            case custom(firstItem: CGFloat, subsequentItems: CGFloat)
+        }
+        
+        var firstItemPeek: CGFloat {
+            switch leading {
+            case .uniform(let value): value
+            case .custom(let firstItem, _): firstItem
+            }
+        }
+        
+        var secondaryItemPeek: CGFloat {
+            switch leading {
+            case .uniform(let value): value
+            case .custom(_, let subsequentItems): subsequentItems
+            }
+        }
+        
+        let leading: Leading
+        let trailing: CGFloat
+        
+        public init(leading: Leading = .uniform(0), trailing: CGFloat = 0) {
+            self.leading = leading
+            self.trailing = trailing
         }
     }
 }
@@ -174,14 +240,6 @@ final class PagedListLayout : ListLayout
     {
         let bounds = self.resolvedBounds(in: context)
         
-        /// The size of each page to use during the layout.
-        /// Defaults to the size of the view, but some cases (eg tests) override.
-        
-        let pageSize = self.layoutAppearance.pagingSize.size(
-            for: context.viewBounds.size,
-            direction: self.direction
-        )
-        
         /// The size of the containing view.
         
         let viewSize = context.viewBounds.size
@@ -195,14 +253,25 @@ final class PagedListLayout : ListLayout
             alignment: .center
         ))
         
-        let itemPosition = itemWidth.position(
-            with: pageSize.width,
-            defaultWidth: bounds.width.clamp(pageSize.width)
-        )
         
-        var lastMaxY : CGFloat = 0
         
-        for item in content.all {
+        var lastMaxY : CGFloat = layoutAppearance.peek?.firstItemPeek ?? 0
+        
+        for (index, item) in content.all.enumerated() {
+            
+            /// The size of each page to use during the layout.
+            /// Defaults to the size of the view, but some cases (eg tests) override.
+            
+            let pageSize = self.layoutAppearance.pagingSize.size(
+                for: context.viewBounds.size,
+                itemIndex: index,
+                direction: self.direction
+            )
+            
+            let itemPosition = itemWidth.position(
+                with: pageSize.width,
+                defaultWidth: bounds.width.clamp(pageSize.width)
+            )
             
             var itemFrame : CGRect = direction.switch {
                 CGRect(
@@ -242,6 +311,10 @@ final class PagedListLayout : ListLayout
             vertical: bounds.padding.bottom,
             horizontal: bounds.padding.right
         )
+        
+        /// Add the final peek value to the last item.
+        
+        lastMaxY += layoutAppearance.peek?.trailing ?? 0
         
         return .init(
             contentSize: direction.switch(
