@@ -225,6 +225,8 @@ extension TableAppearance
         // If the header for the section should be sticky.
         public var isHeaderSticky : Bool?
         
+        
+        /// In a horizontal layout, this powers the height of the section.
         public var width : CustomWidth
 
         /// Overrides the calculated spacing after this section

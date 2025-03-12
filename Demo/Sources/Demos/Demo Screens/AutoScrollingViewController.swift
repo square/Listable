@@ -76,7 +76,7 @@ final class AutoScrollingViewController : UIViewController
                     shouldPerform: { info in
                         // Only scroll to the bottom if the bottom item is already visible.
                         if let identifier = lastItem {
-                            return info.visibleItems.contains(identifier)
+                            return info.visibleItems.map({ $0.identifier }).contains(identifier)
                         } else {
                             return false
                         }

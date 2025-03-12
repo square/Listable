@@ -69,8 +69,16 @@ public struct PagedAppearance : ListLayoutAppearance
     public let pagingBehavior: ListPagingBehavior = .firstVisibleItemCentered
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
-        .init(
-            pagingStyle: self.pagingSize == .view ? .native : .custom,
+        
+        let pagingStyle: PagingStyle = switch pagingSize {
+        // When there is no peek, meaning pages span the width of the collection view,
+        // use the system's native paging behavior.
+        case .inset(let peek): peek.isEmpty ? .native : .custom
+        case .fixed: .native
+        }
+        
+        return .init(
+            pagingStyle: pagingStyle,
             contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: false,
             allowsBounceHorizontal: false,
@@ -81,18 +89,15 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public var bounds: ListContentBounds?
     
-    public var peek: Peek? {
+    /// This is a proxy to the internal `pagingSize`.
+    public var peek: Peek {
         get {
             switch pagingSize {
-            case .view, .fixed: nil
-            case .insetForPeek(let peek): peek
+            case .inset(let peek): peek
+            case .fixed: .zero
             }
         } set {
-            if let newValue = newValue {
-                pagingSize = .insetForPeek(newValue)
-            } else {
-                pagingSize = .view
-            }
+            pagingSize = .inset(newValue)
         }
     }
     
@@ -112,13 +117,10 @@ public struct PagedAppearance : ListLayoutAppearance
         direction: LayoutDirection = .vertical,
         showsScrollIndicators : Bool = false,
         bounds: ListContentBounds? = nil,
-        peek: Peek? = nil
+        peek: Peek = .zero
     ) {
-        if let peek {
-            self.pagingSize = .insetForPeek(peek)
-        } else {
-            self.pagingSize = .view
-        }
+        self.pagingSize = .inset(peek)
+        
         self.direction = direction
         self.showsScrollIndicators = showsScrollIndicators
         self.bounds = bounds
@@ -126,30 +128,31 @@ public struct PagedAppearance : ListLayoutAppearance
     }
     
     enum PagingSize : Equatable {
-        case view
-        case fixed(CGFloat)
-        case insetForPeek(Peek)
         
-        func size(for viewSize : CGSize, itemIndex: Int, direction : LayoutDirection) -> CGSize {
+        /// This will inset the layout's primary dimension using the associated `Peek`.
+        case inset(Peek)
+        
+        case fixed(CGFloat)
+        
+        func size(for viewSize : CGSize, isFirstItem: Bool, direction : LayoutDirection) -> CGSize {
             switch self {
-            case .view: return viewSize
-            case .fixed(let fixed):
-                switch direction {
-                case .vertical: return CGSize(width: viewSize.width, height: fixed)
-                case .horizontal: return CGSize(width: fixed, height: viewSize.height)
-                }
-            case .insetForPeek(let peek):
+            case .inset(let peek):
                 switch direction {
                 case .vertical:
                     return CGSize(
                         width: viewSize.width,
-                        height: viewSize.height - ((itemIndex == 0 ? peek.firstItemPeek : peek.secondaryItemPeek) + peek.trailing)
+                        height: viewSize.height - peek.totalValue(isFirstItem)
                     )
                 case .horizontal:
                     return CGSize(
-                        width: viewSize.width - ((itemIndex == 0 ? peek.firstItemPeek : peek.secondaryItemPeek) + peek.trailing),
+                        width: viewSize.width - peek.totalValue(isFirstItem),
                         height: viewSize.height
                     )
+                }
+            case .fixed(let fixed):
+                switch direction {
+                case .vertical: return CGSize(width: viewSize.width, height: fixed)
+                case .horizontal: return CGSize(width: fixed, height: viewSize.height)
                 }
             }
         }
@@ -157,34 +160,70 @@ public struct PagedAppearance : ListLayoutAppearance
 }
 
 public extension PagedAppearance {
+    
+    /// This data model is used to apply an inset to each page, allowing items residing on the
+    /// edge of the collection view to "peek" into view.
     struct Peek: Equatable {
         
         public enum Leading: Equatable {
+            
+            /// The leading peek is consistent across all items. The page sizes will also be consistent.
             case uniform( CGFloat)
-            case custom(firstItem: CGFloat, subsequentItems: CGFloat)
+            
+            /// The first item's peek is unique from the rest. This can be used to remove the leading
+            /// peek and make the item full width.
+            case disjointed(firstItem: CGFloat, subsequentItems: CGFloat)
         }
         
-        var firstItemPeek: CGFloat {
-            switch leading {
-            case .uniform(let value): value
-            case .custom(let firstItem, _): firstItem
+        public var leading: Leading
+        
+        public var trailing: CGFloat
+        
+        public var leadingFirstItem: CGFloat {
+            get {
+                switch leading {
+                case .uniform(let value): value
+                case .disjointed(let firstItem, _): firstItem
+                }
+            } set {
+                switch leading {
+                case .uniform(let value): leading = .disjointed(firstItem: newValue, subsequentItems: value)
+                case .disjointed(_, let subsequentItems): leading = .disjointed(firstItem: newValue, subsequentItems: subsequentItems)
+                }
             }
         }
         
-        var secondaryItemPeek: CGFloat {
-            switch leading {
-            case .uniform(let value): value
-            case .custom(_, let subsequentItems): subsequentItems
+        public var leadingSubsequentItem: CGFloat {
+            get {
+                switch leading {
+                case .uniform(let value): value
+                case .disjointed(_, let subsequentItems): subsequentItems
+                }
+            } set {
+                switch leading {
+                case .uniform: leading = .uniform(newValue)
+                case .disjointed(let firstItem, _): leading = .disjointed(firstItem: firstItem, subsequentItems: newValue)
+                }
             }
         }
         
-        let leading: Leading
-        let trailing: CGFloat
+        /// This returns the total peek, taking int account a disjointed leading first item value.
+        func totalValue(_ isFirstItem: Bool) -> CGFloat {
+            (isFirstItem ? leadingFirstItem : leadingSubsequentItem) + trailing
+        }
+        
+        /// This is `true` if there are no associated peek values.
+        var isEmpty: Bool {
+            leadingFirstItem == 0 && leadingSubsequentItem == 0 && trailing == 0
+        }
         
         public init(leading: Leading = .uniform(0), trailing: CGFloat = 0) {
             self.leading = leading
             self.trailing = trailing
         }
+        
+        /// This represents no peeking functionality.
+        public static var zero: Self { .init() }
     }
 }
 
@@ -254,17 +293,19 @@ final class PagedListLayout : ListLayout
         ))
         
         
+        /// Apply the leading peek to the first item's position.
         
-        var lastMaxY : CGFloat = layoutAppearance.peek?.firstItemPeek ?? 0
+        var lastMaxY : CGFloat = layoutAppearance.peek.leadingFirstItem
         
         for (index, item) in content.all.enumerated() {
             
             /// The size of each page to use during the layout.
-            /// Defaults to the size of the view, but some cases (eg tests) override.
+            /// Tests override this, but it's typically either the size of the view, with
+            /// optional peeking insets applied.
             
             let pageSize = self.layoutAppearance.pagingSize.size(
                 for: context.viewBounds.size,
-                itemIndex: index,
+                isFirstItem: index == 0,
                 direction: self.direction
             )
             
@@ -314,7 +355,7 @@ final class PagedListLayout : ListLayout
         
         /// Add the final peek value to the last item.
         
-        lastMaxY += layoutAppearance.peek?.trailing ?? 0
+        lastMaxY += layoutAppearance.peek.trailing
         
         return .init(
             contentSize: direction.switch(

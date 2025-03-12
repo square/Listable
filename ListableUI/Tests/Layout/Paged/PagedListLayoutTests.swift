@@ -126,11 +126,73 @@ class PagedAppearance_PagingSize_Tests : XCTestCase
     {
         let size = CGSize(width: 30.0, height: 50.0)
         
-        XCTAssertEqual(PagedAppearance.PagingSize.view.size(for: size, direction: .vertical), CGSize(width: 30.0, height: 50.0))
-        XCTAssertEqual(PagedAppearance.PagingSize.view.size(for: size, direction: .horizontal), CGSize(width: 30.0, height: 50.0))
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(.zero).size(for: size, isFirstItem: true, direction: .vertical),
+            CGSize(width: 30.0, height: 50.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(.zero).size(for: size, isFirstItem: true, direction: .horizontal),
+            CGSize(width: 30.0, height: 50.0)
+        )
         
-        XCTAssertEqual(PagedAppearance.PagingSize.fixed(100).size(for: size, direction: .vertical), CGSize(width: 30.0, height: 100.0))
-        XCTAssertEqual(PagedAppearance.PagingSize.fixed(100).size(for: size, direction: .horizontal), CGSize(width: 100.0, height: 50.0))
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.fixed(100).size(for: size, isFirstItem: true, direction: .vertical),
+            CGSize(width: 30.0, height: 100.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.fixed(100).size(for: size, isFirstItem: true, direction: .horizontal),
+            CGSize(width: 100.0, height: 50.0)
+        )
+    }
+    
+    func test_insetUniformSize() {
+        let size = CGSize(width: 30.0, height: 50.0)
+        let peek = PagedAppearance.Peek(
+            leading: .uniform(5),
+            trailing: 10
+        )
+        
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .vertical),
+            CGSize(width: 30.0, height: 35.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .vertical),
+            CGSize(width: 30.0, height: 35.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .horizontal),
+            CGSize(width: 15.0, height: 50.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .horizontal),
+            CGSize(width: 15.0, height: 50.0)
+        )
+    }
+    
+    func test_insetDisjointedSize() {
+        let size = CGSize(width: 30.0, height: 50.0)
+        let peek = PagedAppearance.Peek(
+            leading: .disjointed(firstItem: 5, subsequentItems: 10),
+            trailing: 10
+        )
+        
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .vertical),
+            CGSize(width: 30.0, height: 35.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .vertical),
+            CGSize(width: 30.0, height: 30.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .horizontal),
+            CGSize(width: 15.0, height: 50.0)
+        )
+        XCTAssertEqual(
+            PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .horizontal),
+            CGSize(width: 10.0, height: 50.0)
+        )
     }
 }
 
