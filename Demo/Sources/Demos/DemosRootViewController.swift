@@ -258,6 +258,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(PagedViewController())
                     }
                 )
+                
+                Item(
+                    DemoItem(text: "Peeking Paged Layout"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(PeekingPagedViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "Center-Snapping Table Layout"),

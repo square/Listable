@@ -105,7 +105,7 @@ class PagedListLayoutTests : XCTestCase
         return listView
     }
     
-    func test_pageStyle_defaultPeek() {
+    func test_pagingStyle_defaultPeek() {
         
         let layout = PagedListLayout(
             layoutAppearance: PagedAppearance(),
@@ -117,7 +117,7 @@ class PagedListLayoutTests : XCTestCase
         XCTAssertEqual(layout.scrollViewProperties.pagingStyle, .native)
     }
     
-    func test_pageStyle_customPeek() {
+    func test_pagingStyle_customPeek() {
         
         let layout = PagedListLayout(
             layoutAppearance: PagedAppearance(peek: PagedAppearance.Peek(value: 10)),
@@ -146,7 +146,7 @@ class PagedAppearanceTests : XCTestCase
 
 class PagedAppearance_PagingSize_Tests : XCTestCase
 {
-    func test_size()
+    func test_size_noPeek()
     {
         let size = CGSize(width: 30.0, height: 50.0)
         

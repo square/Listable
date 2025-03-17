@@ -59,7 +59,7 @@ public struct Behavior : Equatable
         underflow : Underflow = Underflow(),
         canCancelContentTouches : Bool = true,
         delaysContentTouches : Bool = true,
-        pagingStyle : PagingStyle? = nil,
+        pagingStyle : PagingStyle? = .none,
         decelerationRate : DecelerationRate = .normal,
         verticalLayoutGravity : VerticalLayoutGravity = .top
     ) {
@@ -74,7 +74,7 @@ public struct Behavior : Equatable
         
         self.canCancelContentTouches = canCancelContentTouches
         self.delaysContentTouches = delaysContentTouches
-        self.pagingStyle = .none
+        self.pagingStyle = pagingStyle
         self.decelerationRate = decelerationRate
         
         self.verticalLayoutGravity = verticalLayoutGravity

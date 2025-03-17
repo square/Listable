@@ -516,14 +516,14 @@ extension AnyListLayout
         )
         
         if scrollViewProperties.pagingStyle == .custom && mainAxisVelocity == 0 {
-            /// When the items are being held still with custom paging, this will bias the most visible item.
+            /// When the items are being held still with custom paging, bias the most visible item.
             return items
                 .sorted { lhs, rhs in
                     lhs.percentageVisible(inside: visibleContentFrame) > rhs.percentageVisible(inside: visibleContentFrame)
                 }
                 .first
         } else {
-            /// This sorts items based on their position on the primary axis, in ascending order.
+            /// Sort items based on their position on the primary axis, in ascending order.
             return items
                 .sorted { lhs, rhs in
                     switch scrollDirection {
@@ -533,7 +533,7 @@ extension AnyListLayout
                         return direction.maxY(for: lhs.defaultFrame) > direction.maxY(for: rhs.defaultFrame)
                     }
                 }
-                /// Finds the first item that has a min edge beyond the offset, along the primary axis.
+                /// Find the first item that has a min edge beyond the offset, along the primary axis.
                 .first { item in
                     let edge = direction.minY(for: item.defaultFrame)
                     let offset = direction.y(for: contentOffset)

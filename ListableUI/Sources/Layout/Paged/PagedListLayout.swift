@@ -165,13 +165,13 @@ public extension PagedAppearance {
     /// edge of the collection view to "peek" into view.
     struct Peek: Equatable {
         
-        
         /// This is the main leading and trailing peek value.
         public var value: CGFloat
         
         public var firstItemConfiguration: FirstItemConfiguration
         
-        var firstItemValue: CGFloat {
+        /// This is the leading peek value before the first item.
+        var firstItemLeadingValue: CGFloat {
             switch firstItemConfiguration {
             case .uniform: value
             case .customLeading(let customValue): customValue
@@ -193,18 +193,18 @@ public extension PagedAppearance {
             case customLeading(CGFloat)
         }
         
-        /// This returns the leading and trailing peek, accounting for a custom leading value when
-        /// `isFirstItem` is true.
+        /// This returns the combined leading and trailing peek, accounting for a custom leading value
+        /// when `isFirstItem` is true.
         func totalValue(_ isFirstItem: Bool) -> CGFloat {
-            (isFirstItem ? firstItemValue : value) + value
+            (isFirstItem ? firstItemLeadingValue : value) + value
         }
         
         /// This is `true` if there are no associated peek values.
         var isEmpty: Bool {
-            value == 0 && firstItemValue == 0
+            value == 0 && firstItemLeadingValue == 0
         }
         
-        init(value: CGFloat = 0, firstItemConfiguration: FirstItemConfiguration = .uniform) {
+        public init(value: CGFloat = 0, firstItemConfiguration: FirstItemConfiguration = .uniform) {
             self.value = value
             self.firstItemConfiguration = firstItemConfiguration
         }
@@ -282,7 +282,7 @@ final class PagedListLayout : ListLayout
         
         /// Apply the leading peek to the first item's position.
         
-        var lastMaxY : CGFloat = layoutAppearance.peek.firstItemValue
+        var lastMaxY : CGFloat = layoutAppearance.peek.firstItemLeadingValue
         
         for (index, item) in content.all.enumerated() {
             
