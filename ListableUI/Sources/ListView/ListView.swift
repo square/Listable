@@ -232,10 +232,10 @@ public final class ListView : UIView
     public var scrollPositionInfo : ListScrollPositionInfo {
         let visibleItems = Set(self.visibleContent.items.map { item in
             let itemFrame = self.collectionViewLayout.frameForItem(at: item.indexPath)
-            let visibleFrame = self.collectionView.visibleContentFrame.intersection(itemFrame)
+            let visibleFrame = self.collectionView.visibleContentFrame
             return ListScrollPositionInfo.VisibleItem(
                 identifier: item.item.anyModel.anyIdentifier,
-                percentageVisible: (visibleFrame.width * visibleFrame.height) / (itemFrame.width * itemFrame.height)
+                percentageVisible: itemFrame.percentageVisible(inside: visibleFrame)
             )
         })
         

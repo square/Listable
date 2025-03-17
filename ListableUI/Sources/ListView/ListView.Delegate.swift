@@ -369,7 +369,7 @@ extension ListView
                 layoutManager.layout.onDidEndDraggingTargetContentOffset(
                     for: scrollView.contentOffset,
                     velocity: velocity,
-                    visibleContentSize: scrollView.visibleContentFrame.size
+                    visibleContentFrame: scrollView.visibleContentFrame
                 )
             }
             
@@ -386,7 +386,9 @@ extension ListView
                 if mainAxisVelocity < 1.25 {
                     // With a custom paging style, when the velocity is low, programatically
                     // scroll to the target. This avoids cases where it takes too long for
-                    // the scroll view to reach the target.
+                    // the scroll view to reach the target. This is dispatched to wait for
+                    // scrollViewWillEndDragging(_:withVelocity:targetContentOffset:) to
+                    // finish, identical to an async programmatic scroll while decelerating.
                     DispatchQueue.main.async {
                         scrollView.setContentOffset(target, animated: true)
                     }

@@ -104,6 +104,30 @@ class PagedListLayoutTests : XCTestCase
         
         return listView
     }
+    
+    func test_pageStyle_defaultPeek() {
+        
+        let layout = PagedListLayout(
+            layoutAppearance: PagedAppearance(),
+            appearance: Appearance(),
+            behavior: Behavior(),
+            content: ListLayoutContent()
+        )
+        
+        XCTAssertEqual(layout.scrollViewProperties.pagingStyle, .native)
+    }
+    
+    func test_pageStyle_customPeek() {
+        
+        let layout = PagedListLayout(
+            layoutAppearance: PagedAppearance(peek: PagedAppearance.Peek(value: 10)),
+            appearance: Appearance(),
+            behavior: Behavior(),
+            content: ListLayoutContent()
+        )
+        
+        XCTAssertEqual(layout.scrollViewProperties.pagingStyle, .custom)
+    }
 }
 
 
@@ -145,36 +169,36 @@ class PagedAppearance_PagingSize_Tests : XCTestCase
         )
     }
     
-    func test_insetUniformSize() {
+    func test_size_uniformPeek() {
         let size = CGSize(width: 30.0, height: 50.0)
         let peek = PagedAppearance.Peek(
-            leading: .uniform(5),
-            trailing: 10
+            value: 10,
+            firstItemConfiguration: .uniform
         )
         
         XCTAssertEqual(
             PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .vertical),
-            CGSize(width: 30.0, height: 35.0)
+            CGSize(width: 30.0, height: 30.0)
         )
         XCTAssertEqual(
             PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .vertical),
-            CGSize(width: 30.0, height: 35.0)
+            CGSize(width: 30.0, height: 30.0)
         )
         XCTAssertEqual(
             PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: true, direction: .horizontal),
-            CGSize(width: 15.0, height: 50.0)
+            CGSize(width: 10.0, height: 50.0)
         )
         XCTAssertEqual(
             PagedAppearance.PagingSize.inset(peek).size(for: size, isFirstItem: false, direction: .horizontal),
-            CGSize(width: 15.0, height: 50.0)
+            CGSize(width: 10.0, height: 50.0)
         )
     }
     
-    func test_insetDisjointedSize() {
+    func test_size_customLeadingPeek() {
         let size = CGSize(width: 30.0, height: 50.0)
         let peek = PagedAppearance.Peek(
-            leading: .disjointed(firstItem: 5, subsequentItems: 10),
-            trailing: 10
+            value: 10,
+            firstItemConfiguration: .customLeading(5)
         )
         
         XCTAssertEqual(

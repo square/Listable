@@ -459,16 +459,18 @@ extension AnyListLayout
     func onDidEndDraggingTargetContentOffset(
         for targetContentOffset : CGPoint,
         velocity : CGPoint,
-        visibleContentSize: CGSize
+        visibleContentFrame: CGRect
     ) -> CGPoint?
     {        
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
-            velocity: velocity
+            velocity: velocity,
+            visibleContentFrame: visibleContentFrame
         ) else {
             return nil
         }
         
+        let visibleContentSize = visibleContentFrame.size
         let padding = self.bounds?.padding ?? .zero
 
         switch self.pagingBehavior {
@@ -491,7 +493,8 @@ extension AnyListLayout
     
     func itemToScrollToOnDidEndDragging(
         after contentOffset : CGPoint,
-        velocity : CGPoint
+        velocity : CGPoint,
+        visibleContentFrame: CGRect
     ) -> ListLayoutContent.ContentItem?
     {
         let rect : CGRect = self.rectForFindingItemToScrollToOnDidEndDragging(
@@ -505,25 +508,43 @@ extension AnyListLayout
             in: rect,
             alwaysIncludeOverscroll: false,
             includeUnpopulated: false
-        ).sorted { lhs, rhs in
-            switch scrollDirection {
-            case .forward:
-                return direction.minY(for: lhs.defaultFrame) < direction.minY(for: rhs.defaultFrame)
-            case .backward:
-                return direction.maxY(for: lhs.defaultFrame) > direction.maxY(for: rhs.defaultFrame)
-            }
-        }
-
-        return items.first { item in
-            let edge = direction.minY(for: item.defaultFrame)
-            let offset = direction.y(for: contentOffset)
-            
-            switch scrollDirection {
-            case .forward:
-                return edge >= offset
-            case .backward:
-                return edge <= offset
-            }
+        )
+        
+        let mainAxisVelocity = direction.switch(
+            vertical: { velocity.y },
+            horizontal: { velocity.x }
+        )
+        
+        if scrollViewProperties.pagingStyle == .custom && mainAxisVelocity == 0 {
+            /// When the items are being held still with custom paging, this will bias the most visible item.
+            return items
+                .sorted { lhs, rhs in
+                    lhs.percentageVisible(inside: visibleContentFrame) > rhs.percentageVisible(inside: visibleContentFrame)
+                }
+                .first
+        } else {
+            /// This sorts items based on their position on the primary axis, in ascending order.
+            return items
+                .sorted { lhs, rhs in
+                    switch scrollDirection {
+                    case .forward:
+                        return direction.minY(for: lhs.defaultFrame) < direction.minY(for: rhs.defaultFrame)
+                    case .backward:
+                        return direction.maxY(for: lhs.defaultFrame) > direction.maxY(for: rhs.defaultFrame)
+                    }
+                }
+                /// Finds the first item that has a min edge beyond the offset, along the primary axis.
+                .first { item in
+                    let edge = direction.minY(for: item.defaultFrame)
+                    let offset = direction.y(for: contentOffset)
+                    
+                    switch scrollDirection {
+                    case .forward:
+                        return edge >= offset
+                    case .backward:
+                        return edge <= offset
+                    }
+                }
         }
     }
     

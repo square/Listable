@@ -165,61 +165,48 @@ public extension PagedAppearance {
     /// edge of the collection view to "peek" into view.
     struct Peek: Equatable {
         
-        public enum Leading: Equatable {
-            
-            /// The leading peek is consistent across all items. The page sizes will also be consistent.
-            case uniform( CGFloat)
-            
-            /// The first item's peek is unique from the rest. This can be used to remove the leading
-            /// peek and make the item full width.
-            case disjointed(firstItem: CGFloat, subsequentItems: CGFloat)
-        }
         
-        public var leading: Leading
+        /// This is the main leading and trailing peek value.
+        public var value: CGFloat
         
-        public var trailing: CGFloat
+        public var firstItemConfiguration: FirstItemConfiguration
         
-        public var leadingFirstItem: CGFloat {
-            get {
-                switch leading {
-                case .uniform(let value): value
-                case .disjointed(let firstItem, _): firstItem
-                }
-            } set {
-                switch leading {
-                case .uniform(let value): leading = .disjointed(firstItem: newValue, subsequentItems: value)
-                case .disjointed(_, let subsequentItems): leading = .disjointed(firstItem: newValue, subsequentItems: subsequentItems)
-                }
+        var firstItemValue: CGFloat {
+            switch firstItemConfiguration {
+            case .uniform: value
+            case .customLeading(let customValue): customValue
             }
         }
         
-        public var leadingSubsequentItem: CGFloat {
-            get {
-                switch leading {
-                case .uniform(let value): value
-                case .disjointed(_, let subsequentItems): subsequentItems
-                }
-            } set {
-                switch leading {
-                case .uniform: leading = .uniform(newValue)
-                case .disjointed(let firstItem, _): leading = .disjointed(firstItem: firstItem, subsequentItems: newValue)
-                }
-            }
+        public enum FirstItemConfiguration: Equatable {
+            
+            /// The first item's leading peek is equal to the `Peek.value`. This will keep the first
+            /// item centered within the layout and will keep page sizes consistent.
+            case uniform
+            
+            /// The first item's leading peek is equal to the associated value. This will offset the
+            /// first item, giving it a larger page size than the rest of the items.
+            ///
+            /// Note: this value should be smaller than `Peek.value`. If a first item leading peek that
+            /// is larger than the rest of the peeks becomes a business requirement, add a new
+            /// `ListPagingBehavior` case to support trailing/bottom alignment on the first item.
+            case customLeading(CGFloat)
         }
         
-        /// This returns the total peek, taking int account a disjointed leading first item value.
+        /// This returns the leading and trailing peek, accounting for a custom leading value when
+        /// `isFirstItem` is true.
         func totalValue(_ isFirstItem: Bool) -> CGFloat {
-            (isFirstItem ? leadingFirstItem : leadingSubsequentItem) + trailing
+            (isFirstItem ? firstItemValue : value) + value
         }
         
         /// This is `true` if there are no associated peek values.
         var isEmpty: Bool {
-            leadingFirstItem == 0 && leadingSubsequentItem == 0 && trailing == 0
+            value == 0 && firstItemValue == 0
         }
         
-        public init(leading: Leading = .uniform(0), trailing: CGFloat = 0) {
-            self.leading = leading
-            self.trailing = trailing
+        init(value: CGFloat = 0, firstItemConfiguration: FirstItemConfiguration = .uniform) {
+            self.value = value
+            self.firstItemConfiguration = firstItemConfiguration
         }
         
         /// This represents no peeking functionality.
@@ -295,7 +282,7 @@ final class PagedListLayout : ListLayout
         
         /// Apply the leading peek to the first item's position.
         
-        var lastMaxY : CGFloat = layoutAppearance.peek.leadingFirstItem
+        var lastMaxY : CGFloat = layoutAppearance.peek.firstItemValue
         
         for (index, item) in content.all.enumerated() {
             
@@ -355,7 +342,7 @@ final class PagedListLayout : ListLayout
         
         /// Add the final peek value to the last item.
         
-        lastMaxY += layoutAppearance.peek.trailing
+        lastMaxY += layoutAppearance.peek.value
         
         return .init(
             contentSize: direction.switch(

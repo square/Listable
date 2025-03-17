@@ -26,7 +26,7 @@ final class AnyListLayoutTests : XCTestCase {
                 layout.onDidEndDraggingTargetContentOffset(
                     for: CGPoint(x: 0, y: 0),
                     velocity: CGPoint(x: 0, y: 1),
-                    visibleContentSize: listSize
+                    visibleContentFrame: CGRect(origin: .zero, size: listSize)
                 ),
                 .zero
             )
@@ -43,7 +43,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 0, y: 1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: 0.0)
                     )
@@ -52,7 +52,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 100),
                             velocity: CGPoint(x: 0, y: 1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: 100.0)
                     )
@@ -63,7 +63,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 0, y: -1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         nil
                     )
@@ -72,7 +72,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 100),
                             velocity: CGPoint(x: 0, y: -1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: 0)
                     )
@@ -87,7 +87,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0.0, y: 0.0)
                     )
@@ -97,7 +97,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 100, y: 0),
                             velocity: CGPoint(x: 1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 100, y: 0.0)
                     )
@@ -108,7 +108,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: -1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         nil
                     )
@@ -118,7 +118,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 100, y: 0),
                             velocity: CGPoint(x: -1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0.0, y: 0.0)
                     )
@@ -137,7 +137,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 0, y: 1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: -40)
                     )
@@ -146,7 +146,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 100),
                             velocity: CGPoint(x: 0, y: 1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: 60)
                     )
@@ -157,7 +157,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 0, y: -1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         nil
                     )
@@ -166,7 +166,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 100),
                             velocity: CGPoint(x: 0, y: -1),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 0, y: -40)
                     )
@@ -181,7 +181,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: 1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: -30, y: 0)
                     )
@@ -191,7 +191,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 100, y: 0),
                             velocity: CGPoint(x: 1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: 70, y: 0)
                     )
@@ -202,7 +202,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 0, y: 0),
                             velocity: CGPoint(x: -1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         nil
                     )
@@ -212,7 +212,7 @@ final class AnyListLayoutTests : XCTestCase {
                         layout.onDidEndDraggingTargetContentOffset(
                             for: CGPoint(x: 100, y: 0),
                             velocity: CGPoint(x: -1, y: 0),
-                            visibleContentSize: listSize
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         ),
                         CGPoint(x: -30, y: 0)
                     )
@@ -233,7 +233,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 0),
-                            velocity: CGPoint(x: 0, y: 1)
+                            velocity: CGPoint(x: 0, y: 1),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 20, y: 10, width: 140, height: 100)
                     )
@@ -241,7 +242,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 50),
-                            velocity: CGPoint(x: 0, y: 1)
+                            velocity: CGPoint(x: 0, y: 1),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 20, y: 110, width: 140, height: 100)
                     )
@@ -251,7 +253,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 0),
-                            velocity: CGPoint(x: 0, y: -1)
+                            velocity: CGPoint(x: 0, y: -1),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         nil
                     )
@@ -259,7 +262,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 350),
-                            velocity: CGPoint(x: 0, y: -1)
+                            velocity: CGPoint(x: 0, y: -1),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 20, y: 310, width: 140, height: 100)
                     )
@@ -273,7 +277,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 0),
-                            velocity: CGPoint(x: 1, y: 0)
+                            velocity: CGPoint(x: 1, y: 0),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 20, y: 10, width: 100, height: 160)
                     )
@@ -281,7 +286,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 50, y: 0),
-                            velocity: CGPoint(x: 1, y: 0)
+                            velocity: CGPoint(x: 1, y: 0),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 120, y: 10, width: 100, height: 160)
                     )
@@ -291,7 +297,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 0, y: 0),
-                            velocity: CGPoint(x: -1, y: 0)
+                            velocity: CGPoint(x: -1, y: 0),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         nil
                     )
@@ -299,7 +306,8 @@ final class AnyListLayoutTests : XCTestCase {
                     XCTAssertEqual(
                         layout.itemToScrollToOnDidEndDragging(
                             after: CGPoint(x: 350, y: 0),
-                            velocity: CGPoint(x: -1, y: 0)
+                            velocity: CGPoint(x: -1, y: 0),
+                            visibleContentFrame: CGRect(origin: .zero, size: listSize)
                         )?.defaultFrame,
                         CGRect(x: 320, y: 10, width: 100, height: 160)
                     )
