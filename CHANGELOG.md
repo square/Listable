@@ -20,7 +20,7 @@
 
 ### Internal
 
-- Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items wiht an edge peek.
+- Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.
 - Updating GitHub `actions/cache` to v4.
 
 # Past Releases

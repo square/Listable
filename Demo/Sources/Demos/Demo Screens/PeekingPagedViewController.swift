@@ -2,7 +2,7 @@ import BlueprintUILists
 import BlueprintUICommonControls
 
 
-/// This demo showcases a `PagedListLayout` with peeking leading and trailing items.
+/// This demo showcases a `PagedListLayout` with peeking leading/top and trailing/bottom items.
 final class PeekingPagedViewController : UIViewController {
     
     let blueprintView = BlueprintView()
@@ -44,6 +44,7 @@ final class PeekingPagedViewController : UIViewController {
     func update() {
         blueprintView.element = List { list in
             list.actions = listActions
+            list.behavior.decelerationRate = .fast
             list.layout = .paged {
                 $0.direction = isVertical ? .vertical : .horizontal
                 $0.peek = PagedAppearance.Peek(

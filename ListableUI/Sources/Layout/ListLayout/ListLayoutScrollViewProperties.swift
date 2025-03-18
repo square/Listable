@@ -121,7 +121,7 @@ public enum PagingStyle {
     /// scroll view's bounds.
     case native
     
-    /// Applies custom paging logic; used when the page isn't the full width of the scroll
+    /// Applies custom paging logic, used when the page isn't the full width of the scroll
     /// view's bounds.
     case custom
 }
