@@ -12,6 +12,8 @@
 
 ### Internal
 
+- Updating GitHub `actions/cache` to v4.
+
 # Past Releases
 
 # [15.0.1] - 2025-02-25
