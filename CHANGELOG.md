@@ -18,6 +18,8 @@
 
 ### Misc
 
+- `PagedListLayout.pagingBehavior` is now configurable. This can be used to keep the items centered when peeking.
+
 ### Internal
 
 - Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.

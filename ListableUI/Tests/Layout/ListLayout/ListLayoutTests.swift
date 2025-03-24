@@ -28,7 +28,7 @@ final class AnyListLayoutTests : XCTestCase {
                     velocity: CGPoint(x: 0, y: 1),
                     visibleContentFrame: CGRect(origin: .zero, size: listSize)
                 ),
-                .zero
+                nil
             )
         }
 

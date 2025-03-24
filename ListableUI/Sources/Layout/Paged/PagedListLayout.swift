@@ -66,7 +66,7 @@ public struct PagedAppearance : ListLayoutAppearance
 
     public let stickySectionHeaders: Bool = false
     
-    public let pagingBehavior: ListPagingBehavior = .firstVisibleItemCentered
+    public var pagingBehavior: ListPagingBehavior = .none
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         
@@ -199,8 +199,8 @@ public extension PagedAppearance {
             (isFirstItem ? firstItemLeadingValue : value) + value
         }
         
-        /// This is `true` if there are no associated peek values.
-        var isEmpty: Bool {
+        /// This is `true` if there are no peek values.
+        public var isEmpty: Bool {
             value == 0 && firstItemLeadingValue == 0
         }
         
