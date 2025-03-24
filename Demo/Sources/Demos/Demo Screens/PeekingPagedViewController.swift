@@ -47,6 +47,7 @@ final class PeekingPagedViewController : UIViewController {
             list.behavior.decelerationRate = .fast
             list.layout = .paged {
                 $0.direction = isVertical ? .vertical : .horizontal
+                $0.pagingBehavior = .firstVisibleItemCentered
                 $0.peek = PagedAppearance.Peek(
                     value: (isVertical ? view.bounds.height : view.bounds.width) / 6,
                     firstItemConfiguration: zeroLeadingPeek ? .customLeading(0) : .uniform

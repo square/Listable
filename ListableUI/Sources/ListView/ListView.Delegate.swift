@@ -292,7 +292,7 @@ extension ListView
         }
 
         // MARK: UIScrollViewDelegate
-        
+                
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
             self.view.liveCells.perform {
@@ -365,38 +365,17 @@ extension ListView
             withVelocity velocity: CGPoint,
             targetContentOffset: UnsafeMutablePointer<CGPoint>
         ) {
-            func findTarget() -> CGPoint? {
-                layoutManager.layout.onDidEndDraggingTargetContentOffset(
+            switch layoutManager.layout.scrollViewProperties.pagingStyle {
+            case .native:
+                // With a native paging style, leverage the system's default target offset.
+                break
+            case .custom, .none:
+                let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
                     for: scrollView.contentOffset,
                     velocity: velocity,
                     visibleContentFrame: scrollView.visibleContentFrame
                 )
-            }
-            
-            switch layoutManager.layout.scrollViewProperties.pagingStyle {
-            case .native:
-                // With a native paging style, leverage the system's target offset.
-                break
-            case .custom:
-                guard let target = findTarget() else { return }
-                let mainAxisVelocity = layoutManager.layout.direction.switch(
-                    vertical: { velocity.y.magnitude },
-                    horizontal: { velocity.x.magnitude }
-                )
-                if mainAxisVelocity < 1.25 {
-                    // With a custom paging style, when the velocity is low, programatically
-                    // scroll to the target. This avoids cases where it takes too long for
-                    // the scroll view to reach the target. This is dispatched to wait for
-                    // scrollViewWillEndDragging(_:withVelocity:targetContentOffset:) to
-                    // finish, identical to an async programmatic scroll while decelerating.
-                    DispatchQueue.main.async {
-                        scrollView.setContentOffset(target, animated: true)
-                    }
-                } else {
-                    targetContentOffset.pointee = target
-                }
-            case .none:
-                guard let target = findTarget() else { return }
+                guard let target else { return }
                 targetContentOffset.pointee = target
             }
         }
