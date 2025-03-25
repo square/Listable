@@ -292,7 +292,7 @@ extension ListView
         }
 
         // MARK: UIScrollViewDelegate
-                
+        
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
             self.view.liveCells.perform {

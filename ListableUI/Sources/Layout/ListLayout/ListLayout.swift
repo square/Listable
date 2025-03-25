@@ -461,7 +461,9 @@ extension AnyListLayout
         velocity : CGPoint,
         visibleContentFrame: CGRect
     ) -> CGPoint?
-    {        
+    {
+        guard self.pagingBehavior != .none else { return nil }
+
         guard let item = self.itemToScrollToOnDidEndDragging(
             after: targetContentOffset,
             velocity: velocity,
@@ -510,12 +512,12 @@ extension AnyListLayout
             includeUnpopulated: false
         )
         
-        let mainAxisVelocity = direction.switch(
-            vertical: { velocity.y },
-            horizontal: { velocity.x }
-        )
-        
         if scrollViewProperties.pagingStyle == .custom {
+            let mainAxisVelocity = direction.switch(
+                vertical: { velocity.y },
+                horizontal: { velocity.x }
+            )
+            
             if mainAxisVelocity == 0 {
                 return items
                     /// When the items are being held still with custom paging, bias the most visible item.
