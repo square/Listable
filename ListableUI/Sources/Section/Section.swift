@@ -85,8 +85,7 @@ public struct Section
         header : AnyHeaderFooterConvertible? = nil,
         footer : AnyHeaderFooterConvertible? = nil,
         reordering : SectionReordering = .init(),
-        items : [AnyItemConvertible] = [],
-        configure : Configure = { _ in }
+        items : [AnyItemConvertible] = []
     ) {
         self.identifier = Identifier(identifier)
         
@@ -98,8 +97,6 @@ public struct Section
         self.reordering = reordering
         
         self.items = items.map { $0.toAnyItem() }
-        
-        configure(&self)
     }
     
     /// Creates a new section with a trailing closure to configure the section inline.
@@ -123,32 +120,14 @@ public struct Section
         _ identifier : IdentifierValue,
         layouts : SectionLayouts = .init(),
         reordering : SectionReordering = .init(),
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        header : () -> AnyHeaderFooterConvertible? = { nil },
-        footer : () -> AnyHeaderFooterConvertible? = { nil }
+        @ListableArrayBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
+        @AnyHeaderFooterBuilder header : () -> AnyHeaderFooterConvertible? = { nil },
+        @AnyHeaderFooterBuilder footer : () -> AnyHeaderFooterConvertible? = { nil }
     ) {
         self.identifier = Identifier(identifier)
         
         self.layouts = layouts
         self.reordering = reordering
-        
-        self.items = items().map { $0.toAnyItem() }
-        
-        self.header = header()
-        self.footer = footer()
-    }
-    
-    /// Creates a new section with result builder-style APIs.
-    public init<IdentifierValue:Hashable>(
-        _ identifier : IdentifierValue,
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible],
-        header : () -> AnyHeaderFooterConvertible? = { nil },
-        footer : () -> AnyHeaderFooterConvertible? = { nil }
-    ) {
-        self.identifier = Identifier(identifier)
-        
-        self.layouts = .init()
-        self.reordering = .init()
         
         self.items = items().map { $0.toAnyItem() }
         
@@ -232,7 +211,7 @@ public struct Section
     /// }
     /// ```
     public mutating func add(
-        @ListableBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
+        @ListableArrayBuilder<AnyItemConvertible> items : () -> [AnyItemConvertible]
     ) {
         self.items += items().map { $0.toAnyItem() }
     }

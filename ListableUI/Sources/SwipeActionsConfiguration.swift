@@ -40,7 +40,7 @@ public struct SwipeActionsConfiguration {
     /// Creates a new configuration with the provided actions.
     public init(
         performsFirstActionWithFullSwipe : Bool = false,
-        @ListableBuilder<SwipeAction> actions : () -> [SwipeAction]
+        @ListableArrayBuilder<SwipeAction> actions : () -> [SwipeAction]
     ) {
         self.performsFirstActionWithFullSwipe = performsFirstActionWithFullSwipe
         self.actions = actions()
