@@ -499,10 +499,16 @@ extension AnyListLayout
         visibleContentFrame: CGRect
     ) -> ListLayoutContent.ContentItem?
     {
-        let rect : CGRect = self.rectForFindingItemToScrollToOnDidEndDragging(
-            after: contentOffset,
-            velocity: velocity
-        )
+        let rect: CGRect
+        if scrollViewProperties.pageScrollingBehavior == .peek {
+            /// When peeking, the visible items are the only items considered for the page offest.
+            rect = visibleContentFrame
+        } else {
+            rect = self.rectForFindingItemToScrollToOnDidEndDragging(
+                after: contentOffset,
+                velocity: velocity
+            )
+        }
         
         let scrollDirection = ScrollVelocityDirection(direction.y(for: velocity))
         
@@ -519,16 +525,14 @@ extension AnyListLayout
             )
             
             if mainAxisVelocity == 0 {
+                /// When the items are being held still with custom paging, bias the most visible item.
                 return items
-                    /// When the items are being held still with custom paging, bias the most visible item.
                     .sorted { lhs, rhs in
                         lhs.percentageVisible(inside: visibleContentFrame) > rhs.percentageVisible(inside: visibleContentFrame)
                     }
                     .first
             } else {
                 return items
-                    /// Only consider the visible items when calculating the custom paging offest.
-                    .filter { $0.percentageVisible(inside: visibleContentFrame) > 0 }
                     /// Sort items in ascending order, based on their position along the primary axis.
                     .sorted { lhs, rhs in
                         direction.minY(for: lhs.defaultFrame) > direction.minY(for: rhs.defaultFrame)
