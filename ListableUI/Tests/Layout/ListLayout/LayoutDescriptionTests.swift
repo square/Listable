@@ -72,7 +72,7 @@ final class LayoutDescriptionTests : XCTestCase
                 stickySectionHeaders: false,
                 pagingBehavior: .none,
                 scrollViewProperties: .init(
-                    pagingStyle: .none,
+                    pageScrollingBehavior: .none,
                     contentInsetAdjustmentBehavior: .automatic,
                     allowsBounceVertical: true,
                     allowsBounceHorizontal: true,
@@ -128,7 +128,7 @@ private struct TestLayoutAppearance : ListLayoutAppearance
     var pagingBehavior: ListPagingBehavior = .none
     
     var scrollViewProperties: ListLayoutScrollViewProperties = .init(
-        pagingStyle: .none,
+        pageScrollingBehavior: .none,
         contentInsetAdjustmentBehavior: .automatic,
         allowsBounceVertical: true,
         allowsBounceHorizontal: true,

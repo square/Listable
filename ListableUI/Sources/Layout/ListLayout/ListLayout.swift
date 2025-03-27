@@ -512,7 +512,7 @@ extension AnyListLayout
             includeUnpopulated: false
         )
         
-        if scrollViewProperties.pagingStyle == .custom {
+        if scrollViewProperties.pageScrollingBehavior == .peek {
             let mainAxisVelocity = direction.switch(
                 vertical: { velocity.y },
                 horizontal: { velocity.x }

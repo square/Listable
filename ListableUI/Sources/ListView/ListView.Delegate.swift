@@ -365,11 +365,11 @@ extension ListView
             withVelocity velocity: CGPoint,
             targetContentOffset: UnsafeMutablePointer<CGPoint>
         ) {
-            switch layoutManager.layout.scrollViewProperties.pagingStyle {
-            case .native:
-                // With a native paging style, leverage the system's default target offset.
+            switch layoutManager.layout.scrollViewProperties.pageScrollingBehavior {
+            case .full:
+                // With full paging, leverage the system's default target offset.
                 break
-            case .custom, .none:
+            case .peek, .none:
                 let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
                     for: scrollView.contentOffset,
                     velocity: velocity,

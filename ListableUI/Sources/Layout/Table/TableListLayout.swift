@@ -121,7 +121,7 @@ public struct TableAppearance : ListLayoutAppearance
     /// The properties applied to the scroll view backing the list.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            pagingStyle: .none,
+            pageScrollingBehavior: .none,
             contentInsetAdjustmentBehavior: self.contentInsetAdjustmentBehavior,
             allowsBounceVertical: self.bounceOnUnderflow,
             allowsBounceHorizontal: self.bounceOnUnderflow,

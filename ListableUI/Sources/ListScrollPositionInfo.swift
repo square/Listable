@@ -26,13 +26,11 @@ public struct ListScrollPositionInfo : Equatable {
     
     /// The item from `visibleItems` that has the highest percentage of visibility.
     public var mostVisibleItem: VisibleItem? {
-        var mostVisibleItem: VisibleItem?
-        for visibleItem in visibleItems {
-            if visibleItem.percentageVisible > (mostVisibleItem?.percentageVisible ?? 0) {
-                mostVisibleItem = visibleItem
+        visibleItems.reduce(into: VisibleItem?.none) { mostVisibleItem, next in
+            if next.percentageVisible > (mostVisibleItem?.percentageVisible ?? 0) {
+                mostVisibleItem = next
             }
         }
-        return mostVisibleItem
     }
     
     /// If the first item list is partially visible.

@@ -20,7 +20,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             scrollView.isPagingEnabled = false
             
             let properties1 = ListLayoutScrollViewProperties(
-                pagingStyle: .native,
+                pageScrollingBehavior: .full,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: false,
                 allowsBounceHorizontal: false,
@@ -29,7 +29,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             )
             
             var behavior1 = Behavior()
-            behavior1.pagingStyle = .none
+            behavior1.pageScrollingBehavior = .none
             
             properties1.apply(to: scrollView, behavior: behavior1, direction: .vertical, showsScrollIndicators: true)
             
@@ -37,7 +37,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             scrollView.isPagingEnabled = false
             
             let properties2 = ListLayoutScrollViewProperties(
-                pagingStyle: .none,
+                pageScrollingBehavior: .none,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: false,
                 allowsBounceHorizontal: false,
@@ -46,14 +46,14 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             )
             
             var behavior2 = Behavior()
-            behavior2.pagingStyle = .native
+            behavior2.pageScrollingBehavior = .full
             
             properties2.apply(to: scrollView, behavior: behavior2, direction: .vertical, showsScrollIndicators: true)
             
             XCTAssertEqual(scrollView.isPagingEnabled, true)
             
             let properties3 = ListLayoutScrollViewProperties(
-                pagingStyle: .none,
+                pageScrollingBehavior: .none,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: false,
                 allowsBounceHorizontal: false,
@@ -62,7 +62,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             )
             
             var behavior3 = Behavior()
-            behavior3.pagingStyle = .none
+            behavior3.pageScrollingBehavior = .none
             
             properties3.apply(to: scrollView, behavior: behavior3, direction: .vertical, showsScrollIndicators: true)
             
@@ -74,7 +74,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             scrollView.contentInsetAdjustmentBehavior = .never
             
             let properties = ListLayoutScrollViewProperties(
-                pagingStyle: .none,
+                pageScrollingBehavior: .none,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: false,
                 allowsBounceHorizontal: false,
@@ -94,7 +94,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             scrollView.alwaysBounceHorizontal = false
             
             var properties = ListLayoutScrollViewProperties(
-                pagingStyle: .none,
+                pageScrollingBehavior: .none,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: true,
                 allowsBounceHorizontal: true,
@@ -152,7 +152,7 @@ class ListLayoutScrollViewPropertiesTests : XCTestCase
             scrollView.showsVerticalScrollIndicator = false
             
             let properties = ListLayoutScrollViewProperties(
-                pagingStyle: .none,
+                pageScrollingBehavior: .none,
                 contentInsetAdjustmentBehavior: .automatic,
                 allowsBounceVertical: true,
                 allowsBounceHorizontal: true,

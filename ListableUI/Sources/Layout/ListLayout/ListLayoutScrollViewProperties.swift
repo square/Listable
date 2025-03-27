@@ -10,7 +10,7 @@ import UIKit
 
 public struct ListLayoutScrollViewProperties : Equatable
 {
-    public var pagingStyle : PagingStyle?
+    public var pageScrollingBehavior : PageScrollingBehavior
     
     public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
@@ -21,14 +21,14 @@ public struct ListLayoutScrollViewProperties : Equatable
     public var allowsVerticalScrollIndicator : Bool
     
     public init(
-        pagingStyle: PagingStyle?,
+        pageScrollingBehavior: PageScrollingBehavior,
         contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior,
         allowsBounceVertical : Bool,
         allowsBounceHorizontal : Bool,
         allowsVerticalScrollIndicator : Bool,
         allowsHorizontalScrollIndicator : Bool
     ) {
-        self.pagingStyle = pagingStyle
+        self.pageScrollingBehavior = pageScrollingBehavior
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
         
         self.allowsBounceVertical = allowsBounceVertical
@@ -52,7 +52,7 @@ public struct ListLayoutScrollViewProperties : Equatable
             view.isScrollEnabled = behavior.isScrollEnabled
         }
 
-        let isNativePagingEnabled = self.pagingStyle == .native || behavior.pagingStyle == .native
+        let isNativePagingEnabled = self.pageScrollingBehavior == .full || behavior.pageScrollingBehavior == .full
 
         if view.isPagingEnabled != isNativePagingEnabled {
             view.isPagingEnabled = isNativePagingEnabled
@@ -115,13 +115,16 @@ public enum ContentInsetAdjustmentBehavior : Equatable {
 
 
 /// The paging style of the scroll view.
-public enum PagingStyle {
+public enum PageScrollingBehavior {
     
-    /// Applies native `UIScrollView` paging, where each page is the full width of the
-    /// scroll view's bounds.
-    case native
+    /// This behavior does not use any paging functionality.
+    case none
     
-    /// Applies custom paging logic, used when the page isn't the full width of the scroll
-    /// view's bounds.
-    case custom
+    /// Applies native `UIScrollView` paging, where each page is the full size of the
+    /// scroll view's primary axis.
+    case full
+    
+    /// Applies custom paging, where pages aren't the full width of the scroll view's
+    /// bounds, allowing items to peek in from the edge.
+    case peek
 }

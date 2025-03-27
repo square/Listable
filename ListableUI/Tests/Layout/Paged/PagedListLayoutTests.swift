@@ -114,7 +114,7 @@ class PagedListLayoutTests : XCTestCase
             content: ListLayoutContent()
         )
         
-        XCTAssertEqual(layout.scrollViewProperties.pagingStyle, .native)
+        XCTAssertEqual(layout.scrollViewProperties.pageScrollingBehavior, .full)
     }
     
     func test_pagingStyle_customPeek() {
@@ -126,7 +126,7 @@ class PagedListLayoutTests : XCTestCase
             content: ListLayoutContent()
         )
         
-        XCTAssertEqual(layout.scrollViewProperties.pagingStyle, .custom)
+        XCTAssertEqual(layout.scrollViewProperties.pageScrollingBehavior, .peek)
     }
 }
 
@@ -151,11 +151,11 @@ class PagedAppearance_PagingSize_Tests : XCTestCase
         let size = CGSize(width: 30.0, height: 50.0)
         
         XCTAssertEqual(
-            PagedAppearance.PagingSize.inset(.zero).size(for: size, isFirstItem: true, direction: .vertical),
+            PagedAppearance.PagingSize.inset(.none).size(for: size, isFirstItem: true, direction: .vertical),
             CGSize(width: 30.0, height: 50.0)
         )
         XCTAssertEqual(
-            PagedAppearance.PagingSize.inset(.zero).size(for: size, isFirstItem: true, direction: .horizontal),
+            PagedAppearance.PagingSize.inset(.none).size(for: size, isFirstItem: true, direction: .horizontal),
             CGSize(width: 30.0, height: 50.0)
         )
         

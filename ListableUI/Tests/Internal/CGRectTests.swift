@@ -32,4 +32,14 @@ final class CGRectTests: XCTestCase {
             1.0
         )
     }
+    
+    func test_percentageVisible_zeroArea() {
+        let containerRect = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let itemRect = CGRect.zero
+        
+        XCTAssertEqual(
+            itemRect.percentageVisible(inside: containerRect),
+            0
+        )
+    }
 }

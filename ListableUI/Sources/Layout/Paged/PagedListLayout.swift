@@ -70,15 +70,15 @@ public struct PagedAppearance : ListLayoutAppearance
     
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         
-        let pagingStyle: PagingStyle = switch pagingSize {
+        let pageScrollingBehavior: PageScrollingBehavior = switch pagingSize {
         // When there is no peek, meaning pages span the width of the collection view,
         // use the system's native paging behavior.
-        case .inset(let peek): peek.isEmpty ? .native : .custom
-        case .fixed: .native
+        case .inset(let peek): peek.isEmpty ? .full : .peek
+        case .fixed: .full
         }
         
         return .init(
-            pagingStyle: pagingStyle,
+            pageScrollingBehavior: pageScrollingBehavior,
             contentInsetAdjustmentBehavior: .never,
             allowsBounceVertical: false,
             allowsBounceHorizontal: false,
@@ -94,7 +94,7 @@ public struct PagedAppearance : ListLayoutAppearance
         get {
             switch pagingSize {
             case .inset(let peek): peek
-            case .fixed: .zero
+            case .fixed: .none
             }
         } set {
             pagingSize = .inset(newValue)
@@ -117,7 +117,7 @@ public struct PagedAppearance : ListLayoutAppearance
         direction: LayoutDirection = .vertical,
         showsScrollIndicators : Bool = false,
         bounds: ListContentBounds? = nil,
-        peek: Peek = .zero
+        peek: Peek = .none
     ) {
         self.pagingSize = .inset(peek)
         
@@ -210,7 +210,7 @@ public extension PagedAppearance {
         }
         
         /// This represents no peeking functionality.
-        public static var zero: Self { .init() }
+        public static var none: Self { .init() }
     }
 }
 
@@ -284,7 +284,7 @@ final class PagedListLayout : ListLayout
         
         var lastMaxY : CGFloat = layoutAppearance.peek.firstItemLeadingValue
         
-        for (index, item) in content.all.enumerated() {
+        content.all.forEachWithIndex { index, _, item in
             
             /// The size of each page to use during the layout.
             /// Tests override this, but it's typically either the size of the view, with
