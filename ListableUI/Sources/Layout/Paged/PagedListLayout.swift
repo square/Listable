@@ -165,12 +165,13 @@ public extension PagedAppearance {
     /// edge of the collection view to "peek" into view.
     struct Peek: Equatable {
         
-        /// This is the main leading and trailing peek value.
-        public var value: CGFloat
+        /// The main leading and trailing peek value.
+        let value: CGFloat
         
-        public var firstItemConfiguration: FirstItemConfiguration
+        /// Configures the first item's peek, which can be unique from the other peek values.
+        let firstItemConfiguration: FirstItemConfiguration
         
-        /// This is the leading peek value before the first item.
+        /// The leading peek value before the first item.
         var firstItemLeadingValue: CGFloat {
             switch firstItemConfiguration {
             case .uniform: value
@@ -178,6 +179,7 @@ public extension PagedAppearance {
             }
         }
         
+        /// Houses the various configuration options for the first item's peek value.
         public enum FirstItemConfiguration: Equatable {
             
             /// The first item's leading peek is equal to the `Peek.value`. This will keep the first
@@ -204,6 +206,11 @@ public extension PagedAppearance {
             value == 0 && firstItemLeadingValue == 0
         }
         
+        /// Creates a new `Peek` with the specified peek value and first item configuration. By default,
+        /// this initializer creates an empty `Peek`, so that items consume the layout's full width.
+        /// - Parameters:
+        ///   - value: The peek value applied to the leading and trailing side of items.
+        ///   - firstItemConfiguration: The custom peek configuration for the layout's first item.
         public init(value: CGFloat = 0, firstItemConfiguration: FirstItemConfiguration = .uniform) {
             self.value = value
             self.firstItemConfiguration = firstItemConfiguration
