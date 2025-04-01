@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Disabled cell content interaction when swipe actions were visible.
+
 ### Added
 
 ### Removed
