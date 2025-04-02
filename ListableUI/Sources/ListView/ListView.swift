@@ -1050,22 +1050,22 @@ public final class ListView : UIView
     private var updateOverrideIndexPath : IndexPath? = nil
     
     private var firstVisibleIndexPath : IndexPath? {
-        
+
         /// 1) Get the first visible index path.
-        
+
         let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems.sorted(by: <)
-        
+
         /// 2) Pick the largest index path of two to return.
-        
+
         return [
             updateOverrideIndexPath,
             visibleIndexPaths.first
         ]
-        .compactMap(\.self)
-        .sorted(by: >)
-        .first
+            .compactMap { $0 }
+            .sorted(by: >)
+            .first
     }
-    
+
     internal func updatePresentationState(
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> () = { _ in }
