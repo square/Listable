@@ -5,16 +5,17 @@
 ### Added
 
 - `PagedListLayout` now supports a peek value, which allows items to peek into view from the leading/top and trailing/bottom edges.
-- Replacing the `isPagingEnabled` boolean with a `PagingStyle` enum. This gives layouts the ability to:
-  - leverage `native` UIScrollView paging, where items are full width (equivalent to `isPagingEnabled` being `true`)
-  - use `custom` paging, where items can be any width (this is new functionality)
-  - disable paging (equivalent to `isPagingEnabled` being `false`)
-- Adding a `percentageVisible` property to `ListScrollPositionInfo.VisibleItem`.
 - Adding a `mostVisibleItem` property to `ListScrollPositionInfo`.
 
 ### Removed
 
 ### Changed
+
+- Replacing the `isPagingEnabled` boolean with a `PageScrollingBehavior` enum. This gives layouts the ability to:
+  - leverage `full` page scrolling, where items are full width (equivalent to `isPagingEnabled` being `true`)
+  - use `peek` page scrolling, where items can be less than the full width and peek into view (this is new functionality)
+  - disable page scrolling via `none` (equivalent to `isPagingEnabled` being `false`)
+- `ListScrollPositionInfo`'s `visibleItems` is now a set of `VisibleItem` models, which contains a `percentageVisible` property.
 
 ### Misc
 
