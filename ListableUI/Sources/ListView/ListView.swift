@@ -1057,10 +1057,10 @@ public final class ListView : UIView
         
         /// 2) Pick the largest index path of two to return.
         
-        return [
+        return ([
             updateOverrideIndexPath,
             visibleIndexPaths.first
-        ]
+        ] as [IndexPath?])
         .compactMap(\.self)
         .sorted(by: >)
         .first
