@@ -2,9 +2,6 @@
 
 ### Fixed
 
-- Disabled cell content interaction when swipe actions were visible.
-- Fixed a crash which could occur when a programmatic scroll down event is quickly followed by a content update.
-
 ### Added
 
 ### Removed
@@ -15,9 +12,18 @@
 
 ### Internal
 
-- Updating GitHub `actions/cache` to v4.
-
 # Past Releases
+
+# [15.0.2] - 2025-04-02
+
+### Fixed
+
+- Disabled cell content interaction when swipe actions were visible.
+- Fixed a crash which could occur when a programmatic scroll down event is quickly followed by a content update.
+
+### Internal
+
+- Updating GitHub `actions/cache` to v4.
 
 # [15.0.1] - 2025-02-25
 
@@ -1110,7 +1116,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/15.0.1...main
+[Main]: https://github.com/square/Listable/compare/15.0.2...main
+[15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
 [15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
 [15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0
 [14.5.0]: https://github.com/square/Listable/compare/14.4.1...14.5.0
