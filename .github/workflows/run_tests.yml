@@ -14,8 +14,8 @@ jobs:
     runs-on: macos-14-xlarge
 
     steps:
-      - name: Switch To Xcode 15.4
-        run: sudo xcode-select -switch /Applications/Xcode_15.4.app
+      - name: Switch to Xcode ${{ env.xcode_version }}
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
       - name: Checkout repository
         uses: actions/checkout@v1
