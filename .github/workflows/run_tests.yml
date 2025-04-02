@@ -27,7 +27,7 @@ jobs:
       # Build
 
       - name: Build
-        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2" -sdk iphonesimulator build
+        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=18.2" -sdk iphonesimulator build
 
   test:
     name: "iOS ${{ matrix.sdk }}"
