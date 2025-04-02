@@ -11,9 +11,12 @@ jobs:
   spm:
     name: Swift Package Manager
 
-    runs-on: ${{ env.macos_runner }}
+    runs-on: macos-15-xlarge
 
     steps:
+      - name: Read env
+        run: cat .github/workflows/env.properties >> $GITHUB_ENV
+        
       - name: Switch to Xcode ${{ env.xcode_version }}
         run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
@@ -28,7 +31,7 @@ jobs:
   test:
     name: "iOS ${{ matrix.sdk }}"
 
-    runs-on: ${{ env.macos_runner }}
+    runs-on: macos-15-xlarge
 
     strategy:
       matrix:
@@ -43,7 +46,7 @@ jobs:
 
           - sdk: "17.2"
             simulator_name: iPhone SE (3rd generation)
-            # The iOS 17.2 SDK is pre-installed on the macOS 13 image.
+            # The iOS 17.2 SDK is pre-installed on the macOS image.
             # Attempting to install it will fail with an error.
             installation_required: false
 
