@@ -3,6 +3,7 @@
 ### Fixed
 
 - Disabled cell content interaction when swipe actions were visible.
+- Fixed a crash which could occur when a programmatic scroll down event is quickly followed by a content update.
 
 ### Added
 
