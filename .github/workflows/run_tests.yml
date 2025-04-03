@@ -33,7 +33,7 @@ jobs:
       - name: Install xcodes
         run: brew install aria2 xcodesorg/made/xcodes
 
-      - name: Install iOS ${{ matrix.sdk }}
+      - name: Install iOS 18.2
         run: sudo xcodes runtimes install "iOS 18.2"
 
       # Build
