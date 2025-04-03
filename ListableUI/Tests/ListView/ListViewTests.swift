@@ -565,6 +565,51 @@ class ListViewTests: XCTestCase
         }
     }
     
+    func test_updatePresentationState_respects_index_path_from_programaticScrollDownTo() {
+                
+        let content = Content { content in
+
+            for sectionID in 1...50 {
+                content += Section(sectionID) {
+                    for itemID in 1...20 {
+                        TestContent(content: itemID)
+                    }
+                }
+            }
+        }
+
+        let vc = ViewController()
+
+        show(vc: vc) { vc in
+            self.waitFor {
+
+                vc.list.configure { list in
+                    list.content = content
+                }
+                
+                /// The bug occurs when we try to scroll down, and then quickly try to deliver another
+                /// update while the scroll event is in progress/enqueued, so the visible index paths
+                /// haven't updated yet.
+                
+                vc.list.scrollToSection(
+                    with: Section.identifier(with: 45),
+                    scrollPosition: .init(position: .bottom),
+                    animated: true
+                )
+                
+                /// Ok, now push through another update.
+                
+                vc.list.configure { list in
+                    list.content = content
+                }
+
+                /// Don't return until the list queue is empty.
+                return vc.list.updateQueue.isEmpty
+            }
+        }
+        
+    }
+    
     func test_auto_scroll_action() {
         
         self.testcase("on insert") {

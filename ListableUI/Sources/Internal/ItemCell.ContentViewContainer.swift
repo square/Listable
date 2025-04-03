@@ -15,7 +15,7 @@ extension ItemCell {
     final class ContentContainerView : UIView, UIGestureRecognizerDelegate {
 
         let contentView : Content.ContentView
-        
+
         private var configurations: [Side: SwipeConfiguration] = [:]
         
         private var swipeAccessibilityCustomActions: [Side: [AccessibilitySwipeAction]] = [:] {
@@ -24,7 +24,7 @@ extension ItemCell {
             }
         }
 
-        private (set) var swipeState: SwipeActionState = .closed {
+        private(set) var swipeState: SwipeActionState = .closed {
             didSet {
                 if oldValue != swipeState {
                     configurations.values.forEach { $0.swipeView.apply(state: swipeState) }
@@ -285,6 +285,14 @@ extension ItemCell {
 
         private func set(state: SwipeActionState, animated: Bool = false) {
             swipeState = state
+
+            // We don't want any actions on the content view while our swipe actions are open.
+            self.contentView.isUserInteractionEnabled = switch state {
+            case .closed:
+                true
+            case .expandActions, .open, .swiping, .willPerformFirstActionAutomatically:
+                false
+            }
 
             if animated {
                 UIViewPropertyAnimator {

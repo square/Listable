@@ -1051,6 +1051,30 @@ public final class ListView : UIView
     // MARK: Internal - Updating Presentation State
     //
     
+    /// An index path we store in order to ensure if multiple updates are processed in quick succession, we do not
+    /// end up overriding a previous attempt to programmatically trigger a scroll event.
+    ///
+    /// https://github.com/square/Listable/pull/557
+    ///
+    private var updateOverrideIndexPath : IndexPath? = nil
+    
+    private var firstVisibleIndexPath : IndexPath? {
+
+        /// 1) Get the first visible index path.
+
+        let visibleIndexPaths = self.collectionView.indexPathsForVisibleItems.sorted(by: <)
+
+        /// 2) Pick the largest index path of two to return.
+
+        return [
+            updateOverrideIndexPath,
+            visibleIndexPaths.first
+        ]
+            .compactMap { $0 }
+            .sorted(by: >)
+            .first
+    }
+
     internal func updatePresentationState(
         for reason : PresentationState.UpdateReason,
         completion callerCompletion : @escaping (Bool) -> () = { _ in }
@@ -1061,10 +1085,8 @@ public final class ListView : UIView
             callerCompletion(completed)
             SignpostLogger.log(.end, log: .updateContent, name: "List Update", for: self)
         }
-        
-        let indexPaths = self.collectionView.indexPathsForVisibleItems
-        
-        let indexPath = indexPaths.first
+                
+        let indexPath = firstVisibleIndexPath
         
         let presentationStateTruncated = self.storage.presentationState.containsAllItems == false
         
@@ -1099,7 +1121,20 @@ public final class ListView : UIView
             self.updatePresentationStateWith(firstVisibleIndexPath: indexPath, for: reason, completion: completion)
             
         case .programaticScrollDownTo(let scrollToIndexPath):
-            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: completion)
+            
+            updateOverrideIndexPath = scrollToIndexPath
+            
+            self.updatePresentationStateWith(firstVisibleIndexPath: scrollToIndexPath, for: reason, completion: {
+                
+                /// Verify this is the same as inputted index path – if it's not, that means
+                /// _another_ `programaticScrollDownTo` has occurred and thus has
+                /// overridden this value, so we shouldn't clear it out.
+                if self.updateOverrideIndexPath == scrollToIndexPath {
+                    self.updateOverrideIndexPath = nil
+                }
+
+                completion($0)
+            })
         }
     }
         
