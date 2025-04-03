@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added support for `onDisplay` and `onEndDisplay` callbacks for `HeaderFooters`.
+
 ### Removed
 
 ### Changed
