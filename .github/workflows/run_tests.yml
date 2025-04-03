@@ -33,13 +33,13 @@ jobs:
       - name: Install xcodes
         run: brew install aria2 xcodesorg/made/xcodes
 
-      - name: Install iOS 18.2
-        run: sudo xcodes runtimes install "iOS 18.2"
+      - name: Install iOS 17.2
+        run: sudo xcodes runtimes install "iOS 17.2"
 
       # Build
 
       - name: Build
-        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=18.2" -sdk iphonesimulator build
+        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2,name=iPhone SE (3rd generation)" -sdk iphonesimulator build
 
   test:
     name: "iOS ${{ matrix.sdk }}"
