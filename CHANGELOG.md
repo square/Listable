@@ -4,13 +4,26 @@
 
 ### Added
 
+- `PagedListLayout` now supports a peek value, which allows items to peek into view from the leading/top and trailing/bottom edges.
+- Adding a `mostVisibleItem` property to `ListScrollPositionInfo`.
+
 ### Removed
 
 ### Changed
 
+- Replacing the `isPagingEnabled` boolean with a `PageScrollingBehavior` enum. This gives layouts the ability to:
+  - leverage `full` page scrolling, where items are full width (equivalent to `isPagingEnabled` being `true`)
+  - use `peek` page scrolling, where items can be less than the full width and peek into view (this is new functionality)
+  - disable page scrolling via `none` (equivalent to `isPagingEnabled` being `false`)
+- `ListScrollPositionInfo`'s `visibleItems` is now a set of `VisibleItem` models, which contains a `percentageVisible` property.
+
 ### Misc
 
+- `PagedListLayout.pagingBehavior` is now configurable. This can be used to keep the items centered when peeking.
+
 ### Internal
+
+- Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.
 
 # Past Releases
 

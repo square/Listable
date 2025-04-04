@@ -10,7 +10,7 @@ import UIKit
 
 public struct ListLayoutScrollViewProperties : Equatable
 {
-    public var isPagingEnabled : Bool
+    public var pageScrollingBehavior : PageScrollingBehavior
     
     public var contentInsetAdjustmentBehavior : ContentInsetAdjustmentBehavior
     
@@ -21,14 +21,14 @@ public struct ListLayoutScrollViewProperties : Equatable
     public var allowsVerticalScrollIndicator : Bool
     
     public init(
-        isPagingEnabled: Bool,
+        pageScrollingBehavior: PageScrollingBehavior,
         contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior,
         allowsBounceVertical : Bool,
         allowsBounceHorizontal : Bool,
         allowsVerticalScrollIndicator : Bool,
         allowsHorizontalScrollIndicator : Bool
     ) {
-        self.isPagingEnabled = isPagingEnabled
+        self.pageScrollingBehavior = pageScrollingBehavior
         self.contentInsetAdjustmentBehavior = contentInsetAdjustmentBehavior
         
         self.allowsBounceVertical = allowsBounceVertical
@@ -52,10 +52,10 @@ public struct ListLayoutScrollViewProperties : Equatable
             view.isScrollEnabled = behavior.isScrollEnabled
         }
 
-        let isPagingEnabled = self.isPagingEnabled || behavior.isPagingEnabled
-                
-        if view.isPagingEnabled != isPagingEnabled {
-            view.isPagingEnabled = isPagingEnabled
+        let isNativePagingEnabled = self.pageScrollingBehavior == .full || behavior.pageScrollingBehavior == .full
+
+        if view.isPagingEnabled != isNativePagingEnabled {
+            view.isPagingEnabled = isNativePagingEnabled
         }
         
         if view.contentInsetAdjustmentBehavior != self.contentInsetAdjustmentBehavior.toUIScrollViewValue {
@@ -111,4 +111,20 @@ public enum ContentInsetAdjustmentBehavior : Equatable {
         case .always: return .always
         }
     }
+}
+
+
+/// The paging style of the scroll view.
+public enum PageScrollingBehavior {
+    
+    /// This behavior does not use any paging functionality.
+    case none
+    
+    /// Applies native `UIScrollView` paging, where each page is the full size of the
+    /// scroll view's primary axis.
+    case full
+    
+    /// Applies custom paging, where pages aren't the full width of the scroll view's
+    /// bounds, allowing items to peek in from the edge.
+    case peek
 }

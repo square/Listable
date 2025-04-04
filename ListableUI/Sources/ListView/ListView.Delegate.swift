@@ -365,15 +365,19 @@ extension ListView
             withVelocity velocity: CGPoint,
             targetContentOffset: UnsafeMutablePointer<CGPoint>
         ) {
-            guard let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
-                for: scrollView.contentOffset,
-                velocity: velocity,
-                visibleContentSize: scrollView.visibleContentFrame.size
-            ) else {
-                return
+            switch layoutManager.layout.scrollViewProperties.pageScrollingBehavior {
+            case .full:
+                // With full paging, leverage the system's default target offset.
+                break
+            case .peek, .none:
+                let target = layoutManager.layout.onDidEndDraggingTargetContentOffset(
+                    for: scrollView.contentOffset,
+                    velocity: velocity,
+                    visibleContentFrame: scrollView.visibleContentFrame
+                )
+                guard let target else { return }
+                targetContentOffset.pointee = target
             }
-            
-            targetContentOffset.pointee = target
         }
     }
 }
