@@ -4,10 +4,22 @@
 
 ### Added
 
+### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# [16.0.0] - 2025-04-04
+
+### Added
+
 - `PagedListLayout` now supports a peek value, which allows items to peek into view from the leading/top and trailing/bottom edges.
 - Adding a `mostVisibleItem` property to `ListScrollPositionInfo`.
-
-### Removed
 
 ### Changed
 
@@ -24,8 +36,6 @@
 ### Internal
 
 - Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.
-
-# Past Releases
 
 # [15.0.2] - 2025-04-02
 
@@ -1129,7 +1139,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/15.0.2...main
+[Main]: https://github.com/square/Listable/compare/16.0.0...main
+[16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
 [15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
 [15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
 [15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0

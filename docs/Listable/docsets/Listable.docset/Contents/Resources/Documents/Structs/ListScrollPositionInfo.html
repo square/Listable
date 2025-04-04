@@ -193,6 +193,9 @@
                 <a class="nav-group-task-link" href="../Enums/ListableBuilder.html">ListableBuilder</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PageScrollingBehavior.html">PageScrollingBehavior</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/ReappliesToVisibleView.html">ReappliesToVisibleView</a>
               </li>
               <li class="nav-group-task">
@@ -561,6 +564,9 @@
                 <a class="nav-group-task-link" href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListScrollPositionInfo/VisibleItem.html">– VisibleItem</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListStateObserver.html">ListStateObserver</a>
               </li>
               <li class="nav-group-task">
@@ -607,6 +613,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/PagedAppearance.html">PagedAppearance</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PagedAppearance/Peek.html">– Peek</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/RefreshControl.html">RefreshControl</a>
@@ -736,9 +745,9 @@ want to allow an auto-scroll action, etc.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI22ListScrollPositionInfoV12visibleItemsShyAA13AnyIdentifierCGvp"></a>
+                    <a name="/s:10ListableUI22ListScrollPositionInfoV12visibleItemsShyAC11VisibleItemVGvp"></a>
                     <a name="//apple_ref/swift/Property/visibleItems" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV12visibleItemsShyAA13AnyIdentifierCGvp">visibleItems</a>
+                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV12visibleItemsShyAC11VisibleItemVGvp">visibleItems</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -753,7 +762,34 @@ want to allow an auto-scroll action, etc.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">visibleItems</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">visibleItems</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ListScrollPositionInfo/VisibleItem.html">VisibleItem</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI22ListScrollPositionInfoV15mostVisibleItemAC0hI0VSgvp"></a>
+                    <a name="//apple_ref/swift/Property/mostVisibleItem" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV15mostVisibleItemAC0hI0VSgvp">mostVisibleItem</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The item from <code><a href="../Structs/ListScrollPositionInfo.html#/s:10ListableUI22ListScrollPositionInfoV12visibleItemsShyAC11VisibleItemVGvp">visibleItems</a></code> that has the highest percentage of visibility.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">mostVisibleItem</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListScrollPositionInfo/VisibleItem.html">VisibleItem</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -977,9 +1013,9 @@ if you consider the bottom edge visible if it&rsquo;s visible below the home ind
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI22ListScrollPositionInfoV10scrollView12visibleItems18isFirstItemVisible0k4LastmN0ACSo08UIScrollH0C_ShyAA13AnyIdentifierCGS2btcfc"></a>
+                    <a name="/s:10ListableUI22ListScrollPositionInfoV10scrollView12visibleItems18isFirstItemVisible0k4LastmN0ACSo08UIScrollH0C_ShyAC0nM0VGS2btcfc"></a>
                     <a name="//apple_ref/swift/Method/init(scrollView:visibleItems:isFirstItemVisible:isLastItemVisible:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV10scrollView12visibleItems18isFirstItemVisible0k4LastmN0ACSo08UIScrollH0C_ShyAA13AnyIdentifierCGS2btcfc">init(scrollView:<wbr>visibleItems:<wbr>isFirstItemVisible:<wbr>isLastItemVisible:<wbr>)</a>
+                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV10scrollView12visibleItems18isFirstItemVisible0k4LastmN0ACSo08UIScrollH0C_ShyAC0nM0VGS2btcfc">init(scrollView:<wbr>visibleItems:<wbr>isFirstItemVisible:<wbr>isLastItemVisible:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -996,10 +1032,37 @@ if you consider the bottom edge visible if it&rsquo;s visible below the home ind
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">scrollView</span> <span class="p">:</span> <span class="kt">UIScrollView</span><span class="p">,</span>
-    <span class="nv">visibleItems</span> <span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">visibleItems</span> <span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/ListScrollPositionInfo/VisibleItem.html">VisibleItem</a></span><span class="o">&gt;</span><span class="p">,</span>
     <span class="nv">isFirstItemVisible</span> <span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
     <span class="nv">isLastItemVisible</span> <span class="p">:</span> <span class="kt">Bool</span>
 <span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI22ListScrollPositionInfoV11VisibleItemV"></a>
+                    <a name="//apple_ref/swift/Struct/VisibleItem" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI22ListScrollPositionInfoV11VisibleItemV">VisibleItem</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="../Structs/ListScrollPositionInfo/VisibleItem.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">VisibleItem</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
 
                         </div>
                       </div>
