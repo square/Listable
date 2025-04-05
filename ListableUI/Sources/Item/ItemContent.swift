@@ -314,6 +314,10 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     ///
     func wasMoved(comparedTo other : Self) -> Bool
     
+    associatedtype ContentSizingSharingKey : SizingSharingKey = DefaultSizingSharingKey
+    
+    var sizingSharingKey : ContentSizingSharingKey { get }
+    
     //
     // MARK: Default Item Properties
     //
@@ -654,6 +658,14 @@ public extension ItemContent
 {
     var defaultItemProperties : DefaultProperties {
         .init()
+    }
+}
+
+
+public extension ItemContent where ContentSizingSharingKey == DefaultSizingSharingKey
+{
+    var sizingSharingKey : ContentSizingSharingKey {
+        DefaultSizingSharingKey()
     }
 }
 

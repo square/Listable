@@ -501,11 +501,11 @@ extension PresentationState
             }
         }
         
-        private var cachedSizes : [SizeKey:CGSize] = [:]
+        private var cachedSizes : Cache<SizeKey,CGSize> = .init()
         
         func resetCachedSizes()
         {
-            self.cachedSizes.removeAll()
+            self.cachedSizes.clear()
         }
         
         func size(
@@ -525,9 +525,7 @@ extension PresentationState
                 sizing: self.model.sizing
             )
             
-            if let size = self.cachedSizes[key] {
-                return size
-            } else {
+            return self.cachedSizes.get(key) {
                 SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
                 let size : CGSize = cache.use(
@@ -546,8 +544,6 @@ extension PresentationState
                     
                     return self.model.sizing.measure(with: cell, info: info)
                 })
-                
-                self.cachedSizes[key] = size
                 
                 SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
                 
