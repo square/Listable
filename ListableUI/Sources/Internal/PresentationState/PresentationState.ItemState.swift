@@ -57,7 +57,7 @@ protocol AnyPresentationItemState : AnyObject
     func size(
         for info : Sizing.MeasureInfo,
         viewCache : ReusableViewCache,
-        sizingSharingCache: PresentationState.SizingSharingCache,
+        sizingSharingCache: SizingSharingCache,
         environment : ListEnvironment
     ) -> CGSize
     
@@ -512,7 +512,7 @@ extension PresentationState
         func size(
             for info : Sizing.MeasureInfo,
             viewCache : ReusableViewCache,
-            sizingSharingCache: PresentationState.SizingSharingCache,
+            sizingSharingCache: SizingSharingCache,
             environment : ListEnvironment
         ) -> CGSize
         {

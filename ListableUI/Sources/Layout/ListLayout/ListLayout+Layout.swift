@@ -13,7 +13,7 @@ extension ListProperties {
     
     static let headerFooterMeasurementCache = ReusableViewCache()
     static let itemMeasurementCache = ReusableViewCache()
-    static let sizingSharingCache = PresentationState.SizingSharingCache()
+    static let sizingSharingCache = SizingSharingCache()
     
     /// **Note**: For testing or measuring content sizes only.
     ///
