@@ -42,6 +42,8 @@ final class PresentationState
     private let itemMeasurementCache : ReusableViewCache
     private let headerFooterMeasurementCache : ReusableViewCache
     
+    private let sizingSharingCache : SizingSharingCache
+    
     //
     // MARK: Initialization
     //
@@ -63,16 +65,20 @@ final class PresentationState
         
         self.itemMeasurementCache = ReusableViewCache()
         self.headerFooterMeasurementCache = ReusableViewCache()
+        
+        self.sizingSharingCache = SizingSharingCache()
     }
     
     init(
         forMeasuringOrTestsWith content : Content,
         environment : ListEnvironment,
         itemMeasurementCache : ReusableViewCache,
-        headerFooterMeasurementCache : ReusableViewCache
+        headerFooterMeasurementCache : ReusableViewCache,
+        sizingSharingCache : SizingSharingCache
     ) {
         self.itemMeasurementCache = itemMeasurementCache
         self.headerFooterMeasurementCache = headerFooterMeasurementCache
+        self.sizingSharingCache = sizingSharingCache
         
         self.refreshControl = {
             if let refreshControl = content.refreshControl {
@@ -543,10 +549,16 @@ extension PresentationState
                     kind: .listContainerHeader,
                     isPopulated: true,
                     measurer: { info in
-                        header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                        header.size(
+                            for: info,
+                            viewCache: self.headerFooterMeasurementCache,
+                            sizingSharingCache: self.sizingSharingCache,
+                            environment: environment
+                        )
                     }
                 )
             }(),
+            
             header: {
                 guard let header = self.header.state else { return nil }
                 
@@ -555,10 +567,16 @@ extension PresentationState
                     kind: .listHeader,
                     isPopulated: true,
                     measurer: { info in
-                        header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                        header.size(
+                            for: info,
+                            viewCache: self.headerFooterMeasurementCache,
+                            sizingSharingCache: self.sizingSharingCache,
+                            environment: environment
+                        )
                     }
                 )
             }(),
+            
             footer: {
                 guard let footer = self.footer.state else { return nil }
                 
@@ -567,10 +585,16 @@ extension PresentationState
                     kind: .listFooter,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                        footer.size(
+                            for: info,
+                            viewCache: self.headerFooterMeasurementCache,
+                            sizingSharingCache: self.sizingSharingCache,
+                            environment: environment
+                        )
                     }
                 )
             }(),
+            
             overscrollFooter: {
                 guard let footer = self.overscrollFooter.state else { return nil }
                 
@@ -579,7 +603,12 @@ extension PresentationState
                     kind: .overscrollFooter,
                     isPopulated: true,
                     measurer: { info in
-                        footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                        footer.size(
+                            for: info,
+                            viewCache: self.headerFooterMeasurementCache,
+                            sizingSharingCache: self.sizingSharingCache,
+                            environment: environment
+                        )
                     }
                 )
             }(),
@@ -594,10 +623,16 @@ extension PresentationState
                             kind: .sectionHeader,
                             isPopulated: true,
                             measurer: { info in
-                                header.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                                header.size(
+                                    for: info,
+                                    viewCache: self.headerFooterMeasurementCache,
+                                    sizingSharingCache: self.sizingSharingCache,
+                                    environment: environment
+                                )
                             }
                         )
                     }(),
+                    
                     footer: {
                         guard let footer = section.footer.state else { return nil }
                         
@@ -606,17 +641,28 @@ extension PresentationState
                             kind: .sectionFooter,
                             isPopulated: true,
                             measurer: { info in
-                                footer.size(for: info, cache: self.headerFooterMeasurementCache, environment: environment)
+                                footer.size(
+                                    for: info,
+                                    viewCache: self.headerFooterMeasurementCache,
+                                    sizingSharingCache: self.sizingSharingCache,
+                                    environment: environment
+                                )
                             }
                         )
                     }(),
+                    
                     items: section.items.mapWithIndex { itemIndex, _, item in
                         .init(
                             state: item,
                             indexPath: IndexPath(item: itemIndex, section: sectionIndex),
                             insertAndRemoveAnimations: item.anyModel.insertAndRemoveAnimations ?? defaults.itemInsertAndRemoveAnimations,
                             measurer: { info in
-                                item.size(for: info, cache: self.itemMeasurementCache, environment: environment)
+                                item.size(
+                                    for: info,
+                                    viewCache: self.itemMeasurementCache,
+                                    sizingSharingCache: self.sizingSharingCache,
+                                    environment: environment
+                                )
                             }
                         )
                     }

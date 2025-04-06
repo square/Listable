@@ -56,7 +56,8 @@ protocol AnyPresentationItemState : AnyObject
     
     func size(
         for info : Sizing.MeasureInfo,
-        cache : ReusableViewCache,
+        viewCache : ReusableViewCache,
+        sizingSharingCache: PresentationState.SizingSharingCache,
         environment : ListEnvironment
     ) -> CGSize
     
@@ -510,7 +511,8 @@ extension PresentationState
         
         func size(
             for info : Sizing.MeasureInfo,
-            cache : ReusableViewCache,
+            viewCache : ReusableViewCache,
+            sizingSharingCache: PresentationState.SizingSharingCache,
             environment : ListEnvironment
         ) -> CGSize
         {
@@ -525,29 +527,35 @@ extension PresentationState
                 sizing: self.model.sizing
             )
             
-            return self.cachedSizes.get(key) {
-                SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
-                
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return ItemCell<Content>()
-                }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+            return sizingSharingCache.size(
+                contentType: Content.self,
+                sharingKey: self.model.content.sizingSharingKey,
+                sizingKey: key
+            ) {
+                self.cachedSizes.get(key) {
+                    SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                     
-                    self.applyTo(
-                        cell: cell,
-                        itemState: itemState,
-                        reason: .measurement,
-                        environment: environment
-                    )
+                    let size : CGSize = viewCache.use(
+                        with: self.model.reuseIdentifier,
+                        create: {
+                            return ItemCell<Content>()
+                    }, { cell in
+                        let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+                        
+                        self.applyTo(
+                            cell: cell,
+                            itemState: itemState,
+                            reason: .measurement,
+                            environment: environment
+                        )
+                        
+                        return self.model.sizing.measure(with: cell, info: info)
+                    })
                     
-                    return self.model.sizing.measure(with: cell, info: info)
-                })
-                
-                SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
-                
-                return size
+                    SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
+                    
+                    return size
+                }
             }
         }
         

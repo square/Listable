@@ -47,7 +47,8 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     
     func size(
         for info : Sizing.MeasureInfo,
-        cache : ReusableViewCache,
+        viewCache : ReusableViewCache,
+        sizingSharingCache: PresentationState.SizingSharingCache,
         environment : ListEnvironment
     ) -> CGSize
 }
@@ -241,7 +242,8 @@ extension PresentationState
         
         func size(
             for info : Sizing.MeasureInfo,
-            cache : ReusableViewCache,
+            viewCache : ReusableViewCache,
+            sizingSharingCache: PresentationState.SizingSharingCache,
             environment : ListEnvironment
         ) -> CGSize
         {
@@ -256,28 +258,34 @@ extension PresentationState
                 sizing: self.model.sizing
             )
             
-            return self.cachedSizes.get(key) {
-                SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
-                
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return HeaderFooterContentView<Content>(frame: .zero)
-                }, { view in
-                    let views = HeaderFooterContentViews<Content>(view: view)
+            return sizingSharingCache.size(
+                contentType: Content.self,
+                sharingKey: self.model.content.sizingSharingKey,
+                sizingKey: key
+            ) {
+                self.cachedSizes.get(key) {
+                    SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                     
-                    self.model.content.apply(
-                        to: views,
-                        for: .measurement,
-                        with: .init(environment: environment)
-                    )
+                    let size : CGSize = viewCache.use(
+                        with: self.model.reuseIdentifier,
+                        create: {
+                            return HeaderFooterContentView<Content>(frame: .zero)
+                    }, { view in
+                        let views = HeaderFooterContentViews<Content>(view: view)
+                        
+                        self.model.content.apply(
+                            to: views,
+                            for: .measurement,
+                            with: .init(environment: environment)
+                        )
+                        
+                        return self.model.sizing.measure(with: view, info: info)
+                    })
+                                    
+                    SignpostLogger.log(.end, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                     
-                    return self.model.sizing.measure(with: view, info: info)
-                })
-                                
-                SignpostLogger.log(.end, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
-                
-                return size
+                    return size
+                }
             }
         }
     }

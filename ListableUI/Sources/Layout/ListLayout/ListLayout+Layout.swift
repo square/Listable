@@ -13,6 +13,7 @@ extension ListProperties {
     
     static let headerFooterMeasurementCache = ReusableViewCache()
     static let itemMeasurementCache = ReusableViewCache()
+    static let sizingSharingCache = PresentationState.SizingSharingCache()
     
     /// **Note**: For testing or measuring content sizes only.
     ///
@@ -38,7 +39,8 @@ extension ListProperties {
             }(),
             environment: self.environment,
             itemMeasurementCache: Self.itemMeasurementCache,
-            headerFooterMeasurementCache: Self.headerFooterMeasurementCache
+            headerFooterMeasurementCache: Self.headerFooterMeasurementCache,
+            sizingSharingCache: Self.sizingSharingCache
         )
         
         /// 2) Create the layout used to measure the content.
