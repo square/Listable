@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a crash that would occur when a user would reorder / move items between sections.
+
 ### Added
 
 ### Removed

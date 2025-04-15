@@ -185,6 +185,10 @@ internal extension ListView
                 )
             }
             
+            /// We need to place this `ListStateObserver` in the `updateQueue` to ensure that the
+            /// reorder-triggered re-layout of our `CollectionViewLayout` has occured. Without waiting
+            /// for this, any work within the observer that queries the collection view layout may either (a) retrieve
+            /// the wrong item, or (b) crash if items were moved between sections.
             self.view.updateQueue.add {
                 ListStateObserver.perform(self.view.stateObserver.onItemReordered, "Item Reordered", with: self.view) {
                     ListStateObserver.ItemReordered(
