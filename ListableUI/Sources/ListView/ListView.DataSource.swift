@@ -185,14 +185,16 @@ internal extension ListView
                 )
             }
             
-            ListStateObserver.perform(self.view.stateObserver.onItemReordered, "Item Reordered", with: self.view) {
-                ListStateObserver.ItemReordered(
-                    actions: $0,
-                    positionInfo: self.view.scrollPositionInfo,
-                    item: item.anyModel,
-                    sections: self.presentationState.sectionModels,
-                    result: result
-                )
+            self.view.updateQueue.add {
+                ListStateObserver.perform(self.view.stateObserver.onItemReordered, "Item Reordered", with: self.view) {
+                    ListStateObserver.ItemReordered(
+                        actions: $0,
+                        positionInfo: self.view.scrollPositionInfo,
+                        item: item.anyModel,
+                        sections: self.presentationState.sectionModels,
+                        result: result
+                    )
+                }
             }
         }
     }
