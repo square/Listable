@@ -118,7 +118,7 @@ public struct FlowAppearance : ListLayoutAppearance {
     /// The properties of the backing `UIScrollView`.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            isPagingEnabled: false,
+            pageScrollingBehavior: .none,
             contentInsetAdjustmentBehavior: .scrollableAxes,
             allowsBounceVertical: true,
             allowsBounceHorizontal: true,

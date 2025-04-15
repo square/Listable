@@ -121,7 +121,7 @@ public struct TableAppearance : ListLayoutAppearance
     /// The properties applied to the scroll view backing the list.
     public var scrollViewProperties: ListLayoutScrollViewProperties {
         .init(
-            isPagingEnabled: false,
+            pageScrollingBehavior: .none,
             contentInsetAdjustmentBehavior: self.contentInsetAdjustmentBehavior,
             allowsBounceVertical: self.bounceOnUnderflow,
             allowsBounceHorizontal: self.bounceOnUnderflow,
@@ -225,6 +225,8 @@ extension TableAppearance
         // If the header for the section should be sticky.
         public var isHeaderSticky : Bool?
         
+        
+        /// In a horizontal layout, this powers the height of the section.
         public var width : CustomWidth
 
         /// Overrides the calculated spacing after this section

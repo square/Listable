@@ -231,14 +231,23 @@ public final class ListView : UIView
         
     public var scrollPositionInfo : ListScrollPositionInfo {
         let visibleItems = Set(self.visibleContent.items.map { item in
-            item.item.anyModel.anyIdentifier
+            let itemFrame = self.collectionViewLayout.frameForItem(at: item.indexPath)
+            let visibleFrame = self.collectionView.visibleContentFrame
+            return ListScrollPositionInfo.VisibleItem(
+                identifier: item.item.anyModel.anyIdentifier,
+                percentageVisible: itemFrame.percentageVisible(inside: visibleFrame)
+            )
         })
         
         return ListScrollPositionInfo(
             scrollView: self.collectionView,
             visibleItems: visibleItems,
-            isFirstItemVisible: self.content.firstItem.map { visibleItems.contains($0.anyIdentifier) } ?? false,
-            isLastItemVisible: self.content.lastItem.map { visibleItems.contains($0.anyIdentifier) } ?? false
+            isFirstItemVisible: self.content.firstItem.map { firstItem in
+                visibleItems.contains(where: { $0.identifier == firstItem.anyIdentifier })
+            } ?? false,
+            isLastItemVisible: self.content.lastItem.map { lastItem in
+                visibleItems.contains(where: { $0.identifier == lastItem.anyIdentifier })
+            } ?? false
         )
     }
     

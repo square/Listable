@@ -16,6 +16,29 @@
 
 # Past Releases
 
+# [16.0.0] - 2025-04-04
+
+### Added
+
+- `PagedListLayout` now supports a peek value, which allows items to peek into view from the leading/top and trailing/bottom edges.
+- Adding a `mostVisibleItem` property to `ListScrollPositionInfo`.
+
+### Changed
+
+- Replacing the `isPagingEnabled` boolean with a `PageScrollingBehavior` enum. This gives layouts the ability to:
+  - leverage `full` page scrolling, where items are full width (equivalent to `isPagingEnabled` being `true`)
+  - use `peek` page scrolling, where items can be less than the full width and peek into view (this is new functionality)
+  - disable page scrolling via `none` (equivalent to `isPagingEnabled` being `false`)
+- `ListScrollPositionInfo`'s `visibleItems` is now a set of `VisibleItem` models, which contains a `percentageVisible` property.
+
+### Misc
+
+- `PagedListLayout.pagingBehavior` is now configurable. This can be used to keep the items centered when peeking.
+
+### Internal
+
+- Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.
+
 # [15.0.2] - 2025-04-02
 
 ### Fixed
@@ -1118,7 +1141,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/15.0.2...main
+[Main]: https://github.com/square/Listable/compare/16.0.0...main
+[16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
 [15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
 [15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
 [15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0

@@ -51,8 +51,29 @@ final class UIRectEdgeTests : XCTestCase
         }
 
     }
+    
+    func test_mostVisibleItem() {
+        
+        let items: Set<ListScrollPositionInfo.VisibleItem> = [
+            .init(identifier: Identifier<TestingType, Int>(0), percentageVisible: 0.25),
+            .init(identifier: Identifier<TestingType, Int>(1), percentageVisible: 0.5),
+            .init(identifier: Identifier<TestingType, Int>(2), percentageVisible: 1.0),
+            .init(identifier: Identifier<TestingType, Int>(3), percentageVisible: 0.0),
+        ]
+        
+        let info = ListScrollPositionInfo(
+            scrollView: UIScrollView(),
+            visibleItems: items,
+            isFirstItemVisible: true,
+            isLastItemVisible: false
+        )
+        
+        XCTAssertEqual(info.mostVisibleItem?.identifier.anyValue, 2)
+        XCTAssertEqual(info.mostVisibleItem?.percentageVisible, 1.0)
+    }
+    
+    fileprivate struct TestingType { }
 }
-
 
 final class UIEdgeInsetsTests : XCTestCase
 {

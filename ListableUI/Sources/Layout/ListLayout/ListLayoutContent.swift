@@ -560,6 +560,11 @@ extension ListLayoutContent
             case .supplementary(let supplementary, _): return supplementary.defaultFrame
             }
         }
+        
+        /// Returns the percentage from `0.0` to `1.0` that this item overlaps `container`.
+        func percentageVisible(inside container: CGRect) -> CGFloat {
+            collectionViewLayoutAttributes.frame.percentageVisible(inside: container)
+        }
     }
 }
 

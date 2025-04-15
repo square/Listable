@@ -22,7 +22,16 @@ public struct ListScrollPositionInfo : Equatable {
     //
     
     /// Which items within the list are currently visible.
-    public var visibleItems : Set<AnyIdentifier>
+    public var visibleItems : Set<VisibleItem>
+    
+    /// The item from `visibleItems` that has the highest percentage of visibility.
+    public var mostVisibleItem: VisibleItem? {
+        visibleItems.reduce(into: VisibleItem?.none) { mostVisibleItem, next in
+            if next.percentageVisible > (mostVisibleItem?.percentageVisible ?? 0) {
+                mostVisibleItem = next
+            }
+        }
+    }
     
     /// If the first item list is partially visible.
     public var isFirstItemVisible : Bool
@@ -101,7 +110,7 @@ public struct ListScrollPositionInfo : Equatable {
     /// Creates a `ListScrollPositionInfo` for the provided scroll view.
     public init(
         scrollView : UIScrollView,
-        visibleItems : Set<AnyIdentifier>,
+        visibleItems : Set<VisibleItem>,
         isFirstItemVisible : Bool,
         isLastItemVisible : Bool
     ) {
@@ -127,6 +136,14 @@ public struct ListScrollPositionInfo : Equatable {
         var bounds : CGRect
         var contentSize : CGSize
         var safeAreaInsets : UIEdgeInsets
+    }
+    
+    public struct VisibleItem: Hashable {
+        
+        public let identifier: AnyIdentifier
+        
+        /// The percentage of this item within the collection view's visible frame.
+        public let percentageVisible: CGFloat
     }
 }
 
