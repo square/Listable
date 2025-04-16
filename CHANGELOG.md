@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed a crash that would occur when a user would reorder / move items between sections.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# [16.0.1] - 2025-04-16
+
+### Fixed
+
+- Fixed a crash that would occur when a user would reorder / move items between sections.
 
 # [16.0.0] - 2025-04-04
 
@@ -1141,7 +1145,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.0...main
+[Main]: https://github.com/square/Listable/compare/16.0.1...main
+[16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
 [16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
 [15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
 [15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
