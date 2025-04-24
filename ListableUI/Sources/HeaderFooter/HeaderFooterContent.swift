@@ -53,6 +53,14 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     func isEquivalent(to other : Self) -> Bool
     
     //
+    // MARK: Size Sharing Across Items
+    //
+    
+    associatedtype ContentSizingSharingKey : SizingSharingKey = NoSizingSharingKey
+    
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> { get }
+    
+    //
     // MARK: Default Properties
     //
     
@@ -214,6 +222,14 @@ public extension HeaderFooterContent {
     
     func asAnyHeaderFooter() -> AnyHeaderFooter {
         HeaderFooter(self)
+    }
+}
+
+
+public extension HeaderFooterContent where ContentSizingSharingKey == NoSizingSharingKey
+{
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> {
+        SizingSharing(sizingSharingKey: NoSizingSharingKey())
     }
 }
 

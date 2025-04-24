@@ -173,7 +173,7 @@ extension UIEdgeInsets
     }
 }
 
-extension UIRectEdge : CustomDebugStringConvertible
+extension UIRectEdge : @retroactive CustomDebugStringConvertible
 {
     static func visibleScrollViewContentEdges(
         bounds : CGRect,

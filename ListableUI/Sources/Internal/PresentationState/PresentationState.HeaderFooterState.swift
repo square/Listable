@@ -47,7 +47,8 @@ protocol AnyPresentationHeaderFooterState : AnyObject
     
     func size(
         for info : Sizing.MeasureInfo,
-        cache : ReusableViewCache,
+        viewCache : ReusableViewCache,
+        sizingSharingCache: SizingSharingCache,
         environment : ListEnvironment
     ) -> CGSize
 }
@@ -232,16 +233,17 @@ extension PresentationState
             }
         }
         
-        private var cachedSizes : [SizeKey:CGSize] = [:]
+        private var cachedSizes : Cache<SizeKey,CGSize> = .init()
         
         func resetCachedSizes()
         {
-            self.cachedSizes.removeAll()
+            self.cachedSizes.clear()
         }
         
         func size(
             for info : Sizing.MeasureInfo,
-            cache : ReusableViewCache,
+            viewCache : ReusableViewCache,
+            sizingSharingCache: SizingSharingCache,
             environment : ListEnvironment
         ) -> CGSize
         {
@@ -256,32 +258,39 @@ extension PresentationState
                 sizing: self.model.sizing
             )
             
-            if let size = self.cachedSizes[key] {
-                return size
-            } else {
-                SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
-                
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return HeaderFooterContentView<Content>(frame: .zero)
-                }, { view in
-                    let views = HeaderFooterContentViews<Content>(view: view)
+            return sizingSharingCache.size(
+                contentType: Content.self,
+                sharingKey: self.model.content.sizingSharing.sizingSharingKey,
+                sizingKey: key
+            ) {
+                self.cachedSizes.get(key) {
+                    SignpostLogger.log(.begin, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                     
-                    self.model.content.apply(
-                        to: views,
-                        for: .measurement,
-                        with: .init(environment: environment)
-                    )
+                    let size : CGSize = viewCache.use(
+                        with: self.model.reuseIdentifier,
+                        create: {
+                            return HeaderFooterContentView<Content>(frame: .zero)
+                    }, { view in
+                        let views = HeaderFooterContentViews<Content>(view: view)
+                        
+                        let content = switch self.model.content.sizingSharing.source {
+                        case .content: self.model.content
+                        case .provided(let content): content
+                        }
+                        
+                        content.apply(
+                            to: views,
+                            for: .measurement,
+                            with: .init(environment: environment)
+                        )
+                        
+                        return self.model.sizing.measure(with: view, info: info)
+                    })
+                                    
+                    SignpostLogger.log(.end, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
                     
-                    return self.model.sizing.measure(with: view, info: info)
-                })
-                
-                self.cachedSizes[key] = size
-                
-                SignpostLogger.log(.end, log: .updateContent, name: "Measure HeaderFooter", for: self.model)
-                
-                return size
+                    return size
+                }
             }
         }
     }

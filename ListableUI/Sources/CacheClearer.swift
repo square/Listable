@@ -15,5 +15,6 @@ public struct CacheClearer {
     public static func clearStaticCaches() {
         ListProperties.headerFooterMeasurementCache.removeAllObjects()
         ListProperties.itemMeasurementCache.removeAllObjects()
+        ListProperties.sizingSharingCache.clear()
     }
 }

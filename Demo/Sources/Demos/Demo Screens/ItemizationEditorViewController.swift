@@ -237,6 +237,17 @@ struct ChoiceItem : BlueprintItemContent, Equatable
     var identifierValue : String {
         self.title
     }
+    
+    var sizingSharing: SizingSharing<DemoSizeSharingKey, ChoiceItem> {
+        SizingSharing(sizingSharingKey: .init()) {
+            ChoiceItem(
+                title: "A longer title to ensure we're measuring the maximum size",
+                detail: "A longer detail to ensure we're measuring the maximum size"
+            )
+        }
+    }
+    
+    struct DemoSizeSharingKey : SizingSharingKey {}
 }
 
 struct ToggleItem : BlueprintItemContent

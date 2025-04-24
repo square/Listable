@@ -56,7 +56,8 @@ protocol AnyPresentationItemState : AnyObject
     
     func size(
         for info : Sizing.MeasureInfo,
-        cache : ReusableViewCache,
+        viewCache : ReusableViewCache,
+        sizingSharingCache: SizingSharingCache,
         environment : ListEnvironment
     ) -> CGSize
     
@@ -317,14 +318,16 @@ extension PresentationState
             
             // Apply Model State
             
-            model
-                .content
+            let content = switch self.model.content.sizingSharing.source {
+            case .content: model.content
+            case .provided(let content): content
+            }
+            
+            content
                 .contentAreaViewProperties(with: applyInfo)
                 .apply(to: cell.contentContainer)
             
-            self
-                .model
-                .content
+            content
                 .apply(
                     to: ItemContentViews(cell: cell),
                     for: reason,
@@ -501,16 +504,17 @@ extension PresentationState
             }
         }
         
-        private var cachedSizes : [SizeKey:CGSize] = [:]
+        private var cachedSizes : Cache<SizeKey,CGSize> = .init()
         
         func resetCachedSizes()
         {
-            self.cachedSizes.removeAll()
+            self.cachedSizes.clear()
         }
         
         func size(
             for info : Sizing.MeasureInfo,
-            cache : ReusableViewCache,
+            viewCache : ReusableViewCache,
+            sizingSharingCache: SizingSharingCache,
             environment : ListEnvironment
         ) -> CGSize
         {
@@ -525,33 +529,35 @@ extension PresentationState
                 sizing: self.model.sizing
             )
             
-            if let size = self.cachedSizes[key] {
-                return size
-            } else {
-                SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
-                
-                let size : CGSize = cache.use(
-                    with: self.model.reuseIdentifier,
-                    create: {
-                        return ItemCell<Content>()
-                }, { cell in
-                    let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+            return sizingSharingCache.size(
+                contentType: Content.self,
+                sharingKey: self.model.content.sizingSharing.sizingSharingKey,
+                sizingKey: key
+            ) {
+                self.cachedSizes.get(key) {
+                    SignpostLogger.log(.begin, log: .updateContent, name: "Measure ItemContent", for: self.model)
                     
-                    self.applyTo(
-                        cell: cell,
-                        itemState: itemState,
-                        reason: .measurement,
-                        environment: environment
-                    )
+                    let size : CGSize = viewCache.use(
+                        with: self.model.reuseIdentifier,
+                        create: {
+                            return ItemCell<Content>()
+                    }, { cell in
+                        let itemState = ListableUI.ItemState(isSelected: false, isHighlighted: false, isReordering: false)
+                        
+                        self.applyTo(
+                            cell: cell,
+                            itemState: itemState,
+                            reason: .measurement,
+                            environment: environment
+                        )
+                        
+                        return self.model.sizing.measure(with: cell, info: info)
+                    })
                     
-                    return self.model.sizing.measure(with: cell, info: info)
-                })
-                
-                self.cachedSizes[key] = size
-                
-                SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
-                
-                return size
+                    SignpostLogger.log(.end, log: .updateContent, name: "Measure ItemContent", for: self.model)
+                    
+                    return size
+                }
             }
         }
         
