@@ -58,7 +58,7 @@ public protocol HeaderFooterContent : AnyHeaderFooterConvertible
     
     associatedtype ContentSizingSharingKey : SizingSharingKey = NoSizingSharingKey
     
-    var sizingSharingKey : ContentSizingSharingKey { get }
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> { get }
     
     //
     // MARK: Default Properties
@@ -228,8 +228,8 @@ public extension HeaderFooterContent {
 
 public extension HeaderFooterContent where ContentSizingSharingKey == NoSizingSharingKey
 {
-    var sizingSharingKey : ContentSizingSharingKey {
-        NoSizingSharingKey()
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> {
+        SizingSharing(sizingSharingKey: NoSizingSharingKey())
     }
 }
 

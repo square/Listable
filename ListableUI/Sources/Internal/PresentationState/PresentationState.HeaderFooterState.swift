@@ -260,7 +260,7 @@ extension PresentationState
             
             return sizingSharingCache.size(
                 contentType: Content.self,
-                sharingKey: self.model.content.sizingSharingKey,
+                sharingKey: self.model.content.sizingSharing.sizingSharingKey,
                 sizingKey: key
             ) {
                 self.cachedSizes.get(key) {
@@ -273,7 +273,12 @@ extension PresentationState
                     }, { view in
                         let views = HeaderFooterContentViews<Content>(view: view)
                         
-                        self.model.content.apply(
+                        let content = switch self.model.content.sizingSharing.source {
+                        case .content: self.model.content
+                        case .provided(let content): content
+                        }
+                        
+                        content.apply(
                             to: views,
                             for: .measurement,
                             with: .init(environment: environment)

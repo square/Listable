@@ -237,6 +237,14 @@ struct ChoiceItem : BlueprintItemContent, Equatable
     var identifierValue : String {
         self.title
     }
+    
+    var sizingSharingKey: DemoSizeSharingKey {
+        DemoSizeSharingKey(hasSubtitle: self.detail.isEmpty == false)
+    }
+    
+    struct DemoSizeSharingKey : SizingSharingKey {
+        var hasSubtitle : Bool
+    }
 }
 
 struct ToggleItem : BlueprintItemContent

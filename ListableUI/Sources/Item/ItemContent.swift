@@ -320,7 +320,7 @@ public protocol ItemContent : AnyItemConvertible where Coordinator.ItemContentTy
     
     associatedtype ContentSizingSharingKey : SizingSharingKey = NoSizingSharingKey
     
-    var sizingSharingKey : ContentSizingSharingKey { get }
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> { get }
     
     //
     // MARK: Default Item Properties
@@ -668,8 +668,8 @@ public extension ItemContent
 
 public extension ItemContent where ContentSizingSharingKey == NoSizingSharingKey
 {
-    var sizingSharingKey : ContentSizingSharingKey {
-        NoSizingSharingKey()
+    var sizingSharing : SizingSharing<ContentSizingSharingKey, Self> {
+        SizingSharing(sizingSharingKey: NoSizingSharingKey())
     }
 }
 

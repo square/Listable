@@ -318,14 +318,16 @@ extension PresentationState
             
             // Apply Model State
             
-            model
-                .content
+            let content = switch self.model.content.sizingSharing.source {
+            case .content: model.content
+            case .provided(let content): content
+            }
+            
+            content
                 .contentAreaViewProperties(with: applyInfo)
                 .apply(to: cell.contentContainer)
             
-            self
-                .model
-                .content
+            content
                 .apply(
                     to: ItemContentViews(cell: cell),
                     for: reason,
@@ -529,7 +531,7 @@ extension PresentationState
             
             return sizingSharingCache.size(
                 contentType: Content.self,
-                sharingKey: self.model.content.sizingSharingKey,
+                sharingKey: self.model.content.sizingSharing.sizingSharingKey,
                 sizingKey: key
             ) {
                 self.cachedSizes.get(key) {
