@@ -17,13 +17,33 @@ import BlueprintUICommonControls
 final class AutoScrollingViewController3 : UIViewController
 {
     let list = ListView()
+    
+    lazy var insertButton: UIBarButtonItem = {
+        UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem))
+    }()
+    
+    lazy var removeButton: UIBarButtonItem = {
+        UIBarButtonItem(title: "Remove", style: .plain, target: self, action: #selector(removeItem))
+    }()
+    
+    lazy var toggleAnimationsButton: UIBarButtonItem = {
+        UIBarButtonItem(title: "Toggle Animations", style: .plain, target: self, action: #selector(toggleAnimations))
+    }()
+    
+    private var animateAutoscroll: Bool = false
 
-    private let items: [Item<BottomPinnedItem>] = Array(0...100).map {
+    private var items: [Item<BottomPinnedItem>] = Array(0...100).map {
         Item(BottomPinnedItem(text: "Item \($0)"))
     }
+    
+    private var observedItem = Item(BottomPinnedItem(text: "Item 50"))
+    
+    private var seekToIdentifier: AnyIdentifier { observedItem.anyIdentifier }
 
     override func loadView() {
         self.view = self.list
+        navigationItem.rightBarButtonItems = [insertButton, removeButton, toggleAnimationsButton]
+        insertButton.isEnabled = false
     }
 
     override func viewDidLoad() {
@@ -38,21 +58,19 @@ final class AutoScrollingViewController3 : UIViewController
             list.appearance = .demoAppearance
             list.layout = .demoLayout
 
-            // THIS WORKS ONLY IF YOU CHANGE THIS TO .top:
             list.behavior.verticalLayoutGravity = .bottom
 
             list.animation = .fast
             
             list += Section("items", items: self.items)
 
-            let seekToIdentifier = items[Int(items.count / 2)].anyIdentifier
             list.autoScrollAction = .scrollTo(
                 .item(seekToIdentifier),
                 onInsertOf: seekToIdentifier,
                 position: .init(position: .centered, ifAlreadyVisible: .scrollToPosition),
-                animated: false,
+                animated: animateAutoscroll,
                 didPerform: { info in
-                    print("Did scroll: \(info)")
+                    print("Did scroll: \(info.visibleItems.map(\.identifier))")
                 }
             )
 
@@ -62,5 +80,24 @@ final class AutoScrollingViewController3 : UIViewController
                 BottomPinnedItem(text: "Total $10.00")
             }
         }
+    }
+    
+    @objc func addItem() {
+        items.insert(observedItem, at: 50)
+        updateItems()
+        insertButton.isEnabled = false
+        removeButton.isEnabled = true
+    }
+    
+    @objc func removeItem() {
+        items.remove(at: 50)
+        updateItems()
+        insertButton.isEnabled = true
+        removeButton.isEnabled = false
+    }
+    
+    @objc func toggleAnimations() {
+        animateAutoscroll.toggle()
+        print("autoScrollAction animations are \(animateAutoscroll ? "on" : "off").")
     }
 }
