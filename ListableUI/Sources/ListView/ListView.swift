@@ -1282,13 +1282,35 @@ public final class ListView : UIView
                 let animated = info.animated && animated
                 
                 if let destination = info.destination.destination(with: self.content) {
+                    
+                    if behavior.verticalLayoutGravity == .bottom {
+                        /// Perform a layout to adjust the `contentSize` of the collection view before
+                        /// scrolling. This avoids an issue where:
+                        ///   - the list is first appearing with a `bottom` `VerticalLayoutGravity` and a
+                        ///     `scrollToItem(onInsertOf:)` `AutoScrollAction`.
+                        ///   - the initial set of items in the list trigger the `scrollToItem(onInsertOf:)`
+                        ///   - the resulting scroll position isn't at the bottom of the list
+                        ///
+                        /// Without calling `layoutIfNeeded`, the above scenario will reset the scroll position
+                        /// to the bottom, discarding this scroll update. This is because the system will
+                        /// asynchronously update the underlying `contentSize` as part of the initial layout,
+                        /// moments after this method is executed. The list's `contentSize` is overridden to
+                        /// keep the offset anchored to the bottom when using `bottom` `VerticalLayoutGravity`.
+                        collectionView.layoutIfNeeded()
+                    }
+                    
                     guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
                     if animated {
                         stateObserver.onDidEndScrollingAnimation { state in
                             info.didPerform(state.positionInfo)
                         }
                     } else {
-                        info.didPerform(self.scrollPositionInfo)
+                        /// Perform a layout after an animationless scroll so that `CollectionViewLayout`'s
+                        /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
+                        /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
+                        /// be stale.
+                        collectionView.layoutIfNeeded()
+                        info.didPerform(scrollPositionInfo)
                     }
                 }
             }
