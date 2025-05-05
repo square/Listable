@@ -621,8 +621,8 @@ class ListViewTests: XCTestCase
                 
                 list.sections = (1...50).map { sectionID in
                     Section(sectionID) {
-                        for itemID in 1...20 {
-                            TestContent(content: itemID)
+                        for itemNumber in 1...20 {
+                            TestContent(content: "Section \(sectionID); Item \(itemNumber)")
                         }
                     }
                 }
@@ -640,29 +640,141 @@ class ListViewTests: XCTestCase
             }
 
             let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
 
             show(vc: vc) { vc in
                 vc.list.configure(with: content)
-
                 waitFor { vc.list.updateQueue.isEmpty }
-                
                 XCTAssertEqual(didPerform.count, 0)
                 
                 vc.list.configure(with: content)
-
                 waitFor { vc.list.updateQueue.isEmpty }
-                
                 XCTAssertEqual(didPerform.count, 0)
                 
+                // Insert a new item & section at the very bottom.
                 content.content += Section("new") {
                     TestContent(content: "A")
                 }
+                vc.list.configure(with: content)
+                waitFor { vc.list.updateQueue.isEmpty }
+                XCTAssertEqual(didPerform.count, 1)
+                
+                guard let visibleItems = didPerform.first?.visibleItems else {
+                    XCTFail("There should be visible items after scrolling.")
+                    return
+                }
+                
+                // The bottom 12 items should be visible because the list has a height
+                // of 600pts and each item has a height of 50pts.
+                XCTAssertEqual(visibleItems.count, 12)
+                // The last 11 items in section 50 are visible.
+                for itemNumber in 10...20 {
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Section 50; Item \(itemNumber)"),
+                                percentageVisible: 1.0
+                            )
+                        )
+                    )
+                }
+                // The newly-added item in the last section is also visible.
+                XCTAssert(
+                    visibleItems.contains(
+                        ListScrollPositionInfo.VisibleItem(
+                            identifier: Identifier<TestContent, String>("A"),
+                            percentageVisible: 1.0
+                        )
+                    )
+                )
+            }
+        }
+        
+        self.testcase("on insert with bottom gravity") {
+            var didPerform : [ListScrollPositionInfo] = []
+            
+            var content = ListProperties.default { list in
+                
+                list.animatesChanges = false
+                list.behavior.verticalLayoutGravity = .bottom
+                list.sections = (1...50).map { sectionID in
+                    Section(sectionID) {
+                        for itemNumber in 1...20 {
+                            TestContent(content: "Section \(sectionID); Item \(itemNumber)")
+                        }
+                    }
+                }
+                
+                let ID = TestContent.identifier(with: "A")
+                
+                list.autoScrollAction = .scrollTo(
+                    .item(ID),
+                    onInsertOf: ID,
+                    position: .init(position: .centered), // Vertically center the item.
+                    animated: true,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                )
+            }
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: content)
+                waitFor { vc.list.updateQueue.isEmpty }
+                XCTAssertEqual(didPerform.count, 0)
                 
                 vc.list.configure(with: content)
-                
                 waitFor { vc.list.updateQueue.isEmpty }
+                XCTAssertEqual(didPerform.count, 0)
                 
+                // Insert a new item to the middle of the list's content.
+                content.content.sections[25].items.insert(
+                    TestContent(content: "A").toAnyItem(),
+                    at: 10
+                )
+                
+                vc.list.configure(with: content)
+                waitFor { vc.list.updateQueue.isEmpty }
                 XCTAssertEqual(didPerform.count, 1)
+                
+                guard let visibleItems = didPerform.first?.visibleItems else {
+                    XCTFail("There should be visible items after scrolling.")
+                    return
+                }
+                
+                // The new item was inserted between items 10 and 11. After performing the
+                // centered autoScrollAction, the viewport will display these items:
+                //
+                // [Item  5] The top 25pts of this item are out of view.
+                // [Item  6]
+                // ...
+                // [Item 10]
+                // [Item  A] Vertically centered within the viewport.
+                // [Item 11]
+                // ...
+                // [Item 15]
+                // [Item 16] The bottom 25pts of this item are out of view.
+                XCTAssertEqual(visibleItems.count, 13)
+                for itemNumber in 5...16 {
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Section 26; Item \(itemNumber)"),
+                                percentageVisible: (itemNumber == 5 || itemNumber == 16) ? 0.5 : 1.0
+                            )
+                        )
+                    )
+                }
+                XCTAssert(
+                    visibleItems.contains(
+                        ListScrollPositionInfo.VisibleItem(
+                            identifier: Identifier<TestContent, String>("A"),
+                            percentageVisible: 1.0
+                        )
+                    )
+                )
             }
         }
         
@@ -722,9 +834,30 @@ class ListViewTests: XCTestCase
 fileprivate final class ViewController : UIViewController {
 
     let list : ListView = ListView()
+    
+    /// Configure this before loading the controller's view.
+    var listFramingBehavior: ListFramingBehavior = .hostSize
+    
+    enum ListFramingBehavior {
+        
+        /// The list will be the size of this view controller. This matches the
+        /// host app's root view controller bounds.
+        case hostSize
+        
+        /// The list will be position at 0,0 with the provided size. This allows
+        /// for replicating an expected list size across any test device.
+        case exactly(CGSize)
+    }
 
     override func loadView() {
-        self.view = list
+        switch listFramingBehavior {
+        case .hostSize:
+            view = list
+        case .exactly(let size):
+            view = UIView()
+            view.addSubview(list)
+            list.frame = CGRect(origin: .zero, size: size)
+        }
     }
 }
 
