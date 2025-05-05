@@ -155,12 +155,12 @@
 		0AA4D9CA248064AE00CF95A5 /* Demo Screens */ = {
 			isa = PBXGroup;
 			children = (
-				2BCF36742DC29E0600C4D479 /* AutoScrollingViewController3.swift */,
 				0A49210324E5E11300D17038 /* AccordionViewController.swift */,
 				0AD0CF6628B57759000ECF0C /* SupplementaryTestingViewController.swift */,
 				0A66420A254A317A007F6B2F /* AutoLayoutDemoViewController.swift */,
 				0AA4D9B4248064A300CF95A5 /* AutoScrollingViewController.swift */,
 				2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */,
+				2BCF36742DC29E0600C4D479 /* AutoScrollingViewController3.swift */,
 				0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */,
 				8ECEBF6128B7E4C200ECEC56 /* CenterSnappingTableViewController.swift */,
 				0AA4D9B2248064A300CF95A5 /* CollectionViewAppearance.swift */,
