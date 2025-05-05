@@ -18,6 +18,8 @@ final class AutoScrollingViewController2 : UIViewController
     let list = ListView()
 
     private var items: [Item<BottomPinnedItem>] = []
+    
+    private var animatePinning: Bool = true
 
     override func loadView()
     {
@@ -35,6 +37,7 @@ final class AutoScrollingViewController2 : UIViewController
         self.navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addItem)),
             UIBarButtonItem(title: "Remove", style: .plain, target: self, action: #selector(removeItem)),
+            UIBarButtonItem(title: "Toggle Animations", style: .plain, target: self, action: #selector(toggleAnimations))
         ]
     }
 
@@ -66,14 +69,14 @@ final class AutoScrollingViewController2 : UIViewController
             list.autoScrollAction = .pin(
                 .lastItem,
                 position: .init(position: .bottom),
-                animated: true,
+                animated: animatePinning,
                 shouldPerform: { info in
                     // Only auto-scroll if we're currently scrolled less than a
                     // screen's-height from the bottom
                     return info.bottomScrollOffset < info.bounds.height - info.safeAreaInsets.top
                 },
                 didPerform: { info in
-                    print("Did scroll: \(info)")
+                    print("Did scroll: \(info.visibleItems.map(\.identifier))")
                 }
             )
 
@@ -83,5 +86,10 @@ final class AutoScrollingViewController2 : UIViewController
                 BottomPinnedItem(text: "Total $10.00")
             }
         }
+    }
+    
+    @objc func toggleAnimations() {
+        animatePinning.toggle()
+        print("pin animations are \(animatePinning ? "on" : "off").")
     }
 }
