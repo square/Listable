@@ -1286,8 +1286,8 @@ public final class ListView : UIView
                     if behavior.verticalLayoutGravity == .bottom {
                         /// Perform a layout to adjust the `contentSize` of the collection view before
                         /// scrolling. This avoids an issue where:
-                        ///   - the list is first appearing with a `bottom` `VerticalLayoutGravity` and a
-                        ///     `scrollToItem(onInsertOf:)` `AutoScrollAction`.
+                        ///   - the list is first appearing with `VerticalLayoutGravity.bottom` and
+                        ///     `AutoScrollAction.scrollToItem(onInsertOf:)` behaviors
                         ///   - the initial set of items in the list trigger the `scrollToItem(onInsertOf:)`
                         ///   - the resulting scroll position isn't at the bottom of the list
                         ///
@@ -1295,7 +1295,7 @@ public final class ListView : UIView
                         /// to the bottom, discarding this scroll update. This is because the system will
                         /// asynchronously update the underlying `contentSize` as part of the initial layout,
                         /// moments after this method is executed. The list's `contentSize` is overridden to
-                        /// keep the offset anchored to the bottom when using `bottom` `VerticalLayoutGravity`.
+                        /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
                         collectionView.layoutIfNeeded()
                     }
                     

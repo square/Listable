@@ -616,9 +616,7 @@ class ListViewTests: XCTestCase
             var didPerform : [ListScrollPositionInfo] = []
             
             var content = ListProperties.default { list in
-                
                 list.animatesChanges = false
-                
                 list.sections = (1...50).map { sectionID in
                     Section(sectionID) {
                         for itemNumber in 1...20 {
@@ -628,7 +626,6 @@ class ListViewTests: XCTestCase
                 }
                 
                 let ID = TestContent.identifier(with: "A")
-                
                 list.autoScrollAction = .scrollTo(
                     .item(ID),
                     onInsertOf: ID,
@@ -694,7 +691,6 @@ class ListViewTests: XCTestCase
             var didPerform : [ListScrollPositionInfo] = []
             
             var content = ListProperties.default { list in
-                
                 list.animatesChanges = false
                 list.behavior.verticalLayoutGravity = .bottom
                 list.sections = (1...50).map { sectionID in
@@ -706,7 +702,6 @@ class ListViewTests: XCTestCase
                 }
                 
                 let ID = TestContent.identifier(with: "A")
-                
                 list.autoScrollAction = .scrollTo(
                     .item(ID),
                     onInsertOf: ID,
@@ -782,7 +777,6 @@ class ListViewTests: XCTestCase
             var didPerform : [ListScrollPositionInfo] = []
             
             var content = ListProperties.default { list in
-                
                 list.sections = (1...50).map { sectionID in
                     Section(sectionID) {
                         for itemID in 1...20 {
@@ -792,7 +786,6 @@ class ListViewTests: XCTestCase
                 }
                 
                 let ID = TestContent.identifier(with: "A")
-                
                 list.autoScrollAction = .pin(
                     .item(ID),
                     position: .init(position: .bottom),
@@ -806,15 +799,11 @@ class ListViewTests: XCTestCase
 
             show(vc: vc) { vc in
                 vc.list.configure(with: content)
-
                 waitFor { vc.list.updateQueue.isEmpty }
-                
                 XCTAssertEqual(didPerform.count, 0)
                 
                 vc.list.configure(with: content)
-
                 waitFor { vc.list.updateQueue.isEmpty }
-                
                 XCTAssertEqual(didPerform.count, 0)
                 
                 content.content += Section("new") {
@@ -822,10 +811,10 @@ class ListViewTests: XCTestCase
                 }
                 
                 vc.list.configure(with: content)
-                
                 waitFor { vc.list.updateQueue.isEmpty }
-                
                 XCTAssertEqual(didPerform.count, 1)
+                
+                // TODO: Assert that the visible items are correct when using `pin(...)`.
             }
         }
     }

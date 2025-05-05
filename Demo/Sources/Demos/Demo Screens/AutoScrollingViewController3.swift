@@ -14,8 +14,8 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 
-final class AutoScrollingViewController3 : UIViewController
-{
+final class AutoScrollingViewController3 : UIViewController {
+    
     let list = ListView()
     
     lazy var insertButton: UIBarButtonItem = {
@@ -48,21 +48,16 @@ final class AutoScrollingViewController3 : UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         updateItems()
     }
 
     private func updateItems() {
-        
-        self.list.configure { list in
+        list.configure { list in
             list.appearance = .demoAppearance
             list.layout = .demoLayout
-
             list.behavior.verticalLayoutGravity = .bottom
-
             list.animation = .fast
-            
-            list += Section("items", items: self.items)
+            list += Section("items", items: items)
 
             list.autoScrollAction = .scrollTo(
                 .item(seekToIdentifier),
