@@ -779,8 +779,8 @@ class ListViewTests: XCTestCase
             var content = ListProperties.default { list in
                 list.sections = (1...50).map { sectionID in
                     Section(sectionID) {
-                        for itemID in 1...20 {
-                            TestContent(content: itemID)
+                        for itemNumber in 1...20 {
+                            TestContent(content: "Section \(sectionID); Item \(itemNumber)")
                         }
                     }
                 }
@@ -796,6 +796,7 @@ class ListViewTests: XCTestCase
             }
 
             let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 1000))
 
             show(vc: vc) { vc in
                 vc.list.configure(with: content)
@@ -806,15 +807,42 @@ class ListViewTests: XCTestCase
                 waitFor { vc.list.updateQueue.isEmpty }
                 XCTAssertEqual(didPerform.count, 0)
                 
+                // Insert a new item & section at the very bottom.
                 content.content += Section("new") {
                     TestContent(content: "A")
                 }
-                
                 vc.list.configure(with: content)
                 waitFor { vc.list.updateQueue.isEmpty }
                 XCTAssertEqual(didPerform.count, 1)
                 
-                // TODO: Assert that the visible items are correct when using `pin(...)`.
+                guard let visibleItems = didPerform.first?.visibleItems else {
+                    XCTFail("There should be visible items after scrolling.")
+                    return
+                }
+                
+                // The bottom 20 items should be visible because the list has a height
+                // of 1000pts and each item has a height of 50pts.
+                XCTAssertEqual(visibleItems.count, 20)
+                // The last 19 items in section 50 are visible.
+                for itemNumber in 2...20 {
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Section 50; Item \(itemNumber)"),
+                                percentageVisible: 1.0
+                            )
+                        )
+                    )
+                }
+                // The newly-added item in the last section is also visible.
+                XCTAssert(
+                    visibleItems.contains(
+                        ListScrollPositionInfo.VisibleItem(
+                            identifier: Identifier<TestContent, String>("A"),
+                            percentageVisible: 1.0
+                        )
+                    )
+                )
             }
         }
     }

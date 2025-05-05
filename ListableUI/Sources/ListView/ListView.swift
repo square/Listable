@@ -1327,6 +1327,11 @@ public final class ListView : UIView
                             pin.didPerform(self.scrollPositionInfo)
                         }
                     } else {
+                        /// Perform a layout after an animationless scroll so that `CollectionViewLayout`'s
+                        /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
+                        /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
+                        /// be stale.
+                        collectionView.layoutIfNeeded()
                         pin.didPerform(self.scrollPositionInfo)
                     }
                 }
