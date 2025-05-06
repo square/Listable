@@ -1303,7 +1303,7 @@ public final class ListView : UIView
                         /// asynchronously update the underlying `contentSize` as part of the initial layout,
                         /// moments after this method is executed. The list's `contentSize` is overridden to
                         /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
-                        collectionView.performBatchUpdates(nil)
+                        performEmptyBatchUpdates()
                     }
                     
                     guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
@@ -1316,7 +1316,7 @@ public final class ListView : UIView
                         /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
                         /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
                         /// be stale.
-                        collectionView.performBatchUpdates(nil)
+                        performEmptyBatchUpdates()
                         info.didPerform(scrollPositionInfo)
                     }
                 }
@@ -1407,6 +1407,16 @@ public final class ListView : UIView
         }
 
         return true
+    }
+    
+    /// This is similar to calling `collectionView.performBatchUpdates(nil)`, but
+    /// it also includes workarounds for first responder bugs on iOS 16.4 and 17.0.
+    private func performEmptyBatchUpdates() {
+        collectionView.performBatchUpdates(
+            {},
+            changes: CollectionViewChanges.empty,
+            completion: { _ in }
+        )
     }
     
     private func performBatchUpdates(
