@@ -172,7 +172,6 @@ extension AutoScrollAction
         
         /// Called when the list performs the insertion.
         var didPerform : (ListScrollPositionInfo) -> () { get set }
-        
     }
     
     /// Values used to configure the `scrollToItem(onInsertOf:)` action.
