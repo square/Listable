@@ -1275,8 +1275,15 @@ public final class ListView : UIView
             
         case .scrollToItem(let info):
             let wasInserted = addedItems.contains(info.insertedIdentifier)
-            
-            if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
+            if wasInserted {
+                autoScroll(with: info)
+            }
+        case .pin(let pin):
+            autoScroll(with: pin)
+        }
+        
+        func autoScroll(with info: AutoScrollAction.Behavior) {
+            if info.shouldPerform(self.scrollPositionInfo) {
                 
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
                 let animated = info.animated && animated
@@ -1287,8 +1294,8 @@ public final class ListView : UIView
                         /// Perform a layout to adjust the `contentSize` of the collection view before
                         /// scrolling. This avoids an issue where:
                         ///   - the list is first appearing with `VerticalLayoutGravity.bottom` and
-                        ///     `AutoScrollAction.scrollToItem(onInsertOf:)` behaviors
-                        ///   - the initial set of items in the list trigger the `scrollToItem(onInsertOf:)`
+                        ///     `AutoScrollAction` behaviors
+                        ///   - the initial set of items in the list trigger the autoscroll
                         ///   - the resulting scroll position isn't at the bottom of the list
                         ///
                         /// Without calling `layoutIfNeeded`, the above scenario will reset the scroll position
@@ -1311,28 +1318,6 @@ public final class ListView : UIView
                         /// be stale.
                         collectionView.layoutIfNeeded()
                         info.didPerform(scrollPositionInfo)
-                    }
-                }
-            }
-            
-        case .pin(let pin):
-            if pin.shouldPerform(self.scrollPositionInfo) {
-                /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let animated = pin.animated && animated
-                
-                if let destination = pin.destination.destination(with: self.content) {
-                    guard self.scrollTo(item: destination, position: pin.position, animated: animated) else { return }
-                    if animated {
-                        stateObserver.onDidEndScrollingAnimation { state in
-                            pin.didPerform(self.scrollPositionInfo)
-                        }
-                    } else {
-                        /// Perform a layout after an animationless scroll so that `CollectionViewLayout`'s
-                        /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
-                        /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
-                        /// be stale.
-                        collectionView.layoutIfNeeded()
-                        pin.didPerform(self.scrollPositionInfo)
                     }
                 }
             }

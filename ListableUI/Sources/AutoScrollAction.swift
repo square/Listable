@@ -150,9 +150,33 @@ extension AutoScrollAction
         }
     }
     
+    /// This protocol allows `ListView` to treat the `OnInsertedItem` and `Pin` behaviors
+    /// in a similar fashion.
+    public protocol Behavior {
+        
+        /// The item in the list to scroll to.
+        var destination : ScrollDestination { get set }
+        
+        /// The desired scroll position.
+        var position : ScrollPosition { get set }
+        
+        /// If the change should be animated.
+        ///
+        /// ### Note
+        /// The action will only be animated if it is animated, **and** the list update itself is
+        /// animated. Otherwise, no animation occurs.
+        var animated : Bool { get set }
+        
+        /// An additional check you may provide to approve or reject the scroll action.
+        var shouldPerform : (ListScrollPositionInfo) -> Bool { get set }
+        
+        /// Called when the list performs the insertion.
+        var didPerform : (ListScrollPositionInfo) -> () { get set }
+        
+    }
     
     /// Values used to configure the `scrollToItem(onInsertOf:)` action.
-    public struct OnInsertedItem
+    public struct OnInsertedItem: AutoScrollAction.Behavior
     {
         /// The item in the list to scroll to when the `insertedIdentifier` is inserted.
         public var destination : ScrollDestination
@@ -160,43 +184,26 @@ extension AutoScrollAction
         /// The identifier of the item for which the `AutoScrollAction` should be performed.
         public var insertedIdentifier : AnyIdentifier
         
-        /// The desired scroll position,
         public var position : ScrollPosition
         
-        /// If the change should be animated.
-        ///
-        /// ### Note
-        /// The action will only be animated if it is animated, **and** the list update itself is
-        /// animated. Otherwise, no animation occurs.
         public var animated : Bool
         
-        /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool
         
-        /// Called when the list performs the insertion.
         public var didPerform : (ListScrollPositionInfo) -> ()
     }
 
     /// Values used to configure the `pin(to:)` action.
-    public struct Pin
+    public struct Pin: AutoScrollAction.Behavior
     {
-        /// The item in the list to scroll to.
         public var destination : ScrollDestination
 
-        /// The desired scroll position,
         public var position : ScrollPosition
         
-        /// If the change should be animated.
-        ///
-        /// ### Note
-        /// The action will only be animated if it is animated, **and** the list update itself is
-        /// animated. Otherwise, no animation occurs.
         public var animated : Bool
         
-        /// An additional check you may provide to approve or reject the scroll action.
         public var shouldPerform : (ListScrollPositionInfo) -> Bool
         
-        /// Called when the list performs the insertion.
         public var didPerform : (ListScrollPositionInfo) -> ()
     }
 }

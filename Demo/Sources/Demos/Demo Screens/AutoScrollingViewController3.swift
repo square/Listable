@@ -14,7 +14,7 @@ import BlueprintUI
 import BlueprintUICommonControls
 
 
-final class AutoScrollingViewController3 : UIViewController {
+class AutoScrollingViewController3 : UIViewController {
     
     let list = ListView()
     
@@ -30,7 +30,7 @@ final class AutoScrollingViewController3 : UIViewController {
         UIBarButtonItem(title: "Toggle Animations", style: .plain, target: self, action: #selector(toggleAnimations))
     }()
     
-    private var animateAutoscroll: Bool = false
+    fileprivate var animateAutoscroll: Bool = false
 
     private var items: [Item<BottomPinnedItem>] = Array(0...100).map {
         Item(BottomPinnedItem(text: "Item \($0)"))
@@ -38,7 +38,12 @@ final class AutoScrollingViewController3 : UIViewController {
     
     private var observedItem = Item(BottomPinnedItem(text: "Item 50"))
     
-    private var seekToIdentifier: AnyIdentifier { observedItem.anyIdentifier }
+    fileprivate var seekToIdentifier: AnyIdentifier { observedItem.anyIdentifier }
+    
+    var autoScrollAction: AutoScrollAction {
+        assertionFailure("Override \(#function) in subclasses.")
+        return .pin(.firstItem, position: .init(position: .top))
+    }
 
     override func loadView() {
         self.view = self.list
@@ -57,18 +62,9 @@ final class AutoScrollingViewController3 : UIViewController {
             list.layout = .demoLayout
             list.behavior.verticalLayoutGravity = .bottom
             list.animation = .fast
+            list.autoScrollAction = autoScrollAction
+            
             list += Section("items", items: items)
-
-            list.autoScrollAction = .scrollTo(
-                .item(seekToIdentifier),
-                onInsertOf: seekToIdentifier,
-                position: .init(position: .centered, ifAlreadyVisible: .scrollToPosition),
-                animated: animateAutoscroll,
-                didPerform: { info in
-                    print("Did scroll: \(info.visibleItems.map(\.identifier))")
-                }
-            )
-
             list += Section("itemization") {
                 BottomPinnedItem(text: "Tax $2.00")
                 BottomPinnedItem(text: "Discount $4.00")
@@ -94,5 +90,32 @@ final class AutoScrollingViewController3 : UIViewController {
     @objc func toggleAnimations() {
         animateAutoscroll.toggle()
         print("autoScrollAction animations are \(animateAutoscroll ? "on" : "off").")
+    }
+}
+
+final class ScrollToAutoscrollingViewController: AutoScrollingViewController3 {
+    override var autoScrollAction: AutoScrollAction {
+        .scrollTo(
+            .item(seekToIdentifier),
+            onInsertOf: seekToIdentifier,
+            position: .init(position: .centered, ifAlreadyVisible: .scrollToPosition),
+            animated: animateAutoscroll,
+            didPerform: { info in
+                print("Did scroll: \(info.visibleItems.map(\.identifier))")
+            }
+        )
+    }
+}
+
+final class PinAutoscrollingViewController: AutoScrollingViewController3 {
+    override var autoScrollAction: AutoScrollAction {
+        .pin(
+            .item(seekToIdentifier),
+            position: .init(position: .centered, ifAlreadyVisible: .scrollToPosition),
+            animated: animateAutoscroll,
+            didPerform: { info in
+                print("Did scroll: \(info.visibleItems.map(\.identifier))")
+            }
+        )
     }
 }
