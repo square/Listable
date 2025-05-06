@@ -1291,7 +1291,7 @@ public final class ListView : UIView
                 if let destination = info.destination.destination(with: self.content) {
                     
                     if behavior.verticalLayoutGravity == .bottom {
-                        /// Perform a layout to adjust the `contentSize` of the collection view before
+                        /// Perform an update to adjust the `contentSize` of the collection view before
                         /// scrolling. This avoids an issue where:
                         ///   - the list is first appearing with `VerticalLayoutGravity.bottom` and
                         ///     `AutoScrollAction` behaviors
@@ -1303,7 +1303,7 @@ public final class ListView : UIView
                         /// asynchronously update the underlying `contentSize` as part of the initial layout,
                         /// moments after this method is executed. The list's `contentSize` is overridden to
                         /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
-                        collectionView.layoutIfNeeded()
+                        collectionView.performBatchUpdates(nil)
                     }
                     
                     guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
@@ -1312,11 +1312,11 @@ public final class ListView : UIView
                             info.didPerform(state.positionInfo)
                         }
                     } else {
-                        /// Perform a layout after an animationless scroll so that `CollectionViewLayout`'s
+                        /// Perform an update after an animationless scroll so that `CollectionViewLayout`'s
                         /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
                         /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
                         /// be stale.
-                        collectionView.layoutIfNeeded()
+                        collectionView.performBatchUpdates(nil)
                         info.didPerform(scrollPositionInfo)
                     }
                 }
