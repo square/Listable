@@ -48,23 +48,64 @@ final class BlueprintListDemoViewController : UIViewController
     
     func reloadData()
     {
-        self.blueprintView.element = List {
-            Section("podcasts") {
-                let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
-                
-                for podcast in podcasts {
-                    ElementItem(podcast, id: \.name) { _, _ in
-                        PodcastElement(podcast: podcast)
-                    } background: { _, _ in
-                        Box(backgroundColor: .white, cornerStyle: .square)
-                    } selectedBackground: { _, _ in
-                        Box(backgroundColor: .lightGray, cornerStyle: .square)
-                    } configure: {
-                        $0.insertAndRemoveAnimations = .scaleUp
+        self.blueprintView.element = Overlay {
+            
+            List {
+                Section("podcasts") {
+                    let podcasts = Podcast.podcasts.sorted { $0.episode < $1.episode }
+                    
+                    for podcast in podcasts {
+                        ElementItem(podcast, id: \.name) { _, _ in
+                            PodcastElement(podcast: podcast)
+                        } background: { _, _ in
+                            Box(backgroundColor: .white, cornerStyle: .square)
+                        } selectedBackground: { _, _ in
+                            Box(backgroundColor: .lightGray, cornerStyle: .square)
+                        } configure: {
+                            $0.insertAndRemoveAnimations = .scaleUp
+                        }
                     }
                 }
             }
+            
+            EnvironmentReader { env in
+                List(measurement: .measureContent(verticalFill: .natural)) { list in
+                    list.layout = .table {
+                        $0.direction = .horizontal
+                        
+                        $0.layout.itemSpacing = 10
+                        
+                        $0.bounds = .init(padding: .init(top: 0, left: 10, bottom: 0, right: 10))
+                    }
+                    
+                    list.appearance.backgroundColor = .clear
+                    list.appearance.showsScrollIndicators = false
+                    
+                } sections: {
+                    Section("shows") {
+                        for show in Podcast.shows {
+                            ElementItem(show, id: \.self) { _, _ in
+                                ShowElement(name:show)
+                            }
+                        }
+                    }
+                }
+                .inset(bottom: env.safeAreaInsets.bottom)
+                .aligned(vertically: .bottom, horizontally: .fill)
+            }
         }
+    }
+}
+
+
+fileprivate struct ShowElement : ProxyElement {
+    
+    var name : String
+    
+    var elementRepresentation: Element {
+        Label(text: name)
+            .inset(uniform: 10)
+            .box(background: .systemGray6, corners: .capsule, borders: .solid(color: .systemGray3, width: 1))
     }
 }
 
@@ -133,6 +174,10 @@ struct Podcast : Equatable
         case downloading(Double)
         case downloaded
         case error
+    }
+    
+    static var shows : [String] {
+        podcasts.map(\.name).sorted(by: <)
     }
 
     static var podcasts : [Podcast] {

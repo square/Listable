@@ -141,7 +141,7 @@ extension List {
                 }
                 
             case .measureContent(let horizontalFill, let verticalFill, let safeArea, let limit):
-                return ElementContent() { constraint, environment -> CGSize in
+                return ElementContent { constraint, environment -> CGSize in
                     let measurements = ListView.contentSize(
                         in: constraint.maximum,
                         for: self.properties,
@@ -185,72 +185,50 @@ extension List {
             verticalFill : Measurement.FillRule
         ) -> CGSize
         {
+            precondition(
+                layoutMode == .caffeinated,
+                "Listable only supports the `.caffeinated` layout mode in Blueprint."
+            )
+            
             let width : CGFloat = {
                 switch horizontalFill {
                 case .fillParent:
-                    if let max = constraint.width.constrainedValue {
-                        return max
-                    } else if case .caffeinated = layoutMode {
-                        return .infinity
-                    } else {
-                        fatalError(
-                            """
-                            `List` is being used with the `.fillParent` measurement option, which takes \
-                            up the full width it is afforded by its parent element. However, \
-                            the parent element provided the `List` an unconstrained width, which is meaningless.
-                            
-                            How do you fix this?
-                            --------------------
-                            1) This usually means that your `List` itself has been \
-                            placed in a `ScrollView` or other element which intentionally provides an \
-                            unconstrained measurement to its content. If your `List` is in a `ScrollView`, \
-                            remove the outer scroll view – `List` manages its own scrolling. Two `ScrollViews` \
-                            that are nested within each other is generally meaningless unless they scroll \
-                            in different directions (eg, horizontal vs vertical).
-                            
-                            2) If your `List` is not in a `ScrollView`, ensure that the element
-                            measuring it is providing a constrained `SizeConstraint`.
-                            """
+                    return constraint.width.constrainedValue ?? .infinity
+                    
+                case .natural:
+                    switch size.layoutDirection {
+                    case .vertical:
+                        return min(
+                            size.naturalWidth ?? size.contentSize.width,
+                            constraint.width.maximum
+                        )
+                    case .horizontal:
+                        return min(
+                            size.contentSize.width,
+                            constraint.width.maximum
                         )
                     }
-                case .natural:
-                    return size.naturalWidth ?? size.contentSize.width
                 }
             }()
             
             let height : CGFloat = {
                 switch verticalFill {
                 case .fillParent:
-                    if let max = constraint.height.constrainedValue {
-                        return max
-                    } else if case .caffeinated = layoutMode {
-                        return .infinity
-                    } else {
-                        fatalError(
-                            """
-                            `List` is being used with the `.fillParent` measurement option, which takes \
-                            up the full height it is afforded by its parent element. However, \
-                            the parent element provided the `List` an unconstrained height, which is meaningless.
-                            
-                            How do you fix this?
-                            --------------------
-                            1) This usually means that your `List` itself has been \
-                            placed in a `ScrollView` or other element which intentionally provides an \
-                            unconstrained measurement to its content. If your `List` is in a `ScrollView`, \
-                            remove the outer scroll view – `List` manages its own scrolling. Two `ScrollViews` \
-                            that are nested within each other is generally meaningless unless they scroll \
-                            in different directions (eg, horizontal vs vertical).
-                            
-                            2) If your `List` is not in a `ScrollView`, ensure that the element
-                            measuring it is providing a constrained `SizeConstraint`.
-                            """
+                    return constraint.height.constrainedValue ?? .infinity
+                    
+                case .natural:
+                    switch size.layoutDirection {
+                    case .vertical:
+                        return min(
+                            size.contentSize.height,
+                            constraint.height.maximum
+                        )
+                    case .horizontal:
+                        return min(
+                            size.naturalWidth ?? size.contentSize.height,
+                            constraint.height.maximum
                         )
                     }
-                case .natural:
-                    if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
-                        return min(size.contentSize.height, maxHeight)
-                    }
-                    return size.contentSize.height
                 }
             }()
             
