@@ -2,6 +2,9 @@
 
 ### Fixed
 
+- Fixed an issue with `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` that caused the scrolled offset to be reset to the bottom when using `VerticalLayoutGravity.bottom`.
+- Fixed issue with the `didPerform` closures of `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin`, where the visible items were stale after adjusting the offset with no animation. 
+
 ### Added
 
 ### Removed
@@ -11,6 +14,9 @@
 ### Misc
 
 ### Internal
+
+- Adding new demos to showcase mixing `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` with `VerticalLayoutGravity.bottom`.
+- Adding a new `AutoScrollAction.Behavior` protocol.
 
 # Past Releases
 

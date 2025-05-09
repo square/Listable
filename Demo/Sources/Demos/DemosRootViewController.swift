@@ -66,6 +66,22 @@ public final class DemosRootViewController : ListViewController
                 )
 
                 Item(
+                    DemoItem(text: "Auto Scrolling3 (Center Pin: scrollTo + bottom gravity)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ScrollToAutoscrollingViewController())
+                    }
+                )
+
+                Item(
+                    DemoItem(text: "Auto Scrolling3 (Center Pin: pin + bottom gravity)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(PinAutoscrollingViewController())
+                    }
+                )
+
+                Item(
                     DemoItem(text: "List State & State Reader"),
                     selectionStyle: .selectable(),
                     onSelect: { _ in

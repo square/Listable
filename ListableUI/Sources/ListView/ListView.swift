@@ -1275,37 +1275,49 @@ public final class ListView : UIView
             
         case .scrollToItem(let info):
             let wasInserted = addedItems.contains(info.insertedIdentifier)
-            
-            if wasInserted && info.shouldPerform(self.scrollPositionInfo) {
+            if wasInserted {
+                autoScroll(with: info)
+            }
+        case .pin(let pin):
+            autoScroll(with: pin)
+        }
+        
+        func autoScroll(with info: AutoScrollAction.Configuration) {
+            if info.shouldPerform(self.scrollPositionInfo) {
                 
                 /// Only animate the scroll if both the update **and** the scroll action are animated.
                 let animated = info.animated && animated
                 
                 if let destination = info.destination.destination(with: self.content) {
+                    
+                    if behavior.verticalLayoutGravity == .bottom {
+                        /// Perform an update to adjust the `contentSize` of the collection view before
+                        /// scrolling. This avoids an issue where:
+                        ///   - the list is first appearing with `VerticalLayoutGravity.bottom` and
+                        ///     `AutoScrollAction` behaviors
+                        ///   - the initial set of items in the list trigger the autoscroll
+                        ///   - the resulting scroll position isn't at the bottom of the list
+                        ///
+                        /// Without calling `layoutIfNeeded`, the above scenario will reset the scroll position
+                        /// to the bottom, discarding this scroll update. This is because the system will
+                        /// asynchronously update the underlying `contentSize` as part of the initial layout,
+                        /// moments after this method is executed. The list's `contentSize` is overridden to
+                        /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
+                        performEmptyBatchUpdates()
+                    }
+                    
                     guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
                     if animated {
                         stateObserver.onDidEndScrollingAnimation { state in
                             info.didPerform(state.positionInfo)
                         }
                     } else {
-                        info.didPerform(self.scrollPositionInfo)
-                    }
-                }
-            }
-            
-        case .pin(let pin):
-            if pin.shouldPerform(self.scrollPositionInfo) {
-                /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let animated = pin.animated && animated
-                
-                if let destination = pin.destination.destination(with: self.content) {
-                    guard self.scrollTo(item: destination, position: pin.position, animated: animated) else { return }
-                    if animated {
-                        stateObserver.onDidEndScrollingAnimation { state in
-                            pin.didPerform(self.scrollPositionInfo)
-                        }
-                    } else {
-                        pin.didPerform(self.scrollPositionInfo)
+                        /// Perform an update after an animationless scroll so that `CollectionViewLayout`'s
+                        /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
+                        /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
+                        /// be stale.
+                        performEmptyBatchUpdates()
+                        info.didPerform(scrollPositionInfo)
                     }
                 }
             }
@@ -1395,6 +1407,16 @@ public final class ListView : UIView
         }
 
         return true
+    }
+    
+    /// This is similar to calling `collectionView.performBatchUpdates(nil)`, but
+    /// it also includes workarounds for first responder bugs on iOS 16.4 and 17.0.
+    private func performEmptyBatchUpdates() {
+        collectionView.performBatchUpdates(
+            {},
+            changes: CollectionViewChanges.empty,
+            completion: { _ in }
+        )
     }
     
     private func performBatchUpdates(
