@@ -1282,7 +1282,7 @@ public final class ListView : UIView
             autoScroll(with: pin)
         }
         
-        func autoScroll(with info: AutoScrollAction.Behavior) {
+        func autoScroll(with info: AutoScrollAction.Configuration) {
             if info.shouldPerform(self.scrollPositionInfo) {
                 
                 /// Only animate the scroll if both the update **and** the scroll action are animated.

@@ -150,9 +150,9 @@ extension AutoScrollAction
         }
     }
     
-    /// This protocol allows `ListView` to treat the `OnInsertedItem` and `Pin` behaviors
+    /// This protocol allows `ListView` to treat the `OnInsertedItem` and `Pin` configurations
     /// in a similar fashion.
-    public protocol Behavior {
+    public protocol Configuration {
         
         /// The item in the list to scroll to.
         var destination : ScrollDestination { get set }
@@ -175,7 +175,7 @@ extension AutoScrollAction
     }
     
     /// Values used to configure the `scrollToItem(onInsertOf:)` action.
-    public struct OnInsertedItem: AutoScrollAction.Behavior
+    public struct OnInsertedItem: AutoScrollAction.Configuration
     {
         /// The item in the list to scroll to when the `insertedIdentifier` is inserted.
         public var destination : ScrollDestination
@@ -193,7 +193,7 @@ extension AutoScrollAction
     }
 
     /// Values used to configure the `pin(to:)` action.
-    public struct Pin: AutoScrollAction.Behavior
+    public struct Pin: AutoScrollAction.Configuration
     {
         public var destination : ScrollDestination
 
