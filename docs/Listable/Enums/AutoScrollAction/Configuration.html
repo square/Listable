@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ViewControllerTransitioning Class Reference</title>
+    <title>Configuration Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Class/ViewControllerTransitioning" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Protocol/Configuration" class="dashAnchor"></a>
 
-    <a title="ViewControllerTransitioning Class Reference"></a>
+    <a title="Configuration Protocol Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,11 +44,11 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../../index.html">Listable</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      <a class="breadcrumb" href="../../Classes.html">Classes</a>
+      <a class="breadcrumb" href="../../Enums.html">Enumerations</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      <a class="breadcrumb" href="../../Classes/ListActions.html">ListableUI.ListActions</a>
+      <a class="breadcrumb" href="../../Enums/AutoScrollAction.html">ListableUI.AutoScrollAction</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      ViewControllerTransitioning Class Reference
+      Configuration Protocol Reference
     </p>
 
     <div class="content-wrapper">
@@ -716,15 +716,16 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>ViewControllerTransitioning</h1>
+            <h1>Configuration</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ViewControllerTransitioning</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Configuration</span></code></pre>
 
                 </div>
               </div>
-            <p>Provides access to view controller transitioning options in a list.</p>
+            <p>This protocol allows <code><a href="../../Classes/ListView.html">ListView</a></code> to treat the <code><a href="../../Enums/AutoScrollAction/OnInsertedItem.html">OnInsertedItem</a></code> and <code><a href="../../Enums/AutoScrollAction/Pin.html">Pin</a></code> configurations
+in a similar fashion.</p>
 
           </div>
         </section>
@@ -736,9 +737,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC27ViewControllerTransitioningCAEycfc"></a>
-                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC27ViewControllerTransitioningCAEycfc">init()</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP11destinationAC0D11DestinationOvp"></a>
+                    <a name="//apple_ref/swift/Property/destination" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP11destinationAC0D11DestinationOvp">destination</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -746,13 +747,126 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>The item in the list to scroll to.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">destination</span><span class="p">:</span> <span class="kt"><a href="../../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP8positionAA0D8PositionVvp"></a>
+                    <a name="//apple_ref/swift/Property/position" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP8positionAA0D8PositionVvp">position</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The desired scroll position.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../../Structs/ScrollPosition.html">ScrollPosition</a></span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP8animatedSbvp"></a>
+                    <a name="//apple_ref/swift/Property/animated" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP8animatedSbvp">animated</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the change should be animated.</p>
+<h3 id='note' class='heading'>Note</h3>
+
+<p>The action will only be animated if it is animated, <strong>and</strong> the list update itself is
+animated. Otherwise, no animation occurs.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP13shouldPerformySbAA04ListD12PositionInfoVcvp"></a>
+                    <a name="//apple_ref/swift/Property/shouldPerform" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP13shouldPerformySbAA04ListD12PositionInfoVcvp">shouldPerform</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An additional check you may provide to approve or reject the scroll action.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">shouldPerform</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP10didPerformyyAA04ListD12PositionInfoVcvp"></a>
+                    <a name="//apple_ref/swift/Property/didPerform" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP10didPerformyyAA04ListD12PositionInfoVcvp">didPerform</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the list performs the insertion.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">didPerform</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>

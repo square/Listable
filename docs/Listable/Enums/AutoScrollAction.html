@@ -145,6 +145,9 @@
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AutoScrollAction/Configuration.html">– Configuration</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction/OnInsertedItem.html">– OnInsertedItem</a>
               </li>
               <li class="nav-group-task">
@@ -1097,6 +1100,35 @@ this block will be called multiple times.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO13ConfigurationP"></a>
+                    <a name="//apple_ref/swift/Protocol/Configuration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO13ConfigurationP">Configuration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This protocol allows <code><a href="../Classes/ListView.html">ListView</a></code> to treat the <code><a href="../Enums/AutoScrollAction/OnInsertedItem.html">OnInsertedItem</a></code> and <code><a href="../Enums/AutoScrollAction/Pin.html">Pin</a></code> configurations
+in a similar fashion.</p>
+
+                        <a href="../Enums/AutoScrollAction/Configuration.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Configuration</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI16AutoScrollActionO14OnInsertedItemV"></a>
                     <a name="//apple_ref/swift/Struct/OnInsertedItem" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI16AutoScrollActionO14OnInsertedItemV">OnInsertedItem</a>
@@ -1115,7 +1147,7 @@ this block will be called multiple times.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OnInsertedItem</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OnInsertedItem</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction.html">AutoScrollAction</a></span><span class="o">.</span><span class="kt"><a href="../Enums/AutoScrollAction/Configuration.html">Configuration</a></span></code></pre>
 
                         </div>
                       </div>
@@ -1143,7 +1175,7 @@ this block will be called multiple times.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Pin</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Pin</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction.html">AutoScrollAction</a></span><span class="o">.</span><span class="kt"><a href="../Enums/AutoScrollAction/Configuration.html">Configuration</a></span></code></pre>
 
                         </div>
                       </div>

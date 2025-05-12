@@ -2,9 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue with `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` that caused the scrolled offset to be reset to the bottom when using `VerticalLayoutGravity.bottom`.
-- Fixed issue with the `didPerform` closures of `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin`, where the visible items were stale after adjusting the offset with no animation. 
-
 ### Added
 
 ### Removed
@@ -15,10 +12,19 @@
 
 ### Internal
 
+# Past Releases
+
+# [16.0.2] - 2025-05-09
+
+### Fixed
+
+- Fixed an issue with `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` that caused the scrolled offset to be reset to the bottom when using `VerticalLayoutGravity.bottom`.
+- Fixed issue with the `didPerform` closures of `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin`, where the visible items were stale after adjusting the offset with no animation.
+
+### Internal
+
 - Adding new demos to showcase mixing `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` with `VerticalLayoutGravity.bottom`.
 - Adding a new `AutoScrollAction.Behavior` protocol.
-
-# Past Releases
 
 # [16.0.1] - 2025-04-16
 
@@ -1151,7 +1157,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.1...main
+[Main]: https://github.com/square/Listable/compare/16.0.2...main
+[16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
 [16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
 [16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
 [15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
