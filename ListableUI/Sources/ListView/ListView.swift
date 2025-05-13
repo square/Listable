@@ -1303,7 +1303,7 @@ public final class ListView : UIView
                         /// asynchronously update the underlying `contentSize` as part of the initial layout,
                         /// moments after this method is executed. The list's `contentSize` is overridden to
                         /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
-                        performEmptyBatchUpdates()
+                        layoutIfNeeded()
                     }
                     
                     guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
@@ -1316,7 +1316,7 @@ public final class ListView : UIView
                         /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
                         /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
                         /// be stale.
-                        performEmptyBatchUpdates()
+                        layoutIfNeeded()
                         info.didPerform(scrollPositionInfo)
                     }
                 }
