@@ -181,6 +181,7 @@ struct Header : BlueprintHeaderFooterContent, Equatable
     var elementRepresentation : Element {
         return Inset(insets: UIEdgeInsets(top: 0.0, left: 0.0, bottom: 10.0, right: 0.0), wrapping: Label(text: self.title) { label in
             label.font = .systemFont(ofSize: 30.0, weight: .bold)
+            label.accessibilityTraits = [.header]
         })
     }
 }
