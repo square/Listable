@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a crash that occurred when, while the cursor is on the first heading, we are on the Headings VoiceOver rotor and swipe up with one finger.
+
 ### Added
 
 - Added support for `onDisplay` and `onEndDisplay` callbacks for `HeaderFooters`.
