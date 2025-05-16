@@ -12,6 +12,8 @@
 
 ### Internal
 
+- Improving how `AutoScrollAction` and `VerticalLayoutGravity.bottom` work together by temporarily ignoring the bottom gravity logic while autoscrolling.
+
 # Past Releases
 
 # [16.0.2] - 2025-05-09

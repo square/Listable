@@ -1291,24 +1291,27 @@ public final class ListView : UIView
                 if let destination = info.destination.destination(with: self.content) {
                     
                     if behavior.verticalLayoutGravity == .bottom {
-                        /// Perform an update to adjust the `contentSize` of the collection view before
-                        /// scrolling. This avoids an issue where:
-                        ///   - the list is first appearing with `VerticalLayoutGravity.bottom` and
-                        ///     `AutoScrollAction` behaviors
-                        ///   - the initial set of items in the list trigger the autoscroll
-                        ///   - the resulting scroll position isn't at the bottom of the list
+                        /// Temporarily ignore the bottom gravity offest overrides before scrolling. This
+                        /// avoids an issue where:
+                        ///   - the list has `VerticalLayoutGravity.bottom` and `AutoScrollAction` behaviors
+                        ///   - the list has offscreen items that haven't been sized
+                        ///   - the `AutoScrollAction` has been triggered
+                        ///   - the resulting scroll position will adjust the collection view's `contentSize`
+                        ///     as items are dequeued and sized
                         ///
-                        /// Without calling `layoutIfNeeded`, the above scenario will reset the scroll position
-                        /// to the bottom, discarding this scroll update. This is because the system will
-                        /// asynchronously update the underlying `contentSize` as part of the initial layout,
-                        /// moments after this method is executed. The list's `contentSize` is overridden to
-                        /// keep the offset anchored to the bottom when using `VerticalLayoutGravity.bottom`.
-                        performEmptyBatchUpdates()
+                        /// Without ignoring the custom `VerticalLayoutGravity.bottom` offset behavior, the
+                        /// above scenario will force the scroll offset to the bottom, discarding this scroll
+                        /// update.
+                        collectionView.ignoreBottomGravityOffsetOverride = true
                     }
                     
-                    guard self.scrollTo(item: destination, position: info.position, animated: animated) else { return }
+                    guard self.scrollTo(item: destination, position: info.position, animated: animated) else {
+                        collectionView.ignoreBottomGravityOffsetOverride = false
+                        return
+                    }
                     if animated {
-                        stateObserver.onDidEndScrollingAnimation { state in
+                        stateObserver.onDidEndScrollingAnimation { [weak self] state in
+                            self?.collectionView.ignoreBottomGravityOffsetOverride = false
                             info.didPerform(state.positionInfo)
                         }
                     } else {
@@ -1317,6 +1320,7 @@ public final class ListView : UIView
                         /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
                         /// be stale.
                         performEmptyBatchUpdates()
+                        collectionView.ignoreBottomGravityOffsetOverride = false
                         info.didPerform(scrollPositionInfo)
                     }
                 }
@@ -1729,6 +1733,12 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
     
     var verticalLayoutGravity : Behavior.VerticalLayoutGravity = .top
     var layoutDirection: LayoutDirection = .vertical
+    
+    /// Normally, using `VerticalLayoutGravity.bottom` will keep the viewport anchored at the bottom.
+    /// This happens in overrides of `contentSize`, `contentInset`, and `frame`. When this variable is
+    /// `true`, the logic in those overrides is ignored. This can be used to ensure `AutoScrollAction`
+    /// has a chance to scroll to the desired item when mixing it with `VerticalLayoutGravity.bottom`.
+    var ignoreBottomGravityOffsetOverride: Bool = false
 
     override var contentSize: CGSize {
 
@@ -1737,7 +1747,7 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
             // scroll to the bottom increases by the height delta. But with bottom gravity enabled
             // we need to keep the scroll distance to the bottom unchanged, which we do by
             // adjusting the `contentOffset`.
-            if verticalLayoutGravity == .bottom {
+            if verticalLayoutGravity == .bottom && !ignoreBottomGravityOffsetOverride {
                 guard layoutDirection == .vertical else {
                     assertionFailure("bottom gravity is only supported for vertical layouts")
                     return
@@ -1761,7 +1771,7 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
             // When bottom gravity is enabled, we may need to adjust the `contentOffset`
             // when the `contentInset` changes in order to keep the scroll distance to
             // the bottom unchanged.
-            if layoutDirection == .vertical && verticalLayoutGravity == .bottom {
+            if layoutDirection == .vertical && verticalLayoutGravity == .bottom && !ignoreBottomGravityOffsetOverride {
                 guard oldValue != contentInset else { return }
                 guard isContentScrollable else { return }
 
@@ -1802,7 +1812,7 @@ final class CollectionView : ListView.IOS16_4_First_Responder_Bug_CollectionView
         }
         set {
             // With bottom gravity enabled keep the scroll distance to the bottom unchanged
-            if layoutDirection == .vertical && verticalLayoutGravity == .bottom {
+            if layoutDirection == .vertical && verticalLayoutGravity == .bottom && !ignoreBottomGravityOffsetOverride {
                 guard newValue != super.frame else {
                     return
                 }
