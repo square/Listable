@@ -12,9 +12,13 @@
 
 ### Internal
 
-- Improving how `AutoScrollAction` and `VerticalLayoutGravity.bottom` work together by temporarily ignoring the bottom gravity logic while autoscrolling.
-
 # Past Releases
+
+# [16.0.3] - 2025-05-20
+
+### Internal
+
+- Improving how `AutoScrollAction` and `VerticalLayoutGravity.bottom` work together by temporarily ignoring the bottom gravity logic while autoscrolling.
 
 # [16.0.2] - 2025-05-09
 
@@ -1159,7 +1163,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.2...main
+[Main]: https://github.com/square/Listable/compare/16.0.3...main
+[16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
 [16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
 [16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
 [16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
