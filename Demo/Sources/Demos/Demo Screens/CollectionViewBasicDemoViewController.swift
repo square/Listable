@@ -72,15 +72,38 @@ final class CollectionViewBasicDemoViewController : UIViewController
                     
                     section.layouts.table.columns = .init(count: 2, spacing: 10.0)
                      
-                    if self.showsSectionHeaders {
-                        section.header = DemoHeader(title: "Section Header")
+                    section.header = if self.showsSectionHeaders {
+                        HeaderFooter(DemoHeader(title: "Section Header")) {
+                            $0.onDisplay = { _ in
+                                print("Displayed header")
+                            }
+                            $0.onEndDisplay = { _ in
+                                print("Ended displaying header")
+                            }
+                        }
                     } else {
-                        section.header = DemoHeader2(title: "Section Header")
+                        HeaderFooter(DemoHeader2(title: "Section Header")) {
+                            $0.onDisplay = { _ in
+                                print("Displayed header")
+                            }
+                            $0.onEndDisplay = { _ in
+                                print("Ended displaying header")
+                            }
+                        }
                     }
                     
                     section.footer = DemoFooter(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non luctus sem, eu consectetur ipsum. Curabitur malesuada cursus ante.")
                     
-                    section += sectionRows
+                    section += sectionRows.map { row in
+                        Item(row) {
+                            $0.onDisplay = { _ in
+                                print("Displayed row")
+                            }
+                            $0.onEndDisplay = { _ in
+                                print("Ended displaying row")
+                            }
+                        }
+                    }
                 }
             }
         }
