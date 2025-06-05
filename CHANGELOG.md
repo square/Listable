@@ -10,6 +10,9 @@
 
 ### Misc
 
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround has been capped to OS versions _less_ than iOS 19.0 until the fix has been verified as required and functioning.
+- The interpetation of the `Listable.EnableIOS164FirstResponderWorkaround` user defaults flag now defaults to `true` if no value has been set.
+
 ### Internal
 
 # Past Releases

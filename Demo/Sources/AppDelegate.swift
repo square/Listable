@@ -20,9 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         window.rootViewController = DemoNavigationController()
         
         self.window = window
-        
-        UserDefaults.standard.set(true, forKey: "Listable.EnableIOS164FirstResponderWorkaround")
-        
+
         window.makeKeyAndVisible()
         
         return true

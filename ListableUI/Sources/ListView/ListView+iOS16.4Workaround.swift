@@ -13,9 +13,13 @@ import UIKit
 /// ## ⚠️⚠️⚠️ Good Morning! iOS Bug Workaround Ahead ⚠️⚠️⚠️
 ///
 /// iOS 16.4 introduced a regression (which was fixed in 16.5, then again broken in 17.0),
-/// where on every `performBatchUpdates` applie to a `UICollectionView`, it would resign
+/// where on every `performBatchUpdates` applied to a `UICollectionView`, it would resign
 /// the first responder if it was within a supplementary (header, footer) view.
 /// This is a common position for search bars. Regular cells are not affected.
+///
+/// Update 06/04/2025:
+/// It appears that the buggy behavior on iOS 17+ is triggered when there are _multiple_
+/// `performBatchUpdates` calls within a short interval. The workaround still appears to avoid the issue.
 ///
 /// Square SEV: https://jira.sqprod.co/browse/ALERT-11928
 ///
@@ -122,7 +126,7 @@ extension ListView {
     
     // Note: If we need additional overrides, please subclass me, so we can
     // wholesale delete this subclass when we drop iOS 17.0.
-    @available(iOS, introduced: 14.0, obsoleted: 17.0, message: "This workaround is no longer applicable. Please remove!")
+    @available(iOS, introduced: 14.0, obsoleted: 19.0, message: "This workaround is no longer applicable. Please remove!")
     class IOS16_4_First_Responder_Bug_CollectionView : UICollectionView {
         
         override init(
@@ -165,7 +169,7 @@ extension ListView {
         /// ### 🚨 This Overrides A Private Method
         ///
         /// This method wholesale re-implements a private method from `UICollectionView`,
-        /// which broke in iOS 16.4. We have the diff, so we can figure this out ourselves.
+        /// which broke in iOS 16.4 and again in iOS 17-18. We have the diff, so we can figure this out ourselves.
         ///
         /// For reference, here's the decompiled original impl:
         ///
@@ -264,7 +268,11 @@ extension ListView {
             /// remotely if needed.
             ///
             /// Note: We are explicitly **not** making this a static value, so it can be changed across reads.
-            guard UserDefaults.standard.bool(forKey: "Listable.EnableIOS164FirstResponderWorkaround") else {
+            let workaroundEnabled = UserDefaults.standard.object(
+                forKey: "Listable.EnableIOS164FirstResponderWorkaround"
+            ) as? NSNumber ?? NSNumber(booleanLiteral: true)
+
+            guard workaroundEnabled.boolValue == true else {
                 return super_function(self, selector)
             }
             
@@ -344,16 +352,24 @@ extension ListView {
                     .init(majorVersion: 16, minorVersion: 5, patchVersion: 0)
                 )
             
-            /// ...But is broken again in the first iOS 17.0 beta.
-            /// Likely, the fixes from 16.5 have not been merged down into 17.0 yet.
+            /// ...But is broken again iOS 17.0 - 18.4 (at least)
             
             let isIOS17_0 = ProcessInfo
                 .processInfo
                 .isOperatingSystemAtLeast(
                     .init(majorVersion: 17, minorVersion: 0, patchVersion: 0)
                 )
-            
-            return isIOS16_4 && !isIOS16_5 || isIOS17_0
+
+            /// iOS 19 status is unknown as of June 2025 but we disable it preemptively to avoid risk of
+            /// internal assertion failures.
+
+            let isIOS19_0 = ProcessInfo
+                .processInfo
+                .isOperatingSystemAtLeast(
+                    .init(majorVersion: 19, minorVersion: 0, patchVersion: 0)
+                )
+
+            return (isIOS16_4 && !isIOS16_5) || (isIOS17_0 && !isIOS19_0)
         }()
         
         private static let hasFirstResponderViewProperty : Bool = {
