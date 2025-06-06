@@ -119,7 +119,11 @@ extension SystemFlowLayoutViewController : UICollectionViewDataSource, UICollect
                 /// Note that even throwing this in a `DispathQueue.main.async`
                 /// doesn't seem to resolve the issue.
                 collectionView?.performBatchUpdates({})
-                
+
+                // Update 06/04/2025:
+                // On iOS 17+ _two_ `performBatchUpdates` calls are required to
+                // trigger the first responder resignation issue.
+                collectionView?.performBatchUpdates({})
             }
             
             return header
