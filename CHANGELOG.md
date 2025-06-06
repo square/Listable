@@ -10,12 +10,16 @@
 
 ### Misc
 
-- The `IOS16_4_First_Responder_Bug_CollectionView` workaround has been capped to OS versions _less_ than iOS 19.0 until the fix has been verified as required and functioning.
-- The interpretation of the `Listable.EnableIOS164FirstResponderWorkaround` user defaults flag now defaults to `true` if no value has been set.
-
 ### Internal
 
 # Past Releases
+
+# [16.0.4] - 2025-06-06
+
+### Misc
+
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround has been capped to OS versions _less_ than iOS 19.0 until the fix has been verified as required and functioning.
+- The interpretation of the `Listable.EnableIOS164FirstResponderWorkaround` user defaults flag now defaults to `true` if no value has been set.
 
 # [16.0.3] - 2025-05-20
 
@@ -1166,7 +1170,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.3...main
+[Main]: https://github.com/square/Listable/compare/16.0.4...main
+[16.0.3]: https://github.com/square/Listable/compare/16.0.4...16.0.3
 [16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
 [16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
 [16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
