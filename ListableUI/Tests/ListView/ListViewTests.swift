@@ -846,6 +846,206 @@ class ListViewTests: XCTestCase
             }
         }
     }
+    
+    func test_scroll_to_item_completion() throws {
+        
+        for animated in [true, false] {
+            for visibilityRule in [ScrollPosition.IfAlreadyVisible.scrollToPosition, .doNothing] {
+                
+                try testControllerCase("scroll to offscreen item") { viewController in
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 75"),
+                        position: .centered,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    
+                    // The viewport is 600pts in height. Each item is 50pts in height. Since we've
+                    // centered an item, the top and bottom visible items should be halfway offscreen.
+                    XCTAssertEqual(visibleItems.count, 13)
+                    for itemNumber in 70...80 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Item 69"),
+                                percentageVisible: 0.5 // Halfway off the top of the viewport.
+                            )
+                        )
+                    )
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Item 81"),
+                                percentageVisible: 0.5 // Halfway off the bottom of the viewport.
+                            )
+                        )
+                    )
+                }
+                
+                try testControllerCase("scroll to an already-positioned item") { viewController in
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 1"),
+                        position: .top,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    // The viewport is 600pts in height. Each item is 50pts in height. Since item 1 is at
+                    // the top, we'll fit the first 12 items in the viewport.
+                    XCTAssertEqual(visibleItems.count, 12)
+                    for itemNumber in 1...12 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                }
+                
+                try testControllerCase("scroll to unpositioned item") { viewController in
+                    /// The collection view will need to scroll a few rows down so that item 3
+                    /// is at the top of the list.
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 3"),
+                        position: .top,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    XCTAssertEqual(visibleItems.count, 12)
+                    
+                    let expectedItems: ClosedRange<Int>
+                    if visibilityRule == .doNothing {
+                        // If the list does not scroll when the item is already visible, then the visible
+                        // items should reflect the intiail state since 3 is initially visible.
+                        expectedItems = 1...12
+                    } else {
+                        // Otherwise, we do scroll even when visible and item 3 is scrolled to the top.
+                        expectedItems = 3...14
+                    }
+                    
+                    for itemNumber in expectedItems {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            ),
+                            "Item \(itemNumber)"
+                        )
+                    }
+                }
+                
+                try testControllerCase("scroll to unpositioned item") { viewController in
+                    /// The collection view will not need to scroll since it can't move the
+                    /// viewport any higher.
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 2"),
+                        position: .centered,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    XCTAssertEqual(visibleItems.count, 12)
+                    for itemNumber in 1...12 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                }
+                
+                try testControllerCase("scroll to unpositioned item") { viewController in
+                    // Scroll to the very bottom.
+                    scrollTo(
+                        item: TestContent.Identifier("Item 99"),
+                        position: .centered,
+                        using: viewController
+                    )
+                    // Attempt to scroll an item near the bottom to the top of the list.
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 98"),
+                        position: .top,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    // The bottom-most items remain visible.
+                    XCTAssertEqual(visibleItems.count, 12)
+                    for itemNumber in 89...100 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                }
+                
+                /// Helper function to perform the scrolling and await the result, using the
+                /// global animation flag and `IfAlreadyVisible` rule.
+                @discardableResult
+                func scrollTo(item: TestContent.Identifier, position: ScrollPosition.Position, using viewController: ViewController) -> ListScrollPositionInfo? {
+                    var positionInfo: ListScrollPositionInfo?
+                    let scrollExpectation = expectation(description: "Scroll completed")
+                    viewController.list.scrollTo(
+                        item: item,
+                        position: ScrollPosition(
+                            position: position,
+                            ifAlreadyVisible: visibilityRule
+                        ),
+                        animated: animated,
+                        completion: {
+                            positionInfo = $0
+                            scrollExpectation.fulfill()
+                        }
+                    )
+                    wait(for: [scrollExpectation], timeout: 0.5)
+                    return positionInfo
+                }
+            }
+        }
+    }
+    
+    /// Helper function for a test case that creates and presents a `ViewController`
+    /// with a list of 100 rows. You can use the controller in the `completion` closure.
+    fileprivate func testControllerCase(_ name : String = "", completion: (ViewController) throws -> Void) rethrows {
+        try testcase(name) {
+            let viewController = ViewController()
+            viewController.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+            try show(vc: viewController) { viewController in
+                viewController.list.configure { list in
+                    list.layout = .table { layout in
+                        layout.contentInsetAdjustmentBehavior = .never
+                    }
+                    list.animatesChanges = false
+                    list.sections = [
+                        Section("section") {
+                            for itemNumber in 1...100 {
+                                TestContent(content: "Item \(itemNumber)")
+                            }
+                        }
+                    ]
+                }
+                try completion(viewController)
+            }
+        }
+    }
 }
 
 fileprivate final class ViewController : UIViewController {

@@ -94,6 +94,12 @@ public struct ListStateObserver {
     }
 
     private(set) var onDidEndScrollingAnimation: [OnDidEndScrollingAnimation] = []
+    
+    /// This internal variable is used to house the completion handler of scrolling APIs.
+    /// This handler avoids using the `onDidEndScrollingAnimation` handler array, which
+    /// isn't emptied in cases where the `ListView` is used in a standard UIView interface
+    /// instead of a Blueprint interface.
+    internal var programmaticScrollCompletion: OnDidEndScrollingAnimation?
 
     //
     // MARK: Responding to Drag Begin

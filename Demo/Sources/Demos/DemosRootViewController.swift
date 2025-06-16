@@ -80,6 +80,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(PinAutoscrollingViewController())
                     }
                 )
+                
+                Item(
+                    DemoItem(text: "scrollTo(...) completion handler"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ScrollCompletionHandlerViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "List State & State Reader"),

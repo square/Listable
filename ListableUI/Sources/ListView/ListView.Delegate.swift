@@ -105,6 +105,17 @@ extension ListView
                     positionInfo: self.view.scrollPositionInfo
                 )
             }
+            
+            if let programmaticCompletion = self.view.stateObserver.programmaticScrollCompletion {
+                ListStateObserver.perform([programmaticCompletion], "Did End Programmatic Scrolling Animation", with: self.view) { _ in
+                    ListStateObserver.DidEndScrollingAnimation(
+                        positionInfo: self.view.scrollPositionInfo
+                    )
+                }
+                
+                // Clear the completion handler after execution.
+                self.view.stateObserver.programmaticScrollCompletion = nil
+            }
         }
 
         private var oldSelectedItems : Set<AnyIdentifier> = []
