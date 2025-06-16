@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Blueprint dependency updated to 6.0.
+
 ### Misc
 
 ### Internal
