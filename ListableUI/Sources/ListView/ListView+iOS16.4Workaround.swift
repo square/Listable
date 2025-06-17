@@ -126,7 +126,7 @@ extension ListView {
     
     // Note: If we need additional overrides, please subclass me, so we can
     // wholesale delete this subclass when we drop iOS 17.0.
-    @available(iOS, introduced: 14.0, obsoleted: 19.0, message: "This workaround is no longer applicable. Please remove!")
+    @available(iOS, introduced: 14.0, deprecated: 27.0, message: "This workaround may no longer be necessary. Test the behavior and remove this type if it is no longer necessary.")
     class IOS16_4_First_Responder_Bug_CollectionView : UICollectionView {
         
         override init(
@@ -360,16 +360,7 @@ extension ListView {
                     .init(majorVersion: 17, minorVersion: 0, patchVersion: 0)
                 )
 
-            /// iOS 19 status is unknown as of June 2025 but we disable it preemptively to avoid risk of
-            /// internal assertion failures.
-
-            let isIOS19_0 = ProcessInfo
-                .processInfo
-                .isOperatingSystemAtLeast(
-                    .init(majorVersion: 19, minorVersion: 0, patchVersion: 0)
-                )
-
-            return (isIOS16_4 && !isIOS16_5) || (isIOS17_0 && !isIOS19_0)
+            return (isIOS16_4 && !isIOS16_5) || isIOS17_0
         }()
         
         private static let hasFirstResponderViewProperty : Bool = {

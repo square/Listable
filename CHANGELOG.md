@@ -10,6 +10,8 @@
 
 ### Misc
 
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround is longer capped to iOS versions less than 19.0. It was verified as required in the iOS 19 beta.
+
 ### Internal
 
 # Past Releases
