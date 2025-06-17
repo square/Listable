@@ -126,7 +126,7 @@ extension ListView {
     
     // Note: If we need additional overrides, please subclass me, so we can
     // wholesale delete this subclass when we drop iOS 17.0.
-    @available(iOS, introduced: 14.0, obsoleted: 19.0, message: "This workaround is no longer applicable. Please remove!")
+    @available(iOS, introduced: 14.0, deprecated: 27.0, message: "This workaround may no longer be necessary. Test the behavior and remove this type if it is no longer necessary.")
     class IOS16_4_First_Responder_Bug_CollectionView : UICollectionView {
         
         override init(
