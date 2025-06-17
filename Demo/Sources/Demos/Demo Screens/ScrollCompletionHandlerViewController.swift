@@ -24,7 +24,7 @@ class ScrollCompletionHandlerViewController : UIViewController {
     
     private var ifAlreadyVisible: ScrollPosition.IfAlreadyVisible = .scrollToPosition
     
-    private var itemToSroll = Item(SimpleScrollItem(text: "Item 50"))
+    private var scrolledItem = Item(SimpleScrollItem(text: "Item 50"))
     
     private var layoutDirection : LayoutDirection = .vertical
     
@@ -75,7 +75,7 @@ class ScrollCompletionHandlerViewController : UIViewController {
     
     @objc private func scrollToItem() {
         list.scrollTo(
-            item: itemToSroll,
+            item: scrolledItem,
             position: ScrollPosition(
                 position: scrollPosition,
                 ifAlreadyVisible: ifAlreadyVisible
@@ -166,13 +166,13 @@ class ScrollCompletionHandlerViewController : UIViewController {
         let control = UISegmentedControl(
             items: [
                 UIAction(title: "1") { [weak self] _ in
-                    self?.itemToSroll = Item(SimpleScrollItem(text: "Item 1"))
+                    self?.scrolledItem = Item(SimpleScrollItem(text: "Item 1"))
                 },
                 UIAction(title: "50") { [weak self] _ in
-                    self?.itemToSroll = Item(SimpleScrollItem(text: "Item 50"))
+                    self?.scrolledItem = Item(SimpleScrollItem(text: "Item 50"))
                 },
                 UIAction(title: "99") { [weak self] _ in
-                    self?.itemToSroll = Item(SimpleScrollItem(text: "Item 99"))
+                    self?.scrolledItem = Item(SimpleScrollItem(text: "Item 99"))
                 }
             ]
         )

@@ -801,16 +801,15 @@ public final class ListView : UIView
     }
     
     /// This function will determine if a call to `collectionView.scrollToItem(...)`
-    /// will result in an adjusted content offset. This is useful because when the item
-    /// is already at the expected position, `UICollectionView` will not scroll and will
-    /// not execute its `scrollViewDidEndScrollingAnimation(_:)` delegate.
+    /// will result in an adjusted content offset. This is necessary because when the
+    /// item is already at the expected position, `UICollectionView` will not scroll
+    /// and will not execute its `scrollViewDidEndScrollingAnimation(_:)` delegate.
     func willScroll(
         for scrollPosition: UICollectionView.ScrollPosition,
         itemFrame: CGRect,
         viewport: CGRect,
         contentSize: CGSize
     ) -> Bool {
-        
         func roundRect(_ rect: CGRect) -> CGRect {
             CGRect(
                 x: round(rect.minX),
@@ -819,7 +818,6 @@ public final class ListView : UIView
                 height: round(rect.height)
             )
         }
-        
         let viewport = roundRect(viewport)
         let itemFrame = roundRect(itemFrame)
         let isAlreadyVisible = viewport.contains(itemFrame)
@@ -1501,15 +1499,15 @@ public final class ListView : UIView
 
         resultOffset.y = max(resultOffset.y, -topInset)
         
-        let roundedOffset = CGPoint(
+        let roundedResultOffset = CGPoint(
             x: round(resultOffset.x),
             y: round(resultOffset.y)
         )
-        let currentOffest = CGPoint(
+        let roundedCurrentOffset = CGPoint(
             x: round(collectionView.contentOffset.x),
             y: round(collectionView.contentOffset.y)
         )
-        if currentOffest != roundedOffset {
+        if roundedCurrentOffset != roundedResultOffset {
             collectionView.setContentOffset(resultOffset, animated: shouldAnimate)
             enqueueScrollHandler(reason: .scrolled(animated: shouldAnimate), completion: completion)
         } else {

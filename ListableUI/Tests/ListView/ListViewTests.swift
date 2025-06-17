@@ -941,8 +941,7 @@ class ListViewTests: XCTestCase
                                     identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
                                     percentageVisible: 1.0
                                 )
-                            ),
-                            "Item \(itemNumber)"
+                            )
                         )
                     }
                 }
@@ -1051,7 +1050,7 @@ class ListViewTests: XCTestCase
     }
     
     /// A helper function for a test case that creates and presents a `ViewController`
-    /// with a list of 100 rows. You can use the controller in the `completion` closure.
+    /// with a list of 100 rows.
     /// - Parameters:
     ///   - name: The name of the test case.
     ///   - sectionHeader: When true, a 50pt section header will be drawn.
