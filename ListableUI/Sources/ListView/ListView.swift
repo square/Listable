@@ -1500,8 +1500,16 @@ public final class ListView : UIView
         // Don't scroll beyond the top of the list.
 
         resultOffset.y = max(resultOffset.y, -topInset)
-
-        if collectionView.contentOffset != resultOffset {
+        
+        let roundedOffset = CGPoint(
+            x: round(resultOffset.x),
+            y: round(resultOffset.y)
+        )
+        let currentOffest = CGPoint(
+            x: round(collectionView.contentOffset.x),
+            y: round(collectionView.contentOffset.y)
+        )
+        if currentOffest != roundedOffset {
             collectionView.setContentOffset(resultOffset, animated: shouldAnimate)
             enqueueScrollHandler(reason: .scrolled(animated: shouldAnimate), completion: completion)
         } else {

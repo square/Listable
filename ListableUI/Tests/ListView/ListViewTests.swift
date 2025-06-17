@@ -997,7 +997,35 @@ class ListViewTests: XCTestCase
                     }
                 }
                 
-                /// Helper function to perform the scrolling and await the result, using the
+                // ListView has special logic to account for a sticky section header when scrolling an
+                // item to the top position. In this case, scrolling uses a different internal API to
+                // ensure the scrolled item rests directly below the sticky header and isn't covered.
+                try testControllerCase("scroll to item with section header", sectionHeader: true) { viewController in
+                    let positionInfo = scrollTo(
+                        item: TestContent.Identifier("Item 75"),
+                        position: .top,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    
+                    // The viewport is 600pts in height and each item is 50pts in height, so there will
+                    // be space for 12 items from the top. There's also a 50pt header which rests on top
+                    // of the content, so item 75 will be directly below the header, with item 74 also
+                    // inside the viewport.
+                    XCTAssertEqual(visibleItems.count, 12)
+                    for itemNumber in 74...85 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                }
+                
+                /// A helper function to perform the scrolling and await the result, using the
                 /// global animation flag and `IfAlreadyVisible` rule.
                 @discardableResult
                 func scrollTo(item: TestContent.Identifier, position: ScrollPosition.Position, using viewController: ViewController) -> ListScrollPositionInfo? {
@@ -1022,9 +1050,13 @@ class ListViewTests: XCTestCase
         }
     }
     
-    /// Helper function for a test case that creates and presents a `ViewController`
+    /// A helper function for a test case that creates and presents a `ViewController`
     /// with a list of 100 rows. You can use the controller in the `completion` closure.
-    fileprivate func testControllerCase(_ name : String = "", completion: (ViewController) throws -> Void) rethrows {
+    /// - Parameters:
+    ///   - name: The name of the test case.
+    ///   - sectionHeader: When true, a 50pt section header will be drawn.
+    ///   - completion: The closure executed when the view controller is shown.
+    fileprivate func testControllerCase(_ name : String = "", sectionHeader: Bool = false, completion: (ViewController) throws -> Void) rethrows {
         try testcase(name) {
             let viewController = ViewController()
             viewController.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
@@ -1034,13 +1066,17 @@ class ListViewTests: XCTestCase
                         layout.contentInsetAdjustmentBehavior = .never
                     }
                     list.animatesChanges = false
-                    list.sections = [
-                        Section("section") {
-                            for itemNumber in 1...100 {
-                                TestContent(content: "Item \(itemNumber)")
-                            }
+                    list("content") { section in
+                        if sectionHeader {
+                            section.header = HeaderFooter(
+                                TestSupplementary(),
+                                sizing: .fixed(height: 50)
+                            )
                         }
-                    ]
+                        for itemNumber in 1...100 {
+                            section += TestContent(content: "Item \(itemNumber)")
+                        }
+                    }
                 }
                 try completion(viewController)
             }
