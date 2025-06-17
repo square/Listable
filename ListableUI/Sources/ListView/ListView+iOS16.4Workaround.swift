@@ -360,16 +360,7 @@ extension ListView {
                     .init(majorVersion: 17, minorVersion: 0, patchVersion: 0)
                 )
 
-            /// iOS 19 status is unknown as of June 2025 but we disable it preemptively to avoid risk of
-            /// internal assertion failures.
-
-            let isIOS19_0 = ProcessInfo
-                .processInfo
-                .isOperatingSystemAtLeast(
-                    .init(majorVersion: 19, minorVersion: 0, patchVersion: 0)
-                )
-
-            return (isIOS16_4 && !isIOS16_5) || (isIOS17_0 && !isIOS19_0)
+            return (isIOS16_4 && !isIOS16_5) || isIOS17_0
         }()
         
         private static let hasFirstResponderViewProperty : Bool = {
