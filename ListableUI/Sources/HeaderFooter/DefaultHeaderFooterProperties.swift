@@ -24,12 +24,16 @@ public struct DefaultHeaderFooterProperties<ContentType:HeaderFooterContent>
     public var sizing : Sizing?
     public var layouts : HeaderFooterLayouts?
     public var onTap : HeaderFooter.OnTap?
+    public var onDisplay : HeaderFooter.OnDisplay.Callback?
+    public var onEndDisplay : HeaderFooter.OnEndDisplay.Callback?
     public var debuggingIdentifier : String?
     
     public init(
         sizing : Sizing? = nil,
         layouts : HeaderFooterLayouts? = nil,
         onTap : HeaderFooter.OnTap? = nil,
+        onDisplay : HeaderFooter.OnDisplay.Callback? = nil,
+        onEndDisplay : HeaderFooter.OnEndDisplay.Callback? = nil,
         debuggingIdentifier : String? = nil,
         
         configure : (inout Self) -> () = { _ in }
@@ -37,6 +41,8 @@ public struct DefaultHeaderFooterProperties<ContentType:HeaderFooterContent>
         self.sizing = sizing
         self.layouts = layouts
         self.onTap = onTap
+        self.onDisplay = onDisplay
+        self.onEndDisplay = onEndDisplay
         self.debuggingIdentifier = debuggingIdentifier
         
         configure(&self)

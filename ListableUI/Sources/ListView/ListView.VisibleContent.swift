@@ -21,8 +21,11 @@ extension ListView
             
             // Find which items are newly visible (or are no longer visible).
             
-            let removed = self.items.subtracting(newItems)
-            let added = newItems.subtracting(self.items)
+            let removedItems = self.items.subtracting(newItems)
+            let addedItems = newItems.subtracting(self.items)
+            
+            let removedHeaderFooters = self.headerFooters.subtracting(newHeaderFooters)
+            let addedHeaderFooters = newHeaderFooters.subtracting(self.headerFooters)
             
             // Note: We set these values _before_ we invoke `setAndPerform`,
             // incase `setAndPerform` causes an external callback to trigger
@@ -31,25 +34,33 @@ extension ListView
             self.items = newItems
             self.headerFooters = newHeaderFooters
             
-            removed.forEach {
+            removedHeaderFooters.forEach {
+                $0.headerFooter.state?.setAndPerform(isDisplayed: false)
+            }
+            
+            removedItems.forEach {
                 $0.item.setAndPerform(isDisplayed: false)
             }
             
-            added.forEach {
+            addedHeaderFooters.forEach {
+                $0.headerFooter.state?.setAndPerform(isDisplayed: true)
+            }
+            
+            addedItems.forEach {
                 $0.item.setAndPerform(isDisplayed: true)
             }
             
             // Inform any state reader callbacks of the changes.
             
-            let callStateReader = removed.isEmpty == false || added.isEmpty == false
+            let callStateReader = removedItems.isEmpty == false || addedItems.isEmpty == false
             
             if callStateReader {
                 ListStateObserver.perform(view.stateObserver.onVisibilityChanged, "Visibility Changed", with: view) { actions in
                     ListStateObserver.VisibilityChanged(
                         actions: actions,
                         positionInfo: view.scrollPositionInfo,
-                        displayed: added.map { $0.item.anyModel },
-                        endedDisplay: removed.map { $0.item.anyModel }
+                        displayed: addedItems.map { $0.item.anyModel },
+                        endedDisplay: removedItems.map { $0.item.anyModel }
                     )
                 }
             }
