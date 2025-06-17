@@ -8,13 +8,17 @@
 
 ### Changed
 
-- Blueprint dependency updated to 6.0.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [16.1.0] - 2025-06-17
+
+### Changed
+
+- Blueprint dependency updated to 6.0.
 
 # [16.0.4] - 2025-06-06
 
@@ -1172,8 +1176,9 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.4...main
-[16.0.3]: https://github.com/square/Listable/compare/16.0.4...16.0.3
+[Main]: https://github.com/square/Listable/compare/16.1.0...main
+[16.1.0]: https://github.com/square/Listable/compare/16.1.0...16.0.4
+[16.0.4]: https://github.com/square/Listable/compare/16.0.4...16.0.3
 [16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
 [16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
 [16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
