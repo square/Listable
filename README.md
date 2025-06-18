@@ -678,6 +678,23 @@ If you want to depend on bleeding-edge changes, you can add the pods to your Pod
 ## Demo Project
 If you'd like to see examples of Listable in use, clone the repo, and then run `bundle exec pod install` in the root of the repo. This will create the `Demo/Demo.xcworkspace` workspace, which you can open and run. It contains examples of various types of screens and use cases.
 
+### Tuist
+
+This project also uses [Mise](https://mise.jdx.dev/) and [Tuist](https://tuist.io/) to generate a project for local development. Follow the steps below for the recommended setup for zsh.
+
+```
+# load mise into your shell
+source ~/.zshrc
+# tell mise to trust Blueprint's config file
+mise trust
+# install dependencies
+mise install
+
+# only necessary for first setup or after changing dependencies
+tuist install --path Demo
+# generates and opens the Xcode project
+tuist generate --path Demo
+```
 
 # Other Neat Stuff
 
