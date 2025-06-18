@@ -68,3 +68,11 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Tuist
+/Derived
+/*.xcodeproj
+/*.xcworkspace
+/Demo/Derived
+/Demo/*.xcodeproj
+/Demo/*.xcworkspace
