@@ -509,7 +509,7 @@ public final class ListView : UIView
     /// A pass needs to be done to change math and offsets based on the `LayoutDirection`
     /// of the current layout.
     
-    public typealias ScrollCompletion = (Bool) -> ()
+    public typealias ScrollCompletion = ListStateObserver.OnDidEndScrollingAnimation
     
     ///
     /// Scrolls to the provided item, with the provided positioning.
@@ -520,7 +520,7 @@ public final class ListView : UIView
         item : AnyItem,
         position : ScrollPosition,
         animated : Bool = false,
-        completion: ((ListScrollPositionInfo) -> Void)? = nil
+        completion: ScrollCompletion? = nil
     ) -> Bool
     {
         self.scrollTo(
@@ -541,7 +541,7 @@ public final class ListView : UIView
         item : AnyIdentifier,
         position : ScrollPosition,
         animated : Bool = false,
-        completion: ((ListScrollPositionInfo) -> Void)? = nil
+        completion: ScrollCompletion? = nil
     ) -> Bool
     {
         // Make sure the item identifier is valid.
@@ -779,24 +779,43 @@ public final class ListView : UIView
     /// completion handler. This will execute the `completion` handler after scrolling
     /// is finished, or it will execute immediately if scrolling is not possible or if
     /// animations are disabled.
-    private func enqueueScrollHandler(reason: ScrollCompletionReason, completion: ((ListScrollPositionInfo) -> Void)?) {
+    private func enqueueScrollHandler(reason: ScrollCompletionReason, completion: ScrollCompletion?) {
         guard let completion else { return }
         switch reason {
         case .cannotScroll:
-            completion(scrollPositionInfo)
+            // Dispatch so that the completion handler executes on the next runloop
+            // execution.
+            DispatchQueue.main.async {
+                completion(ListStateObserver.DidEndScrollingAnimation(positionInfo: self.scrollPositionInfo))
+            }
         case .scrolled(let animated):
             if animated {
-                stateObserver.programmaticScrollCompletion = { [weak self] _ in
-                    guard let self = self else { return }
+                scrollCompletionHandler = completion
+            } else {
+                // Dispatch so that scrolling without an animation executes the closure
+                // on the next runloop execution, similar to scrolling with an animation.
+                DispatchQueue.main.async {
                     /// Sync the `scrollPositionInfo` before executing the handler.
                     self.performEmptyBatchUpdates()
-                    completion(self.scrollPositionInfo)
+                    completion(ListStateObserver.DidEndScrollingAnimation(positionInfo: self.scrollPositionInfo))
                 }
-            } else {
-                /// Sync the `scrollPositionInfo` before executing the handler.
-                performEmptyBatchUpdates()
-                completion(scrollPositionInfo)
             }
+        }
+    }
+    
+    /// This is used to house the completion handler of scrolling APIs. This is kept
+    /// private and separate from `ListStateObserver` and its handlers.
+    private var scrollCompletionHandler: ScrollCompletion?
+    
+    /// This is called by the `ListView.Delegate` and is used to notify the
+    /// `scrollCompletionHandler` that scrolling finished. This does nothing if there is
+    /// no handler set.
+    internal func didEndScrolling() {
+        if let handler = scrollCompletionHandler {
+            /// Sync the `scrollPositionInfo` before executing the handler.
+            performEmptyBatchUpdates()
+            handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: scrollPositionInfo))
+            scrollCompletionHandler = nil
         }
     }
     
@@ -1462,7 +1481,7 @@ public final class ListView : UIView
         to targetFrame : CGRect,
         scrollPosition : ScrollPosition,
         animated: Bool = false,
-        completion: ((ListScrollPositionInfo) -> Void)? = nil
+        completion: ScrollCompletion? = nil
     ) {
         // If the item is already visible and that's good enough, return.
 
@@ -1515,7 +1534,7 @@ public final class ListView : UIView
         }
     }
 
-    private func preparePresentationStateForScroll(to toIndexPath: IndexPath, handlerWhenFailed:((ListScrollPositionInfo) -> Void)?, scroll: @escaping () -> Void) -> Bool {
+    private func preparePresentationStateForScroll(to toIndexPath: IndexPath, handlerWhenFailed: ScrollCompletion?, scroll: @escaping () -> Void) -> Bool {
 
         // Make sure we have a last loaded index path.
 

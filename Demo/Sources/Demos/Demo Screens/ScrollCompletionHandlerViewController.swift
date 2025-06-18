@@ -81,9 +81,8 @@ class ScrollCompletionHandlerViewController : UIViewController {
                 ifAlreadyVisible: ifAlreadyVisible
             ),
             animated: animateScroll,
-            completion: { scrollPositionInfo in
-                let sortedItems = scrollPositionInfo
-                    .visibleItems
+            completion: { changes in
+                let sortedItems = changes.positionInfo.visibleItems
                     .map { "\($0.identifier) "}
                     .sorted()
                 print("Scroll completion: \(sortedItems)")

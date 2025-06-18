@@ -1037,8 +1037,8 @@ class ListViewTests: XCTestCase
                             ifAlreadyVisible: visibilityRule
                         ),
                         animated: animated,
-                        completion: {
-                            positionInfo = $0
+                        completion: { changes in
+                            positionInfo = changes.positionInfo
                             scrollExpectation.fulfill()
                         }
                     )
@@ -1046,6 +1046,109 @@ class ListViewTests: XCTestCase
                     return positionInfo
                 }
             }
+        }
+    }
+    
+    func test_rapid_scroll_to_item_completion_calls() throws {
+        
+        testControllerCase("rapid scroll calls - no animation") { viewController in
+            for index in 1...5 {
+                let completionExpectation = expectation(description: "Scroll \(index)")
+                viewController.list.scrollTo(
+                    item: TestContent.Identifier("Item 50"),
+                    position: ScrollPosition(position: .bottom),
+                    animated: false,
+                    completion: { changes in
+                        // When there is no animation, all handlers are executed after the scroll
+                        // position is updated; the target item is visible in all handlers.
+                        XCTAssertEqual(changes.positionInfo.visibleItems.count, 12)
+                        for itemNumber in 39...50 {
+                            XCTAssert(
+                                changes.positionInfo.visibleItems.contains(
+                                    ListScrollPositionInfo.VisibleItem(
+                                        identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                        percentageVisible: 1.0
+                                    )
+                                )
+                            )
+                        }
+                        completionExpectation.fulfill()
+                    }
+                )
+            }
+            waitForExpectations(timeout: 0.5)
+        }
+        
+        testControllerCase("rapid scroll calls - offscreen + animated") { viewController in
+            for index in 1...5 {
+                let completionExpectation = expectation(description: "Scroll \(index)")
+                viewController.list.scrollTo(
+                    item: TestContent.Identifier("Item 50"),
+                    position: ScrollPosition(position: .bottom),
+                    animated: true,
+                    completion: { changes in
+                        XCTAssertEqual(changes.positionInfo.visibleItems.count, 12)
+                        if index == 5 {
+                            // When scrolling to an offscreen item, the latest call will succeed;
+                            // the target item is visible.
+                            for itemNumber in 39...50 {
+                                XCTAssert(
+                                    changes.positionInfo.visibleItems.contains(
+                                        ListScrollPositionInfo.VisibleItem(
+                                            identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                            percentageVisible: 1.0
+                                        )
+                                    )
+                                )
+                            }
+                        } else {
+                            // The first 4 calls had their scrolling operation cancelled; the target
+                            // item is not visible in these handlers.
+                            for itemNumber in 1...12 {
+                                XCTAssert(
+                                    changes.positionInfo.visibleItems.contains(
+                                        ListScrollPositionInfo.VisibleItem(
+                                            identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                            percentageVisible: 1.0
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                        completionExpectation.fulfill()
+                    }
+                )
+            }
+            waitForExpectations(timeout: 0.5)
+        }
+        
+        testControllerCase("rapid scroll calls - onscreen + animated") { viewController in
+            for index in 1...5 {
+                let completionExpectation = expectation(description: "Scroll \(index)")
+                viewController.list.scrollTo(
+                    item: TestContent.Identifier("Item 2"),
+                    position: ScrollPosition(position: .centered),
+                    animated: true,
+                    completion: { changes in
+                        // When attempting to animate to an onscreen item, if the viewport cannot
+                        // be adjusted (like in this case), the callback will execute immediately
+                        // and the target item is visible in all handlers.
+                        XCTAssertEqual(changes.positionInfo.visibleItems.count, 12)
+                        for itemNumber in 1...12 {
+                            XCTAssert(
+                                changes.positionInfo.visibleItems.contains(
+                                    ListScrollPositionInfo.VisibleItem(
+                                        identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                        percentageVisible: 1.0
+                                    )
+                                )
+                            )
+                        }
+                        completionExpectation.fulfill()
+                    }
+                )
+            }
+            waitForExpectations(timeout: 0.5)
         }
     }
     
