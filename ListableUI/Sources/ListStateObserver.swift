@@ -94,7 +94,7 @@ public struct ListStateObserver {
     }
 
     private(set) var onDidEndScrollingAnimation: [OnDidEndScrollingAnimation] = []
-    
+
     //
     // MARK: Responding to Drag Begin
     //
