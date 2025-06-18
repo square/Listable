@@ -8,6 +8,7 @@
 
 import BlueprintUILists
 import BlueprintUICommonControls
+import UIKit
 
 
 final class PagedViewController : UIViewController

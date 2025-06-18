@@ -10,6 +10,7 @@ import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
 import BlueprintUILists
+import UIKit
 
 
 final class ChatDemoViewController : UIViewController {

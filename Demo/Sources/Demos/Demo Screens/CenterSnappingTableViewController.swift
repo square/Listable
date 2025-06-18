@@ -1,5 +1,6 @@
 import BlueprintUILists
 import BlueprintUICommonControls
+import UIKit
 
 final class CenterSnappingTableViewController : UIViewController
 {
