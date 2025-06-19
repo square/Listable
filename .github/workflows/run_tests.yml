@@ -9,62 +9,33 @@ on:
 
 jobs:
   spm:
-    name: Swift Package Manager
-
-    runs-on: macos-15-xlarge
-
-    steps:
-    
-      - name: Checkout repository
-        uses: actions/checkout@v1
-
-      - name: Read env
-        run: cat .github/workflows/env.properties >> $GITHUB_ENV
-        
-      - name: Switch to Xcode ${{ env.xcode_version }}
-        run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          # Uses version specified in .ruby_version
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
-      - name: Install xcodes
-        run: brew install aria2 xcodesorg/made/xcodes
-
-      - name: Install iOS 17.2
-        run: sudo xcodes runtimes install "iOS 17.2"
-
-      # Build
-
-      - name: Build
-        run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2,name=iPhone SE (3rd generation)" -sdk iphonesimulator build
-
-  test:
-    name: "iOS ${{ matrix.sdk }}"
+    name: Build & Test All
 
     runs-on: macos-15-xlarge
 
     strategy:
+      fail-fast: false # Don’t fail-fast so that we get all snapshot test changes
       matrix:
         include:
           - sdk: "15.4"
-            simulator_name: iPhone SE (3rd generation)
+            simctl_runtime: "com.apple.CoreSimulator.SimRuntime.iOS-15-4"
             installation_required: true
 
           - sdk: "16.2"
-            simulator_name: iPhone SE (3rd generation)
+            simctl_runtime: "com.apple.CoreSimulator.SimRuntime.iOS-16-2"
             installation_required: true
 
           - sdk: "17.2"
-            simulator_name: iPhone SE (3rd generation)
+            simctl_runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-2"
             installation_required: true
 
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
+
+      - name: Set up Mise
+        uses: jdx/mise-action@v2
 
       - name: Read env
         run: cat .github/workflows/env.properties >> $GITHUB_ENV
@@ -72,35 +43,31 @@ jobs:
       - name: Switch to Xcode ${{ env.xcode_version }}
         run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          # Uses version specified in .ruby_version
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-
       - name: Install xcodes
-        if: ${{ matrix.installation_required }}
         run: brew install aria2 xcodesorg/made/xcodes
 
       - name: Install iOS ${{ matrix.sdk }}
         if: ${{ matrix.installation_required }}
         run: sudo xcodes runtimes install "iOS ${{ matrix.sdk }}"
 
-      # Build Caching
-
-      - name: Cache Cocoapods
-        uses: actions/cache@v4
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
-
-      # Install & Build
-
-      - name: Pod Install
-        run: bundle exec pod install --repo-update
-
-      - name: Build & Test
+      - name: Build
         run: |
-          xcodebuild -workspace Demo/Demo.xcworkspace -scheme "Demo" -destination "platform=iOS Simulator,OS=${{ matrix.sdk }},name=${{ matrix.simulator_name }}" build test
+          xcodebuild \
+            -scheme "Listable-Package" \
+            -destination "platform=${{ env.TUIST_TEST_PLATFORM }} Simulator,OS=${{ matrix.sdk }},name=${{ env.TUIST_TEST_DEVICE }}" \
+            -sdk iphonesimulator build
+
+      - name: Install Tuist dependencies for Demo
+        run: tuist install --path Demo
+
+      - name: Build & Test Demo
+        run: tuist test --path Demo --os ${{ matrix.sdk }} Demo
+      
+      - name: Build & Test Snapshot Package (iOS Simulator)
+        run: |
+          cd "Internal Pods/Snapshot"
+          xcodebuild \
+            -scheme Snapshot \
+            -destination "platform=${{ env.TUIST_TEST_PLATFORM }} Simulator,OS=${{ matrix.sdk }},name=${{ env.TUIST_TEST_DEVICE }}" \
+            -enableCodeCoverage YES \
+            build test
