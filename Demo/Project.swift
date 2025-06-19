@@ -27,15 +27,6 @@ let project = Project(
             ]
         ),
         .target(
-            name: "EnglishDictionary",
-            destinations: .iOS,
-            product: .framework,
-            bundleId: "com.listable.englishdictionary",
-            deploymentTargets: .iOS("15.0"),
-            sources: ["../Internal Pods/EnglishDictionary/Sources/**"],
-            resources: ["../Internal Pods/EnglishDictionary/Resources/**"]
-        ),
-        .target(
             name: "DemoTests",
             destinations: .iOS,
             product: .unitTests,
@@ -45,6 +36,15 @@ let project = Project(
             dependencies: [
                 .target(name: "Demo")
             ]
-        )
+        ),
+        .target(
+            name: "EnglishDictionary",
+            destinations: .iOS,
+            product: .framework,
+            bundleId: "com.listable.englishdictionary",
+            deploymentTargets: .iOS("15.0"),
+            sources: ["../Internal Pods/EnglishDictionary/Sources/**"],
+            resources: ["../Internal Pods/EnglishDictionary/Resources/**"]
+        ),
     ]
 )
