@@ -5,7 +5,7 @@ let project = Project(
     name: "Demo",
     settings: .settings(base: ["ENABLE_MODULE_VERIFIER": "YES"]),
     targets: [
-        .target(
+        .app(
             name: "Demo",
             destinations: .iOS,
             product: .app,
@@ -27,15 +27,6 @@ let project = Project(
             ]
         ),
         .target(
-            name: "EnglishDictionary",
-            destinations: .iOS,
-            product: .framework,
-            bundleId: "com.listable.englishdictionary",
-            deploymentTargets: .iOS("15.0"),
-            sources: ["../Internal Pods/EnglishDictionary/Sources/**"],
-            resources: ["../Internal Pods/EnglishDictionary/Resources/**"]
-        ),
-        .target(
             name: "DemoTests",
             destinations: .iOS,
             product: .unitTests,
@@ -46,5 +37,17 @@ let project = Project(
                 .target(name: "Demo")
             ]
         )
+        .unitTest(
+            for: "Demo"
+        ),
+        .target(
+            name: "EnglishDictionary",
+            destinations: .iOS,
+            product: .framework,
+            bundleId: "com.listable.englishdictionary",
+            deploymentTargets: .iOS("15.0"),
+            sources: ["../Internal Pods/EnglishDictionary/Sources/**"],
+            resources: ["../Internal Pods/EnglishDictionary/Resources/**"]
+        ),
     ]
 )

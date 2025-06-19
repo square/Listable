@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: xcodebuild -scheme "Listable-Package" -destination "platform=iOS Simulator,OS=17.2,name=iPhone SE (3rd generation)" -sdk iphonesimulator build
 
-  test:
+  test-demo:
     name: "iOS ${{ matrix.sdk }}"
 
     runs-on: macos-15-xlarge
@@ -101,3 +101,19 @@ jobs:
 
       - name: Build & Test
         run: tuist test --path Demo --os ${{ matrix.sdk }} DemoTests
+
+  test-snapshot:
+    name: "Snapshot ${{ matrix.sdk }}"
+
+    runs-on: macos-15-xlarge
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build & Test Snapshot Package (iOS Simulator)
+        run: |
+          cd "Internal Pods/Snapshot"
+          xcodebuild \
+            -scheme Snapshot \
+            -destination "platform=iOS Simulator,OS=${{ matrix.sdk }},name=${{ TUIST_TEST_DEVICE }}" \
+            -enableCodeCoverage YES \
+            build test
