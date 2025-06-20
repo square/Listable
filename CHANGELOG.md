@@ -14,6 +14,8 @@
 
 ### Internal
 
+- Local development environment now supports Tuist.
+
 # Past Releases
 
 # [16.1.0] - 2025-06-17
