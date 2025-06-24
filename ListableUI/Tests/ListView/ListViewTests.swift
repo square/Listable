@@ -1152,6 +1152,47 @@ class ListViewTests: XCTestCase
         }
     }
     
+    /// This test simulates multiple queued completion handlers.
+    func test_multiple_queued_scroll_handlers() throws {
+        testControllerCase("multiple handlers") { viewController in
+            // Simulate 4 handlers queued up.
+            for index in 1...4 {
+                let completionExpectation = expectation(description: "Scroll \(index)")
+                viewController.list.scrollCompletionHandlers.append { changes in
+                    assertVisibleItems(changes.positionInfo.visibleItems)
+                    completionExpectation.fulfill()
+                }
+            }
+            
+            // Initiate a scroll that will execute all handlers when completed.
+            let completionExpectation = expectation(description: "Scroll 5")
+            viewController.list.scrollTo(
+                item: TestContent.Identifier("Item 50"),
+                position: ScrollPosition(position: .top),
+                animated: true,
+                completion: { changes in
+                    assertVisibleItems(changes.positionInfo.visibleItems)
+                    completionExpectation.fulfill()
+                }
+            )
+            waitForExpectations(timeout: 0.5)
+        }
+        
+        func assertVisibleItems(_ visibleItems: Set<ListScrollPositionInfo.VisibleItem>) {
+            XCTAssertEqual(visibleItems.count, 12)
+            for itemNumber in 50...61 {
+                XCTAssert(
+                    visibleItems.contains(
+                        ListScrollPositionInfo.VisibleItem(
+                            identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                            percentageVisible: 1.0
+                        )
+                    )
+                )
+            }
+        }
+    }
+    
     /// A helper function for a test case that creates and presents a `ViewController`
     /// with a list of 100 rows.
     /// - Parameters:

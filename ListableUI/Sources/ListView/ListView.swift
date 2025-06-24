@@ -790,7 +790,7 @@ public final class ListView : UIView
             }
         case .scrolled(let animated):
             if animated {
-                scrollCompletionHandler = completion
+                scrollCompletionHandlers.append(completion)
             } else {
                 // Dispatch so that scrolling without an animation executes the closure
                 // on the next runloop execution, similar to scrolling with an animation.
@@ -803,19 +803,31 @@ public final class ListView : UIView
         }
     }
     
-    /// This is used to house the completion handler of scrolling APIs. This is kept
-    /// private and separate from `ListStateObserver` and its handlers.
-    private var scrollCompletionHandler: ScrollCompletion?
+    /// This is used to house the completion handlers of scrolling APIs. This is kept
+    /// internal and separate from `ListStateObserver` and its handlers.
+    internal var scrollCompletionHandlers: [ScrollCompletion] = []
     
     /// This is called by the `ListView.Delegate` and is used to notify the
     /// `scrollCompletionHandler` that scrolling finished. This does nothing if there is
     /// no handler set.
     internal func didEndScrolling() {
-        if let handler = scrollCompletionHandler {
-            /// Sync the `scrollPositionInfo` before executing the handler.
+        if scrollCompletionHandlers.count > 0 {
+            let handlers = scrollCompletionHandlers
+            scrollCompletionHandlers.removeAll()
+            
+            /// Sync the `scrollPositionInfo` before executing the handlers.
+            ///
+            /// Calling `performEmptyBatchUpdates()` will synchronously call the
+            /// `CollectionViewLayout`'s `prepare()` function. That will update the
+            /// list's `visibleContent`, which `scrollPositionInfo` uses to accurately
+            /// find the visible items.
+            ///
+            /// ListViewTests has unit tests to assert that the handler's items are correct.
             performEmptyBatchUpdates()
-            handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: scrollPositionInfo))
-            scrollCompletionHandler = nil
+            let positionInfo = scrollPositionInfo
+            handlers.forEach { handler in
+                handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: positionInfo))
+            }
         }
     }
     
