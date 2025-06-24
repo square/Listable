@@ -547,7 +547,7 @@ public final class ListView : UIView
         // Make sure the item identifier is valid.
 
         guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
-            enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+            handleScrollCompletion(reason: .cannotScroll, completion: completion)
             return false
         }
 
@@ -560,7 +560,7 @@ public final class ListView : UIView
             /// cases, we need to re-query our section index in case it changed or is no longer valid.
             
             guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
-                self.enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+                self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
                 return
             }
             
@@ -571,7 +571,7 @@ public final class ListView : UIView
             // If the item is already visible and that's good enough, return.
 
             if isAlreadyVisible && position.ifAlreadyVisible == .doNothing {
-                self.enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+                self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
                 return
             }
 
@@ -612,9 +612,9 @@ public final class ListView : UIView
                         contentSize: self.contentSize
                     )
                     if willScroll {
-                        self.enqueueScrollHandler(reason: .scrolled(animated: animated), completion: completion)
+                        self.handleScrollCompletion(reason: .scrolled(animated: animated), completion: completion)
                     } else {
-                        self.enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+                        self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
                     }
                 }
             }
@@ -779,7 +779,7 @@ public final class ListView : UIView
     /// completion handler. This will execute the `completion` handler after scrolling
     /// is finished, or it will execute immediately if scrolling is not possible or if
     /// animations are disabled.
-    private func enqueueScrollHandler(reason: ScrollCompletionReason, completion: ScrollCompletion?) {
+    private func handleScrollCompletion(reason: ScrollCompletionReason, completion: ScrollCompletion?) {
         guard let completion else { return }
         switch reason {
         case .cannotScroll:
@@ -1487,7 +1487,7 @@ public final class ListView : UIView
 
         let isAlreadyVisible = collectionView.visibleContentFrame.contains(targetFrame)
         if isAlreadyVisible && scrollPosition.ifAlreadyVisible == .doNothing {
-            enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+            handleScrollCompletion(reason: .cannotScroll, completion: completion)
             return
         }
 
@@ -1528,9 +1528,9 @@ public final class ListView : UIView
         )
         if roundedCurrentOffset != roundedResultOffset {
             collectionView.setContentOffset(resultOffset, animated: shouldAnimate)
-            enqueueScrollHandler(reason: .scrolled(animated: shouldAnimate), completion: completion)
+            handleScrollCompletion(reason: .scrolled(animated: shouldAnimate), completion: completion)
         } else {
-            enqueueScrollHandler(reason: .cannotScroll, completion: completion)
+            handleScrollCompletion(reason: .cannotScroll, completion: completion)
         }
     }
 
@@ -1539,7 +1539,7 @@ public final class ListView : UIView
         // Make sure we have a last loaded index path.
 
         guard let lastLoadedIndexPath = self.storage.presentationState.lastIndexPath else {
-            enqueueScrollHandler(reason: .cannotScroll, completion: handlerWhenFailed)
+            handleScrollCompletion(reason: .cannotScroll, completion: handlerWhenFailed)
             return false
         }
 
