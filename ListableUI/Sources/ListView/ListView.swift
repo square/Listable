@@ -841,64 +841,46 @@ public final class ListView : UIView
         viewport: CGRect,
         contentSize: CGSize
     ) -> Bool {
-        func roundRect(_ rect: CGRect) -> CGRect {
-            CGRect(
-                x: round(rect.minX),
-                y: round(rect.minY),
-                width: round(rect.width),
-                height: round(rect.height)
-            )
+        let distanceToScroll: CGFloat
+        switch scrollPosition {
+        case .top:
+            distanceToScroll = abs(itemFrame.minY - viewport.minY)
+        case .bottom:
+            distanceToScroll = abs(itemFrame.maxY - viewport.maxY)
+        case .centeredVertically:
+            distanceToScroll = abs(itemFrame.midY - viewport.midY)
+        case .left:
+            distanceToScroll = abs(itemFrame.minX - viewport.minX)
+        case .right:
+            distanceToScroll = abs(itemFrame.maxX - viewport.maxX)
+        case .centeredHorizontally:
+            distanceToScroll = abs(itemFrame.midX - viewport.midX)
+        default:
+            return false
         }
-        let viewport = roundRect(viewport)
-        let itemFrame = roundRect(itemFrame)
-        let isAlreadyVisible = viewport.contains(itemFrame)
-        if isAlreadyVisible {
-            let canScrollUp = viewport.minY > 0
-            let canScrollDown = viewport.maxY < contentSize.height
-            let canScrollLeft = viewport.minX > 0
-            let canScrollRight = viewport.maxX < contentSize.width
-            
-            // If the item is visible, determine if it's already in the expected position.
-            switch scrollPosition {
-            case .top:
-                if itemFrame.minY == viewport.minY || !canScrollDown {
-                    return false
-                }
-            case .bottom:
-                if itemFrame.maxY == viewport.maxY || !canScrollUp {
-                    return false
-                }
-            case .centeredVertically:
-                if round(itemFrame.midY) == round(viewport.midY) ||
-                    (itemFrame.midY < viewport.midY && !canScrollUp) ||
-                    (itemFrame.midY > viewport.midY && !canScrollDown) {
-                    return false
-                }
-            case .left:
-                if itemFrame.minX == viewport.minX || !canScrollRight {
-                    return false
-                }
-            case .right:
-                if itemFrame.maxX == viewport.maxX || !canScrollLeft {
-                    return false
-                }
-            case .centeredHorizontally:
-                if round(itemFrame.midX) == round(viewport.midX) ||
-                    (itemFrame.midX < viewport.midX && !canScrollLeft) ||
-                    (itemFrame.midX > viewport.midX && !canScrollRight) {
-                    return false
-                }
-            default:
-                // Catch-all for unknown/future scroll positions. Returning false will
-                // eagerly execute the completion handler. The item is already visible
-                // in this case.
-                return false
-            }
-        }
+        guard round(distanceToScroll) > 0 else { return false }
         
-        // If the item wasn't in the desired position, but there is room to adjust
-        // the content offset, then the collection view will be scrolled.
-        return true
+        let canScrollUp = round(viewport.minY) > 0
+        let canScrollLeft = round(viewport.minX) > 0
+        let canScrollDown = round(viewport.maxY - contentSize.height) < 0
+        let canScrollRight = round(viewport.maxX - contentSize.width) < 0
+        
+        switch scrollPosition {
+        case .top:
+            return itemFrame.minY > viewport.minY ? canScrollDown : canScrollUp
+        case .bottom:
+            return itemFrame.maxY > viewport.maxY ? canScrollDown : canScrollUp
+        case .centeredVertically:
+            return itemFrame.midY > viewport.midY ? canScrollDown : canScrollUp
+        case .left:
+            return itemFrame.minX > viewport.minX ? canScrollRight : canScrollLeft
+        case .right:
+            return itemFrame.maxX > viewport.maxX ? canScrollRight : canScrollLeft
+        case .centeredHorizontally:
+            return itemFrame.midX > viewport.midX ? canScrollRight : canScrollLeft
+        default:
+            return false
+        }
     }
     
     //

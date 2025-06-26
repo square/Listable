@@ -1056,7 +1056,7 @@ class ListViewTests: XCTestCase
                 let completionExpectation = expectation(description: "Scroll \(index)")
                 viewController.list.scrollTo(
                     item: TestContent.Identifier("Item 50"),
-                    position: ScrollPosition(position: .bottom),
+                    position: ScrollPosition(position: .bottom, ifAlreadyVisible: .scrollToPosition),
                     animated: false,
                     completion: { changes in
                         // When there is no animation, all handlers are executed after the scroll
@@ -1084,7 +1084,7 @@ class ListViewTests: XCTestCase
                 let completionExpectation = expectation(description: "Scroll \(index)")
                 viewController.list.scrollTo(
                     item: TestContent.Identifier("Item 50"),
-                    position: ScrollPosition(position: .bottom),
+                    position: ScrollPosition(position: .bottom, ifAlreadyVisible: .scrollToPosition),
                     animated: true,
                     completion: { changes in
                         XCTAssertEqual(changes.positionInfo.visibleItems.count, 12)
@@ -1127,7 +1127,7 @@ class ListViewTests: XCTestCase
                 let completionExpectation = expectation(description: "Scroll \(index)")
                 viewController.list.scrollTo(
                     item: TestContent.Identifier("Item 2"),
-                    position: ScrollPosition(position: .centered),
+                    position: ScrollPosition(position: .centered, ifAlreadyVisible: .scrollToPosition),
                     animated: true,
                     completion: { changes in
                         // When attempting to animate to an onscreen item, if the viewport cannot
@@ -1152,6 +1152,44 @@ class ListViewTests: XCTestCase
         }
     }
     
+    func test_scroll_to_item_completion_with_fractional_offset() throws {
+        
+        try testControllerCase("can scroll up with fractional offset") { viewController in
+            var contentOffset = viewController.list.collectionView.contentOffset
+            contentOffset.y += 0.5
+            viewController.list.collectionView.setContentOffset(contentOffset, animated: false)
+            
+            let indexPath = try XCTUnwrap(viewController.list.storage.allContent.firstIndexPathForItem(with: TestContent.Identifier("Item 1")))
+            XCTAssertTrue(
+                viewController.list.willScroll(
+                    for: .bottom,
+                    itemFrame: viewController.list.collectionViewLayout.frameForItem(at: indexPath),
+                    viewport: viewController.list.collectionView.visibleContentFrame,
+                    contentSize: viewController.list.contentSize
+                )
+            )
+
+            let completionExpectation = expectation(description: "Completion handler executed")
+            viewController.list.scrollTo(
+                item: TestContent.Identifier("Item 1"),
+                position: ScrollPosition(position: .bottom, ifAlreadyVisible: .scrollToPosition),
+                animated: true,
+                completion: { changes in
+                    XCTAssert(
+                        changes.positionInfo.visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Item 1"),
+                                percentageVisible: 1.0
+                            )
+                        )
+                    )
+                    completionExpectation.fulfill()
+                }
+            )
+            waitForExpectations(timeout: 0.5)
+        }
+    }
+    
     /// This test simulates multiple queued completion handlers.
     func test_multiple_queued_scroll_handlers() throws {
         testControllerCase("multiple handlers") { viewController in
@@ -1168,7 +1206,7 @@ class ListViewTests: XCTestCase
             let completionExpectation = expectation(description: "Scroll 5")
             viewController.list.scrollTo(
                 item: TestContent.Identifier("Item 50"),
-                position: ScrollPosition(position: .top),
+                position: ScrollPosition(position: .top, ifAlreadyVisible: .scrollToPosition),
                 animated: true,
                 completion: { changes in
                     assertVisibleItems(changes.positionInfo.visibleItems)
