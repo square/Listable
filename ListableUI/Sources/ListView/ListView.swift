@@ -795,7 +795,7 @@ public final class ListView : UIView
                 // Dispatch so that scrolling without an animation executes the closure
                 // on the next runloop execution, similar to scrolling with an animation.
                 DispatchQueue.main.async {
-                    /// Sync the `scrollPositionInfo` before executing the handler.
+                    // Sync the `scrollPositionInfo` before executing the handler.
                     self.performEmptyBatchUpdates()
                     completion(ListStateObserver.DidEndScrollingAnimation(positionInfo: self.scrollPositionInfo))
                 }
@@ -811,23 +811,27 @@ public final class ListView : UIView
     /// `scrollCompletionHandler` that scrolling finished. This does nothing if there is
     /// no handler set.
     internal func didEndScrolling() {
-        if scrollCompletionHandlers.count > 0 {
-            let handlers = scrollCompletionHandlers
-            scrollCompletionHandlers.removeAll()
-            
-            /// Sync the `scrollPositionInfo` before executing the handlers.
-            ///
-            /// Calling `performEmptyBatchUpdates()` will synchronously call the
-            /// `CollectionViewLayout`'s `prepare()` function. That will update the
-            /// list's `visibleContent`, which `scrollPositionInfo` uses to accurately
-            /// find the visible items.
-            ///
-            /// ListViewTests has unit tests to assert that the handler's items are correct.
-            performEmptyBatchUpdates()
-            let positionInfo = scrollPositionInfo
-            handlers.forEach { handler in
-                handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: positionInfo))
-            }
+        
+        guard scrollCompletionHandlers.isEmpty == false else { return }
+        let handlers = scrollCompletionHandlers
+        
+        // Proactively remove these handlers before executing them. This avoids a
+        // potential edge case where clients have synchronous code in a handler that
+        // makes another call to `scrollTo(...)` with a completion handler.
+        scrollCompletionHandlers.removeAll()
+        
+        // Sync the `scrollPositionInfo` before executing the handlers.
+        //
+        // Calling `performEmptyBatchUpdates()` will synchronously call the
+        // `CollectionViewLayout`'s `prepare()` function. That will update the
+        // list's `visibleContent`, which `scrollPositionInfo` uses to accurately
+        // find the visible items.
+        //
+        // ListViewTests has unit tests to assert that the handler's items are correct.
+        performEmptyBatchUpdates()
+        let positionInfo = scrollPositionInfo
+        handlers.forEach { handler in
+            handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: positionInfo))
         }
     }
     
