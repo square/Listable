@@ -858,12 +858,15 @@ public final class ListView : UIView
         default:
             return false
         }
-        guard round(distanceToScroll) > 0 else { return false }
         
-        let canScrollUp = round(viewport.minY) > 0
-        let canScrollLeft = round(viewport.minX) > 0
-        let canScrollDown = round(viewport.maxY - contentSize.height) < 0
-        let canScrollRight = round(viewport.maxX - contentSize.width) < 0
+        // UICollectionView will not scroll when the distance is under 0.5. Because
+        // of this, we floor/ceil the distance calculations to eagerly return false
+        // for floats under 1.0.
+        guard floor(distanceToScroll) > 0 else { return false }
+        let canScrollUp = floor(viewport.minY) > 0
+        let canScrollLeft = floor(viewport.minX) > 0
+        let canScrollDown = ceil(viewport.maxY - contentSize.height) < 0
+        let canScrollRight = ceil(viewport.maxX - contentSize.width) < 0
         
         switch scrollPosition {
         case .top:

@@ -1154,13 +1154,14 @@ class ListViewTests: XCTestCase
     
     func test_scroll_to_item_completion_with_fractional_offset() throws {
         
-        try testControllerCase("can scroll up with fractional offset") { viewController in
+        try testControllerCase("scroll up with fractional offset/overhang") { viewController in
             var contentOffset = viewController.list.collectionView.contentOffset
             contentOffset.y += 0.5
             viewController.list.collectionView.setContentOffset(contentOffset, animated: false)
             
             let indexPath = try XCTUnwrap(viewController.list.storage.allContent.firstIndexPathForItem(with: TestContent.Identifier("Item 1")))
-            XCTAssertTrue(
+            // Movement less than 1.0 pts eagerly executes the completion handler.
+            XCTAssertFalse(
                 viewController.list.willScroll(
                     for: .bottom,
                     itemFrame: viewController.list.collectionViewLayout.frameForItem(at: indexPath),
