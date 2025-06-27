@@ -10,6 +10,7 @@ import ListableUI
 
 import BlueprintUILists
 import BlueprintUICommonControls
+import UIKit
 
 
 final class CarouselLayoutViewController : ListViewController {
