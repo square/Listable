@@ -57,6 +57,7 @@
 		8ECEBF6228B7E4C200ECEC56 /* CenterSnappingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ECEBF6128B7E4C200ECEC56 /* CenterSnappingTableViewController.swift */; };
 		B223A33A769988911ED5C0E1 /* Pods_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C03134338F55F7FD12551D /* Pods_Demo.framework */; };
 		CE03D84F2D88584E009F922B /* PeekingPagedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE03D84E2D88584E009F922B /* PeekingPagedViewController.swift */; };
+		CEA9CB9B2E01AC7C00387CAB /* ScrollCompletionHandlerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA9CB9A2E01AC7C00387CAB /* ScrollCompletionHandlerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +118,7 @@
 		C55FB4CC847A4E4F271441F7 /* Pods-Test Targets.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test Targets.debug.xcconfig"; path = "Target Support Files/Pods-Test Targets/Pods-Test Targets.debug.xcconfig"; sourceTree = "<group>"; };
 		C9EC890C0D683F6A704AB9ED /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		CE03D84E2D88584E009F922B /* PeekingPagedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingPagedViewController.swift; sourceTree = "<group>"; };
+		CEA9CB9A2E01AC7C00387CAB /* ScrollCompletionHandlerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollCompletionHandlerViewController.swift; sourceTree = "<group>"; };
 		CF78F98F7ED38C2DC8078110 /* Pods_Test_Targets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Test_Targets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0E11D5AA6E2508505BEE4FC /* Pods-Test Targets.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test Targets.release.xcconfig"; path = "Target Support Files/Pods-Test Targets/Pods-Test Targets.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -161,6 +163,7 @@
 				0AA4D9B4248064A300CF95A5 /* AutoScrollingViewController.swift */,
 				2B5691392846737C00E575BE /* AutoScrollingViewController2.swift */,
 				2BCF36742DC29E0600C4D479 /* AutoScrollingViewController3.swift */,
+				CEA9CB9A2E01AC7C00387CAB /* ScrollCompletionHandlerViewController.swift */,
 				0AA4D9AC248064A300CF95A5 /* BlueprintListDemoViewController.swift */,
 				8ECEBF6128B7E4C200ECEC56 /* CenterSnappingTableViewController.swift */,
 				0AA4D9B2248064A300CF95A5 /* CollectionViewAppearance.swift */,
@@ -516,6 +519,7 @@
 				0AA4D9BA248064A300CF95A5 /* SystemFlowLayoutViewController.swift in Sources */,
 				0AC2A1962489F93E00779459 /* PagedViewController.swift in Sources */,
 				0AA4D9C5248064A300CF95A5 /* AutoScrollingViewController.swift in Sources */,
+				CEA9CB9B2E01AC7C00387CAB /* ScrollCompletionHandlerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
