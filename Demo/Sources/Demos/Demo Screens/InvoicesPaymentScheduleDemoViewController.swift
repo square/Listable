@@ -244,7 +244,7 @@ fileprivate struct ViewData : Equatable
 }
 
 
-fileprivate struct ToggleRow : BlueprintItemContent
+fileprivate struct ToggleRow : BlueprintItemContent, KeyPathLayoutEquivalent
 {
     var content : Content
     var onToggle : (Bool) -> ()
@@ -273,8 +273,8 @@ fileprivate struct ToggleRow : BlueprintItemContent
         self.content.text
     }
     
-    func isEquivalent(to other: ToggleRow) -> Bool {
-        self.content == other.content
+    static var isEquivalent: KeyPaths {
+        \.content
     }
 }
 
@@ -324,13 +324,12 @@ fileprivate struct SegmentedControlRow : BlueprintItemContent
         self.id
     }
     
-    func isEquivalent(to other: SegmentedControlRow) -> Bool
-    {
+    func isEquivalent(to other: SegmentedControlRow) -> Bool {
         true
     }
 }
 
-fileprivate struct AmountRow : BlueprintItemContent
+fileprivate struct AmountRow : BlueprintItemContent, KeyPathLayoutEquivalent
 {
     var content : Content
     
@@ -389,14 +388,12 @@ fileprivate struct AmountRow : BlueprintItemContent
         self.content.title
     }
     
-    func isEquivalent(to other: AmountRow) -> Bool
-    {
-        return self.content == other.content
+    static var isEquivalent: KeyPaths {
+        \.content
     }
-    
 }
 
-fileprivate struct ButtonRow : BlueprintItemContent
+fileprivate struct ButtonRow : BlueprintItemContent, KeyPathLayoutEquivalent
 {
     var text : String
     var onTap : () -> ()
@@ -410,8 +407,7 @@ fileprivate struct ButtonRow : BlueprintItemContent
         self.text
     }
     
-    func isEquivalent(to other: ButtonRow) -> Bool
-    {
-        return self.text == other.text
+    static var isEquivalent: KeyPaths {
+        \.text
     }
 }

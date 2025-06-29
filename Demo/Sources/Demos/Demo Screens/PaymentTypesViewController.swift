@@ -262,7 +262,7 @@ fileprivate struct EmptyRow : BlueprintItemContent, Equatable {
     }
 }
 
-fileprivate struct PaymentTypeRow : BlueprintItemContent {
+fileprivate struct PaymentTypeRow : BlueprintItemContent, KeyPathLayoutEquivalent {
     
     var type : PaymentType
     
@@ -315,8 +315,8 @@ fileprivate struct PaymentTypeRow : BlueprintItemContent {
         )
     }
     
-    func isEquivalent(to other: PaymentTypeRow) -> Bool {
-        self.type == other.type
+    static var isEquivalent: KeyPaths {
+        \.type
     }
 }
 

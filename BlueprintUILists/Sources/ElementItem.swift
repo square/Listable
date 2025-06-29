@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  ElementItem.swift
 //  BlueprintUILists
 //
 //  Created by Kyle Van Essen on 9/10/20.
@@ -9,6 +9,8 @@ import ListableUI
 import BlueprintUI
 
 
+///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.listItem(...)` instead.
 ///
 /// Provides a way to create an `Item` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintItemContent` struct.
@@ -68,6 +70,8 @@ public func ElementItem<Represented, IdentifierValue:Hashable>(
 
 
 ///
+/// ⚠️ This method is soft-deprecated! Consider using `myElement.listItem(...)` instead.
+/// 
 /// Provides a way to create an `Item` for your Blueprint elements without
 /// requiring the creation of a new `BlueprintItemContent` struct.
 ///

@@ -4,9 +4,48 @@
 
 ### Added
 
+- Adding Blueprint Elements to your list content has become easier: Just add them directly! Elements just need to to conform to `Equatable` or `LayoutEquivalent`. If you need more advanced behaviors such as backgrounds, etc, you are encouraged to continue to create content types which conforms `BlueprintItemContent` or `BlueprintHeaderFooterContent` . The `ElementItem` and `ElementHeaderFooter` APIs will be deprecated in a future release, and are now soft-deprecated.
+
+    ```swift
+    Section("an id") {
+        MyContent() // Regular ItemContent
+    
+        MyElement() // A Blueprint Element
+        AnotherElement() // A Blueprint Element
+        AnotherElement()
+            .listItem(id: "my-specified-id") { item in
+                item.insertAndRemoveAnimations = .scaleUp
+            }
+    }
+    ```
+    
+- Added `ListableOptionalBuilder`, a result builder for single-value results. This is used for header and footer builders.
+
+- Introduced `KeyPathLayoutEquivalent`, an easier way to write `isEquivalent` implementations using just key paths:
+
+    ```swift
+    struct MyValue : KeyPathLayoutEquivalent {
+        
+        var name : String
+        var age : Int
+        var birthdate : Date
+        var nonCompared : Bool
+        
+        static var isEquivalent: KeyPaths {
+            \.name
+            \.age
+            \.birthdate
+        }
+    }    
+    ```
+
 ### Removed
 
 ### Changed
+
+- Definition of `isEquivalent(to:)` has been moved to `LayoutEquivalent`.
+
+- The `ListableBuilder` result builder is now `ListableArrayBuilder`.
 
 ### Misc
 

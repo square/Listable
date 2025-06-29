@@ -1,5 +1,5 @@
 //
-//  ListableBuilder.swift
+//  ListableArrayBuilder.swift
 //  ListableUI
 //
 //  Created by Kyle Van Essen on 6/10/21.
@@ -11,7 +11,7 @@
 /// You provide a result builder in an API by specifying it as a method parameter, like so:
 ///
 /// ```
-/// init(@ListableBuilder<SomeContent> contents : () -> [SomeContent]) {
+/// init(@ListableArrayBuilder<SomeContent> contents : () -> [SomeContent]) {
 ///     self.contents = contents()
 /// }
 /// ```
@@ -25,7 +25,7 @@
 /// ### Note
 /// Most comments on methods come from the result builders SE proposal.
 ///
-@resultBuilder public enum ListableBuilder<ContentType> {
+@resultBuilder public enum ListableArrayBuilder<ContentType> {
     
     /// The type of individual statement expressions in the transformed function.
     public typealias Expression = ContentType
@@ -83,6 +83,49 @@
 
     /// If declared, this will be called on the partial result from the outermost block statement to produce the final returned result.
     public static func buildFinalResult(_ component: Component) -> FinalResult {
+        component
+    }
+}
+
+
+///
+/// A result builder which can be used to provide a SwiftUI-like DSL for building a single item.
+///
+/// You provide a result builder in an API by specifying it as a method parameter, like so:
+///
+/// ```
+/// init(@ListableOptionalBuilder<SomeContent> thing : () -> SomeContent?) {
+///     self.thing = thing()
+/// }
+/// ```
+///
+/// ## Links & Videos
+/// https://github.com/apple/swift-evolution/blob/main/proposals/0289-result-builders.md
+/// https://developer.apple.com/videos/play/wwdc2021/10253/
+/// https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/
+/// https://www.avanderlee.com/swift/result-builders/
+///
+@resultBuilder public enum ListableOptionalBuilder<ContentType> {
+    
+    typealias Component = ContentType?
+    
+    public static func buildBlock() -> ContentType? {
+        nil
+    }
+
+    public static func buildBlock(_ content: ContentType?) -> ContentType? {
+        content
+    }
+    
+    public static func buildOptional(_ component: ContentType??) -> ContentType? {
+        component ?? nil
+    }
+
+    public static func buildEither(first component: ContentType?) -> ContentType? {
+        component
+    }
+
+    public static func buildEither(second component: ContentType?) -> ContentType? {
         component
     }
 }

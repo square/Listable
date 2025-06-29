@@ -283,7 +283,7 @@ import UIKit
     /// }
     /// ```
     public mutating func add(
-        @ListableBuilder<Section> sections : () -> [Section]
+        @ListableArrayBuilder<Section> sections : () -> [Section]
     ) {
         self.content.sections += sections()
     }

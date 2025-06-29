@@ -44,14 +44,8 @@ public typealias FooterContent = HeaderFooterContent
 /// z-Index 2) `PressedBackgroundView` (Only if the header/footer is pressed, eg if the wrapping `HeaderFooter` has an `onTap` handler.)
 /// z-Index 1) `BackgroundView`
 ///
-public protocol HeaderFooterContent : AnyHeaderFooterConvertible
+public protocol HeaderFooterContent : LayoutEquivalent, AnyHeaderFooterConvertible
 {
-    //
-    // MARK: Tracking Changes
-    //
-    
-    func isEquivalent(to other : Self) -> Bool
-    
     //
     // MARK: Default Properties
     //
@@ -215,15 +209,8 @@ public extension HeaderFooterContent {
     func asAnyHeaderFooter() -> AnyHeaderFooter {
         HeaderFooter(self)
     }
-}
-
-
-public extension HeaderFooterContent where Self:Equatable
-{
-    /// If your `HeaderFooterContent` is `Equatable`, `isEquivalent` is based on the `Equatable` implementation.
-    func isEquivalent(to other : Self) -> Bool {
-        self == other
-    }
+    
+    
 }
 
 
