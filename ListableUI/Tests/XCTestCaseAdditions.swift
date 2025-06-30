@@ -57,9 +57,9 @@ extension XCTestCase
         }
     }
     
-    func testcase(_ name : String = "", _ block : () -> ())
+    func testcase(_ name : String = "", _ block : () throws -> ()) rethrows
     {
-        block()
+        try block()
     }
     
     func assertThrowsError(test : () throws -> (), verify : (Error) -> ())

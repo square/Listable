@@ -105,6 +105,9 @@ extension ListView
                     positionInfo: self.view.scrollPositionInfo
                 )
             }
+            
+            // Notify the ListView that scrolling ended.
+            self.view.didEndScrolling()
         }
 
         private var oldSelectedItems : Set<AnyIdentifier> = []

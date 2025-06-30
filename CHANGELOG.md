@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` API.
+
 ### Removed
 
 ### Changed
@@ -13,6 +15,8 @@
 - The `IOS16_4_First_Responder_Bug_CollectionView` workaround is longer capped to iOS versions less than 19.0. It was verified as required in the iOS 19 beta.
 
 ### Internal
+
+- Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handler with different layout configurations.
 
 # Past Releases
 
