@@ -82,10 +82,18 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
-                    DemoItem(text: "scrollTo(...) completion handler"),
+                    DemoItem(text: "scrollTo(item: ...) completion handler"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
-                        self?.push(ScrollCompletionHandlerViewController())
+                        self?.push(ScrollToItemCompletionHandlerViewController())
+                    }
+                )
+                
+                Item(
+                    DemoItem(text: "scrollToSection(...) completion handler"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(ScrollToSectionCompletionHandlerViewController())
                     }
                 )
 

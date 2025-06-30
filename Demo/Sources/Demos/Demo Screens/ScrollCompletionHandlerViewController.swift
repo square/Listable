@@ -12,37 +12,34 @@ import ListableUI
 import UIKit
 
 
-/// This demo showcases the scrollTo(...) completion handler. It allows you to demo
-/// how it executes in a number of layout situations.
+/// This demo superclass that is used to showcase the `scrollTo(...)` and `scollToSection(...)`
+/// completion handlers. This allows you to demo how it executes in a number of layout situations.
+/// This class should not be used directly. Instead, instantiate a subclass.
 class ScrollCompletionHandlerViewController : UIViewController {
     
-    private let list = ListView()
+    fileprivate let list = ListView()
     
-    private var animateScroll: Bool = true
+    fileprivate var sections: [Section] { [] }
     
-    private var scrollPosition: ScrollPosition.Position = .top
+    fileprivate var animateScroll: Bool = true
     
-    private var ifAlreadyVisible: ScrollPosition.IfAlreadyVisible = .scrollToPosition
+    fileprivate var scrollPosition: ScrollPosition.Position = .top
     
-    private var scrolledItem = Item(SimpleScrollItem(text: "Item 50"))
+    fileprivate var ifAlreadyVisible: ScrollPosition.IfAlreadyVisible = .scrollToPosition
     
     private var layoutDirection : LayoutDirection = .vertical
     
-    private lazy var scrollButton: UIBarButtonItem = {
-        UIBarButtonItem(title: "Scroll", style: .plain, target: self, action: #selector(scrollToItem))
+    fileprivate lazy var scrollButton: UIBarButtonItem = {
+        UIBarButtonItem(title: "Scroll", style: .plain, target: self, action: #selector(performScroll))
     }()
     
-    private lazy var axisButton: UIBarButtonItem = {
+    fileprivate lazy var axisButton: UIBarButtonItem = {
         UIBarButtonItem(title: "Axis", style: .plain, target: self, action: #selector(toggleDirection))
     }()
     
-    private lazy var animationsButton: UIBarButtonItem = {
+    fileprivate lazy var animationsButton: UIBarButtonItem = {
         UIBarButtonItem(title: "Toggle Animations", style: .plain, target: self, action: #selector(toggleAnimations))
     }()
-    
-    private var items: [Item<SimpleScrollItem>] = Array(0...100).map {
-        Item(SimpleScrollItem(text: "Item \($0)"))
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +55,6 @@ class ScrollCompletionHandlerViewController : UIViewController {
             view.safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             view.safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
         ])
-        navigationItem.rightBarButtonItems = [scrollButton, animationsButton, axisButton]
         updateList()
     }
 
@@ -69,25 +65,12 @@ class ScrollCompletionHandlerViewController : UIViewController {
                 tableAppearance.direction = self.layoutDirection
             }
             list.animation = .fast
-            list += Section("items", items: items)
+            list += sections
         }
     }
     
-    @objc private func scrollToItem() {
-        list.scrollTo(
-            item: scrolledItem,
-            position: ScrollPosition(
-                position: scrollPosition,
-                ifAlreadyVisible: ifAlreadyVisible
-            ),
-            animated: animateScroll,
-            completion: { changes in
-                let sortedItems = changes.positionInfo.visibleItems
-                    .map { "\($0.identifier) "}
-                    .sorted()
-                print("Scroll completion: \(sortedItems)")
-            }
-        )
+    @objc fileprivate func performScroll() {
+        assertionFailure("Override in subclasses.")
     }
     
     @objc func toggleAnimations() {
@@ -104,10 +87,14 @@ class ScrollCompletionHandlerViewController : UIViewController {
         updateList()
     }
     
+    fileprivate var settingsControls: [UIView] {
+        [selectionPanel, alreadyVisiblePanel, positionPanel]
+    }
+    
     /// This view contains all the configurable scroll settings.
     lazy var settingsPanel: UIView = {
         let stackView = UIStackView(
-            arrangedSubviews: [itemSelectionPanel, alreadyVisiblePanel, positionPanel]
+            arrangedSubviews: settingsControls
         )
         stackView.axis = .vertical
         stackView.spacing = 8
@@ -160,8 +147,42 @@ class ScrollCompletionHandlerViewController : UIViewController {
         return titledView(control, title: "If Visbile")
     }()
     
-    /// The label and segmented control for selecting the scrolled item.
-    lazy var itemSelectionPanel: UIView = {
+    /// The label and segmented control for selecting the scrolled item/section.
+    /// Override in subclasses.
+    fileprivate var selectionPanel: UIView {
+        assertionFailure("Override in subclasses.")
+        return UIView()
+    }
+    
+    /// A helper to add a label before `view`.
+    fileprivate func titledView(_ view: UIView, title: String) -> UIView {
+        let label = UILabel()
+        label.text = title
+        label.widthAnchor.constraint(equalToConstant: 125).isActive = true
+        label.textAlignment = .right
+        let stackView = UIStackView(arrangedSubviews: [label, view])
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        return stackView
+    }
+}
+
+/// A demo for showcasing scrolling to a particular item.
+class ScrollToItemCompletionHandlerViewController: ScrollCompletionHandlerViewController {
+    
+    private lazy var items: [Item<SimpleScrollItem>] = {
+        Array(0...100).map {
+            Item(SimpleScrollItem(text: "Item \($0)"))
+        }
+    }()
+    
+    override var sections: [Section] {
+        [Section("items", items: items)]
+    }
+    
+    override var selectionPanel: UIView { itemSegmentedControl }
+    
+    private lazy var itemSegmentedControl: UIView = {
         let control = UISegmentedControl(
             items: [
                 UIAction(title: "1") { [weak self] _ in
@@ -179,16 +200,125 @@ class ScrollCompletionHandlerViewController : UIViewController {
         return titledView(control, title: "Selection")
     }()
     
-    /// A helper to add a label before `view`.
-    private func titledView(_ view: UIView, title: String) -> UIView {
-        let label = UILabel()
-        label.text = title
-        label.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        label.textAlignment = .right
-        let stackView = UIStackView(arrangedSubviews: [label, view])
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        return stackView
+    private var scrolledItem = Item(SimpleScrollItem(text: "Item 50"))
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // TODO: Fully add support for programmatic scrolling in horizontal layouts.
+        // The axisButton is used in this demo because there are no section headers.
+        navigationItem.rightBarButtonItems = [scrollButton, animationsButton, axisButton]
+    }
+    
+    override func performScroll() {
+        list.scrollTo(
+            item: scrolledItem,
+            position: ScrollPosition(
+                position: scrollPosition,
+                ifAlreadyVisible: ifAlreadyVisible
+            ),
+            animated: animateScroll,
+            completion: { changes in
+                let sortedItems = changes.positionInfo.visibleItems
+                    .map { "\($0.identifier) "}
+                    .sorted()
+                print("Scroll completion: \(sortedItems)")
+            }
+        )
+    }
+}
+
+/// A demo for showcasing scrolling to a particular section.
+class ScrollToSectionCompletionHandlerViewController: ScrollCompletionHandlerViewController {
+    
+    override var sections: [Section] { _sections }
+    
+    private lazy var _sections: [Section] = {
+        (0...2).map { sectionIndex in
+            Section(
+                "Section \(sectionIndex)",
+                items: {
+                    (0...100).map { itemIndex in
+                        Item(SimpleScrollItem(text: "Section \(sectionIndex) - Item \(itemIndex)"))
+                    }
+                },
+                header: {
+                    DemoHeader(title: "Section \(sectionIndex) Header")
+                },
+                footer: {
+                    DemoFooter(text: "Section \(sectionIndex) Footer")
+                }
+            )
+        }
+    }()
+    
+    override var selectionPanel: UIView { sectionSegmentedControl }
+    
+    private lazy var sectionSegmentedControl: UIView = {
+        let control = UISegmentedControl(
+            items: [
+                UIAction(title: "0") { [weak self] _ in
+                    self?.scrolledSection = Section.identifier(with: "Section 0")
+                },
+                UIAction(title: "1") { [weak self] _ in
+                    self?.scrolledSection = Section.identifier(with: "Section 1")
+                },
+                UIAction(title: "2") { [weak self] _ in
+                    self?.scrolledSection = Section.identifier(with: "Section 2")
+                }
+            ]
+        )
+        control.selectedSegmentIndex = 1
+        return titledView(control, title: "Section")
+    }()
+    
+    private var sectionPosition: SectionPosition = .top
+    
+    override var settingsControls: [UIView] {
+        super.settingsControls + [sectionPositionControl]
+    }
+    
+    /// The label and segmented control for selecting the section position, which powers
+    /// whether the header or footer will be positioned.
+    lazy var sectionPositionControl: UIView = {
+        let control = UISegmentedControl(
+            items: [
+                UIAction(title: "Top/Header") { [weak self] _ in
+                    self?.sectionPosition = .top
+                },
+                UIAction(title: "Bottom/Footer") { [weak self] _ in
+                    self?.sectionPosition = .bottom
+                },
+            ]
+        )
+        control.selectedSegmentIndex = 0
+        return titledView(control, title: "Supp. View")
+    }()
+    
+    private var scrolledSection: Section.Identifier = Section.identifier(with: "Section 1")
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // TODO: Fully add support for programmatic scrolling in horizontal layouts.
+        // Until then, the axisButton is not used in this demo.
+        navigationItem.rightBarButtonItems = [scrollButton, animationsButton]
+    }
+    
+    override func performScroll() {
+        list.scrollToSection(
+            with: scrolledSection,
+            sectionPosition: sectionPosition,
+            scrollPosition: ScrollPosition(
+                position: scrollPosition,
+                ifAlreadyVisible: ifAlreadyVisible
+            ),
+            animated: animateScroll,
+            completion: { changes in
+                let sortedItems = changes.positionInfo.visibleItems
+                    .map { "\($0.identifier) "}
+                    .sorted()
+                print("Scroll completion: \(sortedItems)")
+            }
+        )
     }
 }
 
