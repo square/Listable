@@ -1049,6 +1049,112 @@ class ListViewTests: XCTestCase
         }
     }
     
+    func test_scroll_to_section_completion() throws {
+        for animated in [true, false] {
+            for visibilityRule in [ScrollPosition.IfAlreadyVisible.scrollToPosition, .doNothing] {
+                
+                try testControllerCase("scroll to offscreen section", sectionCount: 5, sectionHeader: true) { viewController in
+                    let positionInfo = scrollToSection(
+                        Section.identifier(with: "Section 3"),
+                        sectionPosition: .top,
+                        scrollPosition: .centered,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    
+                    // The viewport is 600pts in height. Each item is 50pts in height. Since we've
+                    // centered the section header, the bottom 6 elements of the previous section
+                    // and the top 6 elements of the current section are visible
+                    XCTAssertEqual(visibleItems.count, 12)
+                    
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Item 95"),
+                                percentageVisible: 0.5 // Halfway off the top of the viewport.
+                            )
+                        )
+                    )
+                    for itemNumber in 96...100 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                    for itemNumber in 1...5 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                    XCTAssert(
+                        visibleItems.contains(
+                            ListScrollPositionInfo.VisibleItem(
+                                identifier: Identifier<TestContent, String>("Item 6"),
+                                percentageVisible: 0.5 // Halfway off the bottom of the viewport.
+                            )
+                        )
+                    )
+                }
+                
+                try testControllerCase("scroll to visible section", sectionCount: 2, sectionHeader: true) { viewController in
+                    let positionInfo = scrollToSection(
+                        Section.identifier(with: "Section 1"),
+                        sectionPosition: .top,
+                        scrollPosition: .top,
+                        using: viewController
+                    )
+                    let visibleItems = try XCTUnwrap(positionInfo?.visibleItems)
+                    
+                    // The viewport is 600pts in height. Each item is 50pts in height. Section 1's
+                    // top 11 items should be visible, since the header shifts everything down 50pts.
+                    XCTAssertEqual(visibleItems.count, 11)
+                    for itemNumber in 1...11 {
+                        XCTAssert(
+                            visibleItems.contains(
+                                ListScrollPositionInfo.VisibleItem(
+                                    identifier: Identifier<TestContent, String>("Item \(itemNumber)"),
+                                    percentageVisible: 1.0
+                                )
+                            )
+                        )
+                    }
+                }
+                
+                /// A helper function to perform the scrolling and await the result, using the
+                /// global animation flag and `IfAlreadyVisible` rule.
+                @discardableResult
+                func scrollToSection(_ section: Section.Identifier, sectionPosition: SectionPosition, scrollPosition: ScrollPosition.Position, using viewController: ViewController) -> ListScrollPositionInfo? {
+                    var positionInfo: ListScrollPositionInfo?
+                    let scrollExpectation = expectation(description: "Scroll completed")
+                    viewController.list.scrollToSection(
+                        with: section,
+                        sectionPosition: sectionPosition,
+                        scrollPosition: ScrollPosition(
+                            position: scrollPosition,
+                            ifAlreadyVisible: visibilityRule
+                        ),
+                        animated: animated,
+                        completion: { changes in
+                            positionInfo = changes.positionInfo
+                            scrollExpectation.fulfill()
+                        }
+                    )
+                    wait(for: [scrollExpectation], timeout: 0.5)
+                    return positionInfo
+                }
+            }
+        }
+    }
+    
     func test_rapid_scroll_to_item_completion_calls() throws {
         
         testControllerCase("rapid scroll calls - no animation") { viewController in
@@ -1233,12 +1339,13 @@ class ListViewTests: XCTestCase
     }
     
     /// A helper function for a test case that creates and presents a `ViewController`
-    /// with a list of 100 rows.
+    /// with a list of sections each containing 100 rows.
     /// - Parameters:
     ///   - name: The name of the test case.
-    ///   - sectionHeader: When true, a 50pt section header will be drawn.
+    ///   - sectionCount: The number of sections.
+    ///   - sectionHeader: When true, a 50pt header will be drawn on each section.
     ///   - completion: The closure executed when the view controller is shown.
-    fileprivate func testControllerCase(_ name : String = "", sectionHeader: Bool = false, completion: (ViewController) throws -> Void) rethrows {
+    fileprivate func testControllerCase(_ name : String = "", sectionCount: UInt = 1, sectionHeader: Bool = false, completion: (ViewController) throws -> Void) rethrows {
         try testcase(name) {
             let viewController = ViewController()
             viewController.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
@@ -1248,15 +1355,17 @@ class ListViewTests: XCTestCase
                         layout.contentInsetAdjustmentBehavior = .never
                     }
                     list.animatesChanges = false
-                    list("content") { section in
-                        if sectionHeader {
-                            section.header = HeaderFooter(
-                                TestSupplementary(),
-                                sizing: .fixed(height: 50)
-                            )
-                        }
-                        for itemNumber in 1...100 {
-                            section += TestContent(content: "Item \(itemNumber)")
+                    for sectionNumber in 1...sectionCount {
+                        list("Section \(sectionNumber)") { section in
+                            if sectionHeader {
+                                section.header = HeaderFooter(
+                                    TestSupplementary(),
+                                    sizing: .fixed(height: 50)
+                                )
+                            }
+                            for itemNumber in 1...100 {
+                                section += TestContent(content: "Item \(itemNumber)")
+                            }
                         }
                     }
                 }
