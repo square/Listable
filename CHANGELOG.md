@@ -4,21 +4,29 @@
 
 ### Added
 
-- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` and `scrollToSection(with:sectionPosition:scrollPosition:animated:completion:)` APIs.
-
 ### Removed
 
 ### Changed
 
 ### Misc
 
-- The `IOS16_4_First_Responder_Bug_CollectionView` workaround is longer capped to iOS versions less than 19.0. It was verified as required in the iOS 19 beta.
+### Internal
+
+# Past Releases
+
+# [16.2.0] - 2025-07-02
+
+### Added
+
+- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` and `scrollToSection(with:sectionPosition:scrollPosition:animated:completion:)` APIs.
+
+### Misc
+
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround is no longer capped to iOS versions less than 19.0. It was verified as required in the iOS 19 beta.
 
 ### Internal
 
 - Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handlers with different layout configurations.
-
-# Past Releases
 
 # [16.1.0] - 2025-06-17
 
@@ -1182,7 +1190,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.1.0...main
+[Main]: https://github.com/square/Listable/compare/16.2.0...main
+[16.2.0]: https://github.com/square/Listable/compare/16.2.0...16.1.0
 [16.1.0]: https://github.com/square/Listable/compare/16.1.0...16.0.4
 [16.0.4]: https://github.com/square/Listable/compare/16.0.4...16.0.3
 [16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
