@@ -1368,6 +1368,9 @@ public final class ListView : UIView
             // Update the offset of the scroll view to show the refresh control if needed
             presentationState.adjustContentOffsetForRefreshControl(in: self.collectionView)
 
+            // Perform any needed offset adjustments due to the reason
+            self.updateContentOffset(for: reason)
+
             // Perform any needed auto scroll actions.
             self.performAutoScrollAction(with: diff.changes.addedItemIdentifiers, animated: reason.animated)
 
@@ -1416,7 +1419,19 @@ public final class ListView : UIView
             }
         }
     }
-    
+
+    private func updateContentOffset(for reason: PresentationState.UpdateReason) {
+        switch reason {
+        case .contentChanged(_, let identifierChanged):
+            if identifierChanged {
+                let contentOffset = CGPoint(x: 0, y: -collectionView.adjustedContentInset.top)
+                collectionView.setContentOffset(contentOffset, animated: false)
+            }
+        default:
+            break
+        }
+    }
+
     private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool)
     {
         switch self.autoScrollAction {

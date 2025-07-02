@@ -1231,7 +1231,35 @@ class ListViewTests: XCTestCase
             }
         }
     }
-    
+
+    func test_changing_identifier_resets_content_offset() {
+        let listView = ListView(frame: CGRect(x: 0, y: 0, width: 200, height: 400))
+
+        func configureList(identifier: String) {
+            listView.configure { list in
+                list.identifier = identifier
+
+                list += Section("a-section") { section in
+                    for row in 1...100 {
+                        section += Item(
+                            TestContent(content: row),
+                            sizing: .fixed(height: 50)
+                        )
+                    }
+                }
+            }
+        }
+
+        configureList(identifier: "first")
+        listView.collectionView.contentOffset.y = 100
+        self.waitForOneRunloop()
+
+        configureList(identifier: "second")
+        self.waitForOneRunloop()
+        XCTAssertEqual(listView.collectionView.contentOffset.y, 0, accuracy: 0.1)
+    }
+
+
     /// A helper function for a test case that creates and presents a `ViewController`
     /// with a list of 100 rows.
     /// - Parameters:
