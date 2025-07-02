@@ -641,7 +641,8 @@ public final class ListView : UIView
         with identifier : AnyIdentifier,
         sectionPosition : SectionPosition = .top,
         scrollPosition : ScrollPosition,
-        animated: Bool = false
+        animated: Bool = false,
+        completion: ScrollCompletion? = nil
     ) -> Bool
     {
 
@@ -650,15 +651,17 @@ public final class ListView : UIView
         // Make sure the section identifier is valid.
 
         guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+            self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
             return false
         }
 
-        return preparePresentationStateForScrollToSection(index: sectionIndex) {
+        return preparePresentationStateForScrollToSection(index: sectionIndex, handlerWhenFailed: completion) {
             
             /// `preparePresentationStateForScrollToSection` is asynchronous in some
             /// cases, we need to re-query our section index in case it changed or is no longer valid.
             
             guard let sectionIndex = storageContent.firstIndexForSection(with: identifier) else {
+                self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
                 return
             }
             
@@ -667,6 +670,7 @@ public final class ListView : UIView
             // Make sure the section has content.
 
             guard layoutContent.sections[sectionIndex].all.isEmpty == false else {
+                self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
                 return
             }
             
@@ -699,19 +703,22 @@ public final class ListView : UIView
                 self.performScroll(
                     to: footerFrameAdjustedForStickyHeaders ?? targetSupplementaryView.defaultFrame,
                     scrollPosition: scrollPosition,
-                    animated: animated
+                    animated: animated,
+                    completion: completion
                 )
             } else if let adjacentItem = adjacentItem {
                 self.scrollTo(
                     item: adjacentItem,
                     position: scrollPosition,
-                    animated: animated
+                    animated: animated,
+                    completion: completion
                 )
             } else {
                 self.performScroll(
                     to: fallbackSupplementaryView.defaultFrame,
                     scrollPosition: scrollPosition,
-                    animated: animated
+                    animated: animated,
+                    completion: completion
                 )
             }
         }
@@ -1557,11 +1564,12 @@ public final class ListView : UIView
         return true
     }
 
-    private func preparePresentationStateForScrollToSection(index: Int, scroll: @escaping () -> Void) -> Bool {
+    private func preparePresentationStateForScrollToSection(index: Int, handlerWhenFailed: ScrollCompletion?, scroll: @escaping () -> Void) -> Bool {
 
         // Make sure section is contained within all content.
 
         guard index < storage.allContent.sections.count else {
+            handleScrollCompletion(reason: .cannotScroll, completion: handlerWhenFailed)
             return false
         }
 

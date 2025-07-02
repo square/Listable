@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` API.
+- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` and `scrollToSection(with:sectionPosition:scrollPosition:animated:completion:)` APIs.
 
 ### Removed
 
@@ -16,7 +16,7 @@
 
 ### Internal
 
-- Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handler with different layout configurations.
+- Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handlers with different layout configurations.
 
 # Past Releases
 
