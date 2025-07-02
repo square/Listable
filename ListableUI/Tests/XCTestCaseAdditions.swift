@@ -29,6 +29,7 @@ extension XCTestCase
             return
         }
 
+        rootVC.view.window?.layer.speed = 4
         rootVC.addChild(viewController)
         viewController.didMove(toParent: rootVC)
 
@@ -50,6 +51,7 @@ extension XCTestCase
 
             viewController.willMove(toParent: nil)
             viewController.removeFromParent()
+            rootVC.view.window?.layer.speed = 1
         }
 
         try autoreleasepool {
