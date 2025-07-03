@@ -243,6 +243,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(AutoLayoutDemoViewController())
                     }
                 )
+
+                Item(
+                    DemoItem(text: "Changing Identifiers"),
+                    selectionStyle: .tappable,
+                    onSelect: { _ in
+                        self?.push(IdentifierChangedViewController())
+                    }
+                )
             } header: {
                 DemoHeader(title: "List Views")
             }

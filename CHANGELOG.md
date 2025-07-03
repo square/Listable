@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Changing a List's `identifier` now automatically resets the scroll position.
+
 ### Misc
 
 ### Internal
