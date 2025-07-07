@@ -39,7 +39,7 @@ let package = Package(
         ),
         .target(
             name: "EnglishDictionary",
-            path: "Internal Pods/EnglishDictionary",
+            path: "Internal/EnglishDictionary",
             exclude: ["EnglishDictionary.podspec"],
             resources: [
                 .process("Resources"),
@@ -47,12 +47,12 @@ let package = Package(
         ),
         .target(
             name: "Snapshot",
-            path: "Internal Pods/Snapshot/Sources"
+            path: "Internal/Snapshot/Sources"
         ),
         .testTarget(
             name: "SnapshotTests",
             dependencies: ["Snapshot"],
-            path: "Internal Pods/Snapshot/Tests",
+            path: "Internal/Snapshot/Tests",
             exclude: ["Snapshot Results"]
         ),
         .testTarget(
