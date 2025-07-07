@@ -1,5 +1,6 @@
 import BlueprintUILists
 import BlueprintUICommonControls
+import UIKit
 
 
 /// This demo showcases a `PagedListLayout` with peeking leading/top and trailing/bottom items.

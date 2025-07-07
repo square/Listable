@@ -39,7 +39,7 @@ let package = Package(
         ),
         .target(
             name: "EnglishDictionary",
-            path: "Internal Pods/EnglishDictionary",
+            path: "Internal/EnglishDictionary",
             exclude: ["EnglishDictionary.podspec"],
             resources: [
                 .process("Resources"),
@@ -47,12 +47,12 @@ let package = Package(
         ),
         .target(
             name: "Snapshot",
-            path: "Internal Pods/Snapshot/Sources"
+            path: "Internal/Snapshot/Sources"
         ),
         .testTarget(
             name: "SnapshotTests",
             dependencies: ["Snapshot"],
-            path: "Internal Pods/Snapshot/Tests",
+            path: "Internal/Snapshot/Tests",
             exclude: ["Snapshot Results"]
         ),
         .testTarget(
@@ -90,6 +90,25 @@ let package = Package(
                 .product(name: "BlueprintUICommonControls", package: "Blueprint")
             ],
             path: "BlueprintUILists/Tests"
+        ),
+        .target(
+            name: "Demo",
+            dependencies: [
+                "ListableUI",
+                "EnglishDictionary",
+                "BlueprintUILists",
+                .product(name: "BlueprintUI", package: "Blueprint"),
+                .product(name: "BlueprintUICommonControls", package: "Blueprint")
+            ],
+            path: "Demo/Sources",
+            resources: [
+                .process("../Resources"),
+            ]
+        ),
+        .testTarget(
+            name: "DemoTests",
+            dependencies: ["Demo"],
+            path: "Demo/Test Targets"
         ),
     ],
     swiftLanguageVersions: [.v5]
