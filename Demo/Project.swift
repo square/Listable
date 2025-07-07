@@ -43,8 +43,8 @@ let project = Project(
             product: .framework,
             bundleId: "com.listable.englishdictionary",
             deploymentTargets: .iOS("15.0"),
-            sources: ["../Internal Pods/EnglishDictionary/Sources/**"],
-            resources: ["../Internal Pods/EnglishDictionary/Resources/**"]
+            sources: ["../Internal/EnglishDictionary/Sources/**"],
+            resources: ["../Internal/EnglishDictionary/Resources/**"]
         ),
     ]
 )
