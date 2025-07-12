@@ -126,6 +126,19 @@ extension Environment {
     
     private enum ApplyItemContentInfoKey : EnvironmentKey {
         static let defaultValue : ApplyItemContentInfo? = nil
+
+        static func isEquivalent(lhs: ListableUI.ApplyItemContentInfo?, rhs: ListableUI.ApplyItemContentInfo?, in context: BlueprintUI.EquivalencyContext) -> Bool {
+            switch (lhs, rhs) {
+            case (nil, nil):
+                true
+            case (.some, nil), (nil, .some):
+                false
+            case (.some(let lhs), .some(let rhs)):
+                context == .internalElementLayout
+            }
+        }
+
+
     }
 }
 

@@ -100,7 +100,20 @@ extension Environment {
     }
     
     private enum ApplyHeaderFooterContentInfoKey : EnvironmentKey {
+
         static let defaultValue : ApplyHeaderFooterContentInfo? = nil
+
+        static func isEquivalent(lhs: ListableUI.ApplyHeaderFooterContentInfo?, rhs: ListableUI.ApplyHeaderFooterContentInfo?, in context: BlueprintUI.EquivalencyContext) -> Bool {
+            switch (lhs, rhs) {
+            case (nil, nil):
+                true
+            case (.some, nil), (nil, .some):
+                false
+            case (.some(let lhs), .some(let rhs)):
+                context == .internalElementLayout
+            }
+        }
+
     }
 }
 
