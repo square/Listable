@@ -5,11 +5,14 @@
 name: Tests
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
 
 jobs:
   spm:
-    name: Build & Test All
+    name: "Build & Test All - iOS ${{ matrix.sdk }}"
 
     runs-on: macos-15-xlarge
 
@@ -60,20 +63,12 @@ jobs:
       - name: Install Tuist dependencies for Demo
         run: tuist install --path Demo
 
-      - name: Test ListableTests
-        run: tuist test --path Demo --os ${{ matrix.sdk }} ListableTests
+      - name: Test All
+        run: tuist test Demo-Workspace --path Demo --os ${{ matrix.sdk }} --result-bundle-path TestResult.xcresult
 
-      - name: Test BlueprintUIListsTests
-        run: tuist test --path Demo --os ${{ matrix.sdk }} BlueprintUIListsTests
-
-      - name: Test Snapshot-Unit-Tests
-        run: tuist test --path Demo --os ${{ matrix.sdk }} Snapshot-Unit-Tests
-      
-      - name: Build & Test Snapshot Package (iOS Simulator)
-        run: |
-          cd "Internal/Snapshot"
-          xcodebuild \
-            -scheme Snapshot \
-            -destination "platform=${{ env.TUIST_TEST_PLATFORM }} Simulator,OS=${{ matrix.sdk }},name=${{ env.TUIST_TEST_DEVICE }}" \
-            -enableCodeCoverage YES \
-            build test
+      - name: Upload TestResult
+        uses: actions/upload-artifact@v4
+        if: ${{ failure() }}
+        with:
+          name: TestResult.xcresult
+          path: TestResult.xcresult
