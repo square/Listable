@@ -56,9 +56,7 @@ let project = Project(
             product: .unitTests,
             bundleId: "com.listable.BlueprintUIListsTests",
             deploymentTargets: .iOS("15.0"),
-            sources: [
-                .glob("../BlueprintUILists/Tests/**/*.swift", excluding: ["../BlueprintUILists/Tests/**/Snapshot Results/**"])
-            ],
+            sources: ["../BlueprintUILists/Tests/**/*.swift"],
             resources: [],
             dependencies: [
                 .external(name: "BlueprintUILists"),
@@ -74,6 +72,21 @@ let project = Project(
             sources: ["../Internal/Snapshot/Sources/**"],
             resources: [],
             dependencies: [.xctest]
+        ),
+        .target(
+            name: "Snapshot-Unit-Tests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: "com.listable.SnapshotUnitTests",
+            deploymentTargets: .iOS("15.0"),
+            sources: [
+                .glob("../Internal/Snapshot/Tests/**/*.swift", excluding: ["../Internal/Snapshot/Tests/**/Snapshot Results/**"])
+            ],
+            resources: [],
+            dependencies: [
+                .target(name: "Snapshot"),
+                .xctest
+            ]
         ),
         .target(
             name: "EnglishDictionary",

@@ -6,10 +6,12 @@
 //  Copyright © 2025 Kyle Van Essen. All rights reserved.
 //
 
+import Foundation
 import ListableUI
 import BlueprintUI
 import BlueprintUICommonControls
 import BlueprintUILists
+import UIKit
 
 final class IdentifierChangedViewController : ListViewController {
 
