@@ -9,14 +9,7 @@ import UIKit
 
 
 internal extension Bundle {
-    static var resources: Bundle {
-        #if SWIFT_PACKAGE
-        return .module
-        #else
-        let main = Bundle(for: EnglishDictionary.self)
-        return Bundle(url: main.url(forResource: "EnglishDictionaryResources", withExtension: "bundle")!)!
-        #endif
-    }
+    static let resources = Bundle.module
 }
 
 public class EnglishDictionary
