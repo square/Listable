@@ -60,8 +60,11 @@ jobs:
       - name: Install Tuist dependencies for Demo
         run: tuist install --path Demo
 
-      - name: Build & Test Demo
-        run: tuist test --path Demo --os ${{ matrix.sdk }} Demo
+      - name: Test ListableTests
+        run: tuist test --path Demo --os ${{ matrix.sdk }} ListableTests
+
+      - name: Test BlueprintUIListsTests
+        run: tuist test --path Demo --os ${{ matrix.sdk }} BlueprintUIListsTests
       
       - name: Build & Test Snapshot Package (iOS Simulator)
         run: |
