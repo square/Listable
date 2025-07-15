@@ -8,7 +8,7 @@
 import Foundation
 
 internal extension Bundle {
-    static var resources: Bundle { .module }
+    static let resources = Bundle.module
 }
 
 struct StableRNG : RandomNumberGenerator
