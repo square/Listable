@@ -91,25 +91,6 @@ let package = Package(
             ],
             path: "BlueprintUILists/Tests"
         ),
-        .target(
-            name: "Demo",
-            dependencies: [
-                "ListableUI",
-                "EnglishDictionary",
-                "BlueprintUILists",
-                .product(name: "BlueprintUI", package: "Blueprint"),
-                .product(name: "BlueprintUICommonControls", package: "Blueprint")
-            ],
-            path: "Demo/Sources",
-            resources: [
-                .process("../Resources"),
-            ]
-        ),
-        .testTarget(
-            name: "DemoTests",
-            dependencies: ["Demo"],
-            path: "Demo/Test Targets"
-        ),
     ],
     swiftLanguageVersions: [.v5]
 )

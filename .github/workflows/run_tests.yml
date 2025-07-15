@@ -65,6 +65,9 @@ jobs:
 
       - name: Test BlueprintUIListsTests
         run: tuist test --path Demo --os ${{ matrix.sdk }} BlueprintUIListsTests
+
+      - name: Test Snapshot-Unit-Tests
+        run: tuist test --path Demo --os ${{ matrix.sdk }} Snapshot-Unit-Tests
       
       - name: Build & Test Snapshot Package (iOS Simulator)
         run: |
