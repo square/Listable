@@ -61,10 +61,10 @@ jobs:
             -sdk iphonesimulator build
 
       - name: Install Tuist dependencies for Demo
-        run: tuist install --path Demo
+        run: tuist install --path Demo/
 
       - name: Test All
-        run: tuist test Demo-Workspace --path Demo --os ${{ matrix.sdk }} --result-bundle-path TestResult.xcresult
+        run: tuist test ListableDevelopment-Workspace --path Demo/ --os ${{ matrix.sdk }} --result-bundle-path TestResult.xcresult
 
       - name: Upload TestResult
         uses: actions/upload-artifact@v4

@@ -1,7 +1,7 @@
 import ProjectDescription
 
 let workspace = Workspace(
-    name: "Demo",
+    name: "ListableDevelopment",
     projects: ["."],
     schemes: [
         .scheme(
