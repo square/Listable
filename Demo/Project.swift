@@ -1,6 +1,9 @@
 import Foundation
 import ProjectDescription
 
+public let listableDestinations: ProjectDescription.Destinations = .iOS
+public let listableDeploymentTargets: DeploymentTargets = .iOS("15.0")
+
 let project = Project(
     name: "ListableDevelopment",
     settings: .settings(base: [
@@ -16,10 +19,10 @@ let project = Project(
         ),
         .target(
             name: "Listable",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .app,
             bundleId: "com.squareup.listable",
-            deploymentTargets: .iOS("15.0"),
+            deploymentTargets: listableDeploymentTargets,
             infoPlist: .file(path: "Demo/Info.plist"),
             sources: ["Sources/**"],
             resources: [
@@ -37,10 +40,10 @@ let project = Project(
         ),
          .target(
             name: "ListableTests",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .unitTests,
-            bundleId: "com.listable.ListableTests",
-            deploymentTargets: .iOS("15.0"),
+            bundleId: "com.squareup.listable.tests",
+            deploymentTargets: listableDeploymentTargets,
             infoPlist: .default,
             sources: [
                 .glob("../ListableUI/Tests/**/*.swift", excluding: ["../ListableUI/Tests/**/Snapshot Results/**"])
@@ -55,10 +58,10 @@ let project = Project(
         ),
         .target(
             name: "BlueprintUIListsTests",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .unitTests,
-            bundleId: "com.listable.BlueprintUIListsTests",
-            deploymentTargets: .iOS("15.0"),
+            bundleId: "com.squareup.listable.BlueprintUILists.tests",
+            deploymentTargets: listableDeploymentTargets,
             sources: ["../BlueprintUILists/Tests/**/*.swift"],
             resources: [],
             dependencies: [
@@ -68,20 +71,20 @@ let project = Project(
         ),
         .target(
             name: "Snapshot",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .framework,
-            bundleId: "com.listable.snapshot",
-            deploymentTargets: .iOS("15.0"),
+            bundleId: "com.squareup.listable.snapshot",
+            deploymentTargets: listableDeploymentTargets,
             sources: ["../Internal/Snapshot/Sources/**"],
             resources: [],
             dependencies: [.xctest]
         ),
         .target(
             name: "Snapshot-Unit-Tests",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .unitTests,
-            bundleId: "com.listable.SnapshotUnitTests",
-            deploymentTargets: .iOS("15.0"),
+            bundleId: "com.squareup.listable.snapshot.tests",
+            deploymentTargets: listableDeploymentTargets,
             sources: [
                 .glob("../Internal/Snapshot/Tests/**/*.swift", excluding: ["../Internal/Snapshot/Tests/**/Snapshot Results/**"])
             ],
@@ -93,10 +96,10 @@ let project = Project(
         ),
         .target(
             name: "EnglishDictionary",
-            destinations: .iOS,
+            destinations: listableDestinations,
             product: .framework,
             bundleId: "com.listable.englishdictionary",
-            deploymentTargets: .iOS("15.0"),
+            deploymentTargets: listableDeploymentTargets,
             sources: ["../Internal/EnglishDictionary/Sources/**"],
             resources: ["../Internal/EnglishDictionary/Resources/**"]
         ),
@@ -107,10 +110,10 @@ extension Target {
 
     public static func app(
         name: String,
-        destinations: ProjectDescription.Destinations = .iOS,
+        destinations: ProjectDescription.Destinations = listableDestinations,
         productName: String,
         bundleId: String,
-        deploymentTargets: DeploymentTargets = .iOS("15.0"),
+        deploymentTargets: DeploymentTargets = listableDeploymentTargets,
         sources: ProjectDescription.SourceFilesList,
         resources: ProjectDescription.ResourceFileElements? = nil,
         dependencies: [TargetDependency] = []
