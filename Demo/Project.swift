@@ -2,7 +2,7 @@ import Foundation
 import ProjectDescription
 
 let project = Project(
-    name: "Demo",
+    name: "ListableDevelopment",
     settings: .settings(base: ["ENABLE_MODULE_VERIFIER": "YES"]),
     targets: [
          .app(
@@ -12,10 +12,10 @@ let project = Project(
             sources: ["../ListableUI/Tests/UITestHost/**"]
         ),
         .target(
-            name: "ListableDevelopment",
+            name: "Listable",
             destinations: .iOS,
             product: .app,
-            bundleId: "com.listable.development",
+            bundleId: "com.squareup.listable",
             deploymentTargets: .iOS("15.0"),
             infoPlist: .file(path: "Demo/Info.plist"),
             sources: ["Sources/**"],
