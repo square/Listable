@@ -8,13 +8,17 @@
 
 ### Changed
 
-- Changing a List's `identifier` now automatically resets the scroll position.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# [16.3.0] - 2025-07-17
+
+### Changed
+
+- Changing a List's `identifier` now automatically resets the scroll position.
 
 # [16.2.0] - 2025-07-02
 
@@ -1192,7 +1196,8 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.2.0...main
+[Main]: https://github.com/square/Listable/compare/16.3.0...main
+[16.3.0]: https://github.com/square/Listable/compare/16.3.0...16.2.0
 [16.2.0]: https://github.com/square/Listable/compare/16.2.0...16.1.0
 [16.1.0]: https://github.com/square/Listable/compare/16.1.0...16.0.4
 [16.0.4]: https://github.com/square/Listable/compare/16.0.4...16.0.3
