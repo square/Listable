@@ -63,9 +63,9 @@ fastlane/test_output
 /Derived
 /*.xcodeproj
 /*.xcworkspace
-/Demo/Derived
-/Demo/*.xcodeproj
-/Demo/*.xcworkspace
+/Development/Derived
+/Development/*.xcodeproj
+/Development/*.xcworkspace
 
 # Test results
 /*.xcresult
