@@ -3,7 +3,10 @@ import ProjectDescription
 
 let project = Project(
     name: "ListableDevelopment",
-    settings: .settings(base: ["ENABLE_MODULE_VERIFIER": "YES"]),
+    settings: .settings(base: [
+        "ENABLE_MODULE_VERIFIER": "YES",
+        "DEVELOPMENT_TEAM": SettingValue(stringLiteral: Environment.developmentTeam.getString(default: "")),
+    ]),
     targets: [
          .app(
             name: "Listable_TestHost",
