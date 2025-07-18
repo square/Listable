@@ -40,16 +40,6 @@ playground.xcworkspace
 # Package.resolved
 .build/
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-Demo/Demo.xcworkspace
-Pods/
-gen/
-
 # Carthage
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
@@ -68,3 +58,14 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Tuist
+/Derived
+/*.xcodeproj
+/*.xcworkspace
+/Development/Derived
+/Development/*.xcodeproj
+/Development/*.xcworkspace
+
+# Test results
+/*.xcresult
