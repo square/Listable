@@ -671,9 +671,21 @@ dependencies: [
 
 ## Demo Project
 
-There is a Demo project that contains examples of various types of screens and use cases. We use [Mise](https://mise.jdx.dev/) and [Tuist](https://tuist.io/) to generate a project for local development. Follow the steps below for the recommended setup for zsh.
+There is a demo project that contains examples of various types of screens and use cases. We use [Mise](https://mise.jdx.dev/) and [Tuist](https://tuist.io/) to generate a project for local development.
+
+**Key Configuration Files:**
+- **`Package.swift`** - Swift Package Manager manifest defining dependencies and library targets
+- **`Development/Project.swift`** - Tuist project definition specifying targets, dependencies, and build settings for the development app
+- **`Development/Workspace.swift`** - Tuist workspace definition organizing multiple projects and schemes
+- **`.mise.toml`** - Mise configuration file pinning tool versions (Tuist, SwiftFormat, etc.) for consistent development environment
+
+Follow the steps below for the recommended setup for zsh.
 
 ```
+# install mise
+brew install mise
+# add mise activation line to your zshrc
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
 # load mise into your shell
 source ~/.zshrc
 # tell mise to trust Listable's config file
@@ -682,9 +694,9 @@ mise trust
 mise install
 
 # only necessary for first setup or after changing dependencies
-tuist install --path Demo
+tuist install --path Development
 # generates and opens the Xcode project
-tuist generate --path Demo
+tuist generate --path Development
 ```
 
 # Other Neat Stuff
