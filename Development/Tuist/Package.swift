@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Demo",
+    name: "Development",
     dependencies: [
         .package(path: "../../"),
     ]
