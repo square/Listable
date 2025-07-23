@@ -187,7 +187,7 @@ public enum Sizing : Equatable
 
 Listable integrates closely with [Blueprint](https://github.com/square/blueprint/), Square's framework for declarative UI construction and management (if you've used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.
 
-All you need to do is take a dependency on the `BlueprintUILists` pod, and then `import BlueprintUILists` to begin using Blueprint integration.
+All you need to do is take a dependency on the `BlueprintUILists` module, and then `import BlueprintUILists` to begin using Blueprint integration.
 
 In this example, we see how to declare a `List` within a Blueprint element hierarchy.
 
@@ -661,23 +661,43 @@ struct MyHeader : BlueprintHeaderFooterContent, Equatable
 
 ## Getting Started
 
-Listable is published on CocoaPods. You can add a dependency on Listable or it's Blueprint wrapper with the following in your Podspec: 
+You can add a dependency on Listable with the following in your `Package.swift` file: 
 
 ```
-s.dependency 'ListableUI'
-s.dependency 'BlueprintUILists'
-```
-
-If you want to depend on bleeding-edge changes, you can add the pods to your Podfile via the git repo like so:
-
-```
-  pod 'BlueprintUILists', git: 'ssh://git@github.com:kyleve/Listable.git'
-  pod 'ListableUI', git: 'ssh://git@github.com:kyleve/Listable.git'
+dependencies: [
+    .package(url: "https://github.com/square/Listable", from: "16.0.0")
+]
 ```
 
 ## Demo Project
-If you'd like to see examples of Listable in use, clone the repo, and then run `bundle exec pod install` in the root of the repo. This will create the `Demo/Demo.xcworkspace` workspace, which you can open and run. It contains examples of various types of screens and use cases.
 
+There is a demo project that contains examples of various types of screens and use cases. We use [Mise](https://mise.jdx.dev/) and [Tuist](https://tuist.io/) to generate a project for local development.
+
+**Key Configuration Files:**
+- **`Package.swift`** - Swift Package Manager manifest defining dependencies and library targets
+- **`Development/Project.swift`** - Tuist project definition specifying targets, dependencies, and build settings for the development app
+- **`Development/Workspace.swift`** - Tuist workspace definition organizing multiple projects and schemes
+- **`.mise.toml`** - Mise configuration file pinning tool versions (Tuist, SwiftFormat, etc.) for consistent development environment
+
+Follow the steps below for the recommended setup for zsh.
+
+```
+# install mise
+brew install mise
+# add mise activation line to your zshrc
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+# load mise into your shell
+source ~/.zshrc
+# tell mise to trust Listable's config file
+mise trust
+# install dependencies
+mise install
+
+# only necessary for first setup or after changing dependencies
+tuist install --path Development
+# generates and opens the Xcode project
+tuist generate --path Development
+```
 
 # Other Neat Stuff
 

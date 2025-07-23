@@ -8,8 +8,11 @@ sourcekitten=`gem contents jazzy | grep 'bin/sourcekitten$' | head -1`
 
 destination="generic/platform=iOS Simulator"
 
-$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme ListableUI -destination "$destination" > docs/JSON/ListableUI.json
-$sourcekitten doc -- -workspace Demo/Demo.xcworkspace -scheme BlueprintUILists -destination "$destination" > docs/JSON/BlueprintUILists.json
+tuist install --path Development/
+tuist generate --no-open --path Development/
+
+$sourcekitten doc -- -workspace Development/ListableDevelopment.xcworkspace -scheme ListableUI -destination "$destination" > docs/JSON/ListableUI.json
+$sourcekitten doc -- -workspace Development/ListableDevelopment.xcworkspace -scheme BlueprintUILists -destination "$destination" > docs/JSON/BlueprintUILists.json
 
 jazzy \
 	--clean \

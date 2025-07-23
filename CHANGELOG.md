@@ -12,6 +12,8 @@
 
 ### Internal
 
+- CocoaPods has been removed and local development environment is now driven by Tuist.
+
 # Past Releases
 
 # [16.3.0] - 2025-07-17
