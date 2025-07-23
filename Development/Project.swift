@@ -75,7 +75,7 @@ let project = Project(
             product: .framework,
             bundleId: "com.squareup.listable.snapshot",
             deploymentTargets: listableDeploymentTargets,
-            sources: ["../Internal/Snapshot/Sources/**"],
+            sources: ["Internal/Snapshot/Sources/**"],
             resources: [],
             dependencies: [.xctest]
         ),
@@ -86,7 +86,7 @@ let project = Project(
             bundleId: "com.squareup.listable.snapshot.tests",
             deploymentTargets: listableDeploymentTargets,
             sources: [
-                .glob("../Internal/Snapshot/Tests/**/*.swift", excluding: ["../Internal/Snapshot/Tests/**/Snapshot Results/**"])
+                .glob("Internal/Snapshot/Tests/**/*.swift", excluding: ["Internal/Snapshot/Tests/**/Snapshot Results/**"])
             ],
             resources: [],
             dependencies: [
@@ -100,8 +100,8 @@ let project = Project(
             product: .framework,
             bundleId: "com.listable.englishdictionary",
             deploymentTargets: listableDeploymentTargets,
-            sources: ["../Internal/EnglishDictionary/Sources/**"],
-            resources: ["../Internal/EnglishDictionary/Resources/**"]
+            sources: ["Internal/EnglishDictionary/Sources/**"],
+            resources: ["Internal/EnglishDictionary/Resources/**"]
         ),
     ]
 )
