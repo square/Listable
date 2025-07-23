@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/square/Blueprint",
       "state" : {
-        "revision" : "6e4698ba60752155fc62f39c1fea74cd1d3f18cc",
-        "version" : "6.0.0"
+        "revision" : "c97006eeef0d1d7be16dd556886ac6551a75dd59",
+        "version" : "6.1.0"
       }
     }
   ],

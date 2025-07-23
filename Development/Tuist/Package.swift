@@ -5,6 +5,13 @@ import PackageDescription
 #if TUIST
 import ProjectDescription
 
+let unsuppressedWarningsSettings: SettingsDictionary = {
+    [
+        "GCC_WARN_INHIBIT_ALL_WARNINGS": "NO",
+        "SWIFT_SUPPRESS_WARNINGS": "NO",
+    ]
+}()
+
 let packageSettings = PackageSettings(
     productTypes: [
         "BlueprintUI": .framework,
@@ -17,13 +24,6 @@ let packageSettings = PackageSettings(
         "ListableUI": unsuppressedWarningsSettings,
     ]
 )
-
-var unsuppressedWarningsSettings: SettingsDictionary {
-    [
-        "GCC_WARN_INHIBIT_ALL_WARNINGS": "NO",
-        "SWIFT_SUPPRESS_WARNINGS": "NO",
-    ]
-}
 
 #endif
 
