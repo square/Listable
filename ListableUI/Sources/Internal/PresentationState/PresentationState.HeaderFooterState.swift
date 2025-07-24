@@ -11,6 +11,9 @@ import UIKit
 
 protocol AnyPresentationHeaderFooterState : AnyObject
 {
+    var isDisplayed : Bool { get }
+    func setAndPerform(isDisplayed: Bool)
+    
     var anyModel : AnyHeaderFooter { get }
     
     var kind : SupplementaryKind { get }
@@ -150,6 +153,41 @@ extension PresentationState
         }
         
         // MARK: AnyPresentationHeaderFooterState
+        
+        private(set) var isDisplayed : Bool = false
+        
+        private var hasDisplayed : Bool = false
+        private var hasEndedDisplay : Bool = false
+        
+        func setAndPerform(isDisplayed: Bool) {
+            guard self.isDisplayed != isDisplayed else {
+                return
+            }
+            
+            self.isDisplayed = isDisplayed
+            
+            if self.isDisplayed {
+                if self.performsContentCallbacks {
+                    self.model.onDisplay?(.init(
+                        headerFooter: self.model,
+                        isFirstDisplay: self.hasDisplayed == false
+                        )
+                    )
+                }
+                
+                self.hasDisplayed = true
+            } else {
+                if self.performsContentCallbacks {
+                    self.model.onEndDisplay?(.init(
+                        headerFooter: self.model,
+                        isFirstEndDisplay: self.hasEndedDisplay == false
+                        )
+                    )
+                }
+                
+                self.hasEndedDisplay = true
+            }
+        }
         
         var anyModel: AnyHeaderFooter {
             return self.model

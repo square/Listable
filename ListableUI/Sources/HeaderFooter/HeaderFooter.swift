@@ -22,6 +22,9 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
     public typealias OnTap = () -> ()
     public var onTap : OnTap?
     
+    public var onDisplay : OnDisplay.Callback?
+    public var onEndDisplay : OnEndDisplay.Callback?
+    
     public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
@@ -45,7 +48,9 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         _ content : Content,
         sizing : Sizing? = nil,
         layouts : HeaderFooterLayouts? = nil,
-        onTap : OnTap? = nil
+        onTap : OnTap? = nil,
+        onDisplay : OnDisplay.Callback? = nil,
+        onEndDisplay : OnEndDisplay.Callback? = nil
     ) {
         assertIsValueType(Content.self)
         
@@ -56,6 +61,8 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.onTap = onTap ?? defaults.onTap
+        self.onDisplay = onDisplay ?? defaults.onDisplay
+        self.onEndDisplay = onEndDisplay ?? defaults.onEndDisplay
         self.debuggingIdentifier = defaults.debuggingIdentifier
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
@@ -145,14 +152,18 @@ extension HeaderFooterContent {
     public func with(
         sizing : Sizing? = nil,
         layouts : HeaderFooterLayouts? = nil,
-        onTap : HeaderFooter<Self>.OnTap? = nil
+        onTap : HeaderFooter<Self>.OnTap? = nil,
+        onDisplay : HeaderFooter<Self>.OnDisplay.Callback? = nil,
+        onEndDisplay : HeaderFooter<Self>.OnEndDisplay.Callback? = nil
     ) -> HeaderFooter<Self>
     {
         HeaderFooter(
             self,
             sizing: sizing,
             layouts: layouts,
-            onTap: onTap
+            onTap: onTap,
+            onDisplay: onDisplay,
+            onEndDisplay: onEndDisplay
         )
     }
 }
