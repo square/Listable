@@ -523,6 +523,32 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         return self.layout.content.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
     }
+    
+    //
+    // MARK: UICollectionViewLayout Methods: Decoration Views
+    //
+    
+    override func layoutAttributesForDecorationView(
+        ofKind elementKind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
+    {
+        fatalError()
+    }
+    
+    override func initialLayoutAttributesForAppearingDecorationElement(
+        ofKind elementKind: String,
+        at decorationIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
+        fatalError()
+    }
+    
+    override func finalLayoutAttributesForDisappearingDecorationElement(
+        ofKind elementKind: String,
+        at decorationIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
+        fatalError()
+    }
 
     //
     // MARK: UICollectionViewLayout Methods: Insertions & Removals
