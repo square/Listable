@@ -61,8 +61,8 @@ public struct HeaderFooter<Content:HeaderFooterContent> : AnyHeaderFooter
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.onTap = onTap ?? defaults.onTap
-        self.onEndDisplay = onEndDisplay ?? defaults.onEndDisplay
         self.onDisplay = onDisplay ?? defaults.onDisplay
+        self.onEndDisplay = onEndDisplay ?? defaults.onEndDisplay
         self.debuggingIdentifier = defaults.debuggingIdentifier
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)
