@@ -86,5 +86,12 @@ internal extension ListView
                 self.movedItems += $0.itemChanges.moved
             }
         }
+        
+        private init() {}
+        
+        /// Returns an instance of `CollectionViewChanges` containing no changes.
+        static var empty: CollectionViewChanges {
+            CollectionViewChanges()
+        }
     }
 }

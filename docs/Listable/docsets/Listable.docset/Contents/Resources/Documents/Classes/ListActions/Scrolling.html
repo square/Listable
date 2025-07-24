@@ -147,6 +147,9 @@
                 <a class="nav-group-task-link" href="../../Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Enums/AutoScrollAction/Configuration.html">– Configuration</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../../Enums/AutoScrollAction/OnInsertedItem.html">– OnInsertedItem</a>
               </li>
               <li class="nav-group-task">
@@ -785,9 +788,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA14ScrollPositionVSbtF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animatedSbAA7AnyItem_p_AA14ScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
+                    <a name="/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animated10completionSbAA7AnyItem_p_AA14ScrollPositionVSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animated10completionSbAA7AnyItem_p_AA14ScrollPositionVSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -807,7 +810,8 @@ If the item is contained in the list, true is returned. If it is not, false is r
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
     <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../../Protocols/AnyItem.html">AnyItem</a></span><span class="p">,</span>
     <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../../Classes/ListActions/Scrolling.html#/s:10ListableUI11ListActionsC9ScrollingC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -818,9 +822,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA14ScrollPositionVSbtF"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animatedSbAA13AnyIdentifierC_AA14ScrollPositionVSbtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>)</a>
+                    <a name="/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animated10completionSbAA13AnyIdentifierC_AA14ScrollPositionVSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC8scrollTo4item8position8animated10completionSbAA13AnyIdentifierC_AA14ScrollPositionVSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -841,7 +845,8 @@ If the item is contained in the list, true is returned. If it is not, false is r
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
     <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../../Classes/ListActions/Scrolling.html#/s:10ListableUI11ListActionsC9ScrollingC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
@@ -852,9 +857,9 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI11ListActionsC9ScrollingC15scrollToSection4with15sectionPosition0fK08animatedSbAA13AnyIdentifierC_AA0hK0OAA06ScrollK0VSbtF"></a>
-                    <a name="//apple_ref/swift/Method/scrollToSection(with:sectionPosition:scrollPosition:animated:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC15scrollToSection4with15sectionPosition0fK08animatedSbAA13AnyIdentifierC_AA0hK0OAA06ScrollK0VSbtF">scrollToSection(with:<wbr>sectionPosition:<wbr>scrollPosition:<wbr>animated:<wbr>)</a>
+                    <a name="/s:10ListableUI11ListActionsC9ScrollingC15scrollToSection4with15sectionPosition0fK08animated10completionSbAA13AnyIdentifierC_AA0hK0OAA06ScrollK0VSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollToSection(with:sectionPosition:scrollPosition:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI11ListActionsC9ScrollingC15scrollToSection4with15sectionPosition0fK08animated10completionSbAA13AnyIdentifierC_AA0hK0OAA06ScrollK0VSbyAA0C13StateObserverV06DidEndE9AnimationVcSgtF">scrollToSection(with:<wbr>sectionPosition:<wbr>scrollPosition:<wbr>animated:<wbr>completion:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -886,7 +891,8 @@ If the section has any content and is contained in the list, true is returned. I
     <span class="n">with</span> <span class="nv">identifier</span> <span class="p">:</span> <span class="kt"><a href="../../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">sectionPosition</span> <span class="p">:</span> <span class="kt"><a href="../../Enums/SectionPosition.html">SectionPosition</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">top</span><span class="p">,</span>
     <span class="nv">scrollPosition</span> <span class="p">:</span> <span class="kt"><a href="../../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
-    <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../../Classes/ListActions/Scrolling.html#/s:10ListableUI11ListActionsC9ScrollingC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>

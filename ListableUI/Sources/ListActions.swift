@@ -94,7 +94,8 @@ public final class ListActions {
         public func scrollTo(
             item : AnyItem,
             position : ScrollPosition,
-            animated : Bool = false
+            animated : Bool = false,
+            completion: ScrollCompletion? = nil
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -104,7 +105,8 @@ public final class ListActions {
             return listView.scrollTo(
                 item: item,
                 position: position,
-                animated: animated
+                animated: animated,
+                completion: completion
             )
         }
         
@@ -117,7 +119,8 @@ public final class ListActions {
         public func scrollTo(
             item : AnyIdentifier,
             position : ScrollPosition,
-            animated : Bool = false
+            animated : Bool = false,
+            completion: ScrollCompletion? = nil
             ) -> Bool
         {
             guard let listView = self.listView else {
@@ -127,7 +130,8 @@ public final class ListActions {
             return listView.scrollTo(
                 item: item,
                 position: position,
-                animated: animated
+                animated: animated,
+                completion: completion
             )
         }
 
@@ -151,7 +155,8 @@ public final class ListActions {
             with identifier : AnyIdentifier,
             sectionPosition : SectionPosition = .top,
             scrollPosition : ScrollPosition,
-            animated: Bool = false
+            animated: Bool = false,
+            completion: ScrollCompletion? = nil
         ) -> Bool
         {
             guard let listView = self.listView else {
@@ -162,7 +167,8 @@ public final class ListActions {
                 with: identifier,
                 sectionPosition: sectionPosition,
                 scrollPosition: scrollPosition,
-                animated: animated
+                animated: animated,
+                completion: completion
             )
         }
         

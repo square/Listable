@@ -190,28 +190,8 @@ extension List {
                 case .fillParent:
                     if let max = constraint.width.constrainedValue {
                         return max
-                    } else if case .caffeinated = layoutMode {
-                        return .infinity
                     } else {
-                        fatalError(
-                            """
-                            `List` is being used with the `.fillParent` measurement option, which takes \
-                            up the full width it is afforded by its parent element. However, \
-                            the parent element provided the `List` an unconstrained width, which is meaningless.
-                            
-                            How do you fix this?
-                            --------------------
-                            1) This usually means that your `List` itself has been \
-                            placed in a `ScrollView` or other element which intentionally provides an \
-                            unconstrained measurement to its content. If your `List` is in a `ScrollView`, \
-                            remove the outer scroll view – `List` manages its own scrolling. Two `ScrollViews` \
-                            that are nested within each other is generally meaningless unless they scroll \
-                            in different directions (eg, horizontal vs vertical).
-                            
-                            2) If your `List` is not in a `ScrollView`, ensure that the element
-                            measuring it is providing a constrained `SizeConstraint`.
-                            """
-                        )
+                        return .infinity
                     }
                 case .natural:
                     return size.naturalWidth ?? size.contentSize.width
@@ -223,31 +203,11 @@ extension List {
                 case .fillParent:
                     if let max = constraint.height.constrainedValue {
                         return max
-                    } else if case .caffeinated = layoutMode {
-                        return .infinity
                     } else {
-                        fatalError(
-                            """
-                            `List` is being used with the `.fillParent` measurement option, which takes \
-                            up the full height it is afforded by its parent element. However, \
-                            the parent element provided the `List` an unconstrained height, which is meaningless.
-                            
-                            How do you fix this?
-                            --------------------
-                            1) This usually means that your `List` itself has been \
-                            placed in a `ScrollView` or other element which intentionally provides an \
-                            unconstrained measurement to its content. If your `List` is in a `ScrollView`, \
-                            remove the outer scroll view – `List` manages its own scrolling. Two `ScrollViews` \
-                            that are nested within each other is generally meaningless unless they scroll \
-                            in different directions (eg, horizontal vs vertical).
-                            
-                            2) If your `List` is not in a `ScrollView`, ensure that the element
-                            measuring it is providing a constrained `SizeConstraint`.
-                            """
-                        )
+                        return .infinity
                     }
                 case .natural:
-                    if case .caffeinated = layoutMode, let maxHeight = constraint.height.constrainedValue {
+                    if let maxHeight = constraint.height.constrainedValue {
                         return min(size.contentSize.height, maxHeight)
                     }
                     return size.contentSize.height

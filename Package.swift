@@ -20,7 +20,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/square/Blueprint", from: "5.0.0"),
+        .package(url: "https://github.com/square/Blueprint", from: "6.0.0"),
     ],
     targets: [
         .target(
@@ -32,38 +32,6 @@ let package = Package(
                 "Sources/ContentBounds/ListContentBounds.monopic",
                 "Sources/Layout/Table/TableAppearance.monopic",
                 "Tests",
-            ],
-            resources: [
-                .process("Resources"),
-            ]
-        ),
-        .target(
-            name: "EnglishDictionary",
-            path: "Internal Pods/EnglishDictionary",
-            exclude: ["EnglishDictionary.podspec"],
-            resources: [
-                .process("Resources"),
-            ]
-        ),
-        .target(
-            name: "Snapshot",
-            path: "Internal Pods/Snapshot/Sources"
-        ),
-        .testTarget(
-            name: "SnapshotTests",
-            dependencies: ["Snapshot"],
-            path: "Internal Pods/Snapshot/Tests",
-            exclude: ["Snapshot Results"]
-        ),
-        .testTarget(
-            name: "ListableUITests",
-            dependencies: ["ListableUI", "EnglishDictionary", "Snapshot"],
-            path: "ListableUI/Tests",
-            exclude: [
-                "Layout/Flow/Snapshot Results",
-                "Layout/Paged/Snapshot Results",
-                "Layout/Table/Snapshot Results",
-                "Previews/Snapshot Results",
             ],
             resources: [
                 .process("Resources"),
@@ -82,14 +50,6 @@ let package = Package(
             resources: [
                 .process("Resources"),
             ]
-        ),
-        .testTarget(
-            name: "BlueprintUIListsTests",
-            dependencies: [
-                "BlueprintUILists",
-                .product(name: "BlueprintUICommonControls", package: "Blueprint")
-            ],
-            path: "BlueprintUILists/Tests"
         ),
     ],
     swiftLanguageVersions: [.v5]

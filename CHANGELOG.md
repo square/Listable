@@ -14,7 +14,66 @@
 
 ### Internal
 
+- CocoaPods has been removed and local development environment is now driven by Tuist.
+
 # Past Releases
+
+# [16.3.0] - 2025-07-17
+
+### Changed
+
+- Changing a List's `identifier` now automatically resets the scroll position.
+
+# [16.2.0] - 2025-07-02
+
+### Added
+
+- Added a completion handler to ListView's `scrollTo(item:position:animated:completion:)` and `scrollToSection(with:sectionPosition:scrollPosition:animated:completion:)` APIs.
+
+### Misc
+
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround is no longer capped to iOS versions less than 19.0. It was verified as required in the iOS 19 beta.
+
+### Internal
+
+- Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handlers with different layout configurations.
+
+# [16.1.0] - 2025-06-17
+
+### Changed
+
+- Blueprint dependency updated to 6.0.
+
+# [16.0.4] - 2025-06-06
+
+### Misc
+
+- The `IOS16_4_First_Responder_Bug_CollectionView` workaround has been capped to OS versions _less_ than iOS 19.0 until the fix has been verified as required and functioning.
+- The interpretation of the `Listable.EnableIOS164FirstResponderWorkaround` user defaults flag now defaults to `true` if no value has been set.
+
+# [16.0.3] - 2025-05-20
+
+### Internal
+
+- Improving how `AutoScrollAction` and `VerticalLayoutGravity.bottom` work together by temporarily ignoring the bottom gravity logic while autoscrolling.
+
+# [16.0.2] - 2025-05-09
+
+### Fixed
+
+- Fixed an issue with `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` that caused the scrolled offset to be reset to the bottom when using `VerticalLayoutGravity.bottom`.
+- Fixed issue with the `didPerform` closures of `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin`, where the visible items were stale after adjusting the offset with no animation.
+
+### Internal
+
+- Adding new demos to showcase mixing `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` with `VerticalLayoutGravity.bottom`.
+- Adding a new `AutoScrollAction.Behavior` protocol.
+
+# [16.0.1] - 2025-04-16
+
+### Fixed
+
+- Fixed a crash that would occur when a user would reorder / move items between sections.
 
 # [16.0.0] - 2025-04-04
 
@@ -1141,7 +1200,14 @@ listActions.scrolling.scrollToSection(
 Earlier releases were ad-hoc and not tracked. To see all changes, please reference [closed PRs on Github](https://github.com/kyleve/Listable/pulls?q=is%3Apr+is%3Aclosed).
 
 
-[Main]: https://github.com/square/Listable/compare/16.0.0...main
+[Main]: https://github.com/square/Listable/compare/16.3.0...main
+[16.3.0]: https://github.com/square/Listable/compare/16.3.0...16.2.0
+[16.2.0]: https://github.com/square/Listable/compare/16.2.0...16.1.0
+[16.1.0]: https://github.com/square/Listable/compare/16.1.0...16.0.4
+[16.0.4]: https://github.com/square/Listable/compare/16.0.4...16.0.3
+[16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
+[16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
+[16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
 [16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
 [15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
 [15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0

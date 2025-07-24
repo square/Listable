@@ -8,14 +8,7 @@
 import Foundation
 
 internal extension Bundle {
-    static var resources: Bundle {
-        #if SWIFT_PACKAGE
-        return .module
-        #else
-        let main = Bundle(for: ArrayDiffTests.self)
-        return Bundle(url: main.url(forResource: "ListableUITestsResources", withExtension: "bundle")!)!
-        #endif
-    }
+    static let resources = Bundle.module
 }
 
 struct StableRNG : RandomNumberGenerator
