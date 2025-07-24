@@ -57,7 +57,7 @@ jobs:
         run: tuist install --path Development/
 
       - name: Test All
-        run: tuist test ListableDevelopment-Workspace --path Development/ --platform ${{ env.TUIST_TEST_PLATFORM }} --os ${{ matrix.sdk }} --device "${{ env.TUIST_TEST_DEVICE }}" --result-bundle-path TestResult.xcresult
+        run: tuist test ListableDevelopment-Workspace --path Development/ --os ${{ matrix.sdk }} --result-bundle-path TestResult.xcresult
 
       - name: Upload TestResult
         uses: actions/upload-artifact@v4
