@@ -53,13 +53,6 @@ jobs:
         if: ${{ matrix.installation_required }}
         run: sudo xcodes runtimes install "iOS ${{ matrix.sdk }}"
 
-      - name: Build
-        run: |
-          xcodebuild \
-            -scheme "Listable-Package" \
-            -destination "platform=${{ env.TUIST_TEST_PLATFORM }} Simulator,OS=${{ matrix.sdk }},name=${{ env.TUIST_TEST_DEVICE }}" \
-            -sdk iphonesimulator build
-
       - name: Install Tuist dependencies for Development
         run: tuist install --path Development/
 
