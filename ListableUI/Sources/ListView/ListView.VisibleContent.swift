@@ -87,6 +87,10 @@ extension ListView
             var headerFooters : Set<HeaderFooter> = []
             
             for item in visibleAttributes {
+                
+                guard let kindString = item.representedElementKind else { continue }
+                guard let kind = try? ElementKind(kindString) else { continue }
+                
                 switch item.representedElementCategory {
                 case .cell:
                     items.insert(Item(
@@ -95,17 +99,26 @@ extension ListView
                     ))
                     
                 case .supplementaryView:
-                    let kind = SupplementaryKind(rawValue: item.representedElementKind!)!
+                    guard case let .supplementary(supplementary) = kind else {
+                        continue
+                    }
                     
                     headerFooters.insert(HeaderFooter(
-                        kind: kind,
+                        kind: supplementary,
                         indexPath: item.indexPath,
-                        headerFooter: view.storage.presentationState.headerFooter(of: kind, in: item.indexPath.section)
+                        headerFooter: view.storage.presentationState.headerFooter(
+                            of: supplementary,
+                            in: item.indexPath.section
+                        )
                     ))
                     
-                case .decorationView: fatalError()
+                case .decorationView:
+                    fatalError()
                     
-                @unknown default: assertionFailure("Unknown representedElementCategory type.")
+                @unknown default:
+                    assertionFailure(
+                        "Unknown representedElementCategory type `\(item.representedElementCategory)`."
+                    )
                 }
             }
             

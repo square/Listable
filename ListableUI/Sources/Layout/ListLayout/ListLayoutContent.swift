@@ -97,7 +97,13 @@ public final class ListLayoutContent
     {
         let section = self.sections[indexPath.section]
         
-        switch SupplementaryKind(rawValue: kind)! {
+        let elementKind = try! ElementKind(kind)
+        
+        guard case let .supplementary(kind) = elementKind else {
+            fatalError("im low key dead")
+        }
+        
+        switch kind {
         case .listContainerHeader: return self.containerHeader.layoutAttributes(with: indexPath)
         case .listHeader: return self.header.layoutAttributes(with: indexPath)
         case .listFooter: return self.footer.layoutAttributes(with: indexPath)
@@ -473,7 +479,10 @@ extension ListLayoutContent
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
         {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: self.kind.rawValue, with: indexPath)
+            let attributes = UICollectionViewLayoutAttributes(
+                forSupplementaryViewOfKind: ElementKind.supplementary(self.kind).stringValue,
+                with: indexPath
+            )
             
             attributes.frame = self.visibleFrame
             attributes.zIndex = self.zIndex
@@ -537,27 +546,89 @@ extension ListLayoutContent
         }
     }
     
+    public final class DecorationInfo : ListLayoutContentItem
+    {
+        let state : AnyPresentationItemState // TODO: Different
+        
+        var indexPath : IndexPath
+                
+        let kind : DecorationKind
+        let insertAndRemoveAnimations : ItemInsertAndRemoveAnimations
+        public let measurer : (Sizing.MeasureInfo) -> CGSize
+                
+        public var measuredSize : CGSize = .zero
+        
+        public var size : CGSize = .zero
+                
+        public var x : CGFloat = .zero
+        public var y : CGFloat = .zero
+        
+        public var zIndex : Int = 0
+        
+        public var layouts : ItemLayouts {
+            self.state.anyModel.layouts // TODO: Fix
+        }
+        
+        public var frame : CGRect {
+            CGRect(
+                origin: CGPoint(x: self.x, y: self.y),
+                size: self.size
+            )
+        }
+        
+        init(
+            state : AnyPresentationItemState, // TODO: Fix
+            kind : DecorationKind,
+            indexPath : IndexPath,
+            insertAndRemoveAnimations : ItemInsertAndRemoveAnimations,
+            measurer : @escaping (Sizing.MeasureInfo) -> CGSize
+        ) {
+            self.state = state
+            self.kind = kind
+            self.indexPath = indexPath
+            self.insertAndRemoveAnimations = insertAndRemoveAnimations
+            self.measurer = measurer
+        }
+        
+        func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
+        {
+            let attributes = UICollectionViewLayoutAttributes(
+                forDecorationViewOfKind: ElementKind.decoration(self.kind).stringValue,
+                with: indexPath
+            )
+            
+            attributes.frame = self.frame
+            attributes.zIndex = self.zIndex
+            
+            return attributes
+        }
+    }
+    
     enum ContentItem {
         
         case item(ListLayoutContent.ItemInfo, UICollectionViewLayoutAttributes)
         
         case supplementary(ListLayoutContent.SupplementaryItemInfo, UICollectionViewLayoutAttributes)
         
-        public var collectionViewLayoutAttributes : UICollectionViewLayoutAttributes {
+        case decoration(ListLayoutContent.DecorationInfo, UICollectionViewLayoutAttributes)
+        
+        var collectionViewLayoutAttributes : UICollectionViewLayoutAttributes {
             switch self {
             case .item(_, let attributes): return attributes
             case .supplementary(_, let attributes): return attributes
+            case .decoration(_, let attributes): return attributes
             }
         }
         
-        public var indexPath : IndexPath {
+        var indexPath : IndexPath {
             self.collectionViewLayoutAttributes.indexPath
         }
         
-        public var defaultFrame : CGRect {
+        var defaultFrame : CGRect {
             switch self {
             case .item(let item, _): return item.frame
             case .supplementary(let supplementary, _): return supplementary.defaultFrame
+            case .decoration(let decoration, _): return decoration.frame
             }
         }
         

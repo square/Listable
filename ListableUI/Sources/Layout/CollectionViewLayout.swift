@@ -503,10 +503,21 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         return self.layout.content.contentSize
     }
+    
+    final class TestDecoration : UICollectionReusableView {
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            self.backgroundColor = .red
+        }
+        
+        required init?(coder: NSCoder) {fatalError() }
+    }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: true)
+        self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: true)
     }
 
     func visibleLayoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
@@ -522,6 +533,32 @@ final class CollectionViewLayout : UICollectionViewLayout
     public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
     {
         return self.layout.content.supplementaryLayoutAttributes(of: elementKind, at: indexPath)
+    }
+    
+    //
+    // MARK: UICollectionViewLayout Methods: Decoration Views
+    //
+    
+    override func layoutAttributesForDecorationView(
+        ofKind elementKind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes?
+    {
+        fatalError()
+    }
+    
+    override func initialLayoutAttributesForAppearingDecorationElement(
+        ofKind elementKind: String,
+        at decorationIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
+        fatalError()
+    }
+    
+    override func finalLayoutAttributesForDisappearingDecorationElement(
+        ofKind elementKind: String,
+        at decorationIndexPath: IndexPath
+    ) -> UICollectionViewLayoutAttributes? {
+        fatalError()
     }
 
     //
