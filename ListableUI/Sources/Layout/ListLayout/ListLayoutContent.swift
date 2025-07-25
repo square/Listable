@@ -96,8 +96,12 @@ public final class ListLayoutContent
     func supplementaryLayoutAttributes(of kind : String, at indexPath : IndexPath) -> UICollectionViewLayoutAttributes?
     {
         let section = self.sections[indexPath.section]
-        
-        switch SupplementaryKind(rawValue: kind)! {
+
+        guard let typedKind = SupplementaryKind(rawValue: kind) else {
+            return nil
+        }
+
+        switch typedKind {
         case .listContainerHeader: return self.containerHeader.layoutAttributes(with: indexPath)
         case .listHeader: return self.header.layoutAttributes(with: indexPath)
         case .listFooter: return self.footer.layoutAttributes(with: indexPath)
