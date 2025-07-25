@@ -503,10 +503,21 @@ final class CollectionViewLayout : UICollectionViewLayout
     {
         return self.layout.content.contentSize
     }
+    
+    final class TestDecoration : UICollectionReusableView {
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            self.backgroundColor = .red
+        }
+        
+        required init?(coder: NSCoder) {fatalError() }
+    }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
-        return self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: true)
+        self.layout.content.layoutAttributes(in: rect, alwaysIncludeOverscroll: true)
     }
 
     func visibleLayoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?

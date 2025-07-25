@@ -8,16 +8,18 @@
 import Foundation
 
 
-public enum SupplementaryKind : String, CaseIterable
+// TODO: Rename to HeaderFooterKind, since even Decorations are "supplementary" views?
+public enum SupplementaryKind : String, CaseIterable, Codable
 {
-    case listContainerHeader = "Listable.ListContainerHeader"
-    case listHeader = "Listable.ListHeader"
-    case listFooter = "Listable.ListFooter"
+    case listContainerHeader = "ListContainerHeader"
+    case listHeader = "ListHeader"
+    case listFooter = "ListFooter"
     
-    case sectionHeader = "Listable.SectionHeader"
-    case sectionFooter = "Listable.SectionFooter"
+    case sectionHeader = "SectionHeader"
+    case sectionFooter = "SectionFooter"
     
-    case overscrollFooter = "Listable.OverscrollFooter"
+    // TODO: Convert to a decoration view eventually
+    case overscrollFooter = "OverscrollFooter"
     
     func indexPath(in section : Int) -> IndexPath
     {

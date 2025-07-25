@@ -18,6 +18,9 @@ public struct Decoration<Content:DecorationContent> : AnyDecoration
     public typealias OnTap = () -> ()
     public var onTap : OnTap?
     
+    public var onDisplay : OnDisplay.Callback?
+    public var onEndDisplay : OnEndDisplay.Callback?
+    
     public var debuggingIdentifier : String? = nil
     
     internal let reuseIdentifier : ReuseIdentifier<Content>
@@ -41,7 +44,9 @@ public struct Decoration<Content:DecorationContent> : AnyDecoration
         _ content : Content,
         sizing : Sizing? = nil,
         layouts : DecorationLayouts? = nil,
-        onTap : OnTap? = nil
+        onTap : OnTap? = nil,
+        onDisplay : OnDisplay.Callback? = nil,
+        onEndDisplay : OnEndDisplay.Callback? = nil
     ) {
         assertIsValueType(Content.self)
         
@@ -52,6 +57,8 @@ public struct Decoration<Content:DecorationContent> : AnyDecoration
         self.sizing = sizing ?? defaults.sizing ?? .thatFits(.noConstraint)
         self.layouts = layouts ?? defaults.layouts ?? .init()
         self.onTap = onTap ?? defaults.onTap
+        self.onDisplay = onDisplay
+        self.onEndDisplay = onEndDisplay
         self.debuggingIdentifier = defaults.debuggingIdentifier
         
         self.reuseIdentifier = ReuseIdentifier.identifier(for: Content.self)

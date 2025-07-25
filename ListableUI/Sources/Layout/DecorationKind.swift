@@ -8,7 +8,9 @@
 import Foundation
 
 
-public enum DecorationKind : String, CaseIterable {
+public enum DecorationKind : String, Codable {
     
-    case `default` = "Listable.ListDecoration"
+    case list
+    case section
+    case item
 }

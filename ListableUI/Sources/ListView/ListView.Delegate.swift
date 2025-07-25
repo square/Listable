@@ -171,17 +171,20 @@ extension ListView
             at indexPath: IndexPath
             )
         {
-            let container = anyView as! SupplementaryContainerView
-            let kind = SupplementaryKind(rawValue: kindString)!
-            
-            let headerFooter = self.presentationState.headerFooter(
-                of: kind,
-                in: indexPath.section
-            )
-            
-            headerFooter.collectionViewWillDisplay(view: container)
-            
-            self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
+            if let container = anyView as? SupplementaryContainerView {
+                let kind = SupplementaryKind(rawValue: kindString)!
+                
+                let headerFooter = self.presentationState.headerFooter(
+                    of: kind,
+                    in: indexPath.section
+                )
+                
+                headerFooter.collectionViewWillDisplay(view: container)
+                
+                self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
+            } else {
+                print("Displaying unknown view \(kindString)")
+            }
         }
         
         func collectionView(
@@ -191,13 +194,15 @@ extension ListView
             at indexPath: IndexPath
             )
         {
-            let container = anyView as! SupplementaryContainerView
-            
-            guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(container)) else {
-                return
+            if let container = anyView as? SupplementaryContainerView {
+                guard let headerFooter = self.displayedSupplementaryItems.removeValue(forKey: ObjectIdentifier(container)) else {
+                    return
+                }
+                            
+                headerFooter.collectionViewDidEndDisplay(of: container)
+            } else {
+                print("End displaying unknown view \(kindString)")
             }
-                        
-            headerFooter.collectionViewDidEndDisplay(of: container)
         }
         
         func collectionView(
