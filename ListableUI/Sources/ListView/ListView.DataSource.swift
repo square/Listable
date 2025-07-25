@@ -53,12 +53,18 @@ internal extension ListView
         
         func collectionView(
             _ collectionView: UICollectionView,
-            viewForSupplementaryElementOfKind kind: String,
+            viewForSupplementaryElementOfKind kindString: String,
             at indexPath: IndexPath
             ) -> UICollectionReusableView
         {
+            let elementKind = try! ElementKind(kindString)!
+            
+            guard case .supplementary(let kind) = elementKind else {
+                fatalError("Got an unexpected kind: \(elementKind)")
+            }
+            
             let statePair : PresentationState.HeaderFooterViewStatePair = {
-                switch SupplementaryKind(rawValue: kind)! {
+                switch kind {
                 case .listContainerHeader: return self.presentationState.containerHeader
                 case .listHeader: return self.presentationState.header
                 case .listFooter: return self.presentationState.footer
@@ -112,7 +118,7 @@ internal extension ListView
                 } else {
                     return SupplementaryContainerView.dequeue(
                         in: collectionView,
-                        for: kind,
+                        for: kindString,
                         at: indexPath,
                         reuseCache: self.headerFooterReuseCache,
                         environment: self.view.environment

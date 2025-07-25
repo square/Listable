@@ -97,7 +97,13 @@ public final class ListLayoutContent
     {
         let section = self.sections[indexPath.section]
         
-        switch SupplementaryKind(rawValue: kind)! {
+        let elementKind = try! ElementKind(kind)
+        
+        guard case let .supplementary(kind) = elementKind else {
+            fatalError("im low key dead")
+        }
+        
+        switch kind {
         case .listContainerHeader: return self.containerHeader.layoutAttributes(with: indexPath)
         case .listHeader: return self.header.layoutAttributes(with: indexPath)
         case .listFooter: return self.footer.layoutAttributes(with: indexPath)
@@ -473,7 +479,10 @@ extension ListLayoutContent
         
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
         {
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: self.kind.rawValue, with: indexPath)
+            let attributes = UICollectionViewLayoutAttributes(
+                forSupplementaryViewOfKind: ElementKind.supplementary(self.kind).stringValue,
+                with: indexPath
+            )
             
             attributes.frame = self.visibleFrame
             attributes.zIndex = self.zIndex
@@ -584,7 +593,7 @@ extension ListLayoutContent
         func layoutAttributes(with indexPath : IndexPath) -> UICollectionViewLayoutAttributes
         {
             let attributes = UICollectionViewLayoutAttributes(
-                forDecorationViewOfKind: self.kind.rawValue,
+                forDecorationViewOfKind: ElementKind.decoration(self.kind).stringValue,
                 with: indexPath
             )
             

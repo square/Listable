@@ -171,8 +171,12 @@ extension ListView
             at indexPath: IndexPath
             )
         {
-            if let container = anyView as? SupplementaryContainerView {
-                let kind = SupplementaryKind(rawValue: kindString)!
+            let elementKind = try! ElementKind(kindString)
+            
+            switch elementKind {
+            case .supplementary(let kind):
+                
+                let container = anyView as! SupplementaryContainerView
                 
                 let headerFooter = self.presentationState.headerFooter(
                     of: kind,
@@ -182,7 +186,9 @@ extension ListView
                 headerFooter.collectionViewWillDisplay(view: container)
                 
                 self.displayedSupplementaryItems[ObjectIdentifier(container)] = headerFooter
-            } else {
+            case .decoration(let decorationKind):
+                fatalError("// TODO")
+            case nil:
                 print("Displaying unknown view \(kindString)")
             }
         }

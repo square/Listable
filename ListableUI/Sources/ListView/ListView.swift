@@ -102,7 +102,10 @@ public final class ListView : UIView
         // Register supplementary views.
         
         SupplementaryKind.allCases.forEach {
-            SupplementaryContainerView.register(in: self.collectionView, for: $0.rawValue)
+            SupplementaryContainerView.register(
+                in: self.collectionView,
+                for: ElementKind.supplementary($0).stringValue
+            )
         }
         
         // Size and update views.

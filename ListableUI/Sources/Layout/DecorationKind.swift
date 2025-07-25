@@ -8,7 +8,7 @@
 import Foundation
 
 
-public enum DecorationKind : String, Codable {
+public enum DecorationKind : Codable {
     
     case list
     case section
