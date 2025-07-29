@@ -1,0 +1,4 @@
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BlueprintUILists.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ListableUI.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BlueprintUI.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BlueprintUICommonControls.framework

@@ -1,0 +1,35 @@
+{
+  "name": "Snapshot",
+  "version": "1.0.0.LOCAL",
+  "summary": "Snapshot testing for images, text hierarchies, etc.",
+  "homepage": "https://github.com/kyleve/Listable",
+  "license": {
+    "type": "Proprietary",
+    "text": "© 2020 Square, Inc."
+  },
+  "authors": {
+    "iOS Team": "seller-ios@squareup.com"
+  },
+  "source": {
+    "git": "Not Published",
+    "tag": "podify/1.0.0.LOCAL"
+  },
+  "platforms": {
+    "ios": "15.0"
+  },
+  "swift_versions": [
+    "5.9"
+  ],
+  "source_files": "Sources/**/*.{swift}",
+  "frameworks": "XCTest",
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "Tests/**/*.{swift}",
+      "frameworks": "XCTest",
+      "requires_app_host": true
+    }
+  ],
+  "swift_version": "5.9"
+}

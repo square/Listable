@@ -1,0 +1,6 @@
+framework module BlueprintUICommonControls {
+  umbrella header "BlueprintUICommonControls-umbrella.h"
+
+  export *
+  module * { export * }
+}

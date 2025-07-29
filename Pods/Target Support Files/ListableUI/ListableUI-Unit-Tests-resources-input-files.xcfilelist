@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/ListableUI/ListableUI-Unit-Tests-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/ListableUI/ListableUIResources.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/ListableUITestsResources.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/EnglishDictionary/EnglishDictionaryResources.bundle

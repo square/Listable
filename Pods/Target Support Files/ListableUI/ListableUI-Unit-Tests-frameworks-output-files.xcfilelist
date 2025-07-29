@@ -1,0 +1,3 @@
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ListableUI.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EnglishDictionary.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Snapshot.framework

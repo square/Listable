@@ -1,0 +1,6 @@
+framework module EnglishDictionary {
+  umbrella header "EnglishDictionary-umbrella.h"
+
+  export *
+  module * { export * }
+}

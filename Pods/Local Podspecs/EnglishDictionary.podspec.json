@@ -1,0 +1,30 @@
+{
+  "name": "EnglishDictionary",
+  "version": "1.0.0.LOCAL",
+  "summary": "English Dictionary class for testing.",
+  "homepage": "https://github.com/kyleve/Listable",
+  "license": {
+    "type": "Proprietary",
+    "text": "© 2020 Square, Inc."
+  },
+  "authors": {
+    "iOS Team": "seller-ios@squareup.com"
+  },
+  "source": {
+    "git": "Not Published",
+    "tag": "podify/1.0.0.LOCAL"
+  },
+  "platforms": {
+    "ios": "15.0"
+  },
+  "swift_versions": [
+    "5.9"
+  ],
+  "source_files": "Sources/**/*.{swift}",
+  "ios": {
+    "resource_bundles": {
+      "EnglishDictionaryResources": "Resources/**/*.*"
+    }
+  },
+  "swift_version": "5.9"
+}

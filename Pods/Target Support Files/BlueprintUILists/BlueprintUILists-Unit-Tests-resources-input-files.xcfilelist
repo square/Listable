@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/BlueprintUILists/BlueprintUILists-Unit-Tests-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/BlueprintUIListsResources.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/ListableUI/ListableUIResources.bundle

@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/BlueprintUILists/BlueprintUILists-Unit-Tests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/BlueprintUILists/BlueprintUILists.framework
+${BUILT_PRODUCTS_DIR}/ListableUI/ListableUI.framework
+${BUILT_PRODUCTS_DIR}/BlueprintUI/BlueprintUI.framework
+${BUILT_PRODUCTS_DIR}/BlueprintUICommonControls/BlueprintUICommonControls.framework

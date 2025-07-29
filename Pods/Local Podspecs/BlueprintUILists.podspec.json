@@ -1,0 +1,56 @@
+{
+  "name": "BlueprintUILists",
+  "version": "16.1.0",
+  "summary": "Declarative list views for iOS apps that deploy back to iOS 15.0.",
+  "homepage": "https://github.com/kyleve/Listable",
+  "license": "Apache License, Version 2.0",
+  "authors": {
+    "Kyle": "k@squareup.com"
+  },
+  "source": {
+    "git": "https://github.com/kyleve/Listable.git",
+    "tag": "16.1.0"
+  },
+  "platforms": {
+    "ios": "15.0"
+  },
+  "swift_versions": [
+    "5.9"
+  ],
+  "dependencies": {
+    "ListableUI": [],
+    "BlueprintUI": [
+      "~> 5.0"
+    ]
+  },
+  "source_files": "BlueprintUILists/Sources/**/*.{swift}",
+  "pod_target_xcconfig": {
+    "APPLICATION_EXTENSION_API_ONLY": "YES"
+  },
+  "testspecs": [
+    {
+      "name": "Tests",
+      "test_type": "unit",
+      "source_files": "BlueprintUILists/Tests/**/*.{swift}",
+      "ios": {
+        "resource_bundles": {
+          "BlueprintUIListsResources": "BlueprintUILists/Tests/Resources/**/*.*"
+        }
+      },
+      "dependencies": {
+        "BlueprintUICommonControls": [
+          "~> 5.0"
+        ]
+      },
+      "frameworks": "XCTest",
+      "libraries": [
+        "swiftsimd",
+        "swiftCoreGraphics",
+        "swiftFoundation",
+        "swiftUIKit"
+      ],
+      "requires_app_host": true
+    }
+  ],
+  "swift_version": "5.9"
+}

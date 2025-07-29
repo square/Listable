@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/ListableUI/ListableUI-Unit-Tests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/ListableUI/ListableUI.framework
+${BUILT_PRODUCTS_DIR}/EnglishDictionary/EnglishDictionary.framework
+${BUILT_PRODUCTS_DIR}/Snapshot/Snapshot.framework

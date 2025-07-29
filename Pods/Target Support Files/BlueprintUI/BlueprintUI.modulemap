@@ -1,0 +1,6 @@
+framework module BlueprintUI {
+  umbrella header "BlueprintUI-umbrella.h"
+
+  export *
+  module * { export * }
+}

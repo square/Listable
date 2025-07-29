@@ -1,0 +1,6 @@
+framework module BlueprintUILists {
+  umbrella header "BlueprintUILists-umbrella.h"
+
+  export *
+  module * { export * }
+}

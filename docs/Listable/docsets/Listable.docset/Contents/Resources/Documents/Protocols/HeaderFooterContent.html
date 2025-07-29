@@ -453,6 +453,12 @@
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/HeaderFooter/OnDisplay.html">– OnDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/HeaderFooter/OnEndDisplay.html">– OnEndDisplay</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooterContentViews.html">HeaderFooterContentViews</a>
               </li>
               <li class="nav-group-task">
@@ -772,9 +778,9 @@ z-Index 1) <code>BackgroundView</code></p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI19HeaderFooterContentP12isEquivalent2toSbx_tF"></a>
+                    <a name="/s:10ListableUI19HeaderFooterContentPAASQRzrlE12isEquivalent2toSbx_tF"></a>
                     <a name="//apple_ref/swift/Method/isEquivalent(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI19HeaderFooterContentP12isEquivalent2toSbx_tF">isEquivalent(to:<wbr>)</a>
+                    <a class="token" href="#/s:10ListableUI19HeaderFooterContentPAASQRzrlE12isEquivalent2toSbx_tF">isEquivalent(to:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1222,9 +1228,9 @@ do that work in <code>apply(to:)</code>, so the appearance will be updated if th
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI19HeaderFooterContentPAAE4with6sizing7layouts5onTapAA0cD0VyxGAA6SizingOSg_AA0cD7LayoutsVSgyycSgtF"></a>
-                    <a name="//apple_ref/swift/Method/with(sizing:layouts:onTap:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI19HeaderFooterContentPAAE4with6sizing7layouts5onTapAA0cD0VyxGAA6SizingOSg_AA0cD7LayoutsVSgyycSgtF">with(sizing:<wbr>layouts:<wbr>onTap:<wbr>)</a>
+                    <a name="/s:10ListableUI19HeaderFooterContentPAAE4with6sizing7layouts5onTap0I7Display0i3EndK0AA0cD0VyxGAA6SizingOSg_AA0cD7LayoutsVSgyycSgyAK02OnK0Vyx_GcSgyAK0olK0Vyx_GcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/with(sizing:layouts:onTap:onDisplay:onEndDisplay:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI19HeaderFooterContentPAAE4with6sizing7layouts5onTap0I7Display0i3EndK0AA0cD0VyxGAA6SizingOSg_AA0cD7LayoutsVSgyycSgyAK02OnK0Vyx_GcSgyAK0olK0Vyx_GcSgtF">with(sizing:<wbr>layouts:<wbr>onTap:<wbr>onDisplay:<wbr>onEndDisplay:<wbr>)</a>
                     </code>
                       <span class="declaration-note">
                         Extension method
@@ -1260,7 +1266,9 @@ to avoid additional nesting, and to hoist your content up in your code.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">with</span><span class="p">(</span>
     <span class="nv">sizing</span> <span class="p">:</span> <span class="kt"><a href="../Enums/Sizing.html">Sizing</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="nv">layouts</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooterLayouts.html">HeaderFooterLayouts</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">onTap</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooter.html">HeaderFooter</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnTap</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+    <span class="nv">onTap</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooter.html">HeaderFooter</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnTap</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">onDisplay</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooter.html">HeaderFooter</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnDisplay</span><span class="o">.</span><span class="kt">Callback</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">onEndDisplay</span> <span class="p">:</span> <span class="kt"><a href="../Structs/HeaderFooter.html">HeaderFooter</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;.</span><span class="kt">OnEndDisplay</span><span class="o">.</span><span class="kt">Callback</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/HeaderFooter.html">HeaderFooter</a></span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span></code></pre>
 
                         </div>
@@ -1304,53 +1312,6 @@ to avoid additional nesting, and to hoist your content up in your code.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asAnyHeaderFooter</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/AnyHeaderFooter.html">AnyHeaderFooter</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Available%20where%20%60Self%3AEquatable%60"></a>
-                <a name="//apple_ref/swift/Section/Available where `Self:Equatable`" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Self%3AEquatable%60"></a>
-                  <h3 class="section-name"><span>Available where <code>Self:Equatable</code></span>
-</h3>
-                </div>
-              </div>
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10ListableUI19HeaderFooterContentPAASQRzrlE12isEquivalent2toSbx_tF"></a>
-                    <a name="//apple_ref/swift/Method/isEquivalent(to:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI19HeaderFooterContentPAASQRzrlE12isEquivalent2toSbx_tF">isEquivalent(to:<wbr>)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Default implementation
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <h4>Default Implementation</h4>
-                      <div class="default_impl abstract">
-                        <p>If your <code>HeaderFooterContent</code> is <code>Equatable</code>, <code>isEquivalent</code> is based on the <code>Equatable</code> implementation.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">isEquivalent</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>

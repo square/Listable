@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-Demo/Pods-Demo-frameworks.sh
+${BUILT_PRODUCTS_DIR}/BlueprintUI/BlueprintUI.framework
+${BUILT_PRODUCTS_DIR}/BlueprintUICommonControls/BlueprintUICommonControls.framework
+${BUILT_PRODUCTS_DIR}/BlueprintUILists/BlueprintUILists.framework
+${BUILT_PRODUCTS_DIR}/EnglishDictionary/EnglishDictionary.framework
+${BUILT_PRODUCTS_DIR}/ListableUI/ListableUI.framework
