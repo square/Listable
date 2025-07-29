@@ -2,11 +2,7 @@
 
 ### Fixed
 
-- Fixed a crash that occurred when, while the cursor is on the first heading, we are on the Headings VoiceOver rotor and swipe up with one finger.
-
 ### Added
-
-- Added support for `onDisplay` and `onEndDisplay` callbacks for `HeaderFooters`.
 
 ### Removed
 
@@ -16,9 +12,21 @@
 
 ### Internal
 
-- CocoaPods has been removed and local development environment is now driven by Tuist.
-
 # Past Releases
+
+# [16.4.0] - 2025-07-29
+
+### Fixed
+
+- Fixed a crash that occurred when, while the cursor is on the first heading, we are on the Headings VoiceOver rotor and swipe up with one finger.
+
+### Added
+
+- Added support for `onDisplay` and `onEndDisplay` callbacks for `HeaderFooters`.
+
+### Internal
+
+- CocoaPods has been removed and local development environment is now driven by Tuist.
 
 # [16.3.0] - 2025-07-17
 

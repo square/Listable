@@ -453,6 +453,12 @@
                 <a class="nav-group-task-link" href="../Structs/HeaderFooter.html">HeaderFooter</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/HeaderFooter/OnDisplay.html">– OnDisplay</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/HeaderFooter/OnEndDisplay.html">– OnEndDisplay</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/HeaderFooterContentViews.html">HeaderFooterContentViews</a>
               </li>
               <li class="nav-group-task">
@@ -1869,6 +1875,42 @@ of the list view. The newly provided environment values will be used during the 
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="k">override</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">layoutSubviews</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@CM@ListableUI@objc(cs)ListView(cm)configureWithApplication:"></a>
+                    <a name="//apple_ref/swift/Method/configure(with:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@CM@ListableUI@objc(cs)ListView(cm)configureWithApplication:">configure(with:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This should be called in UIApplicationDelegate.application(_:, didFinishLaunchingWithOption:)
+It ensures that all ListViews will correctly avoid the keyboard</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    CocoaPods automatically calls this method
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@available(iOSApplicationExtension, unavailable, message: "This cannot be used in application extensions")</span>
+<span class="kd">@objc(configureWithApplication:)</span>
+<span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>

@@ -298,7 +298,7 @@
 
 <p>Listable integrates closely with <a href="https://github.com/square/blueprint/">Blueprint</a>, Square&rsquo;s framework for declarative UI construction and management (if you&rsquo;ve used SwiftUI, Blueprint is similar). Listable provides wrapper types and default types to make using Listable lists within Blueprint elements simple, and to make it easy to build Listable items out of Blueprint elements.</p>
 
-<p>All you need to do is take a dependency on the <code>BlueprintUILists</code> pod, and then <code>import BlueprintUILists</code> to begin using Blueprint integration.</p>
+<p>All you need to do is take a dependency on the <code>BlueprintUILists</code> module, and then <code>import BlueprintUILists</code> to begin using Blueprint integration.</p>
 
 <p>In this example, we see how to declare a <code><a href="Structs/List.html">List</a></code> within a Blueprint element hierarchy.</p>
 <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">elementRepresentation</span> <span class="p">:</span> <span class="kt">Element</span> <span class="p">{</span>
@@ -718,18 +718,41 @@
 </code></pre>
 <h2 id='getting-started' class='heading'>Getting Started</h2>
 
-<p>Listable is published on CocoaPods. You can add a dependency on Listable or it&rsquo;s Blueprint wrapper with the following in your Podspec: </p>
-<pre class="highlight plaintext"><code>s.dependency 'ListableUI'
-s.dependency 'BlueprintUILists'
-</code></pre>
-
-<p>If you want to depend on bleeding-edge changes, you can add the pods to your Podfile via the git repo like so:</p>
-<pre class="highlight plaintext"><code>  pod 'BlueprintUILists', git: 'ssh://git@github.com:kyleve/Listable.git'
-  pod 'ListableUI', git: 'ssh://git@github.com:kyleve/Listable.git'
+<p>You can add a dependency on Listable with the following in your <code>Package.swift</code> file: </p>
+<pre class="highlight plaintext"><code>dependencies: [
+    .package(url: "https://github.com/square/Listable", from: "16.0.0")
+]
 </code></pre>
 <h2 id='demo-project' class='heading'>Demo Project</h2>
 
-<p>If you&rsquo;d like to see examples of Listable in use, clone the repo, and then run <code>bundle exec pod install</code> in the root of the repo. This will create the <code>Demo/Demo.xcworkspace</code> workspace, which you can open and run. It contains examples of various types of screens and use cases.</p>
+<p>There is a demo project that contains examples of various types of screens and use cases. We use <a href="https://mise.jdx.dev/">Mise</a> and <a href="https://tuist.io/">Tuist</a> to generate a project for local development.</p>
+
+<p><strong>Key Configuration Files:</strong></p>
+
+<ul>
+<li><strong><code>Package.swift</code></strong> - Swift Package Manager manifest defining dependencies and library targets</li>
+<li><strong><code>Development/Project.swift</code></strong> - Tuist project definition specifying targets, dependencies, and build settings for the development app</li>
+<li><strong><code>Development/Workspace.swift</code></strong> - Tuist workspace definition organizing multiple projects and schemes</li>
+<li><strong><code>.mise.toml</code></strong> - Mise configuration file pinning tool versions (Tuist, SwiftFormat, etc.) for consistent development environment</li>
+</ul>
+
+<p>Follow the steps below for the recommended setup for zsh.</p>
+<pre class="highlight plaintext"><code># install mise
+brew install mise
+# add mise activation line to your zshrc
+echo 'eval "$(mise activate zsh)"' &gt;&gt; ~/.zshrc
+# load mise into your shell
+source ~/.zshrc
+# tell mise to trust Listable's config file
+mise trust
+# install dependencies
+mise install
+
+# only necessary for first setup or after changing dependencies
+tuist install --path Development
+# generates and opens the Xcode project
+tuist generate --path Development
+</code></pre>
 <h1 id='other-neat-stuff' class='heading'>Other Neat Stuff</h1>
 <h3 id='you-can-nest-lists-in-other-lists' class='heading'>You can nest Lists in other lists.</h3>
 
