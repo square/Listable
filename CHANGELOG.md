@@ -1212,16 +1212,16 @@ Earlier releases were ad-hoc and not tracked. To see all changes, please referen
 
 [Main]: https://github.com/square/Listable/compare/16.4.0...main
 [16.4.0]: https://github.com/square/Listable/compare/16.3.0...16.4.0
-[16.3.0]: https://github.com/square/Listable/compare/16.3.0...16.2.0
-[16.2.0]: https://github.com/square/Listable/compare/16.2.0...16.1.0
-[16.1.0]: https://github.com/square/Listable/compare/16.1.0...16.0.4
-[16.0.4]: https://github.com/square/Listable/compare/16.0.4...16.0.3
-[16.0.3]: https://github.com/square/Listable/compare/16.0.3...16.0.2
-[16.0.2]: https://github.com/square/Listable/compare/16.0.2...16.0.1
-[16.0.1]: https://github.com/square/Listable/compare/16.0.1...16.0.0
-[16.0.0]: https://github.com/square/Listable/compare/16.0.0...15.0.2
-[15.0.2]: https://github.com/square/Listable/compare/15.0.2...15.0.1
-[15.0.1]: https://github.com/square/Listable/compare/15.0.1...15.0.0
+[16.3.0]: https://github.com/square/Listable/compare/16.2.0...16.3.0
+[16.2.0]: https://github.com/square/Listable/compare/16.1.0...16.2.0
+[16.1.0]: https://github.com/square/Listable/compare/16.0.4...16.1.0
+[16.0.4]: https://github.com/square/Listable/compare/16.0.3...16.0.4
+[16.0.3]: https://github.com/square/Listable/compare/16.0.2...16.0.3
+[16.0.2]: https://github.com/square/Listable/compare/16.0.1...16.0.2
+[16.0.1]: https://github.com/square/Listable/compare/16.0.0...16.0.1
+[16.0.0]: https://github.com/square/Listable/compare/15.0.2...16.0.0
+[15.0.2]: https://github.com/square/Listable/compare/15.0.1...15.0.2
+[15.0.1]: https://github.com/square/Listable/compare/15.0.0...15.0.1
 [15.0.0]: https://github.com/square/Listable/compare/14.5.0...15.0.0
 [14.5.0]: https://github.com/square/Listable/compare/14.4.1...14.5.0
 [14.4.1]: https://github.com/square/Listable/compare/14.4.0...14.4.1
