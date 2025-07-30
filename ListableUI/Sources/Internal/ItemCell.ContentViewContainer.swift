@@ -286,8 +286,11 @@ extension ItemCell {
         private func set(state: SwipeActionState, animated: Bool = false) {
             swipeState = state
 
+            // Warning! : `swipeState` may be mutated to a new value via it's property
+            // observers and may not equal `state` at this point!
+
             // We don't want any actions on the content view while our swipe actions are open.
-            self.contentView.isUserInteractionEnabled = switch state {
+            self.contentView.isUserInteractionEnabled = switch swipeState {
             case .closed:
                 true
             case .expandActions, .open, .swiping, .willPerformFirstActionAutomatically:
