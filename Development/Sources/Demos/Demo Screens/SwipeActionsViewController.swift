@@ -333,6 +333,9 @@ final class SwipeActionsViewController: UIViewController  {
                 .inset(uniform: 16)
             }
             .accessibilityElement(label: "Swipeable Item", value: item.title, traits: [.button])
+            .tappable {
+                print("Tapped \(item.title)")
+            }
         }
     }
 

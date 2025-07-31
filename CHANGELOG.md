@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed an issue where a full swipe of a swipe action could result in the cell being temporarily unresponsive.
+
 ### Added
 
 ### Removed
