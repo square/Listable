@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where a full swipe of a swipe action could result in the cell being temporarily unresponsive.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# 16.4.1 - 2025-08-01
+
+### Fixed
+
+- Fixed an issue where a full swipe of a swipe action could result in the cell being temporarily unresponsive.
 
 # [16.4.0] - 2025-07-29
 
