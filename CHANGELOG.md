@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where a full swipe of a swipe action could result in the cell being temporarily unresponsive.
-
 ### Added
 
 ### Removed
@@ -16,7 +14,13 @@
 
 # Past Releases
 
-# [16.4.0] - 2025-07-29
+# 16.4.1 - 2025-08-01
+
+### Fixed
+
+- Fixed an issue where a full swipe of a swipe action could result in the cell being temporarily unresponsive.
+
+# 16.4.0 - 2025-07-29
 
 ### Fixed
 
@@ -30,13 +34,13 @@
 
 - CocoaPods has been removed and local development environment is now driven by Tuist.
 
-# [16.3.0] - 2025-07-17
+# 16.3.0 - 2025-07-17
 
 ### Changed
 
 - Changing a List's `identifier` now automatically resets the scroll position.
 
-# [16.2.0] - 2025-07-02
+# 16.2.0 - 2025-07-02
 
 ### Added
 
@@ -50,26 +54,26 @@
 
 - Added the `ScrollCompletionHandlerViewController` demo to showcase the new completion handlers with different layout configurations.
 
-# [16.1.0] - 2025-06-17
+# 16.1.0 - 2025-06-17
 
 ### Changed
 
 - Blueprint dependency updated to 6.0.
 
-# [16.0.4] - 2025-06-06
+# 16.0.4 - 2025-06-06
 
 ### Misc
 
 - The `IOS16_4_First_Responder_Bug_CollectionView` workaround has been capped to OS versions _less_ than iOS 19.0 until the fix has been verified as required and functioning.
 - The interpretation of the `Listable.EnableIOS164FirstResponderWorkaround` user defaults flag now defaults to `true` if no value has been set.
 
-# [16.0.3] - 2025-05-20
+# 16.0.3 - 2025-05-20
 
 ### Internal
 
 - Improving how `AutoScrollAction` and `VerticalLayoutGravity.bottom` work together by temporarily ignoring the bottom gravity logic while autoscrolling.
 
-# [16.0.2] - 2025-05-09
+# 16.0.2 - 2025-05-09
 
 ### Fixed
 
@@ -81,13 +85,13 @@
 - Adding new demos to showcase mixing `AutoScrollAction.OnInsertedItem` and `AutoScrollAction.Pin` with `VerticalLayoutGravity.bottom`.
 - Adding a new `AutoScrollAction.Behavior` protocol.
 
-# [16.0.1] - 2025-04-16
+# 16.0.1 - 2025-04-16
 
 ### Fixed
 
 - Fixed a crash that would occur when a user would reorder / move items between sections.
 
-# [16.0.0] - 2025-04-04
+# 16.0.0 - 2025-04-04
 
 ### Added
 
@@ -110,7 +114,7 @@
 
 - Replacing `PagedAppearance.PagingSize.view` with a `.inset(Peek)` case. This is used by `PagedListLayout` to lay out items with an edge peek.
 
-# [15.0.2] - 2025-04-02
+# 15.0.2 - 2025-04-02
 
 ### Fixed
 
@@ -121,13 +125,13 @@
 
 - Updating GitHub `actions/cache` to v4.
 
-# [15.0.1] - 2025-02-25
+# 15.0.1 - 2025-02-25
 
 ### Fixed
 
 - Fixed behavior change introduced in 15.0.0 where scrolling could animate when `UIView.areAnimationsEnabled` is `false`.
 
-# [15.0.0] - 2025-01-16
+# 15.0.0 - 2025-01-16
 
 ### Fixed
 
@@ -149,13 +153,13 @@
 
 - While no longer published, CocoaPods is still used for demo project generation.
 
-# [14.5.0] - 2024-12-18
+# 14.5.0 - 2024-12-18
 
 ### Added
 
 - Added `CacheCleaner` which exposes a method to force Listable's static caches to be cleared. 
 
-# [14.4.1] - 2024-10-31
+# 14.4.1 - 2024-10-31
 
 ### Changed
 
@@ -165,7 +169,7 @@
 
 - `BlueprintUILists` now depends on `BlueprintUI` 5.0.0.
 
-# [14.4.0] - 2024-08-27
+# 14.4.0 - 2024-08-27
 
 ### Added
 
@@ -175,13 +179,13 @@
 
 - Revert: Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
 
-# [14.3.1] - 2024-08-08
+# 14.3.1 - 2024-08-08
 
 ### Fixed
 
 - Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
 
-# [14.3.0] - 2024-07-31
+# 14.3.0 - 2024-07-31
 
 ### Added
 
@@ -208,19 +212,19 @@
 
 - Generated documentation now uses a static copyright notice to avoid noisy diffs.
 
-# [14.0.2] - 2024-02-29
+# 14.0.2 - 2024-02-29
 
 ### Fixed
 
 - Fixed a bug that resulted in some swipe action buttons not being tappable.
 
-# [14.0.1] - 2024-02-21
+# 14.0.1 - 2024-02-21
 
 ### Fixed
 
 - Fix SPM dependency on listable
 
-# [14.0.0] - 2024-02-21
+# 14.0.0 - 2024-02-21
 
 ### Fixed
 
@@ -242,7 +246,7 @@
 - Bumped CI to use Xcode 15.1.
 - Updated Gems and set Ruby version to 3.2.2.
 
-# [13.1.0] - 2023-11-30
+# 13.1.0 - 2023-11-30
 
 ### Fixed
 
@@ -253,7 +257,7 @@
 
 - Remove override of `performBatchUpdates` from our internal `UICollectionView` subclass, it causes warnings for consumers.
 
-# [13.0.0] - 2023-09-06
+# 13.0.0 - 2023-09-06
 
 ### Fixed
 
@@ -264,7 +268,7 @@
 
 - `KeyboardObserverDelegate` now provides `UIView.AnimationCurve` instead of `UIView.AnimationOptions`.
 
-# [12.0.0] - 2023-08-08
+# 12.0.0 - 2023-08-08
 
 ### Added
 
@@ -282,7 +286,7 @@
 - Update CI script to reference the `xcodesorg/made/xcodes` package for installing simulator runtimes.
 - Update CI script to install `aria2` to improve simulator runtime download speeds.
 
-# [11.0.0] - 2023-06-15
+# 11.0.0 - 2023-06-15
 
 ### Removed
 
@@ -292,19 +296,19 @@
 
 - `.paged` layouts now respect `bounds` for each page.
 
-# [10.3.1] - 2023-06-06
+# 10.3.1 - 2023-06-06
 
 ### Fixed
 
 - Enabled collection view first responder workaround for iOS 17.0; it is broken in the first beta.
 
-# [10.3.0] - 2023-05-17
+# 10.3.0 - 2023-05-17
 
 ### Added
 
 - You may now programatically reveal leading and trailing swipe actions, by calling the `showLeadingSwipeActions` or `showTrailingSwipeActions` closures on `ApplyItemContentInfo`.
 
-# [10.2.0] - 2023-05-15
+# 10.2.0 - 2023-05-15
 
 ### Fixed
 
@@ -314,19 +318,19 @@
 
 - Added optional underlay view for item cells that can be styled  
 
-# [10.1.0] - 2023-05-08
+# 10.1.0 - 2023-05-08
 
 ### Changed
 
 - BlueprintUILists now depends on Blueprint 2.0.
 
-# [10.0.1] - 2023-04-26
+# 10.0.1 - 2023-04-26
 
 ### Fixed
 
 - Fix an issue when a header or footer has an `onTap` handler, and no pressed background, the first tap would be ignored.
 
-# [10.0.0] - 2023-04-25
+# 10.0.0 - 2023-04-25
 
 ### Fixed
 
@@ -359,7 +363,7 @@
 
 - Improvement: Background and Selected Background views for rows and section headers will not be created unless requested. This reduces the overall number of views being allocated.
 
-# [9.0.0] - 2023-04-19
+# 9.0.0 - 2023-04-19
 
 ### Added
 
@@ -369,20 +373,20 @@
 
 - BlueprintUILists now depends on Blueprint 1.0.
 
-# [8.2.0] - 2023-04-18
+# 8.2.0 - 2023-04-18
 
 ### Added
 
 - Introduce `ListStateObserver.onDidEndDeceleration(_:)` callback, which allows an observer to become notified when the scrollview finishes deceleration.
 - Introduce `ListStateObserver.OnDidBeginDrag(_:)` callback, which allows an observer to become notified when the scrollview will begin dragging.
 
-# [8.1.2] - 2023-04-12
+# 8.1.2 - 2023-04-12
 
 ### Fixed
 
 - A small defensive update to the iOS 16.4 Collection View workaround.
 
-# [8.1.1] - 2023-04-11
+# 8.1.1 - 2023-04-11
 
 ### Fixed
 
@@ -390,43 +394,43 @@
 
 - [Fixed a regression](https://github.com/square/Listable/pull/466/) in iOS 16.4, where on every collection view refresh, the collection view would force resign a first responder if it was within a header or footer (cells are not affected). See `ListView+iOS16.4Workaround.swift` for more.
 
-# [8.1.0] - 2023-03-16
+# 8.1.0 - 2023-03-16
 
 ### Added
 
 - Introduce an `OverlayDecoration`, which allows you to place a border, etc, around an item which is not affected by swipe action position.
 
-# [8.0.5] - 2023-03-07
+# 8.0.5 - 2023-03-07
 
 ### Misc
 
 - Updated `BlueprintUI` and `BlueprintUICommonControls` to version `0.50.0`.
 
-# [8.0.4] - 2023-02-24
+# 8.0.4 - 2023-02-24
 
 ### Fixed
 
 - Do not call auto scroll action didPeform blocks if the scroll action did not succeed.
 
-# [8.0.3] - 2023-02-17
+# 8.0.3 - 2023-02-17
 
 ### Fixed
 
 - Speculative, low effort fix for a scrolling crash that occurred when the list view was under high update load, with many changes enqueued.
 
-# [8.0.2] - 2023-02-09
+# 8.0.2 - 2023-02-09
 
 ### Misc
 
 - Updated `BlueprintUI` and `BlueprintUICommonControls` to version `0.49.0`.
 
-# [8.0.1] - 2023-01-10
+# 8.0.1 - 2023-01-10
 
 ### Fixed
 
 - Fix Catalyst version specifier in SPM package.
 
-# [8.0.0] - 2022-12-19
+# 8.0.0 - 2022-12-19
 
 ### Changed
 
@@ -439,7 +443,7 @@
     - `ListView.configure(with: application)` should be called when your app has finished launching
     - Failure to do so will continue to `print()` the existing LISTABLE WARNING
 
-# [7.2.0] - 2022-10-24
+# 7.2.0 - 2022-10-24
 
 ### Fixed
 
@@ -453,20 +457,20 @@
 
 - `ListHeaderPosition.fixed` will now only apply if the list's top padding is zero, to avoid the header shifting around during layout if the position is changed.
 
-# [7.1.2] - 2022-09-12
+# 7.1.2 - 2022-09-12
 
 ### Removed
 
 - **Revert from 7.0.0**: _"When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead."_ This was causing crashes in `initialLayoutAttributesForAppearingItem` and `finalLayoutAttributesForDisappearingItem` due to index path mismatches.
 
-# [7.1.1] - 2022-09-06
+# 7.1.1 - 2022-09-06
 
 ### Fixed
 
 - Fixed an issue where `rowSpacing` was used instead of `itemSpacing` in `FlowListLayout`.
 - Fixed SPM-based builds.
 
-# [7.1.0] - 2022-09-06
+# 7.1.0 - 2022-09-06
 
 ### Fixed
 
@@ -479,7 +483,7 @@
 - `ListPagingBehavior.firstVisibleItemCentered` - When the user stops scrolling, the final offset of the scroll event will be adjusted so that the first visible item is centered within the visible bounds.
 
 
-# [7.0.0] - 2022-08-16
+# 7.0.0 - 2022-08-16
 
 ### Added
 
@@ -495,7 +499,7 @@
 
 - When a section is inserted or removed, and that section has only one item, and no header or footer, the insertion or removal animation for the section's singular item will be used instead.
 
-# [6.0.0] - 2022-07-29
+# 6.0.0 - 2022-07-29
 
 ### Fixed
 
@@ -509,19 +513,19 @@
 
 - The refresh control color has moved to `Appearance` from `RefreshControl`.
 
-# [5.2.1] - 2022-07-21
+# 5.2.1 - 2022-07-21
 
 ### Fixed
 
 - Fix a crash when initializing `Item`.
 
-# [5.2.0] - 2022-07-20
+# 5.2.0 - 2022-07-20
 
 ### Changed
 
 - `DefaultItemProperties` and `DefaultHeaderFooterProperties` now have all properties for each of `Item` and `HeaderFooter`.
 
-# [5.1.0] - 2022-07-20
+# 5.1.0 - 2022-07-20
 
 ### Fixed
 
@@ -533,13 +537,13 @@
 
 - Added a tint color to `SwipeAction` to configure `DefaultSwipeActionsView`. This allows customization of the text and image color (assuming a template image is used), where previously they were always white.
 
-# [5.0.1] - 2022-07-19
+# 5.0.1 - 2022-07-19
 
 ### Fixed
 
 - Ensure `Optional` values from `DefaultItemProperties` and `DefaultHeaderFooterProperties` are respected.
 
-# [5.0.0] - 2022-07-18
+# 5.0.0 - 2022-07-18
 
 ### Added
 
@@ -549,7 +553,7 @@
 
 - `stickyListHeader` has been replaced with `listHeaderPosition`, which has three possible values: `inline`, `sticky`, and `fixed`.
 
-# [4.4.0] - 2022-07-18
+# 4.4.0 - 2022-07-18
 
 ### Fixed
 
@@ -559,13 +563,13 @@
 
 - Added `stickyListHeader` to layout / appearance, allowing you to pin list headers to the top of the content.
 
-# [4.3.1] - 2022-07-11
+# 4.3.1 - 2022-07-11
 
 ### Fixed
 
 - Ensure supplementary views are properly reused.
 
-# [4.3.0] - 2022-07-02
+# 4.3.0 - 2022-07-02
 
 ### Fixed
 
@@ -575,14 +579,14 @@
 
 - Introduce `ContentContext`, an `Equatable` value which represents the overall context for all content presented in a list. Eg, you might pass a theme here, the traits for your screen (eg, dark mode, a11y settings, etc), or any other value which when changed, should cause the entire list to re-render. If the `ContentContext` changes across list renders, all list measurements will be thrown out and re-measured during the next render pass.
 
-# [4.2.0] - 2022-06-01
+# 4.2.0 - 2022-06-01
 
 ### Added
 
 - Added a pinning option `pin(to:)` which is very similar to `scrollToItem(onInsertOf:)` except that you don't specify an `onInsertOf` item.
 - Adds a `bottomScrollOffset` property to `ListScrollPositionInfo`. You can use this to fine-tune pinning by only pinning when within a certain distance of the bottom scroll position.
 
-# [4.1.0] - 2022-05-23
+# 4.1.0 - 2022-05-23
 
 ### Changed
 
@@ -591,19 +595,19 @@
 - `containerHeaders` in table and flow layouts now stretch to fill the available width of the view. Previously,
 they were inset with the content.
 
-# [4.0.0] - 2022-04-07
+# 4.0.0 - 2022-04-07
 
 ### Removed
 
 - When using `BlueprintUILists`, layout is no longer forced during element updates. This will cause animations to no longer be inherited. Please use `.transition`, etc. to control animations.
 
-# [3.2.1] - 2022-03-25
+# 3.2.1 - 2022-03-25
 
 ### Removed
 
 - Removed item reordering with VoiceOver as it caused issues with KIF tests.
 
-# [3.2.0] - 2022-03-21
+# 3.2.0 - 2022-03-21
 
 ### Fixed
 - Fixed list measurements with container headers.
@@ -611,13 +615,13 @@ they were inset with the content.
 ### Added
 - Item reordering is now possible when using VoiceOver.
 
-# [3.1.0] - 2022-02-08
+# 3.1.0 - 2022-02-08
 
 ### Added
 
 - `ListReorderGesture.Begins` added. This controls when the reorder gesture starts: `onTap` and `onLongPress`.
 
-# [3.0.0] - 2022-01-15
+# 3.0.0 - 2022-01-15
 
 ### Fixed
 
@@ -630,13 +634,13 @@ they were inset with the content.
 - `ListLayoutAppearance` now has a `func` to modify the default layout.
 - You can now construct a layout description from a `ListLayoutAppearance`, allowing the underlying `ListLayout` to remain internal to a module.
 
-# [2.0.0] - 2021-12-15
+# 2.0.0 - 2021-12-15
 
 ### Changed
 
 - The signature of `ListLayout.layout(delegate:in:)` has been changed to return a `ListLayoutResult` value, to make it clearer which values must be provided as the output of a layout.
 
-# [1.0.2] - 2021-12-14
+# 1.0.2 - 2021-12-14
 
 ### Changed
 
@@ -646,7 +650,7 @@ they were inset with the content.
 
 - Ensure that `.fillParent` `List` measurements returns the right height.
 
-# [1.0.1] - 2021-12-06
+# 1.0.1 - 2021-12-06
 
 ### Added
 
@@ -654,7 +658,7 @@ they were inset with the content.
 
 - You can now control underflow bounce behavior on `.table` layouts, via `bounceOnUnderflow`.
 
-# [1.0.0] - 2021-12-06
+# 1.0.0 - 2021-12-06
 
 ### Fixed
 
@@ -686,13 +690,13 @@ they were inset with the content.
 
 - `precondition` is now overridden within `ListableUI` and `BlueprintUILists` to point at an inlined function, which calls through to `fatalError`. This ensures that error messages are reported in crash reports.
 
-# [0.30.1] - 2021-11-16
+# 0.30.1 - 2021-11-16
 
 ### Fixed
 
 - Fix keyboard inset calculations by using `adjustedContentInset`.
 
-# [0.30.0] - 2021-11-02
+# 0.30.0 - 2021-11-02
 
 ### Added
 
@@ -715,25 +719,25 @@ they were inset with the content.
 
 - `ListLayout` and its associated types are now public, allowing you to make custom layouts. Note that these APIs are still experimental and subject to change.
 
-# [0.29.3] - 2021-10-22
+# 0.29.3 - 2021-10-22
 
 ### Fixed
 
 - Ensure we properly pass through the `ListEnvironment` when updating on-screen views.
 
-# [0.29.2] - 2021-10-21
+# 0.29.2 - 2021-10-21
 
 ### Fixed
 
 - Fixed an erroneous `weak` reference in `SupplementaryContainerView` which lead to contents being deallocated too early – this is not actually needed. `HeaderFooterViewStatePair` holds the reference to the contained `AnyPresentationHeaderFooterState`, there are not direct strong references from `AnyPresentationHeaderFooterState` to `SupplementaryContainerView`.
 
-# [0.29.1] - 2021-10-18
+# 0.29.1 - 2021-10-18
 
 ### Fixed
 
 - Ensure that when comparing header/footer types during updates, we are comparing the correct underlying types in a `type(of:)` check.
 
-# [0.29.0] - 2021-10-13
+# 0.29.0 - 2021-10-13
 
 ### Added
 
@@ -743,7 +747,7 @@ they were inset with the content.
 
 - `onTap` on `HeaderFooter` now takes no parameters, to disambiguate it from `configure`.
 
-# [0.28.0] - 2021-09-28
+# 0.28.0 - 2021-09-28
 
 ### Changed
 
@@ -759,25 +763,25 @@ they were inset with the content.
     section.header = HeaderFooter(MyHeaderContent(title: "Albums"))
     ```
 
-# [0.27.1] - 2021-09-28
+# 0.27.1 - 2021-09-28
 
 ### Changed
 
 - [Change the default sizing of `Item` and `HeaderFooter`](https://github.com/kyleve/Listable/pull/331) to `.thatFits(.noConstraint)` from requiring the min from the layout. This is more common for self-sizing cells.
 
-# [0.27.0] - 2021-09-15
+# 0.27.0 - 2021-09-15
 
 ### Changed
 
 - [`clearsSelectionOnViewWillAppear` was moved](https://github.com/kyleve/Listable/pull/326) to `ListViewController`.
 
-# [0.26.1] - 2021-09-03
+# 0.26.1 - 2021-09-03
 
 ### Fixed
 
 - Includes fix for header reuse from 0.25.1.
 
-# [0.26.0] - 2021-08-14
+# 0.26.0 - 2021-08-14
 
 ### Added
 
@@ -791,55 +795,55 @@ they were inset with the content.
 
 - [`ListSizing` was renamed to `List.Measurement`](https://github.com/kyleve/Listable/pull/317), to reflect that it affects measurement and to align with Blueprint's terminology for measurement.
 
-# [0.25.0] - 2021-08-12
+# 0.25.0 - 2021-08-12
 
 ### Added
 
 - [Add support for `containerHeader`](https://github.com/kyleve/Listable/pull/315), a header which can be added by the container which is displaying the list. This is useful for, eg, a custom navigation controller to add its large title view to the list's content. This header is not affected by the list's vertical padding.
 
-# [0.24.0] - 2021-08-07
+# 0.24.0 - 2021-08-07
 
 ### Added
 
 - [Add support for `ReappliesToVisibleView`](https://github.com/kyleve/Listable/pull/288), which allows controlling when an on-screen view should have its content re-applied.
 
-# [0.23.2] - 2021-08-05
+# 0.23.2 - 2021-08-05
 
 ### Fixed
 
 - [Ensure that scroll actions work](https://github.com/kyleve/Listable/pull/311) with horizontal lists.
 
-# [0.23.1] - 2021-07-26
+# 0.23.1 - 2021-07-26
 
 ### Fixed
 
 - [Fix two reordering crashes](https://github.com/kyleve/Listable/pull/308), which could happen when 1) a reorder signal resulted in an immediate deletion at the end of the list, and 2) a crash during scrolling during a reorder event.
 
-# [0.23.0] - 2021-06-29
+# 0.23.0 - 2021-06-29
 
 ### Added
 
 - [Introduce `defaultHeaderFooterProperties` on `HeaderFooterContent`](https://github.com/kyleve/Listable/pull/304), to allow specifying default values for a `HeaderFooter` when values are not passed to the initializer.
 
-# [0.22.2] - 2021-06-23
+# 0.22.2 - 2021-06-23
 
 ### Fixed
 
 - Fixed `identifier(for:)` on `Section` to match name of `identifier(with:)` on `ItemContent`.
 
-# [0.22.1] - 2021-06-22
+# 0.22.1 - 2021-06-22
 
 ### Fixed
 
 - Fixed `Identifiable` conformance for `ItemContent`.
 
-# [0.22.0] - 2021-06-22
+# 0.22.0 - 2021-06-22
 
 ### Misc
 
 - Listable now depends on Blueprint `0.27.0` which has major breaking changes. There are no public changes to Listable, except public interfaces determined by Blueprint protocol conformance.
 
-# [0.21.0] - 2021-06-17
+# 0.21.0 - 2021-06-17
 
 ### Fixed
 
@@ -865,25 +869,25 @@ they were inset with the content.
 
 - [The Blueprint-based shortcuts to create inline items and header footers have been renamed to `ElementItem` and `ElementHeaderFooter`](https://github.com/kyleve/Listable/pull/292).
 
-# [0.20.2] - 2021-04-19
+# 0.20.2 - 2021-04-19
 
 ### Fixed
 
 - [Fixed the spacing between the header and the first section of a `TableListLayout`](https://github.com/kyleve/Listable/pull/289) to not add the top padding.
 
-# [0.20.1] - 2021-04-06
+# 0.20.1 - 2021-04-06
 
 ### Fixed
 
 - [`TableListLayout` now maintains padding by default and with center alignments.](https://github.com/kyleve/Listable/pull/286)
 
-# [0.20.0] - 2021-03-29
+# 0.20.0 - 2021-03-29
 
 ### Changed
 
 - [Changed how `ListView.contentSize` is implemented](https://github.com/kyleve/Listable/pull/283) in order to improve performance. An internal list is no longer used, instead we create a layout and ask it to lay out its elements. `List.Measurement` also moved to `BlueprintUILists`, as that is the only place it was used.
 
-# [0.19.0] - 2021-03-22
+# 0.19.0 - 2021-03-22
 
 ### Added
 - [Add support for adjusting the content offset](https://github.com/kyleve/Listable/pull/281) when the refresh control becomes visible with the `offsetAdjustmentBehavior` property.
@@ -898,7 +902,7 @@ list.content.refreshControl = RefreshControl(
 )
 ```
 
-# [0.18.0] - 2021-03-12
+# 0.18.0 - 2021-03-12
 
 ### Fixed
 
@@ -918,7 +922,7 @@ listActions.scrolling.scrollToSection(
 )
 ```
 
-# [0.17.0] - 2021-03-10
+# 0.17.0 - 2021-03-10
 
 ### Fixed
 
@@ -930,7 +934,7 @@ listActions.scrolling.scrollToSection(
 
 - [Updates to `ItemContentCoordinator`](https://github.com/kyleve/Listable/pull/274) to properly support animations in Blueprint-backed rows. This change also generalizes the contained animation type to `ViewAnimation`, for use in both scrolling and content updates.
 
-# [0.16.0] - 2021-02-08
+# 0.16.0 - 2021-02-08
 
 ### Fixed
 
@@ -940,13 +944,13 @@ listActions.scrolling.scrollToSection(
 
 - [Rename `build` parameters to `configure`](https://github.com/kyleve/Listable/pull/262), in order to be more consistent within the framework and with Blueprint.
 
-# [0.15.1] - 2021-01-25
+# 0.15.1 - 2021-01-25
 
 ### Fixed
 
 - [Fix a memory leak in `ListView`](https://github.com/kyleve/Listable/pull/263) that caused all `ListViews` with content in them to leak.
 
-# [0.15.0] - 2021-01-22
+# 0.15.0 - 2021-01-22
 
 ### Added
 
@@ -958,13 +962,13 @@ listActions.scrolling.scrollToSection(
 
 - [Rename `.list` layout to `.table`](https://github.com/kyleve/Listable/pull/258), which is clearer, and also reduces confusion between `ListLayout` (the base protocol for layouts), and the specific table-type layout.
 
-# [0.14.2] - 2021-01-21
+# 0.14.2 - 2021-01-21
 
 ### Fixed
 
 - `SwipeActionsConfiguration.performsFirstActionWithFullSwipe` is now respected when set to `false`.
 
-# [0.14.1] - 2021-01-06
+# 0.14.1 - 2021-01-06
 
 ### Fixed
 
@@ -976,19 +980,19 @@ listActions.scrolling.scrollToSection(
 
 - [Adds a way to create items or header/footers](https://github.com/kyleve/Listable/pull/206) for Blueprint lists without requiring the creation of a `BlueprintItemContent` or `BlueprintHeaderFooterContent`.
 
-# [0.13.0] - 2020-12-14
+# 0.13.0 - 2020-12-14
 
 ### Added
 
 - [Introduce `LocalizedItemCollator`](https://github.com/kyleve/Listable/pull/236), a list-friendly version of `UILocalizedIndexedCollation` which allows collating a list of content at one time.
 
-# [0.12.1] - 2020-12-01
+# 0.12.1 - 2020-12-01
 
 ### Fixed
 
 - [Fixed frame setting calcuations, and fixed building in Xcode 11](https://github.com/kyleve/Listable/pull/234).
 
-# [0.12.0] - 2020-12-01
+# 0.12.0 - 2020-12-01
 
 ### Fixed
 
@@ -1012,17 +1016,17 @@ listActions.scrolling.scrollToSection(
 
 - [Change `animated` option on scrolling to an `animation` option](https://github.com/kyleve/Listable/pull/229), to allow customizing the animation's behavior.
 
-# [0.11.0] - 2020-10-20
+# 0.11.0 - 2020-10-20
 
 ### Added
 
 - Allow [setting the `sizing` type on a `List`](https://github.com/kyleve/Listable/pull/202). This controls how the list should be sized by Blueprint: Should it take up all allowed space, or should it size to fit based on its content.
 
-# [0.10.1] - 2020-10-01
+# 0.10.1 - 2020-10-01
 
 - [Fixed import](https://github.com/kyleve/Listable/pull/215) of Swift bridging header, so Cocoapods can build with or without `use_frameworks!`.
 
-# [0.10.0] - 2020-09-24
+# 0.10.0 - 2020-09-24
 
 ### Fixed
 

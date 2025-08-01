@@ -55,9 +55,8 @@ sed -i '' "s/LISTABLE_VERSION ||= '.*'/LISTABLE_VERSION ||= '${NEW_VERSION}'/" v
 echo "Step 5: Updating CHANGELOG.md..."
 echo "Please update CHANGELOG.md manually with the following steps:"
 echo "  1. Move changes from the 'Main' section to a new section for version ${NEW_VERSION}"
-echo "  2. Add the release date: # [${NEW_VERSION}] - $(date +%Y-%m-%d)"
+echo "  2. Add a section for the new release: # ${NEW_VERSION} - $(date +%Y-%m-%d)"
 echo "  3. Reset the 'Main' section with empty categories"
-echo "  4. Update the reference links at the bottom of the file"
 echo "Press Enter when done..."
 read -r
 
