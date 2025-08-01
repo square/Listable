@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "TODO: Update this script to use the new release process."
+echo "Use the manual steps in RELEASING.md for now."
+exit 0
+
 # Release script for Listable
 # This script automates the steps in RELEASING.md
 
