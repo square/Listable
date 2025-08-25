@@ -351,7 +351,7 @@ public final class DemosRootViewController : ListViewController
                 DemoHeader(title: "Other Layouts")
             }
             
-            Section("testing") { [weak self] in
+            Section("fuzzing") { [weak self] in
 
                 Item(
                     DemoItem(text: "Fuzz Testing"),
@@ -368,16 +368,8 @@ public final class DemosRootViewController : ListViewController
                         self?.push(SupplementaryTestingViewController())
                     }
                 )
-                
-                Item(
-                    DemoItem(text: "Verify Reuse Has No Animation"),
-                    selectionStyle: .selectable(),
-                    onSelect : { _ in
-                        self?.push(AnimatedReuseViewController())
-                    }
-                )
             } header: {
-                DemoHeader(title: "Testing")
+                DemoHeader(title: "Fuzz Testing")
             }
             
             Section("selection-state") {
