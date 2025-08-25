@@ -46,7 +46,7 @@ jobs:
       - name: Switch to Xcode ${{ env.xcode_version }}
         run: sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app
 
-      - name: Install xcodes
+      - name: Install aria2
         run: brew install aria2
 
       - name: Install iOS ${{ matrix.sdk }}
