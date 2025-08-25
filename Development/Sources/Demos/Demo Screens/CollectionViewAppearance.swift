@@ -270,7 +270,7 @@ struct Toggle : Element {
             
             config.apply { toggle in
                 if toggle.isOn != self.isOn {
-                    toggle.setOn(self.isOn, animated: true)
+                    toggle.setOn(self.isOn, animated: UIView.inheritedAnimationDuration > 0.0)
                 }
                 toggle.onToggle = self.onToggle
             }
