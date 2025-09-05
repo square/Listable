@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# 16.4.2 - 2025-09-05
+
+### Fixed
+
+- Fixed an issue where animations would occur when dequeuing / reusing cells. A layout is now forced without animation before presentation.
 
 # 16.4.1 - 2025-08-01
 
