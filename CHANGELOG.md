@@ -8,6 +8,8 @@
 
 ### Changed
 
+- The iOS 16.4 first responder workaround no longer checks UserDefaults, the workaround is always applied.
+
 ### Misc
 
 ### Internal

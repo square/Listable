@@ -263,19 +263,6 @@ extension ListView {
                 return super_function(self, selector)
             }
             
-            /// In case this workaround goes wrong somehow, we'll write a go/feature controlled flag
-            /// into `UserDefaults` in POS, and then read it here. This will allow us to disable the workaround
-            /// remotely if needed.
-            ///
-            /// Note: We are explicitly **not** making this a static value, so it can be changed across reads.
-            let workaroundEnabled = UserDefaults.standard.object(
-                forKey: "Listable.EnableIOS164FirstResponderWorkaround"
-            ) as? NSNumber ?? NSNumber(booleanLiteral: true)
-
-            guard workaroundEnabled.boolValue == true else {
-                return super_function(self, selector)
-            }
-            
             guard Self.hasFirstResponderViewProperty else {
                 assertionFailure("UICollectionView no longer has an ivar named `_firstResponderView`.")
                 return super_function(self, selector)
