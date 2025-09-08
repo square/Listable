@@ -4,6 +4,8 @@
 
 ### Added
 
+- Adding an `accessibilityIdentifier` to the `ListReorderGesture` element.
+
 ### Removed
 
 ### Changed
