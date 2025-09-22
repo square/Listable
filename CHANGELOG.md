@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed warning in Package.swift referencing a non-existent Resources directory.
+
 ### Added
 
 ### Removed
