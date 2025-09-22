@@ -3,6 +3,7 @@
 ### Fixed
 
 - Fixed warning in Package.swift referencing a non-existent Resources directory.
+- Fixed warning for a cross-module protocol conformance.
 
 ### Added
 
