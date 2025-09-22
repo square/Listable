@@ -4,6 +4,7 @@
 
 - Fixed warning in Package.swift referencing a non-existent Resources directory.
 - Fixed warning for a cross-module protocol conformance.
+- Fixed deprecation warning by adopting `UIButton.Configuration` for swipe action buttons.
 
 ### Added
 
