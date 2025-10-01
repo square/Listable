@@ -147,6 +147,14 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Keyboard Navigation Focus Demo"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(KeyboardNavigationDemoViewController())
+                    }
+                )
+                
+                Item(
                     DemoItem(text: "Reordering"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in

@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added support for keyboard focus navigation on iOS with `Behavior.FocusConfiguration`. This enables users to navigate list items using keyboard input (Tab, Arrow keys, Return/Space) for improved accessibility and external keyboard support.
+
 ### Removed
 
 ### Changed

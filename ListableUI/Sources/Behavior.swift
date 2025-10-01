@@ -48,6 +48,16 @@ public struct Behavior : Equatable
     /// Applicable when the `layoutDirection` is `vertical`. The gravity determines
     /// how inserting new elements or changing the `contentInset` affects the scroll position.
     public var verticalLayoutGravity : VerticalLayoutGravity
+    
+    /// Configuration for keyboard focus behavior in the list view.
+    ///
+    /// - `.none`: No focus support - keyboard navigation is disabled
+    /// - `.allowsFocus`: Basic focus support with keyboard navigation, but selection doesn't follow focus
+    /// - `.selectionFollowsFocus`: Focus support where selection automatically follows focus changes
+    ///
+    /// When focus is enabled, items that support selection can receive focus for keyboard navigation.
+    /// The focus ring will be applied to focused items automatically.
+    public var focus: FocusConfiguration
 
     /// Creates a new `Behavior` based on the provided parameters.
     public init(
@@ -61,7 +71,8 @@ public struct Behavior : Equatable
         delaysContentTouches : Bool = true,
         pageScrollingBehavior : PageScrollingBehavior = .none,
         decelerationRate : DecelerationRate = .normal,
-        verticalLayoutGravity : VerticalLayoutGravity = .top
+        verticalLayoutGravity : VerticalLayoutGravity = .top,
+        focus: FocusConfiguration = .none
     ) {
         self.isScrollEnabled = isScrollEnabled
         self.keyboardDismissMode = keyboardDismissMode
@@ -78,6 +89,7 @@ public struct Behavior : Equatable
         self.decelerationRate = decelerationRate
         
         self.verticalLayoutGravity = verticalLayoutGravity
+        self.focus = focus
     }
 }
 
@@ -194,6 +206,50 @@ extension Behavior
         /// Intended for cases where the default scroll position is scrolled all the way down.
         /// When a new element is inserted, the scroll distance from the bottom is unchanged.
         case bottom
+    }
+
+    /// Configuration for keyboard focus behavior in the list view.
+    public enum FocusConfiguration: Equatable {
+        /// No focus support - keyboard navigation is disabled.
+        case none
+
+        /// Basic focus support - allows keyboard navigation but selection doesn't follow focus.
+        /// The focus ring is always shown to provide visual feedback for navigation.
+        case allowsFocus
+
+        /// Focus with selection following - keyboard navigation enabled and selection follows focus.
+        /// - Parameter showFocusRing: Whether to show the focus ring around focused items.
+        case selectionFollowsFocus(showFocusRing: Bool = true)
+
+        /// Whether items can receive focus for keyboard navigation.
+        public var allowsFocus: Bool {
+            switch self {
+            case .none: return false
+            case .allowsFocus, .selectionFollowsFocus: return true
+            }
+        }
+
+        /// Whether selection automatically follows focus changes.
+        public var selectionFollowsFocus: Bool {
+            switch self {
+            case .none, .allowsFocus: return false
+            case .selectionFollowsFocus: return true
+            }
+        }
+
+        /// Whether to show the focus ring on focused items.
+        public var showFocusRing: Bool {
+            switch self {
+            case .none:
+                return false
+            case .allowsFocus:
+                return true // Always show focus ring for allowsFocus to provide visual feedback
+            case .selectionFollowsFocus(let showFocusRing):
+                return showFocusRing
+            }
+        }
+
+
     }
 }
 
