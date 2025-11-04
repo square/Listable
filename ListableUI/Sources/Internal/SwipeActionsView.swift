@@ -264,18 +264,39 @@ private class DefaultSwipeActionButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel?.font = .systemFont(ofSize: 15, weight: .medium)
-        titleLabel?.lineBreakMode = .byTruncatingTail
+        var configuration = UIButton.Configuration.plain()
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
+        configuration.titleLineBreakMode = .byTruncatingTail
+        configuration.titleAlignment = .center
+        self.configuration = configuration
+
         titleLabel?.numberOfLines = 2
         titleLabel?.minimumScaleFactor = 0.8
         titleLabel?.adjustsFontSizeToFitWidth = true
-        titleLabel?.textAlignment = .center
-        contentEdgeInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+
         addTarget(self, action: #selector(onTap), for: .primaryActionTriggered)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func updateConfiguration() {
+        super.updateConfiguration()
+
+        if let title = action?.title, let color = action?.tintColor {
+            configuration?.attributedTitle = AttributedString(
+                title,
+                attributes: AttributeContainer([
+                    .font: UIFont.systemFont(ofSize: 15, weight: .medium),
+                    .foregroundColor: color,
+                ]),
+            )
+        } else {
+            configuration?.attributedTitle = nil
+        }
+
+        configuration?.image = action?.image
     }
 
     func set(action: SwipeAction, didPerformAction: @escaping SwipeAction.OnDidPerformAction) {
@@ -289,10 +310,8 @@ private class DefaultSwipeActionButton: UIButton {
         // an incorrect visual appearance.
         
         tintColor = action.tintColor
-        
-        setTitle(action.title, for: .normal)
-        setTitleColor(action.tintColor, for: .normal)
-        setImage(action.image, for: .normal)
+
+        setNeedsUpdateConfiguration()
         
         accessibilityLabel = action.accessibilityLabel
         accessibilityValue = action.accessibilityValue

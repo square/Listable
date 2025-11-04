@@ -2,6 +2,10 @@
 
 ### Fixed
 
+- Fixed warning in Package.swift referencing a non-existent Resources directory.
+- Fixed warning for a cross-module protocol conformance.
+- Fixed deprecation warning by adopting `UIButton.Configuration` for swipe action buttons.
+
 ### Added
 
 - Added support for keyboard focus navigation on iOS with `Behavior.FocusConfiguration`. This enables users to navigate list items using keyboard input (Tab, Arrow keys, Return/Space) for improved accessibility and external keyboard support.
