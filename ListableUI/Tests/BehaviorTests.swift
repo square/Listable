@@ -22,6 +22,7 @@ class BehaviorTests: XCTestCase
         XCTAssertEqual(behavior.selectionMode, .single)
         
         XCTAssertEqual(behavior.underflow, Behavior.Underflow())
+        XCTAssertEqual(behavior.focus, .none)
         
         let listView = ListView()
         
@@ -29,6 +30,36 @@ class BehaviorTests: XCTestCase
         XCTAssertEqual(behavior.canCancelContentTouches, listView.collectionView.canCancelContentTouches)
         XCTAssertEqual(behavior.delaysContentTouches, listView.collectionView.delaysContentTouches)
         XCTAssertEqual(.init(behaviorValue: behavior.decelerationRate), listView.collectionView.decelerationRate)
+    }
+
+    func test_init_with_focus()
+    {
+        let behavior = Behavior(focus: .allowsFocus)
+        XCTAssertEqual(behavior.focus, .allowsFocus)
+    }
+
+    func test_focus_configuration()
+    {
+        self.testcase("none") {
+            let config = Behavior.FocusConfiguration.none
+            XCTAssertFalse(config.allowsFocus)
+            XCTAssertFalse(config.selectionFollowsFocus)
+            XCTAssertFalse(config.showFocusRing)
+        }
+
+        self.testcase("allowsFocus") {
+            let config = Behavior.FocusConfiguration.allowsFocus
+            XCTAssertTrue(config.allowsFocus)
+            XCTAssertFalse(config.selectionFollowsFocus)
+            XCTAssertTrue(config.showFocusRing)
+        }
+
+        self.testcase("selectionFollowsFocus") {
+            let config = Behavior.FocusConfiguration.selectionFollowsFocus(showFocusRing: false)
+            XCTAssertTrue(config.allowsFocus)
+            XCTAssertTrue(config.selectionFollowsFocus)
+            XCTAssertFalse(config.showFocusRing)
+        }
     }
 }
 

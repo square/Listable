@@ -302,6 +302,19 @@ public final class ListView : UIView
             self.collectionView.decelerationRate = newDecelerationRate
         }
 
+        // Apply focus behavior
+        switch self.behavior.focus {
+        case .none:
+            self.collectionView.allowsFocus = false
+            self.collectionView.selectionFollowsFocus = false
+        case .allowsFocus:
+            self.collectionView.allowsFocus = true
+            self.collectionView.selectionFollowsFocus = false
+        case .selectionFollowsFocus:
+            self.collectionView.allowsFocus = true
+            self.collectionView.selectionFollowsFocus = true
+        }
+
         self.updateCollectionViewWithCurrentLayoutProperties()
         self.updateCollectionViewSelectionMode()
         

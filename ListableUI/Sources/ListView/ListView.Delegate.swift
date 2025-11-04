@@ -147,7 +147,9 @@ extension ListView
             item.willDisplay(cell: cell, in: collectionView, for: indexPath)
             
             self.displayedItems[ObjectIdentifier(cell)] = item
-            
+
+            cell.focusEffect = view.behavior.focus.allowsFocus && view.behavior.focus.showFocusRing ? UIFocusHaloEffect() : nil
+
             UIView.performWithoutAnimation {
                 /// Force a layout of the cell before it is displayed, so that any implicit animations
                 /// are avoided. This ensures that cases like toggling a switch on and off are
@@ -212,6 +214,18 @@ extension ListView
             }
                         
             headerFooter.collectionViewDidEndDisplay(of: container)
+        }
+        
+        // MARK: UICollectionViewDelegate - Focus Support
+        
+        func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+            guard view.behavior.focus.allowsFocus else { return false }
+            let item = self.presentationState.item(at: indexPath)
+            return item.anyModel.selectionStyle.isSelectable
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, selectionFollowsFocusForItemAt indexPath: IndexPath) -> Bool {
+            return view.behavior.focus.selectionFollowsFocus
         }
         
         func collectionView(
