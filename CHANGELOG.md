@@ -4,9 +4,21 @@
 
 ### Added
 
-- Added support for keyboard focus navigation on iOS with `Behavior.FocusConfiguration`. This enables users to navigate list items using keyboard input (Tab, Arrow keys, Return/Space) for improved accessibility and external keyboard support.
-
 ### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# 16.5.0 - 2025-11-05
+
+### Added
+
+- Added support for keyboard focus navigation on iOS with `Behavior.FocusConfiguration`. This enables users to navigate list items using keyboard input (Tab, Arrow keys, Return/Space) for improved accessibility and external keyboard support.
 
 ### Changed
 
@@ -14,9 +26,7 @@
 
 ### Misc
 
-### Internal
-
-# Past Releases
+- Updating the release process to no longer automatically sync localizations with Shuttle.
 
 # 16.4.2 - 2025-09-05
 
