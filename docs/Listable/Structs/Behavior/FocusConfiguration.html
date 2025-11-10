@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>IfAlreadyVisible Enumeration Reference</title>
+    <title>FocusConfiguration Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/IfAlreadyVisible" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Enum/FocusConfiguration" class="dashAnchor"></a>
 
-    <a title="IfAlreadyVisible Enumeration Reference"></a>
+    <a title="FocusConfiguration Enumeration Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -46,9 +46,9 @@
       <img class="carat" src="../../img/carat.png" alt=""/>
       <a class="breadcrumb" href="../../Structs.html">Structures</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      <a class="breadcrumb" href="../../Structs/ScrollPosition.html">ListableUI.ScrollPosition</a>
+      <a class="breadcrumb" href="../../Structs/Behavior.html">ListableUI.Behavior</a>
       <img class="carat" src="../../img/carat.png" alt=""/>
-      IfAlreadyVisible Enumeration Reference
+      FocusConfiguration Enumeration Reference
     </p>
 
     <div class="content-wrapper">
@@ -725,15 +725,15 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>IfAlreadyVisible</h1>
+            <h1>FocusConfiguration</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">IfAlreadyVisible</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">FocusConfiguration</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                 </div>
               </div>
-            <p>What action should be taken if an item is already partially visible within a list.</p>
+            <p>Configuration for keyboard focus behavior in the list view.</p>
 
           </div>
         </section>
@@ -745,9 +745,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ScrollPositionV16IfAlreadyVisibleO9doNothingyA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/doNothing" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ScrollPositionV16IfAlreadyVisibleO9doNothingyA2EmF">doNothing</a>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO4noneyA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/none" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO4noneyA2EmF">none</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -755,14 +755,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Do not perform any action if the item is already partially visible.</p>
+                        <p>No focus support - keyboard navigation is disabled.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">doNothing</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="k">none</span></code></pre>
 
                         </div>
                       </div>
@@ -772,9 +772,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI14ScrollPositionV16IfAlreadyVisibleO08scrollToD0yA2EmF"></a>
-                    <a name="//apple_ref/swift/Element/scrollToPosition" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI14ScrollPositionV16IfAlreadyVisibleO08scrollToD0yA2EmF">scrollToPosition</a>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO06allowsD0yA2EmF"></a>
+                    <a name="//apple_ref/swift/Element/allowsFocus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO06allowsD0yA2EmF">allowsFocus</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -782,14 +782,142 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Scroll the item to the desired <code><a href="../../Structs/ScrollPosition/Position.html">Position</a></code>, even if it is already partially visible.</p>
+                        <p>Basic focus support - allows keyboard navigation but selection doesn&rsquo;t follow focus.
+The focus ring is always shown to provide visual feedback for navigation.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">scrollToPosition</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">allowsFocus</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO016selectionFollowsD0yAESb_tcAEmF"></a>
+                    <a name="//apple_ref/swift/Element/selectionFollowsFocus(showFocusRing:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO016selectionFollowsD0yAESb_tcAEmF">selectionFollowsFocus(showFocusRing:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Focus with selection following - keyboard navigation enabled and selection follows focus.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">selectionFollowsFocus</span><span class="p">(</span><span class="nv">showFocusRing</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>showFocusRing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Whether to show the focus ring around focused items.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO06allowsD0Sbvp"></a>
+                    <a name="//apple_ref/swift/Property/allowsFocus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO06allowsD0Sbvp">allowsFocus</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether items can receive focus for keyboard navigation.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">allowsFocus</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO016selectionFollowsD0Sbvp"></a>
+                    <a name="//apple_ref/swift/Property/selectionFollowsFocus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO016selectionFollowsD0Sbvp">selectionFollowsFocus</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether selection automatically follows focus changes.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">selectionFollowsFocus</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO04showD4RingSbvp"></a>
+                    <a name="//apple_ref/swift/Property/showFocusRing" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO04showD4RingSbvp">showFocusRing</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether to show the focus ring on focused items.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">showFocusRing</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>

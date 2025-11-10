@@ -396,6 +396,9 @@
                 <a class="nav-group-task-link" href="../Structs/Behavior/VerticalLayoutGravity.html">– VerticalLayoutGravity</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/Behavior/FocusConfiguration.html">– FocusConfiguration</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/Color.html">Color</a>
               </li>
               <li class="nav-group-task">
@@ -1041,9 +1044,45 @@ how inserting new elements or changing the <code>contentInset</code> affects the
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravityACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(isScrollEnabled:keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:pageScrollingBehavior:decelerationRate:verticalLayoutGravity:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravityACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOtcfc">init(isScrollEnabled:<wbr>keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>pageScrollingBehavior:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>)</a>
+                    <a name="/s:10ListableUI8BehaviorV5focusAC18FocusConfigurationOvp"></a>
+                    <a name="//apple_ref/swift/Property/focus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV5focusAC18FocusConfigurationOvp">focus</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Configuration for keyboard focus behavior in the list view.</p>
+
+<ul>
+<li><code>.none</code>: No focus support - keyboard navigation is disabled</li>
+<li><code>.allowsFocus</code>: Basic focus support with keyboard navigation, but selection doesn&rsquo;t follow focus</li>
+<li><code>.selectionFollowsFocus</code>: Focus support where selection automatically follows focus changes</li>
+</ul>
+
+<p>When focus is enabled, items that support selection can receive focus for keyboard navigation.
+The focus ring will be applied to focused items automatically.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">focus</span><span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/FocusConfiguration.html">FocusConfiguration</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOAC18FocusConfigurationOtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(isScrollEnabled:keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:pageScrollingBehavior:decelerationRate:verticalLayoutGravity:focus:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOAC18FocusConfigurationOtcfc">init(isScrollEnabled:<wbr>keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>pageScrollingBehavior:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>focus:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1069,7 +1108,8 @@ how inserting new elements or changing the <code>contentInset</code> affects the
     <span class="nv">delaysContentTouches</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nv">pageScrollingBehavior</span> <span class="p">:</span> <span class="kt"><a href="../Enums/PageScrollingBehavior.html">PageScrollingBehavior</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span><span class="p">,</span>
     <span class="nv">decelerationRate</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/DecelerationRate.html">DecelerationRate</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">normal</span><span class="p">,</span>
-    <span class="nv">verticalLayoutGravity</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/VerticalLayoutGravity.html">VerticalLayoutGravity</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">top</span>
+    <span class="nv">verticalLayoutGravity</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/VerticalLayoutGravity.html">VerticalLayoutGravity</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">top</span><span class="p">,</span>
+    <span class="nv">focus</span><span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/FocusConfiguration.html">FocusConfiguration</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -1241,6 +1281,34 @@ how inserting new elements or changing the <code>contentInset</code> affects the
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">VerticalLayoutGravity</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8BehaviorV18FocusConfigurationO"></a>
+                    <a name="//apple_ref/swift/Enum/FocusConfiguration" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV18FocusConfigurationO">FocusConfiguration</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Configuration for keyboard focus behavior in the list view.</p>
+
+                        <a href="../Structs/Behavior/FocusConfiguration.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">FocusConfiguration</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>

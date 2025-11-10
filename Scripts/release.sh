@@ -38,17 +38,12 @@ git pull origin main
 echo "Step 2: Creating release branch ${BRANCH_NAME}..."
 git checkout -b "$BRANCH_NAME"
 
-# Step 3: Update localized strings
-echo "Step 3: Updating localized strings..."
-LATEST_COMMIT=$(git log -1 --pretty=%H)
-./Scripts/install_localized_strings.sh "$LATEST_COMMIT"
-
-# Step 4: Update the library version in version.rb
-echo "Step 4: Updating version.rb to ${NEW_VERSION}..."
+# Step 3: Update the library version in version.rb
+echo "Step 3: Updating version.rb to ${NEW_VERSION}..."
 sed -i '' "s/LISTABLE_VERSION ||= '.*'/LISTABLE_VERSION ||= '${NEW_VERSION}'/" version.rb
 
-# Step 5: Update CHANGELOG.md
-echo "Step 5: Updating CHANGELOG.md..."
+# Step 4: Update CHANGELOG.md
+echo "Step 4: Updating CHANGELOG.md..."
 echo "Please update CHANGELOG.md manually with the following steps:"
 echo "  1. Move changes from the 'Main' section to a new section for version ${NEW_VERSION}"
 echo "  2. Add a section for the new release: # ${NEW_VERSION} - $(date +%Y-%m-%d)"
@@ -56,17 +51,17 @@ echo "  3. Reset the 'Main' section with empty categories"
 echo "Press Enter when done..."
 read -r
 
-# Step 6: Re-generate documentation
-echo "Step 6: Re-generating documentation..."
+# Step 5: Re-generate documentation
+echo "Step 5: Re-generating documentation..."
 bundle exec Scripts/generate_docs.sh
 
-# Step 7: Commit changes
-echo "Step 7: Committing version changes..."
+# Step 6: Commit changes
+echo "Step 6: Committing version changes..."
 git add -A
 git commit -m "Bumping versions to ${NEW_VERSION}."
 
-# Step 8: Push branch and open PR
-echo "Step 8: Pushing branch ${BRANCH_NAME}..."
+# Step 7: Push branch and open PR
+echo "Step 7: Pushing branch ${BRANCH_NAME}..."
 git push origin "$BRANCH_NAME"
 echo "Now open a PR from ${BRANCH_NAME} into main."
 echo "Visit: https://github.com/square/Listable/compare/main...${BRANCH_NAME}"
