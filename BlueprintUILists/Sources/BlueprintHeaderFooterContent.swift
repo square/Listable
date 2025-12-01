@@ -103,7 +103,7 @@ extension Environment {
 
         static let defaultValue : ApplyHeaderFooterContentInfo? = nil
 
-        static func isEquivalent(lhs: ListableUI.ApplyHeaderFooterContentInfo?, rhs: ListableUI.ApplyHeaderFooterContentInfo?, in context: BlueprintUI.EquivalencyContext) -> Bool {
+        static func isCacheablyEquivalent(lhs: ListableUI.ApplyHeaderFooterContentInfo?, rhs: ListableUI.ApplyHeaderFooterContentInfo?, in context: BlueprintUI.CrossLayoutCacheableContext) -> Bool {
             alwaysEquivalentIn([.elementSizing], evaluatingContext: context)
         }
 
