@@ -168,6 +168,21 @@ public protocol AnyListLayout : AnyObject
         at indexPath: IndexPath,
         withTargetPosition position: CGPoint
     )
+
+    /// Returns the target index path for an item being interactively moved.
+    ///
+    /// Custom layouts can override this to provide layout-aware drop target
+    /// determination. The default implementation returns `nil`, which causes
+    /// `CollectionViewLayout` to fall back to UICollectionView's default behavior.
+    ///
+    /// - Parameters:
+    ///   - previousIndexPath: The current index path of the item being moved.
+    ///   - position: The current position of the item in the collection view's coordinate space.
+    /// - Returns: The target index path if the layout can determine it, or `nil` to use default behavior.
+    func targetIndexPath(
+        forInteractivelyMovingItem previousIndexPath: IndexPath,
+        withPosition position: CGPoint
+    ) -> IndexPath?
 }
 
 
@@ -337,6 +352,15 @@ extension ListLayout
         withTargetPosition position: CGPoint
     ) {
         // Nothing. Just a default implementation.
+    }
+
+    public func targetIndexPath(
+        forInteractivelyMovingItem previousIndexPath: IndexPath,
+        withPosition position: CGPoint
+    ) -> IndexPath? {
+        // Default: return nil to use UICollectionView's default behavior.
+        // Custom layouts can override this for layout-aware drop targeting.
+        nil
     }
     
     private static func isHeaderSticky(

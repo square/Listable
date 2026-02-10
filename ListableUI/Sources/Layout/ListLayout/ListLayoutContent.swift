@@ -510,6 +510,11 @@ extension ListLayoutContent
         public var layouts : ItemLayouts {
             self.state.anyModel.layouts
         }
+
+        /// Whether this item can be reordered (has reordering configuration).
+        public var isReorderable: Bool {
+            self.state.anyModel.reordering != nil
+        }
         
         public var frame : CGRect {
             CGRect(
