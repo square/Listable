@@ -623,9 +623,15 @@ final class CollectionViewLayout : UICollectionViewLayout
         withPosition position: CGPoint
     ) -> IndexPath {
 
-        /// TODO: The default implementation provided by `UICollectionView` does not work correctly
-        /// when trying to move an item to the end of a section, or when trying to move an item into an
-        /// empty section. We should add casing that allows moving into the section in these cases.
+        // Allow custom layouts to provide layout-aware drop targeting.
+        // This fixes issues with UICollectionView's default implementation which doesn't
+        // work correctly for some layout types.
+        if let customTarget = self.layout.targetIndexPath(
+            forInteractivelyMovingItem: previousIndexPath,
+            withPosition: position
+        ) {
+            return customTarget
+        }
 
         return super.targetIndexPath(forInteractivelyMovingItem: previousIndexPath, withPosition: position)
     }

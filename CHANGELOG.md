@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added `targetIndexPath(forInteractivelyMovingItem:withPosition:)` protocol method to `ListLayout`, allowing custom layouts to override drop target determination during interactive reordering.
+- Added `isReorderable` property on `ListLayoutContent.ItemInfo` to check if an item has reordering enabled.
+
 ### Removed
 
 ### Changed
