@@ -178,9 +178,6 @@
                 <a class="nav-group-task-link" href="../Enums/ItemSelectionStyle.html">ItemSelectionStyle</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Enums/KeyboardFrame.html">KeyboardFrame</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/LayoutDirection.html">LayoutDirection</a>
               </li>
               <li class="nav-group-task">
@@ -250,9 +247,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/ArrayDiff.html#/s:10ListableUI9ArrayDiffV8NoChangeV">– NoChange</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions.html#/s:10ListableUI16KeyboardObserverC">KeyboardObserver</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Extensions/PresentationState.html">PresentationState</a>
@@ -335,9 +329,6 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ItemLayoutsValue.html">ItemLayoutsValue</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Protocols/KeyboardCurrentFrameProvider.html">KeyboardCurrentFrameProvider</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Protocols/ListEnvironmentKey.html">ListEnvironmentKey</a>
@@ -729,6 +720,7 @@
                   
                   <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">ListView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">ListView</span> <span class="p">:</span> <span class="kt">KeyboardObserverDelegate</span></code></pre>
 
                 </div>
               </div>
@@ -1133,7 +1125,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">KeyboardFrameWillChangeCallback</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="kt"><a href="../Protocols/KeyboardCurrentFrameProvider.html">KeyboardCurrentFrameProvider</a></span><span class="p">,</span>
+    <span class="kt">KeyboardCurrentFrameProvider</span><span class="p">,</span>
     <span class="p">(</span><span class="nv">animationDuration</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">animationCurve</span><span class="p">:</span> <span class="kt">UIView</span><span class="o">.</span><span class="kt">AnimationCurve</span><span class="p">)</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
@@ -1145,9 +1137,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8ListViewC25onKeyboardFrameWillChangeyAA0f7CurrentG8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV0lP0ttcSgvp"></a>
+                    <a name="/s:10ListableUI8ListViewC25onKeyboardFrameWillChangey0F8Observer0f7CurrentG8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV0mQ0ttcSgvp"></a>
                     <a name="//apple_ref/swift/Property/onKeyboardFrameWillChange" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8ListViewC25onKeyboardFrameWillChangeyAA0f7CurrentG8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV0lP0ttcSgvp">onKeyboardFrameWillChange</a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC25onKeyboardFrameWillChangey0F8Observer0f7CurrentG8Provider_p_Sd17animationDuration_So20UIViewAnimationCurveV0mQ0ttcSgvp">onKeyboardFrameWillChange</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1884,42 +1876,6 @@ of the list view. The newly provided environment values will be used during the 
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:@CM@ListableUI@objc(cs)ListView(cm)configureWithApplication:"></a>
-                    <a name="//apple_ref/swift/Method/configure(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/c:@CM@ListableUI@objc(cs)ListView(cm)configureWithApplication:">configure(with:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>This should be called in UIApplicationDelegate.application(_:, didFinishLaunchingWithOption:)
-It ensures that all ListViews will correctly avoid the keyboard</p>
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    CocoaPods automatically calls this method
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">@available(iOSApplicationExtension, unavailable, message: "This cannot be used in application extensions")</span>
-<span class="kd">@objc(configureWithApplication:)</span>
-<span class="kd">@MainActor</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">configure</span><span class="p">(</span><span class="n">with</span> <span class="nv">application</span><span class="p">:</span> <span class="kt">UIApplication</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -2090,6 +2046,33 @@ to be rendered asynchronously.</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@MainActor</span>
 <span class="kd">func</span> <span class="nf">testing_forceLayoutUpdateNow</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8ListViewC23keyboardFrameWillChange3for17animationDuration0J5Curvey16KeyboardObserverAHC_SdSo015UIViewAnimationL0VtF"></a>
+                    <a name="//apple_ref/swift/Method/keyboardFrameWillChange(for:animationDuration:animationCurve:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC23keyboardFrameWillChange3for17animationDuration0J5Curvey16KeyboardObserverAHC_SdSo015UIViewAnimationL0VtF">keyboardFrameWillChange(for:<wbr>animationDuration:<wbr>animationCurve:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">keyboardFrameWillChange</span><span class="p">(</span><span class="k">for</span> <span class="nv">observer</span><span class="p">:</span> <span class="kt">KeyboardObserver</span><span class="p">,</span> <span class="nv">animationDuration</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">animationCurve</span><span class="p">:</span> <span class="kt">UIView</span><span class="o">.</span><span class="kt">AnimationCurve</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
