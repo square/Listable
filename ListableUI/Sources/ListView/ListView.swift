@@ -5,6 +5,7 @@
 //  Created by Kyle Van Essen on 6/16/19.
 //
 
+import KeyboardObserver
 import UIKit
 
 
@@ -1743,7 +1744,6 @@ public extension ListView
 }
 
 
-@_spi(ListableKeyboard)
 extension ListView : KeyboardObserverDelegate
 {
     public func keyboardFrameWillChange(for observer: KeyboardObserver, animationDuration: Double, animationCurve: UIView.AnimationCurve) {

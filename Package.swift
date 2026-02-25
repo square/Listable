@@ -21,13 +21,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/square/Blueprint", from: "6.0.0"),
+        .package(url: "https://github.com/square/swift-keyboard-observer", branch: "johnnewman/task/ios-15"),
     ],
     targets: [
         .target(
             name: "ListableUI",
+            dependencies: [
+                .product(name: "KeyboardObserver", package: "swift-keyboard-observer"),
+            ],
             path: "ListableUI",
             exclude: [
-                "Sources/KeyboardObserver/SetupKeyboardObserverOnAppStartup.m",
                 "Sources/Layout/Paged/PagedAppearance.monopic",
                 "Sources/ContentBounds/ListContentBounds.monopic",
                 "Sources/Layout/Table/TableAppearance.monopic",
