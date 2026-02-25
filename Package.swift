@@ -21,7 +21,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/square/Blueprint", from: "6.0.0"),
-        .package(url: "https://github.com/square/swift-keyboard-observer", branch: "johnnewman/task/ios-15"),
+        .package(url: "https://github.com/square/swift-keyboard-observer", from: "1.1.0"),
     ],
     targets: [
         .target(
