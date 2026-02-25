@@ -37,8 +37,10 @@ playground.xcworkspace
 # Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
 # Packages/
 # Package.pins
-# Package.resolved
 .build/
+
+# Resolved dependencies are managed by Tuist in Development/Tuist/Package.resolved.
+Package.resolved
 
 # Carthage
 #
