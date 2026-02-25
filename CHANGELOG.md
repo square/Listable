@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Replaced the internal `KeyboardObserver` with https://github.com/square/swift-keyboard-observer.
+
 ### Misc
 
 ### Internal
