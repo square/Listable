@@ -8,13 +8,17 @@
 
 ### Changed
 
-- Replaced the internal `KeyboardObserver` with https://github.com/square/swift-keyboard-observer.
-
 ### Misc
 
 ### Internal
 
 # Past Releases
+
+# 17.0.0 - 2026-02-25
+
+### Changed
+
+- Replaced the internal `KeyboardObserver` with https://github.com/square/swift-keyboard-observer.
 
 # 16.6.0 - 2026-02-10
 
