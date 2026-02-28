@@ -59,6 +59,9 @@ public struct ListReorderGesture : Element
     /// The acccessibility label for the reorder element. Defaults  to "Reorder".
     public var accessibilityLabel : String?
     
+    /// The acccessibility identifier for the reorder element.
+    public var accessibilityIdentifier : String?
+    
     /// Creates a new re-order gesture which wraps the provided element.
     /// 
     /// This element on its own has no visual appearance. Thus, you should
@@ -68,6 +71,7 @@ public struct ListReorderGesture : Element
         actions : ReorderingActions,
         begins: Begins = .onTap,
         accessibilityLabel: String? = nil,
+        accessibilityIdentifier: String? = nil,
         wrapping element : Element
     ) {
         self.isEnabled =  isEnabled
@@ -77,6 +81,8 @@ public struct ListReorderGesture : Element
         self.begins = begins
         
         self.accessibilityLabel = accessibilityLabel
+        
+        self.accessibilityIdentifier = accessibilityIdentifier
         
         self.element = element
     }
@@ -115,12 +121,14 @@ public extension Element
         with actions : ReorderingActions,
         isEnabled : Bool = true,
         begins: ListReorderGesture.Begins = .onTap,
-        accessibilityLabel: String? = nil
+        accessibilityLabel: String? = nil,
+        accessibilityIdentifier: String? = nil
     ) -> Element {
         ListReorderGesture(isEnabled: isEnabled,
                            actions: actions,
                            begins: begins,
                            accessibilityLabel: accessibilityLabel,
+                           accessibilityIdentifier: accessibilityIdentifier,
                            wrapping: self)
     }
 }
@@ -173,6 +181,7 @@ fileprivate extension ListReorderGesture
         func apply(_ model: ListReorderGesture) {
             proxyElement.accessibilityLabel = model.accessibilityLabel ?? ListableLocalizedStrings.ReorderGesture.accessibilityLabel
             proxyElement.accessibilityHint = ListableLocalizedStrings.ReorderGesture.accessibilityHint
+            proxyElement.accessibilityIdentifier = model.accessibilityIdentifier
             proxyElement.accessibilityTraits.formUnion(.button)
             proxyElement.accessibilityCustomActions = model.accessibilityActions()
             
