@@ -8,8 +8,10 @@
 @testable import ListableUI
 import XCTest
 
-final class ListStateObserverApproachingBottomTests: XCTestCase {
-    func test_callsBackOnceWhileRemainingWithinThreshold() {
+final class ListStateObserverApproachingBottomTests : XCTestCase
+{
+    func test_callsBackOnceWhileRemainingWithinThreshold()
+    {
         var callCount = 0
 
         var observer = ListStateObserver()
@@ -26,7 +28,8 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
         XCTAssertEqual(callCount, 1)
     }
 
-    func test_rearmsAfterScrollingAwayFromThreshold() {
+    func test_rearmsAfterScrollingAwayFromThreshold()
+    {
         var callCount = 0
 
         var observer = ListStateObserver()
@@ -41,7 +44,8 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
         XCTAssertEqual(callCount, 2)
     }
 
-    func test_rearmsAfterContentChangesWhileRemainingWithinThreshold() {
+    func test_rearmsAfterContentChangesWhileRemainingWithinThreshold()
+    {
         var callCount = 0
 
         var observer = ListStateObserver()
@@ -60,7 +64,8 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
         XCTAssertEqual(callCount, 2)
     }
 
-    func test_doesNotRearmForContentUpdatesWithoutChanges() {
+    func test_doesNotRearmForContentUpdatesWithoutChanges()
+    {
         var callCount = 0
 
         var observer = ListStateObserver()
@@ -79,7 +84,8 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
         XCTAssertEqual(callCount, 1)
     }
 
-    func test_shouldPerformCanDelayTheFirstCallback() {
+    func test_shouldPerformCanDelayTheFirstCallback()
+    {
         var callCount = 0
         var canLoadMore = false
 
@@ -100,7 +106,8 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
         XCTAssertEqual(callCount, 1)
     }
 
-    func test_rearmsWhenViewportChanges() {
+    func test_rearmsWhenViewportChanges()
+    {
         var callCount = 0
 
         var observer = ListStateObserver()
@@ -130,15 +137,17 @@ final class ListStateObserverApproachingBottomTests: XCTestCase {
     }
 }
 
-private extension ListStateObserverApproachingBottomTests {
-    func didScroll(positionInfo: ListScrollPositionInfo) -> ListStateObserver.DidScroll {
+private extension ListStateObserverApproachingBottomTests
+{
+    func didScroll(positionInfo : ListScrollPositionInfo) -> ListStateObserver.DidScroll
+    {
         ListStateObserver.DidScroll(
             actions: ListActions(),
             positionInfo: positionInfo
         )
     }
 
-    func visibilityChanged(positionInfo: ListScrollPositionInfo) -> ListStateObserver.VisibilityChanged
+    func visibilityChanged(positionInfo : ListScrollPositionInfo) -> ListStateObserver.VisibilityChanged
     {
         ListStateObserver.VisibilityChanged(
             actions: ListActions(),
@@ -149,8 +158,8 @@ private extension ListStateObserverApproachingBottomTests {
     }
 
     func contentUpdated(
-        positionInfo: ListScrollPositionInfo,
-        hadChanges: Bool
+        positionInfo : ListScrollPositionInfo,
+        hadChanges : Bool
     ) -> ListStateObserver.ContentUpdated {
         ListStateObserver.ContentUpdated(
             hadChanges: hadChanges,
@@ -160,7 +169,8 @@ private extension ListStateObserverApproachingBottomTests {
         )
     }
 
-    func frameChanged(positionInfo: ListScrollPositionInfo) -> ListStateObserver.FrameChanged {
+    func frameChanged(positionInfo : ListScrollPositionInfo) -> ListStateObserver.FrameChanged
+    {
         ListStateObserver.FrameChanged(
             actions: ListActions(),
             positionInfo: positionInfo,
@@ -170,10 +180,10 @@ private extension ListStateObserverApproachingBottomTests {
     }
 
     func makeInfo(
-        bottomScrollOffset: CGFloat,
-        boundsHeight: CGFloat = 400.0,
-        safeAreaInsets: UIEdgeInsets = .zero,
-        isLastItemVisible: Bool = false
+        bottomScrollOffset : CGFloat,
+        boundsHeight : CGFloat = 400.0,
+        safeAreaInsets : UIEdgeInsets = .zero,
+        isLastItemVisible : Bool = false
     ) -> ListScrollPositionInfo {
         let scrollView = TestScrollView()
         scrollView.bounds = CGRect(origin: .zero, size: CGSize(width: 100.0, height: boundsHeight))
@@ -192,7 +202,8 @@ private extension ListStateObserverApproachingBottomTests {
     }
 }
 
-private final class TestScrollView: UIScrollView {
+private final class TestScrollView : UIScrollView
+{
     var testSafeAreaInsets: UIEdgeInsets = .zero
 
     override var safeAreaInsets: UIEdgeInsets {

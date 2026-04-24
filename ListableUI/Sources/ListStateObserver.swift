@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 /// Allows reading state and events based on state changes within the list view.
 /// For example, you can determine when a user scrolls, when the content of a list
 /// changes, etc.
@@ -40,18 +41,18 @@ import UIKit
 /// use Instruments.app to see what callback is slow.
 ///
 public struct ListStateObserver {
+    
     /// Creates and optionally allows you to configure an observer.
-    public init(_ configure: (inout ListStateObserver) -> Void = { _ in }) {
+    public init(_ configure : (inout ListStateObserver) -> () = { _ in })
+    {
         configure(&self)
     }
-
+    
     //
-
     // MARK: Responding To Scrolling
-
     //
-
-    public typealias OnDidScroll = (DidScroll) -> Void
+    
+    public typealias OnDidScroll = (DidScroll) -> ()
 
     /// Registers a callback which will be called when the list view is scrolled, or is
     /// scrolled to top.
@@ -59,209 +60,202 @@ public struct ListStateObserver {
     /// ### ⚠️ Important Note!
     /// This callback is called very frequently when the user is scrolling the list (eg, every frame!).
     /// As such, make sure any work you do in the callback is efficient.
-    public mutating func onDidScroll(_ callback: @escaping OnDidScroll) {
-        onDidScroll.append(callback)
+    public mutating func onDidScroll( _ callback : @escaping OnDidScroll)
+    {
+        self.onDidScroll.append(callback)
     }
-
-    private(set) var onDidScroll: [OnDidScroll] = []
-
+    
+    private(set) var onDidScroll : [OnDidScroll] = []
+    
     //
-
     // MARK: Responding to Scrolling Deceleration
-
     //
 
-    public typealias OnDidEndDeceleration = (DidEndDeceleration) -> Void
+    public typealias OnDidEndDeceleration = (DidEndDeceleration) -> ()
 
     /// Registers a callback which will be called when the list view is finished decelerating.
-    public mutating func onDidEndDeceleration(_ callback: @escaping OnDidEndDeceleration) {
-        onDidEndDeceleration.append(callback)
+    public mutating func onDidEndDeceleration( _ callback : @escaping OnDidEndDeceleration)
+    {
+        self.onDidEndDeceleration.append(callback)
     }
 
     private(set) var onDidEndDeceleration: [OnDidEndDeceleration] = []
 
     //
-
     // MARK: Responding to Scrolling Animation Ending
-
     //
 
-    public typealias OnDidEndScrollingAnimation = (DidEndScrollingAnimation) -> Void
+    public typealias OnDidEndScrollingAnimation = (DidEndScrollingAnimation) -> ()
 
     /// Registers a callback which will be called when the list view had ended scrolling animation.
-    public mutating func onDidEndScrollingAnimation(_ callback: @escaping OnDidEndScrollingAnimation)
+    public mutating func onDidEndScrollingAnimation( _ callback : @escaping OnDidEndScrollingAnimation)
     {
-        onDidEndScrollingAnimation.append(callback)
+        self.onDidEndScrollingAnimation.append(callback)
     }
 
     private(set) var onDidEndScrollingAnimation: [OnDidEndScrollingAnimation] = []
 
     //
-
     // MARK: Responding to Drag Begin
-
     //
-
-    public typealias OnBeginDrag = (BeginDrag) -> Void
-
+    
+    public typealias OnBeginDrag = (BeginDrag) -> ()
+    
     /// Registers a callback which will be called when the list view will begin dragging.
-    public mutating func onBeginDrag(_ callback: @escaping OnBeginDrag) {
-        onBeginDrag.append(callback)
+    public mutating func onBeginDrag( _ callback: @escaping OnBeginDrag)
+    {
+        self.onBeginDrag.append(callback)
     }
-
+    
     private(set) var onBeginDrag: [OnBeginDrag] = []
-
+    
     //
-
     // MARK: Responding To Content Updates
-
     //
-
-    public typealias OnContentUpdated = (ContentUpdated) -> Void
-
+    
+    public typealias OnContentUpdated = (ContentUpdated) -> ()
+    
     /// Registers a callback which will be called when the list view's content is updated
     /// due to a call to `setContent`.
     ///
     /// ### Note
     /// This method is called even if there were no actual changes made during the `setContent`
     /// call. To see if there were changes, check the `hadChanges` property on `ContentUpdated`.
-    public mutating func onContentUpdated(_ callback: @escaping OnContentUpdated) {
-        onContentUpdated.append(callback)
+    public mutating func onContentUpdated( _ callback : @escaping OnContentUpdated)
+    {
+        self.onContentUpdated.append(callback)
     }
-
-    private(set) var onContentUpdated: [OnContentUpdated] = []
-
+    
+    private(set) var onContentUpdated : [OnContentUpdated] = []
+    
     //
-
     // MARK: Responding To Visibility Changes
-
     //
-
-    public typealias OnVisibilityChanged = (VisibilityChanged) -> Void
-
+    
+    public typealias OnVisibilityChanged = (VisibilityChanged) -> ()
+    
     /// Registers a callback which will be called when the visiblity of content within the list changes,
     /// either due to the user scrolling the list, or due to an update changing the visible content.
     ///
     /// If you'd like to (eg) update a pagination indicator or other indicator of what
     /// items / pages / etc are visible, use this method.
-    public mutating func onVisibilityChanged(_ callback: @escaping OnVisibilityChanged) {
-        onVisibilityChanged.append(callback)
+    public mutating func onVisibilityChanged( _ callback : @escaping OnVisibilityChanged)
+    {
+        self.onVisibilityChanged.append(callback)
     }
-
-    private(set) var onVisibilityChanged: [OnVisibilityChanged] = []
-
+    
+    private(set) var onVisibilityChanged : [OnVisibilityChanged] = []
+    
     //
-
     // MARK: Responding To Frame Changes
-
     //
-
-    public typealias OnFrameChanged = (FrameChanged) -> Void
-
+    
+    public typealias OnFrameChanged = (FrameChanged) -> ()
+    
     /// Registers a callback which will be called when the list view's frame is changed.
-    public mutating func onFrameChanged(_ callback: @escaping OnFrameChanged) {
-        onFrameChanged.append(callback)
+    public mutating func onFrameChanged(_ callback : @escaping OnFrameChanged)
+    {
+        self.onFrameChanged.append(callback)
     }
-
-    private(set) var onFrameChanged: [OnFrameChanged] = []
-
+    
+    private(set) var onFrameChanged : [OnFrameChanged] = []
+    
     //
-
     // MARK: Responding To Selection Changes
-
     //
-
-    public typealias OnSelectionChanged = (SelectionChanged) -> Void
-
+    
+    public typealias OnSelectionChanged = (SelectionChanged) -> ()
+    
     /// Registers a callback which will be called when the list view's selected items are changed by the user.
-    public mutating func onSelectionChanged(_ callback: @escaping OnSelectionChanged) {
-        onSelectionChanged.append(callback)
+    public mutating func onSelectionChanged(_ callback : @escaping OnSelectionChanged)
+    {
+        self.onSelectionChanged.append(callback)
     }
-
-    private(set) var onSelectionChanged: [OnSelectionChanged] = []
-
+    
+    private(set) var onSelectionChanged : [OnSelectionChanged] = []
+    
     //
-
     // MARK: Responding To Reordered Items
-
     //
-
-    public typealias OnItemReordered = (ItemReordered) -> Void
-
+    
+    public typealias OnItemReordered = (ItemReordered) -> ()
+    
     /// Registers a callback which will be called when an item in the list view is reordered by the customer.
     /// May be called multiple times in a row for reorder events which contain multiple items.
-    public mutating func onItemReordered(_ callback: @escaping OnItemReordered) {
-        onItemReordered.append(callback)
+    public mutating func onItemReordered(_ callback : @escaping OnItemReordered)
+    {
+        self.onItemReordered.append(callback)
     }
-
-    private(set) var onItemReordered: [OnItemReordered] = []
-
+    
+    private(set) var onItemReordered : [OnItemReordered] = []
+    
     //
-
     // MARK: Internal Methods
-
     //
-
+    
     static func perform<CallbackInfo>(
-        _ callbacks: [(CallbackInfo) -> Void],
-        _ loggingName: StaticString,
-        with listView: ListView, makeInfo: (ListActions) -> (CallbackInfo)
-    ) {
+        _ callbacks : Array<(CallbackInfo) -> ()>,
+        _ loggingName : StaticString,
+        with listView : ListView, makeInfo : (ListActions) -> (CallbackInfo)
+    ){
         guard callbacks.isEmpty == false else {
             return
         }
-
+        
         let actions = ListActions()
         actions.listView = listView
-
+        
         let callbackInfo = makeInfo(actions)
-
+        
         SignpostLogger.log(log: .stateObserver, name: loggingName, for: listView) {
             callbacks.forEach {
                 $0(callbackInfo)
             }
         }
-
+        
         actions.listView = nil
     }
 }
 
-public extension ListStateObserver {
-    /// Parameters available for ``OnDidScroll`` callbacks.
-    struct DidScroll {
-        public let actions: ListActions
-        public let positionInfo: ListScrollPositionInfo
-    }
 
+extension ListStateObserver
+{
+    /// Parameters available for ``OnDidScroll`` callbacks.
+    public struct DidScroll {
+        public let actions : ListActions
+        public let positionInfo : ListScrollPositionInfo
+    }
+    
     /// Parameters available for ``OnDidEndDeceleration`` callbacks.
-    struct DidEndDeceleration {
-        public let positionInfo: ListScrollPositionInfo
+    public struct DidEndDeceleration {
+        public let positionInfo : ListScrollPositionInfo
     }
 
     /// Parameters available for ``OnDidEndScrollingAnimation`` callbacks.
-    struct DidEndScrollingAnimation {
-        public let positionInfo: ListScrollPositionInfo
+    public struct DidEndScrollingAnimation {
+        public let positionInfo : ListScrollPositionInfo
     }
 
     /// Parameters available for ``OnBeginDrag`` callbacks.
-    struct BeginDrag {
-        public let positionInfo: ListScrollPositionInfo
+    public struct BeginDrag {
+        public let positionInfo : ListScrollPositionInfo
     }
-
+    
     /// Parameters available for ``OnContentUpdated`` callbacks.
-    struct ContentUpdated {
+    public struct ContentUpdated {
+        
         // If there were any changes included in this content update.
-        public let hadChanges: Bool
-
+        public let hadChanges : Bool
+        
         /// The insertions and removals in this change, if any.
-        public let insertionsAndRemovals: InsertionsAndRemovals
-
+        public let insertionsAndRemovals : InsertionsAndRemovals
+        
         /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
-        public let actions: ListActions
-
+        public let actions : ListActions
+        
         /// The current scroll position of the list.
-        public let positionInfo: ListScrollPositionInfo
-
+        public let positionInfo : ListScrollPositionInfo
+        
         /// The insertions and removals, for both sections and items, applied to a list
         /// as the result of an update.
         ///
@@ -270,103 +264,114 @@ public extension ListStateObserver {
         /// contains a `Set`, two sections inserting (or removing) an item with an equal ID
         /// will only be included in `ChangedIDs.inserted/removed` set once.
         public struct InsertionsAndRemovals {
+
             /// The inserted and removed sections.
-            public var sections: ChangedIDs
-
+            public var sections : ChangedIDs
+            
             /// The inserted and removed items.
-            public var items: ChangedIDs
-
+            public var items : ChangedIDs
+            
             init(
-                sections: ChangedIDs = ChangedIDs(inserted: [], removed: []),
-                items: ChangedIDs = ChangedIDs(inserted: [], removed: [])
+                sections : ChangedIDs = ChangedIDs(inserted: [], removed: []),
+                items : ChangedIDs = ChangedIDs(inserted: [], removed: [])
             ) {
                 self.sections = sections
                 self.items = items
             }
-
-            init(diff: SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>) {
-                sections = ChangedIDs(
-                    inserted: Set(diff.changes.added.map { $0.identifier }),
-                    removed: Set(diff.changes.removed.map { $0.identifier })
+            
+            init(diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>) {
+                
+                self.sections = ChangedIDs(
+                    inserted: Set(diff.changes.added.map{ $0.identifier }),
+                    removed: Set(diff.changes.removed.map{ $0.identifier })
                 )
-
-                items = ChangedIDs(
+                
+                self.items = ChangedIDs(
                     inserted: diff.changes.addedItemIdentifiers,
                     removed: diff.changes.removedItemIdentifiers
                 )
             }
-
+            
             /// The changed IDs.
             public struct ChangedIDs {
+                
                 /// The inserted IDs.
-                public var inserted: Set<AnyIdentifier>
-
+                public var inserted : Set<AnyIdentifier>
+                
                 /// The removed IDs.
-                public var removed: Set<AnyIdentifier>
+                public var removed : Set<AnyIdentifier>
             }
         }
     }
-
+    
+    
     /// Parameters available for ``OnVisibilityChanged`` callbacks.
-    struct VisibilityChanged {
+    public struct VisibilityChanged {
+        
         /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
-        public let actions: ListActions
-
+        public let actions : ListActions
+        
         /// The current scroll position of the list.
-        public let positionInfo: ListScrollPositionInfo
-
+        public let positionInfo : ListScrollPositionInfo
+        
         /// The items which were scrolled into view or otherwise became visible.
-        public let displayed: [AnyItem]
-
+        public let displayed : [AnyItem]
+        
         /// The items which were scrolled out of view or otherwise were removed from view.
-        public let endedDisplay: [AnyItem]
+        public let endedDisplay : [AnyItem]
     }
-
+    
+    
     /// Parameters available for ``OnFrameChanged`` callbacks.
-    struct FrameChanged {
+    public struct FrameChanged {
+        
         /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
-        public let actions: ListActions
-
+        public let actions : ListActions
+        
         /// The current scroll position of the list.
-        public let positionInfo: ListScrollPositionInfo
+        public let positionInfo : ListScrollPositionInfo
 
         /// The old frame within the bounds of the list.
-        public let old: CGRect
-
+        public let old : CGRect
+        
         /// The new frame within the bounds of the list.
-        public let new: CGRect
+        public let new : CGRect
     }
-
+    
+    
     /// Parameters available for ``OnSelectionChanged`` callbacks.
-    struct SelectionChanged {
+    public struct SelectionChanged {
+        
         /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
-        public let actions: ListActions
-
+        public let actions : ListActions
+        
         /// The current scroll position of the list.
-        public let positionInfo: ListScrollPositionInfo
+        public let positionInfo : ListScrollPositionInfo
 
         /// The previously selected items' identifiers.
-        public let old: Set<AnyIdentifier>
-
+        public let old : Set<AnyIdentifier>
+        
         /// The newly selected items' identifiers.
-        public let new: Set<AnyIdentifier>
+        public let new : Set<AnyIdentifier>
     }
-
+    
+    
     /// Parameters available for ``OnItemReordered`` callbacks.
-    struct ItemReordered {
+    public struct ItemReordered {
+        
         /// A set of methods you can use to perform actions on the list, eg scrolling to a given row.
-        public let actions: ListActions
-
+        public let actions : ListActions
+        
         /// The current scroll position of the list.
-        public let positionInfo: ListScrollPositionInfo
-
+        public let positionInfo : ListScrollPositionInfo
+        
         /// The item which was reordered by the customer.
-        public let item: AnyItem
-
+        public let item : AnyItem
+        
         /// The new state of all sections in the list.
-        public let sections: [Section]
-
-        /// The detailed information about the reorder event.
-        public let result: ItemReordering.Result
+        public let sections : [Section]
+        
+        /// The detailed information about the reorder event. 
+        public let result : ItemReordering.Result
     }
 }
