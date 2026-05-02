@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a crash in `CollectionViewLayout` when the delegate was deallocated before the layout. The delegate is now held weakly rather than unowned.
+
 ### Added
 
 ### Removed
