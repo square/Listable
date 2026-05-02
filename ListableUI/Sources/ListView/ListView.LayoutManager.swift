@@ -45,8 +45,12 @@ extension ListView
                     self.collectionViewLayout.setNeedsRebuild(animated: animated)
                 }
             } else {
+                guard let delegate = self.collectionViewLayout.delegate else {
+                    listableInternalFatal("Cannot swap layout when the previous layout's delegate has been deallocated.")
+                }
+
                 self.collectionViewLayout = CollectionViewLayout(
-                    delegate: self.collectionViewLayout.delegate,
+                    delegate: delegate,
                     layoutDescription: layout,
                     appearance: self.collectionViewLayout.appearance,
                     behavior: self.collectionViewLayout.behavior
