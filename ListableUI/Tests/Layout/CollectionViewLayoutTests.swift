@@ -13,17 +13,19 @@ final class CollectionViewLayoutTests : XCTestCase
 {
     func test_prepare_whenDelegateHasBeenDeallocated()
     {
-        var delegate : CollectionViewLayoutDelegateMock? = CollectionViewLayoutDelegateMock()
-        weak var weakDelegate = delegate
+        weak var weakDelegate : CollectionViewLayoutDelegateMock?
 
-        let layout = CollectionViewLayout(
-            delegate: delegate!,
-            layoutDescription: .table(),
-            appearance: Appearance(),
-            behavior: Behavior()
-        )
+        let layout : CollectionViewLayout = {
+            let delegate = CollectionViewLayoutDelegateMock()
+            weakDelegate = delegate
 
-        delegate = nil
+            return CollectionViewLayout(
+                delegate: delegate,
+                layoutDescription: .table(),
+                appearance: Appearance(),
+                behavior: Behavior()
+            )
+        }()
 
         XCTAssertNil(weakDelegate)
         XCTAssertNil(layout.delegate)
