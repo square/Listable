@@ -2,7 +2,7 @@
 //  CollectionViewLayoutTests.swift
 //  ListableUI-Unit-Tests
 //
-//  Created by OpenAI on 5/2/26.
+//  Created by Alex Odawa on 5/2/26.
 //
 
 import XCTest
