@@ -221,8 +221,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         /// processing any further updates 🥴.
         ///
 
-        OperationQueue.main.addOperation { [weak self] in
-            self?.delegate?.listViewShouldEndQueueingEditsForReorder()
+        OperationQueue.main.addOperation { [weak delegate = self.delegate] in
+            delegate?.listViewShouldEndQueueingEditsForReorder()
         }
     }
 
