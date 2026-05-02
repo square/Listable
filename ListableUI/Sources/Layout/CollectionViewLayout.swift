@@ -14,7 +14,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Properties
     //
 
-    private(set) weak var delegate : CollectionViewLayoutDelegate?
+    unowned let delegate : CollectionViewLayoutDelegate
 
     var layoutDescription : LayoutDescription
 
@@ -221,10 +221,8 @@ final class CollectionViewLayout : UICollectionViewLayout
         /// processing any further updates 🥴.
         ///
 
-        let delegate = self.delegate
-
-        OperationQueue.main.addOperation { [weak delegate] in
-            delegate?.listViewShouldEndQueueingEditsForReorder()
+        OperationQueue.main.addOperation {
+            self.delegate.listViewShouldEndQueueingEditsForReorder()
         }
     }
 
@@ -392,10 +390,6 @@ final class CollectionViewLayout : UICollectionViewLayout
 
         self.changesDuringCurrentUpdate = UpdateItems(with: [])
 
-        guard let delegate = self.delegate else {
-            return
-        }
-
         let size = self.collectionView?.bounds.size ?? .zero
 
         self.neededLayoutType.update(with: {
@@ -408,18 +402,18 @@ final class CollectionViewLayout : UICollectionViewLayout
             case .none:
                 return true
             case .relayout:
-                self.performLayout(delegate: delegate)
+                self.performLayout()
             case .rebuild:
-                self.performRebuild(andLayout: shouldLayout, delegate: delegate)
+                self.performRebuild(andLayout: shouldLayout)
             }
 
             return true
         }())
 
-        self.performLayoutUpdate(delegate: delegate)
+        self.performLayoutUpdate()
 
         if self.isReordering == false {
-            delegate.listViewLayoutDidLayoutContents()
+            self.delegate.listViewLayoutDidLayoutContents()
         }
     }
 
@@ -445,7 +439,7 @@ final class CollectionViewLayout : UICollectionViewLayout
     // MARK: Performing Layouts
     //
 
-    private func performRebuild(andLayout layout : Bool, delegate : CollectionViewLayoutDelegate)
+    private func performRebuild(andLayout layout : Bool)
     {
         self.previousLayout = self.layout
 
@@ -453,7 +447,7 @@ final class CollectionViewLayout : UICollectionViewLayout
             appearance: self.appearance,
             behavior: self.behavior,
             content: {
-                delegate.listLayoutContent(defaults: $0)
+                self.delegate.listLayoutContent(defaults: $0)
             }
         )
 
@@ -465,34 +459,34 @@ final class CollectionViewLayout : UICollectionViewLayout
         )
 
         if layout {
-            self.performLayout(delegate: delegate)
+            self.performLayout()
         }
     }
 
-    private func performLayout(delegate : CollectionViewLayoutDelegate)
+    private func performLayout()
     {
         let view = self.collectionView!
 
         let context = ListLayoutLayoutContext(
             collectionView: view,
-            environment: delegate.listViewLayoutCurrentEnvironment()
+            environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
 
         self.layout.performLayout(
-            with: delegate,
+            with: self.delegate,
             in: context
         )
 
         self.viewProperties = CollectionViewLayoutProperties(collectionView: view)
     }
 
-    private func performLayoutUpdate(delegate : CollectionViewLayoutDelegate)
+    private func performLayoutUpdate()
     {
         let view = self.collectionView!
 
         let context = ListLayoutLayoutContext(
             collectionView: view,
-            environment: delegate.listViewLayoutCurrentEnvironment()
+            environment: self.delegate.listViewLayoutCurrentEnvironment()
         )
 
         self.layout.positionStickyListHeaderIfNeeded(in: context)
