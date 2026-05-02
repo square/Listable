@@ -151,6 +151,8 @@ public final class ListView : UIView
 
         self.collectionView.delegate = nil
         self.collectionView.dataSource = nil
+
+        self.collectionView.removeFromSuperview()
     }
     
     @available(*, unavailable)
