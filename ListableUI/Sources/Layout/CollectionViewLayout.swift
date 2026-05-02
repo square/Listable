@@ -197,7 +197,7 @@ final class CollectionViewLayout : UICollectionViewLayout
         self.neededLayoutType.merge(with: context)
     }
 
-    private func sendEndQueuingEditsAfterDelay() {
+    func sendEndQueuingEditsAfterDelay() {
 
         ///
         /// Hello! Welcome to the source code. You're probably wondering why this perform after runloop hack is here.

@@ -32,6 +32,36 @@ final class CollectionViewLayoutTests : XCTestCase
 
         layout.prepare()
     }
+
+    /// Exercises the real production path that motivates the weak-delegate fix:
+    /// `sendEndQueuingEditsAfterDelay` schedules a closure on `OperationQueue.main`
+    /// that fires on a later runloop turn. If the owning `ListView` (and therefore
+    /// the delegate) deallocates between scheduling and dispatch, the closure
+    /// previously trapped on the `unowned` delegate access.
+    func test_sendEndQueuingEditsAfterDelay_whenDelegateDeallocatesBeforeDispatch()
+    {
+        weak var weakDelegate : CollectionViewLayoutDelegateMock?
+
+        autoreleasepool {
+            let delegate = CollectionViewLayoutDelegateMock()
+            weakDelegate = delegate
+
+            let layout = CollectionViewLayout(
+                delegate: delegate,
+                layoutDescription: .table(),
+                appearance: Appearance(),
+                behavior: Behavior()
+            )
+
+            layout.sendEndQueuingEditsAfterDelay()
+        }
+
+        XCTAssertNil(weakDelegate)
+
+        let drained = expectation(description: "main queue drained")
+        OperationQueue.main.addOperation { drained.fulfill() }
+        wait(for: [drained], timeout: 1.0)
+    }
 }
 
 
