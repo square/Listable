@@ -1113,9 +1113,13 @@ public final class ListView : UIView
     public override func didMoveToWindow()
     {
         super.didMoveToWindow()
-        
+
         if self.window != nil {
             self.updateScrollViewInsets()
+        } else {
+            self.collectionView.delegate = nil
+            self.collectionView.dataSource = nil
+            self.collectionView.removeFromSuperview()
         }
     }
     
