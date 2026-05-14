@@ -48,6 +48,11 @@ public struct ListScrollPositionInfo : Equatable {
     /// `safeAreaInsests` of the list view
     public var safeAreaInsets: UIEdgeInsets
     
+    /// `contentSize` of the list view
+    public var contentSize: CGSize {
+        self.scrollViewState.contentSize
+    }
+    
     ///
     /// Used to retrieve the visible content edges for the list's content.
     ///
@@ -99,6 +104,38 @@ public struct ListScrollPositionInfo : Equatable {
             contentSize: self.scrollViewState.contentSize,
             safeAreaInsets: safeArea
         )
+    }
+    
+    /// Controls how close to the bottom edge of a list a user must scroll before the
+    /// list is considered to be approaching the bottom.
+    public enum BottomThreshold : Equatable {
+        /// The list is approaching the bottom once the final rendered item is visible.
+        case lastItem
+        
+        /// The list is approaching the bottom once the remaining vertical scroll distance
+        /// is less than or equal to the provided number of points.
+        case offset(CGFloat)
+        
+        /// The list is approaching the bottom once the remaining vertical scroll distance
+        /// is less than or equal to the provided number of visible viewport heights.
+        case screens(CGFloat)
+    }
+    
+    /// Returns whether the list is approaching the bottom for a given threshold.
+    public func isApproachingBottom(within threshold : BottomThreshold) -> Bool
+    {
+        switch threshold {
+        case .lastItem:
+            return isLastItemVisible
+            
+        case let .offset(offset):
+            return bottomScrollOffset <= max(offset, 0.0)
+            
+        case let .screens(screens):
+            let visibleHeight = max(bounds.height - safeAreaInsets.top - safeAreaInsets.bottom, 0.0)
+            let screenHeight = visibleHeight > 0.0 ? visibleHeight : bounds.height
+            return bottomScrollOffset <= screenHeight * max(screens, 0.0)
+        }
     }
     
     //

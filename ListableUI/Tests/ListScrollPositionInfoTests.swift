@@ -72,6 +72,77 @@ final class UIRectEdgeTests : XCTestCase
         XCTAssertEqual(info.mostVisibleItem?.percentageVisible, 1.0)
     }
     
+    func test_isApproachingBottom_withLastItemThreshold()
+    {
+        let info = makeInfo(
+            contentHeight: 1000.0,
+            boundsHeight: 400.0,
+            contentOffsetY: 200.0,
+            isLastItemVisible: true
+        )
+        
+        XCTAssertTrue(info.isApproachingBottom(within: .lastItem))
+    }
+    
+    func test_isApproachingBottom_withOffsetThreshold()
+    {
+        let info = makeInfo(
+            contentHeight: 1000.0,
+            boundsHeight: 400.0,
+            contentOffsetY: 540.0
+        )
+        
+        XCTAssertTrue(info.isApproachingBottom(within: .offset(60.0)))
+        XCTAssertFalse(info.isApproachingBottom(within: .offset(59.0)))
+    }
+    
+    func test_isApproachingBottom_withScreensThreshold()
+    {
+        let info = makeInfo(
+            contentHeight: 1000.0,
+            boundsHeight: 400.0,
+            contentOffsetY: 300.0,
+            safeAreaInsets: UIEdgeInsets(top: 20.0, left: 0.0, bottom: 30.0, right: 0.0)
+        )
+        
+        XCTAssertTrue(info.isApproachingBottom(within: .screens(1.0)))
+        XCTAssertFalse(info.isApproachingBottom(within: .screens(0.35)))
+    }
+    
+    func test_contentSize()
+    {
+        let info = makeInfo(
+            contentHeight: 1000.0,
+            boundsHeight: 400.0,
+            contentOffsetY: 200.0
+        )
+        
+        XCTAssertEqual(info.contentSize, CGSize(width: 100.0, height: 1000.0))
+    }
+    
+    private func makeInfo(
+        contentHeight: CGFloat,
+        boundsHeight: CGFloat,
+        contentOffsetY: CGFloat,
+        safeAreaInsets: UIEdgeInsets = .zero,
+        isLastItemVisible: Bool = false
+    ) -> ListScrollPositionInfo {
+        let scrollView = TestScrollView()
+        scrollView.bounds = CGRect(origin: .zero, size: CGSize(width: 100.0, height: boundsHeight))
+        scrollView.contentSize = CGSize(width: 100.0, height: contentHeight)
+        scrollView.contentOffset = CGPoint(x: 0.0, y: contentOffsetY)
+        scrollView.contentInset = .zero
+        scrollView.verticalScrollIndicatorInsets = .zero
+        scrollView.testSafeAreaInsets = safeAreaInsets
+        
+        return ListScrollPositionInfo(
+            scrollView: scrollView,
+            visibleItems: Set(),
+            isFirstItemVisible: false,
+            isLastItemVisible: isLastItemVisible
+        )
+    }
+    
     fileprivate struct TestingType { }
 }
 
@@ -86,5 +157,14 @@ final class UIEdgeInsetsTests : XCTestCase
         XCTAssertEqual(insets.masked(by: [.top, .left]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 0.0, right: 0.0))
         XCTAssertEqual(insets.masked(by: [.top, .left, .bottom]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 0.0))
         XCTAssertEqual(insets.masked(by: [.top, .left, .bottom, .right]), UIEdgeInsets(top: 10.0, left: 20.0, bottom: 30.0, right: 40.0))
+    }
+}
+
+private final class TestScrollView : UIScrollView
+{
+    var testSafeAreaInsets: UIEdgeInsets = .zero
+    
+    override var safeAreaInsets: UIEdgeInsets {
+        testSafeAreaInsets
     }
 }

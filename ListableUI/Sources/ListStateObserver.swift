@@ -271,6 +271,14 @@ extension ListStateObserver
             /// The inserted and removed items.
             public var items : ChangedIDs
             
+            init(
+                sections : ChangedIDs = ChangedIDs(inserted: [], removed: []),
+                items : ChangedIDs = ChangedIDs(inserted: [], removed: [])
+            ) {
+                self.sections = sections
+                self.items = items
+            }
+            
             init(diff : SectionedDiff<Section, AnyIdentifier, AnyItem, AnyIdentifier>) {
                 
                 self.sections = ChangedIDs(

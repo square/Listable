@@ -105,6 +105,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(ListStateViewController())
                     }
                 )
+                
+                Item(
+                    DemoItem(text: "Approaching Bottom Pagination"),
+                    selectionStyle: .selectable(),
+                    onSelect: { _ in
+                        self?.push(ApproachingBottomPaginationViewController())
+                    }
+                )
 
                 Item(
                     DemoItem(text: "Itemization Editor"),
