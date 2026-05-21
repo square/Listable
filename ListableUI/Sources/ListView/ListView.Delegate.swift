@@ -100,8 +100,9 @@ extension ListView
 
         func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView)
         {
-            ListStateObserver.perform(self.view.stateObserver.onDidEndScrollingAnimation, "Did End Scrolling Animation", with: self.view) { _ in
+            ListStateObserver.perform(self.view.stateObserver.onDidEndScrollingAnimation, "Did End Scrolling Animation", with: self.view) { actions in
                 ListStateObserver.DidEndScrollingAnimation(
+                    actions: actions,
                     positionInfo: self.view.scrollPositionInfo
                 )
             }
@@ -341,8 +342,9 @@ extension ListView
         {
             self.view.updatePresentationState(for: .didEndDecelerating)
             
-            ListStateObserver.perform(self.view.stateObserver.onDidEndDeceleration, "Did End Deceleration", with: self.view) { _ in
+            ListStateObserver.perform(self.view.stateObserver.onDidEndDeceleration, "Did End Deceleration", with: self.view) { actions in
                 ListStateObserver.DidEndDeceleration(
+                    actions: actions,
                     positionInfo: self.view.scrollPositionInfo
                 )
             }

@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added item-aware content offset adjustment APIs and scroll-in-progress state for custom scrolling behaviors.
+
 ### Removed
 
 ### Changed

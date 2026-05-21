@@ -1048,6 +1048,138 @@ class ListViewTests: XCTestCase
             }
         }
     }
+
+    func test_scroll_to_item_with_content_offset_adjustment() throws {
+
+        try testControllerCase("applies custom offset") { viewController in
+            var capturedInfo: ListItemScrollPositionInfo?
+            let scrollExpectation = expectation(description: "Scroll completed")
+
+            let didScroll = viewController.list.scrollTo(
+                item: TestContent.Identifier("Item 75"),
+                contentOffsetAdjustment: { info in
+                    capturedInfo = info
+                    return 125.0
+                },
+                animated: false,
+                completion: { _ in
+                    scrollExpectation.fulfill()
+                }
+            )
+
+            XCTAssertTrue(didScroll)
+            wait(for: [scrollExpectation], timeout: 0.5)
+            XCTAssertEqual(viewController.list.collectionView.contentOffset.y, 125.0, accuracy: 0.1)
+
+            let itemIndexPath = try XCTUnwrap(
+                viewController.list.storage.allContent.firstIndexPathForItem(with: TestContent.Identifier("Item 75"))
+            )
+            XCTAssertEqual(capturedInfo?.itemFrame, viewController.list.collectionViewLayout.frameForItem(at: itemIndexPath))
+            XCTAssertEqual(capturedInfo?.visibleContentFrame.origin.y, 0.0, accuracy: 0.1)
+            XCTAssertEqual(capturedInfo?.positionInfo.isScrollInProgress, false)
+        }
+
+        try testControllerCase("clamps custom offset at bottom and top") { viewController in
+            let maxOffset = viewController.list.collectionViewLayout.collectionViewContentSize.height
+                - viewController.list.collectionView.visibleContentFrame.height
+                - viewController.list.collectionView.adjustedContentInset.top
+
+            scrollWithAdjustment(100_000.0, item: TestContent.Identifier("Item 75"), using: viewController)
+            XCTAssertEqual(viewController.list.collectionView.contentOffset.y, maxOffset, accuracy: 0.1)
+
+            scrollWithAdjustment(-100_000.0, item: TestContent.Identifier("Item 1"), using: viewController)
+            XCTAssertEqual(
+                viewController.list.collectionView.contentOffset.y,
+                -viewController.list.collectionView.adjustedContentInset.top,
+                accuracy: 0.1
+            )
+        }
+
+        try testControllerCase("runs completion for no-op custom offset") { viewController in
+            let startingOffset = viewController.list.collectionView.contentOffset
+            let scrollExpectation = expectation(description: "Scroll completed")
+
+            let didScroll = viewController.list.scrollTo(
+                item: TestContent.Identifier("Item 1"),
+                contentOffsetAdjustment: { _ in 0.0 },
+                animated: true,
+                completion: { _ in
+                    scrollExpectation.fulfill()
+                }
+            )
+
+            XCTAssertTrue(didScroll)
+            wait(for: [scrollExpectation], timeout: 0.5)
+            XCTAssertEqual(viewController.list.collectionView.contentOffset, startingOffset)
+        }
+
+        try testControllerCase("runs completion for missing custom offset item") { viewController in
+            let scrollExpectation = expectation(description: "Scroll completed")
+
+            let didScroll = viewController.list.scrollTo(
+                item: TestContent.Identifier("Missing"),
+                contentOffsetAdjustment: { _ in
+                    XCTFail("Unexpected adjustment request")
+                    return 0.0
+                },
+                animated: true,
+                completion: { _ in
+                    scrollExpectation.fulfill()
+                }
+            )
+
+            XCTAssertFalse(didScroll)
+            wait(for: [scrollExpectation], timeout: 0.5)
+            XCTAssertEqual(viewController.list.collectionView.contentOffset.y, 0.0, accuracy: 0.1)
+        }
+
+        func scrollWithAdjustment(_ adjustment: CGFloat, item: TestContent.Identifier, using viewController: ViewController) {
+            let scrollExpectation = expectation(description: "Scroll completed")
+            let didScroll = viewController.list.scrollTo(
+                item: item,
+                contentOffsetAdjustment: { _ in adjustment },
+                animated: false,
+                completion: { _ in
+                    scrollExpectation.fulfill()
+                }
+            )
+
+            XCTAssertTrue(didScroll)
+            wait(for: [scrollExpectation], timeout: 0.5)
+        }
+    }
+
+    func test_settled_scroll_callbacks_include_actions() throws {
+
+        try testControllerCase { viewController in
+            var didEndDecelerationCanUseActions = false
+            var didEndScrollingAnimationCanUseActions = false
+
+            viewController.list.stateObserver = ListStateObserver { observer in
+                observer.onDidEndDeceleration { state in
+                    didEndDecelerationCanUseActions = state.actions.scrolling.scrollTo(
+                        item: TestContent.Identifier("Item 20"),
+                        position: ScrollPosition(position: .top),
+                        animated: false
+                    )
+                }
+
+                observer.onDidEndScrollingAnimation { state in
+                    didEndScrollingAnimationCanUseActions = state.actions.scrolling.scrollTo(
+                        item: TestContent.Identifier("Item 21"),
+                        position: ScrollPosition(position: .top),
+                        animated: false
+                    )
+                }
+            }
+
+            viewController.list.delegate.scrollViewDidEndDecelerating(viewController.list.collectionView)
+            viewController.list.delegate.scrollViewDidEndScrollingAnimation(viewController.list.collectionView)
+
+            XCTAssertTrue(didEndDecelerationCanUseActions)
+            XCTAssertTrue(didEndScrollingAnimationCanUseActions)
+        }
+    }
     
     func test_scroll_to_section_completion() throws {
         for animated in [true, false] {

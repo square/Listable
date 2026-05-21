@@ -544,6 +544,28 @@ public final class ListView : UIView
             completion: completion
         )
     }
+
+    ///
+    /// Scrolls to a custom vertical offset for the provided item.
+    /// The adjustment receives the item's frame and visible content frame,
+    /// then returns the vertical delta to apply.
+    /// If the item is contained in the list, true is returned. If it is not, false is returned.
+    ///
+    @discardableResult
+    public func scrollTo(
+        item : AnyItem,
+        contentOffsetAdjustment : @escaping ListItemScrollPositionAdjustment,
+        animated : Bool = false,
+        completion: ScrollCompletion? = nil
+    ) -> Bool
+    {
+        self.scrollTo(
+            item: item.anyIdentifier,
+            contentOffsetAdjustment: contentOffsetAdjustment,
+            animated: animated,
+            completion: completion
+        )
+    }
         
     ///
     /// Scrolls to the item with the provided identifier, with the provided positioning.
@@ -632,6 +654,60 @@ public final class ListView : UIView
                     }
                 }
             }
+        }
+    }
+
+    ///
+    /// Scrolls to a custom vertical offset for the item with the provided identifier.
+    /// The adjustment receives the item's frame and visible content frame,
+    /// then returns the vertical delta to apply.
+    /// If there is more than one item with the same identifier, the list scrolls to the first.
+    /// If the item is contained in the list, true is returned. If it is not, false is returned.
+    ///
+    @discardableResult
+    public func scrollTo(
+        item : AnyIdentifier,
+        contentOffsetAdjustment : @escaping ListItemScrollPositionAdjustment,
+        animated : Bool = false,
+        completion: ScrollCompletion? = nil
+    ) -> Bool
+    {
+        // Make sure the item identifier is valid.
+
+        guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+            handleScrollCompletion(reason: .cannotScroll, completion: completion)
+            return false
+        }
+
+        // If user is performing this in a `UIView.performWithoutAnimation` block, respect that and don't animate, regardless of what the animated parameter is.
+        let shouldAnimate = animated && UIView.areAnimationsEnabled
+
+        return preparePresentationStateForScroll(to: toIndexPath, handlerWhenFailed: completion) {
+
+            /// `preparePresentationStateForScroll(to:)` is asynchronous in some
+            /// cases, we need to re-query the item index path in case it changed or is no longer valid.
+
+            guard let toIndexPath = self.storage.allContent.firstIndexPathForItem(with: item) else {
+                self.handleScrollCompletion(reason: .cannotScroll, completion: completion)
+                return
+            }
+
+            let itemFrame = self.collectionViewLayout.frameForItem(at: toIndexPath)
+            let visibleContentFrame = self.collectionView.visibleContentFrame
+            let positionInfo = ListItemScrollPositionInfo(
+                itemFrame: itemFrame,
+                visibleContentFrame: visibleContentFrame,
+                positionInfo: self.scrollPositionInfo
+            )
+
+            var resultOffset = self.collectionView.contentOffset
+            resultOffset.y += contentOffsetAdjustment(positionInfo)
+
+            self.performScroll(
+                toContentOffset: resultOffset,
+                animated: shouldAnimate,
+                completion: completion
+            )
         }
     }
 
@@ -807,7 +883,7 @@ public final class ListView : UIView
             // Dispatch so that the completion handler executes on the next runloop
             // execution.
             DispatchQueue.main.async {
-                completion(ListStateObserver.DidEndScrollingAnimation(positionInfo: self.scrollPositionInfo))
+                self.performScrollCompletion(completion, positionInfo: self.scrollPositionInfo)
             }
         case .scrolled(let animated):
             if animated {
@@ -818,10 +894,17 @@ public final class ListView : UIView
                 DispatchQueue.main.async {
                     // Sync the `scrollPositionInfo` before executing the handler.
                     self.performEmptyBatchUpdates()
-                    completion(ListStateObserver.DidEndScrollingAnimation(positionInfo: self.scrollPositionInfo))
+                    self.performScrollCompletion(completion, positionInfo: self.scrollPositionInfo)
                 }
             }
         }
+    }
+
+    private func performScrollCompletion(_ completion: ScrollCompletion, positionInfo: ListScrollPositionInfo) {
+        let actions = ListActions()
+        actions.listView = self
+        completion(ListStateObserver.DidEndScrollingAnimation(actions: actions, positionInfo: positionInfo))
+        actions.listView = nil
     }
     
     /// This is used to house the completion handlers of scrolling APIs. This is kept
@@ -852,7 +935,7 @@ public final class ListView : UIView
         performEmptyBatchUpdates()
         let positionInfo = scrollPositionInfo
         handlers.forEach { handler in
-            handler(ListStateObserver.DidEndScrollingAnimation(positionInfo: positionInfo))
+            performScrollCompletion(handler, positionInfo: positionInfo)
         }
     }
     
@@ -1569,6 +1652,46 @@ public final class ListView : UIView
         } else {
             handleScrollCompletion(reason: .cannotScroll, completion: completion)
         }
+    }
+
+    private func performScroll(
+        toContentOffset contentOffset : CGPoint,
+        animated: Bool = false,
+        completion: ScrollCompletion? = nil
+    ) {
+        let resultOffset = clampedContentOffset(contentOffset)
+
+        let roundedResultOffset = CGPoint(
+            x: round(resultOffset.x),
+            y: round(resultOffset.y)
+        )
+        let roundedCurrentOffset = CGPoint(
+            x: round(collectionView.contentOffset.x),
+            y: round(collectionView.contentOffset.y)
+        )
+        if roundedCurrentOffset != roundedResultOffset {
+            collectionView.setContentOffset(resultOffset, animated: animated)
+            handleScrollCompletion(reason: .scrolled(animated: animated), completion: completion)
+        } else {
+            handleScrollCompletion(reason: .cannotScroll, completion: completion)
+        }
+    }
+
+    private func clampedContentOffset(_ contentOffset : CGPoint) -> CGPoint {
+        var resultOffset = contentOffset
+
+        // Don't scroll past the bottom of the list.
+
+        let topInset = collectionView.adjustedContentInset.top
+        let contentFrameHeight = collectionView.visibleContentFrame.height
+        let maxOffsetHeight = collectionViewLayout.collectionViewContentSize.height - contentFrameHeight - topInset
+        resultOffset.y = min(resultOffset.y, maxOffsetHeight)
+
+        // Don't scroll beyond the top of the list.
+
+        resultOffset.y = max(resultOffset.y, -topInset)
+
+        return resultOffset
     }
 
     private func preparePresentationStateForScroll(to toIndexPath: IndexPath, handlerWhenFailed: ScrollCompletion?, scroll: @escaping () -> Void) -> Bool {

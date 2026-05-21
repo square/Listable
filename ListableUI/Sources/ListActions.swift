@@ -109,6 +109,28 @@ public final class ListActions {
                 completion: completion
             )
         }
+
+        ///
+        /// Scrolls to a custom vertical offset for the provided item.
+        /// The adjustment receives the item's frame and visible content frame,
+        /// then returns the vertical delta to apply.
+        /// If the item is contained in the list, true is returned. If it is not, false is returned.
+        ///
+        @discardableResult
+        public func scrollTo(
+            item : AnyItem,
+            contentOffsetAdjustment : @escaping ListItemScrollPositionAdjustment,
+            animated : Bool = false,
+            completion: ScrollCompletion? = nil
+        ) -> Bool
+        {
+            self.scrollTo(
+                item: item.anyIdentifier,
+                contentOffsetAdjustment: contentOffsetAdjustment,
+                animated: animated,
+                completion: completion
+            )
+        }
         
         ///
         /// Scrolls to the item with the provided identifier, with the provided positioning.
@@ -130,6 +152,33 @@ public final class ListActions {
             return listView.scrollTo(
                 item: item,
                 position: position,
+                animated: animated,
+                completion: completion
+            )
+        }
+
+        ///
+        /// Scrolls to a custom vertical offset for the item with the provided identifier.
+        /// The adjustment receives the item's frame and visible content frame,
+        /// then returns the vertical delta to apply.
+        /// If there is more than one item with the same identifier, the list scrolls to the first.
+        /// If the item is contained in the list, true is returned. If it is not, false is returned.
+        ///
+        @discardableResult
+        public func scrollTo(
+            item : AnyIdentifier,
+            contentOffsetAdjustment : @escaping ListItemScrollPositionAdjustment,
+            animated : Bool = false,
+            completion: ScrollCompletion? = nil
+            ) -> Bool
+        {
+            guard let listView = self.listView else {
+                return false
+            }
+
+            return listView.scrollTo(
+                item: item,
+                contentOffsetAdjustment: contentOffsetAdjustment,
                 animated: animated,
                 completion: completion
             )

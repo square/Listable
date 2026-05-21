@@ -71,8 +71,54 @@ final class UIRectEdgeTests : XCTestCase
         XCTAssertEqual(info.mostVisibleItem?.identifier.anyValue, 2)
         XCTAssertEqual(info.mostVisibleItem?.percentageVisible, 1.0)
     }
+
+    func test_isScrollInProgress() {
+
+        let scrollView = ScrollView()
+
+        func makeInfo() -> ListScrollPositionInfo {
+            ListScrollPositionInfo(
+                scrollView: scrollView,
+                visibleItems: [],
+                isFirstItemVisible: true,
+                isLastItemVisible: false
+            )
+        }
+
+        XCTAssertFalse(makeInfo().isScrollInProgress)
+
+        scrollView.isTrackingValue = true
+        XCTAssertTrue(makeInfo().isScrollInProgress)
+
+        scrollView.isTrackingValue = false
+        scrollView.isDraggingValue = true
+        XCTAssertTrue(makeInfo().isScrollInProgress)
+
+        scrollView.isDraggingValue = false
+        scrollView.isDeceleratingValue = true
+        XCTAssertTrue(makeInfo().isScrollInProgress)
+    }
     
     fileprivate struct TestingType { }
+
+    private final class ScrollView : UIScrollView {
+
+        var isTrackingValue = false
+        var isDraggingValue = false
+        var isDeceleratingValue = false
+
+        override var isTracking : Bool {
+            isTrackingValue
+        }
+
+        override var isDragging : Bool {
+            isDraggingValue
+        }
+
+        override var isDecelerating : Bool {
+            isDeceleratingValue
+        }
+    }
 }
 
 final class UIEdgeInsetsTests : XCTestCase
