@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Synchronized non-animated first-responder focus scrolling with keyboard animations so text inputs do not jump when the keyboard appears.
+
 ### Added
 
 - Added `Behavior.keyboardAdjustmentAdditionalInsets` to account for persistent overlay UI while Listable adjusts for the keyboard.
