@@ -157,6 +157,61 @@ class ListViewTests: XCTestCase
                 UIEdgeInsets(top: 10, left: 0, bottom: 200, right: 0)
             )
         }
+
+        self.testcase("Overlapping Keyboard Frame With Additional Insets") {
+            listView.behavior.keyboardAdjustmentAdditionalInsets = UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+
+            let insets = listView.calculateScrollViewInsets(
+                with:.overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+            )
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 1, left: 2, bottom: 250, right: 4)
+            )
+
+            XCTAssertEqual(
+                insets.horizontalScroll,
+                UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 250, right: 0)
+            )
+        }
+
+        self.testcase("Non-Overlapping Keyboard Frame With Additional Insets") {
+            let insets = listView.calculateScrollViewInsets(with: .nonOverlapping)
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 50, right: 0)
+            )
+        }
+
+        self.testcase("Keyboard Adjustment None With Additional Insets") {
+            listView.behavior.keyboardAdjustmentMode = .none
+
+            let insets = listView.calculateScrollViewInsets(
+                with:.overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+            )
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 30, right: 0)
+            )
+        }
     }
 
     func test_change_size() {

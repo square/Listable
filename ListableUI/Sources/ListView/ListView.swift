@@ -127,7 +127,7 @@ public final class ListView : UIView
             name: UITextField.textDidBeginEditingNotification,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(textDidEndEditingNotification(_:)),
@@ -416,10 +416,19 @@ public final class ListView : UIView
     /// whenever insets require an update.
     public func updateScrollViewInsets()
     {
+        // Keep both inset values so we can detect changes that affect layout.
+        // `adjustedContentInset` includes UIKit-managed safe area adjustments, so it can
+        // change even when the explicit `contentInset` value does not.
+        let previousContentInset = self.collectionView.contentInset
+        let previousAdjustedContentInset = self.collectionView.adjustedContentInset
+
         let insets: ScrollViewInsets
         if case .custom = self.behavior.keyboardAdjustmentMode {
+            // In custom mode the consumer owns the full inset calculation.
             insets = self.customScrollViewInsets()
         } else {
+            // Otherwise Listable derives keyboard avoidance insets from the current
+            // keyboard frame and any configured additional adjustment insets.
             insets = self.calculateScrollViewInsets(
                 with: self.keyboardObserver.currentFrame(in: self)
             )
@@ -435,6 +444,23 @@ public final class ListView : UIView
 
         if self.collectionView.verticalScrollIndicatorInsets != insets.verticalScroll {
             self.collectionView.verticalScrollIndicatorInsets = insets.verticalScroll
+        }
+
+        let nextAdjustedContentInset = self.collectionView.adjustedContentInset
+        let didChangeInsets =
+            previousContentInset != self.collectionView.contentInset ||
+            previousAdjustedContentInset != nextAdjustedContentInset
+
+        if didChangeInsets {
+            // Inset changes alter the visible layout viewport. Relayout synchronously so
+            // visible attributes match the keyboard-adjusted bounds before UIKit's
+            // first-responder auto-scroll runs. Avoid inheriting the keyboard animation
+            // here, since animating the layout invalidation can temporarily present old
+            // and new cell positions at the same time.
+            UIView.performWithoutAnimation {
+                self.collectionViewLayout.setNeedsRelayout()
+                self.collectionView.layoutIfNeeded()
+            }
         }
     }
 
@@ -467,12 +493,32 @@ public final class ListView : UIView
             }
         }()
 
+        let keyboardAdjustmentAdditionalInsets : UIEdgeInsets = {
+            guard layout.wantsKeyboardInsetAdjustment else {
+                return .zero
+            }
+
+            switch self.behavior.keyboardAdjustmentMode {
+            case .none:
+                return .zero
+
+            case .adjustsWhenVisible:
+                return self.behavior.keyboardAdjustmentAdditionalInsets
+
+            case .custom:
+                fatalError("Shouldn't call calculateScrollViewInsets for custom case")
+            }
+        }()
+
         let scrollInsets = modified(self.scrollIndicatorInsets) {
-            $0.bottom = max($0.bottom, keyboardBottomInset)
+            $0.bottom = max($0.bottom, keyboardBottomInset + keyboardAdjustmentAdditionalInsets.bottom)
         }
         
         let contentInsets = modified(self.collectionView.contentInset) {
-            $0.bottom = keyboardBottomInset
+            $0.top = keyboardAdjustmentAdditionalInsets.top
+            $0.left = keyboardAdjustmentAdditionalInsets.left
+            $0.bottom = keyboardBottomInset + keyboardAdjustmentAdditionalInsets.bottom
+            $0.right = keyboardAdjustmentAdditionalInsets.right
         }
         
         return .init(
@@ -659,7 +705,6 @@ public final class ListView : UIView
         completion: ScrollCompletion? = nil
     ) -> Bool
     {
-
         let storageContent = storage.allContent
 
         // Make sure the section identifier is valid.
@@ -1129,9 +1174,9 @@ public final class ListView : UIView
     override public func layoutSubviews()
     {
         super.layoutSubviews()
-        
+
         self.collectionView.frame = self.bounds
-        
+
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
         self.updateScrollViewInsets()
     }

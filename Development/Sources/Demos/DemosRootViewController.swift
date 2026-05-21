@@ -139,6 +139,14 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Keyboard Inset (Floating Bottom)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(FloatingBottomKeyboardAvoidanceViewController())
+                    }
+                )
+
+                Item(
                     DemoItem(text: "Keyboard Inset (Appears Later)"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in
@@ -426,4 +434,3 @@ public final class DemosRootViewController : ListViewController
         }
     }
 }
-

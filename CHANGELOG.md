@@ -4,11 +4,15 @@
 
 ### Added
 
+- Added `Behavior.keyboardAdjustmentAdditionalInsets` to account for persistent overlay UI while Listable adjusts for the keyboard.
+
 ### Removed
 
 ### Changed
 
 ### Misc
+
+- Added a development demo for validating keyboard avoidance with a floating bottom overlay and text fields.
 
 ### Internal
 

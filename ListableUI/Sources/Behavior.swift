@@ -21,6 +21,15 @@ public struct Behavior : Equatable
     
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
     public var keyboardAdjustmentMode : KeyboardAdjustmentMode
+
+    /// Additional insets to apply while adjusting the list for an overlapping keyboard.
+    ///
+    /// This is useful for persistent overlays, such as floating action bars, that should be treated
+    /// as unavailable space when UIKit scrolls the first responder into view.
+    ///
+    /// Use this for the inset created by a floating bottom bar. The inset is applied when the
+    /// keyboard is hidden, and is added to the keyboard inset while the keyboard is visible.
+    public var keyboardAdjustmentAdditionalInsets : UIEdgeInsets
     
     /// How the list should react when the user taps the application status bar.
     /// The default value of this enables scrolling to top.
@@ -64,6 +73,7 @@ public struct Behavior : Equatable
         isScrollEnabled: Bool = true,
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
+        keyboardAdjustmentAdditionalInsets : UIEdgeInsets = .zero,
         scrollsToTop : ScrollsToTop = .enabled,
         selectionMode : SelectionMode = .single,
         underflow : Underflow = Underflow(),
@@ -77,6 +87,7 @@ public struct Behavior : Equatable
         self.isScrollEnabled = isScrollEnabled
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
+        self.keyboardAdjustmentAdditionalInsets = keyboardAdjustmentAdditionalInsets
         
         self.scrollsToTop = scrollsToTop
         
