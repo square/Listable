@@ -185,6 +185,10 @@ public final class ListView : UIView
     private var sourcePresenter : AnySourcePresenter
 
     private var autoScrollAction : AutoScrollAction
+
+    private var pendingAutoScrollAction : PendingAutoScrollAction?
+
+    var isUserScrollInProgress = false
     
     private let dataSource : DataSource
     
@@ -1536,6 +1540,11 @@ public final class ListView : UIView
         }
     }
 
+    private struct PendingAutoScrollAction {
+        var addedItems : Set<AnyIdentifier>
+        var animated : Bool
+    }
+
     private func performAutoScrollAction(with addedItems : Set<AnyIdentifier>, animated : Bool)
     {
         switch self.autoScrollAction {
@@ -1551,49 +1560,139 @@ public final class ListView : UIView
             autoScroll(with: pin)
         }
         
-        func autoScroll(with info: AutoScrollAction.Configuration) {
-            if info.shouldPerform(self.scrollPositionInfo) {
-                
-                /// Only animate the scroll if both the update **and** the scroll action are animated.
-                let animated = info.animated && animated
-                
-                if let destination = info.destination.destination(with: self.content) {
-                    
-                    if behavior.verticalLayoutGravity == .bottom {
-                        /// Temporarily ignore the bottom gravity offest overrides before scrolling. This
-                        /// avoids an issue where:
-                        ///   - the list has `VerticalLayoutGravity.bottom` and `AutoScrollAction` behaviors
-                        ///   - the list has offscreen items that haven't been sized
-                        ///   - the `AutoScrollAction` has been triggered
-                        ///   - the resulting scroll position will adjust the collection view's `contentSize`
-                        ///     as items are dequeued and sized
-                        ///
-                        /// Without ignoring the custom `VerticalLayoutGravity.bottom` offset behavior, the
-                        /// above scenario will force the scroll offset to the bottom, discarding this scroll
-                        /// update.
-                        collectionView.ignoreBottomGravityOffsetOverride = true
-                    }
-                    
-                    guard self.scrollTo(item: destination, position: info.position, animated: animated) else {
-                        collectionView.ignoreBottomGravityOffsetOverride = false
-                        return
-                    }
-                    if animated {
-                        stateObserver.onDidEndScrollingAnimation { [weak self] state in
-                            self?.collectionView.ignoreBottomGravityOffsetOverride = false
-                            info.didPerform(state.positionInfo)
-                        }
-                    } else {
-                        /// Perform an update after an animationless scroll so that `CollectionViewLayout`'s
-                        /// `prepare()` function will synchronously execute before calling `didPerform`. Otherwise,
-                        /// the list's `visibleContent` and the resulting `scrollPositionInfo.visibleItems` will
-                        /// be stale.
-                        performEmptyBatchUpdates()
-                        collectionView.ignoreBottomGravityOffsetOverride = false
-                        info.didPerform(scrollPositionInfo)
-                    }
-                }
+        func autoScroll(with info: _AutoScrollActionConfiguration) {
+            if self.shouldSkipAutoScroll(info) {
+                return
             }
+
+            if self.shouldDeferAutoScroll(info) {
+                self.pendingAutoScrollAction = PendingAutoScrollAction(
+                    addedItems: addedItems,
+                    animated: animated
+                )
+                return
+            }
+
+            guard info.shouldPerform(self.scrollPositionInfo) else {
+                return
+            }
+
+            /// Only animate the scroll if both the update **and** the scroll action are animated.
+            let shouldAnimate = info.animated && animated
+
+            guard let destination = info.destination.destination(with: self.content) else {
+                return
+            }
+
+            if behavior.verticalLayoutGravity == .bottom {
+                /// Temporarily ignore the bottom gravity offest overrides before scrolling. This
+                /// avoids an issue where:
+                ///   - the list has `VerticalLayoutGravity.bottom` and `AutoScrollAction` behaviors
+                ///   - the list has offscreen items that haven't been sized
+                ///   - the `AutoScrollAction` has been triggered
+                ///   - the resulting scroll position will adjust the collection view's `contentSize`
+                ///     as items are dequeued and sized
+                ///
+                /// Without ignoring the custom `VerticalLayoutGravity.bottom` offset behavior, the
+                /// above scenario will force the scroll offset to the bottom, discarding this scroll
+                /// update.
+                collectionView.ignoreBottomGravityOffsetOverride = true
+            }
+
+            var didBeginScroll = false
+            let completion : ScrollCompletion = { [weak self] _ in
+                guard didBeginScroll else {
+                    return
+                }
+
+                guard let self else {
+                    return
+                }
+
+                self.performEmptyBatchUpdates()
+                self.collectionView.ignoreBottomGravityOffsetOverride = false
+                info.didPerform(self.scrollPositionInfo)
+            }
+
+            switch info.itemPosition.storage {
+            case .standard where shouldAnimate == false:
+                didBeginScroll = self.scrollTo(
+                    item: destination,
+                    itemPosition: info.itemPosition,
+                    animated: false,
+                    completion: nil
+                )
+
+                if didBeginScroll {
+                    performEmptyBatchUpdates()
+                    collectionView.ignoreBottomGravityOffsetOverride = false
+                    info.didPerform(scrollPositionInfo)
+                }
+            case .standard, .verticalContentOffsetAdjustment:
+                didBeginScroll = self.scrollTo(
+                    item: destination,
+                    itemPosition: info.itemPosition,
+                    animated: shouldAnimate,
+                    completion: completion
+                )
+            }
+
+            if didBeginScroll == false {
+                collectionView.ignoreBottomGravityOffsetOverride = false
+            }
+        }
+    }
+
+    private func shouldSkipAutoScroll(_ info: _AutoScrollActionConfiguration) -> Bool {
+        guard info.scrollInterruptionPolicy == .skipDuringUserScrolling else {
+            return false
+        }
+
+        return self.isUserScrollInProgress || self.scrollPositionInfo.isScrollInProgress
+    }
+
+    private func shouldDeferAutoScroll(_ info: _AutoScrollActionConfiguration) -> Bool {
+        guard info.scrollInterruptionPolicy == .deferDuringUserScrolling else {
+            return false
+        }
+
+        return self.isUserScrollInProgress || self.scrollPositionInfo.isScrollInProgress
+    }
+
+    internal func flushPendingAutoScrollAction() {
+        guard let pendingAutoScrollAction else {
+            return
+        }
+
+        self.pendingAutoScrollAction = nil
+        self.performAutoScrollAction(
+            with: pendingAutoScrollAction.addedItems,
+            animated: pendingAutoScrollAction.animated
+        )
+    }
+
+    @discardableResult
+    private func scrollTo(
+        item : AnyIdentifier,
+        itemPosition : ListItemScrollPosition,
+        animated : Bool = false,
+        completion: ScrollCompletion? = nil
+    ) -> Bool {
+        switch itemPosition.storage {
+        case .standard(let position):
+            return self.scrollTo(
+                item: item,
+                position: position,
+                animated: animated,
+                completion: completion
+            )
+        case .verticalContentOffsetAdjustment(let adjustment):
+            return self.scrollTo(
+                item: item,
+                contentOffsetAdjustment: adjustment,
+                animated: animated,
+                completion: completion
+            )
         }
     }
 

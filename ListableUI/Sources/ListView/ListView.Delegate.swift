@@ -327,6 +327,8 @@ extension ListView
         
         func scrollViewWillBeginDragging(_ scrollView: UIScrollView)
         {
+            self.view.isUserScrollInProgress = true
+
             self.view.liveCells.perform {
                 $0.closeSwipeActions()
             }
@@ -337,9 +339,20 @@ extension ListView
                 )
             }
         }
+
+        func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
+        {
+            guard decelerate == false else {
+                return
+            }
+
+            self.view.isUserScrollInProgress = false
+            self.view.flushPendingAutoScrollAction()
+        }
         
         func scrollViewDidEndDecelerating(_ scrollView: UIScrollView)
         {
+            self.view.isUserScrollInProgress = false
             self.view.updatePresentationState(for: .didEndDecelerating)
             
             ListStateObserver.perform(self.view.stateObserver.onDidEndDeceleration, "Did End Deceleration", with: self.view) { actions in
@@ -348,6 +361,8 @@ extension ListView
                     positionInfo: self.view.scrollPositionInfo
                 )
             }
+
+            self.view.flushPendingAutoScrollAction()
         }
                 
         func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool

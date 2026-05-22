@@ -59,6 +59,30 @@ public enum AutoScrollAction {
         onInsertOf insertedIdentifier: AnyIdentifier,
         position: ScrollPosition,
         animated : Bool = false,
+        scrollInterruptionPolicy : ScrollInterruptionPolicy = .performImmediately,
+        shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
+        didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
+    ) -> AutoScrollAction
+    {
+        self.scrollTo(
+            destination,
+            onInsertOf: insertedIdentifier,
+            itemPosition: .standard(position),
+            animated: animated,
+            scrollInterruptionPolicy: scrollInterruptionPolicy,
+            shouldPerform: shouldPerform,
+            didPerform: didPerform
+        )
+    }
+
+    /// Scrolls to the specified item when the list is updated if the item was inserted in this update,
+    /// using a custom item positioning strategy.
+    public static func scrollTo(
+        _ destination : ScrollDestination? = nil,
+        onInsertOf insertedIdentifier: AnyIdentifier,
+        itemPosition: ListItemScrollPosition,
+        animated : Bool = false,
+        scrollInterruptionPolicy : ScrollInterruptionPolicy = .performImmediately,
         shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
         didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
     ) -> AutoScrollAction
@@ -67,7 +91,8 @@ public enum AutoScrollAction {
             onInsertOf: .init(
                 destination: destination ?? .item(insertedIdentifier),
                 insertedIdentifier: insertedIdentifier,
-                position: position,
+                itemPosition: itemPosition,
+                scrollInterruptionPolicy: scrollInterruptionPolicy,
                 animated: animated,
                 shouldPerform: shouldPerform,
                 didPerform: didPerform
@@ -110,6 +135,27 @@ public enum AutoScrollAction {
         _ destination : ScrollDestination,
         position: ScrollPosition,
         animated : Bool = false,
+        scrollInterruptionPolicy : ScrollInterruptionPolicy = .performImmediately,
+        shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
+        didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
+    ) -> AutoScrollAction
+    {
+        self.pin(
+            destination,
+            itemPosition: .standard(position),
+            animated: animated,
+            scrollInterruptionPolicy: scrollInterruptionPolicy,
+            shouldPerform: shouldPerform,
+            didPerform: didPerform
+        )
+    }
+
+    /// Scrolls to the specified item when the list is updated using a custom item positioning strategy.
+    public static func pin(
+        _ destination : ScrollDestination,
+        itemPosition: ListItemScrollPosition,
+        animated : Bool = false,
+        scrollInterruptionPolicy : ScrollInterruptionPolicy = .performImmediately,
         shouldPerform : @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
         didPerform : @escaping (ListScrollPositionInfo) -> () = { _ in }
     ) -> AutoScrollAction
@@ -117,7 +163,8 @@ public enum AutoScrollAction {
         .pin(
             to: .init(
                 destination: destination,
-                position: position,
+                itemPosition: itemPosition,
+                scrollInterruptionPolicy: scrollInterruptionPolicy,
                 animated: animated,
                 shouldPerform: shouldPerform,
                 didPerform: didPerform
@@ -129,6 +176,18 @@ public enum AutoScrollAction {
 
 extension AutoScrollAction
 {
+    /// Controls how an auto-scroll action behaves when user scrolling is active.
+    public enum ScrollInterruptionPolicy {
+        /// Perform the auto-scroll action as soon as the list updates.
+        case performImmediately
+
+        /// Wait until the current user scroll finishes before performing the auto-scroll action.
+        case deferDuringUserScrolling
+
+        /// Do not perform the auto-scroll action while the user is scrolling.
+        case skipDuringUserScrolling
+    }
+
     /// Where to scroll as a result of an `AutoScrollAction`.
     public enum ScrollDestination : Equatable
     {
@@ -182,8 +241,24 @@ extension AutoScrollAction
         
         /// The identifier of the item for which the `AutoScrollAction` should be performed.
         public var insertedIdentifier : AnyIdentifier
-        
-        public var position : ScrollPosition
+
+        public var itemPosition : ListItemScrollPosition
+
+        public var position : ScrollPosition {
+            get {
+                switch self.itemPosition.storage {
+                case .standard(let position):
+                    return position
+                case .verticalContentOffsetAdjustment:
+                    return ScrollPosition(position: .bottom)
+                }
+            }
+            set {
+                self.itemPosition = .standard(newValue)
+            }
+        }
+
+        public var scrollInterruptionPolicy : ScrollInterruptionPolicy
         
         public var animated : Bool
         
@@ -197,7 +272,23 @@ extension AutoScrollAction
     {
         public var destination : ScrollDestination
 
-        public var position : ScrollPosition
+        public var itemPosition : ListItemScrollPosition
+
+        public var position : ScrollPosition {
+            get {
+                switch self.itemPosition.storage {
+                case .standard(let position):
+                    return position
+                case .verticalContentOffsetAdjustment:
+                    return ScrollPosition(position: .bottom)
+                }
+            }
+            set {
+                self.itemPosition = .standard(newValue)
+            }
+        }
+
+        public var scrollInterruptionPolicy : ScrollInterruptionPolicy
         
         public var animated : Bool
         
@@ -206,3 +297,11 @@ extension AutoScrollAction
         public var didPerform : (ListScrollPositionInfo) -> ()
     }
 }
+
+protocol _AutoScrollActionConfiguration: AutoScrollAction.Configuration {
+    var itemPosition : ListItemScrollPosition { get set }
+    var scrollInterruptionPolicy : AutoScrollAction.ScrollInterruptionPolicy { get set }
+}
+
+extension AutoScrollAction.OnInsertedItem: _AutoScrollActionConfiguration {}
+extension AutoScrollAction.Pin: _AutoScrollActionConfiguration {}

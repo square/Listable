@@ -653,7 +653,7 @@ class ListViewTests: XCTestCase
                     TestContent(content: "A")
                 }
                 vc.list.configure(with: content)
-                waitFor { vc.list.updateQueue.isEmpty }
+                waitFor { didPerform.count == 1 }
                 XCTAssertEqual(didPerform.count, 1)
                 
                 guard let visibleItems = didPerform.first?.visibleItems else {
@@ -731,7 +731,7 @@ class ListViewTests: XCTestCase
                 )
                 
                 vc.list.configure(with: content)
-                waitFor { vc.list.updateQueue.isEmpty }
+                waitFor { didPerform.count == 1 }
                 XCTAssertEqual(didPerform.count, 1)
                 
                 guard let visibleItems = didPerform.first?.visibleItems else {
@@ -812,7 +812,7 @@ class ListViewTests: XCTestCase
                     TestContent(content: "A")
                 }
                 vc.list.configure(with: content)
-                waitFor { vc.list.updateQueue.isEmpty }
+                waitFor { didPerform.count == 1 }
                 XCTAssertEqual(didPerform.count, 1)
                 
                 guard let visibleItems = didPerform.first?.visibleItems else {
@@ -842,6 +842,354 @@ class ListViewTests: XCTestCase
                             percentageVisible: 1.0
                         )
                     )
+                )
+            }
+        }
+    }
+
+    func test_auto_scroll_action_with_vertical_content_offset_adjustment() throws {
+
+        try self.testcase("pin applies custom offset") {
+            var capturedInfo: ListItemScrollPositionInfo?
+            var offsetAtAdjustment: CGFloat?
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            let content = makeAutoScrollContent(
+                target: TestContent.Identifier("Item 75"),
+                itemPosition: .verticalContentOffsetAdjustment { info in
+                    capturedInfo = info
+                    offsetAtAdjustment = vc.list.collectionView.contentOffset.y
+                    return 125.0
+                },
+                didPerform: { didPerform.append($0) }
+            )
+
+            try show(vc: vc) { vc in
+                vc.list.configure(with: content)
+                waitFor { didPerform.count == 1 }
+
+                let itemIndexPath = try XCTUnwrap(
+                    vc.list.storage.allContent.firstIndexPathForItem(with: TestContent.Identifier("Item 75"))
+                )
+                let info = try XCTUnwrap(capturedInfo)
+                XCTAssertEqual(
+                    vc.list.collectionView.contentOffset.y,
+                    try XCTUnwrap(offsetAtAdjustment) + 125.0,
+                    accuracy: 0.1
+                )
+                XCTAssertEqual(info.itemFrame, vc.list.collectionViewLayout.frameForItem(at: itemIndexPath))
+                XCTAssertEqual(info.visibleContentFrame.origin.y, 0.0, accuracy: 0.1)
+                XCTAssertEqual(info.positionInfo.isScrollInProgress, false)
+            }
+        }
+
+        self.testcase("pin clamps custom offset") {
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent(
+                    target: TestContent.Identifier("Item 75"),
+                    itemPosition: .verticalContentOffsetAdjustment { _ in 100_000.0 },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { didPerform.count == 1 }
+
+                XCTAssertEqual(
+                    vc.list.collectionView.bounds.maxY,
+                    vc.list.collectionView.contentSize.height + vc.list.collectionView.adjustedContentInset.bottom,
+                    accuracy: 0.1
+                )
+
+                vc.list.configure(with: makeAutoScrollContent(
+                    target: TestContent.Identifier("Item 1"),
+                    itemPosition: .verticalContentOffsetAdjustment { _ in -100_000.0 },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { didPerform.count == 2 }
+
+                XCTAssertEqual(
+                    vc.list.collectionView.contentOffset.y,
+                    -vc.list.collectionView.adjustedContentInset.top,
+                    accuracy: 0.1
+                )
+            }
+        }
+
+        for animated in [true, false] {
+            self.testcase("pin runs didPerform once animated: \(animated)") {
+                var didPerform: [ListScrollPositionInfo] = []
+
+                let content = makeAutoScrollContent(
+                    target: TestContent.Identifier("Item 75"),
+                    itemPosition: .verticalContentOffsetAdjustment { _ in 125.0 },
+                    animated: animated,
+                    didPerform: { didPerform.append($0) }
+                )
+
+                let vc = ViewController()
+                vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+                show(vc: vc) { vc in
+                    vc.list.configure(with: content)
+                    waitFor { didPerform.count == 1 }
+                    XCTAssertEqual(didPerform.count, 1)
+                }
+            }
+        }
+
+        try self.testcase("scroll to inserted item uses custom offset") {
+            var didPerform: [ListScrollPositionInfo] = []
+            var capturedInfo: ListItemScrollPositionInfo?
+
+            let insertedID = TestContent.Identifier("A")
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            var offsetAtAdjustment: CGFloat?
+            var content = makeInsertedAutoScrollContent(
+                insertedID: insertedID,
+                itemPosition: .verticalContentOffsetAdjustment { info in
+                    capturedInfo = info
+                    offsetAtAdjustment = vc.list.collectionView.contentOffset.y
+                    return 125.0
+                },
+                didPerform: { didPerform.append($0) }
+            )
+
+            try show(vc: vc) { vc in
+                vc.list.configure(with: content)
+                waitFor { vc.list.updateQueue.isEmpty }
+                XCTAssertEqual(didPerform.count, 0)
+
+                content.content += Section("new") {
+                    TestContent(content: "A")
+                }
+                vc.list.configure(with: content)
+                waitFor { didPerform.count == 1 }
+
+                let info = try XCTUnwrap(capturedInfo)
+                XCTAssertEqual(
+                    vc.list.collectionView.contentOffset.y,
+                    try XCTUnwrap(offsetAtAdjustment) + 125.0,
+                    accuracy: 0.1
+                )
+                XCTAssertEqual(info.positionInfo.isScrollInProgress, false)
+            }
+        }
+
+        func makeAutoScrollContent(
+            target: TestContent.Identifier,
+            itemPosition: ListItemScrollPosition,
+            animated: Bool = false,
+            scrollInterruptionPolicy: AutoScrollAction.ScrollInterruptionPolicy = .performImmediately,
+            shouldPerform: @escaping (ListScrollPositionInfo) -> Bool = { _ in true },
+            didPerform: @escaping (ListScrollPositionInfo) -> Void = { _ in }
+        ) -> ListProperties {
+            ListProperties.default { list in
+                list.animatesChanges = animated
+                list.layout = .table { layout in
+                    layout.contentInsetAdjustmentBehavior = .never
+                }
+                list.sections = [
+                    Section("items") {
+                        for itemNumber in 1...100 {
+                            TestContent(content: "Item \(itemNumber)")
+                        }
+                    }
+                ]
+
+                list.autoScrollAction = .pin(
+                    .item(target),
+                    itemPosition: itemPosition,
+                    animated: animated,
+                    scrollInterruptionPolicy: scrollInterruptionPolicy,
+                    shouldPerform: shouldPerform,
+                    didPerform: didPerform
+                )
+            }
+        }
+
+        func makeInsertedAutoScrollContent(
+            insertedID: TestContent.Identifier,
+            itemPosition: ListItemScrollPosition,
+            didPerform: @escaping (ListScrollPositionInfo) -> Void
+        ) -> ListProperties {
+            ListProperties.default { list in
+                list.animatesChanges = false
+                list.layout = .table { layout in
+                    layout.contentInsetAdjustmentBehavior = .never
+                }
+                list.sections = [
+                    Section("items") {
+                        for itemNumber in 1...100 {
+                            TestContent(content: "Item \(itemNumber)")
+                        }
+                    }
+                ]
+
+                list.autoScrollAction = .scrollTo(
+                    .item(insertedID),
+                    onInsertOf: insertedID,
+                    itemPosition: itemPosition,
+                    animated: false,
+                    shouldPerform: { _ in true },
+                    didPerform: didPerform
+                )
+            }
+        }
+    }
+
+    func test_deferred_auto_scroll_action_with_vertical_content_offset_adjustment() throws {
+
+        try self.testcase("defers while dragging and runs when dragging ends") {
+            var didPerform: [ListScrollPositionInfo] = []
+            var capturedInfo: ListItemScrollPositionInfo?
+            var offsetAtAdjustment: CGFloat?
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            try show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.delegate.scrollViewWillBeginDragging(vc.list.collectionView)
+                vc.list.configure(with: makeAutoScrollContent(
+                    contentOffsetAdjustment: { info in
+                        capturedInfo = info
+                        offsetAtAdjustment = vc.list.collectionView.contentOffset.y
+                        return 125.0
+                    },
+                    scrollInterruptionPolicy: .deferDuringUserScrolling,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                XCTAssertEqual(didPerform.count, 0)
+                XCTAssertEqual(vc.list.collectionView.contentOffset.y, 0.0, accuracy: 0.1)
+
+                vc.list.delegate.scrollViewDidEndDragging(vc.list.collectionView, willDecelerate: false)
+                waitFor { didPerform.count == 1 }
+
+                _ = try XCTUnwrap(capturedInfo)
+                XCTAssertEqual(
+                    vc.list.collectionView.contentOffset.y,
+                    try XCTUnwrap(offsetAtAdjustment) + 125.0,
+                    accuracy: 0.1
+                )
+            }
+        }
+
+        self.testcase("defers until deceleration ends") {
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.delegate.scrollViewWillBeginDragging(vc.list.collectionView)
+                vc.list.configure(with: makeAutoScrollContent(
+                    scrollInterruptionPolicy: .deferDuringUserScrolling,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.delegate.scrollViewDidEndDragging(vc.list.collectionView, willDecelerate: true)
+                XCTAssertEqual(didPerform.count, 0)
+
+                vc.list.delegate.scrollViewDidEndDecelerating(vc.list.collectionView)
+                waitFor { didPerform.count == 1 }
+            }
+        }
+
+        self.testcase("re-evaluates shouldPerform when deferred scroll retries") {
+            var didPerform: [ListScrollPositionInfo] = []
+            var shouldPerform = false
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.delegate.scrollViewWillBeginDragging(vc.list.collectionView)
+                vc.list.configure(with: makeAutoScrollContent(
+                    scrollInterruptionPolicy: .deferDuringUserScrolling,
+                    shouldPerform: { _ in shouldPerform },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                shouldPerform = true
+                vc.list.delegate.scrollViewDidEndDragging(vc.list.collectionView, willDecelerate: false)
+                waitFor { didPerform.count == 1 }
+            }
+        }
+
+        self.testcase("skips while dragging") {
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.delegate.scrollViewWillBeginDragging(vc.list.collectionView)
+                vc.list.configure(with: makeAutoScrollContent(
+                    scrollInterruptionPolicy: .skipDuringUserScrolling,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                XCTAssertEqual(didPerform.count, 0)
+
+                vc.list.delegate.scrollViewDidEndDragging(vc.list.collectionView, willDecelerate: false)
+                waitFor { vc.list.updateQueue.isEmpty }
+                XCTAssertEqual(didPerform.count, 0)
+            }
+        }
+
+        func makeAutoScrollContent(
+            contentOffsetAdjustment: @escaping ListItemScrollPositionAdjustment = { _ in 125.0 },
+            scrollInterruptionPolicy: AutoScrollAction.ScrollInterruptionPolicy = .performImmediately,
+            shouldPerform: @escaping (ListScrollPositionInfo) -> Bool = { _ in false },
+            didPerform: @escaping (ListScrollPositionInfo) -> Void = { _ in }
+        ) -> ListProperties {
+            ListProperties.default { list in
+                list.animatesChanges = false
+                list.layout = .table { layout in
+                    layout.contentInsetAdjustmentBehavior = .never
+                }
+                list.sections = [
+                    Section("items") {
+                        for itemNumber in 1...100 {
+                            TestContent(content: "Item \(itemNumber)")
+                        }
+                    }
+                ]
+
+                list.autoScrollAction = .pin(
+                    .item(TestContent.Identifier("Item 75")),
+                    itemPosition: .verticalContentOffsetAdjustment(contentOffsetAdjustment),
+                    animated: false,
+                    scrollInterruptionPolicy: scrollInterruptionPolicy,
+                    shouldPerform: shouldPerform,
+                    didPerform: didPerform
                 )
             }
         }
@@ -1053,12 +1401,14 @@ class ListViewTests: XCTestCase
 
         try testControllerCase("applies custom offset") { viewController in
             var capturedInfo: ListItemScrollPositionInfo?
+            var offsetAtAdjustment: CGFloat?
             let scrollExpectation = expectation(description: "Scroll completed")
 
             let didScroll = viewController.list.scrollTo(
                 item: TestContent.Identifier("Item 75"),
                 contentOffsetAdjustment: { info in
                     capturedInfo = info
+                    offsetAtAdjustment = viewController.list.collectionView.contentOffset.y
                     return 125.0
                 },
                 animated: false,
@@ -1069,23 +1419,28 @@ class ListViewTests: XCTestCase
 
             XCTAssertTrue(didScroll)
             wait(for: [scrollExpectation], timeout: 0.5)
-            XCTAssertEqual(viewController.list.collectionView.contentOffset.y, 125.0, accuracy: 0.1)
 
             let itemIndexPath = try XCTUnwrap(
                 viewController.list.storage.allContent.firstIndexPathForItem(with: TestContent.Identifier("Item 75"))
             )
-            XCTAssertEqual(capturedInfo?.itemFrame, viewController.list.collectionViewLayout.frameForItem(at: itemIndexPath))
-            XCTAssertEqual(capturedInfo?.visibleContentFrame.origin.y, 0.0, accuracy: 0.1)
-            XCTAssertEqual(capturedInfo?.positionInfo.isScrollInProgress, false)
+            let info = try XCTUnwrap(capturedInfo)
+            XCTAssertEqual(
+                viewController.list.collectionView.contentOffset.y,
+                try XCTUnwrap(offsetAtAdjustment) + 125.0,
+                accuracy: 0.1
+            )
+            XCTAssertEqual(info.itemFrame, viewController.list.collectionViewLayout.frameForItem(at: itemIndexPath))
+            XCTAssertEqual(info.visibleContentFrame.origin.y, 0.0, accuracy: 0.1)
+            XCTAssertEqual(info.positionInfo.isScrollInProgress, false)
         }
 
         try testControllerCase("clamps custom offset at bottom and top") { viewController in
-            let maxOffset = viewController.list.collectionViewLayout.collectionViewContentSize.height
-                - viewController.list.collectionView.visibleContentFrame.height
-                - viewController.list.collectionView.adjustedContentInset.top
-
             scrollWithAdjustment(100_000.0, item: TestContent.Identifier("Item 75"), using: viewController)
-            XCTAssertEqual(viewController.list.collectionView.contentOffset.y, maxOffset, accuracy: 0.1)
+            XCTAssertEqual(
+                viewController.list.collectionView.bounds.maxY,
+                viewController.list.collectionView.contentSize.height + viewController.list.collectionView.adjustedContentInset.bottom,
+                accuracy: 0.1
+            )
 
             scrollWithAdjustment(-100_000.0, item: TestContent.Identifier("Item 1"), using: viewController)
             XCTAssertEqual(
