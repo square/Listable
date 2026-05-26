@@ -67,11 +67,6 @@ final class SwipeActionsView: UIView {
         self.didPerformAction = didPerformAction
         super.init(frame: .zero)
         clipsToBounds = true
-
-        // The swipe action buttons live off-screen with zero width when the swipe is
-        // closed, so they must be hidden from VoiceOver in that state — otherwise users
-        // land on invisible, unactivatable elements between rows. `apply(state:)` toggles
-        // this back on whenever the actions are actually visible.
         accessibilityElementsHidden = true
 
         addSubview(container)
