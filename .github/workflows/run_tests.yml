@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Mise
-        uses: jdx/mise-action@v2
+        uses: jdx/mise-action@v3
 
       - name: Read env
         run: cat .github/workflows/env.properties >> $GITHUB_ENV
