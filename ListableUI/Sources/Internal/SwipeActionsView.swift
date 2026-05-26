@@ -68,6 +68,12 @@ final class SwipeActionsView: UIView {
         super.init(frame: .zero)
         clipsToBounds = true
 
+        // The swipe action buttons are an implementation detail of the swipe gesture's
+        // visual. VoiceOver interacts with swipe actions via `accessibilityCustomActions`
+        // on the enclosing `ContentViewContainer`; exposing the buttons here as well
+        // surfaces invisible, unactivatable elements when the swipe is closed.
+        accessibilityElementsHidden = true
+
         addSubview(container)
     }
 

@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Hid `SwipeActionsView` from the accessibility tree so VoiceOver no longer surfaces invisible, off-screen swipe action buttons. Swipe actions remain available via `accessibilityCustomActions` on the list item.
+
 ### Added
 
 ### Removed
