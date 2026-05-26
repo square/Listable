@@ -2,7 +2,7 @@
 
 ### Fixed
 
-- Hid `SwipeActionsView` from the accessibility tree so VoiceOver no longer surfaces invisible, off-screen swipe action buttons. Swipe actions remain available via `accessibilityCustomActions` on the list item.
+- Hid swipe action buttons from VoiceOver while the swipe is closed. The buttons become accessibility elements again once the swipe is open, so the row's `accessibilityCustomActions` no longer competes with invisible, off-screen buttons.
 
 ### Added
 
