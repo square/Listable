@@ -67,6 +67,7 @@ final class SwipeActionsView: UIView {
         self.didPerformAction = didPerformAction
         super.init(frame: .zero)
         clipsToBounds = true
+        accessibilityElementsHidden = true
 
         addSubview(container)
     }
@@ -226,7 +227,9 @@ final class SwipeActionsView: UIView {
     func apply(state newState: SwipeActionState) {
         let priorState = state
         state = newState
-        
+
+        accessibilityElementsHidden = (newState == .closed)
+
         guard newState.isRelevantFor(side: side) else {
             return
         }
