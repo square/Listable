@@ -11,6 +11,9 @@ destination="generic/platform=iOS Simulator"
 tuist install --path Development/
 tuist generate --no-open --path Development/
 
+# docs/JSON is gitignored — these files are intermediate sourcekitten output
+# consumed by jazzy below.
+mkdir -p docs/JSON
 $sourcekitten doc -- -workspace Development/ListableDevelopment.xcworkspace -scheme ListableUI -destination "$destination" > docs/JSON/ListableUI.json
 $sourcekitten doc -- -workspace Development/ListableDevelopment.xcworkspace -scheme BlueprintUILists -destination "$destination" > docs/JSON/BlueprintUILists.json
 
