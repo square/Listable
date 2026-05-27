@@ -17,6 +17,14 @@ final class CustomAutoScrollingViewController : UIViewController
     private let list = ListView()
     private let footer = UIView()
     private let footerTitle = UILabel()
+    private lazy var animationsButton : UIBarButtonItem = {
+        UIBarButtonItem(
+            title: self.animationsButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(toggleAnimations)
+        )
+    }()
 
     private var selectedRow = 24
     private var expandedRows = Set<Int>()
@@ -55,12 +63,7 @@ final class CustomAutoScrollingViewController : UIViewController
         super.viewDidLoad()
 
         self.title = "Custom Auto Scrolling"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Toggle Animations",
-            style: .plain,
-            target: self,
-            action: #selector(toggleAnimations)
-        )
+        self.navigationItem.rightBarButtonItem = self.animationsButton
         self.updateList()
     }
 
@@ -158,7 +161,13 @@ final class CustomAutoScrollingViewController : UIViewController
     @objc private func toggleAnimations()
     {
         self.animateAutoScroll.toggle()
+        self.updateAnimationsButtonTitle()
         print("Auto-scroll animations are \(self.animateAutoScroll ? "on" : "off").")
+    }
+
+    private func updateAnimationsButtonTitle()
+    {
+        self.animationsButton.title = self.animationsButtonTitle
     }
 
     private func updateList()
@@ -222,6 +231,10 @@ final class CustomAutoScrollingViewController : UIViewController
 
     private var scrollIndicatorBottomInset : CGFloat {
         max(0.0, self.footer.bounds.height - self.view.safeAreaInsets.bottom)
+    }
+
+    private var animationsButtonTitle : String {
+        "Animations: \(self.animateAutoScroll ? "On" : "Off")"
     }
 
     private static let rowCount = 50
