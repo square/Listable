@@ -68,6 +68,13 @@ final class CustomAutoScrollingViewController : UIViewController
         self.updateList()
     }
 
+    override func viewSafeAreaInsetsDidChange()
+    {
+        super.viewSafeAreaInsetsDidChange()
+
+        self.updateList()
+    }
+
     private func configureFooter()
     {
         self.footer.backgroundColor = .systemBackground
@@ -146,7 +153,7 @@ final class CustomAutoScrollingViewController : UIViewController
             list.appearance = .demoAppearance
             list.layout = .demoLayout
             list.animation = .fast
-            list.scrollIndicatorInsets.bottom = 112.0
+            list.scrollIndicatorInsets.bottom = self.scrollIndicatorBottomInset
 
             list.autoScrollAction = .pin(
                 .item(targetIdentifier),
@@ -192,6 +199,10 @@ final class CustomAutoScrollingViewController : UIViewController
         }
 
         return 0.0
+    }
+
+    private var scrollIndicatorBottomInset : CGFloat {
+        max(0.0, self.footer.bounds.height - self.view.safeAreaInsets.bottom)
     }
 
     private static let rowCount = 50
