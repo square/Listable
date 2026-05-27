@@ -100,6 +100,8 @@ extension ListView
 
         func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView)
         {
+            let scrollCompletions = self.view.drainScrollCompletionHandlers()
+
             ListStateObserver.perform(self.view.stateObserver.onDidEndScrollingAnimation, "Did End Scrolling Animation", with: self.view) { actions in
                 ListStateObserver.DidEndScrollingAnimation(
                     actions: actions,
@@ -108,7 +110,7 @@ extension ListView
             }
             
             // Notify the ListView that scrolling ended.
-            self.view.didEndScrolling()
+            self.view.performScrollCompletions(scrollCompletions)
         }
 
         private var oldSelectedItems : Set<AnyIdentifier> = []

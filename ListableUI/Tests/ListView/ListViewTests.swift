@@ -1535,6 +1535,52 @@ class ListViewTests: XCTestCase
             XCTAssertTrue(didEndScrollingAnimationCanUseActions)
         }
     }
+
+    func test_scroll_started_from_did_end_scrolling_animation_completes_on_next_scroll_end() {
+
+        testControllerCase { viewController in
+            var firstCompletionCount = 0
+            var secondCompletionCount = 0
+            var shouldStartSecondScroll = true
+
+            viewController.list.scrollCompletionHandlers.append { changes in
+                XCTAssertEqual(changes.positionInfo.bounds.size, CGSize(width: 400, height: 600))
+                firstCompletionCount += 1
+            }
+
+            viewController.list.stateObserver = ListStateObserver { observer in
+                observer.onDidEndScrollingAnimation { state in
+                    guard shouldStartSecondScroll else {
+                        return
+                    }
+
+                    shouldStartSecondScroll = false
+                    let didScroll = state.actions.scrolling.scrollTo(
+                        item: TestContent.Identifier("Item 50"),
+                        position: ScrollPosition(position: .top, ifAlreadyVisible: .scrollToPosition),
+                        animated: true,
+                        completion: { changes in
+                            XCTAssertEqual(changes.positionInfo.bounds.size, CGSize(width: 400, height: 600))
+                            secondCompletionCount += 1
+                        }
+                    )
+                    XCTAssertTrue(didScroll)
+                }
+            }
+
+            viewController.list.delegate.scrollViewDidEndScrollingAnimation(viewController.list.collectionView)
+
+            XCTAssertEqual(firstCompletionCount, 1)
+            XCTAssertEqual(secondCompletionCount, 0)
+            XCTAssertEqual(viewController.list.scrollCompletionHandlers.count, 1)
+
+            viewController.list.delegate.scrollViewDidEndScrollingAnimation(viewController.list.collectionView)
+
+            XCTAssertEqual(firstCompletionCount, 1)
+            XCTAssertEqual(secondCompletionCount, 1)
+            XCTAssertEqual(viewController.list.scrollCompletionHandlers.count, 0)
+        }
+    }
     
     func test_scroll_to_section_completion() throws {
         for animated in [true, false] {

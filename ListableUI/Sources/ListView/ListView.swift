@@ -914,13 +914,21 @@ public final class ListView : UIView
     /// This is used to house the completion handlers of scrolling APIs. This is kept
     /// internal and separate from `ListStateObserver` and its handlers.
     internal var scrollCompletionHandlers: [ScrollCompletion] = []
+
+    internal struct ScrollCompletionBatch {
+        let handlers: [ScrollCompletion]
+        let positionInfo: ListScrollPositionInfo
+    }
     
     /// This is called by the `ListView.Delegate` and is used to notify the
     /// `scrollCompletionHandler` that scrolling finished. This does nothing if there is
     /// no handler set.
     internal func didEndScrolling() {
-        
-        guard scrollCompletionHandlers.isEmpty == false else { return }
+        self.performScrollCompletions(self.drainScrollCompletionHandlers())
+    }
+
+    internal func drainScrollCompletionHandlers() -> ScrollCompletionBatch? {
+        guard scrollCompletionHandlers.isEmpty == false else { return nil }
         let handlers = scrollCompletionHandlers
         
         // Proactively remove these handlers before executing them. This avoids a
@@ -938,8 +946,17 @@ public final class ListView : UIView
         // ListViewTests has unit tests to assert that the handler's items are correct.
         performEmptyBatchUpdates()
         let positionInfo = scrollPositionInfo
-        handlers.forEach { handler in
-            performScrollCompletion(handler, positionInfo: positionInfo)
+
+        return ScrollCompletionBatch(handlers: handlers, positionInfo: positionInfo)
+    }
+
+    internal func performScrollCompletions(_ batch: ScrollCompletionBatch?) {
+        guard let batch else {
+            return
+        }
+
+        batch.handlers.forEach { handler in
+            performScrollCompletion(handler, positionInfo: batch.positionInfo)
         }
     }
     
