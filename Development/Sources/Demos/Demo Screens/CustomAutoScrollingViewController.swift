@@ -22,6 +22,7 @@ final class CustomAutoScrollingViewController : UIViewController
     private var expandedRows = Set<Int>()
     private var hasPerformedInitialLayoutUpdate = false
     private var animateAutoScroll = false
+    private var isSuppressingAutoScrollAnimation = false
 
     override func loadView()
     {
@@ -72,7 +73,12 @@ final class CustomAutoScrollingViewController : UIViewController
         }
 
         self.hasPerformedInitialLayoutUpdate = true
-        self.updateList()
+        self.isSuppressingAutoScrollAnimation = true
+        defer { self.isSuppressingAutoScrollAnimation = false }
+
+        UIView.performWithoutAnimation {
+            self.updateList()
+        }
     }
 
     override func viewSafeAreaInsetsDidChange()
@@ -173,7 +179,7 @@ final class CustomAutoScrollingViewController : UIViewController
                 itemPosition: .verticalContentOffsetAdjustment { [weak self] info in
                     self?.footerAwareScrollDelta(for: info) ?? 0.0
                 },
-                animated: self.animateAutoScroll,
+                animated: self.animateAutoScroll && self.isSuppressingAutoScrollAnimation == false,
                 scrollInterruptionPolicy: .deferDuringUserScrolling,
                 shouldPerform: { _ in true }
             )
