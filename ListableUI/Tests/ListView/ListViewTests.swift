@@ -1434,7 +1434,7 @@ class ListViewTests: XCTestCase
             XCTAssertEqual(info.positionInfo.isScrollInProgress, false)
         }
 
-        try testControllerCase("clamps custom offset at bottom and top") { viewController in
+        testControllerCase("clamps custom offset at bottom and top") { viewController in
             scrollWithAdjustment(100_000.0, item: TestContent.Identifier("Item 75"), using: viewController)
             XCTAssertEqual(
                 viewController.list.collectionView.bounds.maxY,
@@ -1450,7 +1450,7 @@ class ListViewTests: XCTestCase
             )
         }
 
-        try testControllerCase("runs completion for no-op custom offset") { viewController in
+        testControllerCase("runs completion for no-op custom offset") { viewController in
             let startingOffset = viewController.list.collectionView.contentOffset
             let scrollExpectation = expectation(description: "Scroll completed")
 
@@ -1468,7 +1468,7 @@ class ListViewTests: XCTestCase
             XCTAssertEqual(viewController.list.collectionView.contentOffset, startingOffset)
         }
 
-        try testControllerCase("runs completion for missing custom offset item") { viewController in
+        testControllerCase("runs completion for missing custom offset item") { viewController in
             let scrollExpectation = expectation(description: "Scroll completed")
 
             let didScroll = viewController.list.scrollTo(
@@ -1506,7 +1506,7 @@ class ListViewTests: XCTestCase
 
     func test_settled_scroll_callbacks_include_actions() throws {
 
-        try testControllerCase { viewController in
+        testControllerCase { viewController in
             var didEndDecelerationCanUseActions = false
             var didEndScrollingAnimationCanUseActions = false
 
