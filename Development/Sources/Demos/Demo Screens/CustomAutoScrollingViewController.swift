@@ -21,6 +21,7 @@ final class CustomAutoScrollingViewController : UIViewController
     private var selectedRow = 24
     private var expandedRows = Set<Int>()
     private var hasPerformedInitialLayoutUpdate = false
+    private var animateAutoScroll = false
 
     override func loadView()
     {
@@ -53,6 +54,12 @@ final class CustomAutoScrollingViewController : UIViewController
         super.viewDidLoad()
 
         self.title = "Custom Auto Scrolling"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Toggle Animations",
+            style: .plain,
+            target: self,
+            action: #selector(toggleAnimations)
+        )
         self.updateList()
     }
 
@@ -142,6 +149,12 @@ final class CustomAutoScrollingViewController : UIViewController
         self.updateList()
     }
 
+    @objc private func toggleAnimations()
+    {
+        self.animateAutoScroll.toggle()
+        print("Auto-scroll animations are \(self.animateAutoScroll ? "on" : "off").")
+    }
+
     private func updateList()
     {
         self.footerTitle.text = "Target row \(self.selectedRow + 1) stays above the fixed footer"
@@ -160,7 +173,7 @@ final class CustomAutoScrollingViewController : UIViewController
                 itemPosition: .verticalContentOffsetAdjustment { [weak self] info in
                     self?.footerAwareScrollDelta(for: info) ?? 0.0
                 },
-                animated: false,
+                animated: self.animateAutoScroll,
                 scrollInterruptionPolicy: .deferDuringUserScrolling,
                 shouldPerform: { _ in true }
             )
