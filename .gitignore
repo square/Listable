@@ -72,3 +72,9 @@ fastlane/test_output
 
 # Test results
 /*.xcresult
+
+# Generated docs intermediates. The sourcekitten JSON embeds absolute build
+# paths in key.filepath entries, and jazzy writes the build path into
+# undocumented.json. Neither file needs to be tracked.
+docs/JSON/
+docs/**/undocumented.json

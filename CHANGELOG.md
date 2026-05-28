@@ -2,8 +2,6 @@
 
 ### Fixed
 
-- Hid swipe action buttons from VoiceOver while the swipe is closed. The buttons become accessibility elements again once the swipe is open, so the row's `accessibilityCustomActions` no longer competes with invisible, off-screen buttons.
-
 ### Added
 
 ### Removed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# 17.0.1 - 2026-05-27
+
+### Fixed
+
+- Hid swipe action buttons from VoiceOver while the swipe is closed. The buttons become accessibility elements again once the swipe is open, so the row's `accessibilityCustomActions` no longer competes with invisible, off-screen buttons.
 
 # 17.0.0 - 2026-02-25
 
