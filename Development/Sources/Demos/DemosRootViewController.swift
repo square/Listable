@@ -81,6 +81,14 @@ public final class DemosRootViewController : ListViewController
                         self?.push(PinAutoscrollingViewController())
                     }
                 )
+
+                Item(
+                    DemoItem(text: "Custom Auto Scrolling (Footer-Aware Pin)"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(CustomAutoScrollingViewController())
+                    }
+                )
                 
                 Item(
                     DemoItem(text: "scrollTo(item: ...) completion handler"),
@@ -426,4 +434,3 @@ public final class DemosRootViewController : ListViewController
         }
     }
 }
-

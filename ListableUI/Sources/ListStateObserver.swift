@@ -228,11 +228,13 @@ extension ListStateObserver
     
     /// Parameters available for ``OnDidEndDeceleration`` callbacks.
     public struct DidEndDeceleration {
+        public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
     }
 
     /// Parameters available for ``OnDidEndScrollingAnimation`` callbacks.
     public struct DidEndScrollingAnimation {
+        public let actions : ListActions
         public let positionInfo : ListScrollPositionInfo
     }
 

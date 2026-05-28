@@ -47,6 +47,9 @@ public struct ListScrollPositionInfo : Equatable {
 
     /// `safeAreaInsests` of the list view
     public var safeAreaInsets: UIEdgeInsets
+
+    /// Whether the scroll view is currently being interacted with or decelerating.
+    public var isScrollInProgress: Bool
     
     ///
     /// Used to retrieve the visible content edges for the list's content.
@@ -129,6 +132,7 @@ public struct ListScrollPositionInfo : Equatable {
 
         self.bounds = scrollView.bounds
         self.safeAreaInsets = scrollView.safeAreaInsets
+        self.isScrollInProgress = scrollView.isTracking || scrollView.isDragging || scrollView.isDecelerating
     }
     
     struct ScrollViewState : Equatable
