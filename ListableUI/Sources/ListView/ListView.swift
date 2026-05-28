@@ -1665,7 +1665,7 @@ public final class ListView : UIView
             return false
         }
 
-        return self.isUserScrollInProgress || self.scrollPositionInfo.isScrollInProgress
+        return self.isUserScrollInProgress
     }
 
     private func shouldDeferAutoScroll(_ info: _AutoScrollActionConfiguration) -> Bool {
@@ -1673,7 +1673,7 @@ public final class ListView : UIView
             return false
         }
 
-        return self.isUserScrollInProgress || self.scrollPositionInfo.isScrollInProgress
+        return self.isUserScrollInProgress
     }
 
     internal func flushPendingAutoScrollAction() {

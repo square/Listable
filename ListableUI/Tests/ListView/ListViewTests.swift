@@ -1113,6 +1113,27 @@ class ListViewTests: XCTestCase
             }
         }
 
+        self.testcase("defer policy performs immediately when not dragging") {
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.configure(with: makeAutoScrollContent(
+                    scrollInterruptionPolicy: .deferDuringUserScrolling,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { didPerform.count == 1 }
+
+                XCTAssertEqual(vc.list.collectionView.contentOffset.y, 125.0, accuracy: 0.1)
+            }
+        }
+
         self.testcase("re-evaluates shouldPerform when deferred scroll retries") {
             var didPerform: [ListScrollPositionInfo] = []
             var shouldPerform = false
@@ -1161,6 +1182,27 @@ class ListViewTests: XCTestCase
                 vc.list.delegate.scrollViewDidEndDragging(vc.list.collectionView, willDecelerate: false)
                 waitFor { vc.list.updateQueue.isEmpty }
                 XCTAssertEqual(didPerform.count, 0)
+            }
+        }
+
+        self.testcase("skip policy performs when not dragging") {
+            var didPerform: [ListScrollPositionInfo] = []
+
+            let vc = ViewController()
+            vc.listFramingBehavior = .exactly(CGSize(width: 400, height: 600))
+
+            show(vc: vc) { vc in
+                vc.list.configure(with: makeAutoScrollContent())
+                waitFor { vc.list.updateQueue.isEmpty }
+
+                vc.list.configure(with: makeAutoScrollContent(
+                    scrollInterruptionPolicy: .skipDuringUserScrolling,
+                    shouldPerform: { _ in true },
+                    didPerform: { didPerform.append($0) }
+                ))
+                waitFor { didPerform.count == 1 }
+
+                XCTAssertEqual(vc.list.collectionView.contentOffset.y, 125.0, accuracy: 0.1)
             }
         }
 
