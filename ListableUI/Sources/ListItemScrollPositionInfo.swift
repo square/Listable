@@ -10,6 +10,10 @@ import UIKit
 
 
 /// Returns the vertical delta to apply to the list's current content offset.
+///
+/// When this adjustment is stored on an auto-scroll action, avoid strongly capturing
+/// an object that owns or configures the list. Capture that object weakly to prevent
+/// retain cycles.
 public typealias ListItemScrollPositionAdjustment = (ListItemScrollPositionInfo) -> CGFloat
 
 /// Specifies how to position an item in a list when requesting the list scrolls to it.
@@ -28,6 +32,9 @@ public struct ListItemScrollPosition {
     }
 
     /// Positions the item by applying a custom vertical delta to the current content offset.
+    ///
+    /// The adjustment may be stored by declarative scrolling APIs. If it captures an object
+    /// that owns or configures the list, capture that object weakly to prevent retain cycles.
     public static func verticalContentOffsetAdjustment(
         _ adjustment: @escaping ListItemScrollPositionAdjustment
     ) -> ListItemScrollPosition {
