@@ -139,7 +139,7 @@ class ListViewTests: XCTestCase
 
         self.testcase("Overlapping Keyboard Frame") {
             let insets = listView.calculateScrollViewInsets(
-                with:.overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+                with: .overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
             )
 
             XCTAssertEqual(
@@ -155,6 +155,84 @@ class ListViewTests: XCTestCase
             XCTAssertEqual(
                 insets.verticalScroll,
                 UIEdgeInsets(top: 10, left: 0, bottom: 200, right: 0)
+            )
+        }
+
+        self.testcase("Overlapping Keyboard Frame With Occlusion Insets") {
+            listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
+            listView.behavior.occlusionInsets = UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+
+            let insets = listView.calculateScrollViewInsets(
+                with: .overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+            )
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 1, left: 2, bottom: 250, right: 4)
+            )
+
+            XCTAssertEqual(
+                insets.horizontalScroll,
+                UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 250, right: 0)
+            )
+        }
+
+        self.testcase("Non-Overlapping Keyboard Frame With Occlusion Insets") {
+            listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
+            listView.behavior.occlusionInsets = UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+
+            let insets = listView.calculateScrollViewInsets(with: .nonOverlapping)
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 50, right: 0)
+            )
+        }
+
+        self.testcase("Keyboard Adjustment None With Occlusion Insets") {
+            listView.behavior.keyboardAdjustmentMode = .none
+            listView.behavior.occlusionInsets = UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+
+            let insets = listView.calculateScrollViewInsets(
+                with:.overlapping(frame: CGRect(x: 0, y: 200, width: 200, height: 200))
+            )
+
+            XCTAssertEqual(
+                insets.content,
+                UIEdgeInsets(top: 1, left: 2, bottom: 50, right: 4)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 10, left: 0, bottom: 50, right: 0)
+            )
+        }
+
+        self.testcase("Occlusion Insets Update Scroll Indicator Edges") {
+            listView.behavior.keyboardAdjustmentMode = .adjustsWhenVisible
+            listView.behavior.occlusionInsets = UIEdgeInsets(top: 11, left: 22, bottom: 33, right: 44)
+            listView.scrollIndicatorInsets = .zero
+
+            let insets = listView.calculateScrollViewInsets(with: .nonOverlapping)
+
+            XCTAssertEqual(
+                insets.horizontalScroll,
+                UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 44)
+            )
+
+            XCTAssertEqual(
+                insets.verticalScroll,
+                UIEdgeInsets(top: 11, left: 0, bottom: 33, right: 0)
             )
         }
     }

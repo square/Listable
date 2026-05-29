@@ -147,6 +147,14 @@ public final class DemosRootViewController : ListViewController
                 )
                 
                 Item(
+                    DemoItem(text: "Occlusion Insets"),
+                    selectionStyle: .selectable(),
+                    onSelect : { _ in
+                        self?.push(OcclusionInsetsViewController())
+                    }
+                )
+
+                Item(
                     DemoItem(text: "Keyboard Inset (Appears Later)"),
                     selectionStyle: .selectable(),
                     onSelect : { _ in

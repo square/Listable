@@ -21,6 +21,17 @@ public struct Behavior : Equatable
     
     /// How to adjust the `contentInset` of the list when the keyboard visibility changes.
     public var keyboardAdjustmentMode : KeyboardAdjustmentMode
+
+    /// Insets for persistent UI that visually occludes the list viewport.
+    ///
+    /// Listable applies these insets to the underlying scroll view content inset, applies the
+    /// relevant axis-specific edges to scroll indicators, and combines them with keyboard avoidance
+    /// so first-responder scrolling treats the occluded area as unavailable. These insets do not
+    /// change list layout geometry; use layout bounds padding for content layout spacing.
+    ///
+    /// If ``keyboardAdjustmentMode`` is ``KeyboardAdjustmentMode/custom``, the custom scroll view
+    /// inset callback owns the full inset calculation instead.
+    public var occlusionInsets : UIEdgeInsets
     
     /// How the list should react when the user taps the application status bar.
     /// The default value of this enables scrolling to top.
@@ -64,6 +75,7 @@ public struct Behavior : Equatable
         isScrollEnabled: Bool = true,
         keyboardDismissMode : UIScrollView.KeyboardDismissMode = .interactive,
         keyboardAdjustmentMode : KeyboardAdjustmentMode = .adjustsWhenVisible,
+        occlusionInsets : UIEdgeInsets = .zero,
         scrollsToTop : ScrollsToTop = .enabled,
         selectionMode : SelectionMode = .single,
         underflow : Underflow = Underflow(),
@@ -77,6 +89,7 @@ public struct Behavior : Equatable
         self.isScrollEnabled = isScrollEnabled
         self.keyboardDismissMode = keyboardDismissMode
         self.keyboardAdjustmentMode = keyboardAdjustmentMode
+        self.occlusionInsets = occlusionInsets
         
         self.scrollsToTop = scrollsToTop
         
