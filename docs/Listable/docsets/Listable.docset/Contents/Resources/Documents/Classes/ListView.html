@@ -142,6 +142,9 @@
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction.html">AutoScrollAction</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">– ScrollInterruptionPolicy</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
               </li>
               <li class="nav-group-task">
@@ -546,6 +549,12 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListItemScrollPosition.html">ListItemScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListItemScrollPositionInfo.html">ListItemScrollPositionInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
               </li>
               <li class="nav-group-task">
@@ -705,6 +714,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:10ListableUI13HeaderContenta">HeaderContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:10ListableUI32ListItemScrollPositionAdjustmenta">ListItemScrollPositionAdjustment</a>
               </li>
             </ul>
           </li>
@@ -1374,6 +1386,43 @@ If the item is contained in the list, true is returned. If it is not, false is r
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item23contentOffsetAdjustment8animated10completionSbAA7AnyItem_p_14CoreFoundation7CGFloatVAA0cN18ScrollPositionInfoVcSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:contentOffsetAdjustment:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item23contentOffsetAdjustment8animated10completionSbAA7AnyItem_p_14CoreFoundation7CGFloatVAA0cN18ScrollPositionInfoVcSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF">scrollTo(item:<wbr>contentOffsetAdjustment:<wbr>animated:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to a custom vertical offset for the provided item.
+The adjustment receives the item&rsquo;s frame and visible content frame,
+then returns the vertical delta to apply.
+If the item is contained in the list, true is returned. If it is not, false is returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
+    <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnyItem.html">AnyItem</a></span><span class="p">,</span>
+    <span class="nv">contentOffsetAdjustment</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:10ListableUI32ListItemScrollPositionAdjustmenta">ListItemScrollPositionAdjustment</a></span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI8ListViewC8scrollTo4item8position8animated10completionSbAA13AnyIdentifierC_AA14ScrollPositionVSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF"></a>
                     <a name="//apple_ref/swift/Method/scrollTo(item:position:animated:completion:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item8position8animated10completionSbAA13AnyIdentifierC_AA14ScrollPositionVSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF">scrollTo(item:<wbr>position:<wbr>animated:<wbr>completion:<wbr>)</a>
@@ -1398,6 +1447,44 @@ If the item is contained in the list, true is returned. If it is not, false is r
 <span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
     <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span> <span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI8ListViewC8scrollTo4item23contentOffsetAdjustment8animated10completionSbAA13AnyIdentifierC_14CoreFoundation7CGFloatVAA0C22ItemScrollPositionInfoVcSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(item:contentOffsetAdjustment:animated:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8ListViewC8scrollTo4item23contentOffsetAdjustment8animated10completionSbAA13AnyIdentifierC_14CoreFoundation7CGFloatVAA0C22ItemScrollPositionInfoVcSbyAA0C13StateObserverV24DidEndScrollingAnimationVcSgtF">scrollTo(item:<wbr>contentOffsetAdjustment:<wbr>animated:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to a custom vertical offset for the item with the provided identifier.
+The adjustment receives the item&rsquo;s frame and visible content frame,
+then returns the vertical delta to apply.
+If there is more than one item with the same identifier, the list scrolls to the first.
+If the item is contained in the list, true is returned. If it is not, false is returned.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
+    <span class="nv">item</span> <span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
+    <span class="nv">contentOffsetAdjustment</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:10ListableUI32ListItemScrollPositionAdjustmenta">ListItemScrollPositionAdjustment</a></span><span class="p">,</span>
     <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="nv">completion</span><span class="p">:</span> <span class="kt"><a href="../Classes/ListView.html#/s:10ListableUI8ListViewC16ScrollCompletiona">ScrollCompletion</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
