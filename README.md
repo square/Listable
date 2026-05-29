@@ -146,9 +146,19 @@ Finally, the `Behavior` and  `Behavior.Underflow` allows customizing what happen
 public struct Behavior : Equatable
 {
     public var keyboardDismissMode : UIScrollView.KeyboardDismissMode
+
+    public var keyboardAdjustmentMode : KeyboardAdjustmentMode
+
+    public var occlusionInsets : UIEdgeInsets
     
     public var underflow : Underflow
 ```
+
+`occlusionInsets` lets callers reserve scroll viewport space for persistent overlays,
+such as a floating bottom bar. Listable applies these insets to the scroll view content
+inset, applies the relevant axis-specific edges to scroll indicators, and combines them
+with keyboard avoidance so first-responder scrolling treats the occluded area as
+unavailable.
 
 ```swift
 

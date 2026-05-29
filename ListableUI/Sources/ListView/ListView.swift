@@ -127,7 +127,7 @@ public final class ListView : UIView
             name: UITextField.textDidBeginEditingNotification,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(textDidEndEditingNotification(_:)),
@@ -422,8 +422,11 @@ public final class ListView : UIView
     {
         let insets: ScrollViewInsets
         if case .custom = self.behavior.keyboardAdjustmentMode {
+            // In custom mode the consumer owns the full inset calculation.
             insets = self.customScrollViewInsets()
         } else {
+            // Otherwise Listable derives scroll view insets from the current keyboard
+            // frame and any configured persistent occlusion insets.
             insets = self.calculateScrollViewInsets(
                 with: self.keyboardObserver.currentFrame(in: self)
             )
@@ -471,12 +474,20 @@ public final class ListView : UIView
             }
         }()
 
+        let occlusionInsets = self.behavior.occlusionInsets
+
         let scrollInsets = modified(self.scrollIndicatorInsets) {
-            $0.bottom = max($0.bottom, keyboardBottomInset)
+            $0.top = max($0.top, occlusionInsets.top)
+            $0.left = max($0.left, occlusionInsets.left)
+            $0.bottom = max($0.bottom, keyboardBottomInset + occlusionInsets.bottom)
+            $0.right = max($0.right, occlusionInsets.right)
         }
         
         let contentInsets = modified(self.collectionView.contentInset) {
-            $0.bottom = keyboardBottomInset
+            $0.top = occlusionInsets.top
+            $0.left = occlusionInsets.left
+            $0.bottom = keyboardBottomInset + occlusionInsets.bottom
+            $0.right = occlusionInsets.right
         }
         
         return .init(
@@ -739,7 +750,6 @@ public final class ListView : UIView
         completion: ScrollCompletion? = nil
     ) -> Bool
     {
-
         let storageContent = storage.allContent
 
         // Make sure the section identifier is valid.
@@ -1233,9 +1243,9 @@ public final class ListView : UIView
     override public func layoutSubviews()
     {
         super.layoutSubviews()
-        
+
         self.collectionView.frame = self.bounds
-        
+
         /// Our layout changed, update the keyboard inset in case the inset should now be different.
         self.updateScrollViewInsets()
     }
