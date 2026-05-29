@@ -142,6 +142,9 @@
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction.html">AutoScrollAction</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">– ScrollInterruptionPolicy</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Enums/AutoScrollAction/ScrollDestination.html">– ScrollDestination</a>
               </li>
               <li class="nav-group-task">
@@ -546,6 +549,12 @@
                 <a class="nav-group-task-link" href="../Structs/ListEnvironment.html">ListEnvironment</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListItemScrollPosition.html">ListItemScrollPosition</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/ListItemScrollPositionInfo.html">ListItemScrollPositionInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Structs/ListLayoutAppearanceProperties.html">ListLayoutAppearanceProperties</a>
               </li>
               <li class="nav-group-task">
@@ -706,6 +715,9 @@
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="../Typealiases.html#/s:10ListableUI13HeaderContenta">HeaderContent</a>
               </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:10ListableUI32ListItemScrollPositionAdjustmenta">ListItemScrollPositionAdjustment</a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -815,9 +827,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVS2bAA04ListdS4InfoVcyARctFZ"></a>
-                    <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animated:shouldPerform:didPerform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated13shouldPerform03didN0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVS2bAA04ListdS4InfoVcyARctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animated:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated0F18InterruptionPolicy13shouldPerform03didP0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVSbAC0dmN0OSbAA04ListdU4InfoVcyAUctFZ"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:position:animated:scrollInterruptionPolicy:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf8position8animated0F18InterruptionPolicy13shouldPerform03didP0A2C0D11DestinationOSg_AA13AnyIdentifierCAA0D8PositionVSbAC0dmN0OSbAA04ListdU4InfoVcyAUctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>position:<wbr>animated:<wbr>scrollInterruptionPolicy:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -859,6 +871,7 @@ the action will be performed on insert.</p>
     <span class="n">onInsertOf</span> <span class="nv">insertedIdentifier</span><span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
     <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
     <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">scrollInterruptionPolicy</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">ScrollInterruptionPolicy</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">performImmediately</span><span class="p">,</span>
     <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
     <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
@@ -951,9 +964,45 @@ this block will be called multiple times.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI16AutoScrollActionO3pin_8position8animated13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVS2bAA04ListdM4InfoVcyANctFZ"></a>
-                    <a name="//apple_ref/swift/Method/pin(_:position:animated:shouldPerform:didPerform:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_8position8animated13shouldPerform03didJ0A2C0D11DestinationO_AA0D8PositionVS2bAA04ListdM4InfoVcyANctFZ">pin(_:<wbr>position:<wbr>animated:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    <a name="/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf12itemPosition8animated0F18InterruptionPolicy13shouldPerform03didQ0A2C0D11DestinationOSg_AA13AnyIdentifierCAA08ListItemdL0VSbAC0dnO0OSbAA0vdL4InfoVcyAUctFZ"></a>
+                    <a name="//apple_ref/swift/Method/scrollTo(_:onInsertOf:itemPosition:animated:scrollInterruptionPolicy:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO8scrollTo_10onInsertOf12itemPosition8animated0F18InterruptionPolicy13shouldPerform03didQ0A2C0D11DestinationOSg_AA13AnyIdentifierCAA08ListItemdL0VSbAC0dnO0OSbAA0vdL4InfoVcyAUctFZ">scrollTo(_:<wbr>onInsertOf:<wbr>itemPosition:<wbr>animated:<wbr>scrollInterruptionPolicy:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to the specified item when the list is updated if the item was inserted in this update,
+using a custom item positioning strategy.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">scrollTo</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">onInsertOf</span> <span class="nv">insertedIdentifier</span><span class="p">:</span> <span class="kt"><a href="../Classes/AnyIdentifier.html">AnyIdentifier</a></span><span class="p">,</span>
+    <span class="nv">itemPosition</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListItemScrollPosition.html">ListItemScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">scrollInterruptionPolicy</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">ScrollInterruptionPolicy</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">performImmediately</span><span class="p">,</span>
+    <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3pin_8position8animated24scrollInterruptionPolicy13shouldPerform03didM0A2C0D11DestinationO_AA0D8PositionVSbAC0djK0OSbAA04ListdP4InfoVcyAQctFZ"></a>
+                    <a name="//apple_ref/swift/Method/pin(_:position:animated:scrollInterruptionPolicy:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_8position8animated24scrollInterruptionPolicy13shouldPerform03didM0A2C0D11DestinationO_AA0D8PositionVSbAC0djK0OSbAA04ListdP4InfoVcyAQctFZ">pin(_:<wbr>position:<wbr>animated:<wbr>scrollInterruptionPolicy:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -992,6 +1041,7 @@ the action will be performed on insert.</p>
     <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">,</span>
     <span class="nv">position</span><span class="p">:</span> <span class="kt"><a href="../Structs/ScrollPosition.html">ScrollPosition</a></span><span class="p">,</span>
     <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">scrollInterruptionPolicy</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">ScrollInterruptionPolicy</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">performImmediately</span><span class="p">,</span>
     <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
     <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
@@ -1065,6 +1115,68 @@ this block will be called multiple times.</p>
                             </tr>
                           </tbody>
                         </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO3pin_12itemPosition8animated24scrollInterruptionPolicy13shouldPerform03didN0A2C0D11DestinationO_AA08ListItemdH0VSbAC0dkL0OSbAA0qdH4InfoVcyAQctFZ"></a>
+                    <a name="//apple_ref/swift/Method/pin(_:itemPosition:animated:scrollInterruptionPolicy:shouldPerform:didPerform:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO3pin_12itemPosition8animated24scrollInterruptionPolicy13shouldPerform03didN0A2C0D11DestinationO_AA08ListItemdH0VSbAC0dkL0OSbAA0qdH4InfoVcyAQctFZ">pin(_:<wbr>itemPosition:<wbr>animated:<wbr>scrollInterruptionPolicy:<wbr>shouldPerform:<wbr>didPerform:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Scrolls to the specified item when the list is updated using a custom item positioning strategy.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">pin</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">destination</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollDestination.html">ScrollDestination</a></span><span class="p">,</span>
+    <span class="nv">itemPosition</span><span class="p">:</span> <span class="kt"><a href="../Structs/ListItemScrollPosition.html">ListItemScrollPosition</a></span><span class="p">,</span>
+    <span class="nv">animated</span> <span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nv">scrollInterruptionPolicy</span> <span class="p">:</span> <span class="kt"><a href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html">ScrollInterruptionPolicy</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">performImmediately</span><span class="p">,</span>
+    <span class="nv">shouldPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="nv">didPerform</span> <span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ListScrollPositionInfo.html">ListScrollPositionInfo</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AutoScrollAction</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10ListableUI16AutoScrollActionO0D18InterruptionPolicyO"></a>
+                    <a name="//apple_ref/swift/Enum/ScrollInterruptionPolicy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI16AutoScrollActionO0D18InterruptionPolicyO">ScrollInterruptionPolicy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Controls how an auto-scroll action behaves when user scrolling is active.</p>
+
+                        <a href="../Enums/AutoScrollAction/ScrollInterruptionPolicy.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ScrollInterruptionPolicy</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

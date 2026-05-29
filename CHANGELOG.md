@@ -4,6 +4,20 @@
 
 ### Added
 
+### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# 17.1.0 - 2026-05-29
+
+### Added
+
 - Added item-aware content offset adjustment APIs, declarative auto-scroll support, and scroll-in-progress state for custom scrolling behaviors.
   ```swift
   list.autoScrollAction = .pin(
@@ -15,16 +29,6 @@
   )
   ```
   Use `.skipDuringUserScrolling` instead when the auto-scroll should be dropped rather than retried after the user scroll ends.
-
-### Removed
-
-### Changed
-
-### Misc
-
-### Internal
-
-# Past Releases
 
 # 17.0.1 - 2026-05-27
 
