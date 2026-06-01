@@ -4,19 +4,25 @@
 
 ### Added
 
-- Added `Behavior.occlusionInsets` to account for persistent overlay UI that visually covers the list viewport.
-
 ### Removed
 
 ### Changed
 
 ### Misc
 
-- Added a development demo for validating keyboard avoidance with a floating bottom overlay and text fields.
-
 ### Internal
 
 # Past Releases
+
+# 17.2.0 - 2026-06-01
+
+### Added
+
+- Added `Behavior.occlusionInsets` to account for persistent overlay UI that visually covers the list viewport.
+
+### Misc
+
+- Added a development demo for validating keyboard avoidance with a floating bottom overlay and text fields.
 
 # 17.1.0 - 2026-05-29
 

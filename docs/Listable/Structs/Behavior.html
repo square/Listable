@@ -828,6 +828,41 @@ when the list content underflows the available space in the list view.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10ListableUI8BehaviorV15occlusionInsetsSo06UIEdgeE0Vvp"></a>
+                    <a name="//apple_ref/swift/Property/occlusionInsets" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV15occlusionInsetsSo06UIEdgeE0Vvp">occlusionInsets</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Insets for persistent UI that visually occludes the list viewport.</p>
+
+<p>Listable applies these insets to the underlying scroll view content inset, applies the
+relevant axis-specific edges to scroll indicators, and combines them with keyboard avoidance
+so first-responder scrolling treats the occluded area as unavailable. These insets do not
+change list layout geometry; use layout bounds padding for content layout spacing.</p>
+
+<p>If <code><a href="../Structs/Behavior.html#/s:10ListableUI8BehaviorV22keyboardAdjustmentModeAC08KeyboardeF0Ovp">keyboardAdjustmentMode</a></code> is <code><a href="../Structs/Behavior/KeyboardAdjustmentMode.html#/s:10ListableUI8BehaviorV22KeyboardAdjustmentModeO6customyA2EmF">custom</a></code>, the custom scroll view
+inset callback owns the full inset calculation instead.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">occlusionInsets</span><span class="p">:</span> <span class="kt">UIEdgeInsets</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10ListableUI8BehaviorV12scrollsToTopAC07ScrollseF0Ovp"></a>
                     <a name="//apple_ref/swift/Property/scrollsToTop" class="dashAnchor"></a>
                     <a class="token" href="#/s:10ListableUI8BehaviorV12scrollsToTopAC07ScrollseF0Ovp">scrollsToTop</a>
@@ -1083,9 +1118,9 @@ The focus ring will be applied to focused items automatically.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOAC18FocusConfigurationOtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(isScrollEnabled:keyboardDismissMode:keyboardAdjustmentMode:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:pageScrollingBehavior:decelerationRate:verticalLayoutGravity:focus:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI012scrollsToTop09selectionI09underflow23canCancelContentTouches06delaysrS0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OAC07ScrollslM0OAC09SelectionI0OAC9UnderflowVS2bAA04PagevC0OAC012DecelerationX0OAC08VerticalZ7GravityOAC18FocusConfigurationOtcfc">init(isScrollEnabled:<wbr>keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>pageScrollingBehavior:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>focus:<wbr>)</a>
+                    <a name="/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI015occlusionInsets12scrollsToTop09selectionI09underflow23canCancelContentTouches06delaystU0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OSo06UIEdgeL0VAC07ScrollsnO0OAC09SelectionI0OAC9UnderflowVS2bAA04PagexC0OAC012DecelerationZ0OAC21VerticalLayoutGravityOAC18FocusConfigurationOtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(isScrollEnabled:keyboardDismissMode:keyboardAdjustmentMode:occlusionInsets:scrollsToTop:selectionMode:underflow:canCancelContentTouches:delaysContentTouches:pageScrollingBehavior:decelerationRate:verticalLayoutGravity:focus:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10ListableUI8BehaviorV15isScrollEnabled19keyboardDismissMode0g10AdjustmentI015occlusionInsets12scrollsToTop09selectionI09underflow23canCancelContentTouches06delaystU0013pageScrollingC016decelerationRate21verticalLayoutGravity5focusACSb_So020UIScrollViewKeyboardhI0VAC08KeyboardjI0OSo06UIEdgeL0VAC07ScrollsnO0OAC09SelectionI0OAC9UnderflowVS2bAA04PagexC0OAC012DecelerationZ0OAC21VerticalLayoutGravityOAC18FocusConfigurationOtcfc">init(isScrollEnabled:<wbr>keyboardDismissMode:<wbr>keyboardAdjustmentMode:<wbr>occlusionInsets:<wbr>scrollsToTop:<wbr>selectionMode:<wbr>underflow:<wbr>canCancelContentTouches:<wbr>delaysContentTouches:<wbr>pageScrollingBehavior:<wbr>decelerationRate:<wbr>verticalLayoutGravity:<wbr>focus:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1104,6 +1139,7 @@ The focus ring will be applied to focused items automatically.</p>
     <span class="nv">isScrollEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
     <span class="nv">keyboardDismissMode</span> <span class="p">:</span> <span class="kt">UIScrollView</span><span class="o">.</span><span class="kt">KeyboardDismissMode</span> <span class="o">=</span> <span class="o">.</span><span class="n">interactive</span><span class="p">,</span>
     <span class="nv">keyboardAdjustmentMode</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/KeyboardAdjustmentMode.html">KeyboardAdjustmentMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">adjustsWhenVisible</span><span class="p">,</span>
+    <span class="nv">occlusionInsets</span> <span class="p">:</span> <span class="kt">UIEdgeInsets</span> <span class="o">=</span> <span class="o">.</span><span class="n">zero</span><span class="p">,</span>
     <span class="nv">scrollsToTop</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/ScrollsToTop.html">ScrollsToTop</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">enabled</span><span class="p">,</span>
     <span class="nv">selectionMode</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/SelectionMode.html">SelectionMode</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">single</span><span class="p">,</span>
     <span class="nv">underflow</span> <span class="p">:</span> <span class="kt"><a href="../Structs/Behavior/Underflow.html">Underflow</a></span> <span class="o">=</span> <span class="kt"><a href="../Structs/Behavior/Underflow.html">Underflow</a></span><span class="p">(),</span>
