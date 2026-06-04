@@ -318,6 +318,58 @@ class PresentationState_ItemStateTests : XCTestCase
         XCTAssertEqual(state.coordination.coordinator?.willDisplay_calls.count, 1)
         XCTAssertEqual(state.coordination.coordinator?.didEndDisplay_calls.count, 1)
     }
+
+    func test_applyTo_isSelectable()
+    {
+        XCTAssertEqual(appliedInfo(for: .tappable).isSelectable, true)
+        XCTAssertEqual(appliedInfo(for: .notSelectable).isSelectable, false)
+    }
+
+    /// Builds an `ItemState` for the given `selectionStyle`, applies it to a cell, and returns the `ApplyItemContentInfo` passed to the content.
+    private func appliedInfo(for selectionStyle : ItemSelectionStyle) -> ApplyItemContentInfo
+    {
+        var applied : ApplyItemContentInfo?
+
+        let item = Item(CapturingContent { applied = $0 }, selectionStyle: selectionStyle)
+
+        let state = PresentationState.ItemState(
+            with: item,
+            dependencies: ItemStateDependencies(
+                reorderingDelegate: ReorderingActionsDelegateMock(),
+                coordinatorDelegate: ItemContentCoordinatorDelegateMock(),
+                environmentProvider: { .empty }
+            ),
+            updateCallbacks: UpdateCallbacks(.immediate, wantsAnimations: false),
+            performsContentCallbacks: true
+        )
+
+        state.applyTo(
+            cell: ItemCell<CapturingContent>(frame: .zero),
+            itemState: .init(isSelected: false, isHighlighted: false, isReordering: false),
+            reason: .willDisplay,
+            environment: .empty
+        )
+
+        return applied!
+    }
+}
+
+
+fileprivate struct CapturingContent : ItemContent
+{
+    typealias ContentView = UIView
+
+    let onApply : (ApplyItemContentInfo) -> ()
+
+    var identifierValue : String { "" }
+
+    func isEquivalent(to other : CapturingContent) -> Bool { false }
+
+    func apply(to views : ItemContentViews<CapturingContent>, for reason : ApplyReason, with info : ApplyItemContentInfo) {
+        onApply(info)
+    }
+
+    static func createReusableContentView(frame : CGRect) -> UIView { UIView(frame: frame) }
 }
 
 
