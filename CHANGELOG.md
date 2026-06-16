@@ -4,8 +4,6 @@
 
 ### Added
 
-- Added `isSelectable` to `ApplyItemContentInfo`, reflecting whether the item's `selectionStyle` is interactive (`.tappable`, `.selectable`, or `.toggles`). `ItemContent` implementations can read this to represent themselves as interactive, for example by applying the `.button` accessibility trait so VoiceOver users know the item responds to taps.
-
 ### Removed
 
 ### Changed
@@ -15,6 +13,12 @@
 ### Internal
 
 # Past Releases
+
+# 17.3.0 - 2026-06-16
+
+### Added
+
+- Added `isSelectable` to `ApplyItemContentInfo`, reflecting whether the item's `selectionStyle` is interactive (`.tappable`, `.selectable`, or `.toggles`). `ItemContent` implementations can read this to represent themselves as interactive, for example by applying the `.button` accessibility trait so VoiceOver users know the item responds to taps.
 
 # 17.2.0 - 2026-06-01
 
