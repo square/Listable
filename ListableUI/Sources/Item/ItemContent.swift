@@ -565,7 +565,12 @@ public struct ApplyItemContentInfo
     /// If the item can be reordered.
     /// Use this property to determine if your `ItemContent` should display a reorder control.
     public var isReorderable : Bool
-    
+
+    /// If the item is selectable; that is, if its `selectionStyle` is `.tappable`, `.selectable`, or `.toggles`.
+    /// Use this property to determine if your `ItemContent` should represent itself as interactive, for example
+    /// by applying the `.button` accessibility trait so VoiceOver users know the item responds to taps.
+    public var isSelectable : Bool
+
     /// The environment of the containing list.
     /// See `ListEnvironment` for usage information.
     public var environment : ListEnvironment

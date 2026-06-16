@@ -312,6 +312,7 @@ extension PresentationState
                     cell.openTrailingSwipeActions()
                 },
                 isReorderable: self.model.reordering != nil,
+                isSelectable: self.model.selectionStyle.isSelectable,
                 environment: environment
             )
             
