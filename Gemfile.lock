@@ -131,7 +131,7 @@ DEPENDENCIES
   jazzy
 
 RUBY VERSION
-   ruby 3.2.2p53
+   ruby 3.3.9p170
 
 BUNDLED WITH
    2.1.4
