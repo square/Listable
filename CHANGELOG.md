@@ -2,7 +2,25 @@
 
 ### Fixed
 
+### Added
+
+### Removed
+
+### Changed
+
+### Misc
+
+### Internal
+
+# Past Releases
+
+# 17.4.0 - 2026-08-03
+
+### Fixed
+
 - Fixed a scroll completion handler being stranded when an `animated: true` scroll was requested inside a `UIView.performWithoutAnimation` block. The suppressed scroll never produced a `scrollViewDidEndScrollingAnimation(_:)` callback, so the handler it was queued for was never reported.
+
+- Fixed a scroll completion handler being stranded when an animated scroll had nowhere to go — scrolling to the top while already at the top, for example. `setContentOffset(_:animated: true)` with the offset the scroll view is already at starts no animation, so the `scrollViewDidEndScrollingAnimation(_:)` callback the handler was queued for never arrived. Such a scroll now reports the way an unanimated one does, on the next runloop pass.
 
 ### Added
 
@@ -21,16 +39,6 @@
   A `.duration` scroll is interrupted by the same things that interrupt the scroll view's own animation — the user taking hold of the list, or another scroll replacing it — and reports its completion handler either way. `ListActions.Scrolling.cancelScrollAnimation()` stops one explicitly.
 
 - Added `completion` handlers to `scrollToTop(...)` and `scrollToLastItem(...)`, which previously had no way to report when they finished.
-
-### Removed
-
-### Changed
-
-### Misc
-
-### Internal
-
-# Past Releases
 
 # 17.3.0 - 2026-06-16
 

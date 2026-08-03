@@ -634,6 +634,9 @@
                 <a class="nav-group-task-link" href="Structs/RefreshControl/Title.html">– Title</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/ScrollAnimation.html">ScrollAnimation</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Structs/ScrollPosition.html">ScrollPosition</a>
               </li>
               <li class="nav-group-task">
@@ -879,7 +882,7 @@ unavailable.</p>
 <p>Another common pain-point for standard <code>UITableViews</code> or <code>UICollectionViews</code> is handling dynamic and self sizing cells. Listable handles this transparently for you, and provides many ways to size content. Each <code><a href="Structs/Item.html">Item</a></code> has a <code>sizing</code> property, which can be set to any of the following values. <code>.default</code> pulls the default sizing of the item from the <code>List.Measurement</code> mentioned above, where as the <code>thatFits</code> and <code>autolayout</code> values size the item based on <code>sizeThatFits</code> and <code>systemLayoutSizeFitting</code>, respectively.</p>
 <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Sizing</span> <span class="p">:</span> <span class="kt">Equatable</span>
 <span class="p">{</span>
-    <span class="k">case</span> <span class="p">`</span><span class="nv">default</span><span class="p">`</span>
+    <span class="k">case</span> <span class="err">`</span><span class="k">default</span><span class="err">`</span>
 
     <span class="k">case</span> <span class="nf">fixed</span><span class="p">(</span><span class="kt">CGFloat</span><span class="p">)</span>
 
