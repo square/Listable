@@ -144,6 +144,15 @@ public final class ListView : UIView
         // because the display link driving it is retained by the main runloop.
         self.cancelScrollAnimation()
 
+        // If the list is deallocated while a reorder gesture is still in flight, the native
+        // interactive-movement session would otherwise outlive the data source and layout.
+        // UIKit would then try to resolve the move against content that no longer matches the
+        // drag's index paths, reading a stale index and crashing in the layout. Cancel it here,
+        // while everything is still in sync.
+        if self.hasInProgressReorders {
+            self.cancelAllInProgressReorders()
+        }
+
         /**
          Even though these are zeroing weak references in UIKIt as of iOS 9.0,
          
@@ -1567,9 +1576,15 @@ public final class ListView : UIView
     public override func didMoveToWindow()
     {
         super.didMoveToWindow()
-        
+
         if self.window != nil {
             self.updateScrollViewInsets()
+        } else if self.hasInProgressReorders {
+            // Leaving the window — for example, navigating away while a drag is still held — ends
+            // any chance of the reorder gesture completing normally. Cancel it now, while the
+            // content and the drag's index paths still agree, so a later content update or layout
+            // pass cannot read a stale index and crash.
+            self.cancelAllInProgressReorders()
         }
     }
     
@@ -2467,7 +2482,7 @@ extension ListView : ReorderingActionsDelegate
         self.collectionView.cancelInteractiveMovement()
     }
     
-    private var hasInProgressReorders : Bool {
+    var hasInProgressReorders : Bool {
         
         for section in self.storage.presentationState.sections {
             for item in section.items {
