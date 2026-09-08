@@ -40,7 +40,7 @@ jobs:
       - name: Set up Mise
         uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          minimum_release_age: 24h
+          version: "2026.9.1"
 
       - name: Read env
         run: cat .github/workflows/env.properties >> $GITHUB_ENV
