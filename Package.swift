@@ -49,9 +49,6 @@ let package = Package(
             path: "BlueprintUILists",
             exclude: [
                 "Tests",
-            ],
-            resources: [
-                .process("Resources"),
             ]
         ),
     ],
