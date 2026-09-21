@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added `ListStateObserver.onApproachingBottom(within:shouldPerform:_:)` to make end-of-list pagination easier to implement and test.
+- Added `ListScrollPositionInfo.BottomThreshold`, `contentSize`, and `isApproachingBottom(within:)` to support approaching-bottom pagination observers.
+
 ### Removed
 
 ### Changed
