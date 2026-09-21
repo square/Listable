@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a crash when a list left the window (or was deallocated) while an interactive reorder was still in progress — for example, navigating away while a drag was held. The native interactive-movement session outlived the content it was started against, so a later content update or layout pass read a now-stale index and trapped in the layout. `ListView` now cancels any in-progress reorder on `didMoveToWindow` (when leaving the window) and in `deinit`, while the data source and layout are still in sync.
+
 ### Added
 
 ### Removed
