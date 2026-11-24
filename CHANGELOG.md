@@ -2,6 +2,8 @@
 
 ### Fixed
 
+- Fixed a list keeping stale item sizes when one update changed both its layout and its `ContentContext`. The new layout made the collection view rebuild at the start of the batch update, before the new items landed, so it measured the old items into the cache the new context had just cleared, and items equivalent to the old ones kept those sizes. The context now changes with the new items, inside the batch update.
+
 ### Added
 
 ### Removed

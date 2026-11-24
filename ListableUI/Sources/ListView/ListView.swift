@@ -1494,8 +1494,6 @@ public final class ListView : UIView
         let newIdentifier = self.storage.allContent.identifier
         let identifierChanged = oldIdentifier != newIdentifier
         
-        self.storage.presentationState.context = self.storage.allContent.context
-        
         self.updatePresentationState(for: .contentChanged(animated: animated, identifierChanged: identifierChanged))
     }
     
@@ -1809,6 +1807,9 @@ public final class ListView : UIView
 
             let visibleSlice = self.newVisibleSlice(to: indexPath)
 
+            /// Read alongside the slice, so the context always matches the items it describes.
+            let context = self.storage.allContent.context
+
             let diff = SignpostLogger.log(log: .updateContent, name: "Diff Content", for: self) {
                 ListView.diffWith(old: presentationState.sectionModels, new: visibleSlice.content.sections)
             }
@@ -1822,6 +1823,13 @@ public final class ListView : UIView
                     environmentProvider: { [weak self] in self?.environment ?? .empty }
                 )
                 
+                /// A new context throws out every cached size. It must land with the new items, not before:
+                /// if the layout was invalidated in the same update, such as by a new layout, the collection
+                /// view rebuilds it at the start of the batch update, measuring the old items. Throwing the
+                /// sizes out earlier would let that rebuild cache the old items' sizes, and items equivalent
+                /// to the old ones would keep them.
+                presentationState.context = context
+
                 presentationState.update(
                     with: diff,
                     slice: visibleSlice,
